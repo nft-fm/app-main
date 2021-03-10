@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import BG from "../../assets/img/profile_nfts_bg.png";
 
 const Nft = ({ nft }) => {
 
@@ -25,7 +24,7 @@ const Nft = ({ nft }) => {
                 Attack:
               </StatLeft>
               <StatRight>
-                {nft.stats.attack}
+                {nft.stats?.attack}
               </StatRight>
             </NFTStat>
             <NFTStat>
@@ -33,19 +32,17 @@ const Nft = ({ nft }) => {
                 Defense:
               </StatLeft>
               <StatRight>
-                {nft.stats.defense}
-
+                {nft.stats?.defense}
               </StatRight>
-            </NFTStat>            <NFTStat>
+            </NFTStat>
+            <NFTStat>
               <StatLeft>
                 Heal:
               </StatLeft>
               <StatRight>
-                {nft.stats.heal}
-
+                {nft.stats?.heal}
               </StatRight>
             </NFTStat>
-
           </NFTStats>
         </NFTMetaDataTop>
         <BalanceBar>
@@ -109,29 +106,29 @@ text-shadow: rgb(90, 98, 102) 2px 2px 0px;
 `
 
 const NFTMetaDataTop = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: row;  
-  margin-bottom: 5px;
-  justify-content: space-between;
+width: 100%;
+display: flex;
+flex-direction: row;  
+margin-bottom: 5px;
+justify-content: space-between;
 `
 
 const NFTMetaData = styled.div`
-padding: 5px 15px;
-width: calc(100% - 30px);
-font-family: "Comic Book";
-font-size: 16px;
-border: solid black;
-border-width: 3px 2px 2.5px 2px;
-background-color: #fef9ed;
-border-top-left-radius: 8% 5%;
-border-top-right-radius: 5% 4%;
-border-bottom-right-radius: 6% 7%;
-border-bottom-left-radius: 25% 5%;
-transform: rotate(-0.5deg);
-color: black;
-display: flex;
-flex-direction: column;
+  padding: 5px 15px;
+  width: calc(100% - 30px);
+  font-family: "Comic Book";
+  font-size: 16px;
+  border: solid black;
+  border-width: 3px 2px 2.5px 2px;
+  background-color: #fef9ed;
+  border-top-left-radius: 8% 5%;
+  border-top-right-radius: 5% 4%;
+  border-bottom-right-radius: 6% 7%;
+  border-bottom-left-radius: 25% 5%;
+  transform: rotate(-0.5deg);
+  color: black;
+  display: flex;
+  flex-direction: column;
 `
 
 const NFTImage = styled.img`

@@ -52,7 +52,6 @@ const BattleSchema = new Schema({
 	winner: {
 		type: Schema.Types.ObjectId,
 		ref: "user",
-		required: true,
 	},
 	history: [{
 		contestant1Move: {

@@ -9,7 +9,7 @@ import { Nav } from "./components/Nav";
 
 const TopBar = () => {
   return (
-    <StyledTopBar>
+    <StyledTopBar id="top">
       <Container size="lg">
         <StyledTopBarInner>
           <NavLink to="/" style={{ flex: 1, textDecoration: "none" }}>
@@ -34,6 +34,7 @@ const TopBar = () => {
 };
 
 const StyledTopBar = styled.div`
+  z-index: 10;
   border: solid 2px #000000;
   background-image: linear-gradient(
     to right,

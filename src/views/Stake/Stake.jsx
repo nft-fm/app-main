@@ -16,7 +16,7 @@ const Farms = () => {
   const checkDCBal = async () => {
     getDCBalance((res) => {
       console.log(res);
-      setBalance(parseFloat(res).toFixed(4));
+      setBalance(parseFloat(res).toFixed(2));
     });
   };
 
@@ -102,7 +102,7 @@ const HeaderText = styled.div`
   line-height: 1.07;
   text-align: center;
   color: #fef9ed;
-  margin-top: 3vh;
+  margin-top: 2vh;
   @media only screen and (max-width: 767px) {
     font-size: 80px;
     margin-top: 0vh;

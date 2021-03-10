@@ -2,11 +2,11 @@ import { Contract, utils, providers, constants, BigNumber, getDefaultProvider } 
 import ERC20StakingABI from "./abi/Erc20StakingPool.abi";
 import BDTABI from "./abi/BDT.abi";
 import DCABI from "./abi/DC.abi";
-// import NFTABI from "./abi/NFT.abi";
-// import NFTSaleABI from "./abi/NFTSale.abi";
+import NFTABI from "./abi/NFT.abi";
+import NFTSaleABI from "./abi/NFTSale.abi";
 import {
 	ERC20StakingAddress, LPStakingAddress, BDTAddress, BDTLPAddress, DCAddress,
-	// NFTAddress, NFTSaleAddress
+	NFTAddress, NFTSaleAddress
 } from './constants';
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import isMobile from "../utils/isMobile";
@@ -27,7 +27,7 @@ export const require = async (statement, error) => {
 		provider = new providers.Web3Provider(window.ethereum);
 		walletAddress = window.ethereum.selectedAddress;
 	}
-	console.log("provider:\n", provider);
+	// console.log("provider:\n", provider);
 	if (!statement && error) {
 		console.log(error)
 		throw error
@@ -193,7 +193,6 @@ export const getDCBalance = async (callback) => {
 	const contract = new Contract(DCAddress, DCABI, signer);
 	const balance = contract.balanceOf(walletAddress).then(r => (utils.formatEther(r)))
 	Promise.all([balance]).then((res) => {
-		console.log(res);
 		callback(res)
 	})
 }
@@ -214,60 +213,128 @@ export const fetchBDTVotes = async (callback) => {
 	})
 }
 
-// export const approveNFT = async (callback) => {
-// 	const { provider, walletAddress } = await require()
-// 	const signer = provider.getSigner();
-// 	const DCContract = new Contract(DCAddress, DCABI, signer);
-// 	const BDTContract = new Contract(BDTAddress, BDTABI, signer);
-// 	const DCAllowance = DCContract
-// 		.approve(NFTSaleAddress, constants.MaxUint256)
-// 		.then((r) => r.wait())
-// 		.then(() => {
-// 			const Allowance = DCContract.allowance(walletAddress, NFTSaleAddress).then(r => (utils.formatEther(r)))
-// 			return Allowance;
-// 		})
-// 	const BDTAllowance = BDTContract
-// 		.approve(NFTSaleAddress, constants.MaxUint256)
-// 		.then((r) => r.wait())
-// 		.then(() => {
-// 			const Allowance = BDTContract.allowance(walletAddress, NFTSaleAddress).then(r => (utils.formatEther(r)))
-// 			return Allowance;
-// 		})
-// 	Promise.all([DCAllowance, BDTAllowance]).then((res) => {
-// 		console.log("is approved?", res);
-// 		const ret = res[0] && res[1];
-// 		callback(ret);
-// 	})
-// }
+export const approveNFT = async (callback) => {
+	const { provider, walletAddress } = await require()
+	const signer = provider.getSigner();
+	const DCContract = new Contract(DCAddress, DCABI, signer);
+	const BDTContract = new Contract(BDTAddress, BDTABI, signer);
+	const DCAllowance = DCContract
+		.approve(NFTSaleAddress, constants.MaxUint256)
+		.then((r) => r.wait())
+		.then(() => {
+			const Allowance = DCContract.allowance(walletAddress, NFTSaleAddress).then(r => (utils.formatEther(r)))
+			return Allowance;
+		})
+	const BDTAllowance = BDTContract
+		.approve(NFTSaleAddress, constants.MaxUint256)
+		.then((r) => r.wait())
+		.then(() => {
+			const Allowance = BDTContract.allowance(walletAddress, NFTSaleAddress).then(r => (utils.formatEther(r)))
+			return Allowance;
+		})
+	Promise.all([DCAllowance, BDTAllowance]).then((res) => {
+		console.log("is approved?", res);
+		const ret = res[0] && res[1];
+		callback(ret);
+	})
+}
 
-// export const fetchNFTApproved = async (callback) => {
-// 	const { provider, walletAddress } = await require()
-// 	const signer = provider.getSigner();
-// 	const DCContract = new Contract(DCAddress, DCABI, provider);
-// 	const DCAllowance = DCContract.allowance(walletAddress, NFTSaleAddress).then(r => (utils.formatEther(r)))
-// 	const BDTContract = new Contract(BDTAddress, BDTABI, provider);
-// 	const BDTAllowance = BDTContract.allowance(walletAddress, NFTSaleAddress).then(r => (utils.formatEther(r)))
+export const fetchNFTApproved = async (callback) => {
+	const { provider, walletAddress } = await require()
+	const signer = provider.getSigner();
+	const DCContract = new Contract(DCAddress, DCABI, provider);
+	const DCAllowance = DCContract.allowance(walletAddress, NFTSaleAddress).then(r => (utils.formatEther(r)))
+	const BDTContract = new Contract(BDTAddress, BDTABI, provider);
+	const BDTAllowance = BDTContract.allowance(walletAddress, NFTSaleAddress).then(r => (utils.formatEther(r)))
 
-// 	Promise.all([DCAllowance, BDTAllowance]).then((res) => {
-// 		console.log("is approved?", res);
-// 		const ret = res[0] && res[1];
-// 		callback(ret);
-// 	})
-// }
+	Promise.all([DCAllowance, BDTAllowance]).then((res) => {
+		console.log("is approved?", res);
+		const ret = res[0] && res[1];
+		callback(ret);
+	})
+}
 
-// export const buyNFT = async (callback) => {
-// 	const { provider, walletAddress } = await require()
-// 	const signer = provider.getSigner();
-// 	let contract = new Contract(NFTSaleAddress, NFTSaleABI, signer);
+export const buyNFT = async (callback) => {
+	const { provider, walletAddress } = await require()
+	const signer = provider.getSigner();
+	let contract = new Contract(NFTSaleAddress, NFTSaleABI, signer);
 
-// 	console.log("about to buy", utils.parseEther(String(1)));
+	console.log("about to buy", utils.parseEther(String(1)));
 
-// 	contract.estimate.buyNFT(utils.parseEther(String(1))).then(r => r.wait()).then((res) => {
-// 		console.log("estimated gas", res);
-// 		callback()
-// 	});
+	let txReq = await contract.buyNFT(1)
+	let logs = await txReq.wait(1)
+	// logs = logs.filter((log) => log.address === NFTSaleAddress).map((log) => BigNumber.from(log.topics[1]).toString());
+	console.log("buy key", logs, txReq);
 
-// 	contract.buyNFT(utils.parseEther(String(1))).then(r => r.wait()).then(() => {
-// 		callback()
-// 	});
-// }
+	callback(logs)
+}
+
+export const getLootboxPrice = async (callback) => {
+	const { provider, walletAddress } = await require()
+	const signer = provider.getSigner();
+	let contract = new Contract(NFTSaleAddress, NFTSaleABI, signer);
+	let DCPrice = await contract.nftDCPrice()
+	let BDTPrice = await contract.nftBDTPrice()
+	Promise.all([DCPrice, BDTPrice]).then((res) => {
+		callback({
+			DCPrice: res[0].toNumber(),
+			BDTPrice: res[1].toNumber()
+		});
+	})
+}
+
+export const getPendingNFTs = async (callback) => {
+	const { provider, walletAddress } = await require()
+	const signer = provider.getSigner();
+	let contract = new Contract(NFTSaleAddress, NFTSaleABI, signer);
+	let pending = await contract.getPendingPurchases(walletAddress)
+	callback(pending)
+}
+
+export const redeemNFT = async (data, callback) => {
+	const { provider, walletAddress } = await require()
+	const signer = provider.getSigner();
+	let contract = new Contract(NFTSaleAddress, NFTSaleABI, signer);
+	console.log("redeeming", contract, data);
+	console.log("args", data.saleID, data.amount, data.saleID, parseInt(data.v), data.r, data.s)
+
+	// let result = await contract.redeemERC1155(data.id, data.amount, data.saleID, parseInt(data.v), data.r, data.s)
+	let result = await contract.redeemERC1155(data.saleID, data.amount, data.saleID, parseInt(data.v), data.r, data.s).then(res => res.wait())
+
+	console.log("redeem nft result", result);
+
+	callback(result)
+}
+
+export const getMyNFTs = async (callback) => {
+	const { provider, walletAddress } = await require()
+	const signer = provider.getSigner();
+	let contract = new Contract(NFTAddress, NFTABI, signer);
+	let nfts = await contract.getFullBalance(walletAddress)
+	console.log("mine", nfts);
+	callback(nfts)
+}
+
+export const getOthersNFTs = async (callback, profile) => {
+	const { provider, walletAddress } = await require()
+	const signer = provider.getSigner();
+	let contract = new Contract(NFTAddress, NFTABI, signer);
+	let nfts = await contract.getFullBalance(profile.address);
+	callback(nfts, profile)
+}
+
+export const setBuyPrices = async (callback) => {
+	const { provider, walletAddress } = await require()
+	const signer = provider.getSigner();
+
+	// sets return rate at 100x normal
+	let contract = new Contract(ERC20StakingAddress, ERC20StakingABI, signer);
+	await contract.setReturnRate("12500000000000000000");
+	let rewardRate = await contract.getReturnRate();
+	console.log("return", rewardRate);
+
+	contract = new Contract(NFTSaleAddress, NFTSaleABI, signer);
+	let dcPrice = await contract.setDCPrice(1);
+	let bdtPrice = await contract.setBDTPrice(2);
+	callback();
+}

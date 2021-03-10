@@ -3,7 +3,8 @@ import styled from 'styled-components'
 import { useWallet } from 'use-wallet'
 import axios from "axios";
 import swal from "sweetalert2";
-import editIcon from "../../assets/img/profile_edit.png"
+import editIcon from "../../assets/img/profile_page_assets/profile_edit.png"
+import ProfileTopBG from "../../assets/img/profile_page_assets/profile_top.png"
 import { TwitterPicker } from "react-color";
 import Picker from 'emoji-picker-react';
 import { require } from "../../web3/utils";
@@ -62,7 +63,7 @@ const Profile = ({ user, fetchAccount }) => {
       pictureColor: newColor,
     }))
 
-    axios.post(`api/gov/update-account`, {
+    axios.post(`api/user/update-account`, {
       address: account,
       picture: newPicture,
       pictureColor: newColor,
@@ -191,6 +192,7 @@ flex-direction: column;
 padding-left: 40px;
 width: calc(100% - 40px);
 justify-content: center;
+z-index: 20;
 `
 
 const Address = styled.div`
@@ -210,10 +212,24 @@ const Container = styled.div`
   display: flex;
   width: calc(100% - 44px);
   padding: 20px;
-  background-image: linear-gradient(to right, #8a3f2e, #8a3f2e 34%, #338199 68%, #338199);
+  background-position: center;
   border-radius: 2px;
   border: 2px solid black;
   margin-bottom: 20px;
+  position: relative;
+::before {
+  content: "";
+position: absolute;  
+  top: 0px;
+  right: 0px;
+  left: 0px;
+  bottom: 0px;
+  filter: grayscale(.7) brightness(110%);
+  background-image: url(${ProfileTopBG});
+  background-repeat: no-repeat;
+background-position: center;
+background-size: cover;
+}
 `
 
 const ColorEditButton = styled.div`
@@ -238,6 +254,7 @@ flex-direction: column;
 position: absolute;
 margin-top: 45px;
 margin-left: -7px;
+z-index: 21;
 `
 
 const EditNickName = styled.input`
@@ -253,7 +270,7 @@ color: white;
 margin-bottom: 20px;
 &:focus {
   outline: none;
-},
+}
 &:active {
   outline: none;
 }
@@ -284,6 +301,7 @@ align-items: center;
 justify-content: center;
 font-size: 120px;
 user-select: none;
+z-index: 20;
 border: solid 10px rgba(256,256,256,0.3);
 &:hover {
   cursor: pointer;
@@ -302,6 +320,7 @@ justify-content: center;
 font-size: 120px;
 user-select: none;
 border: solid 10px rgba(256,256,256,0.3);
+z-index: 20;
 `
 
 const CheckButton = styled.div`
@@ -344,6 +363,7 @@ justify-content: space-between;
 position: absolute;
 right: 20px;
 top: 20px;
+z-index: 100;
 `
 
 const EditButton = styled.img`
@@ -354,6 +374,7 @@ width: 16px;
 height: 16px;
 cursor: pointer;
 transition: all .1s linear;
+z-index: 100;
 &:hover {
   width: 18px;
   height: 18px;

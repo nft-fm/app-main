@@ -50,13 +50,7 @@ const Farms = () => {
                   </InfoTitle> */}
                   <InfoContent>
                     <InfoContentTitle>
-                      Block Duelers Alpha is launching at the end of March!
-                    </InfoContentTitle>
-                  </InfoContent>
-                  <div style={{ height: "20px" }} />
-                  <InfoContent>
-                    <InfoContentTitle>
-                      Click the link below to purchase some BDT
+                      We Have Listed! Click the link below to purchase some BDT
                     </InfoContentTitle>
                     <ETHAddress href='https://app.uniswap.org/#/swap?outputCurrency=0x7bce667ef12023dc5f8577d015a2f09d99a5ef58&inputCurrency=ETH' target="_blank"
                       rel="noopener noreferrer">
@@ -350,23 +344,6 @@ We are just getting started!
                       LinkedIn</StyledLinkedIn>
                   </StyledLinkContainer>
                 </SmallTeam>
-                <SmallTeam style={{ marginTop: "-40px" }}>
-                  <SmallTeamImage src={'https://media.discordapp.net/attachments/785353561273270282/806044448823705660/1550741743914.jpeg'} />
-                  {!isMobile() ?
-                    <TeamCaption>
-                      BEN FAIRBANK - Advisor
-                </TeamCaption>
-                    : <TeamCaption>
-                      BEN FAIRBANK<br />-<br />Advisor
-                </TeamCaption>
-                  }
-                  <StyledLinkContainer>
-                    <StyledLinkedIn
-                      href="https://www.linkedin.com/in/benfairbank/" target="_blank"
-                      rel="noopener noreferrer">
-                      LinkedIn</StyledLinkedIn>
-                  </StyledLinkContainer>
-                </SmallTeam>
               </TeamContainer>
             </BottomContainer>
 
@@ -604,8 +581,8 @@ align-items: center;
 
 const TeamContainer = !isMobile() ? styled.div`
 display: flex;
-width: 1600px;
-max-width: 90vw;
+width: 1400px;
+max-width: 80vw;
 justify-content: space-between;
 margin-bottom: 40px;
 margin-top: 40px;
@@ -1114,6 +1091,7 @@ border-bottom-right-radius: 6% 92%;
 border-bottom-left-radius: 95% 5%;
 transform: rotate(-0.5deg);
 color: black !important;
+height: 220px;
 display: flex;
 flex-direction: column;
 justify-content: space-evenly;
@@ -1123,8 +1101,9 @@ const InfoContentTitle = styled.div`
 font-family: "Comic Book";
 background-color: #fef9ed;
 font-weight: normal;
-font-size: 30px;
+font-size: 20px;
 padding: 0 20px;`
+
 
 const InfoTitle = styled.h1`
 font-family: "Bangers";
@@ -1283,29 +1262,30 @@ padding: 40px 0 100px 0;
 `
 
 const HeaderText = !isMobile() ? styled.div`
-text-shadow: 10px 10px 0 #000000;
-font-family: Bangers;
-font-size: 169px;
-font-weight: normal;
-font-stretch: normal;
-font-style: normal;
-line-height: 1.07;
-letter-spacing: normal;
-text-align: center;
-color: #fef9ed;
+  text-shadow: 10px 10px 0 #000000;
+  font-family: Bangers;
+  font-size: 169px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.07;
+  letter-spacing: normal;
+  text-align: center;
+  color: #fef9ed;
 ` : styled.div`
-text-shadow: 10px 10px 0 #000000;
-font-family: Bangers;
-font-size: 100px;
-font-weight: normal;
-font-stretch: normal;
-font-style: normal;
-line-height: 1.07;
-letter-spacing: normal;
-text-align: center;
-color: #fef9ed;
-margin-bottom: 20px;
+  text-shadow: 10px 10px 0 #000000;
+  font-family: Bangers;
+  font-size: 80px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.07;
+  letter-spacing: normal;
+  text-align: center;
+  color: #fef9ed;
+  margin-bottom: 20px;
 `;
+
 
 
 const LandingSection = !isMobile() ? styled.div`

@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, {useCallback, useEffect} from "react";
 import ReactGA from "react-ga";
 import styled from "styled-components";
 import { useWallet } from "use-wallet";
@@ -6,11 +6,21 @@ import buttonBG from "../../../assets/img/unlock_wallet_bubble.png";
 import useModal from "../../../hooks/useModal";
 import isMobile from "../../../utils/isMobile";
 import WalletProviderModal from "../../WalletProviderModal";
+import axios from "axios";
 
 const AccountButton = (props) => {
   const [onPresentWalletProviderModal] = useModal(<WalletProviderModal />);
 
   const { account, connect } = useWallet();
+
+  const fetchAccount = async () => {
+    axios.post(`api/gov/get-account`,
+      { address: account, }).then(res => {
+      console.log("user", res.data)
+    }).catch(err => {
+      console.log(err);
+    })
+  }
 
   const handleUnlockClick = useCallback(() => {
     if (isMobile()) {
@@ -20,6 +30,7 @@ const AccountButton = (props) => {
       connect("injected");
       // onPresentWalletProviderModal()
     }
+    fetchAccount()
   }, [onPresentWalletProviderModal, connect]);
 
   if (account) {

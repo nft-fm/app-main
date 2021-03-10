@@ -49,7 +49,7 @@ const Community = ({ fetchSuggestions, suggestions }) => {
         suggestionId: suggestion._id,
         voteAmount
       }))
-      axios.post(`api/gov/vote`,
+      axios.post(`api/user/vote`,
         {
           address: account, voteAmount, suggestionId: suggestion._id,
           sig

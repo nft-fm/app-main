@@ -9,6 +9,8 @@ import RulesModal from "./RulesModal";
 import Suggestions from "./Suggestions";
 import { require } from "../../web3/utils";
 import isMobile from "../../utils/isMobile";
+import ProfileGovBG from "../../assets/img/profile_page_assets/profile_gov.png";
+import ProfileSuggestBG from "../../assets/img/profile_page_assets/profile_suggest.png";
 
 const Community = () => {
   const [suggestions, setSuggestions] = useState([]);
@@ -21,7 +23,7 @@ const Community = () => {
   const { account, connect } = useWallet()
 
   const fetchSuggestions = () => {
-    axios.post(`/api/gov/get-suggestions`, {
+    axios.post(`/api/user/get-suggestions`, {
       address: account,
       page,
       sort
@@ -58,7 +60,7 @@ const Community = () => {
       address: account,
       suggestion: newSuggestion,
     }))
-    axios.post(`/api/gov/suggestion`,
+    axios.post(`/api/user/suggestion`,
       {
         address: account,
         sig,
@@ -91,10 +93,10 @@ const Community = () => {
           </Icon>
         </ComicTitle>
         <Sorting>
-          <Option style={{ color: sort === "top" ? "black" : "rgba(0,0,0,0.6)", textDecoration: sort === "top" ? "underline" : "none" }} onClick={() => toggleSort("top")}>
+          <Option style={{ color: sort === "top" ? "white" : "rgba(256,256,256,0.8)", textDecoration: sort === "top" ? "underline" : "none" }} onClick={() => toggleSort("top")}>
             top
           </Option>
-          <Option style={{ color: sort === "new" ? "black" : "rgba(0,0,0,0.6)", textDecoration: sort === "new" ? "underline" : "none" }} onClick={() => toggleSort("new")}>
+          <Option style={{ color: sort === "new" ? "white" : "rgba(256,256,256,0.8)", textDecoration: sort === "new" ? "underline" : "none" }} onClick={() => toggleSort("new")}>
             new
           </Option>
 
@@ -211,6 +213,8 @@ box-shadow: 5px 5px 0 #222;
 letter-spacing: 1px;
 font-weight: normal;
 top: 10px;
+z-index: 50;
+
 `
 
 const GovContainer = styled.div`
@@ -223,6 +227,21 @@ border-radius: 2px;
 border: 2px solid black;
 background-color: rgba(0,0,0,0.1);
 align-self: stretch;
+
+position: relative;
+::before {
+  content: "";
+position: absolute;  
+  top: 0px;
+  right: 0px;
+  left: 0px;
+  bottom: 0px;
+  filter: grayscale(.7) brightness(110%);
+  background-image: url(${ProfileGovBG});
+  background-repeat: no-repeat;
+background-position: center;
+background-size: cover;
+}
 `
 
 const SuggestionContainer = styled.div`
@@ -231,20 +250,37 @@ display: flex;
 align-items: center;
 display: flex;
 flex-direction: column;
-jusfity-content: center;
+justify-content: center;
 border-radius: 2px;
 border: 2px solid black;
 background-color: rgba(0,0,0,0.1);
 justify-content: center;
 min-height: 300px;
 align-self: stretch;
+position: relative;
+::before {
+  content: "";
+position: absolute;  
+  top: 0px;
+  right: 0px;
+  left: 0px;
+  bottom: 0px;
+  filter: grayscale(.7) brightness(110%);
+  background-image: url(${ProfileSuggestBG});
+  background-repeat: no-repeat;
+background-position: center;
+background-size: cover;
+}
 `
 
 const Pagination = styled.div`
 display:flex;
 justify-content: flex-end;
 width: calc(100% - 26px);
-margin-bottom: 10px;`
+margin-bottom: 10px;
+z-index: 20;
+
+`
 
 const Option = !isMobile() ? styled.div`
 font-family: "Bangers";
@@ -327,9 +363,11 @@ const SuggestionTitle = styled.div`
 margin-top: 40px;
 margin-bottom: 10px;
 font-family: "Comic Book";
+z-index: 20;
   font-size: 18px;
   font-stretch: normal;
   font-style: normal;
+  color: white;
   line-height: 1.5;
   letter-spacing: normal;
 `
@@ -349,6 +387,8 @@ margin-left: 10px;
 const Sorting = styled.div`
 margin-top: 10px;
 height: 45px;
+z-index: 20;
+
 align-items: center;
 width: 100%;
 display: flex;

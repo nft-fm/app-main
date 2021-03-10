@@ -5,6 +5,8 @@ body {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  overflow-x: hidden;
 }
 
 a {
@@ -130,7 +132,7 @@ aside.emoji-picker-react {
   border-top: solid 2px gray;
   border-bottom: solid 2px gray;
   border-right: solid 2px gray;
-  background-color: rgba(256,256,256,0.08);
+  background-color: rgba(256,256,256,0.8);
   color: rgba(0,0,0,0.8);
   cursor: pointer;
   user-select: none;
@@ -140,7 +142,8 @@ aside.emoji-picker-react {
 }
 
 .pagination > li:hover {
-  background-color: rgba(256,256,256,0.16);
+  /* background-color: rgba(256,256,256,0.16); */
+  font-weight: bold;
 }
 
 .pagination > li > a {
@@ -153,7 +156,7 @@ aside.emoji-picker-react {
 }
 
 .pagination > li:last-child {
-  border-radius: 0 5px 5px 0;
+  border-radius: 0 2px 2px 0;
 }
 
 .pagination > li:last-child > a {
@@ -165,10 +168,11 @@ aside.emoji-picker-react {
 }
 
 .pagination > li:first-child {
-  border-radius:  5px 0 0 5px;
+  border-radius: 2px 0 0 2px;
   border-left: solid 2px gray;
 }
 
 .pagination > li.active {
-  background-color: rgba(256,256,256,0.8);
+  background-color: rgba(256,256,256,1);
+  font-weight: bold;
 }

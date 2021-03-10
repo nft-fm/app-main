@@ -44,30 +44,29 @@ const Roadmap = () => {
         <Title >
           February
       </Title>
-
+        <MilestoneRow>
+          <img className="milestone-image" alt="milestone" src={development} />
+          <MilestoneText>
+            Smart Contract Development Complete
+              </MilestoneText>
+        </MilestoneRow>
         <MilestoneRow>
           <img className="milestone-image" alt="milestone" src={battle} />
-          <MilestoneTextDone>
+          <MilestoneText>
             Dueling and Leveling System Complete
-              </MilestoneTextDone>
+              </MilestoneText>
         </MilestoneRow>
         <MilestoneRow>
           <img className="milestone-image" alt="milestone" src={community} />
-          <MilestoneTextDone>
+          <MilestoneText>
             Community Governance System Complete
-              </MilestoneTextDone>
-        </MilestoneRow>
-        <MilestoneRow>
-          <img className="milestone-image" alt="milestone" src={development} />
-          <MilestoneTextDone>
-            Smart Contract Development Complete
-              </MilestoneTextDone>
+              </MilestoneText>
         </MilestoneRow>
         <MilestoneRow>
           <img className="milestone-image" alt="milestone" src={security} />
-          <MilestoneTextDone>
+          <MilestoneText>
             Security Review Done
-              </MilestoneTextDone>
+              </MilestoneText>
         </MilestoneRow>
         <Space />
         <Title >

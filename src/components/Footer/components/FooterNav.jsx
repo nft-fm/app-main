@@ -12,14 +12,10 @@ export const FooterNav = () => {
       <Col size={1} collapse="sm">
         <StyledContact>
           <ContactTop>
-            {/* Contact us for questions, partnership ideas and private investment opportunities! */}
-            All Rights Reserved
+            Contact us for questions, partnership ideas and private investment
+            opportunities!
           </ContactTop>
-          <ContactTop>
-            {/* Contact us for questions, partnership ideas and private investment opportunities! */}
-            Copyright &copy; BlockDuelers LLC 2021
-          </ContactTop>
-          {/* <ContactBottom>INFO@BLOCKDUELERS.COM</ContactBottom> */}
+          <ContactBottom>INFO@BLOCKDUELERS.COM</ContactBottom>
         </StyledContact>
       </Col>
 
@@ -58,8 +54,6 @@ const ContactTop = styled.div`
   text-align: center;
   color: #fef9ed;
   margin-bottom: 10px;
-
-  margin-top: 10px;
 `;
 
 const ContactBottom = styled.div`

@@ -1,11 +1,14 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 const NftTypeSchema = new Schema({
-  contractAddress: {
-    type: String,
+  assetId: {
+    type: Number,
     required: true,
     unique: true
+  },
+  contractAddress: {
+    type: String,
   },
   picture: {
     type: String,
@@ -16,7 +19,6 @@ const NftTypeSchema = new Schema({
   name: {
     type: String,
   },
-  //  currently unused?
   mintLimit: {
     type: Number,
   },
@@ -24,7 +26,7 @@ const NftTypeSchema = new Schema({
     type: Number,
     default: 0,
   },
-  stats: {
+  baseStats: {
     attack: {
       type: Number,
     },
@@ -52,4 +54,4 @@ const NftTypeSchema = new Schema({
   },
 })
 
-module.exports = NftType = mongoose.model('type', NftTypeSchema)
+module.exports = NftType = mongoose.model('type', NftTypeSchema);

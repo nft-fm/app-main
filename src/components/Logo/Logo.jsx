@@ -17,6 +17,7 @@ const LogoContainer = styled.div`
 `;
 
 const StyledLogo = styled.img`
+  z-index: 20;
   height: 120px;
   margin-top: 50px;
   cursor: pointer;

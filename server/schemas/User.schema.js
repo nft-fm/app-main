@@ -14,66 +14,42 @@ const UserSchema = new Schema({
   },
   picture: {
     type: String,
-    default: "🤑",
+    default: "🦸‍♂️",
   },
   pictureColor: {
     type: String,
-    default: "#002450",
+    default: "#1A8EB2",
   },
-
-  participatedBattles: [{
-    id: {
-      type: Schema.Types.ObjectId,
-      ref: "battle",
-      required: true,
-    },
-    won: {
-      type: Boolean,
-    },
-  }],
-
-  defender: {
-    type: Schema.Types.ObjectId,
-    ref: "nft",
-  },
-  queue: [
-    {
-      move: {
-        type: Number,
-      }
-    }
-  ],
-
-  battleWinPercent: {
+  idNum: {
     type: Number,
     default: 0,
   },
-  //  based off of sum of NFT
-  // rank: {
-  //   type: Number,
-  //   default: 0,
-  // },
-  // exp: {
-  //   type: Number,
-  //   default: 0,
-  // },
-
-  // participatedBets: [{
-  //   id: {
-  //     type: Schema.Types.ObjectId,
-  //     ref: "bet",
-  //     required: true,
-  //   },
-  //   value: {
-  //     type: Number,
-  //   },
-  //   won: {
-  //     type: Boolean,
-  //   },
-  //   amountWon: {
-  //     type: Number,
+  battlesWon: {
+    type: Number,
+    default: 0,
+  },
+  battlesLost: {
+    type: Number,
+    default: 0,
+  },
+  rank: {
+    type: Number,
+    default: 1,
+  },
+  xp: {
+    type: Number,
+    default: 0,
+  },
+  activeNFT: {
+    type: Number
+  },
+  // queue: [
+  //   {
+  //     move: {
+  //       type: Number,
+  //     }
   //   }
-  // }],
+  // ],
   // betWinPercent: {
   //   type: Number,
   //   default: 0,

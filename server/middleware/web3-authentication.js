@@ -17,13 +17,15 @@ const web3RejectUnauthenticated = async (req, res, next) => {
   // }
 
   //  use encryption for pw
-  const admin = await Admin.findOne({ username: "admin" });
-  if (admin.password === req.body.password) {
-    next();
-  } else {
-    res.status(403).send('user not authenticated')
-    return;
-  }
+  // const admin = await Admin.findOne({ username: "admin" });
+  // if (admin.password === req.body.password) {
+  //   next();
+  // } else {
+  //   res.status(403).send('user not authenticated')
+  //   return;
+  // }
+  next();
+
 }
 
 module.exports = { web3RejectUnauthenticated }

@@ -7,65 +7,41 @@ import Background from '../../assets/img/background.jpg'
 import TopDisplayContainer from "../../components/TopDisplayContainer";
 import UserProfile from "./UserProfile";
 import isMobile from "../../utils/isMobile";
+import { MyNftsProvider } from "../../contexts/MyNfts";
 
 const Profile = () => {
   const { account, connect } = useWallet()
 
   return (
     <Switch>
-      <StyledCanvas>
-        <BackgroundSection />
-        <ContentContainer>
-          <Page>
-            <TopDisplayContainer />
-            {account ?
-              <>
-                <ProfileContent>
-                  <Flavor>
-                    Edition #1
-                  </Flavor>
-                  <Title>Profile</Title>
-                  <UserProfile />
-                </ProfileContent>
-              </>
-              :
-              <StyledLinkContainer onClick={() => connect('injected')}>
-                <StyledLink>
-                  <BigTitle>
-                    Connect Your Wallet
+      <MyNftsProvider>
+        <StyledCanvas>
+          <BackgroundSection />
+          <ContentContainer>
+            <Page>
+              <TopDisplayContainer />
+              {account ?
+                <UserProfile />
+                :
+                <StyledLinkContainer onClick={() => connect('injected')}>
+                  <StyledLink>
+                    <BigTitle>
+                      Connect Your Wallet
               </BigTitle>
-                  <SubTitle>
-                    to access your profile
+                    <SubTitle>
+                      to access your profile
                 </SubTitle>
-                </StyledLink>
-              </StyledLinkContainer>
-            }
-          </Page>
-        </ContentContainer>
-      </StyledCanvas>
+                  </StyledLink>
+                </StyledLinkContainer>
+              }
+            </Page>
+          </ContentContainer>
+        </StyledCanvas>
+      </MyNftsProvider>
     </Switch>
   )
 }
 
-const Flavor = styled.div`
-position: absolute;
-top: 15px;
-right: 25px;
-font-family: "Bangers";
-font-size: 20px;
-`
-
-const Title = styled.div`
-  font-family: "Bangers";
-  font-size: 80px;
-  letter-spacing: 5px;
-  margin-bottom: 10px;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1;
-  letter-spacing: 4px;
-  color: black;
-`
 
 const StyledLink = styled.a`
 font-family: "Comic Book";
@@ -132,20 +108,6 @@ font-family: "Bangers";
   color: black;
   text-shadow: rgb(120,120,120) 3px 3px 0px;
 `
-
-
-const ProfileContent = styled.div`
-  display: flex;
-  position: relative;
-  flex-direction: column;
-  align-items: center;
-  width: 1156px;
-  padding: 20px;
-  background-color: white;
-  border-radius: 2px 2px 0 0;
-  border: 2px solid black;
-  border-bottom: none;
-  `
 
 const BackgroundSection = styled.div`
   background-image: url(${Background});

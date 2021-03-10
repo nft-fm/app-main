@@ -7,6 +7,8 @@ const contract = new web3.eth.Contract(abi.abi, '0xa9CDb5e3C911884Ca6D4b32273c21
 const { web3RejectUnauthenticated } = require('../middleware/web3-authentication');
 const Nft = require('../schemas/Nft.schema')
 const NftType = require('../schemas/NftType.schema')
+const { buyNFT } = require('../web3/server-utils')
+const Receipt = require('../schemas/Receipt.schema')
 
 const xpTable = [
   {
@@ -63,7 +65,7 @@ router.post('/get-by-user', async (req, res) => {
   }
 })
 
-router.get('/', async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     let Nft = await Nft.findOne({ _id: req.body.nftId });
     res.send(Nft);
@@ -111,6 +113,85 @@ router.post('/xp', web3RejectUnauthenticated, async (req, res) => {
 
     await nft.save();
     res.send(newNft);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("server error")
+  }
+})
+
+const createNFT = async (receipt) => {
+  // console.log("creating", receipt)
+  let nft = await Nft.findOne({ nftId: receipt.saleId });
+  if (nft) {
+    return nft;
+  }
+  const nftType = await NftType.findOne({ assetId: receipt.assetId });
+  const newNft = new Nft({
+    nftId: receipt.saleId,
+    assetId: receipt.assetId,
+    nftType: nftType._id,
+    receipt: receipt._id,
+    stats: nftType.baseStats,
+    name: nftType.name
+  })
+  await newNft.save();
+  // console.log("created?", newNft);
+  return (newNft);
+}
+
+router.post('/buy', async (req, res) => {
+  try {
+
+    console.log("pinging buy", req.body);
+    if (!req.body.address || (!req.body.saleID && req.body.saleID !== 0)) {
+      return res.sendStatus(500)
+    }
+    let receipt = await Receipt.findOne({ saleId: req.body.saleID })
+    if (receipt) {
+      const newNft = await createNFT(receipt);
+      // console.log("bought", receipt, newNft);
+      res.send(receipt)
+    }
+    else {
+      await buyNFT(req.body.address, req.body.saleID)
+      receipt = await Receipt.findOne({ saleId: req.body.saleID })
+      const newNft = await createNFT(receipt);
+      // console.log("bought", receipt, newNft);
+      res.send(receipt)
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("server error")
+  }
+})
+
+router.post('/get-one', async (req, res) => {
+  try {
+    console.log("1", req.body)
+    let nft = await Nft.findOne({ nftId: req.body.nftId })
+    if (!nft) {
+      console.log("error, cannot find nft")
+      res.send(null);
+    }
+    // let receipt = await Receipt.findOne({ saleId: req.body.saleId})
+    let nftType = await NftType.findOne({ assetId: nft.assetId });
+    const returnNft = {
+      assetId: nft.assetId,
+      level: nft.level,
+      nftId: nft.nftId,
+      nftType: nft.nftType,
+      // receipt: nft.receipt,
+      stats: nft.stats,
+      // timestamp: nft.timestamp,
+      xp: nft.xp,
+      xpToNextLevel: nft.level > 0 ? nft.level * 10 : 10,
+      picture: nftType.picture,
+      rarity: nftType.rarity,
+      name: nftType.name
+    };
+
+    res.send(returnNft);
+
   } catch (error) {
     console.log(error);
     res.status(500).send("server error")

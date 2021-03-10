@@ -8,7 +8,7 @@ import { Nav } from "../TopBar/components/Nav";
 const Page = ({ children }) => (
   <StyledPage>
     <TopBar />
-    <Col expand="sm" style={{marginTop:"10px"}}>
+    <Col expand="sm" style={{ marginTop: "10px" }}>
       <Nav />
     </Col>
     <StyledMain>
@@ -29,6 +29,7 @@ const StyledMain = styled.div`
   display: flex;
   flex-direction: column;
   min-height: calc(100% - 63px);
+  
   margin-bottom: -130px;
 `;
 

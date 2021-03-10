@@ -8,12 +8,9 @@ export const Nav = () => {
       <StyledLink exact activeClassName="active" to="/stake">
         Stake
       </StyledLink>
-      {/* <StyledLink exact activeClassName="inactive" to="/nfts">Buy NFTs</StyledLink>
-      <StyledLink exact activeClassName="inactive" to="/duels">Duel!</StyledLink>
-      <StyledLink exact activeClassName="inactive" to="/profile">Profile</StyledLink> */}
-      <InactiveLink>Buy NFTs</InactiveLink>
-      <InactiveLink>Duel!</InactiveLink>
-      <InactiveLink>Profile</InactiveLink>
+      <StyledLink exact activeClassName="active" to="/store">Buy NFTs</StyledLink>
+      <StyledLink exact activeClassName="active" to="/duels">Duel!</StyledLink>
+      <StyledLink exact activeClassName="active" to="/profile">Profile</StyledLink>
     </StyledNav>
   );
 };

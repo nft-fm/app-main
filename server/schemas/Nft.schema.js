@@ -7,38 +7,39 @@ const NftSchema = new Schema({
     required: true,
     unique: true,
   },
+  assetId: {
+    type: Number,
+    required: true,
+  },
   nftType: {
 		type: Schema.Types.ObjectId,
 		ref: "type",
 		required: true,
   },
-  owner: {
-    type: String,
+  receipt: {
+		type: Schema.Types.ObjectId,
+		ref: "receipt",
+		required: true,
   },
-  contractAddress: {
-    type: String,
-    required: true,
-  },
-  name: {
-    type: String,
-    default: "",
-  },
-  picture: {
-    type: String,
-    default: ":money_mouth:",
-  },
-  rarity: {
-    type: Number,
-  },
+  // owner: {
+  //   type: String,
+  // },
+  // contractAddress: {
+  //   type: String,
+  //   required: true,
+  // },
+  // name: {
+  //   type: String,
+  //   default: "",
+  // },
+  // rarity: {
+  //   type: Number,
+  // },
   level: {
     type: Number,
     default: 0,
   },
   xp: {
-    type: Number,
-    default: 0,
-  },
-  xpToNextLevel: {
     type: Number,
     default: 0,
   },
@@ -67,4 +68,4 @@ const NftSchema = new Schema({
   },
 })
 
-module.exports = Nft = mongoose.model('nft', NftSchema)
+module.exports = Nft = mongoose.model('nft', NftSchema);

@@ -12,7 +12,6 @@ import ModalsProvider from './contexts/Modals'
 import Home from './views/Home'
 import Profile from './views/Profile'
 import Stake from './views/Stake'
-// import NFT from './views/NFT'
 import isMobile from "./utils/isMobile";
 import theme from './theme'
 import { createGlobalStyle } from 'styled-components';
@@ -73,28 +72,6 @@ if (window.location.hostname !== 'localhost')
 
 const App = () => {
 
-  const trackingId = "G-DRVS5C20MX";
-  ReactGA.initialize(trackingId);
-
-  // if (isMobile()) {
-  //   return (
-  //     <Providers>
-  //       <StyledCanvas>
-  //         <Router>
-  //           <Switch>
-  //             <Redirect exact from="/" to="/home" />
-  //             <Route path="/home" exact>
-  //               <Home />
-  //             </Route>
-  //             <Route path="/stake" exact>
-  //             <Stake />
-  //           </Route>
-  //           </Switch>
-  //         </Router>
-  //       </StyledCanvas>
-  //     </Providers>
-  //   );
-  // }
   return (
     <Providers>
       <StyledCanvas>
@@ -130,7 +107,7 @@ const Providers = ({ children }) => {
   return (
     <ThemeProvider theme={theme}>
       {/* change the ChainId below here for the preffered network when testing, 1 main 3 ropsten 42 kovan */}
-      <UseWalletProvider chainId={1} connectors={{
+      <UseWalletProvider chainId={42} connectors={{
         walletconnect: { rpcUrl: 'https://mainnet.eth.aragon.network/' },
       }}>
         <ModalsProvider>

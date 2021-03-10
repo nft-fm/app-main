@@ -1,0 +1,174 @@
+body {
+  background: #011B3A;
+  margin: 0;
+  font-family: "Nunito", sans-serif;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+}
+
+button:focus {
+  outline: none;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Alegreya&display=swap");
+
+@keyframes dOtNsp {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes dOtNsp2 {
+  0% {
+    background-position: 0% 50%;
+    transform: scale(1.05);
+  }
+  50% {
+    background-position: 100% 50%;
+    transform: scale(1);
+  }
+  100% {
+    background-position: 0% 50%;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes marquee {
+  0% {
+    -webkit-transform: translateX(0vw);
+  }
+  25% {
+    -webkit-transform: translateX(-80vw);
+  }
+  50% {
+    -webkit-transform: translateX(0vw);
+  }
+  75% {
+    -webkit-transform: translateX(-80vw);
+  }
+  100% {
+    -webkit-transform: translateX(0vw);
+  }
+}
+
+@keyframes fadein {
+  0% {
+    opacity: 0;
+    z-index: 10000;
+  }
+  50% {
+    opacity: 0.5;
+    z-index: 10000;
+  }
+  100% {
+    opacity: 1;
+    z-index: 10000;
+  }
+}
+
+.Series  > g > path {
+  stroke: white !important;
+}
+
+.medium-link {
+  max-width: 60%;
+  margin-bottom: 5px;
+}
+
+.milestone-image {
+  width: 40px;
+  min-height:40px;
+  min-width: 40px;
+}
+
+.swal2-container {
+  z-index: 10000000 !important;
+}
+
+.timeline-Widget {
+  background-color: rgba(0,0,0,0.2) !important;
+}
+
+.emoji-picker-react .emoji-group {
+  text-align: left;
+}
+
+aside.emoji-picker-react {
+  box-shadow: none;
+}
+
+.emoji-picker-react ul.skin-tones-list {
+  top: 5px;
+}
+
+.emoji-picker-react .emoji {
+  height: 38px !important;
+}
+
+.pagination {
+  list-style-type: none;
+  display: flex;
+  margin: 0px;
+}
+
+.pagination > li {
+  border-top: solid 2px gray;
+  border-bottom: solid 2px gray;
+  border-right: solid 2px gray;
+  background-color: rgba(256,256,256,0.08);
+  color: rgba(0,0,0,0.8);
+  cursor: pointer;
+  user-select: none;
+  height: 24px;
+  display: flex;
+  transition: all 0.1s linear;
+}
+
+.pagination > li:hover {
+  background-color: rgba(256,256,256,0.16);
+}
+
+.pagination > li > a {
+  outline: none;
+  height: 100%;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination > li:last-child {
+  border-radius: 0 5px 5px 0;
+}
+
+.pagination > li:last-child > a {
+  padding-right: 6px;
+}
+
+.pagination > li:first-child > a {
+  padding-left: 6px;
+}
+
+.pagination > li:first-child {
+  border-radius:  5px 0 0 5px;
+  border-left: solid 2px gray;
+}
+
+.pagination > li.active {
+  background-color: rgba(256,256,256,0.8);
+}

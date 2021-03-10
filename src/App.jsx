@@ -75,29 +75,6 @@ if (window.location.hostname !== 'localhost')
   console.log = function () { };
 
 const App = () => {
-
-  const trackingId = "G-DRVS5C20MX";
-  ReactGA.initialize(trackingId);
-
-  // if (isMobile()) {
-  //   return (
-  //     <Providers>
-  //       <StyledCanvas>
-  //         <Router>
-  //           <Switch>
-  //             <Redirect exact from="/" to="/home" />
-  //             <Route path="/home" exact>
-  //               <Home />
-  //             </Route>
-  //             <Route path="/stake" exact>
-  //             <Stake />
-  //           </Route>
-  //           </Switch>
-  //         </Router>
-  //       </StyledCanvas>
-  //     </Providers>
-  //   );
-  // }
   return (
     <Providers>
       <StyledCanvas>

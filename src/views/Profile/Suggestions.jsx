@@ -4,16 +4,16 @@ import { useWallet } from 'use-wallet'
 import axios from "axios";
 import swal from "sweetalert2";
 import moment from 'moment';
-import { fetchBDTVotes, require } from "../../web3/utils";
+// import { fetchBDTVotes, require } from "../../web3/utils";
 
 const Community = ({ fetchSuggestions, suggestions }) => {
   const [exploitPrevent, setExploitPrevent] = useState(false);
   const [bdtVotes, setBdtVotes] = useState(0);
   const { account, connect } = useWallet()
 
-  useEffect(() => {
-    fetchBDTVotes((res) => setBdtVotes(res))
-  }, [account])
+  // useEffect(() => {
+  //   fetchBDTVotes((res) => setBdtVotes(res))
+  // }, [account])
 
   const newStyledSuggestions = suggestions.map((suggestion, index) => {
     let votesColor = "black";

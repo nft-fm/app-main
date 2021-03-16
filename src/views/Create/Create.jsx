@@ -1,35 +1,21 @@
-import {useWallet} from "use-wallet";
-import Page from "../../components/Page";
-import React from "react";
-import styled from "styled-components";
-import {useDuels} from "../../contexts/Duels";
+import React, { useCallback, useEffect, useState } from 'react'
+import styled from 'styled-components'
+import BaseView from '../BaseView'
+import useWallet from 'use-wallet'
 
-const Duels = () => {
-	const {getUser} = useDuels();
-	const {connect} = useWallet();
+const Profile = () => {
+  const { account, connect } = useWallet()
 
-	const makeConnection = async () => {
-		await connect('injected');
-		await getUser();
-	}
-	return (
-		<Page>
-			<StyledLinkContainer onClick={makeConnection}>
-				<StyledLinkConnect>
-					<BigTitle>
-						Connect Your Wallet
-					</BigTitle>
-					<SubTitle>
-						to access duels
-					</SubTitle>
-				</StyledLinkConnect>
-			</StyledLinkContainer>
-		</Page>
-	)
-
+  return (
+    <BaseView>
+      <BigTitle>Create music NFTs</BigTitle>
+      
+    </BaseView>
+  )
 }
 
-const StyledLinkConnect = styled.a`
+
+const StyledLink = styled.a`
 font-family: "Comic Book";
 font-size: 80px;
 font-stretch: normal;
@@ -95,4 +81,5 @@ font-family: "Bangers";
   text-shadow: rgb(120,120,120) 3px 3px 0px;
 `
 
-export default Duels;
+
+export default Profile

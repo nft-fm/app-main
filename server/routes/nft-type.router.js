@@ -1,11 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const Web3 = require('web3');
-const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/a768678405854cf584ae620be7844cc3'))
-const abi = require('../modules/BATTLEPool.json')
-const contract = new web3.eth.Contract(abi.abi, '0xa9CDb5e3C911884Ca6D4b32273c219B536Ee9e6A')
-const { web3RejectUnauthenticated } = require('../middleware/web3-authentication');
-const Nft = require('../schemas/Nft.schema')
 const NftType = require('../schemas/NftType.schema')
 
 
@@ -28,7 +22,7 @@ router.post('/new', async (req, res) => {
 })
 
 
-router.post('/update', web3RejectUnauthenticated, async (req, res) => {
+router.post('/update',  async (req, res) => {
   try {
     const { contractAddress, picture, rarity, stats, mintLimit } = req.body;
 

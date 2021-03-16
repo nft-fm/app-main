@@ -8,10 +8,7 @@ const cookieParser = require('cookie-parser')
 // const web3Router = require('./routes/unused/web3.router')
 const userRouter = require('./routes/user.router')
 const nftTypeRouter = require('./routes/nft-type.router')
-const nftRouter = require('./routes/nft.router')
-const battleRouter = require('./routes/battle.router')
 const connectDB = require('./modules/db')
-const passport = require('./modules/passport')
 const sessionMiddleware = require('./middleware/session-middleware')
 const path = require('path')
 
@@ -31,17 +28,13 @@ connectDB()
 
 app.use(cookieParser())
 app.use(sessionMiddleware)
-app.use(passport.initialize())
-app.use(passport.session())
+
 app.use(express.static('build'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-// app.use('api/cms', cmsRouter)
-// app.use('api/api', web3Router)
+
 app.use('/api/user', userRouter)
 app.use('/api/nft-type', nftTypeRouter)
-app.use('/api/nft', nftRouter)
-app.use('/api/battle', battleRouter)
 
 app.get('/*', function (req, res) {
   res.sendFile(path.join(__dirname, '../build/index.html'), function (err) {

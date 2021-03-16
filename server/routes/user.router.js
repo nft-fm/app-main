@@ -4,12 +4,7 @@ const BigNumber = require('bignumber.js')
 
 const User = require('../schemas/User.schema')
 const Suggestion = require("../schemas/Suggestion.schema");
-const Nft = require('../schemas/Nft.schema')
 
-const Web3 = require('web3');
-const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/a768678405854cf584ae620be7844cc3'))
-const abi = require('../modules/BATTLEPool.json')
-const contract = new web3.eth.Contract(abi.abi, '0xa9CDb5e3C911884Ca6D4b32273c219B536Ee9e6A')
 
 router.post('/get-account', async (req, res) => {
   try {
@@ -30,28 +25,6 @@ router.post('/get-account', async (req, res) => {
   }
 })
 
-router.post('/update-activeNft', async (req,res) => {
-  try {
-    console.log("GOT IN UPDATE")
-    const newNFT = {activeNFT: req.body.activeNFT, address: req.body.address};
-    const signingAddress = web3.eth.accounts.recover(JSON.stringify(newNFT), req.body.sig);
-
-    if (req.body.address !== signingAddress) {
-      console.log("signature mismatch")
-      res.status(401).send("signature mismatch");
-      return
-    }
-
-    let user = await User.findOneAndUpdate({ address: req.body.address },
-                                          {activeNFT: req.body.activeNFT});
-
-    console.log(user);
-    res.send(user);
-  } catch (error) {
-    console.log(error);
-    res.sendStatus(500)
-  }
-})
 router.post('/update-account', async (req, res) => {
   try {
     const pictureColor = req.body.pictureColor ? req.body.pictureColor : "#002450";
@@ -109,7 +82,7 @@ router.post('/suggestion', async (req, res) => {
     //   res.status(403).send("You may only submit one suggestion per day.")
     //   return
     // }
-    let votes = new BigNumber(await contract.methods.balanceOf(req.body.address).call()).dividedBy(10 ** 18).toFixed(18)
+    // let votes = new BigNumber(await contract.methods.balanceOf(req.body.address).call()).dividedBy(10 ** 18).toFixed(18)
 
     // if (parseFloat(votes) === 0) {
     //   res.status(403).send("You must have BDT or ETH-BDT-LP staked in order to submit a suggestion. Please stake BDT on the stake page.")

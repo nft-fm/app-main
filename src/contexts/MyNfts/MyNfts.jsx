@@ -73,21 +73,21 @@ export const MyNftsProvider = ({ children }) => {
     setMyNfts(nfts);
   }
 
-  useEffect(() => {
-    if (account) {
-      getMyNFTs(res => {
-        res = res.map(nft => {
-          return nft.map(s => s.toNumber())
-        })
-        if (!res[0].length) {
-          setHasNfts(false);
-        } else {
-          fetchNfts(res[0]);
-        }
-      })
-      getBattleHistory(battlePage, 4);
-    }
-  }, [account, battlePage])
+  // useEffect(() => {
+  //   if (account) {
+  //     getMyNFTs(res => {
+  //       res = res.map(nft => {
+  //         return nft.map(s => s.toNumber())
+  //       })
+  //       if (!res[0].length) {
+  //         setHasNfts(false);
+  //       } else {
+  //         fetchNfts(res[0]);
+  //       }
+  //     })
+  //     getBattleHistory(battlePage, 4);
+  //   }
+  // }, [account, battlePage])
 
   return (
     <NftsContext.Provider

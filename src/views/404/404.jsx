@@ -6,7 +6,6 @@ import Page from "../../components/Page";
 import Background from '../../assets/img/background.jpg'
 import Logo from "../../assets/img/logo.png"
 import TopDisplayContainer from '../../components/TopDisplayContainer'
-import { getDCBalance } from '../../web3/utils'
 import { NavLink } from "react-router-dom";
 import isMobile from "../../utils/isMobile";
 
@@ -14,19 +13,6 @@ const Farms = () => {
   const { account, connect, ethereum } = useWallet()
   let [balance, setBalance] = useState(0);
 
-  const checkDCBal = async () => {
-    getDCBalance((res) => {
-      console.log(res);
-      setBalance(parseFloat(res).toFixed(4))
-    });
-  }
-
-  useEffect(() => {
-    if (account) {
-      checkDCBal()
-      setInterval(function () { checkDCBal() }, 6000)
-    }
-  }, [account])
 
   if (balance === 0) {
     balance = null

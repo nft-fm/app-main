@@ -1,13 +1,5 @@
 import { Contract, utils, providers, constants, BigNumber, getDefaultProvider } from "ethers";
-import ERC20StakingABI from "./abi/Erc20StakingPool.abi";
-import BDTABI from "./abi/BDT.abi";
-import DCABI from "./abi/DC.abi";
-import NFTABI from "./abi/NFT.abi";
-import NFTSaleABI from "./abi/NFTSale.abi";
-import {
-	ERC20StakingAddress, LPStakingAddress, BDTAddress, BDTLPAddress, DCAddress,
-	NFTAddress, NFTSaleAddress
-} from './constants';
+
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import isMobile from "../utils/isMobile";
 

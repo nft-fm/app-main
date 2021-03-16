@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import RankBubble from '../../assets/img/profile_page_assets/profile_rank_bubble.png'
 import ProfileRankBG from "../../assets/img/profile_page_assets/profile_rank.png"
 import ProfileHistoryBG from "../../assets/img/profile_page_assets/profile_history.png"
-import History from "./History";
 
 const Profile = ({ user }) => {
 
@@ -83,7 +82,6 @@ const Profile = ({ user }) => {
         <ComicTitle>
           Duel History
         </ComicTitle>
-        <History user={user} />
       </DuelHistory>
     </Container>
   )

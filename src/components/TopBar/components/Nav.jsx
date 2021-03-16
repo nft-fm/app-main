@@ -5,11 +5,10 @@ import styled from "styled-components";
 export const Nav = () => {
   return (
     <StyledNav>
-      <StyledLink exact activeClassName="active" to="/stake">
-        Stake
+      <StyledLink exact activeClassName="active" to="/create">
+        Create
       </StyledLink>
       <StyledLink exact activeClassName="active" to="/store">Buy NFTs</StyledLink>
-      <StyledLink exact activeClassName="active" to="/duels">Duel!</StyledLink>
       <StyledLink exact activeClassName="active" to="/profile">Profile</StyledLink>
     </StyledNav>
   );

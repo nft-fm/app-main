@@ -101,12 +101,8 @@ const Button = styled.button`
     `
 
 const StyledAccountButton = styled.div`
-      background-image: url(${buttonBG});
       width: 200px;
       height: 70px;
-      background-size: contain;
-      background-repeat: no-repeat;
-      font-family: "Comic Book";
       cursor: pointer;
       transition: all 0.1s ease-in-out;
       display: flex;

@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import logo from "../../assets/img/logo_outline.png";
+import logo from "../../assets/img/logo.png";
 
 const Logo = () => {
   return (
     <LogoContainer>
       <StyledLogo src={logo} alt="logo" height="40px" />
-      <StyledText>Block Duelers</StyledText>
+      <StyledText>NFT FM</StyledText>
     </LogoContainer>
   );
 };

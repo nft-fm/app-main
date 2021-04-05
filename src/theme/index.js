@@ -14,7 +14,7 @@ const theme = {
     },
     white,
   },
-  siteWidth: 1400,
+  siteWidth: 1700,
   spacing: {
     1: 4,
     2: 8,
@@ -24,7 +24,7 @@ const theme = {
     6: 48,
     7: 64,
   },
-  topBarSize: 50
+  topBarSize: 60
 }
 
 export default theme

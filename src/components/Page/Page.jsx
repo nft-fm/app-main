@@ -28,9 +28,9 @@ const StyledMain = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
-  min-height: calc(100% - 63px);
+  min-height: calc(100% - 60px);
   
-  margin-bottom: -130px;
+  margin-bottom: -60px;
 `;
 
 const Push = styled.div`

@@ -16,340 +16,93 @@ import telegram from "../../assets/img/social_telegram.png";
 import discord from "../../assets/img/social_discord.png";
 import Uniswap from '../../assets/img/uniswap.svg'
 import isMobile from "../../utils/isMobile";
+import BaseView from '../BaseView'
 
-const Farms = () => {
+const Listen = () => {
   const { path } = useRouteMatch();
   const { account, connect } = useWallet();
-
-  let [warStaked, setWarStaked] = useState({
-    warStaked: new BigNumber(0),
-    circSupply: new BigNumber(0)
-  });
-  let launch = 1640116800000;
 
 
   return (
     <Switch>
-      <StyledCanvas>
-        <BackgroundSection />
-        <BackgroundOverlay />
-        <BigLogoContainer>
-          <BigLogo src={Logo} />
-        </BigLogoContainer>
-        <ContentContainer>
-          <Page>
-            <TopDisplayContainer />
-            <LandingSection>
-              <HeaderText>
-                BLOCK DUELERS
+      <BaseView>
+        <TopDisplayContainer />
+        <LandingSection>
+          <HeaderText>
+            NFT FM
                 </HeaderText>
-              <LandingBottom>
-                <LandingInfo>
-                  {/* <InfoTitle>
+          <LandingBottom>
+            <LandingInfo>
+              {/* <InfoTitle>
                     LISTING IS LIVE!
                   </InfoTitle> */}
-                  <InfoContent>
-                    <InfoContentTitle>
-                      We Have Listed! Click the link below to purchase some BDT
+              <InfoContent>
+                <InfoContentTitle>
+                  We Have Listed! Click the link below to purchase some BDT
                     </InfoContentTitle>
-                    <ETHAddress href='https://app.uniswap.org/#/swap?outputCurrency=0x7bce667ef12023dc5f8577d015a2f09d99a5ef58&inputCurrency=ETH' target="_blank"
-                      rel="noopener noreferrer">
-                      <StyledDiv
-                        style={{ marginTop: "-5px" }}
-                        target="_blank"
-                      />
-                    </ETHAddress>
-                    {/* <div>
+                <ETHAddress href='https://app.uniswap.org/#/swap?outputCurrency=0x7bce667ef12023dc5f8577d015a2f09d99a5ef58&inputCurrency=ETH' target="_blank"
+                  rel="noopener noreferrer">
+                  <StyledDiv
+                    style={{ marginTop: "-5px" }}
+                    target="_blank"
+                  />
+                </ETHAddress>
+                {/* <div>
                       This is our last presale before listing. It will be closed after the first 50 transactions. Don't wait, it's the last time to get BDT at this price!
                       </div> */}
-                  </InfoContent>
-                </LandingInfo>
-                <LandingSocials>
-                  <StyledLinkContainer
-                    style={{ marginLeft: '50%' }}
+              </InfoContent>
+            </LandingInfo>
+            <LandingSocials>
+              <StyledLinkContainer
+                style={{ marginLeft: '50%' }}
 
-                  >
+              >
 
-                    <StyledLink
-                      href="https://t.me/BlockDuelers" target="_blank"
-                      rel="noopener noreferrer">
-                      <SocialIcon src={telegram} />
+                <StyledLink
+                  href="https://t.me/BlockDuelers" target="_blank"
+                  rel="noopener noreferrer">
+                  <SocialIcon src={telegram} />
                 Telegram
                 </StyledLink>
-                  </StyledLinkContainer>
+              </StyledLinkContainer>
 
-                  <StyledLinkContainer
-                    style={{ marginLeft: '30%' }}
-                  >
-                    <StyledLink
-                      href="https://twitter.com/Blockduelers" target="_blank"
-                      rel="noopener noreferrer">
-                      <SocialIcon src={twitter} />
+              <StyledLinkContainer
+                style={{ marginLeft: '30%' }}
+              >
+                <StyledLink
+                  href="https://twitter.com/Blockduelers" target="_blank"
+                  rel="noopener noreferrer">
+                  <SocialIcon src={twitter} />
                     Twitter
                     </StyledLink>
-                  </StyledLinkContainer>
+              </StyledLinkContainer>
 
-                  <StyledLinkContainer
-                    style={{ marginLeft: '45%' }}
-                  >
-                    <StyledLink
-                      href="https://discord.com/invite/7ww5YaYfWC" target="_blank"
-                      rel="noopener noreferrer">
-                      <SocialIcon src={discord} />
+              <StyledLinkContainer
+                style={{ marginLeft: '45%' }}
+              >
+                <StyledLink
+                  href="https://discord.com/invite/7ww5YaYfWC" target="_blank"
+                  rel="noopener noreferrer">
+                  <SocialIcon src={discord} />
                       Discord
                     </StyledLink>
-                  </StyledLinkContainer>
+              </StyledLinkContainer>
 
-                  <StyledLinkContainer
-                    style={{ marginLeft: '23%', marginBottom: '0' }}
-                  >
+              <StyledLinkContainer
+                style={{ marginLeft: '23%', marginBottom: '0' }}
+              >
 
-                    <StyledLink
-                      href="https://medium.com/@blockduelers" target="_blank"
-                      rel="noopener noreferrer">
-                      <SocialIcon src={medium} />
+                <StyledLink
+                  href="https://medium.com/@blockduelers" target="_blank"
+                  rel="noopener noreferrer">
+                  <SocialIcon src={medium} />
                     Medium
                     </StyledLink>
-                  </StyledLinkContainer>
-
-
-                </LandingSocials>
-              </LandingBottom>
-            </LandingSection>
-            <MidContainer1>
-              <MidTitle>
-                WHO ARE WE ?
-                </MidTitle>
-              <MidBody>
-                The first decentralized finance project to create true utility for NFTs by utilizing an ever-evolving dueling platform, with an integrated wager system to bet on the outcome of live duels! The battle platform attaches custom fighting stats to your favorite NFTs. As you fight and win duels, the stats of your duelers go up and game changing upgrades become available!
-                </MidBody>
-              <TechnicalContents>
-                <Roadmap />
-                <TechDoc style={{ backgroundImage: `url(${"https://media.discordapp.net/attachments/785353561273270282/798220425343533066/PNG_CORR_Community_Tech_Doc_Beta_Features.png"})` }} />
-              </TechnicalContents>
-            </MidContainer1>
-            <MidContainer2>
-              <ComicTitle>
-                NFTS ?
-                </ComicTitle>
-              <ComicContents>
-                <Column>
-                  <ComicBody1>
-                    NFTs are an exciting new technology that brings verifiable digital scarcity, as well as digital ownership and the possibility of asset interoperability, across multiple platforms. The most popular use of NFTs right now is digital art. This new era of art is set to explode in the next few years, with billions of dollars to be made for both collectors and creators alike!
-                </ComicBody1>
-                </Column>
-                <Column>
-                  <ComicBody2>
-                    Crypto collectibles were the first use case of NFTs related to gaming, trading card games in particular. A great example is a game called Crypto Kitties. This game utilized NFTs as collectible animated pets. This has quickly expanded to other formats and will continue to do so as the popularity of this technology increases.
-                </ComicBody2>
-                </Column>
-              </ComicContents>
-              <ComicContents>
-                <NFTExample style={{ backgroundImage: `url(${"https://cdn.discordapp.com/attachments/613478885174018084/795808082642468874/unknown.png"})` }} />
-                <NFTExample style={{ backgroundImage: `url(${"https://cdn.discordapp.com/attachments/613478885174018084/795805925957042196/unknown.png"})` }} />
-                <NFTExample style={{ backgroundImage: `url(${"https://cdn.discordapp.com/attachments/613478885174018084/795808135020544060/unknown.png"})` }} />
-              </ComicContents>
-              <ComicSeperator />
-              <ComicSubTitle>
-                Created by industry leading artist, Johnny Gonzo!
-                </ComicSubTitle>
-              <ComicContents>
-                <Column>
-                  <DemoImage src={'https://cdn.discordapp.com/attachments/613478885174018084/794334893143883846/chonk_andre.gif'} />
-                  <Caption>
-                    Example of Gonzos Work
-                </Caption>
-                </Column>
-                <Column>
-                  <ComicBody2>
-                    These NFT's will be made by Johnny Gonzo and other leading industry artists! Eventually, we will partner with existing NFT projects to integrate specific NFT's from their platforms.
-                </ComicBody2>
-                  <ComicBody1>
-                    The Hall of Duelers is where you will stake your Block Duelers ERC20 Tokens and LP tokens. In return, you will receive dueler credits that can be used to redeem NFT duelers and eventually other items.
-                </ComicBody1>
-                  <ComicBody2>
-                    These items will include things like powerful stat upgrades, hard hitting attacks, defensive tactics and other fighter perks. Dueler Credits will later be used to gain entry into tournaments, items to use in battle, and as credits for the gambling/wager feature.
-                </ComicBody2>
-                </Column>
-              </ComicContents>
-            </MidContainer2>
-            <MidContainer3>
-              <ComicTitle>
-                How does the game work?
-                </ComicTitle>
-              <ComicContents>
-                <BattleText>
-                  <ComicBody1>
-                    After players create an account on our battle platform and connect their Ethereum wallet with their compatible NFTs, they will be able to duel other players and their NFTs. The first release of Block Duelers will introduce 3 tiers of fighters available to redeem and battle.
-                </ComicBody1>
-                </BattleText>
-                <BattleText>
-                  <ComicBody2>
-                    Each tier will have different skill power levels and will initially include 3 skills: Attack, Heal and Defend. Future development of the game will bring new skills, tier levels, power upgrades, new NFT fighters and much, much more!
-                </ComicBody2>
-                </BattleText>                <BattleText>
-                  <ComicBody1>
-                    Each compatible NFT that is uploaded to the player’s account (via our custom dueling platform) will have a predetermined set of stats assigned to it. These stats will follow the NFT throughout its Saga on our platform by using its UDA# (Unique Digital Asset #), no matter who owns the NFT!
-                </ComicBody1>
-                </BattleText>
-              </ComicContents>
-              <BattleImageContainer>
-                <DemoImage style={{ maxHeight: "380px" }} src={'https://cdn.discordapp.com/attachments/613478885174018084/794339272974270464/unknown.png'} />
-                <Caption>
-                  Battle System Demo. Subject to Change.
-                </Caption>
-              </BattleImageContainer>
-            </MidContainer3>
-            <MidContainer4>
-              <ComicTitle>
-                Sounds Exciting! What Else?
-                </ComicTitle>
-              <ComicContents>
-                <Column>
-                  <ComicBody2>
-                    As duelers gain experience and their NFT fighters grow in strength, there will be a need for legendary tournaments. Here, the best heroes and villains will duel it out for large cash prizes. Where various cryptocurrencies are accepted, these tournaments can also be bet on by other people.
-                </ComicBody2>
-                  <ComicBody1>
-                    After Issue #1 is released with the key base features that we spoke about earlier, we will continue brainstorming, developing and implementing new game-changing ideas and elements into future versions.
-                </ComicBody1>
-                  <ComicBody2>
-                    We have a lengthy, ever-growing list of things we want to eventually incorporate into the project and business model, but we need to have the basics done in order to do so! We hope that you are as excited as we are to start this awesome adventure in NFTs, Crypto and gaming.
-<br /><br />
-We are just getting started!
-                </ComicBody2>
-                </Column>
-                <Column>
-                  <DemoImage src={'https://cdn.discordapp.com/attachments/613478885174018084/794334896872357928/chonk_vitalik.gif'} />
-                  <Caption>
-                    Example of Gonzos Work
-                </Caption>
-                </Column>
-              </ComicContents>
-            </MidContainer4>
-            <MidContainer5>
-              <ComicTitle>
-                Tokenomics & Sale Information
-                </ComicTitle>
-              <ComicContents>
-                <Column>
-                  <TokenomicsImage />
-                </Column>
-
-                <Column>
-                  <ComicBody2 style={!isMobile() ? { marginTop: "100px", marginBottom: "150px" } : null}>
-                    Funding rounds have been complete and our development has begun! We will be burning the remaining tokens shortly! There are 10,000 BDT being held by the team for development and marketing. Aside from that, the rest of the token supply is already in the hands of the community or currently being staked on our platform!
-                </ComicBody2>
-                </Column>
-              </ComicContents>
-              <Spacer />
-              {!isMobile() ?
-                <FlavorImage src={TokenomicsImg} />
-                :
-                <FlavorImage src={TokenomicsImgMobile} />
-              }
-            </MidContainer5>
-            <BottomContainer>
-              <ComicTitle>
-                Meet The Team!
-                </ComicTitle>
-              <TopTeamContainer>
-                <BigTeam>
-                  <BigTeamImage src={'https://cdn.discordapp.com/attachments/785353561273270282/804396103674888252/1611497516830.jpeg'} />
-
-                  {!isMobile() ?
-                    <TeamCaption>
-                      GARRETT BLAKESLEE - Creator, Founder and CEO
-                    </TeamCaption>
-                    : <TeamCaption>
-                      GARRETT BLAKESLEE<br />-<br />Creator, Founder and CEO
-                  </TeamCaption>
-                  }
-                  <StyledLinkContainer>
-                    <StyledLinkedIn
-                      href="https://www.linkedin.com/in/garrett-blakeslee-540a015b/" target="_blank"
-                      rel="noopener noreferrer">
-                      LinkedIn</StyledLinkedIn>
-                  </StyledLinkContainer>
-                </BigTeam>
-                <SmallTeam>
-                  <SmallTeamImage style={{ border: "none" }} src={'https://cdn.discordapp.com/attachments/613478885174018084/803067337171402792/logo_hd.png'} />
-                  {!isMobile() ?
-                    <TeamCaption>
-                      SIMPLE BREAKTHROUGH - Development Team
-                    </TeamCaption>
-                    : <TeamCaption>
-                      SIMPLE BREAKTHROUGH<br />-<br />Development Team
-                      </TeamCaption>
-                  }
-                  <StyledLinkContainer>
-                    <StyledLinkedIn
-                      href="https://www.linkedin.com/company/71608163/" target="_blank"
-                      rel="noopener noreferrer">
-                      LinkedIn</StyledLinkedIn>
-                    <StyledLinkedIn
-                      style={!isMobile() ? { marginLeft: "20px" } : { marginTop: "8px" }}
-                      href="https://www.simple-breakthrough.com/contact" target="_blank"
-                      rel="noopener noreferrer">
-                      Inquiries</StyledLinkedIn>
-                  </StyledLinkContainer>
-                </SmallTeam>
-              </TopTeamContainer>
-              <TeamContainer>
-                <SmallTeam style={{ marginTop: "-40px" }}>
-                  <SmallTeamImage src={'https://media.discordapp.net/attachments/785353561273270282/804395364131012658/omar.jpeg'} />
-                  {!isMobile() ?
-                    <TeamCaption>
-                      OMAR ABDELFATTAH - Business Development Manager
-                </TeamCaption>
-                    : <TeamCaption>
-                      OMAR ABDELFATTAH<br />-<br />Business Development Manager
-                </TeamCaption>
-                  }
-                  <StyledLinkContainer>
-                    <StyledLinkedIn
-                      href="https://www.linkedin.com/in/omar-abdelfattah-14b16518b/" target="_blank"
-                      rel="noopener noreferrer">
-                      LinkedIn</StyledLinkedIn>
-                  </StyledLinkContainer>
-                </SmallTeam>
-                <SmallTeam style={{ marginTop: "-40px" }}>
-                  <SmallTeamImage src={'https://cdn.discordapp.com/attachments/785353561273270282/804443600137486356/1553099973229.jpeg'} />
-                  {!isMobile() ?
-                    <TeamCaption>
-                      STUART FARMER - Technical Advisor
-                </TeamCaption> :
-                    <TeamCaption>
-                      STUART FARMER<br />-<br />Technical Advisor
-                    </TeamCaption>}
-                  <StyledLinkContainer>
-                    <StyledLinkedIn
-                      href="https://www.linkedin.com/in/stuartfarmer/" target="_blank"
-                      rel="noopener noreferrer">
-                      LinkedIn</StyledLinkedIn>
-                  </StyledLinkContainer>
-                </SmallTeam>
-                <SmallTeam style={{ marginTop: "-40px" }}>
-                  <SmallTeamImage src={'https://cdn.discordapp.com/attachments/785353561273270282/804403777364426812/Screen_Shot_2021-01-28_at_9.33.08_AM.png'} />
-                  {!isMobile() ?
-                    <TeamCaption>
-                      RAKIB AHAMED - Marketing Director
-                    </TeamCaption> :
-                    <TeamCaption>
-                      RAKIB AHAMED<br />-<br />Marketing Director
-                    </TeamCaption>}
-                  <StyledLinkContainer>
-                    <StyledLinkedIn
-                      href="http://linkedin.com/in/md-rakib-ahamed-156886158" target="_blank"
-                      rel="noopener noreferrer">
-                      LinkedIn</StyledLinkedIn>
-                  </StyledLinkContainer>
-                </SmallTeam>
-              </TeamContainer>
-            </BottomContainer>
-
-          </Page>
-        </ContentContainer>
-      </StyledCanvas>
+              </StyledLinkContainer>
+            </LandingSocials>
+          </LandingBottom>
+        </LandingSection>
+      </BaseView>
     </Switch>
   );
 };
@@ -1358,4 +1111,4 @@ const ContentContainer = styled.div`
   text-align: center;
 `;
 
-export default Farms;
+export default Listen;

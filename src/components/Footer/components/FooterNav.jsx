@@ -9,16 +9,6 @@ import { FooterLink } from "./FooterLink";
 export const FooterNav = () => {
   return (
     <Row>
-      <Col size={1} collapse="sm">
-        <StyledContact>
-          <ContactTop>
-            Contact us for questions, partnership ideas and private investment
-            opportunities!
-          </ContactTop>
-          <ContactBottom>INFO@BLOCKDUELERS.COM</ContactBottom>
-        </StyledContact>
-      </Col>
-
       <Col size={1} style={{ alignItems: "center" }}>
         <Row>
           <FooterLink

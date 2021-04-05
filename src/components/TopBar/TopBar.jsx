@@ -35,21 +35,13 @@ const TopBar = () => {
 
 const StyledTopBar = styled.div`
   z-index: 10;
-  border: solid 2px #000000;
-  background-image: linear-gradient(
-    to right,
-    #b72100,
-    #b72100 34%,
-    #1a8eb2 68%,
-    #1a8eb2
-  );
+  background-color: teal;
 `;
 
 const StyledTopBarInner = styled.div`
   align-items: center;
   display: flex;
   height: ${(props) => props.theme.topBarSize}px;
-  margin-top: 5px;
   justify-content: space-between;
   max-width: ${(props) => props.theme.siteWidth}px;
   width: 100%;

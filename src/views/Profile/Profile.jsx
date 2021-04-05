@@ -8,6 +8,7 @@ import TopDisplayContainer from "../../components/TopDisplayContainer";
 import UserProfile from "./UserProfile";
 import isMobile from "../../utils/isMobile";
 import { MyNftsProvider } from "../../contexts/MyNfts";
+import BaseView from '../BaseView'
 
 const Profile = () => {
   const { account, connect } = useWallet()
@@ -15,28 +16,23 @@ const Profile = () => {
   return (
     <Switch>
       <MyNftsProvider>
-        <StyledCanvas>
-          <BackgroundSection />
-          <ContentContainer>
-            <Page>
-              <TopDisplayContainer />
-              {account ?
-                <UserProfile />
-                :
-                <StyledLinkContainer onClick={() => connect('injected')}>
-                  <StyledLink>
-                    <BigTitle>
-                      Connect Your Wallet
+        <BaseView>
+          <TopDisplayContainer />
+          {account ?
+            <UserProfile />
+            :
+            <StyledLinkContainer onClick={() => connect('injected')}>
+              <StyledLink>
+                <BigTitle>
+                  Connect Your Wallet
               </BigTitle>
-                    <SubTitle>
-                      to access your profile
+                <SubTitle>
+                  to access your profile
                 </SubTitle>
-                  </StyledLink>
-                </StyledLinkContainer>
-              }
-            </Page>
-          </ContentContainer>
-        </StyledCanvas>
+              </StyledLink>
+            </StyledLinkContainer>
+          }
+        </BaseView>
       </MyNftsProvider>
     </Switch>
   )

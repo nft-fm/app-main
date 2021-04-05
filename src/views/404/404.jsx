@@ -8,6 +8,7 @@ import Logo from "../../assets/img/logo.png"
 import TopDisplayContainer from '../../components/TopDisplayContainer'
 import { NavLink } from "react-router-dom";
 import isMobile from "../../utils/isMobile";
+import BaseView from '../BaseView'
 
 const Farms = () => {
   const { account, connect, ethereum } = useWallet()
@@ -20,32 +21,23 @@ const Farms = () => {
 
   return (
     <Switch>
-      <StyledCanvas>
-        <BackgroundSection />
-        <BackgroundOverlay />
-        <BigLogoContainer>
-          <BigLogo src={Logo} />
-        </BigLogoContainer>
-        <ContentContainer>
-          <Page>
-            <CardContainer>
-              <TopDisplayContainer />
-              <HeaderText>
-                404
+      <BaseView>
+        <CardContainer>
+          <TopDisplayContainer />
+          <HeaderText>
+            404
                 </HeaderText>
-              <SubText>
-                There's nothing here
+          <SubText>
+            There's nothing here
                 </SubText>
-              <StyledLinkContainer>
+          <StyledLinkContainer>
 
-                <StyledLink exact to="/home">
-                  to home
+            <StyledLink exact to="/home">
+              to home
                  </StyledLink>
-              </StyledLinkContainer>
-            </CardContainer>
-          </Page>
-        </ContentContainer>
-      </StyledCanvas>
+          </StyledLinkContainer>
+        </CardContainer>
+      </BaseView>
     </Switch>
   );
 };

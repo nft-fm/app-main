@@ -11,6 +11,7 @@ export const Footer = () => (
 );
 
 const StyledFooter = styled.footer`
+  width: 100%;
   align-items: center;
   display: flex;
   justify-content: center;
@@ -26,12 +27,7 @@ const StyledFooter = styled.footer`
 const StyledFooterBG = styled.div`
   display: flex;
   justify-content: center;
-  padding: 30px 0 30px 0;
-  background-image: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.5),
-    rgba(0, 0, 0, 0) 50%
-  );
+  padding: 10px 0 10px 0;
+  background-color: teal;
   width: 100%;
-  border: 2px solid black;
 `;

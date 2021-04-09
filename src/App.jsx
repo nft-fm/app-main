@@ -25,7 +25,7 @@ const App = () => {
       <StyledCanvas>
         <Router>
           <Switch>
-            <Redirect exact from="/" to="/home" />
+            <Redirect exact from="/" to="/listen" />
             <Route path="/listen" exact>
               <Listen />
             </Route>

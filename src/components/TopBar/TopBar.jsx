@@ -9,34 +9,25 @@ import { Nav } from "./components/Nav";
 
 const TopBar = () => {
   return (
-    <StyledTopBar id="top">
-      {/* <Container size="lg"> */}
-        <StyledTopBarInner>
-          <NavLink to="/" style={{ flex: 1, textDecoration: "none" }}>
-            <Logo />
-          </NavLink>
-          {/* <Col collapse="sm"> */}
-            <Nav />
-          {/* </Col> */}
-          {/* <div
-            style={{
-              flex: 1,
-              display: "flex",
-              justifyContent: "flex-end",
-            }}
-          > */}
-            <AccountButton />
-          {/* </div> */}
-        </StyledTopBarInner>
-      {/* </Container> */}
+    <StyledTopBar id="top" window={window.location.pathname}>
+      <StyledTopBarInner>
+        <NavLink to="/" style={{ flex: 1, textDecoration: "none" }}>
+          <Logo />
+        </NavLink>
+        <Nav />
+        <AccountButton />
+      </StyledTopBarInner>
     </StyledTopBar>
   );
 };
+
+console.log(window.location.pathname)
 
 const StyledTopBar = styled.div`
   z-index: 10;
   background-color: black;
   border-bottom: 4px solid#7e2ce3;
+  border-bottom: ${props => props.window === "/listen" ? 'none' : '4px solid #7e2ce3'}
 `;
 
 const StyledTopBarInner = styled.div`

@@ -30,7 +30,7 @@ const StyledMain = styled.div`
   flex-direction: column;
   min-height: calc(100% - 68px);
   
-  margin-bottom: -60px;
+  margin-bottom: -56px;
 `;
 
 const Push = styled.div`

@@ -17,7 +17,6 @@ const StyledFooter = styled.footer`
   justify-content: center;
   background-color: black;
   padding: 10px 0 10px 0;
-
   border-top: 4px solid#7e2ce3;
 `;
 

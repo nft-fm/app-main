@@ -24,7 +24,7 @@ const InactiveLink = styled.div`
   user-select: none;
   line-height: 1;
   letter-spacing: 0.5px;
-  color: #ffb700;
+  color: #7e2ce3;
   opacity: 0.3;
   padding-left: ${(props) => props.theme.spacing[3]}px;
   padding-right: ${(props) => props.theme.spacing[3]}px;
@@ -43,12 +43,12 @@ const StyledLink = styled(NavLink)`
   font-size: 20px;
   line-height: 1;
   letter-spacing: 0.5px;
-  color: #ffb700;
+  color: #7e2ce3;
   padding-left: ${(props) => props.theme.spacing[3]}px;
   padding-right: ${(props) => props.theme.spacing[3]}px;
   text-decoration: none;
   &:hover {
-    color: #ffcb46;
+    color: #a365ef;
   }
   &.active {
     text-decoration: underline;

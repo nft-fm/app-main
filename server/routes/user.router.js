@@ -8,13 +8,11 @@ const Suggestion = require("../schemas/Suggestion.schema");
 
 router.post('/get-account', async (req, res) => {
   try {
+    console.log("get-account hit",req.body)
     let user = await User.findOne({ address: req.body.address });
     if (!user) {
-      const prevUser = await User.find().sort({ idNum: -1 }).limit(1)
-      const idNum = prevUser[0] ? prevUser[0].idNum + 1 : 1;
       user = new User({
         address: req.body.address,
-        idNum,
       })
       await user.save();
     }

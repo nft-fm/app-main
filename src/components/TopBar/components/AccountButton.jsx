@@ -2,7 +2,6 @@ import React, {useCallback, useEffect} from "react";
 import ReactGA from "react-ga";
 import styled from "styled-components";
 import { useWallet } from "use-wallet";
-import buttonBG from "../../../assets/img/unlock_wallet_bubble.png";
 import useModal from "../../../hooks/useModal";
 import isMobile from "../../../utils/isMobile";
 import WalletProviderModal from "../../WalletProviderModal";
@@ -14,12 +13,13 @@ const AccountButton = (props) => {
   const { account, connect } = useWallet();
 
   const fetchAccount = async () => {
-    axios.post(`api/gov/get-account`,
-      { address: account, }).then(res => {
-      console.log("user", res.data)
-    }).catch(err => {
-      console.log(err);
-    })
+    console.log(account)
+    // axios.post(`api/user/get-account`,
+    //   { address: account, }).then(res => {
+    //   console.log("user", res.data)
+    // }).catch(err => {
+    //   console.log(err);
+    // })
   }
 
   const handleUnlockClick = useCallback(() => {

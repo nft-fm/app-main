@@ -3,14 +3,11 @@ import styled from 'styled-components'
 import { useWallet } from 'use-wallet'
 import isMobile from "../../utils/isMobile";
 import BaseView from '../BaseView'
+import axios from "axios";
 
 const Profile = () => {
   const { account, connect } = useWallet()
-  const [user, setUser] = useState({
-    username: "",
-
-  })
-
+  
   return (
         <BaseView>
         <FormContainer>

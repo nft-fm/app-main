@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import discord from "../../../assets/img/social_discord.png";
-import medium from "../../../assets/img/social_medium.png";
-import telegram from "../../../assets/img/social_telegram.png";
-import twitter from "../../../assets/img/social_twitter.png";
+import discord from "../../../assets/img/socials/social_discord.png";
+import medium from "../../../assets/img/socials/social_medium.png";
+import telegram from "../../../assets/img/socials/social_telegram.png";
+import twitter from "../../../assets/img/socials/social_twitter.png";
 import { Col, Row } from "../../Grid";
 import { FooterLink } from "./FooterLink";
 export const FooterNav = () => {

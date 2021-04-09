@@ -28,6 +28,6 @@ const StyledFooterBG = styled.div`
   display: flex;
   justify-content: center;
   padding: 10px 0 10px 0;
-  background-color: teal;
+  background-color: black;
   width: 100%;
 `;

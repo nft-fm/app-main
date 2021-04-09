@@ -35,7 +35,7 @@ const TopBar = () => {
 
 const StyledTopBar = styled.div`
   z-index: 10;
-  background-color: teal;
+  background-color: black;
 `;
 
 const StyledTopBarInner = styled.div`

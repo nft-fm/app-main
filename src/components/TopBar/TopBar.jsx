@@ -26,7 +26,6 @@ console.log(window.location.pathname)
 const StyledTopBar = styled.div`
   z-index: 10;
   background-color: black;
-  border-bottom: 4px solid#7e2ce3;
   border-bottom: ${props => props.window === "/listen" ? 'none' : '4px solid #7e2ce3'}
 `;
 

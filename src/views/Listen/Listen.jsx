@@ -205,6 +205,7 @@ const Banner = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  border-bottom: 4px solid#7e2ce3;
 `;
 
 const MainContents = styled.div`

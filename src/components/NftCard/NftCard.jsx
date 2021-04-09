@@ -6,7 +6,9 @@ import cart from "../../assets/img/listen/cart.svg";
 const NftCard = (props) => {
   return (
     <Container>
+        <ImageContainer>
       <Image src={props.nft.image} alt="image" />
+        </ImageContainer>
       <BottomContainer>
         <InfoContainer>
           <TrackName>{props.nft.title}</TrackName>
@@ -25,11 +27,16 @@ const Container = styled.div`
   width: 250px;
   padding: 10px;
 `;
-const Image = styled.img`
+const ImageContainer = styled.div`
   width: 250px;
   height: 250px;
   border-radius: 15px;
   border: 1px solid #707070;
+  overflow: hidden;
+`
+const Image = styled.img`
+width: 100%;
+aspect-ratio: 1;
 `;
 const BottomContainer = styled.div`
 width: 250px;

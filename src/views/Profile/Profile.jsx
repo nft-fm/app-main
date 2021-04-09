@@ -17,7 +17,7 @@ const Profile = () => {
     <Switch>
       <MyNftsProvider>
         <BaseView>
-          <TopDisplayContainer />
+          {/* <TopDisplayContainer />
           {account ?
             <UserProfile />
             :
@@ -31,7 +31,7 @@ const Profile = () => {
                 </SubTitle>
               </StyledLink>
             </StyledLinkContainer>
-          }
+          } */}
         </BaseView>
       </MyNftsProvider>
     </Switch>

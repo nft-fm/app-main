@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import logo from "../../assets/img/logo.png";
+import logo from "../../assets/img/logos/fm_logo.png";
 
 const Logo = () => {
   return (
@@ -19,7 +19,7 @@ const LogoContainer = styled.div`
 const StyledLogo = styled.img`
   z-index: 20;
   height: 120px;
-  margin-top: 50px;
+  margin-top: 64px;
   cursor: pointer;
   @media only screen and (max-width: 767px) {
     height: 80px;

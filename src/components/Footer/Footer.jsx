@@ -4,9 +4,9 @@ import { FooterNav } from "./components/FooterNav";
 
 export const Footer = () => (
   <StyledFooter>
-    <StyledFooterBG>
+    {/* <StyledFooterBG> */}
       <FooterNav />
-    </StyledFooterBG>
+    {/* </StyledFooterBG> */}
   </StyledFooter>
 );
 
@@ -15,19 +15,14 @@ const StyledFooter = styled.footer`
   align-items: center;
   display: flex;
   justify-content: center;
-  background-image: linear-gradient(
-    to right,
-    #b72100,
-    #b72100 32%,
-    #1a8eb2 69%,
-    #1a8eb2
-  );
+  background-color: black;
+  padding: 10px 0 10px 0;
+
+  border-top: 4px solid#7e2ce3;
 `;
 
 const StyledFooterBG = styled.div`
   display: flex;
   justify-content: center;
-  padding: 10px 0 10px 0;
-  background-color: black;
   width: 100%;
 `;

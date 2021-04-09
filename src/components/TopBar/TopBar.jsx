@@ -10,25 +10,25 @@ import { Nav } from "./components/Nav";
 const TopBar = () => {
   return (
     <StyledTopBar id="top">
-      <Container size="lg">
+      {/* <Container size="lg"> */}
         <StyledTopBarInner>
           <NavLink to="/" style={{ flex: 1, textDecoration: "none" }}>
             <Logo />
           </NavLink>
-          <Col collapse="sm">
+          {/* <Col collapse="sm"> */}
             <Nav />
-          </Col>
-          <div
+          {/* </Col> */}
+          {/* <div
             style={{
               flex: 1,
               display: "flex",
               justifyContent: "flex-end",
             }}
-          >
+          > */}
             <AccountButton />
-          </div>
+          {/* </div> */}
         </StyledTopBarInner>
-      </Container>
+      {/* </Container> */}
     </StyledTopBar>
   );
 };
@@ -36,13 +36,14 @@ const TopBar = () => {
 const StyledTopBar = styled.div`
   z-index: 10;
   background-color: black;
+  border-bottom: 4px solid#7e2ce3;
 `;
 
 const StyledTopBarInner = styled.div`
   align-items: center;
   display: flex;
   height: ${(props) => props.theme.topBarSize}px;
-  justify-content: space-between;
+  justify-content: flex-end;
   max-width: ${(props) => props.theme.siteWidth}px;
   width: 100%;
 `;

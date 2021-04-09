@@ -47,7 +47,7 @@ const AccountButton = (props) => {
         <Button onClick={handleUnlockClick}>Unlock Wallet</Button>
       ) : (
         <StyledAccountInfo>
-          <Oval />
+          {/* <Oval /> */}
           {isMobile() ? 
                     <StyledA
                     href={`https://etherscan.io/address/${account}`}
@@ -90,8 +90,7 @@ const Button = styled.button`
       font-size: 16px;
       font-weight: bold;
       cursor: pointer;
-      font-family: "Comic Book";
-      padding-bottom: 10px;
+color: white;
       @media only screen and (max-width: 767px) {
         font-size: 14px;
         font-weight: normal;
@@ -102,11 +101,11 @@ const Button = styled.button`
 
 const StyledAccountButton = styled.div`
       width: 200px;
-      height: 70px;
+      /* height: 70px; */
       cursor: pointer;
       transition: all 0.1s ease-in-out;
       display: flex;
-      align-items: center;
+      /* align-items: center; */
       justify-content: center;
       &:hover {
         transform: scale(1.1);

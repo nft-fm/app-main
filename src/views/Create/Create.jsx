@@ -8,7 +8,7 @@ const Profile = () => {
 
   return (
     <BaseView>
-      <BigTitle>Create music NFTs</BigTitle>
+      {/* <BigTitle>Create music NFTs</BigTitle> */}
       
     </BaseView>
   )

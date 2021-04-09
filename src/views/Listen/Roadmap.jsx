@@ -201,7 +201,6 @@ const Title = styled.div`
   text-align: left;
   padding-left: 30px;
   color: black;
-}
 `;
 
 

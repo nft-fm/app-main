@@ -8,6 +8,24 @@ import axios from "axios";
 const Profile = () => {
   const { account, connect } = useWallet()
   
+  const [user, setUser] = useState(null);
+
+  const fetchAccount = () => {
+    axios.post(`api/user/get-account`,
+      { address: account, }).then(res => {
+        console.log("user", res.data);
+        setUser(res.data);
+      }).catch(err => {
+        console.log(err);
+      })
+  }
+
+  useEffect(() => {
+    fetchAccount()
+  }, [])
+
+  console.log("user", user)
+
   return (
         <BaseView>
         <FormContainer>

@@ -2,16 +2,12 @@ const express = require('express')
 const router = express.Router()
 const NftType = require('../schemas/NftType.schema')
 
-
 router.post('/new', async (req, res) => {
   try {
-    const { assetId, contractAddress, picture, rarity, name, mintLimit, baseStats } = req.body;
-    if (typeof picture !== "string" || typeof name !== "string") {
-      res.sendStatus(500)
-      return
-    }
+    console.log('/new hit', req.body)
+    const { title, artist, price } = req.body;
 
-    const newNftType = new NftType({ assetId, contractAddress, picture, rarity, baseStats, mintLimit, name })
+    const newNftType = new NftType({ title, artist, price })
     await newNftType.save();
 
     res.send(newNftType);
@@ -46,7 +42,8 @@ router.post('/update',  async (req, res) => {
 
 router.post('/get-one', async (req, res) => {
   try {
-    let nftType = await NftType.findOne({ assetId: req.body.assetId });
+    let id = req.body.id
+    let nftType = await NftType.findById(id);
     console.log(nftType);
     
     res.send(nftType);

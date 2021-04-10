@@ -41,26 +41,6 @@ router.post('/update-account', async (req, res) => {
   }
 })
 
-router.get('/battles-leaderboard', async (req, res) => {
-  try {
-    let users = await User.find().sort({ battleWinPercent: -1 }).limit(5);
-    res.send(users);
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("server error")
-  }
-})
-
-router.get('/bets-leaderboard', async (req, res) => {
-  try {
-    let users = await User.find().sort({ betAmountWon: -1 }).limit(5);
-    res.send(users);
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("server error")
-  }
-})
-
 router.post('/suggestion', async (req, res) => {
   try {
     console.log("info", req.body.address, req.body.suggestion);

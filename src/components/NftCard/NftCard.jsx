@@ -1,20 +1,31 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import image from "../../assets/img/logos/fm_logo_1.png";
 import cart from "../../assets/img/listen/cart.svg";
+import Modal from "../Modal/Modal";
 
 const NftCard = (props) => {
+  const { nft } = props;
+  const [isOpen, setIsOpen] = useState(false);
+  const show = () => setIsOpen(true);
+  const hide = (e) => {
+    setIsOpen(false);
+    console.log("isOpen", isOpen);
+  };
   return (
     <Container>
-        <ImageContainer>
-      <Image src={props.nft.image} alt="image" />
-        </ImageContainer>
+      <Modal open={isOpen} hide={hide} nft={nft} />
+      <ImageContainer>
+
+      <Image src={image} alt="image" onClick={() => setIsOpen(!isOpen)} />
+      </ImageContainer>
+      {/* <Image src={image} alt="image" onClick={() => setIsOpen(!isOpen)} /> */}
       <BottomContainer>
         <InfoContainer>
-          <TrackName>{props.nft.title}</TrackName>
-          <Artist>{props.nft.artist}</Artist>
+          <TrackName>{nft.title}</TrackName>
+          <Artist>{nft.artist}</Artist>
         </InfoContainer>
-        <Buy src={cart} alt="cart" />
+        <Buy src={cart} alt="cart" onClick={() => setIsOpen(!isOpen)} />
       </BottomContainer>
     </Container>
   );
@@ -24,47 +35,56 @@ const Container = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
-  width: 250px;
+  width: 200px;
   padding: 10px;
 `;
 const ImageContainer = styled.div`
-  width: 250px;
-  height: 250px;
+width: 200px;
+height: 200px;
   border-radius: 15px;
   border: 1px solid #707070;
-  overflow: hidden;
-`
-const Image = styled.img`
-width: 100%;
-aspect-ratio: 1;
+overflow: hidden;
 `;
+const Image = styled.img`
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+`;
+// const Image = styled.img`
+//   cursor: pointer;
+//   width: 200px;
+//   height: 200px;
+//   border-radius: 15px;
+//   border: 1px solid #707070;
+//   /* aspect-ratio: 1; */
+//   object-fit: fill;
+// `;
 const BottomContainer = styled.div`
-width: 250px;
-/* height: 100px; */
-display: flex;
-justify-content: space-between;
-align-items: center;
-/* padding: 10px */
-`
+  width: 200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
 const InfoContainer = styled.div`
-width: 80%;
-display: flex;
-flex-direction: column;
-align-items: flex-start;
-padding-left: 10px;
-`
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 10px;
+`;
 const TrackName = styled.span`
-font-size: .9rem;
-`
+  font-size: 0.9rem;
+`;
 const Artist = styled.span`
-font-size: .8rem;
-color: #7e2ce3;
-padding-left: 5px;
-`
+  font-size: 0.8rem;
+  color: #7e2ce3;
+  padding-left: 5px;
+`;
 const Buy = styled.img`
-width: 25px;
-height: 25px;
-padding-right: 10px;
-`
+  width: 25px;
+  height: 25px;
+  padding-right: 10px;
+  cursor: pointer;
+`;
 
 export default NftCard;

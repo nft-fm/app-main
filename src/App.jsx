@@ -12,6 +12,7 @@ import ModalsProvider from './contexts/Modals'
 import Listen from './views/Listen'
 import Profile from './views/Profile'
 import Create from './views/Create/Create'
+import Login from './views/Login/Login';
 import isMobile from "./utils/isMobile";
 import theme from './theme'
 import Error404 from "./views/404";
@@ -28,6 +29,9 @@ const App = () => {
             <Redirect exact from="/" to="/listen" />
             <Route path="/listen" exact>
               <Listen />
+            </Route>
+            <Route path="/login" exact>
+              <Login />
             </Route>
             <Route path="/create" exact>
               <Create />

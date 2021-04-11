@@ -15,7 +15,6 @@ const NftCard = (props) => {
   return (
     <Container>
       <Modal open={isOpen} hide={hide} nft={nft} />
-
       <Image src={image} alt="image" onClick={() => setIsOpen(!isOpen)} />
       <BottomContainer>
         <InfoContainer>

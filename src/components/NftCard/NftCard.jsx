@@ -15,11 +15,8 @@ const NftCard = (props) => {
   return (
     <Container>
       <Modal open={isOpen} hide={hide} nft={nft} />
-      <ImageContainer>
 
       <Image src={image} alt="image" onClick={() => setIsOpen(!isOpen)} />
-      </ImageContainer>
-      {/* <Image src={image} alt="image" onClick={() => setIsOpen(!isOpen)} /> */}
       <BottomContainer>
         <InfoContainer>
           <TrackName>{nft.title}</TrackName>
@@ -38,27 +35,14 @@ const Container = styled.div`
   width: 200px;
   padding: 10px;
 `;
-const ImageContainer = styled.div`
-width: 200px;
-height: 200px;
-  border-radius: 15px;
-  border: 1px solid #707070;
-overflow: hidden;
-`;
 const Image = styled.img`
   cursor: pointer;
-  width: 100%;
-  height: 100%;
+  width: 200px;
+  height: 200px;
+  border-radius: 15px;
+  border: 1px solid #707070;
+  object-fit: fill;
 `;
-// const Image = styled.img`
-//   cursor: pointer;
-//   width: 200px;
-//   height: 200px;
-//   border-radius: 15px;
-//   border: 1px solid #707070;
-//   /* aspect-ratio: 1; */
-//   object-fit: fill;
-// `;
 const BottomContainer = styled.div`
   width: 200px;
   display: flex;

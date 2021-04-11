@@ -5,9 +5,7 @@ const NftType = require('../schemas/NftType.schema')
 router.post('/new', async (req, res) => {
   try {
     console.log('/new hit', req.body)
-    const { title, artist, price } = req.body;
-
-    const newNftType = new NftType({ title, artist, price })
+    const newNftType = new NftType(req.body)
     await newNftType.save();
 
     res.send(newNftType);

@@ -77,6 +77,7 @@ const Image = styled.img`
   height: 200px;
   border-radius: 15px;
   border: 1px solid #707070;
+  object-fit: cover;
   overflow: hidden;
 `;
 const BottomContainer = styled.div`

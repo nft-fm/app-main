@@ -40,7 +40,7 @@ const Image = styled.img`
   height: 200px;
   border-radius: 15px;
   border: 1px solid #707070;
-  object-fit: fill;
+  object-fit: cover;
 `;
 const BottomContainer = styled.div`
   width: 200px;

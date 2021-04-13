@@ -2,9 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
 import { useWallet } from "use-wallet";
 import styled from "styled-components";
-import Page from "../../components/Page";
-import Background from '../../assets/img/background.jpg'
-import Logo from "../../assets/img/logo.png"
 import TopDisplayContainer from '../../components/TopDisplayContainer'
 import { NavLink } from "react-router-dom";
 import isMobile from "../../utils/isMobile";
@@ -175,29 +172,6 @@ const CardContainer = styled.div`
   align-items: center;
   justify-content: space-evenly;
   flex-wrap: wrap;
-`;
-
-const BackgroundSection = styled.div`
-position: fixed;
-width: 100vw;
-height: 100vh;
-background-image: url(${Background});
-filter: brightness(90%);
-top: 0;
-background-repeat: no-repeat;
-background-size: cover;
-`
-
-const StyledCanvas = styled.div`
-  position: absolute;
-  width: 100%;
-  background-color: #154f9b;
-`;
-
-const ContentContainer = styled.div`
-  position: absolute;
-  width: 100%;
-  text-align: center;
 `;
 
 export default Farms;

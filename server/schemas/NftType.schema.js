@@ -2,52 +2,34 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const NftTypeSchema = new Schema({
-  assetId: {
-    type: Number,
-    required: true,
-    unique: true
-  },
-  contractAddress: {
+  artist: {
     type: String,
+    default: "",
   },
-  picture: {
+  title: {
     type: String,
+    default: "",
   },
-  rarity: {
-    type: Number,
-  },
-  name: {
+  genre: {
     type: String,
+    default: "",
   },
-  mintLimit: {
-    type: Number,
+  producer: {
+    type: String,
+    default: "",
+  },
+  writer: {
+    type: String,
+    default: "",
   },
   numMinted: {
+    type: String,
+    default: "",
+  },
+  price: {
     type: Number,
-    default: 0,
+    default: 1,
   },
-  baseStats: {
-    attack: {
-      type: Number,
-    },
-    defense: {
-      type: Number,
-    },
-    heal: {
-      type: Number,
-    }
-  },
-  // moves: [{
-  //   name: {
-  //     type: String,
-  //   },
-  //   physical: {
-  //     type: Boolean,
-  //   },
-  //   baseDamage: {
-  //     type: Number,
-  //   },
-  // }],
   timestamp: {
     type: Date,
     default: Date.now

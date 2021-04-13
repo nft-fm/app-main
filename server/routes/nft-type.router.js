@@ -1,3 +1,4 @@
+const { AnalyticsExportDestination } = require('@aws-sdk/client-s3');
 const express = require('express')
 const { flushSync } = require('react-dom')
 const router = express.Router()
@@ -6,10 +7,42 @@ const fs = require('fs')
 const multer = require('multer')
 
 router.post('/new', async (req, res) => {
+  const { music, image, artist } = req.body.nftData;
+  var AWS = require('aws-sdk');
+  AWS.config.region = 'us-west-1';
+  const path = require('path');
+
+  AWS.config.loadFromPath(path.join(__dirname, '../aws_config.json'));
+  var s3Client = new AWS.S3();
+
+  var musicParams = {
+    Bucket: "nftfm-music",
+    Key: artist + "/" + title,
+    Body: music
+  };
+  var imageParams = {
+    Bucket: "nftfm-images",
+    Key: artist + "/" + title,
+    Body: image
+  };
   try {
     console.log('/new hit', req.body)
     // const newNftType = new NftType(req.body)
     // await newNftType.save();
+    s3Client.upload(musicParams, function (err, data) {
+      if (err)
+        res.status(401).send("error: ", err);
+      else
+        console.log("uploaded music!")
+    })
+    s3Client.upload(imageParams, function (err, data) {
+      if (err)
+        res.status(401).send("error: ", err);
+      else
+        console.log("uploaded image!")
+    })
+    const newNftType = new NftType(req.body)
+    await newNftType.save();
 
     // res.send(newNftType);
   } catch (error) {
@@ -22,7 +55,6 @@ router.post('/new', async (req, res) => {
 router.post('/update', async (req, res) => {
   try {
     const { contractAddress, picture, rarity, stats, mintLimit } = req.body;
-
 
     let nftType = await NftType.findOne({ contractAddress });
     if (picture) nftType.picture = picture;

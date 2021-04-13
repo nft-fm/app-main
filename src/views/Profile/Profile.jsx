@@ -54,9 +54,28 @@ const Profile = () => {
   const [audioFile, setAudioFile] = useState(null);
   const [imageFile, setImageFile] = useState(null);
 
+  
+  const getExtension = (filename) => {
+    var parts = filename.split('.');
+    return parts[parts.length - 1];
+  }
+
+  function isImage(filename) {
+    var ext = getExtension(filename);
+    switch (ext.toLowerCase()) {
+      case 'jpg':
+      case 'gif':
+      case 'bmp':
+      case 'png':
+        //etc
+        return true;
+    }
+    return false;
+  }
+
   useEffect(() => {
-    setNftData({ ...nftData, artist: account });
-  }, [account]);
+    setNftData({ ...nftData, artist: account })
+  }, [account])
 
   const updateState = (e) => {
     if (e.target.name === "price") {
@@ -68,6 +87,7 @@ const Profile = () => {
     setNftData({ ...nftData, [e.target.name]: e.target.value });
   };
 
+  //TODO entry validation
   const handleSubmit = (e) => {
     e.preventDefault();
     // if (!account) {

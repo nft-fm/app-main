@@ -7,6 +7,8 @@ import isMobile from "../../../utils/isMobile";
 import WalletProviderModal from "../../WalletProviderModal";
 import axios from "axios";
 
+
+
 const AccountButton = (props) => {
   // const [onPresentWalletProviderModal] = useModal(<WalletProviderModal />);
 
@@ -14,18 +16,18 @@ const AccountButton = (props) => {
   const fetchAccount = async () => {
     axios.post(`api/user/get-account`,
       { address: account, }).then(res => {
-      console.log("user", res.data)
-    }).catch(err => {
-      console.log(err);
-    })
+        console.log("user", res.data)
+      }).catch(err => {
+        console.log(err);
+      })
   };
 
   const handleUnlockClick = useCallback(() => {
     if (isMobile()) {
       // connect('injected');
-      connect("walletconnect");
+      connect("walletconnect")//.then(() => { getS3Bucket() });
     } else {
-      connect("injected");
+      connect("injected")//.then(() => { getS3Bucket() });
       // onPresentWalletProviderModal()
     }
     fetchAccount();

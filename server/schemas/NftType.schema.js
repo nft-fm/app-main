@@ -30,6 +30,14 @@ const NftTypeSchema = new Schema({
     type: Number,
     default: 1,
   },
+  authorAddress: {
+    type: String,
+    required: true,
+  },
+  draft: {
+    type: Boolean,
+    default: true,
+  },
   timestamp: {
     type: Date,
     default: Date.now

@@ -70,54 +70,72 @@ const Profile = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!account) {
-      swal.fire("unlock your wallet dipshit");
-      return;
-    }
-    if (
-      !audioFile ||
-      !imageFile ||
-      nftData.title === "" ||
-      nftData.genre === "" ||
-      nftData.producer === "" ||
-      nftData.writer === "" ||
-      nftData.numMinted === "" ||
-      nftData.price === ""
-    ) {
-      swal.fire("fill in all fields");
-    return;
-    }
+    // if (!account) {
+    //   swal.fire("unlock your wallet dipshit");
+    //   return;
+    // }
+    // if (
+    //   !audioFile ||
+    //   !imageFile ||
+    //   nftData.title === "" ||
+    //   nftData.genre === "" ||
+    //   nftData.producer === "" ||
+    //   nftData.writer === "" ||
+    //   nftData.numMinted === "" ||
+    //   nftData.price === ""
+    // ) {
+    //   swal.fire("fill in all fields");
+    //   return;
+    // }
+
+    //run these two, store the returns in the nftData state object
+    const audioFormData = new FormData();
+    audioFormData.append("audioFile", audioFile);
+
     axios
-      .post("/api/nft-type/new", {
-        nftData: nftData,
-        audio: audioFile,
-        image: imageFile,
+      .post("/api/nft-type/handleAudio", audioFormData)
+      .then((res) => {
+        console.log(res);
       })
-      .then((res) => console.log(res))
       .catch((err) => console.log(err));
+
+    const imageFormData = new FormData();
+    imageFormData.append("imageFile", imageFile);
+
+    axios
+      .post("/api/nft-type/handleImage", imageFormData)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => console.log(err));
+
+    //after nftData has both audio and image references, run this route
+    // axios
+    //   .post("/api/nft-type/new", {
+    //     nftData: nftData,
+    //     audio: audioFile,
+    //     image: imageFile,
+    //   })
+    //   .then((res) => console.log(res))
+    //   .catch((err) => console.log(err));
   };
 
+  //this is all to handle the image and audio
   const hiddenAudioInput = useRef(null);
-  const hiddenImageInput = useRef(null);
   const handleAudio = (e) => {
     hiddenAudioInput.current.click();
   };
+  const handleAudioChange = (e) => {
+    setAudioFile(e.target.files[0]);
+  };
+
+  const hiddenImageInput = useRef(null);
   const handleImage = (e) => {
     hiddenImageInput.current.click();
   };
-  const handleAudioChange = (e) => {
-    const fileUploaded = e.target.files[0];
-  };
   const handleImageChange = (e) => {
-    const fileUploaded = e.target.files[0];
+    setImageFile(e.target.files[0]);
   };
-
-  const onChange = async e => {
-    if (e.target.files && e.target.files.length > 0) {
-      setAudioFile(e.target.files[0])
-    }
-  }
-
   return (
     <BaseView>
       <FormContainer>
@@ -132,25 +150,25 @@ const Profile = () => {
             </ImagePreview>
             <MediaButtons>
               <MediaButton onClick={() => handleAudio()}>
-                <span>Upload image</span>
-                <span>.png, .jpeg</span>
-                <img src={upload_icon} alt="upload-file-icon" />
-              </MediaButton>
-              <StyledInput
-                type="file"
-                name='image'
-                onChange={onChange}
-                // onChange={(e) => setAudioFile(e.target.files[0])}
-                style={{ display: "none" }}
-              />
-              <MediaButton onClick={handleImage}>
                 <span>Upload audio</span>
                 <span>.mp3, .flac</span>
                 <img src={upload_icon} alt="upload-file-icon" />
               </MediaButton>
               <StyledInput
                 type="file"
-                // onChange={(e) => setImageFile(e.target.files[0])}
+                ref={hiddenAudioInput}
+                onChange={handleAudioChange}
+                style={{ display: "none" }}
+              />
+              <MediaButton onClick={() => handleImage()}>
+                <span>Upload image</span>
+                <span>.png, .jpeg</span>
+                <img src={upload_icon} alt="upload-file-icon" />
+              </MediaButton>
+              <StyledInput
+                type="file"
+                ref={hiddenImageInput}
+                onChange={handleImageChange}
                 style={{ display: "none" }}
               />
             </MediaButtons>

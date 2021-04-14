@@ -54,19 +54,20 @@ router.post('/new', async (req, res) => {
 
 router.post('/update', async (req, res) => {
   try {
-    const { contractAddress, picture, rarity, stats, mintLimit } = req.body;
+    console.log('/update hit', req.body)
+    let newData = req.body;
+    await NftType.findOneAndUpdate({address: req.body.address}, newData);
+    // console.log('here', nftType)
+    // nftType = req.body;
 
-    let nftType = await NftType.findOne({ contractAddress });
-    if (picture) nftType.picture = picture;
-    if (rarity) nftType.rarity = rarity;
-    if (stats) nftType.stats = stats;
-    await nftType.save();
+    // console.log('HERRREEE', nftType)
+    // // nftType = req.body
+    // await nftType.save();
+    // if (picture) nftType.picture = picture;
+    // if (rarity) nftType.rarity = rarity;
+    // if (stats) nftType.stats = stats;
+    // await nftType.save();
 
-    //go through each num minted and alter their individual base stats
-    for (let i = 0; i < numMinted; i++) {
-    }
-
-    // res.send(newNftType);
   } catch (error) {
     console.log(error);
     res.status(500).send("server error")
@@ -166,10 +167,24 @@ router.post('/handleImage', async (req, res) => {
 
 router.post('/fetchNFT', async (req, res) => {
   try {
-    console.log('/fetchNFT hit', req.body)
-  } catch (err) {
+    console.log("fetchNFT Hit", req.body.account);
+    let nft = await NftType.findOne({
+      address: req.body.account,
+      draft: true,
+    });
+    if (!nft) {
+      const newNft = new NftType({
+        address: req.body.account,
+        draft: true,
+      });
+      await newNft.save();
+      res.send(newNft);
+    } else {
+      res.send(nft);
+    }
+  } catch (error) {
     console.log(error);
-    res.status(500).send("server error")
+    res.status(500).send("no users found");
   }
 })
 module.exports = router

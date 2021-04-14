@@ -30,22 +30,22 @@ const Create = () => {
       .then(res => console.log('res', res))
   }
 
-  // const fetchAccount = () => {
-  //   axios
-  //     .post(`api/user/get-account`, { address: account })
-  //     .then((res) => {
-  //       console.log("user", res.data);
-  //       setUser(res.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
+  const fetchAccount = () => {
+    axios
+      .post(`api/user/get-account`, { address: account })
+      .then((res) => {
+        console.log("user", res.data);
+        setUser(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-  useEffect(() => {
-    fetchCurrencyRates();
-    fetchNFT();
-  }, []);
+  // useEffect(() => {
+  //   fetchCurrencyRates();
+  //   fetchNFT();
+  // }, []);
 
   const [nftData, setNftData] = useState({
     artist: "",
@@ -95,6 +95,7 @@ const Create = () => {
   //TODO entry validation
   const handleSubmit = (e) => {
     e.preventDefault();
+    // fetchAccount();
     // if (!account) {
     //   swal.fire("unlock your wallet dipshit");
     //   return;

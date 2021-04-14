@@ -8,9 +8,17 @@ import swal from "sweetalert2";
 
 const Profile = () => {
   const { account, connect } = useWallet();
+
+  const handleClick = () => {
+    axios.post("/api/nft-type/getSong", { title: "werqwe", address: account });
+  }
+
   return (
     <BaseView>
-    <h1>Profile :D</h1>
+      <h1>Profile :D</h1>
+      <button onClick={() => { handleClick() }}>
+        Hi
+    </button>
     </BaseView>
   );
 };

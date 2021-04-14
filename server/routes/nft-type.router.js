@@ -6,52 +6,6 @@ const NftType = require('../schemas/NftType.schema')
 const fs = require('fs')
 const multer = require('multer')
 
-router.post('/new', async (req, res) => {
-  const { music, image, artist } = req.body.nftData;
-  var AWS = require('aws-sdk');
-  AWS.config.region = 'us-west-1';
-  const path = require('path');
-
-  AWS.config.loadFromPath(path.join(__dirname, '../aws_config.json'));
-  var s3Client = new AWS.S3();
-
-  var musicParams = {
-    Bucket: "nftfm-music",
-    Key: artist + "/" + title,
-    Body: music
-  };
-  var imageParams = {
-    Bucket: "nftfm-images",
-    Key: artist + "/" + title,
-    Body: image
-  };
-  try {
-    console.log('/new hit', req.body)
-    // const newNftType = new NftType(req.body)
-    // await newNftType.save();
-    s3Client.upload(musicParams, function (err, data) {
-      if (err)
-        res.status(401).send("error: ", err);
-      else
-        console.log("uploaded music!")
-    })
-    s3Client.upload(imageParams, function (err, data) {
-      if (err)
-        res.status(401).send("error: ", err);
-      else
-        console.log("uploaded image!")
-    })
-    const newNftType = new NftType(req.body)
-    await newNftType.save();
-
-    // res.send(newNftType);
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("server error")
-  }
-})
-
-
 router.post('/update', async (req, res) => {
   try {
     const { contractAddress, picture, rarity, stats, mintLimit } = req.body;
@@ -97,10 +51,43 @@ router.get('/all', async (req, res) => {
   }
 })
 
+const uploadToS3Bucket = (bucket, req, res) => {
+  const { artist, title } = req.body.nftData;
+  const file = req.body.audioFile;
+  var base64data = Buffer.from("binary", file)
+  // console.log("file: ", file);
+  // return;
+  var AWS = require('aws-sdk');
+  AWS.config.region = 'us-west-2';
+  const path = require('path');
 
+  AWS.config.loadFromPath(path.join(__dirname, '../aws_config.json'));
+  var s3Client = new AWS.S3();
+
+  var params = {
+    Bucket: bucket,
+    Key: artist + "/" + title,
+    Body: base64data
+  };
+
+  try {
+    s3Client.upload(params, function (err, data) {
+      if (err)
+        res.status(400).send("error: ", err);
+      else
+        console.log("uploaded content!")
+    })
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("server error")
+  }
+}
 
 //send audio file to private bucket
 router.post('/handleAudio', async (req, res) => {
+  // console.log(req.body.getKey('audioFile'))
+  uploadToS3Bucket("nftfm-music", req, res);
+
   try {
 
     console.log('/handleAudio hit')
@@ -124,6 +111,7 @@ router.post('/handleAudio', async (req, res) => {
       }
       return res.status(200).send(req.file)
     })
+    uploadToS3Bucket("nftfm-music", req, res);
   } catch (err) {
     console.log(err);
     res.status(500).send("server error")
@@ -133,9 +121,6 @@ router.post('/handleAudio', async (req, res) => {
 //send image file to public folder
 router.post('/handleImage', async (req, res) => {
   try {
-
-    console.log('/handleImage hit')
-
     let storage = multer.diskStorage({
       destination: function (req, file, cb) {
         cb(null, 'public')
@@ -145,7 +130,6 @@ router.post('/handleImage', async (req, res) => {
       }
     })
     let upload = multer({ storage: storage }).single('imageFile')
-
 
     upload(req, res, function (err) {
       if (err instanceof multer.MulterError) {
@@ -172,4 +156,27 @@ router.post('/fetchNFT', async (req, res) => {
     res.status(500).send("server error")
   }
 })
+
+router.post('/getSong', async (req, res) => {
+  console.log(req.body);
+  var AWS = require('aws-sdk');
+  AWS.config.region = 'us-west-2';
+  const path = require('path');
+
+  AWS.config.loadFromPath(path.join(__dirname, '../aws_config.json'));
+  var s3 = new AWS.S3();
+
+  s3.getObject(
+    { Bucket: "nftfm-music", Key: req.body.address + "/" + req.body.title },
+    function (error, data) {
+      if (error != null) {
+        console.log("Failed to retrieve an object: " + error);
+      } else {
+        console.log("Loaded " + data.ContentLength + " bytes");
+        // do something with data.Body
+      }
+    }
+  );
+})
+
 module.exports = router

@@ -26,8 +26,8 @@ const Create = () => {
       .then((res) => setCurrency(res.data.ethereum.usd));
   };
   const fetchNFT = async () => {
-    await axios.post('/api/nft-type/fetchNFT', {account: account})
-    .then(res => console.log('res', res))
+    await axios.post('/api/nft-type/fetchNFT', { account: account })
+      .then(res => console.log('res', res))
   }
 
   // const fetchAccount = () => {
@@ -59,7 +59,7 @@ const Create = () => {
   const [audioFile, setAudioFile] = useState(null);
   const [imageFile, setImageFile] = useState(null);
 
-  
+
   const getExtension = (filename) => {
     var parts = filename.split('.');
     return parts[parts.length - 1];
@@ -117,8 +117,10 @@ const Create = () => {
     const audioFormData = new FormData();
     audioFormData.append("audioFile", audioFile);
 
+    console.log(...audioFormData)
+
     axios
-      .post("/api/nft-type/handleAudio", audioFormData)
+      .post("/api/nft-type/handleAudio", { audioFile: audioFile, nftData: nftData })
       .then((res) => {
         console.log(res);
       })
@@ -127,12 +129,12 @@ const Create = () => {
     const imageFormData = new FormData();
     imageFormData.append("imageFile", imageFile);
 
-    axios
-      .post("/api/nft-type/handleImage", imageFormData)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => console.log(err));
+    // axios
+    //   .post("/api/nft-type/handleImage", imageFormData)
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((err) => console.log(err));
 
     //after nftData has both audio and image references, run this route
     // axios
@@ -269,9 +271,9 @@ const Create = () => {
                   <Subtext>
                     $
                     {(currency * nftData.price).toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                   </Subtext>
                 </CurrencyButton>
               </CurrencyButtons>

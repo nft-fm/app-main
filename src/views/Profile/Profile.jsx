@@ -81,31 +81,7 @@ const Profile = () => {
       })
       .then((res) => setUser(res.data));
   };
-
-  if (account && songList.length > 0)
-    return (
-      <BaseView>
-        <h1>Profile</h1>
-        <div key={songList}>
-          {songList.map((song) => {
-            if (song.Key)
-              return (
-                <div>
-                  {song.Key.split("/")[1]}
-                  <button
-                    onClick={() => {
-                      playSong(song);
-                    }}
-                  >
-                    Download and play!
-                  </button>
-                </div>
-              );
-          })}
-        </div>
-      </BaseView>
-    );
-  else if (account) {
+  if (account) {
     return (
       <BaseView>
         <LandingSection>
@@ -148,9 +124,30 @@ const Profile = () => {
           )}
         </AccountDetails>
         <Create />
-        <h1>
-          No songs owned :(. Go to the 'listen' page to build your collection!
+        {songList.length <= 0 ?
+          <h1>
+            No songs owned. Go to the 'listen' page to build your collection!
         </h1>
+          :
+          <div key={songList}>
+            {songList.map((song) => {
+              if (song.Key)
+                return (
+                  <div>
+                    {song.Key.split("/")[1]}
+                    <button
+                      onClick={() => {
+                        playSong(song);
+                      }}
+                    >
+                      Download and play!
+              </button>
+                  </div>
+                );
+            })}
+          </div>
+
+        }
       </BaseView>
     );
   }

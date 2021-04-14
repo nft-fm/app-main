@@ -17,21 +17,27 @@ const Create = () => {
 
   const [user, setUser] = useState(null);
   const [currency, setCurrency] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [nftData, setNftData] = useState({
     address: "",
     artist: "",
-    draft: "",
+    draft: false,
     genre: "",
     numMinted: "",
     price: "",
     producer: "",
     title: "",
     writer: "",
+    imageUrl: "",
+    audioUrl: ""
   });
   const [audioFile, setAudioFile] = useState(null);
   const [imageFile, setImageFile] = useState(null);
 
+  useEffect(() => {
+    setNftData({ ...nftData, address: account })
+  }, [account]);
   const fetchCurrencyRates = async () => {
     await axios
       .get(
@@ -44,9 +50,9 @@ const Create = () => {
       .then(res => console.log('res', res))
   }
 
-  useEffect(() => {
-    fetchNFT();
-  }, [account]);
+  // useEffect(() => {
+  //   fetchNFT();
+  // }, [account]);
 
   useEffect(() => {
     fetchCurrencyRates();
@@ -87,6 +93,7 @@ const Create = () => {
   //TODO entry validation
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsLoading(true);
     // fetchAccount();
     // if (!account) {
     //   swal.fire("unlock your wallet dipshit");
@@ -149,14 +156,10 @@ const Create = () => {
       })
       .catch((err) => console.log(err));
     // after nftData has both audio and image references, run this route
-    // axios
-    //   .post("/api/nft-type/new", {
-    //     nftData: nftData,
-    //     audio: audioFile,
-    //     image: imageFile,
-    //   })
-    //   .then((res) => console.log(res))
-    //   .catch((err) => console.log(err));
+    axios
+      .post("/api/nft-type/update", nftData)
+      .catch((err) => console.log(err));;
+    setIsLoading(false);
   };
 
   //this is all to handle the image and audio
@@ -166,14 +169,26 @@ const Create = () => {
   };
   const handleAudioChange = (e) => {
     setAudioFile(e.target.files[0]);
+    setNftData({
+      ...nftData,
+      audioUrl: "https://nftfm-music.s3-us-west-1.amazonaws.com/"
+        + account + "/" + e.target.files[0].name
+    })
+    // console.log(e.target.files[0]);
   };
 
   const hiddenImageInput = useRef(null);
   const handleImage = (e) => {
+
     hiddenImageInput.current.click();
   };
   const handleImageChange = (e) => {
     setImageFile(e.target.files[0]);
+    setNftData({
+      ...nftData,
+      imageUrl: "https://nftfm-music.s3-us-west-1.amazonaws.com/"
+        + account + "/" + e.target.files[0].name
+    })
   };
 
   console.log('HERE', audioFile)
@@ -185,6 +200,12 @@ const Create = () => {
   //     </BaseView>
   //   );
   // }
+  if (isLoading)
+    return (
+      <BaseView>
+        <h1>Loading...</h1>
+      </BaseView>
+    )
   return (
     <BaseView>
       <FormContainer>
@@ -219,7 +240,7 @@ const Create = () => {
               </MediaButton>
               <StyledInput
                 type="file"
-                accept=".jpg,.jpeg,.png"
+                accept=".jpg,.jpeg,.png,.gif"
                 ref={hiddenImageInput}
                 onChange={handleImageChange}
                 style={{ display: "none" }}

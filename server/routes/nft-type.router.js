@@ -10,7 +10,7 @@ router.post('/update', async (req, res) => {
   try {
     console.log('/update hit', req.body)
     let newData = req.body;
-    await NftType.findOneAndUpdate({address: req.body.address}, newData);
+    await NftType.findOneAndUpdate({ address: req.body.address }, newData);
     // console.log('here', nftType)
     // nftType = req.body;
 
@@ -93,7 +93,7 @@ router.post('/uploadAudioS3', async (req, res) => {
       console.log('there', err)
       return res.status(500).json(err)
     }
-    return res.status(200).send(req.file)
+    return res.status(200).send("success")
   })
 })
 

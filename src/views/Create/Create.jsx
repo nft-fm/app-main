@@ -115,16 +115,27 @@ const Create = () => {
 
     //run these two, store the returns in the nftData state object
     const audioFormData = new FormData();
+    audioFormData.append("artist", account);
     audioFormData.append("audioFile", audioFile);
 
     console.log(...audioFormData)
 
+    console.log('account: ', account);
     axios
-      .post("/api/nft-type/handleAudio", { audioFile: audioFile, nftData: nftData })
+      .post("/api/nft-type/handleAudio", audioFormData, {
+        headers: {
+          'content-type': 'multipart/form-data'
+        }
+      })
       .then((res) => {
         console.log(res);
       })
       .catch((err) => console.log(err));
+    axios.post("api/nft-type/uploadAudioS3", audioFormData, {
+      headers: {
+        'content-type': 'multipart/form-data'
+      }
+    })
 
     const imageFormData = new FormData();
     imageFormData.append("imageFile", imageFile);

@@ -51,47 +51,61 @@ router.get('/all', async (req, res) => {
   }
 })
 
-const uploadToS3Bucket = (bucket, req, res) => {
-  const { artist, title } = req.body.nftData;
-  const file = req.body.audioFile;
-  var base64data = Buffer.from("binary", file)
+router.post('/uploadAudioS3', async (req, res) => {
+  // const { artist, title } = req.body.nftData;
+  const file = req.file;
   // console.log("file: ", file);
+  const artist = req.body.artist;
+  // console.log("artist: ", req.account);
   // return;
   var AWS = require('aws-sdk');
   AWS.config.region = 'us-west-2';
   const path = require('path');
+  const multerS3 = require("multer-s3");
 
   AWS.config.loadFromPath(path.join(__dirname, '../aws_config.json'));
   var s3Client = new AWS.S3();
 
-  var params = {
-    Bucket: bucket,
-    Key: artist + "/" + title,
-    Body: base64data
+  const fileFilter = (req, file, cb) => {
+    if (file.mimetype === "audio/mpeg") {
+      cb(null, true);
+    } else {
+      cb(new Error("Invalid file type, only MP3s are allowed!"), false);
+    }
   };
 
-  try {
-    s3Client.upload(params, function (err, data) {
-      if (err)
-        res.status(400).send("error: ", err);
-      else
-        console.log("uploaded content!")
+  let upload = multer({
+    fileFilter,
+    storage: multerS3({
+      ACL: "public-read",
+      s3: s3Client,
+      bucket: "nftfm-music",
+      metadata: function (req, file, cb) {
+        cb(null, { fieldName: "audioFile" });
+      },
+      key: function (req, file, cb) {
+        cb(null, req.body.artist + "/" + file.originalname);
+      },
     })
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("server error")
-  }
-}
+  })
+  const singleUpload = upload.single("audioFile");
+  singleUpload(req, res, function (err) {
+    console.log("here: ", req.body);
+    if (err instanceof multer.MulterError) {
+      console.log('here', err)
+      return res.status(500).json(err)
+    } else if (err) {
+      console.log('there', err)
+      return res.status(500).json(err)
+    }
+    return res.status(200).send(req.file)
+  })
+})
 
 //send audio file to private bucket
 router.post('/handleAudio', async (req, res) => {
-  // console.log(req.body.getKey('audioFile'))
-  uploadToS3Bucket("nftfm-music", req, res);
-
   try {
-
     console.log('/handleAudio hit')
-
     let storage = multer.diskStorage({
       destination: function (req, file, cb) {
         cb(null, 'public')
@@ -111,7 +125,6 @@ router.post('/handleAudio', async (req, res) => {
       }
       return res.status(200).send(req.file)
     })
-    uploadToS3Bucket("nftfm-music", req, res);
   } catch (err) {
     console.log(err);
     res.status(500).send("server error")
@@ -139,6 +152,7 @@ router.post('/handleImage', async (req, res) => {
         console.log('there', err)
         return res.status(500).json(err)
       }
+      // uploadToS3Bucket("nftfm-image", req, res);
       return res.status(200).send(req.file)
     })
   } catch (err) {

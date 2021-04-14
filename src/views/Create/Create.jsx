@@ -26,7 +26,7 @@ const Create = () => {
       .then((res) => setCurrency(res.data.ethereum.usd));
   };
   const fetchNFT = async () => {
-    await axios.post('/api/nft-type/fetchNFT', account)
+    await axios.post('/api/nft-type/fetchNFT', {account: account})
     .then(res => console.log('res', res))
   }
 
@@ -48,7 +48,7 @@ const Create = () => {
   }, []);
 
   const [nftData, setNftData] = useState({
-    artist: account,
+    artist: "",
     title: "",
     genre: "",
     producer: "",

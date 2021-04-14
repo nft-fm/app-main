@@ -38,6 +38,14 @@ const NftTypeSchema = new Schema({
     type: Boolean,
     default: true,
   },
+  imageUrl: {
+    type: String,
+    required: true
+  },
+  audioUrl: {
+    type: String,
+    required: true,
+  },
   timestamp: {
     type: Date,
     default: Date.now

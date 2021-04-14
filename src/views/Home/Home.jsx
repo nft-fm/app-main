@@ -2,12 +2,10 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
 import { useWallet } from "use-wallet";
 import styled, { keyframes } from "styled-components";
-import isMobile from "../../utils/isMobile";
 import BaseView from "../BaseView";
 import axios from "axios";
 import NftCard from "../../components/NftCard/NftCard";
-import placeholderImage from "../../assets/img/logos/fm_logo_1.png";
-import Modal from "../../components/Modal/Modal";
+import GenericBanner from "../../assets/img/generic_banner.jpg";
 
 const Listen = () => {
   const { path } = useRouteMatch();
@@ -34,9 +32,9 @@ const Listen = () => {
         </LandingSection>
         <MainContents>
           <InfoSection>
-            <InfoHeaderText>
+            {/* <InfoHeaderText>
               NFT <span>FM</span>
-            </InfoHeaderText>
+            </InfoHeaderText> */}
             <InfoSectionContent>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
               lacinia justo non consequat euismod. Praesent venenatis maximus
@@ -71,15 +69,19 @@ const InfoSection = styled.div`
 const SearchBar = styled.input`
   border-radius: 15px;
   width: 50%;
-  margin-top: -26px;
   padding: 5px 10px;
   outline: none;
   background-color: #eaeaea;
   border: 4px solid white;
+  position: absolute;
+  top: -18px;
 `;
 
 const InfoSectionContent = styled.span`
-  padding: 20px 20px;
+  padding: 40px 40px 60px 40px;
+  width: 600px;
+  max-width: 90%;
+  text-align: center;
 `;
 
 const NftSectionHolder = styled.div`
@@ -90,6 +92,8 @@ const NftSectionHolder = styled.div`
   align-items: center;
   justify-content: center;
   padding: 10px 0;
+  flex: 1;
+  position: relative;
 `;
 
 const NftDisplay = styled.div`
@@ -131,7 +135,13 @@ const LandingSection = styled.div`
 
 const HeaderContents = styled.span`
   color: white;
-  width: 80%;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: grayscale(50%) brightness(30%);
+
   font-family: "Compita";
   font-weight: bold;
   letter-spacing: 2px;
@@ -141,7 +151,7 @@ const HeaderContents = styled.span`
 `;
 
 const Banner = styled.div`
-margin-top: -65px;
+  margin-top: -65px;
   width: 100%;
   height: 365px;
   background-color: black;
@@ -152,6 +162,9 @@ margin-top: -65px;
   text-align: center;
   border-bottom: 4px solid#7e2ce3;
   z-index: 0;
+  background: url(${GenericBanner});
+  background-size: cover;
+  background-position-y: -70px;
 `;
 
 const MainContents = styled.div`
@@ -159,6 +172,7 @@ const MainContents = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex: 1;
 `;
 export default Listen;
 

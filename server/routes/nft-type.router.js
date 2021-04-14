@@ -52,12 +52,6 @@ router.get('/all', async (req, res) => {
 })
 
 router.post('/uploadAudioS3', async (req, res) => {
-  // const { artist, title } = req.body.nftData;
-  const file = req.file;
-  // console.log("file: ", file);
-  const artist = req.body.artist;
-  // console.log("artist: ", req.account);
-  // return;
   var AWS = require('aws-sdk');
   AWS.config.region = 'us-west-2';
   const path = require('path');
@@ -129,6 +123,50 @@ router.post('/handleAudio', async (req, res) => {
     console.log(err);
     res.status(500).send("server error")
   }
+})
+router.post('/uploadImageS3', async (req, res) => {
+  var AWS = require('aws-sdk');
+  AWS.config.region = 'us-west-2';
+  const path = require('path');
+  const multerS3 = require("multer-s3");
+
+  AWS.config.loadFromPath(path.join(__dirname, '../aws_config.json'));
+  var s3Client = new AWS.S3();
+
+  const fileFilter = (req, file, cb) => {
+    if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+      cb(null, true);
+    } else {
+      cb(new Error("Invalid file type, only jpeg's and png's are allowed!"), false);
+    }
+  };
+
+  let upload = multer({
+    fileFilter,
+    storage: multerS3({
+      ACL: "public-read",
+      s3: s3Client,
+      bucket: "nftfm-images",
+      metadata: function (req, file, cb) {
+        cb(null, { fieldName: "imageFile" });
+      },
+      key: function (req, file, cb) {
+        cb(null, req.body.artist + "/" + file.originalname);
+      },
+    })
+  })
+  const singleUpload = upload.single("imageFile");
+  singleUpload(req, res, function (err) {
+    console.log("here: ", req.body);
+    if (err instanceof multer.MulterError) {
+      console.log('here', err)
+      return res.status(500).json(err)
+    } else if (err) {
+      console.log('there', err)
+      return res.status(500).json(err)
+    }
+    return res.status(200).send(req.file)
+  })
 })
 
 //send image file to public folder

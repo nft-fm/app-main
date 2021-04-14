@@ -131,6 +131,7 @@ const Create = () => {
         console.log(res);
       })
       .catch((err) => console.log(err));
+    console.log("account:")
     axios.post("api/nft-type/uploadAudioS3", audioFormData, {
       headers: {
         'content-type': 'multipart/form-data'
@@ -138,16 +139,23 @@ const Create = () => {
     })
 
     const imageFormData = new FormData();
+    imageFormData.append("artist", account);
     imageFormData.append("imageFile", imageFile);
 
-    // axios
-    //   .post("/api/nft-type/handleImage", imageFormData)
-    //   .then((res) => {
-    //     console.log(res);
-    //   })
-    //   .catch((err) => console.log(err));
+    axios
+      .post("/api/nft-type/handleImage", imageFormData)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => console.log(err));
 
-    //after nftData has both audio and image references, run this route
+    axios
+      .post("/api/nft-type/uploadImageS3", imageFormData)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => console.log(err));
+    // after nftData has both audio and image references, run this route
     // axios
     //   .post("/api/nft-type/new", {
     //     nftData: nftData,

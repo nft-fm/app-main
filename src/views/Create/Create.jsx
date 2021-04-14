@@ -202,6 +202,7 @@ const Create = () => {
               </MediaButton>
               <StyledInput
                 type="file"
+                accept=".mp3"
                 ref={hiddenAudioInput}
                 onChange={handleAudioChange}
                 style={{ display: "none" }}
@@ -213,6 +214,7 @@ const Create = () => {
               </MediaButton>
               <StyledInput
                 type="file"
+                accept=".jpg,.jpeg,.png"
                 ref={hiddenImageInput}
                 onChange={handleImageChange}
                 style={{ display: "none" }}

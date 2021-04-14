@@ -1,11 +1,7 @@
 import React, { useCallback, useEffect, useState, useRef } from "react";
-import styled from "styled-components";
 import { useWallet } from "use-wallet";
-import isMobile from "../../utils/isMobile";
 import BaseView from "../BaseView";
 import axios from "axios";
-import swal from "sweetalert2";
-import { PutBucketAnalyticsConfigurationCommand } from "@aws-sdk/client-s3";
 
 const Profile = () => {
   const { account, connect } = useWallet();
@@ -50,31 +46,38 @@ const Profile = () => {
     console.log(songList);
   }
 
-  return (
-    <BaseView >
-      <h1>Profile :D</h1>
-      <div key={songList}>
-        {songList.length > 0 ?
-          songList.map(song => {
+  if (account && songList.length > 0)
+    return (
+      <BaseView >
+        <h1>Profile</h1>
+        <div key={songList}>
+          {songList.map(song => {
             if (song.Key)
               return (
                 <div>
                   {song.Key.split('/')[1]}
                   <button onClick={() => { playSong(song) }}>
                     Download and play!
-                  </button>
+                    </button>
                 </div>
               )
           })
-          :
-          <h1>Buy some songs, doofus!</h1>
-        }
-      </div>
-      <button onClick={() => { handleClick() }}>
-        Hi
-    </button>
-    </BaseView>
-  );
+          }
+        </div>
+      </BaseView>
+    );
+  else if (account)
+    return (
+      <BaseView>
+        <h1>No songs owned :(. Go to the 'listen' page to build your collection!</h1>
+      </BaseView>
+    )
+  else
+    return (
+      <BaseView>
+        <h1> Connect your wallet to view your collection!</h1>
+      </BaseView>
+    )
 };
 
 export default Profile;

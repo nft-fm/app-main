@@ -219,16 +219,37 @@ router.post('/getSong', async (req, res) => {
   var s3 = new AWS.S3();
 
   s3.getObject(
-    { Bucket: "nftfm-music", Key: req.body.address + "/" + req.body.title },
+    { Bucket: "nftfm-music", Key: req.body.key },
     function (error, data) {
       if (error != null) {
         console.log("Failed to retrieve an object: " + error);
       } else {
         console.log("Loaded " + data.ContentLength + " bytes");
-        // do something with data.Body
+        res.status(200).send(data);           // successful response
       }
     }
   );
+})
+
+router.post('/getSongList', async (req, res) => {
+  const account = req.body.account;
+  console.log("account: ", account);
+  const params = {
+    Bucket: 'nftfm-music',
+    Prefix: account
+  }
+  var AWS = require('aws-sdk');
+  AWS.config.region = 'us-west-2';
+  const path = require('path');
+
+  AWS.config.loadFromPath(path.join(__dirname, '../aws_config.json'));
+  var s3 = new AWS.S3();
+  s3.listObjectsV2(params, function (err, data) {
+    console.log(data);
+    if (err) console.log(err, err.stack); // an error occurred
+    else
+      res.status(200).send(data);           // successful response
+  });
 })
 
 module.exports = router

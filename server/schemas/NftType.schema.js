@@ -28,9 +28,9 @@ const NftTypeSchema = new Schema({
   },
   price: {
     type: Number,
-    default: 1,
+    default: 0,
   },
-  authorAddress: {
+  address: {
     type: String,
     required: true,
   },

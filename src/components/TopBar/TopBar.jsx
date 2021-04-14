@@ -27,12 +27,13 @@ const TopBar = () => {
 console.log(window.location.pathname)
 
 const NavRight = styled.div`
-display: flex;`
+display: flex;
+z-index: 20;
+`
 
 const StyledTopBar = styled.div`
-  z-index: 10;
   background-color: black;
-  border-bottom: ${props => props.window === "/" ? '4px solid transparent' : '4px solid #7e2ce3'}
+  border-bottom: ${props => props.window === "/" ? '4px solid transparent' : '4px solid #7e2ce3'};
 `;
 
 const StyledTopBarInner = styled.div`

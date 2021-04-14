@@ -79,6 +79,9 @@ const SearchBar = styled.input`
 
 const InfoSectionContent = styled.span`
   padding: 40px 40px 60px 40px;
+  width: 600px;
+  max-width: 90%;
+  text-align: center;
 `;
 
 const NftSectionHolder = styled.div`

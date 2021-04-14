@@ -40,10 +40,16 @@ const Create = () => {
       .then((res) => setCurrency(res.data.ethereum.usd));
   };
   const fetchNFT = async () => {
+<<<<<<< HEAD
     await axios
       .post("/api/nft-type/fetchNFT", { account: account })
       .then((res) => setNftData(res.data));
   };
+=======
+    await axios.post('/api/nft-type/fetchNFT', { account: account })
+      .then(res => console.log('res', res))
+  }
+>>>>>>> 5dbad6cb9c8f5619683486e5df22157d6bb19823
 
   useEffect(() => {
     fetchNFT();
@@ -53,6 +59,22 @@ const Create = () => {
     fetchCurrencyRates();
   }, []);
 
+<<<<<<< HEAD
+=======
+  const [nftData, setNftData] = useState({
+    artist: "",
+    title: "",
+    genre: "",
+    producer: "",
+    writer: "",
+    numMinted: "",
+    price: "",
+  });
+  const [audioFile, setAudioFile] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
+
+
+>>>>>>> 5dbad6cb9c8f5619683486e5df22157d6bb19823
   const getExtension = (filename) => {
     var parts = filename.split(".");
     return parts[parts.length - 1];
@@ -108,16 +130,31 @@ const Create = () => {
 
     //run these two, store the returns in the nftData state object
     const audioFormData = new FormData();
+    audioFormData.append("artist", account);
     audioFormData.append("audioFile", audioFile);
 
+    console.log(...audioFormData)
+
+    console.log('account: ', account);
     axios
-      .post("/api/nft-type/handleAudio", audioFormData)
+      .post("/api/nft-type/handleAudio", audioFormData, {
+        headers: {
+          'content-type': 'multipart/form-data'
+        }
+      })
       .then((res) => {
         console.log(res);
       })
       .catch((err) => console.log(err));
+    console.log("account:")
+    axios.post("api/nft-type/uploadAudioS3", audioFormData, {
+      headers: {
+        'content-type': 'multipart/form-data'
+      }
+    })
 
     const imageFormData = new FormData();
+    imageFormData.append("artist", account);
     imageFormData.append("imageFile", imageFile);
 
     axios
@@ -127,7 +164,13 @@ const Create = () => {
       })
       .catch((err) => console.log(err));
 
-    //after nftData has both audio and image references, run this route
+    axios
+      .post("/api/nft-type/uploadImageS3", imageFormData)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => console.log(err));
+    // after nftData has both audio and image references, run this route
     // axios
     //   .post("/api/nft-type/new", {
     //     nftData: nftData,
@@ -185,6 +228,7 @@ const Create = () => {
               </MediaButton>
               <StyledInput
                 type="file"
+                accept=".mp3"
                 ref={hiddenAudioInput}
                 onChange={handleAudioChange}
                 style={{ display: "none" }}
@@ -197,6 +241,7 @@ const Create = () => {
               </MediaButton>
               <StyledInput
                 type="file"
+                accept=".jpg,.jpeg,.png"
                 ref={hiddenImageInput}
                 onChange={handleImageChange}
                 style={{ display: "none" }}
@@ -278,9 +323,9 @@ const Create = () => {
                   <Subtext>
                     $
                     {(currency * nftData.price).toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                   </Subtext>
                 </CurrencyButton>
               </CurrencyButtons>

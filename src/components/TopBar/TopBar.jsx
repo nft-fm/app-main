@@ -37,6 +37,8 @@ const StyledTopBar = styled.div`
 `;
 
 const StyledTopBarInner = styled.div`
+z-index: 20;
+  background-color: rgba(0,0,0,0.2);
   align-items: center;
   display: flex;
   height: ${(props) => props.theme.topBarSize}px;

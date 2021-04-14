@@ -28,7 +28,7 @@ const StyledMain = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
-  min-height: calc(100% - 60px);
+  min-height: calc(100% - 64px);
   /* overflow-y: hidden; */
   margin-bottom: -64px;
   @media only screen and (max-width: 991px) {

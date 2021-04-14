@@ -18,6 +18,20 @@ const Create = () => {
   const [user, setUser] = useState(null);
   const [currency, setCurrency] = useState(0);
 
+  const [nftData, setNftData] = useState({
+    address: "",
+    artist: "",
+    draft: "",
+    genre: "",
+    numMinted: "",
+    price: "",
+    producer: "",
+    title: "",
+    writer: "",
+  });
+  const [audioFile, setAudioFile] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
+
   const fetchCurrencyRates = async () => {
     await axios
       .get(
@@ -26,52 +40,30 @@ const Create = () => {
       .then((res) => setCurrency(res.data.ethereum.usd));
   };
   const fetchNFT = async () => {
-    await axios.post('/api/nft-type/fetchNFT', {account: account})
-    .then(res => console.log('res', res))
+    await axios.post('/api/nft-type/fetchNFT', { account: account })
+      .then(res => console.log('res', res))
   }
 
-  // const fetchAccount = () => {
-  //   axios
-  //     .post(`api/user/get-account`, { address: account })
-  //     .then((res) => {
-  //       console.log("user", res.data);
-  //       setUser(res.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
+  useEffect(() => {
+    fetchNFT();
+  }, [account]);
 
   useEffect(() => {
     fetchCurrencyRates();
-    fetchNFT();
   }, []);
 
-  const [nftData, setNftData] = useState({
-    artist: "",
-    title: "",
-    genre: "",
-    producer: "",
-    writer: "",
-    numMinted: "",
-    price: "",
-  });
-  const [audioFile, setAudioFile] = useState(null);
-  const [imageFile, setImageFile] = useState(null);
-
-  
   const getExtension = (filename) => {
-    var parts = filename.split('.');
+    var parts = filename.split(".");
     return parts[parts.length - 1];
-  }
+  };
 
   function isImage(filename) {
     var ext = getExtension(filename);
     switch (ext.toLowerCase()) {
-      case 'jpg':
-      case 'gif':
-      case 'bmp':
-      case 'png':
+      case "jpg":
+      case "gif":
+      case "bmp":
+      case "png":
         //etc
         return true;
     }
@@ -79,8 +71,8 @@ const Create = () => {
   }
 
   useEffect(() => {
-    setNftData({ ...nftData, artist: account })
-  }, [account])
+    setNftData({ ...nftData, artist: account });
+  }, [account]);
 
   const updateState = (e) => {
     if (e.target.name === "price") {
@@ -95,6 +87,7 @@ const Create = () => {
   //TODO entry validation
   const handleSubmit = (e) => {
     e.preventDefault();
+    // fetchAccount();
     // if (!account) {
     //   swal.fire("unlock your wallet dipshit");
     //   return;
@@ -115,16 +108,31 @@ const Create = () => {
 
     //run these two, store the returns in the nftData state object
     const audioFormData = new FormData();
+    audioFormData.append("artist", account);
     audioFormData.append("audioFile", audioFile);
 
+    console.log(...audioFormData)
+
+    console.log('account: ', account);
     axios
-      .post("/api/nft-type/handleAudio", audioFormData)
+      .post("/api/nft-type/handleAudio", audioFormData, {
+        headers: {
+          'content-type': 'multipart/form-data'
+        }
+      })
       .then((res) => {
         console.log(res);
       })
       .catch((err) => console.log(err));
+    console.log("account:")
+    axios.post("api/nft-type/uploadAudioS3", audioFormData, {
+      headers: {
+        'content-type': 'multipart/form-data'
+      }
+    })
 
     const imageFormData = new FormData();
+    imageFormData.append("artist", account);
     imageFormData.append("imageFile", imageFile);
 
     axios
@@ -134,7 +142,13 @@ const Create = () => {
       })
       .catch((err) => console.log(err));
 
-    //after nftData has both audio and image references, run this route
+    axios
+      .post("/api/nft-type/uploadImageS3", imageFormData)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => console.log(err));
+    // after nftData has both audio and image references, run this route
     // axios
     //   .post("/api/nft-type/new", {
     //     nftData: nftData,
@@ -161,6 +175,16 @@ const Create = () => {
   const handleImageChange = (e) => {
     setImageFile(e.target.files[0]);
   };
+
+  console.log('HERE', audioFile)
+
+  // if (!account) {
+  //   return (
+  //     <BaseView>
+  //       <h1>Connect your wallet!!</h1>
+  //     </BaseView>
+  //   );
+  // }
   return (
     <BaseView>
       <FormContainer>
@@ -178,9 +202,11 @@ const Create = () => {
                 <span>Upload audio</span>
                 <span>.mp3, .flac</span>
                 <img src={upload_icon} alt="upload-file-icon" />
+
               </MediaButton>
               <StyledInput
                 type="file"
+                accept=".mp3"
                 ref={hiddenAudioInput}
                 onChange={handleAudioChange}
                 style={{ display: "none" }}
@@ -189,14 +215,20 @@ const Create = () => {
                 <span>Upload image</span>
                 <span>.png, .jpeg</span>
                 <img src={upload_icon} alt="upload-file-icon" />
+
               </MediaButton>
               <StyledInput
                 type="file"
+                accept=".jpg,.jpeg,.png"
                 ref={hiddenImageInput}
                 onChange={handleImageChange}
                 style={{ display: "none" }}
               />
             </MediaButtons>
+            <FileNames>
+              <span>{audioFile?.name}</span>
+              <span>{imageFile?.name}</span>
+            </FileNames>
           </Files>
           <Inputs autoComplete="off" onSubmit={handleSubmit}>
             {/* remove the autocomplete off later, for testing only */}
@@ -269,9 +301,9 @@ const Create = () => {
                   <Subtext>
                     $
                     {(currency * nftData.price).toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                   </Subtext>
                 </CurrencyButton>
               </CurrencyButtons>
@@ -401,6 +433,21 @@ const SubmitButton = styled.button`
   font-size: 20px;
 `;
 
+const FileNames = styled.div`
+width: 100%;
+display: flex;
+justify-content: space-evenly;
+position: absolute;
+left: 0;
+bottom: -10px;
+& > span {
+  width: 30%;
+  font-size: 0.7rem;
+  text-align: center;
+  opacity: .7;
+}
+`;
+
 const MediaButton = styled.button`
   background-color: white;
   border-radius: 10px;
@@ -412,6 +459,8 @@ const MediaButton = styled.button`
   padding: 5px;
   cursor: pointer;
   margin-top: 30px;
+  /* position: relative; */
+  width: 40%;
   & > img {
     height: 20px;
     opacity: 0.5;
@@ -439,6 +488,7 @@ const Files = styled.div`
   display: flex;
   flex-direction: column;
   padding: 10px;
+  position: relative;
 `;
 
 const Inputs = styled.form`

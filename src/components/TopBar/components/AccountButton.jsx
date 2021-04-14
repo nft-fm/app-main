@@ -30,7 +30,8 @@ const AccountButton = (props) => {
       connect("injected")//.then(() => { getS3Bucket() });
       // onPresentWalletProviderModal()
     }
-    fetchAccount();
+    console.log('account', account)
+    // fetchAccount();
   }, [connect]);
 
   if (account) {
@@ -40,6 +41,11 @@ const AccountButton = (props) => {
       // that you would like to track with google analytics
     });
   }
+
+  useEffect(() => {
+    console.log('account', account)
+    fetchAccount();
+  }, [account])
 
   return (
     <StyledAccountButton>

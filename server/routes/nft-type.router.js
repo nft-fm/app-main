@@ -163,4 +163,13 @@ router.post('/handleImage', async (req, res) => {
   }
 })
 
+
+router.post('/fetchNFT', async (req, res) => {
+  try {
+    console.log('/fetchNFT hit', req.body)
+  } catch (err) {
+    console.log(error);
+    res.status(500).send("server error")
+  }
+})
 module.exports = router

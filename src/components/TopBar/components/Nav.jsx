@@ -6,7 +6,6 @@ export const Nav = () => {
   return (
     <StyledNav>
       <StyledLink exact activeClassName="active" to="/">Home</StyledLink>
-      <StyledLink exact activeClassName="active" to="/create">Create</StyledLink>
       <StyledLink exact activeClassName="active" to="/profile">Profile</StyledLink>
     </StyledNav>
   );

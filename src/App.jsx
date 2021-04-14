@@ -11,7 +11,6 @@ import styled from 'styled-components'
 import ModalsProvider from './contexts/Modals'
 import Home from './views/Home'
 import Profile from './views/Profile'
-import Create from './views/Create/Create'
 import Login from './views/Login/Login';
 import Register from './views/Register';
 import isMobile from "./utils/isMobile";
@@ -32,12 +31,6 @@ const App = () => {
             </Route>
             <Route path="/register" exact>
               <Register />
-            </Route>
-            <Route path="/login" exact>
-              <Login />
-            </Route>
-            <Route path="/create" exact>
-              <Create />
             </Route>
             <Route path="/profile" exact>
               <Profile />

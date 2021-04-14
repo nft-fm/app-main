@@ -28,8 +28,7 @@ const Listen = () => {
         <LandingSection>
           <Banner>
             <HeaderContents>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-              lacinia justo non consequat euismod.
+              Exclusive drops from your favorite Artists.
             </HeaderContents>
           </Banner>
         </LandingSection>
@@ -72,11 +71,11 @@ const InfoSection = styled.div`
 const SearchBar = styled.input`
   border-radius: 15px;
   width: 50%;
-  margin-top: -20px;
+  margin-top: -26px;
   padding: 5px 10px;
   outline: none;
   background-color: #eaeaea;
-  border: 2px solid #707070;
+  border: 4px solid white;
 `;
 
 const InfoSectionContent = styled.span`
@@ -114,7 +113,7 @@ const NftDisplay = styled.div`
 `;
 
 const InfoHeaderText = styled.div`
-  font-family: "HelveticaNeue-Bold";
+  font-family: "Compita";
   font-size: 30px;
   text-align: center;
   & > span {
@@ -133,18 +132,26 @@ const LandingSection = styled.div`
 const HeaderContents = styled.span`
   color: white;
   width: 80%;
+  font-family: "Compita";
+  font-weight: bold;
+  letter-spacing: 2px;
+  font-size: 40px;
+  /* margin-top: -40px; */
   /* margin-top: 50px; */
 `;
 
 const Banner = styled.div`
+margin-top: -65px;
   width: 100%;
-  height: 150px;
+  height: 365px;
   background-color: black;
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
   border-bottom: 4px solid#7e2ce3;
+  z-index: 0;
 `;
 
 const MainContents = styled.div`

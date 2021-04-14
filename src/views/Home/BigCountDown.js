@@ -69,7 +69,7 @@ class CountDown extends React.Component {
 const CountDownText = styled.div`
 margin-bottom: 20px;
 width: 100%;
-font-family: "Bangers";
+font-family: "Compita";
   font-size: 30px;
   
   font-stretch: normal;
@@ -89,7 +89,7 @@ const TimerText = styled.div`
 text-align: center;
 width: 100%;
 margin-top: 1vh;
-font-family: "Bangers";
+font-family: "Compita";
   font-size: 20px;
   font-weight: normal;
   font-stretch: normal;
@@ -104,7 +104,7 @@ display: flex;
 margin-top: 20px;
 flex-direction: row;
 justify-content: space-evenly;
-font-family: "Bangers";
+font-family: "Compita";
   font-size: 90px;
   
   font-stretch: normal;
@@ -116,7 +116,7 @@ font-family: "Bangers";
 display: flex;
 flex-direction: row;
 justify-content: space-evenly;
-font-family: "Bangers";
+font-family: "Compita";
   font-size: 60px;
   
   font-stretch: normal;

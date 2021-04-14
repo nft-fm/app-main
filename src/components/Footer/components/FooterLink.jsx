@@ -18,7 +18,7 @@ const SocialIcon = styled.img`
 
 const StyledLink = styled.a`
   margin: 5px;
-  font-family: "Bangers";
+  font-family: "Compita";
   font-size: 20px;
   line-height: 1;
   text-decoration: underline;

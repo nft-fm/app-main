@@ -77,7 +77,7 @@ text-align: center;
 `
 
 const Text = styled.div`
-font-family: "Bangers";
+font-family: "Compita";
   font-size: 20px;
   font-weight: normal;
   font-stretch: normal;
@@ -91,7 +91,7 @@ const TimerText = styled.div`
 text-align: center;
 width: 100%;
 margin-top: 1vh;
-font-family: "Bangers";
+font-family: "Compita";
   font-size: 20px;
   font-weight: normal;
   font-stretch: normal;
@@ -103,7 +103,7 @@ font-family: "Bangers";
 const Countdown = styled.div`
 display: flex;
 margin-left: 5px;
-font-family: "Bangers";
+font-family: "Compita";
 	font-size: 20px;
   color: rgb(255, 204, 160);
 	

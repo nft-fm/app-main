@@ -13,7 +13,7 @@ const Page = ({ children }) => (
     </Col>
     <StyledMain>
       {children}
-      {/* <Push /> */}
+      <Push />
     </StyledMain>
     <Footer />
   </StyledPage>
@@ -28,13 +28,20 @@ const StyledMain = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
-  min-height: calc(100% - 68px);
-  
-  margin-bottom: -56px;
-`;
+  min-height: calc(100% - 60px);
+  /* overflow-y: hidden; */
+  margin-bottom: -64px;
+  @media only screen and (max-width: 991px) {
+    margin: -50px 0 -120px 0;
+    }
+
+`
 
 const Push = styled.div`
-  height: 130px;
-`;
+  height: 64px;
+  @media only screen and (max-width: 991px) {
+height: 170px;
+ }
+`
 
 export default Page;

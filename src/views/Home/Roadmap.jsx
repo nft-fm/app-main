@@ -142,7 +142,7 @@ const RecDesc = styled.div`
 
 const RecTitle = styled.div`
   margin: auto;
-  font-family: "Bangers";
+  font-family: "Compita";
   font-size: 40px;
   text-decoration: none;
   font-stretch: normal;

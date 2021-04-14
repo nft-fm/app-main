@@ -9,7 +9,7 @@ import { ThemeProvider } from 'styled-components'
 import { UseWalletProvider } from 'use-wallet'
 import styled from 'styled-components'
 import ModalsProvider from './contexts/Modals'
-import Listen from './views/Listen'
+import Home from './views/Home'
 import Profile from './views/Profile'
 import Create from './views/Create/Create'
 import Login from './views/Login/Login';
@@ -27,9 +27,8 @@ const App = () => {
       <StyledCanvas>
         <Router>
           <Switch>
-            <Redirect exact from="/" to="/listen" />
-            <Route path="/listen" exact>
-              <Listen />
+            <Route path="/" exact>
+              <Home />
             </Route>
             <Route path="/register" exact>
               <Register />
@@ -57,7 +56,7 @@ const Providers = ({ children }) => {
   return (
     <ThemeProvider theme={theme}>
       {/* change the ChainId below here for the preffered network when testing, 1 main 3 ropsten 42 kovan */}
-      <UseWalletProvider chainId={5} connectors={{
+      <UseWalletProvider chainId={4} connectors={{
         walletconnect: { rpcUrl: 'https://mainnet.eth.aragon.network/' },
       }}>
         <ModalsProvider>

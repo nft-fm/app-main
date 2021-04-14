@@ -99,7 +99,7 @@ const StyledButton = styled.button`
   padding-top: 3px;
   pointer-events: ${props => !props.disabled ? undefined : 'none'};
   width: ${props => props.size}px;
-  font-family: "Bangers";
+  font-family: "Compita";
   font-size: 20px;
   letter-spacing: 1px;
   font-stretch: normal;

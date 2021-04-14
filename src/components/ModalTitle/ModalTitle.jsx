@@ -10,7 +10,7 @@ const ModalTitle = ({ text }) => (
 const StyledModalTitle = styled.div`
   align-items: center;
   color: black;
-  font-family: "Bangers";
+  font-family: "Compita";
   display: flex;
   font-size: 40px;
   letter-spacing: 1px;

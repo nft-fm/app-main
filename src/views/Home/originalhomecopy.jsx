@@ -853,7 +853,7 @@ max-width: calc(90vw - 10px);
 const ComicSubTitle = !isMobile() ? styled.div`
 padding: 5px 10px;
 max-width: 50vw;
-font-family: "Bangers";
+font-family: "Compita";
 font-weight: normal;
 font-size: 40px;
 border: solid #000;
@@ -867,7 +867,7 @@ margin-bottom: 50px;
 ` : styled.div`
 padding: 5px 10px;
 max-width: calc(90vw - 20px);
-font-family: "Bangers";
+font-family: "Compita";
 font-weight: normal;
 font-size: 40px;
 border: solid #000;
@@ -953,7 +953,7 @@ margin-bottom: 20px;
 const ComicTitle = !isMobile() ? styled.div`
 padding: 5px 10px;
 max-width: 50vw;
-font-family: "Bangers";
+font-family: "Compita";
 font-weight: normal;
 font-size: 60px;
 border: solid #000;
@@ -967,7 +967,7 @@ margin-bottom: 50px;
 ` : styled.div`
 padding: 5px 10px;
 max-width: calc(90vw - 20px);
-font-family: "Bangers";
+font-family: "Compita";
 font-weight: normal;
 font-size: 60px;
 border: solid #000;
@@ -1106,7 +1106,7 @@ padding: 0 20px;`
 
 
 const InfoTitle = styled.h1`
-font-family: "Bangers";
+font-family: "Compita";
 background-color: #fef9ed;
 padding: 5px 0 5px 0;
 border: solid black;

@@ -26,7 +26,7 @@ min-width: 200px;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-font-family: "Bangers";
+font-family: "Compita";
   font-size: 25px;
   
   font-stretch: normal;

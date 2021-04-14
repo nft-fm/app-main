@@ -81,7 +81,7 @@ const TopDisplayContainer = !isMobile()
 const DisplayItem = !isMobile()
   ? styled.div`
         color: white;
-        font-family: "Bangers";
+        font-family: "Compita";
         font-size: 18px;
         
         font-stretch: normal;
@@ -96,7 +96,7 @@ const DisplayItem = !isMobile()
         margin-bottom: 10px;
         color: white;
         text-align: center;
-        font-family: "Bangers";
+        font-family: "Compita";
         font-size: 18px;
         
         font-stretch: normal;

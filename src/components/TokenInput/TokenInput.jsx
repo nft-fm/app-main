@@ -68,7 +68,7 @@ const ModalButton = styled.button`
   padding: 3px 10px 0 10px;
   justify-content: center;
   outline: none;
-  font-family: "Bangers";
+  font-family: "Compita";
   font-size: 20px;
   font-stretch: normal;
   font-style: normal;
@@ -83,7 +83,7 @@ const ModalButton = styled.button`
   padding: 3px 10px 0 10px;
   justify-content: center;
   outline: none;
-  font-family: "Bangers";
+  font-family: "Compita";
   font-stretch: normal;
   font-style: normal;
   line-height: 1;

@@ -19,7 +19,7 @@ const StyledNav = styled.nav`
 `;
 
 const InactiveLink = styled.div`
-  font-family: "Bangers";
+  font-family: "Compita";
   font-size: 20px;
   user-select: none;
   line-height: 1;
@@ -39,16 +39,16 @@ const InactiveLink = styled.div`
 `;
 
 const StyledLink = styled(NavLink)`
-  font-family: "Bangers";
+  font-family: "Compita";
   font-size: 20px;
   line-height: 1;
   letter-spacing: 0.5px;
-  color: #7e2ce3;
+  color: #a365ef;
   padding-left: ${(props) => props.theme.spacing[3]}px;
   padding-right: ${(props) => props.theme.spacing[3]}px;
   text-decoration: none;
   &:hover {
-    color: #a365ef;
+    color: #c398f8;
   }
   &.active {
     text-decoration: underline;

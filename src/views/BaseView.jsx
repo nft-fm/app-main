@@ -6,25 +6,18 @@ import isMobile from "../utils/isMobile";
 export const BaseView = (props) => {
   return (
     <StyledCanvas>
-      {/* <BackgroundOverlay /> */}
-      {/* <BigLogoContainer>
-        <BigLogo src={Logo} />
-      </BigLogoContainer> */}
-      <ContentContainer>
-        <Page>{props.children}</Page>
-      </ContentContainer>
+      <Page>{props.children}</Page>
     </StyledCanvas>
   );
 };
 
 const StyledCanvas = styled.div`
-  position: absolute;
   width: 100%;
+  height: 100%;
   background-color: white;
 `;
 
 const ContentContainer = styled.div`
-  position: absolute;
   width: 100%;
   text-align: center;
 `;

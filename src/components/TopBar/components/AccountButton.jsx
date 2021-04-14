@@ -98,48 +98,43 @@ const Button = styled.button`
 `;
 
 const StyledAccountButton = styled.div`
-  width: 200px;
-  /* height: 70px; */
+  width: 140px;
   cursor: pointer;
   transition: all 0.1s ease-in-out;
   display: flex;
-  /* align-items: center; */
   justify-content: center;
+  border: 2px solid rgba(256,256,256,0.7);
+  margin: 0 16px;
+  height: 28px;
+  border-radius: 2px;
+  background-color: rgba(256,256,256,0.1);
   &:hover {
-    transform: scale(1.1);
+    background-color: rgba(256,256,256,0.2);
   }
   @media only screen and (max-width: 767px) {
     background-size: 100% 100%;
     width: 100px;
     margin-left: -15px;
+
   }
 `;
 
-const Oval = styled.div`
-  width: 8px;
-  height: 8px;
-  border-radius: 5px;
-  background-color: #7dca46;
-  margin-right: 10px;
-`;
 
 const StyledAccountInfo = styled.div`
-  padding-bottom: 8px;
   display: flex;
   flex-direction: row;
   align-items: center;
 `;
 
 const StyledA = styled.a`
-  font-family: "Bangers";
+  font-family: "Compita";
   font-size: 20px;
   line-height: 1;
   text-decoration: none !important;
-  color: #ffb700;
+  color: #a365ef;
   transition: all 0.1s linear;
-  opacity: 0.85;
+  /* opacity: 0.85; */
   &:hover {
-    opacity: 1;
   }
 `;
 

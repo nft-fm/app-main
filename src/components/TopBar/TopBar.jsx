@@ -11,11 +11,14 @@ const TopBar = () => {
   return (
     <StyledTopBar id="top" window={window.location.pathname}>
       <StyledTopBarInner>
-        <NavLink to="/" style={{ flex: 1, textDecoration: "none" }}>
+        <NavLink to="/" style={{ textDecoration: "none" }}>
           <Logo />
         </NavLink>
-        <Nav />
-        <AccountButton />
+        <NavRight>
+
+          <Nav />
+          <AccountButton />
+        </NavRight>
       </StyledTopBarInner>
     </StyledTopBar>
   );
@@ -23,17 +26,20 @@ const TopBar = () => {
 
 console.log(window.location.pathname)
 
+const NavRight = styled.div`
+display: flex;`
+
 const StyledTopBar = styled.div`
   z-index: 10;
   background-color: black;
-  border-bottom: ${props => props.window === "/listen" ? 'none' : '4px solid #7e2ce3'}
+  border-bottom: ${props => props.window === "/" ? '4px solid transparent' : '4px solid #7e2ce3'}
 `;
 
 const StyledTopBarInner = styled.div`
   align-items: center;
   display: flex;
   height: ${(props) => props.theme.topBarSize}px;
-  justify-content: flex-end;
+  justify-content: space-between;
   max-width: ${(props) => props.theme.siteWidth}px;
   width: 100%;
 `;

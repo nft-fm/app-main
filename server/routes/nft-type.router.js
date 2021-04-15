@@ -130,8 +130,6 @@ router.post('/uploadImageS3', async (req, res) => {
   AWS.config.region = 'us-west-2';
   const path = require('path');
   const multerS3 = require("multer-s3");
-
-  AWS.config.loadFromPath(path.join(__dirname, '../aws_config.json'));
   var s3Client = new AWS.S3();
 
   const fileFilter = (req, file, cb) => {

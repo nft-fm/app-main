@@ -37,6 +37,8 @@ const Create = () => {
 
   useEffect(() => {
     setNftData({ ...nftData, address: account })
+    if (account)
+      axios.post('/api/nft-type/new', { account: account })
   }, [account]);
 
   const fetchCurrencyRates = async () => {
@@ -114,7 +116,7 @@ const Create = () => {
     if (!isUploadError) {
       // after nftData has both audio and image references, run this route
       axios
-        .post("/api/nft-type/new", nftData)
+        .post("/api/nft-type/update", nftData)
         .catch((err) => console.log(err));;
     }
     else {

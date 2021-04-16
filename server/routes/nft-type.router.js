@@ -11,7 +11,6 @@ router.post('/new', async (req, res) => {
     console.log("/new Hit", req.body.address);
     let nft = await NftType.findOne({
       address: req.body.address,
-      audioUrl: req.body.audioUrl,
       draft: true,
     });
     if (!nft) {
@@ -33,16 +32,6 @@ router.post('/update', async (req, res) => {
     console.log('/update hit', req.body)
     let newData = req.body;
     await NftType.findOneAndUpdate({ address: req.body.address }, newData);
-    // console.log('here', nftType)
-    // nftType = req.body;
-
-    // console.log('HERRREEE', nftType)
-    // // nftType = req.body
-    // await nftType.save();
-    // if (picture) nftType.picture = picture;
-    // if (rarity) nftType.rarity = rarity;
-    // if (stats) nftType.stats = stats;
-    // await nftType.save();
 
   } catch (error) {
     console.log(error);

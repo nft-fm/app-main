@@ -24,9 +24,9 @@ const initialNftState = {
   writer: "",
   imageUrl: "",
   audioUrl: "",
-}
+};
 
-const Create = () => {
+const Create = ({ open, hide,  }) => {
   const { account, connect } = useWallet();
 
   const [user, setUser] = useState(null);
@@ -115,14 +115,14 @@ const Create = () => {
         .then((res) => {
           console.log("update res", res);
           if (res.status === 200) {
-            setNftData(initialNftState)
-            setImageFile(null)
-            setAudioFile(null)
+            setNftData(initialNftState);
+            setImageFile(null);
+            setAudioFile(null);
             swal.fire({
               title: "Success!",
               text: "Nft successfully created!",
               icon: "success",
-            })
+            });
           }
         })
         .catch((err) => console.log(err));
@@ -183,6 +183,12 @@ const Create = () => {
   //     </BaseView>
   //   );
   // }
+
+  if (!open) return null;
+  const stopProp = (e) => {
+    e.stopPropagation();
+  };
+
   if (isLoading)
     return (
       <BaseView>
@@ -190,138 +196,140 @@ const Create = () => {
       </BaseView>
     );
   return (
-    <FormContainer>
-      <Header>
-        <span>Add NFTs</span>
-        {/* <X src={x}/> */}
-      </Header>
-      <Main>
-        <Files>
-          <ImagePreview>
-            <Image src={image} alt="image" />
-          </ImagePreview>
-          <MediaButtons>
-            <MediaButton onClick={() => handleAudio()}>
-              <span>Upload audio</span>
-              <span>.mp3, .flac</span>
-              <img src={upload_icon} alt="upload-file-icon" />
-            </MediaButton>
-            <StyledInput
-              type="file"
-              accept=".mp3"
-              ref={hiddenAudioInput}
-              onChange={handleAudioChange}
-              style={{ display: "none" }}
-              defaultValue={audioFile}
-            />
-            <MediaButton onClick={() => handleImage()}>
-              <span>Upload image</span>
-              <span>.png, .jpeg</span>
-              <img src={upload_icon} alt="upload-file-icon" />
-            </MediaButton>
-            <StyledInput
-              type="file"
-              accept=".jpg,.jpeg,.png,.gif"
-              ref={hiddenImageInput}
-              onChange={handleImageChange}
-              style={{ display: "none" }}
-              defaultValue={imageFile}
-            />
-          </MediaButtons>
-          <FileNames>
-            <span>{audioFile?.name}</span>
-            <span>{imageFile?.name}</span>
-          </FileNames>
-        </Files>
-        <Inputs autoComplete="off" onSubmit={handleSubmit}>
-          {/* remove the autocomplete off later, for testing only */}
-          <TopInputs>
-            <StyledInput
-              type="text"
-              placeholder="Title"
-              name="title"
-              onChange={(e) => updateState(e)}
-              defaultValue={nftData.title}
-            />
-            <StyledInput
-              type="text"
-              placeholder="Genre"
-              name="genre"
-              onChange={(e) => updateState(e)}
-              defaultValue={nftData.genre}
-            />
-            <StyledInput
-              type="text"
-              placeholder="Producer"
-              name="producer"
-              onChange={(e) => updateState(e)}
-              defaultValue={nftData.producer}
-            />
-            <StyledInput
-              type="text"
-              placeholder="Writer"
-              name="writer"
-              onChange={(e) => updateState(e)}
-              defaultValue={nftData.writer}
-            />
-          </TopInputs>
-          <MiddleInputs>
-            <label>NFT Created</label>
-            <StyledDivInput>
-              <StyledNumberInput
-                className="mint"
-                type="number"
-                name="numMinted"
-                onChange={(e) => updateState(e)}
-                min="0"
-                value={nftData.numMinted}
+    <OpaqueFilter onClick={(e) => hide(e)}>
+      <FormContainer onClick={(e) => stopProp(e)}>
+        <Header>
+          <span>Add NFTs</span>
+          <X src={x} onClick={(e) => hide(e)}/>
+        </Header>
+        <Main>
+          <Files>
+            <ImagePreview>
+              <Image src={image} alt="image" />
+            </ImagePreview>
+            <MediaButtons>
+              <MediaButton onClick={() => handleAudio()}>
+                <span>Upload audio</span>
+                <span>.mp3, .flac</span>
+                <img src={upload_icon} alt="upload-file-icon" />
+              </MediaButton>
+              <StyledInput
+                type="file"
+                accept=".mp3"
+                ref={hiddenAudioInput}
+                onChange={handleAudioChange}
+                style={{ display: "none" }}
+                defaultValue={audioFile}
               />
-            </StyledDivInput>
-            <label>NFT Price</label>
-            <StyledDivInput>
-              <StyledNumberInput
-                className="cost"
-                type="number"
-                name="price"
-                onChange={(e) => updateState(e)}
-                value={nftData.price}
+              <MediaButton onClick={() => handleImage()}>
+                <span>Upload image</span>
+                <span>.png, .jpeg</span>
+                <img src={upload_icon} alt="upload-file-icon" />
+              </MediaButton>
+              <StyledInput
+                type="file"
+                accept=".jpg,.jpeg,.png,.gif"
+                ref={hiddenImageInput}
+                onChange={handleImageChange}
+                style={{ display: "none" }}
+                defaultValue={imageFile}
               />
-              <span>/ETH</span>
-            </StyledDivInput>
-            <CurrencyButtons>
-              <CurrencyButton type="button" className="ETH">
-                <div>
-                  <CurrencyIcon src={eth_icon_white} /> ETH
-                </div>
-                <Subtext>{currency}</Subtext>
-              </CurrencyButton>
-              <CurrencyButton type="button" className="BTU">
-                <div>
-                  <CurrencyIcon src={eth_icon} /> ABC
-                </div>
-                <Subtext>{currency}</Subtext>
-              </CurrencyButton>
-              <CurrencyButton type="button" className="USD">
-                <div>
-                  <CurrencyIcon src={usd_icon} />
-                  USD
-                </div>
-                <Subtext>
-                  $
-                  {(currency * nftData.price).toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
-                </Subtext>
-              </CurrencyButton>
-            </CurrencyButtons>
-          </MiddleInputs>
-          <BottomInput>
-            <SubmitButton type="submit">Approve and Create</SubmitButton>
-          </BottomInput>
-        </Inputs>
-      </Main>
-    </FormContainer>
+            </MediaButtons>
+            <FileNames>
+              <span>{audioFile?.name}</span>
+              <span>{imageFile?.name}</span>
+            </FileNames>
+          </Files>
+          <Inputs autoComplete="off" onSubmit={handleSubmit}>
+            {/* remove the autocomplete off later, for testing only */}
+            <TopInputs>
+              <StyledInput
+                type="text"
+                placeholder="Title"
+                name="title"
+                onChange={(e) => updateState(e)}
+                defaultValue={nftData.title}
+              />
+              <StyledInput
+                type="text"
+                placeholder="Genre"
+                name="genre"
+                onChange={(e) => updateState(e)}
+                defaultValue={nftData.genre}
+              />
+              <StyledInput
+                type="text"
+                placeholder="Producer"
+                name="producer"
+                onChange={(e) => updateState(e)}
+                defaultValue={nftData.producer}
+              />
+              <StyledInput
+                type="text"
+                placeholder="Writer"
+                name="writer"
+                onChange={(e) => updateState(e)}
+                defaultValue={nftData.writer}
+              />
+            </TopInputs>
+            <MiddleInputs>
+              <label>NFT Created</label>
+              <StyledDivInput>
+                <StyledNumberInput
+                  className="mint"
+                  type="number"
+                  name="numMinted"
+                  onChange={(e) => updateState(e)}
+                  min="0"
+                  value={nftData.numMinted}
+                />
+              </StyledDivInput>
+              <label>NFT Price</label>
+              <StyledDivInput>
+                <StyledNumberInput
+                  className="cost"
+                  type="number"
+                  name="price"
+                  onChange={(e) => updateState(e)}
+                  value={nftData.price}
+                />
+                <span>/ETH</span>
+              </StyledDivInput>
+              <CurrencyButtons>
+                <CurrencyButton type="button" className="ETH">
+                  <div>
+                    <CurrencyIcon src={eth_icon_white} /> ETH
+                  </div>
+                  <Subtext>{currency}</Subtext>
+                </CurrencyButton>
+                <CurrencyButton type="button" className="BTU">
+                  <div>
+                    <CurrencyIcon src={eth_icon} /> ABC
+                  </div>
+                  <Subtext>{currency}</Subtext>
+                </CurrencyButton>
+                <CurrencyButton type="button" className="USD">
+                  <div>
+                    <CurrencyIcon src={usd_icon} />
+                    USD
+                  </div>
+                  <Subtext>
+                    $
+                    {(currency * nftData.price).toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </Subtext>
+                </CurrencyButton>
+              </CurrencyButtons>
+            </MiddleInputs>
+            <BottomInput>
+              <SubmitButton type="submit">Approve and Create</SubmitButton>
+            </BottomInput>
+          </Inputs>
+        </Main>
+      </FormContainer>
+    </OpaqueFilter>
   );
 };
 
@@ -531,12 +539,28 @@ const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 20px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
 `;
+
+const OpaqueFilter = styled.div`
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  /* transform: translate(-50%, -50%); */
+  background-color: rgba(0, 0, 0, 0.4);
+`;
+
 
 const X = styled.img`
   width: 25px;
   height: 25px;
   cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
 `;
 
 export default Create;

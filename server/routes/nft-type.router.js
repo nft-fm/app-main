@@ -34,8 +34,6 @@ router.post('/update', async (req, res) => {
     console.log('/update hit', req.body)
     let newData = req.body;
     newData.draft = false;
-    console.log("newData", newData)
-    
     let updateNFT = await NftType.findByIdAndUpdate( newData._id, newData, {new: true})
     if (updateNFT) {
       res.status(200).send("success")
@@ -64,7 +62,7 @@ router.post('/get-one', async (req, res) => {
 
 router.get('/all', async (req, res) => {
   try {
-    let nftTypes = await NftType.find();
+    let nftTypes = await NftType.find({draft: false});
     res.send(nftTypes);
   } catch (error) {
     console.log(error);

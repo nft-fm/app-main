@@ -14,329 +14,289 @@ import usd_icon from "../../../assets/img/profile_page_assets/usd_icon.svg";
 import BaseView from "../../BaseView";
 
 const Create = () => {
-    const { account, connect } = useWallet();
-  
-    const [user, setUser] = useState(null);
-    const [currency, setCurrency] = useState(0);
-    const [isLoading, setIsLoading] = useState(false);
-  
-    const [nftData, setNftData] = useState({
-      address: "",
-      artist: "",
-      draft: false,
-      genre: "",
-      numMinted: "",
-      price: "",
-      producer: "",
-      title: "",
-      writer: "",
-      imageUrl: "",
-      audioUrl: ""
-    });
-    const [audioFile, setAudioFile] = useState(null);
-    const [imageFile, setImageFile] = useState(null);
-  
-    useEffect(() => {
-      setNftData({ ...nftData, address: account })
-    }, [account]);
-    const fetchCurrencyRates = async () => {
-      await axios
-        .get(
-          "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=USD"
-        )
-        .then((res) => setCurrency(res.data.ethereum.usd));
-    };
-    const fetchNFT = async () => {
-      await axios.post('/api/nft-type/fetchNFT', { account: account })
-        .then(res => console.log('res', res))
-    }
-  
-    // useEffect(() => {
-    //   fetchNFT();
-    // }, [account]);
-  
-    useEffect(() => {
-      fetchCurrencyRates();
-    }, []);
-  
-    const getExtension = (filename) => {
-      var parts = filename.split(".");
-      return parts[parts.length - 1];
-    };
-  
-    function isImage(filename) {
-      var ext = getExtension(filename);
-      switch (ext.toLowerCase()) {
-        case "jpg":
-        case "gif":
-        case "bmp":
-        case "png":
-          //etc
-          return true;
+  const { account, connect } = useWallet();
+
+  const [user, setUser] = useState(null);
+  const [currency, setCurrency] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [nftData, setNftData] = useState({
+    address: "",
+    draft: false,
+    genre: "",
+    numMinted: "",
+    price: "",
+    producer: "",
+    title: "",
+    writer: "",
+    imageUrl: "",
+    audioUrl: ""
+  });
+  const [audioFile, setAudioFile] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
+
+  useEffect(() => {
+    setNftData({ ...nftData, address: account })
+  }, [account]);
+
+  const fetchCurrencyRates = async () => {
+    await axios
+      .get(
+        "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=USD"
+      )
+      .then((res) => setCurrency(res.data.ethereum.usd));
+  };
+  const fetchNFT = async () => {
+    await axios.post('/api/nft-type/fetchNFT', { account: account })
+      .then(res => console.log('res', res))
+  }
+
+  // useEffect(() => {
+  //   fetchNFT();
+  // }, [account]);
+
+  useEffect(() => {
+    fetchCurrencyRates();
+  }, []);
+
+  const getExtension = (filename) => {
+    var parts = filename.split(".");
+    return parts[parts.length - 1];
+  };
+
+  // useEffect(() => {
+  //   setNftData({ ...nftData, artist: account });
+  // }, [account]);
+
+  const updateState = (e) => {
+    if (e.target.name === "price") {
+      let string = e.target.value.toString();
+      if (string.length > 7) {
+        return;
       }
-      return false;
     }
-  
-    useEffect(() => {
-      setNftData({ ...nftData, artist: account });
-    }, [account]);
-  
-    const updateState = (e) => {
-      if (e.target.name === "price") {
-        let string = e.target.value.toString();
-        if (string.length > 7) {
-          return;
-        }
+    setNftData({ ...nftData, [e.target.name]: e.target.value });
+  };
+
+  //TODO entry validation
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    let isUploadError = false;
+
+    //run these two, store the returns in the nftData state object
+    const audioFormData = new FormData();
+    audioFormData.append("artist", account);
+    audioFormData.append("audioFile", audioFile);
+
+    axios.post("api/nft-type/uploadAudioS3", audioFormData, {
+      headers: {
+        'content-type': 'multipart/form-data'
       }
-      setNftData({ ...nftData, [e.target.name]: e.target.value });
-    };
-  
-    //TODO entry validation
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      setIsLoading(true);
-      // fetchAccount();
-      // if (!account) {
-      //   swal.fire("unlock your wallet dipshit");
-      //   return;
-      // }
-      // if (
-      //   !audioFile ||
-      //   !imageFile ||
-      //   nftData.title === "" ||
-      //   nftData.genre === "" ||
-      //   nftData.producer === "" ||
-      //   nftData.writer === "" ||
-      //   nftData.numMinted === "" ||
-      //   nftData.price === ""
-      // ) {
-      //   swal.fire("fill in all fields");
-      //   return;
-      // }
-  
-      //run these two, store the returns in the nftData state object
-      const audioFormData = new FormData();
-      audioFormData.append("artist", account);
-      audioFormData.append("audioFile", audioFile);
-  
-      console.log(...audioFormData)
-  
-      console.log('account: ', account);
-      axios
-        .post("/api/nft-type/handleAudio", audioFormData, {
-          headers: {
-            'content-type': 'multipart/form-data'
-          }
-        })
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => console.log(err));
-      console.log("account:")
-      axios.post("api/nft-type/uploadAudioS3", audioFormData, {
-        headers: {
-          'content-type': 'multipart/form-data'
-        }
+    })
+      .then((res) => {
+        console.log(res);
       })
-  
-      const imageFormData = new FormData();
-      imageFormData.append("artist", account);
-      imageFormData.append("imageFile", imageFile);
-  
-      axios
-        .post("/api/nft-type/handleImage", imageFormData)
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => console.log(err));
-  
-      axios
-        .post("/api/nft-type/uploadImageS3", imageFormData)
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => console.log(err));
+      .catch((err) => { console.log(err); isUploadError = true })
+
+    const imageFormData = new FormData();
+    imageFormData.append("artist", account);
+    imageFormData.append("imageFile", imageFile);
+
+    axios
+      .post("/api/nft-type/uploadImageS3", imageFormData)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => { console.log(err); isUploadError = true })
+
+    if (!isUploadError) {
       // after nftData has both audio and image references, run this route
       axios
-        .post("/api/nft-type/update", nftData)
+        .post("/api/nft-type/new", nftData)
         .catch((err) => console.log(err));;
-      setIsLoading(false);
-    };
-  
-    //this is all to handle the image and audio
-    const hiddenAudioInput = useRef(null);
-    const handleAudio = (e) => {
-      hiddenAudioInput.current.click();
-    };
-    const handleAudioChange = (e) => {
-      setAudioFile(e.target.files[0]);
-      setNftData({
-        ...nftData,
-        audioUrl: "https://nftfm-music.s3-us-west-1.amazonaws.com/"
-          + account + "/" + e.target.files[0].name
-      })
-      // console.log(e.target.files[0]);
-    };
-  
-    const hiddenImageInput = useRef(null);
-    const handleImage = (e) => {
-  
-      hiddenImageInput.current.click();
-    };
-    const handleImageChange = (e) => {
-      setImageFile(e.target.files[0]);
-      setNftData({
-        ...nftData,
-        imageUrl: "https://nftfm-music.s3-us-west-1.amazonaws.com/"
-          + account + "/" + e.target.files[0].name
-      })
-    };
-  
-    console.log('HERE', audioFile)
-  
-    // if (!account) {
-    //   return (
-    //     <BaseView>
-    //       <h1>Connect your wallet!!</h1>
-    //     </BaseView>
-    //   );
-    // }
-    if (isLoading)
-      return (
-        <BaseView>
-          <h1>Loading...</h1>
-        </BaseView>
-      )
+    }
+    else {
+      //do something
+    }
+    setIsLoading(false);
+  };
+
+  //this is all to handle the image and audio
+  const hiddenAudioInput = useRef(null);
+  const handleAudio = (e) => {
+    hiddenAudioInput.current.click();
+  };
+  const handleAudioChange = (e) => {
+    setAudioFile(e.target.files[0]);
+    setNftData({
+      ...nftData,
+      audioUrl: "https://nftfm-music.s3-us-west-1.amazonaws.com/"
+        + account + "/" + e.target.files[0].name
+    })
+    // console.log(e.target.files[0]);
+  };
+
+  const hiddenImageInput = useRef(null);
+  const handleImage = (e) => {
+
+    hiddenImageInput.current.click();
+  };
+  const handleImageChange = (e) => {
+    setImageFile(e.target.files[0]);
+    setNftData({
+      ...nftData,
+      imageUrl: "https://nftfm-music.s3-us-west-1.amazonaws.com/"
+        + account + "/" + e.target.files[0].name
+    })
+  };
+
+  console.log('HERE', audioFile)
+
+  // if (!account) {
+  //   return (
+  //     <BaseView>
+  //       <h1>Connect your wallet!!</h1>
+  //     </BaseView>
+  //   );
+  // }
+  if (isLoading)
     return (
-        <FormContainer>
-          <Header>
-            <span>Add NFTs</span>
-            {/* <X src={x}/> */}
-          </Header>
-          <Main>
-            <Files>
-              <ImagePreview>
-                <Image src={image} alt="image" />
-              </ImagePreview>
-              <MediaButtons>
-                <MediaButton onClick={() => handleAudio()}>
-                  <span>Upload audio</span>
-                  <span>.mp3, .flac</span>
-                  <img src={upload_icon} alt="upload-file-icon" />
-  
-                </MediaButton>
-                <StyledInput
-                  type="file"
-                  accept=".mp3"
-                  ref={hiddenAudioInput}
-                  onChange={handleAudioChange}
-                  style={{ display: "none" }}
-                />
-                <MediaButton onClick={() => handleImage()}>
-                  <span>Upload image</span>
-                  <span>.png, .jpeg</span>
-                  <img src={upload_icon} alt="upload-file-icon" />
-  
-                </MediaButton>
-                <StyledInput
-                  type="file"
-                  accept=".jpg,.jpeg,.png,.gif"
-                  ref={hiddenImageInput}
-                  onChange={handleImageChange}
-                  style={{ display: "none" }}
-                />
-              </MediaButtons>
-              <FileNames>
-                <span>{audioFile?.name}</span>
-                <span>{imageFile?.name}</span>
-              </FileNames>
-            </Files>
-            <Inputs autoComplete="off" onSubmit={handleSubmit}>
-              {/* remove the autocomplete off later, for testing only */}
-              <TopInputs>
-                <StyledInput
-                  type="text"
-                  placeholder="Title"
-                  name="title"
-                  onChange={(e) => updateState(e)}
-                />
-                <StyledInput
-                  type="text"
-                  placeholder="Genre"
-                  name="genre"
-                  onChange={(e) => updateState(e)}
-                />
-                <StyledInput
-                  type="text"
-                  placeholder="Producer"
-                  name="producer"
-                  onChange={(e) => updateState(e)}
-                />
-                <StyledInput
-                  type="text"
-                  placeholder="Writer"
-                  name="writer"
-                  onChange={(e) => updateState(e)}
-                />
-              </TopInputs>
-              <MiddleInputs>
-                <label>NFT Created</label>
-                <StyledDivInput>
-                  <StyledNumberInput
-                    className="mint"
-                    type="number"
-                    name="numMinted"
-                    onChange={(e) => updateState(e)}
-                    min="0"
-                  />
-                </StyledDivInput>
-                <label>NFT Price</label>
-                <StyledDivInput>
-                  <StyledNumberInput
-                    className="cost"
-                    type="number"
-                    name="price"
-                    onChange={(e) => updateState(e)}
-                    value={nftData.price}
-                  />
-                  <span>/ETH</span>
-                </StyledDivInput>
-                <CurrencyButtons>
-                  <CurrencyButton type="button" className="ETH">
-                    <div>
-                      <CurrencyIcon src={eth_icon_white} /> ETH
+      <BaseView>
+        <h1>Loading...</h1>
+      </BaseView>
+    )
+  return (
+    <FormContainer>
+      <Header>
+        <span>Add NFTs</span>
+        {/* <X src={x}/> */}
+      </Header>
+      <Main>
+        <Files>
+          <ImagePreview>
+            <Image src={image} alt="image" />
+          </ImagePreview>
+          <MediaButtons>
+            <MediaButton onClick={() => handleAudio()}>
+              <span>Upload audio</span>
+              <span>.mp3, .flac</span>
+              <img src={upload_icon} alt="upload-file-icon" />
+
+            </MediaButton>
+            <StyledInput
+              type="file"
+              accept=".mp3"
+              ref={hiddenAudioInput}
+              onChange={handleAudioChange}
+              style={{ display: "none" }}
+            />
+            <MediaButton onClick={() => handleImage()}>
+              <span>Upload image</span>
+              <span>.png, .jpeg</span>
+              <img src={upload_icon} alt="upload-file-icon" />
+
+            </MediaButton>
+            <StyledInput
+              type="file"
+              accept=".jpg,.jpeg,.png,.gif"
+              ref={hiddenImageInput}
+              onChange={handleImageChange}
+              style={{ display: "none" }}
+            />
+          </MediaButtons>
+          <FileNames>
+            <span>{audioFile?.name}</span>
+            <span>{imageFile?.name}</span>
+          </FileNames>
+        </Files>
+        <Inputs autoComplete="off" onSubmit={handleSubmit}>
+          {/* remove the autocomplete off later, for testing only */}
+          <TopInputs>
+            <StyledInput
+              type="text"
+              placeholder="Title"
+              name="title"
+              onChange={(e) => updateState(e)}
+            />
+            <StyledInput
+              type="text"
+              placeholder="Genre"
+              name="genre"
+              onChange={(e) => updateState(e)}
+            />
+            <StyledInput
+              type="text"
+              placeholder="Producer"
+              name="producer"
+              onChange={(e) => updateState(e)}
+            />
+            <StyledInput
+              type="text"
+              placeholder="Writer"
+              name="writer"
+              onChange={(e) => updateState(e)}
+            />
+          </TopInputs>
+          <MiddleInputs>
+            <label>NFT Created</label>
+            <StyledDivInput>
+              <StyledNumberInput
+                className="mint"
+                type="number"
+                name="numMinted"
+                onChange={(e) => updateState(e)}
+                min="0"
+              />
+            </StyledDivInput>
+            <label>NFT Price</label>
+            <StyledDivInput>
+              <StyledNumberInput
+                className="cost"
+                type="number"
+                name="price"
+                onChange={(e) => updateState(e)}
+                value={nftData.price}
+              />
+              <span>/ETH</span>
+            </StyledDivInput>
+            <CurrencyButtons>
+              <CurrencyButton type="button" className="ETH">
+                <div>
+                  <CurrencyIcon src={eth_icon_white} /> ETH
                     </div>
-                    <Subtext>{currency}</Subtext>
-                  </CurrencyButton>
-                  <CurrencyButton type="button" className="BTU">
-                    <div>
-                      <CurrencyIcon src={eth_icon} /> ABC
+                <Subtext>{currency}</Subtext>
+              </CurrencyButton>
+              <CurrencyButton type="button" className="BTU">
+                <div>
+                  <CurrencyIcon src={eth_icon} /> ABC
                     </div>
-                    <Subtext>{currency}</Subtext>
-                  </CurrencyButton>
-                  <CurrencyButton type="button" className="USD">
-                    <div>
-                      <CurrencyIcon src={usd_icon} />
+                <Subtext>{currency}</Subtext>
+              </CurrencyButton>
+              <CurrencyButton type="button" className="USD">
+                <div>
+                  <CurrencyIcon src={usd_icon} />
                       USD
                     </div>
-                    <Subtext>
-                      $
+                <Subtext>
+                  $
                       {(currency * nftData.price).toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}
-                    </Subtext>
-                  </CurrencyButton>
-                </CurrencyButtons>
-              </MiddleInputs>
-              <BottomInput>
-                <SubmitButton type="submit">Approve and Create</SubmitButton>
-              </BottomInput>
-            </Inputs>
-          </Main>
-        </FormContainer>
-    );
-  };
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+                </Subtext>
+              </CurrencyButton>
+            </CurrencyButtons>
+          </MiddleInputs>
+          <BottomInput>
+            <SubmitButton type="submit">Approve and Create</SubmitButton>
+          </BottomInput>
+        </Inputs>
+      </Main>
+    </FormContainer>
+  );
+};
 
 const CurrencyIcon = styled.img`
   width: 12px;

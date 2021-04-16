@@ -6,6 +6,28 @@ const NftType = require('../schemas/NftType.schema')
 const fs = require('fs')
 const multer = require('multer')
 
+router.post('/new', async (req, res) => {
+  try {
+    console.log("/new Hit", req.body.address);
+    let nft = await NftType.findOne({
+      address: req.body.address,
+      audioUrl: req.body.audioUrl,
+      draft: true,
+    });
+    if (!nft) {
+      const newNft = new NftType(req.body);
+      await newNft.save();
+      res.send(newNft);
+    } else {
+      res.send(nft);
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("server error: ", error);
+  }
+});
+
+
 router.post('/update', async (req, res) => {
   try {
     console.log('/update hit', req.body)
@@ -58,7 +80,7 @@ router.post('/uploadAudioS3', async (req, res) => {
   const path = require('path');
   const multerS3 = require("multer-s3");
 
-  AWS.config.loadFromPath(path.join(__dirname, '../aws_config.json'));
+  // AWS.config.loadFromPath(path.join(__dirname, '../aws_config.json'));
   var s3Client = new AWS.S3();
 
   const fileFilter = (req, file, cb) => {
@@ -228,7 +250,7 @@ router.post('/getSong', async (req, res) => {
   AWS.config.region = 'us-west-2';
   const path = require('path');
 
-  AWS.config.loadFromPath(path.join(__dirname, '../aws_config.json'));
+  // AWS.config.loadFromPath(path.join(__dirname, '../aws_config.json'));
   var s3 = new AWS.S3();
 
   s3.getObject(
@@ -255,7 +277,7 @@ router.post('/getSongList', async (req, res) => {
   AWS.config.region = 'us-west-2';
   const path = require('path');
 
-  AWS.config.loadFromPath(path.join(__dirname, '../aws_config.json'));
+  // AWS.config.loadFromPath(path.join(__dirname, '../aws_config.json'));
   var s3 = new AWS.S3();
   s3.listObjectsV2(params, function (err, data) {
     console.log(data);

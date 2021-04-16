@@ -6,8 +6,6 @@ import styled from "styled-components";
 import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
 import Create from "./components/Create"
 
-
-
 const Profile = () => {
   const { account, connect } = useWallet();
   const [user, setUser] = useState();

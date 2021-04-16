@@ -2,10 +2,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const NftTypeSchema = new Schema({
-  artist: {
-    type: String,
-    default: "",
-  },
   title: {
     type: String,
     default: "",
@@ -23,8 +19,8 @@ const NftTypeSchema = new Schema({
     default: "",
   },
   numMinted: {
-    type: String,
-    default: "",
+    type: Number,
+    default: 0,
   },
   price: {
     type: Number,
@@ -33,6 +29,7 @@ const NftTypeSchema = new Schema({
   address: {
     type: String,
     required: true,
+    default: "",
   },
   draft: {
     type: Boolean,
@@ -40,11 +37,11 @@ const NftTypeSchema = new Schema({
   },
   imageUrl: {
     type: String,
-    required: true
+    default: "",
   },
   audioUrl: {
     type: String,
-    required: true,
+    default: "",
   },
   timestamp: {
     type: Date,

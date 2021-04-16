@@ -4,14 +4,13 @@ import styled from "styled-components";
 import { useWallet } from "use-wallet";
 import useModal from "../../../hooks/useModal";
 import isMobile from "../../../utils/isMobile";
-import WalletProviderModal from "../../WalletProviderModal";
 import axios from "axios";
+import InstallMetamaskModal from "../../InstallMetamaskModal";
 
 
 
 const AccountButton = (props) => {
-  // const [onPresentWalletProviderModal] = useModal(<WalletProviderModal />);
-
+  const [onPresentInstallMetamask] = useModal(<InstallMetamaskModal/>);
   const { account, connect } = useWallet();
   const fetchAccount = async () => {
     axios.post(`api/user/get-account`,
@@ -23,6 +22,9 @@ const AccountButton = (props) => {
   };
 
   const handleUnlockClick = useCallback(() => {
+    if (!window.ethereum) {
+      onPresentInstallMetamask();
+    }
     if (isMobile()) {
       // connect('injected');
       connect("walletconnect")//.then(() => { getS3Bucket() });

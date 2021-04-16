@@ -24,6 +24,8 @@ const Transition = ({ children }) => {
     <Context.Provider value={{
       content,
       isOpen,
+      setIsOpen,
+      setContent,
       onPresent: handlePresent,
       onDismiss: handleDismiss,
     }}>
@@ -55,4 +57,4 @@ const StyledModalBackdrop = styled.div`
   top: 0; right: 0; bottom: 0; left: 0;
 `
 
-export default Transition
+export default Transition;

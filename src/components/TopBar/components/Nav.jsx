@@ -1,12 +1,13 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const Nav = () => {
   return (
     <StyledNav>
-      <StyledLink exact activeClassName="active" to="/">Home</StyledLink>
-      <StyledLink exact activeClassName="active" to="/profile">Profile</StyledLink>
+      <StyledLink exact tab="home" activeClassName="active" to="/">Home</StyledLink>
+      <StyledLink exact tab="discover" activeClassName="active" to="/discover">Discover</StyledLink>
+      <StyledLink exact tab="profile" activeClassName="active" to="/profile">Profile</StyledLink>
     </StyledNav>
   );
 };
@@ -15,7 +16,31 @@ const StyledNav = styled.nav`
   justify-content: center;
   align-items: center;
   display: flex;
+  font-family: "Compita";
 `;
+
+const StyledLink = styled(NavLink)`
+  font-size: ${props => props.theme.fontSizes.xs};
+  font-weight: bold;
+  letter-spacing: 1px;
+  padding-right: ${(props) => props.theme.spacing[5]}px;
+  transition: all 0.1s ease-in-out;
+  text-decoration: none;
+  /* ${props => props.tab === "home" && css`color: ${props => props.theme.color.blue};`} */
+  /* ${props => props.tab === "browse" && css`color: ${props => props.theme.color.yellow};`} */
+  /* ${props => props.tab === "profile" && css`color: ${props => props.theme.color.green};`} */
+  color: ${props => props.theme.color.lightgray};
+
+  &:hover {
+    filter: brightness(125%) saturate(125%);
+  }
+  &.active {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    color: white;
+  }
+`;
+
 
 const InactiveLink = styled.div`
   font-family: "Compita";
@@ -30,24 +55,6 @@ const InactiveLink = styled.div`
   text-decoration: none;
   &:hover {
     color: #ffcb46;
-  }
-  &.active {
-    text-decoration: underline;
-    color: white;
-  }
-`;
-
-const StyledLink = styled(NavLink)`
-  font-family: "Compita";
-  font-size: 20px;
-  line-height: 1;
-  letter-spacing: 0.5px;
-  color: #a365ef;
-  padding-left: ${(props) => props.theme.spacing[3]}px;
-  padding-right: ${(props) => props.theme.spacing[3]}px;
-  text-decoration: none;
-  &:hover {
-    color: #c398f8;
   }
   &.active {
     text-decoration: underline;

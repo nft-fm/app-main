@@ -1,28 +1,33 @@
 import { black, white, green, grey, blue, red, yellow } from './colors'
 
 const theme = {
-  borderRadius: 12,
-  bgColor: black,
-  boxColor: grey[500],
-  fontColor: white,
+  borderRadius: 16,
+  bgColor: "#131313",
+  boxColor: "#181818",
+  boxBorderColor: "#262626",
+  fontColor: {
+    white,
+    gray: "#5c5c5c",
+  },
   color: {
-    green,
-    red,
-    blue,
-    yellow,
+    red: "#fa423e",
+    blue: "#20a4fc",
+    yellow: "#fde404",
+    green: "#68c12f",
+    gray: "#5c5c5c",
+    lightgray: "#888",
     white,
     black,
-    grey,
-    primary: {
-      light: red[200],
-      main: red[500],
-    },
-    secondary: {
-      main: green[500],
-    },
+    // primary: {
+    //   light: red[200],
+    //   main: red[500],
+    // },
+    // secondary: {
+    //   main: green[500],
+    // },
   },
   fontSizes: {
-    xxs: '0.625', // 10px
+    xxs: '0.625rem', // 10px
     xs: '1rem',     // 16px
     sm: '1.3125rem', //21 px
     md: '1.75rem',// 28px

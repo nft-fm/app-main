@@ -22,12 +22,18 @@ const UserSchema = new Schema({
   },
   isArtist: {
     type: Boolean,
-    default: false,
+    default: true,
   },
   timestamp: {
     type: Date,
     default: Date.now
   },
+  x_nfts: [{
+    nft: {
+      type: String
+    },
+  },
+  ]
 })
 
 module.exports = User = mongoose.model('user', UserSchema)

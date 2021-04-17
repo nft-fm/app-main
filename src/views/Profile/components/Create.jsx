@@ -15,7 +15,7 @@ import BaseView from "../../BaseView";
 
 const initialNftState = {
   address: "",
-  draft: false,
+  draft: true,
   genre: "",
   numMinted: "",
   price: "",

@@ -4,7 +4,8 @@ const { flushSync } = require('react-dom')
 const router = express.Router()
 const NftType = require('../schemas/NftType.schema')
 const fs = require('fs')
-const multer = require('multer')
+const multer = require('multer');
+const User = require('../schemas/User.schema');
 
 router.post('/fetchNFT', async (req, res) => {
   try {
@@ -34,7 +35,7 @@ router.post('/update', async (req, res) => {
     console.log('/update hit', req.body)
     let newData = req.body;
     newData.draft = false;
-    let updateNFT = await NftType.findByIdAndUpdate( newData._id, newData, {new: true})
+    let updateNFT = await NftType.findByIdAndUpdate(newData._id, newData, { new: true })
     if (updateNFT) {
       res.status(200).send("success")
     } else {
@@ -62,7 +63,7 @@ router.post('/get-one', async (req, res) => {
 
 router.get('/all', async (req, res) => {
   try {
-    let nftTypes = await NftType.find({draft: false});
+    let nftTypes = await NftType.find({ draft: false });
     res.send(nftTypes);
   } catch (error) {
     console.log(error);
@@ -257,6 +258,38 @@ router.post('/getSongList', async (req, res) => {
     else
       res.status(200).send(data);           // successful response
   });
+})
+
+router.post("/purchase", async (req, res) => {
+  try {
+    console.log("/purchase hit", req.body.id)
+    const nft = await NftType.findById(req.body.id)
+    const user = await User.find({ address: req.body.address })
+    if (!nft) {
+      res.status(500).send('No NFT found')
+      return
+    }
+    if (!user) {
+      res.status(500).send('No user found')
+      return
+    }
+    if (nft.x_numSold >= nft.numMinted) {
+      res.status(500).send('None available for purchase')
+      return
+    }
+
+    user.x_nfts.push({ nft: nft._id })
+    await user.save();
+
+    nft.x_numSold++
+    await nft.save();
+    res.status(200).send("Success!")
+
+
+
+  } catch (err) {
+    res.status(500).send(err)
+  }
 })
 
 module.exports = router

@@ -11,7 +11,7 @@ const Profile = () => {
   const [ownedNfts, setOwnedNfts] = useState([]);
   console.log("ownedNfts", ownedNfts);
   const { account, user, setUser } = useAccountConsumer();
-
+//.
   // const [songList, setSongList] = useState([]);
 
   const getUser = async () => {

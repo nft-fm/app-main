@@ -50,7 +50,7 @@ const Create = ({ open, hide }) => {
   };
   const fetchNFT = async () => {
     await axios
-      .post("/api/nft-type/fetchNFT", { account: account })
+      .post("/api/nft-type/get-NFT", { account: account })
       .then((res) => setNftData(res.data));
   };
 

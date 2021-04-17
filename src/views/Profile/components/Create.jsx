@@ -119,8 +119,9 @@ const Create = ({ open, hide }) => {
             setAudioFile(null);
             swal.fire({
               title: "Success!",
+              background: `#000`,
+              boxShadow: `24px 24px 48px -24px #131313`,
               text: "Nft successfully created!",
-              icon: "success",
             });
           }
         })
@@ -210,7 +211,7 @@ const Create = ({ open, hide }) => {
         <Main>
           <Files>
             <ImagePreview>
-                <Image src={image} alt="image" />
+              <Image src={image} alt="image" />
             </ImagePreview>
             <MediaButtons>
               <MediaButton onClick={() => handleAudio()}>
@@ -321,9 +322,9 @@ const Create = ({ open, hide }) => {
                   <Subtext>
                     $
                     {(currency * nftData.price).toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                   </Subtext>
                 </CurrencyButton>
               </CurrencyButtons>

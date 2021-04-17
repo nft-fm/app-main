@@ -2,18 +2,17 @@ import React, { useCallback, useEffect, useState, useRef } from "react";
 import { useWallet } from "use-wallet";
 import BaseView from "../BaseView";
 import axios from "axios";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
 import Create from "./components/Create";
-import {useAccountConsumer} from "../../contexts/Account";
+import { useAccountConsumer } from "../../contexts/Account";
+
+import cog from "../../assets/img/Icons/cog.svg";
 
 const Profile = () => {
   const [ownedNfts, setOwnedNfts] = useState([]);
   console.log("ownedNfts", ownedNfts);
   const { account, user, setUser } = useAccountConsumer();
-//.
-  // const [songList, setSongList] = useState([]);
-
   const getUser = async () => {
     axios
       .post("api/user/get-account", { address: account })
@@ -48,7 +47,6 @@ const Profile = () => {
       .then((res) => setUser(res.data));
   };
 
-  const [isCreating, setIsCreating] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const hide = (e) => {
     setIsOpen(false);
@@ -62,6 +60,7 @@ const Profile = () => {
         <ProfileHolder>
           <ProfilePicHolder>
             <ProfilePic src={default_pic} alt="default-profile-pic" />
+            <Cog src={cog} alt="edit icon" />
           </ProfilePicHolder>
           <span>{user?.username}</span>
           <span>{user?.address}</span>
@@ -72,17 +71,34 @@ const Profile = () => {
         </Side>
       </ProfileHeading>
       {user?.isArtist && (
-          <button onClick={() => setIsOpen(!isOpen)}>Create NFT!</button>
-        )}
-        <Create open={isOpen} hide={hide} />
+        <button onClick={() => setIsOpen(!isOpen)}>Create NFT!</button>
+      )}
+      <Create open={isOpen} hide={hide} />
     </BaseView>
   );
 };
 
+const Cog = styled.img`
+  width: 15px;
+  position: absolute;
+  cursor: pointer;
+  :hover {
+    animation: rotation 4s infinite linear;
+  }
+  @keyframes rotation {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(359deg);
+    }
+  }
+`;
+
 const ProfilePicHolder = styled.div`
-background-color: ${props => props.theme.boxBorderColor};
+  background-color: ${(props) => props.theme.boxBorderColor};
   border-width: 4px;
-  border-color: ${props => props.theme.boxBorderColor};
+  border-color: ${(props) => props.theme.boxBorderColor};
   border-style: solid;
   border-radius: 75px;
   width: 100px;
@@ -91,7 +107,7 @@ background-color: ${props => props.theme.boxBorderColor};
 `;
 
 const ProfilePic = styled.img`
-width: 100%;
+  width: 100%;
 `;
 
 const Side = styled.div`
@@ -114,7 +130,7 @@ const ProfileHeading = styled.div`
   margin-right: auto;
   display: flex;
   width: 50%;
-  color: ${props => props.theme.fontColor.white}
+  color: ${(props) => props.theme.fontColor.white};
 `;
 
 const StyledInput = styled.input`

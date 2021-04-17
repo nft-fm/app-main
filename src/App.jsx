@@ -16,6 +16,7 @@ import Register from './views/Register';
 import isMobile from "./utils/isMobile";
 import theme from './theme'
 import Error404 from "./views/404";
+import {AccountProvider} from "./contexts/Account";
 
 if (window.location.hostname !== 'localhost')
   console.log = function () { };
@@ -52,9 +53,11 @@ const Providers = ({ children }) => {
       <UseWalletProvider chainId={4} connectors={{
         walletconnect: { rpcUrl: 'https://mainnet.eth.aragon.network/' },
       }}>
-        <ModalsProvider>
-          {children}
-        </ModalsProvider>
+        <AccountProvider>
+          <ModalsProvider>
+            {children}
+          </ModalsProvider>
+        </AccountProvider>
       </UseWalletProvider>
     </ThemeProvider>
   )

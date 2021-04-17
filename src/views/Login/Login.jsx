@@ -1,9 +1,10 @@
 import Axios from 'axios';
 import React, { useState } from 'react';
 import { useWallet } from "use-wallet";
+import {useAccountConsumer} from "../../contexts/Account";
 
 const Login = () => {
-    const { account, connect } = useWallet()
+    const { account } = useAccountConsumer()
     const [selectedFile, setSelectedFile] = useState();
 
     // const changeHandler = (event) => {

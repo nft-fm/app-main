@@ -12,6 +12,7 @@ import eth_icon_white from "../../../assets/img/profile_page_assets/eth_icon_whi
 import usd_icon from "../../../assets/img/profile_page_assets/usd_icon.svg";
 
 import BaseView from "../../BaseView";
+import {useAccountConsumer} from "../../../contexts/Account";
 
 const initialNftState = {
   address: "",
@@ -27,9 +28,7 @@ const initialNftState = {
 };
 
 const Create = ({ open, hide }) => {
-  const { account, connect } = useWallet();
-
-  const [user, setUser] = useState(null);
+  const { account, user, setUser } = useAccountConsumer();
   const [currency, setCurrency] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 

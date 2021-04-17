@@ -5,10 +5,11 @@ import axios from "axios";
 import styled from "styled-components";
 import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
 import Create from "./components/Create";
+import {useAccountConsumer} from "../../contexts/Account";
 
 const Profile = () => {
-  const { account, connect } = useWallet();
-  const [user, setUser] = useState();
+  const { account, user, setUser } = useAccountConsumer();
+
   // const [songList, setSongList] = useState([]);
 
   const getUser = async () => {

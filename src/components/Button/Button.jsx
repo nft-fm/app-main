@@ -22,24 +22,24 @@ const Button = ({
   let fontSize;
   switch (size) {
     case 'sm':
-      boxShadow = `4px 4px 8px ${color.grey[300]},
-        -8px -8px 16px ${color.grey[100]}FF;`
+      boxShadow = `4px 4px 8px ${color.grey},
+        -8px -8px 16px ${color.grey}FF;`
       buttonPadding = 10
       buttonSize = 170
       buttonHeight = 80
       fontSize = 16
       break
     case 'lg':
-      boxShadow = `6px 6px 12px ${color.grey[300]},
-        -12px -12px 24px ${color.grey[100]}ff;`
+      boxShadow = `6px 6px 12px ${color.grey},
+        -12px -12px 24px ${color.grey}ff;`
       buttonPadding = 10
       buttonSize = 170
       buttonHeight = 40
       fontSize = 16
       break
     case 'xlg':
-      boxShadow = `6px 6px 12px ${color.grey[300]},
-          -12px -12px 24px ${color.grey[100]}ff;`
+      boxShadow = `6px 6px 12px ${color.grey},
+          -12px -12px 24px ${color.grey}ff;`
       buttonPadding = 10
       buttonSize = 220
       buttonHeight = 40

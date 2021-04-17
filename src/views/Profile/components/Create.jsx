@@ -26,7 +26,7 @@ const initialNftState = {
   audioUrl: "",
 };
 
-const Create = ({ open, hide,  }) => {
+const Create = ({ open, hide }) => {
   const { account, connect } = useWallet();
 
   const [user, setUser] = useState(null);
@@ -188,24 +188,30 @@ const Create = ({ open, hide,  }) => {
   const stopProp = (e) => {
     e.stopPropagation();
   };
-
-  if (isLoading)
+  const hideCreate = (e) => {
+    setNftData(initialNftState);
+    setImageFile(null);
+    setAudioFile(null);
+    hide(e);
+  };
+  if (isLoading) {
     return (
       <BaseView>
         <h1>Loading...</h1>
       </BaseView>
     );
+  }
   return (
-    <OpaqueFilter onClick={(e) => hide(e)}>
+    <OpaqueFilter onClick={(e) => hideCreate(e)}>
       <FormContainer onClick={(e) => stopProp(e)}>
         <Header>
           <span>Add NFTs</span>
-          <X src={x} onClick={(e) => hide(e)}/>
+          <X src={x} onClick={(e) => hideCreate(e)} />
         </Header>
         <Main>
           <Files>
             <ImagePreview>
-              <Image src={image} alt="image" />
+                <Image src={image} alt="image" />
             </ImagePreview>
             <MediaButtons>
               <MediaButton onClick={() => handleAudio()}>
@@ -552,7 +558,6 @@ const OpaqueFilter = styled.div`
   /* transform: translate(-50%, -50%); */
   background-color: rgba(0, 0, 0, 0.4);
 `;
-
 
 const X = styled.img`
   width: 25px;

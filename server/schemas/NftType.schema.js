@@ -1,3 +1,4 @@
+const { findAllByDisplayValue } = require('@testing-library/dom');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -21,6 +22,10 @@ const NftTypeSchema = new Schema({
   numMinted: {
     type: Number,
     default: 0,
+  },
+  isMinted: {
+    type: Boolean,
+    default: false,
   },
   price: {
     type: Number,

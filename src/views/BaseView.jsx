@@ -14,7 +14,6 @@ export const BaseView = (props) => {
 const StyledCanvas = styled.div`
   width: 100%;
   height: 100%;
-  background-color: white;
 `;
 
 const ContentContainer = styled.div`

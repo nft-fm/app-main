@@ -29,6 +29,7 @@ const StyledMain = styled.div`
   display: flex;
   flex-direction: column;
   min-height: calc(100% - 64px);
+  background-color: #131313;
   /* overflow-y: hidden; */
   margin-bottom: -64px;
   @media only screen and (max-width: 991px) {

@@ -17,9 +17,9 @@ const LogoContainer = styled.div`
 `;
 
 const StyledLogo = styled.img`
+  margin-top: 5px;
+  max-height: 110px;
   z-index: 20;
-  height: 120px;
-  margin-top: 90px;
   margin-left: 14px;
   cursor: pointer;
   @media only screen and (max-width: 767px) {

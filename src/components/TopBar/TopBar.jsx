@@ -9,7 +9,7 @@ import { Nav } from "./components/Nav";
 
 const TopBar = () => {
   return (
-    <StyledTopBar id="top" window={window.location.pathname}>
+    <StyledTopBar id="top">
       <StyledTopBarInner>
         <NavLink to="/" style={{ textDecoration: "none" }}>
           <Logo />
@@ -32,8 +32,8 @@ z-index: 20;
 `
 
 const StyledTopBar = styled.div`
-  background-color: black;
-  border-bottom: ${props => props.window === "/" ? '4px solid transparent' : '4px solid #7e2ce3'};
+  background-color:#121212;
+  border-bottom: 1px solid #232323;
 `;
 
 const StyledTopBarInner = styled.div`

@@ -14,6 +14,14 @@ const theme = {
     },
     white,
   },
+  fontSizes: {
+    xxs: '0.625', // 10px
+    xs: '1rem',     // 16px
+    sm: '1.3125rem', //21 px
+    md: '1.75rem',// 28px
+    lg: '2.125rem', //36p
+    xl: '3.125rem' //50px
+  },
   siteWidth: 1700,
   spacing: {
     1: 4,

@@ -28,6 +28,7 @@ const NftCard = (props) => {
 };
 
 const Container = styled.div`
+z-index: 4;
   align-items: center;
   display: flex;
   flex-direction: column;

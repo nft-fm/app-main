@@ -6,7 +6,7 @@ import BaseView from "../BaseView";
 import axios from "axios";
 import NftCard from "../../components/NftCard/NftCard";
 import GenericBanner from "../../assets/img/generic_banner.jpg";
-import logo from "../../assets/img/logos/nftfm_logo_no_text.png";
+import logo from "../../assets/img/logos/logo.png";
 import greenCheckMark from "../../assets/img/green_check.png";
 import grayCheckMark from "../../assets/img/gray_check.png";
 

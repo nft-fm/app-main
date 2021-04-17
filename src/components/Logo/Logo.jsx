@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import logo from "../../assets/img/logos/nftfm_logo.png";
+import logo from "../../assets/img/logos/logo_nav.png";
 
 const Logo = () => {
   return (

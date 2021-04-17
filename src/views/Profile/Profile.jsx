@@ -5,61 +5,38 @@ import axios from "axios";
 import styled from "styled-components";
 import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
 import Create from "./components/Create";
+import {useAccountConsumer} from "../../contexts/Account";
 
 const Profile = () => {
+<<<<<<< HEAD
   const { account, connect } = useWallet();
   const [user, setUser] = useState();
+  const [ownedNfts, setOwnedNfts] = useState([]);
+  console.log("ownedNfts", ownedNfts);
+=======
+  const { account, user, setUser } = useAccountConsumer();
+
   // const [songList, setSongList] = useState([]);
 
+>>>>>>> fadaf5b2113ca2e704971c8a9de83c7aa655b722
   const getUser = async () => {
     axios
       .post("api/user/get-account", { address: account })
       .then((res) => setUser(res.data));
   };
 
-  // const getSongList = async () => {
-  //   console.log(account);
-  //   if (account) {
-  //     const _songList = await axios.post("api/nft-type/getSongList", {
-  //       account: account.toString(),
-  //     });
-  //     setSongList(_songList.data.Contents);
-  //   }
-  // };
-
+  const getUserNfts = async () => {
+    console.log("here");
+    axios
+      .post("api/nft-type/get-user-nfts", user)
+      .then((res) => setOwnedNfts(res.data));
+  };
   useEffect(() => {
-    // getSongList();
+    getUserNfts();
+  }, [user]);
+  useEffect(() => {
     getUser();
   }, [account]);
-  // const toArrayBuffer = (buf) => {
-  //   var ab = new ArrayBuffer(buf.length);
-  //   var view = new Uint8Array(ab);
-  //   for (var i = 0; i < buf.length; ++i) {
-  //     view[i] = buf[i];
-  //   }
-  //   return ab;
-  // };
-  // const playSong = async (song) => {
-  //   const _songFile = await axios.post("api/nft-type/getSong", {
-  //     key: song.Key,
-  //   });
-  //   console.log(_songFile);
-  //   const abSong = toArrayBuffer(_songFile.data.Body.data);
-  //   var audioCtx = new window.AudioContext();
-  //   var source = audioCtx.createBufferSource();
-  //   audioCtx.decodeAudioData(
-  //     abSong,
-  //     (buffer) => {
-  //       source.buffer = buffer;
-  //       source.connect(audioCtx.destination);
-  //       source.loop = true;
-  //     },
-  //     (e) => {
-  //       console.log("Error: ", e.err);
-  //     }
-  //   );
-  //   source.start(0);
-  // };
 
   const [edit, setEdit] = useState(false);
   const [username, setUsername] = useState("");
@@ -82,91 +59,68 @@ const Profile = () => {
     setIsOpen(false);
     console.log("isOpen", isOpen);
   };
-  if (account) {
-    return (
-      <BaseView>
-        <LandingSection>
-          <Banner>
-            <ProfilePic src={default_pic} alt="profile picture" />
-          </Banner>
-        </LandingSection>
-        <AccountDetails>
-          {/* {!user?.username && <span>no username, click to add</span>}
-          {!user?.username ? <StyledInput type="text" /> : <span>{user.username}</span>}
-          {!user?.email ? <StyledInput type="email" /> : <span>{user.email}</span>} */}
-          <span>
-            Username:{" "}
-            {edit ? (
-              <StyledInput
-                type="text"
-                defaultValue={user?.username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            ) : (
-              user?.username
-            )}
-          </span>
-          <span>
-            Email:{" "}
-            {edit ? (
-              <StyledInput
-                type="email"
-                defaultValue={user?.email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            ) : (
-              user?.email
-            )}
-          </span>
-          {edit ? (
-            <button onClick={() => saveDetails()}>Save</button>
-          ) : (
-            <button onClick={() => setEdit(true)}>Edit</button>
-          )}
-        </AccountDetails>
-
-        {user?.isArtist && (
-          <button onClick={() => setIsOpen(!isOpen)}>Create NFT!</button>
-        )}
-        <Create open={isOpen} hide={hide} />
-        {/* {songList.length <= 0 ? (
-          <h1>
-            No songs owned. Go to the 'listen' page to build your collection!
-          </h1>
-        ) : (
-          <div key={songList}>
-            {songList.map((song) => {
-              if (song.Key)
-                return (
-                  <div>
-                    {song.Key.split("/")[1]}
-                    <button
-                      onClick={() => {
-                        playSong(song);
-                      }}
-                    >
-                      Download and play!
-                    </button>
-                  </div>
-                );
-            })}
-          </div>
-        )} */}
-      </BaseView>
-    );
-  }
   return (
     <BaseView>
-      <LandingSection>
-        <Banner>
-          <ProfilePic src={default_pic} alt="profile picture" />
-        </Banner>
-      </LandingSection>
-      <AccountDetails></AccountDetails>
-      <h1> Connect your wallet to view your collection!</h1>
+      <Banner />
+      <ProfileHeading>
+        <Side />
+        <ProfileHolder>
+          <ProfilePicHolder>
+            <ProfilePic src={default_pic} alt="default-profile-pic" />
+          </ProfilePicHolder>
+          <span>{user?.username}</span>
+          <span>{user?.address}</span>
+        </ProfileHolder>
+        <Side>
+          <span>12 /NFTs</span>
+          <span>8 Traded</span>
+        </Side>
+      </ProfileHeading>
+      {/* {user?.isArtist && (
+          <button onClick={() => setIsOpen(!isOpen)}>Create NFT!</button>
+        )}
+        <Create open={isOpen} hide={hide} /> */}
     </BaseView>
   );
 };
+
+const ProfilePicHolder = styled.div`
+background-color: ${props => props.theme.boxBorderColor};
+  border-width: 4px;
+  border-color: ${props => props.theme.boxBorderColor};
+  border-style: solid;
+  border-radius: 75px;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+`;
+
+const ProfilePic = styled.img`
+width: 100%;
+`;
+
+const Side = styled.div`
+  width: calc(100% / 3);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+`;
+
+const ProfileHolder = styled.div`
+  width: calc(100% / 3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const ProfileHeading = styled.div`
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  width: 50%;
+  color: ${props => props.theme.fontColor.white}
+`;
 
 const StyledInput = styled.input`
   background-color: #eaeaea;
@@ -181,48 +135,46 @@ const AccountDetails = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
-
-const ProfilePic = styled.img`
-  width: 150px;
-  position: absolute;
-  bottom: -75px;
-  border: 4px solid#7e2ce3;
-  border-radius: 75px;
-  background-color: #7e2ce3;
-`;
-
-const LandingSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-  width: 100%;
-`;
-
-const HeaderContents = styled.span`
   color: white;
-  width: 80%;
-  font-family: "Compita";
-  font-weight: bold;
-  letter-spacing: 2px;
-  font-size: 40px;
-  /* margin-top: -40px; */
-  /* margin-top: 50px; */
 `;
+
+const LandingSection = styled.div``;
 
 const Banner = styled.div`
-  margin-top: -65px;
-  width: 100%;
-  height: 365px;
-  background-color: black;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  border-bottom: 4px solid#7e2ce3;
-  z-index: 0;
-  position: relative;
+  height: 100px;
 `;
 export default Profile;
+
+{
+  /* <AccountDetails>
+<span>
+  Username:{" "}
+  {edit ? (
+    <StyledInput
+      type="text"
+      defaultValue={user?.username}
+      onChange={(e) => setUsername(e.target.value)}
+    />
+  ) : (
+    user?.username
+  )}
+</span>
+<span>
+  Email:{" "}
+  {edit ? (
+    <StyledInput
+      type="email"
+      defaultValue={user?.email}
+      onChange={(e) => setEmail(e.target.value)}
+    />
+  ) : (
+    user?.email
+  )}
+</span>
+{edit ? (
+  <button onClick={() => saveDetails()}>Save</button>
+) : (
+  <button onClick={() => setEdit(true)}>Edit</button>
+)}
+</AccountDetails> */
+}

@@ -6,12 +6,17 @@ import useModal from "../../../hooks/useModal";
 import isMobile from "../../../utils/isMobile";
 import axios from "axios";
 import InstallMetamaskModal from "../../InstallMetamaskModal";
+import {useAccountConsumer} from "../../../contexts/Account";
+import ChangeChainModal from "../../ChangeChainModal";
 
 
 
 const AccountButton = (props) => {
   const [onPresentInstallMetamask] = useModal(<InstallMetamaskModal />);
-  const { account, connect } = useWallet();
+  const [onPresentChangeChain] = useModal(<ChangeChainModal />)
+  const { account, currChainId } = useAccountConsumer();
+  const { connect } = useWallet();
+
   const fetchAccount = async () => {
     axios.post(`api/user/get-account`,
       { address: account, }).then(res => {
@@ -22,9 +27,9 @@ const AccountButton = (props) => {
   };
 
   const handleUnlockClick = useCallback(() => {
-    if (!window.ethereum) {
-      onPresentInstallMetamask();
-    }
+    const chain = process.env.REACT_APP_IS_MAINNET ? 1 : 4;
+    if (!window.ethereum) onPresentInstallMetamask();
+    else if (currChainId !== chain) onPresentChangeChain();
     if (isMobile()) {
       // connect('injected');
       connect("walletconnect")//.then(() => { getS3Bucket() });

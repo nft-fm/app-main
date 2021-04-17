@@ -7,7 +7,7 @@ const fs = require('fs')
 const multer = require('multer');
 const User = require('../schemas/User.schema');
 
-router.post('/fetchNFT', async (req, res) => {
+router.post('/get-NFT', async (req, res) => {
   try {
     console.log("fetchNFT Hit", req.body.account);
     let nft = await NftType.findOne({
@@ -27,6 +27,18 @@ router.post('/fetchNFT', async (req, res) => {
   } catch (error) {
     console.log("fetchNFT error", error);
     res.status(500).send("no users found");
+  }
+})
+
+router.post('/get-user-nfts', async (req, res) => {
+  try {
+    console.log("/get-user-nfts hit", req.body)
+    let ids = req.body.x_nfts;
+    let nfts = await NftType.find({ '_id': { $in: ids}})
+    res.status(200).send(nfts)
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("server error")
   }
 })
 
@@ -331,33 +343,29 @@ router.post('/getSongList', async (req, res) => {
   });
 })
 
+//this will change dramatically with the introduction of smart contracts
 router.post("/purchase", async (req, res) => {
   try {
-    console.log("/purchase hit", req.body.id)
+    console.log("/purchase hit", req.body)
     const nft = await NftType.findById(req.body.id)
-    const user = await User.find({ address: req.body.address })
     if (!nft) {
       res.status(500).send('No NFT found')
-      return
-    }
-    if (!user) {
-      res.status(500).send('No user found')
       return
     }
     if (nft.x_numSold >= nft.numMinted) {
       res.status(500).send('None available for purchase')
       return
     }
-
-    user.x_nfts.push({ nft: nft._id })
+    const user = await User.findOne({ address: req.body.address })
+    if (!user) {
+      res.status(500).send('No user found')
+      return
+    }
+    user.x_nfts.push({ _id: nft._id })
     await user.save();
-
     nft.x_numSold++
     await nft.save();
     res.status(200).send("Success!")
-
-
-
   } catch (err) {
     res.status(500).send(err)
   }

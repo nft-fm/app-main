@@ -7,6 +7,7 @@ import NftCard from "../NftCards/NftCard";
 import image from "../../assets/img/logos/fm_logo_1.png";
 import cart from "../../assets/img/listen/cart.svg";
 import x from "../../assets/img/listen/x.svg";
+import swal from "sweetalert2";
 
 const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
   const { account, connect } = useWallet();
@@ -17,8 +18,12 @@ const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
   console.log("nft", nft);
 
   const purchase = (id) => {
+    if (!account) {
+      swal.fire("You need to connect your wallet first")
+      return;
+    }
     axios
-      .post("/api/nft-type/purchase", { id: id }, { address: account })
+      .post("/api/nft-type/purchase", { id: id, address: account })
       .then((res) => {
         console.log("purchase res", res);
       })

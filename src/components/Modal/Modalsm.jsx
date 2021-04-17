@@ -17,7 +17,7 @@ const Modalsm = ({ children }) => {
 const StyledModal = styled.div`
   position: relative;
   border-radius: ${props => props.theme.borderRadius}px;
-  box-shadow: 24px 24px 48px -24px ${props => props.theme.color.grey[600]};
+  box-shadow: 4px 4px 8px -4px ${props => props.theme.color.blue};
   width: 100%;
   height: 30vh;
   background-color: ${props => props.theme.boxColor};

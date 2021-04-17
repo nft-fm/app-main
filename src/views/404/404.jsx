@@ -6,9 +6,10 @@ import TopDisplayContainer from '../../components/TopDisplayContainer'
 import { NavLink } from "react-router-dom";
 import isMobile from "../../utils/isMobile";
 import BaseView from '../BaseView'
+import {useAccountConsumer} from "../../contexts/Account";
 
 const Farms = () => {
-  const { account, connect, ethereum } = useWallet()
+  const { account } = useAccountConsumer()
   let [balance, setBalance] = useState(0);
 
 

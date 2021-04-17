@@ -9,7 +9,7 @@ const ModalTitle = ({ children }) => (
 
 const StyledModalTitle = styled.div`
   align-items: center;
-  color: ${props => props.theme.fontColor};
+  color: ${props => props.theme.fontColor.white};
   display: flex;
   font-size: ${props => props.theme.fontSizes.lg};
   letter-spacing: 1px;

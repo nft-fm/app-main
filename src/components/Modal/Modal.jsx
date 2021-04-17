@@ -22,7 +22,7 @@ const OpaqueFilter = styled.div`
   left: 0;
   top: 0;
   background-color: rgba(0, 0, 0, 0.4);
-  color: ${props => props.theme.fontColor};
+  color: ${props => props.theme.fontColor.white};
   display: flex;
   flex-direction: column;
   align-items: center;

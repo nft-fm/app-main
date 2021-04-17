@@ -20,7 +20,7 @@ const Modal = ({ open, children, hide, onClose, nft }) => {
         <StyledModal>
           <Buy src={cart} alt="cart" />
           <X src={x} onClick={(e) => hide(e)} />
-          <Image src={image} alt="image" />
+          <Image src={nft.imageUrl} alt="image" />
           <InfoContainer>
             <TrackName>{nft.title}</TrackName>
             <Artist>{nft.artist}</Artist>

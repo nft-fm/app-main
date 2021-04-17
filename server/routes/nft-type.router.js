@@ -6,33 +6,40 @@ const NftType = require('../schemas/NftType.schema')
 const fs = require('fs')
 const multer = require('multer')
 
-router.post('/new', async (req, res) => {
+router.post('/fetchNFT', async (req, res) => {
   try {
-    console.log("/new Hit", req.body.address);
+    console.log("fetchNFT Hit", req.body.account);
     let nft = await NftType.findOne({
-      address: req.body.address,
+      address: req.body.account,
       draft: true,
     });
     if (!nft) {
-      const newNft = new NftType(req.body);
+      const newNft = await new NftType({
+        address: req.body.account,
+        draft: true,
+      });
       await newNft.save();
       res.send(newNft);
     } else {
       res.send(nft);
     }
   } catch (error) {
-    console.log(error);
-    res.status(500).send("server error: ", error);
+    console.log("fetchNFT error", error);
+    res.status(500).send("no users found");
   }
-});
-
+})
 
 router.post('/update', async (req, res) => {
   try {
     console.log('/update hit', req.body)
     let newData = req.body;
-    await NftType.findOneAndUpdate({ address: req.body.address }, newData);
-
+    newData.draft = false;
+    let updateNFT = await NftType.findByIdAndUpdate( newData._id, newData, {new: true})
+    if (updateNFT) {
+      res.status(200).send("success")
+    } else {
+      res.status(500).json(err)
+    }
   } catch (error) {
     console.log(error);
     res.status(500).send("server error")
@@ -55,7 +62,7 @@ router.post('/get-one', async (req, res) => {
 
 router.get('/all', async (req, res) => {
   try {
-    let nftTypes = await NftType.find();
+    let nftTypes = await NftType.find({draft: false});
     res.send(nftTypes);
   } catch (error) {
     console.log(error);
@@ -96,12 +103,12 @@ router.post('/uploadAudioS3', async (req, res) => {
   })
   const singleUpload = upload.single("audioFile");
   singleUpload(req, res, function (err) {
-    console.log("here: ", req.body);
+    console.log("singleUpload: ", req.body);
     if (err instanceof multer.MulterError) {
-      console.log('here', err)
+      console.log('singleUpload multer', err)
       return res.status(500).json(err)
     } else if (err) {
-      console.log('there', err)
+      console.log('singleUpload', err)
       return res.status(500).json(err)
     }
     return res.status(200).send("success")
@@ -123,10 +130,10 @@ router.post('/handleAudio', async (req, res) => {
     let upload = multer({ storage: storage }).single('audioFile')
     upload(req, res, function (err) {
       if (err instanceof multer.MulterError) {
-        console.log('here', err)
+        console.log('handleAudio multer', err)
         return res.status(500).json(err)
       } else if (err) {
-        console.log('there', err)
+        console.log('handleAudio', err)
         return res.status(500).json(err)
       }
       return res.status(200).send(req.file)
@@ -167,12 +174,12 @@ router.post('/uploadImageS3', async (req, res) => {
   })
   const singleUpload = upload.single("imageFile");
   singleUpload(req, res, function (err) {
-    console.log("here: ", req.body);
+    console.log("uploadImageS3: ", req.body);
     if (err instanceof multer.MulterError) {
-      console.log('here', err)
+      console.log('uploadImageS3 multer', err)
       return res.status(500).json(err)
     } else if (err) {
-      console.log('there', err)
+      console.log('uploadImageS3', err)
       return res.status(500).json(err)
     }
     return res.status(200).send(req.file)
@@ -194,10 +201,10 @@ router.post('/handleImage', async (req, res) => {
 
     upload(req, res, function (err) {
       if (err instanceof multer.MulterError) {
-        console.log('here', err)
+        console.log('handleImage multer', err)
         return res.status(500).json(err)
       } else if (err) {
-        console.log('there', err)
+        console.log('handleImage', err)
         return res.status(500).json(err)
       }
       // uploadToS3Bucket("nftfm-image", req, res);
@@ -206,30 +213,6 @@ router.post('/handleImage', async (req, res) => {
   } catch (err) {
     console.log(error);
     res.status(500).send("server error")
-  }
-})
-
-
-router.post('/fetchNFT', async (req, res) => {
-  try {
-    console.log("fetchNFT Hit", req.body.account);
-    let nft = await NftType.findOne({
-      address: req.body.account,
-      draft: true,
-    });
-    if (!nft) {
-      const newNft = new NftType({
-        address: req.body.account,
-        draft: true,
-      });
-      await newNft.save();
-      res.send(newNft);
-    } else {
-      res.send(nft);
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("no users found");
   }
 })
 

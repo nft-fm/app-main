@@ -28,6 +28,12 @@ const UserSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  x_nfts: [{
+    nft: {
+      type: String
+    },
+  },
+  ]
 })
 
 module.exports = User = mongoose.model('user', UserSchema)

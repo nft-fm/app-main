@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
-
+import { useWallet } from "use-wallet";
 import Card from "../Card";
 import axios from "axios";
 import NftCard from "../NftCard/NftCard";
@@ -9,9 +9,20 @@ import cart from "../../assets/img/listen/cart.svg";
 import x from "../../assets/img/listen/x.svg";
 
 const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
+  const { account, connect } = useWallet();
   if (!open) return null;
   const stopProp = (e) => {
     e.stopPropagation();
+  };
+  console.log("nft", nft);
+
+  const purchase = (id) => {
+    axios
+      .post("/api/nft-type/purchase", { id: id }, { address: account })
+      .then((res) => {
+        console.log("purchase res", res);
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -26,9 +37,18 @@ const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
             <Artist>{nft.artist}</Artist>
           </InfoContainer>
           <BottomContainer>
-            <span>Price:</span>
-            <span>{nft.price} &nbsp; ETH</span>
+            <Row>
+              <span>Price:</span>
+              <span>{nft.price} &nbsp; ETH</span>
+            </Row>
+            <Row>
+              <span>Available:</span>
+              <span>{nft.numMinted}</span>
+            </Row>
           </BottomContainer>
+          <BuyButton onClick={() => purchase(nft._id)}>
+            <Button>Purchase NFT</Button>
+          </BuyButton>
         </StyledModal>
       </Container>
     </OpaqueFilter>
@@ -83,7 +103,8 @@ const Image = styled.img`
 const BottomContainer = styled.div`
   width: 200px;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  /* justify-content: space-between; */
   align-items: center;
   padding: 10px;
   background-color: white;
@@ -115,5 +136,42 @@ const X = styled.img`
   top: 15px;
   right: 0px;
 `;
+const Row = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+`;
+const BuyButton = styled.div`
+  width: 140px;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+  display: flex;
+  justify-content: center;
+  border: 2px solid rgba(0, 0, 0, 0.7);
+  margin: 0 16px;
+  height: 28px;
+  border-radius: 2px;
+  background-color: ${(props) => props.theme.boxColor};
+  &:hover {
+    background-color: ${(props) => props.theme.color.primary.main};
+  }
+`;
 
+const Button = styled.button`
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  color: ${(props) => props.theme.fontColor};
+  @media only screen and (max-width: 767px) {
+    font-size: 14px;
+    font-weight: normal;
+    margin-top: 0px;
+    padding: 5px 0px 10px 5px;
+  }
+`;
 export default BuyNftModal;

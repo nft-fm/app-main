@@ -39,3 +39,39 @@ button:focus {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
+
+.swal2-popup {
+  border: solid #000 !important;
+  border-width: 5px 3px 4px 3px !important;
+  border-radius: 16px !important;
+  box-shadow: 24px 24px 48px -24px #131313;
+}
+
+.swal2-html-container {
+  background-color: #000;
+}
+
+.swal2-popup .swal2-styled:focus {
+  box-shadow: none !important;
+}
+
+.swal2-confirm {
+  font-size: 30px;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1;
+  text-decoration: none;
+  letter-spacing: normal;
+  display: flex;
+  align-items: center;
+  color: black;
+  border-radius: 2px !important;
+  text-transform: uppercase !important;
+  border: 4px solid #000 !important;
+  padding: 12px !important;
+  min-width: 100px;
+  color: black !important;
+  background: #7e2ce3 !important;
+  background-size: 12px, 100% !important;
+  margin: 0px 30px !important;
+}

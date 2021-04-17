@@ -22,7 +22,7 @@ const UserSchema = new Schema({
   },
   isArtist: {
     type: Boolean,
-    default: false,
+    default: true,
   },
   timestamp: {
     type: Date,

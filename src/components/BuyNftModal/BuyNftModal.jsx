@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useWallet } from "use-wallet";
 import Card from "../Card";
 import axios from "axios";
-import NftCard from "../NftCard/NftCard";
+import NftCard from "../NftCards/NftCard";
 import image from "../../assets/img/logos/fm_logo_1.png";
 import cart from "../../assets/img/listen/cart.svg";
 import x from "../../assets/img/listen/x.svg";

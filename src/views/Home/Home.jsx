@@ -4,8 +4,7 @@ import { useWallet } from "use-wallet";
 import styled, { keyframes } from "styled-components";
 import BaseView from "../BaseView";
 import axios from "axios";
-import NftCard from "../../components/NftCard/NftCard";
-import GenericBanner from "../../assets/img/generic_banner.jpg";
+import NftCard from "../../components/NftCards/NftCard";
 import logo from "../../assets/img/logos/logo.png";
 import greenCheckMark from "../../assets/img/green_check.png";
 import grayCheckMark from "../../assets/img/gray_check.png";
@@ -485,23 +484,6 @@ const HeaderContents = styled.span`
   /* margin-top: 50px; */
 `;
 
-const Banner = styled.div`
-  margin-top: -65px;
-  width: 100%;
-  height: 365px;
-  background-color: black;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  border-bottom: 4px solid#7e2ce3;
-  z-index: 0;
-  background: url(${GenericBanner});
-  background-size: cover;
-  background-position-y: -70px;
-`;
-
 const MainContents = styled.div`
   width: 100%;
   display: flex;
@@ -510,125 +492,3 @@ const MainContents = styled.div`
   flex: 1;
 `;
 export default Listen;
-{/* <LandingSection>
-<Banner>
-  <HeaderContents>
-    Exclusive drops from your favorite Artists.
-  </HeaderContents>
-</Banner>
-</LandingSection>
-<MainContents>
-<InfoSection>
-  {/* <InfoHeaderText>
-    NFT <span>FM</span>
-  </InfoHeaderText> */}
-{/*<InfoSectionContent>
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-    lacinia justo non consequat euismod. Praesent venenatis maximus
-    purus, a elementum sem ultricies et. Sed sollicitudin congue
-    lectus, sit amet suscipit lacus iaculis in. Integer nibh ipsum,
-    pulvinar eu scelerisque in, malesuada sit amet lorem. Vivamus at
-  </InfoSectionContent>
-</InfoSection>
-<NftSectionHolder>
-  <SearchBar type="text" placeholder="Search..." />
-  <NftDisplay>
-    {nfts.map((nft) => (
-      <NftCard nft={nft} />
-    ))}
-  </NftDisplay>
-</NftSectionHolder>
-</MainContents> */}
-
-  // const nfts = [
-  //   {
-  //     artist: "Big Tone",
-  //     title: "Tony in Paris",
-  //     image: placeholderImage,
-  //     price: 1.4,
-  //   },
-  //   {
-  //     artist: "Big Tone",
-  //     title: "Here He Comes",
-  //     image: placeholderImage,
-  //     price: 0.4,
-  //   },
-  //   {
-  //     artist: "Big Tone",
-  //     title: "Girls Love Big Katz",
-  //     image: placeholderImage,
-  //     price: 1.1,
-  //   },
-  //   {
-  //     artist: "Big Tone",
-  //     title: "Snoozin' and Croozin'",
-  //     image: placeholderImage,
-  //     price: 1.3,
-  //   },
-  //   {
-  //     artist: "Big Tone",
-  //     title: "Tony in Paris 2",
-  //     image: placeholderImage,
-  //     price: 1.9,
-  //   },
-  //   {
-  //     artist: "Big Tone",
-  //     title: "Here He Comes 2",
-  //     image: placeholderImage,
-  //     price: 1.3,
-  //   },
-  //   {
-  //     artist: "Big Tone",
-  //     title: "Girls Love Big Katz 2",
-  //     image: placeholderImage,
-  //     price: 1.4,
-  //   },
-  //   {
-  //     artist: "Big Tone",
-  //     title: "Snoozin' and Croozin' 2",
-  //     image: placeholderImage,
-  //     price: 1.18,
-  //   },
-  //   {
-  //     artist: "Big Tone",
-  //     title: "Tony in Paris 3",
-  //     image: placeholderImage,
-  //     price: 10.4,
-  //   },
-  //   {
-  //     artist: "Big Tone",
-  //     title: "Here He Comes 3",
-  //     image: placeholderImage,
-  //     price: 1.04,
-  //   },
-  //   {
-  //     artist: "Big Tone",
-  //     title: "Girls Love Big Katz 3",
-  //     image: placeholderImage,
-  //     price: 1,
-  //   },
-  //   {
-  //     artist: "Big Tone",
-  //     title: "Snoozin' and Croozin' 3",
-  //     image: placeholderImage,
-  //     price: 1.9,
-  //   },
-  //   {
-  //     artist: "Big Tone",
-  //     title: "Tony in Paris 4",
-  //     image: placeholderImage,
-  //     price: 1.14,
-  //   },
-  //   {
-  //     artist: "Big Tone",
-  //     title: "Here He Comes 4",
-  //     image: placeholderImage,
-  //     price: 1.45,
-  //   },
-  //   {
-  //     artist: "Big Tone",
-  //     title: "Girls Love Big Katz 4",
-  //     image: placeholderImage,
-  //     price: 4.4,
-  //   },
-  // ];

@@ -10,7 +10,7 @@ import InstallMetamaskModal from "../../InstallMetamaskModal";
 
 
 const AccountButton = (props) => {
-  const [onPresentInstallMetamask] = useModal(<InstallMetamaskModal/>);
+  const [onPresentInstallMetamask] = useModal(<InstallMetamaskModal />);
   const { account, connect } = useWallet();
   const fetchAccount = async () => {
     axios.post(`api/user/get-account`,
@@ -52,7 +52,7 @@ const AccountButton = (props) => {
   return (
     <StyledAccountButton>
       {!account ? (
-        <Button onClick={handleUnlockClick}>Unlock Wallet</Button>
+        <Button onClick={handleUnlockClick}>Connect</Button>
       ) : (
         <StyledAccountInfo>
           {/* <Oval /> */}
@@ -84,18 +84,16 @@ const AccountButton = (props) => {
 const Button = styled.button`
   border: none;
   background-color: rgba(0, 0, 0, 0);
+  font-size: ${props => props.theme.fontSizes.sm};
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
   font-weight: bold;
   cursor: pointer;
   color: white;
   @media only screen and (max-width: 767px) {
     font-size: 14px;
     font-weight: normal;
-    margin-top: 0px;
-    padding: 5px 0px 10px 5px;
   }
 `;
 
@@ -105,11 +103,11 @@ const StyledAccountButton = styled.div`
   transition: all 0.1s ease-in-out;
   display: flex;
   justify-content: center;
-  border: 2px solid rgba(256,256,256,0.7);
-  margin: 0 16px;
-  height: 28px;
-  border-radius: 2px;
-  background-color: rgba(256,256,256,0.1);
+  border: 2px solid ${props => props.theme.color.red};
+  height: 32px;
+  border-radius: 20px;
+  font-family: "Compita";
+  background-color: #181818;
   &:hover {
     background-color: rgba(256,256,256,0.2);
   }
@@ -117,7 +115,6 @@ const StyledAccountButton = styled.div`
     background-size: 100% 100%;
     width: 100px;
     margin-left: -15px;
-
   }
 `;
 
@@ -129,15 +126,10 @@ const StyledAccountInfo = styled.div`
 `;
 
 const StyledA = styled.a`
-  font-family: "Compita";
-  font-size: 20px;
-  line-height: 1;
+  font-size: ${props => props.theme.fontSizes.xs};
   text-decoration: none !important;
-  color: #a365ef;
+  color: white;
   transition: all 0.1s linear;
-  /* opacity: 0.85; */
-  &:hover {
-  }
 `;
 
 export default AccountButton;

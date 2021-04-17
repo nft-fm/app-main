@@ -5,7 +5,7 @@ import logo from "../../assets/img/logos/nftfm_logo.png";
 const Logo = () => {
   return (
     <LogoContainer>
-      <StyledLogo src={logo} alt="logo" height="40px" />
+      <StyledLogo src={logo} alt="logo" />
       {/* <StyledText>NFT FM</StyledText> */}
     </LogoContainer>
   );
@@ -17,11 +17,10 @@ const LogoContainer = styled.div`
 `;
 
 const StyledLogo = styled.img`
-  margin-top: 5px;
   max-height: 110px;
   z-index: 20;
-  margin-left: 14px;
   cursor: pointer;
+  height: 50px;
   @media only screen and (max-width: 767px) {
     height: 80px;
     margin-top: 40px;

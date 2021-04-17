@@ -10,16 +10,17 @@ import { Nav } from "./components/Nav";
 const TopBar = () => {
   return (
     <StyledTopBar id="top">
-      <StyledTopBarInner>
-        <NavLink to="/" style={{ textDecoration: "none" }}>
-          <Logo />
-        </NavLink>
-        <NavRight>
-
-          <Nav />
-          <AccountButton />
-        </NavRight>
-      </StyledTopBarInner>
+      <Container size="lg">
+        <StyledTopBarInner>
+          <NavLink to="/" style={{ textDecoration: "none" }}>
+            <Logo />
+          </NavLink>
+          <NavRight>
+            <Nav />
+            <AccountButton />
+          </NavRight>
+        </StyledTopBarInner>
+      </Container>
     </StyledTopBar>
   );
 };

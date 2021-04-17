@@ -4,14 +4,12 @@ import BaseView from "../BaseView";
 import axios from "axios";
 import styled from "styled-components";
 import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
-import Create from "./components/Create"
-
-
+import Create from "./components/Create";
 
 const Profile = () => {
   const { account, connect } = useWallet();
   const [user, setUser] = useState();
-  const [songList, setSongList] = useState([]);
+  // const [songList, setSongList] = useState([]);
 
   const getUser = async () => {
     axios
@@ -19,53 +17,49 @@ const Profile = () => {
       .then((res) => setUser(res.data));
   };
 
-  const getSongList = async () => {
-    console.log(account);
-    if (account) {
-      const _songList = await axios.post("api/nft-type/getSongList", {
-        account: account.toString(),
-      });
-      setSongList(_songList.data.Contents);
-    }
-  };
+  // const getSongList = async () => {
+  //   console.log(account);
+  //   if (account) {
+  //     const _songList = await axios.post("api/nft-type/getSongList", {
+  //       account: account.toString(),
+  //     });
+  //     setSongList(_songList.data.Contents);
+  //   }
+  // };
 
   useEffect(() => {
-    getSongList();
+    // getSongList();
     getUser();
   }, [account]);
-  const toArrayBuffer = (buf) => {
-    var ab = new ArrayBuffer(buf.length);
-    var view = new Uint8Array(ab);
-    for (var i = 0; i < buf.length; ++i) {
-      view[i] = buf[i];
-    }
-    return ab;
-  };
-  const playSong = async (song) => {
-    const _songFile = await axios.post("api/nft-type/getSong", {
-      key: song.Key,
-    });
-    console.log(_songFile);
-    const abSong = toArrayBuffer(_songFile.data.Body.data);
-    var audioCtx = new window.AudioContext();
-    var source = audioCtx.createBufferSource();
-    audioCtx.decodeAudioData(
-      abSong,
-      (buffer) => {
-        source.buffer = buffer;
-        source.connect(audioCtx.destination);
-        source.loop = true;
-      },
-      (e) => {
-        console.log("Error: ", e.err);
-      }
-    );
-    source.start(0);
-  };
-
-  const handleClick = () => {
-    console.log(songList);
-  };
+  // const toArrayBuffer = (buf) => {
+  //   var ab = new ArrayBuffer(buf.length);
+  //   var view = new Uint8Array(ab);
+  //   for (var i = 0; i < buf.length; ++i) {
+  //     view[i] = buf[i];
+  //   }
+  //   return ab;
+  // };
+  // const playSong = async (song) => {
+  //   const _songFile = await axios.post("api/nft-type/getSong", {
+  //     key: song.Key,
+  //   });
+  //   console.log(_songFile);
+  //   const abSong = toArrayBuffer(_songFile.data.Body.data);
+  //   var audioCtx = new window.AudioContext();
+  //   var source = audioCtx.createBufferSource();
+  //   audioCtx.decodeAudioData(
+  //     abSong,
+  //     (buffer) => {
+  //       source.buffer = buffer;
+  //       source.connect(audioCtx.destination);
+  //       source.loop = true;
+  //     },
+  //     (e) => {
+  //       console.log("Error: ", e.err);
+  //     }
+  //   );
+  //   source.start(0);
+  // };
 
   const [edit, setEdit] = useState(false);
   const [username, setUsername] = useState("");
@@ -80,6 +74,13 @@ const Profile = () => {
         email: email,
       })
       .then((res) => setUser(res.data));
+  };
+
+  const [isCreating, setIsCreating] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const hide = (e) => {
+    setIsOpen(false);
+    console.log("isOpen", isOpen);
   };
   if (account) {
     return (
@@ -123,12 +124,16 @@ const Profile = () => {
             <button onClick={() => setEdit(true)}>Edit</button>
           )}
         </AccountDetails>
-        <Create />
-        {songList.length <= 0 ?
+
+        {user?.isArtist && (
+          <button onClick={() => setIsOpen(!isOpen)}>Create NFT!</button>
+        )}
+        <Create open={isOpen} hide={hide} />
+        {/* {songList.length <= 0 ? (
           <h1>
             No songs owned. Go to the 'listen' page to build your collection!
-        </h1>
-          :
+          </h1>
+        ) : (
           <div key={songList}>
             {songList.map((song) => {
               if (song.Key)
@@ -141,13 +146,12 @@ const Profile = () => {
                       }}
                     >
                       Download and play!
-              </button>
+                    </button>
                   </div>
                 );
             })}
           </div>
-
-        }
+        )} */}
       </BaseView>
     );
   }

@@ -15,7 +15,7 @@ const AccountButton = (props) => {
   const fetchAccount = async () => {
     axios.post(`api/user/get-account`,
       { address: account, }).then(res => {
-        console.log("user", res.data)
+        // console.log("user", res.data)
       }).catch(err => {
         console.log(err);
       })
@@ -32,7 +32,7 @@ const AccountButton = (props) => {
       connect("injected")//.then(() => { getS3Bucket() });
       // onPresentWalletProviderModal()
     }
-    console.log('account', account)
+    // console.log('account', account)
     // fetchAccount();
   }, [connect]);
 
@@ -45,7 +45,7 @@ const AccountButton = (props) => {
   }
 
   useEffect(() => {
-    console.log('account', account)
+    // console.log('account', account)
     fetchAccount();
   }, [account])
 

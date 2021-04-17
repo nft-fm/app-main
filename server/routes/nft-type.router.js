@@ -6,22 +6,40 @@ const NftType = require('../schemas/NftType.schema')
 const fs = require('fs')
 const multer = require('multer')
 
+router.post('/fetchNFT', async (req, res) => {
+  try {
+    console.log("fetchNFT Hit", req.body.account);
+    let nft = await NftType.findOne({
+      address: req.body.account,
+      draft: true,
+    });
+    if (!nft) {
+      const newNft = await new NftType({
+        address: req.body.account,
+        draft: true,
+      });
+      await newNft.save();
+      res.send(newNft);
+    } else {
+      res.send(nft);
+    }
+  } catch (error) {
+    console.log("fetchNFT error", error);
+    res.status(500).send("no users found");
+  }
+})
+
 router.post('/update', async (req, res) => {
   try {
     console.log('/update hit', req.body)
     let newData = req.body;
-    await NftType.findOneAndUpdate({ address: req.body.address }, newData);
-    // console.log('here', nftType)
-    // nftType = req.body;
-
-    // console.log('HERRREEE', nftType)
-    // // nftType = req.body
-    // await nftType.save();
-    // if (picture) nftType.picture = picture;
-    // if (rarity) nftType.rarity = rarity;
-    // if (stats) nftType.stats = stats;
-    // await nftType.save();
-
+    newData.draft = false;
+    let updateNFT = await NftType.findByIdAndUpdate( newData._id, newData, {new: true})
+    if (updateNFT) {
+      res.status(200).send("success")
+    } else {
+      res.status(500).json(err)
+    }
   } catch (error) {
     console.log(error);
     res.status(500).send("server error")
@@ -44,7 +62,7 @@ router.post('/get-one', async (req, res) => {
 
 router.get('/all', async (req, res) => {
   try {
-    let nftTypes = await NftType.find();
+    let nftTypes = await NftType.find({draft: false});
     res.send(nftTypes);
   } catch (error) {
     console.log(error);
@@ -58,7 +76,7 @@ router.post('/uploadAudioS3', async (req, res) => {
   const path = require('path');
   const multerS3 = require("multer-s3");
 
-  AWS.config.loadFromPath(path.join(__dirname, '../aws_config.json'));
+  // AWS.config.loadFromPath(path.join(__dirname, '../aws_config.json'));
   var s3Client = new AWS.S3();
 
   const fileFilter = (req, file, cb) => {
@@ -85,12 +103,12 @@ router.post('/uploadAudioS3', async (req, res) => {
   })
   const singleUpload = upload.single("audioFile");
   singleUpload(req, res, function (err) {
-    console.log("here: ", req.body);
+    console.log("singleUpload: ", req.body);
     if (err instanceof multer.MulterError) {
-      console.log('here', err)
+      console.log('singleUpload multer', err)
       return res.status(500).json(err)
     } else if (err) {
-      console.log('there', err)
+      console.log('singleUpload', err)
       return res.status(500).json(err)
     }
     return res.status(200).send("success")
@@ -112,10 +130,10 @@ router.post('/handleAudio', async (req, res) => {
     let upload = multer({ storage: storage }).single('audioFile')
     upload(req, res, function (err) {
       if (err instanceof multer.MulterError) {
-        console.log('here', err)
+        console.log('handleAudio multer', err)
         return res.status(500).json(err)
       } else if (err) {
-        console.log('there', err)
+        console.log('handleAudio', err)
         return res.status(500).json(err)
       }
       return res.status(200).send(req.file)
@@ -156,12 +174,12 @@ router.post('/uploadImageS3', async (req, res) => {
   })
   const singleUpload = upload.single("imageFile");
   singleUpload(req, res, function (err) {
-    console.log("here: ", req.body);
+    console.log("uploadImageS3: ", req.body);
     if (err instanceof multer.MulterError) {
-      console.log('here', err)
+      console.log('uploadImageS3 multer', err)
       return res.status(500).json(err)
     } else if (err) {
-      console.log('there', err)
+      console.log('uploadImageS3', err)
       return res.status(500).json(err)
     }
     return res.status(200).send(req.file)
@@ -183,10 +201,10 @@ router.post('/handleImage', async (req, res) => {
 
     upload(req, res, function (err) {
       if (err instanceof multer.MulterError) {
-        console.log('here', err)
+        console.log('handleImage multer', err)
         return res.status(500).json(err)
       } else if (err) {
-        console.log('there', err)
+        console.log('handleImage', err)
         return res.status(500).json(err)
       }
       // uploadToS3Bucket("nftfm-image", req, res);
@@ -198,37 +216,13 @@ router.post('/handleImage', async (req, res) => {
   }
 })
 
-
-router.post('/fetchNFT', async (req, res) => {
-  try {
-    console.log("fetchNFT Hit", req.body.account);
-    let nft = await NftType.findOne({
-      address: req.body.account,
-      draft: true,
-    });
-    if (!nft) {
-      const newNft = new NftType({
-        address: req.body.account,
-        draft: true,
-      });
-      await newNft.save();
-      res.send(newNft);
-    } else {
-      res.send(nft);
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("no users found");
-  }
-})
-
 router.post('/getSong', async (req, res) => {
   console.log(req.body);
   var AWS = require('aws-sdk');
   AWS.config.region = 'us-west-2';
   const path = require('path');
 
-  AWS.config.loadFromPath(path.join(__dirname, '../aws_config.json'));
+  // AWS.config.loadFromPath(path.join(__dirname, '../aws_config.json'));
   var s3 = new AWS.S3();
 
   s3.getObject(
@@ -255,7 +249,7 @@ router.post('/getSongList', async (req, res) => {
   AWS.config.region = 'us-west-2';
   const path = require('path');
 
-  AWS.config.loadFromPath(path.join(__dirname, '../aws_config.json'));
+  // AWS.config.loadFromPath(path.join(__dirname, '../aws_config.json'));
   var s3 = new AWS.S3();
   s3.listObjectsV2(params, function (err, data) {
     console.log(data);

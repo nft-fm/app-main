@@ -12,10 +12,11 @@ const NftCard = (props) => {
     setIsOpen(false);
     console.log("isOpen", isOpen);
   };
+  console.log('nft', nft)
   return (
     <Container>
       <Modal open={isOpen} hide={hide} nft={nft} />
-      <Image src={image} alt="image" onClick={() => setIsOpen(!isOpen)} />
+      <Image src={nft.imageUrl} alt="image" onClick={() => setIsOpen(!isOpen)} />
       <BottomContainer>
         <InfoContainer>
           <TrackName>{nft.title}</TrackName>

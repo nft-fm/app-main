@@ -9,7 +9,7 @@ import { ThemeProvider } from 'styled-components'
 import { UseWalletProvider } from 'use-wallet'
 import styled from 'styled-components'
 import ModalsProvider from './contexts/Modals'
-import Home from './views/Home'
+import Listen from './views/Listen'
 import Profile from './views/Profile'
 import Login from './views/Login/Login';
 import Register from './views/Register';
@@ -27,7 +27,7 @@ const App = () => {
         <Router>
           <Switch>
             <Route path="/" exact>
-              <Home />
+              <Listen />
             </Route>
             <Route path="/register" exact>
               <Register />

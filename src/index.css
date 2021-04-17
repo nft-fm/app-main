@@ -21,7 +21,7 @@
 body {
   background: white;
   margin: 0;
-  font-family: "Nunito", sans-serif;
+  font-family: "Compita", sans-serif;
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -37,7 +37,8 @@ button:focus {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
 }
 
 .swal2-popup {

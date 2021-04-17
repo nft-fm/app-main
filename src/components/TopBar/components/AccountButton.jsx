@@ -102,7 +102,7 @@ const StyledAccountButton = styled.div`
   transition: all 0.1s ease-in-out;
   display: flex;
   justify-content: center;
-  border: 2px solid ${props => props.theme.color.red};
+  border: 1px solid ${props => props.theme.color.red};
   height: 32px;
   border-radius: 20px;
   font-family: "Compita";

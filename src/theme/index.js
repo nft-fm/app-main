@@ -35,6 +35,7 @@ const theme = {
     xl: '3.125rem' //50px
   },
   siteWidth: 1440,
+  homeWidth: 1200,
   spacing: {
     1: 4,
     2: 8,
@@ -43,8 +44,9 @@ const theme = {
     5: 32,
     6: 48,
     7: 64,
+    8: 96,
   },
-  topBarSize: 70
+  topBarSize: 60
 }
 
 export default theme

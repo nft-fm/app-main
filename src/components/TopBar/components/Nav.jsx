@@ -29,7 +29,7 @@ const StyledLink = styled(NavLink)`
   /* ${props => props.tab === "home" && css`color: ${props => props.theme.color.blue};`} */
   /* ${props => props.tab === "browse" && css`color: ${props => props.theme.color.yellow};`} */
   /* ${props => props.tab === "profile" && css`color: ${props => props.theme.color.green};`} */
-  color: ${props => props.theme.color.blue};
+  color: ${props => props.theme.color.lightgray};
 
   &:hover {
     filter: brightness(125%) saturate(125%);

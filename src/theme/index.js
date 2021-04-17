@@ -15,6 +15,7 @@ const theme = {
     yellow: "#fde404",
     green: "#68c12f",
     gray: "#5c5c5c",
+    lightgray: "#888",
     white,
     black,
     // primary: {

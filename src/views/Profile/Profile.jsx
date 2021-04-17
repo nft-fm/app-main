@@ -71,10 +71,10 @@ const Profile = () => {
           <span>8 Traded</span>
         </Side>
       </ProfileHeading>
-      {/* {user?.isArtist && (
+      {user?.isArtist && (
           <button onClick={() => setIsOpen(!isOpen)}>Create NFT!</button>
         )}
-        <Create open={isOpen} hide={hide} /> */}
+        <Create open={isOpen} hide={hide} />
     </BaseView>
   );
 };

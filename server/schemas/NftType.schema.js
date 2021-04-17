@@ -27,10 +27,6 @@ const NftTypeSchema = new Schema({
     type: Number,
     default: 0,
   },
-  isMinted: {
-    type: Boolean,
-    default: false,
-  },
   price: {
     type: Number,
     default: 0,
@@ -40,10 +36,6 @@ const NftTypeSchema = new Schema({
     required: true,
     default: "",
   },
-  draft: {
-    type: Boolean,
-    default: true,
-  },
   imageUrl: {
     type: String,
     default: "",
@@ -51,6 +43,26 @@ const NftTypeSchema = new Schema({
   audioUrl: {
     type: String,
     default: "",
+  },
+  likeCount: {
+    type: Number,
+    default: 0,
+  },
+  shareCount: {
+    type: Number,
+    default: 0,
+  },
+  isMinted: {
+    type: Boolean,
+    default: false,
+  },
+  isFeatured: {
+    type: Boolean,
+    default: false,
+  },
+  isDraft: {
+    type: Boolean,
+    default: true,
   },
   timestamp: {
     type: Date,

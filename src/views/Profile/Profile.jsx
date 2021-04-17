@@ -8,10 +8,19 @@ import Create from "./components/Create";
 import {useAccountConsumer} from "../../contexts/Account";
 
 const Profile = () => {
+<<<<<<< HEAD
   const { account, connect } = useWallet();
   const [user, setUser] = useState();
   const [ownedNfts, setOwnedNfts] = useState([]);
   console.log("ownedNfts", ownedNfts);
+=======
+  const [ownedNfts, setOwnedNfts] = useState([]);
+  console.log("ownedNfts", ownedNfts);
+  const { account, user, setUser } = useAccountConsumer();
+
+  // const [songList, setSongList] = useState([]);
+
+>>>>>>> 5d5e9a7d9863ac20fb9460fa8c582a7eddb7b734
   const getUser = async () => {
     axios
       .post("api/user/get-account", { address: account })

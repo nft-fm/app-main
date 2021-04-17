@@ -16,7 +16,7 @@ import {useAccountConsumer} from "../../../contexts/Account";
 
 const initialNftState = {
   address: "",
-  draft: true,
+  isDraft: true,
   genre: "",
   numMinted: "",
   price: "",

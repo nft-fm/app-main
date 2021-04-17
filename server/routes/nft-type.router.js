@@ -12,12 +12,12 @@ router.post('/get-NFT', async (req, res) => {
     console.log("fetchNFT Hit", req.body.account);
     let nft = await NftType.findOne({
       address: req.body.account,
-      draft: true,
+      isDraft: true,
     });
     if (!nft) {
       const newNft = await new NftType({
         address: req.body.account,
-        draft: true,
+        isDraft: true,
       });
       await newNft.save();
       res.send(newNft);
@@ -46,7 +46,7 @@ router.post('/update', async (req, res) => {
   try {
     console.log('/update hit', req.body)
     let newData = req.body;
-    newData.draft = false;
+    newData.isDraft = false;
     let updateNFT = await NftType.findByIdAndUpdate(newData._id, newData, { new: true })
     if (updateNFT) {
       res.status(200).send("success")
@@ -72,16 +72,87 @@ router.post('/get-one', async (req, res) => {
   }
 })
 
-
-router.get('/all', async (req, res) => {
+router.get('/featured', async (req, res) => {
   try {
-    let nftTypes = await NftType.find({ draft: false });
+    let nftTypes = await NftType.find({
+      // featured: true 
+    })
+      .limit(5)
+
+
     res.send(nftTypes);
   } catch (error) {
     console.log(error);
     res.status(500).send("server error")
   }
 })
+
+
+//flesh out pagination
+router.post('/get-many', async (req, res) => {
+  // try {
+  //   console.log(
+  //     "get suggestions!\naddress: ",
+  //     req.body.address,
+  //     "\npage: ",
+  //     req.body.page,
+  //     "\nsort: ",
+  //     req.body.sort,
+  //     "\n"
+  //   );
+  //   const sort =
+  //     req.body.sort === "new" ? { timestamp: -1 } : { totalVotes: -1 };
+  //   let initialSuggestions = await Suggestion.find()
+  //     .sort(sort)
+  //     .skip(req.body.page * 5)
+  //     .limit(5);
+
+  //   let suggestions = [];
+  //   for (let suggestion of initialSuggestions) {
+  //     let user = await User.findOne({ _id: suggestion.userId });
+  //     const { address, picture, pictureColor, nickname } = user;
+  //     const { totalVotes, _id, userId, message, timestamp } = suggestion;
+  //     let upDooted;
+  //     let downDooted;
+  //     const voteIndex = suggestion.votes.findIndex(
+  //       (vote) => vote.address === req.body.address
+  //     );
+  //     if (voteIndex !== -1) {
+  //       upDooted = suggestion.votes[voteIndex].amount > 0 ? true : false;
+  //       downDooted = suggestion.votes[voteIndex].amount < 0 ? true : false;
+  //     }
+  //     // console.log("\n\n\nuser: ", user, suggestion)
+  //     suggestions.push({
+  //       totalVotes,
+  //       _id,
+  //       userId,
+  //       message,
+  //       address,
+  //       picture,
+  //       pictureColor,
+  //       nickname,
+  //       upDooted,
+  //       downDooted,
+  //       timestamp,
+  //     });
+  //   }
+  //   let totalPages = (await Suggestion.countDocuments()) / 5;
+  //   totalPages = Math.ceil(totalPages);
+  //   // console.log("done: ", suggestions)
+  //   res.send({ suggestions, totalPages });
+})
+
+
+router.get('/all', async (req, res) => {
+  try {
+    let nftTypes = await NftType.find({ isDraft: false });
+    res.send(nftTypes);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("server error")
+  }
+})
+
 
 router.post('/uploadAudioS3', async (req, res) => {
   var AWS = require('aws-sdk');

@@ -15,6 +15,8 @@ import medium from "../../assets/img/socials/social_medium.png";
 import telegram from "../../assets/img/socials/social_telegram.png";
 import twitter from "../../assets/img/socials/social_twitter.png";
 
+import Landing from "./Landing";
+
 const Listen = () => {
   const { path } = useRouteMatch();
   const { account, connect } = useWallet();
@@ -37,58 +39,7 @@ const Listen = () => {
   return (
     <Switch>
       <BaseView>
-        <Logo src={logo} />
-        <StyledTitle>
-          NFT FM
-        </StyledTitle>
-        <NftFmTagline>
-          The exciting new technology for building meaningful digital collections,
-          brought to you on a platform that's built for everyone
-        </NftFmTagline>
-        <Container>
-          <ContainerTitle>
-            <text>
-              {`PROUD TO`}
-              <span style={{ "color": "blue", "padding": "3px" }}>{`LAUNCH`}</span>
-              <span style={{ "color": "yellow", "padding": "3px" }}>{`ALONGSIDE`}</span>
-              <span style={{ "color": "green", "padding": "3px" }}>{`AMAZING`}</span>
-              <span style={{ "color": "red", "padding": "3px" }}>{`ARTISTS`}</span>
-            </text>
-          </ContainerTitle>
-          <ContainerOutline />
-          <NftScroll>
-            {showNfts}
-          </NftScroll>
-        </Container>
-        <SocialsBar>
-          <SocialsLine />
-          <SocialsIcons>
-            <IconContainer>
-              <Icon src={telegram} />
-              <IconText>
-                {`Telegram`}
-              </IconText>
-            </IconContainer>
-            <IconContainer>
-              <Icon src={twitter} />
-              <IconText>
-                {`Twitter`}
-              </IconText>
-            </IconContainer>
-            <IconContainer>
-              <Icon src={medium} />
-              <IconText>
-                {`Medium`}
-              </IconText>
-            </IconContainer>
-            <IconContainer>
-              <Icon src={discord} />
-              <IconText>
-                {`Discord`}
-              </IconText>
-            </IconContainer>
-          </SocialsIcons>
-        </SocialsBar>
+        <Landing />
         <DescriptionBoxContainer>
           <StyledHeader>Aliquam eu dapibus velit.</StyledHeader>
           <StyledSubHeader>Aliquam non iaculis mauris, ac placerat magna</StyledSubHeader>

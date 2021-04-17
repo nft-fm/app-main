@@ -5,12 +5,20 @@ import axios from "axios";
 import styled from "styled-components";
 import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
 import Create from "./components/Create";
+import {useAccountConsumer} from "../../contexts/Account";
 
 const Profile = () => {
+<<<<<<< HEAD
   const { account, connect } = useWallet();
   const [user, setUser] = useState();
   const [ownedNfts, setOwnedNfts] = useState([]);
   console.log("ownedNfts", ownedNfts);
+=======
+  const { account, user, setUser } = useAccountConsumer();
+
+  // const [songList, setSongList] = useState([]);
+
+>>>>>>> fadaf5b2113ca2e704971c8a9de83c7aa655b722
   const getUser = async () => {
     axios
       .post("api/user/get-account", { address: account })

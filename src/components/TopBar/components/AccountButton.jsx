@@ -54,47 +54,46 @@ const AccountButton = (props) => {
       {!account ? (
         <Button onClick={handleUnlockClick}>Connect</Button>
       ) : (
-        <StyledAccountInfo>
-          {/* <Oval /> */}
-          {isMobile() ? (
-            <StyledA
-              href={`https://etherscan.io/address/${account}`}
-              target={`_blank`}
-              style={{ marginLeft: "-5px" }}
-            >
-              <div>{account.substring(0, 6)}</div>
-              <div>{"..." + account.substring(account.length - 4)}</div>
-            </StyledA>
-          ) : (
-            <StyledA
-              href={`https://etherscan.io/address/${account}`}
-              target={`_blank`}
-            >
-              {account.substring(0, 6) +
-                "..." +
-                account.substring(account.length - 4)}
-            </StyledA>
-          )}
-        </StyledAccountInfo>
-      )}
-    </StyledAccountButton>
+        isMobile() ? (
+          <StyledA
+            href={`https://etherscan.io/address/${account}`}
+            target={`_blank`}
+            style={{ marginLeft: "-5px" }}
+          >
+            <div>{account.substring(0, 6)}</div>
+            <div>{"..." + account.substring(account.length - 4)}</div>
+          </StyledA>
+        ) : (
+          <StyledA
+            href={`https://etherscan.io/address/${account}`}
+            target={`_blank`}
+          >
+            {account.substring(0, 6) +
+              "..." +
+              account.substring(account.length - 4)}
+          </StyledA>
+        )
+      )
+      }
+    </StyledAccountButton >
   );
 };
 
 const Button = styled.button`
   border: none;
-  background-color: rgba(0, 0, 0, 0);
-  font-size: ${props => props.theme.fontSizes.sm};
+  background-color: transparent;
+  font-size: ${props => props.theme.fontSizes.xs};
   display: flex;
+  letter-spacing: 1px;
   align-items: center;
   justify-content: center;
   font-weight: bold;
   cursor: pointer;
   color: white;
-  @media only screen and (max-width: 767px) {
+  /* @media only screen and (max-width: 767px) {
     font-size: 14px;
     font-weight: normal;
-  }
+  } */
 `;
 
 const StyledAccountButton = styled.div`
@@ -108,28 +107,26 @@ const StyledAccountButton = styled.div`
   border-radius: 20px;
   font-family: "Compita";
   background-color: #181818;
+  /* margin-left: ${props => props.theme.spacing[3]}px; */
   &:hover {
     background-color: rgba(256,256,256,0.2);
   }
-  @media only screen and (max-width: 767px) {
+  /* @media only screen and (max-width: 767px) {
     background-size: 100% 100%;
     width: 100px;
     margin-left: -15px;
-  }
+  } */
 `;
 
-
-const StyledAccountInfo = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
 
 const StyledA = styled.a`
   font-size: ${props => props.theme.fontSizes.xs};
   text-decoration: none !important;
   color: white;
   transition: all 0.1s linear;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `;
 
 export default AccountButton;

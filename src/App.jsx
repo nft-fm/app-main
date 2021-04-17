@@ -9,7 +9,7 @@ import { ThemeProvider } from 'styled-components'
 import { UseWalletProvider } from 'use-wallet'
 import styled from 'styled-components'
 import ModalsProvider from './contexts/Modals'
-import Listen from './views/Listen'
+import Listen from './views/Home'
 import Profile from './views/Profile'
 import Login from './views/Login/Login';
 import Register from './views/Register';

@@ -53,7 +53,7 @@ export const AccountProvider = ({ children }) => {
     });
 
     if (account && !user) initialize();
-  }, [account, currChainId]);
+  }, [account, currChainId, user]);
 
   return (
     <AccountContext.Provider

@@ -47,7 +47,8 @@ router.post('/update', async (req, res) => {
     console.log('/update hit', req.body)
     let newData = req.body;
     newData.isDraft = false;
-    let updateNFT = await NftType.findByIdAndUpdate(newData._id, newData, { new: true })
+
+    let updateNFT = await NftType.findByIdAndUpdate(newData._id, newData)
     if (updateNFT) {
       res.status(200).send("success")
     } else {

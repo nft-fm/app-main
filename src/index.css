@@ -5,6 +5,19 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: "Gilroy-Bold";
+  src: url(./assets/fonts/Gilroy-Bold.otf) format ("opentype");
+  /* font-weight: normal;
+  font-style: normal; */
+}
+@font-face {
+  font-family: "Gilroy-Medium";
+  src: url(./assets/fonts/Gilroy-Medium.otf) format ("opentype");
+  /* font-weight: normal;
+  font-style: normal; */
+}
+
 body {
   background: white;
   margin: 0;

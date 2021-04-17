@@ -5,7 +5,7 @@ import { FooterNav } from "./components/FooterNav";
 export const Footer = () => (
   <StyledFooter>
     {/* <StyledFooterBG> */}
-      <FooterNav />
+    <FooterNav />
     {/* </StyledFooterBG> */}
   </StyledFooter>
 );

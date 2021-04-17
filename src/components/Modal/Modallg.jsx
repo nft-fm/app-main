@@ -3,25 +3,23 @@ import styled from 'styled-components'
 import CardContent from '../CardContent'
 import Container from '../Container'
 
-const Modalmd = ({ children }) => {
+const Modallg = ({ children }) => {
   return (
     <Container size="lg">
       <StyledModal>
-        <CardContent>
           {children}
-        </CardContent>
       </StyledModal>
     </Container>
   )
 }
 
 const StyledModal = styled.div`
-border-radius: 8px;
+  border-radius: ${props => props.theme.borderRadius}px;
   position: relative;
   width: 100%;
-  height: 100%;
-  background-color: #ccc;
+  height: 70vh;
+  background-color: ${props => props.theme.boxColor};
   z-index: 100000;
 `
 
-export default Modalmd
+export default Modallg

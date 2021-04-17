@@ -1,22 +1,19 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const ModalTitle = ({ text }) => (
+const ModalTitle = ({ children }) => (
   <StyledModalTitle>
-    {text}
+    {children}
   </StyledModalTitle>
 )
 
 const StyledModalTitle = styled.div`
   align-items: center;
-  color: black;
-  font-family: "Compita";
+  color: ${props => props.theme.fontColor};
   display: flex;
-  font-size: 40px;
+  font-size: ${props => props.theme.fontSizes.lg};
   letter-spacing: 1px;
-  height: ${props => props.theme.topBarSize}px;
   justify-content: center;
-  margin-top: ${props => -props.theme.spacing[2]}px;
 `
 
 export default ModalTitle

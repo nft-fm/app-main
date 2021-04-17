@@ -1,8 +1,16 @@
-import { black, green, grey, red, white } from './colors'
+import { black, white, green, grey, blue, red, yellow } from './colors'
 
 const theme = {
   borderRadius: 12,
+  bgColor: black,
+  boxColor: grey[500],
+  fontColor: white,
   color: {
+    green,
+    red,
+    blue,
+    yellow,
+    white,
     black,
     grey,
     primary: {
@@ -12,7 +20,6 @@ const theme = {
     secondary: {
       main: green[500],
     },
-    white,
   },
   fontSizes: {
     xxs: '0.625', // 10px
@@ -22,7 +29,7 @@ const theme = {
     lg: '2.125rem', //36p
     xl: '3.125rem' //50px
   },
-  siteWidth: 1700,
+  siteWidth: 1440,
   spacing: {
     1: 4,
     2: 8,

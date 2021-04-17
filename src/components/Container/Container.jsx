@@ -26,10 +26,8 @@ const Container = ({ children, size = 'md' }) => {
 const StyledContainer = styled.div`
   box-sizing: border-box;
   margin: 0 auto;
-  max-width: ${props => props.width}px;
+  width: ${props => props.width}px;
   padding: 0 ${props => props.theme.spacing[4] / 2}px;
-  width: 100%;
-  
 `
 
 export default Container

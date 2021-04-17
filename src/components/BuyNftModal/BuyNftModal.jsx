@@ -153,7 +153,7 @@ const BuyButton = styled.div`
   border-radius: 2px;
   background-color: ${(props) => props.theme.boxColor};
   &:hover {
-    background-color: ${(props) => props.theme.color.primary.main};
+    background-color: ${(props) => props.theme.color.red};
   }
 `;
 
@@ -166,7 +166,7 @@ const Button = styled.button`
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
-  color: ${(props) => props.theme.fontColor};
+  color: ${(props) => props.theme.fontColor.white};
   @media only screen and (max-width: 767px) {
     font-size: 14px;
     font-weight: normal;

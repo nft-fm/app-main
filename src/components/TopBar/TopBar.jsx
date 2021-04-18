@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import Container from "../Container";
@@ -8,6 +8,17 @@ import AccountButton from "./components/AccountButton";
 import { Nav } from "./components/Nav";
 
 const TopBar = () => {
+  const [currChainId, setCurrChainId] = useState(false);
+
+  const getChain = async () => {
+    const newChainId = await window.ethereum.request({ method: 'eth_chainId' });
+    console.log("GOT CHAIN", newChainId);
+    setCurrChainId(Number(newChainId));
+  }
+
+  useEffect(() => {
+    getChain();
+  }, [])
   return (
     <StyledTopBar id="top">
       <Container size="lg">
@@ -17,7 +28,7 @@ const TopBar = () => {
           </NavLink>
           <NavRight>
             <Nav />
-            <AccountButton />
+            <AccountButton chainId={currChainId}/>
           </NavRight>
         </StyledTopBarInner>
       </Container>

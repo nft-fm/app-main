@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import ReactGA from "react-ga";
 import styled from "styled-components";
 import { useWallet } from "use-wallet";
@@ -12,11 +12,12 @@ import ChangeChainModal from "../../ChangeChainModal";
 
 
 const AccountButton = (props) => {
+  const [currChainId, setCurrChainId ] = useState(props.chainId);
+  const {  account, connect } = useWallet();
   const [onPresentInstallMetamask] = useModal(<InstallMetamaskModal />);
   const [onPresentChangeChain] = useModal(<ChangeChainModal />)
-  const { account, currChainId } = useAccountConsumer();
-  const { connect } = useWallet();
 
+  console.log(currChainId);
   const fetchAccount = async () => {
     axios.post(`api/user/get-account`,
       { address: account, }).then(res => {
@@ -27,9 +28,9 @@ const AccountButton = (props) => {
   };
 
   const handleUnlockClick = useCallback(() => {
-    const chain = process.env.REACT_APP_IS_MAINNET ? 1 : 4;
+    console.log("CURR CHAIN ID", currChainId)
     if (!window.ethereum) onPresentInstallMetamask();
-    else if (currChainId !== chain) onPresentChangeChain();
+    else if (currChainId !== 1) onPresentChangeChain();
     if (isMobile()) {
       // connect('injected');
       connect("walletconnect")//.then(() => { getS3Bucket() });
@@ -37,9 +38,9 @@ const AccountButton = (props) => {
       connect("injected")//.then(() => { getS3Bucket() });
       // onPresentWalletProviderModal()
     }
-    console.log('account', account)
     // fetchAccount();
   }, [connect]);
+
 
   if (account) {
     ReactGA.set({
@@ -50,10 +51,12 @@ const AccountButton = (props) => {
   }
 
   useEffect(() => {
-    console.log('account', account)
     fetchAccount();
   }, [account])
 
+  useEffect(() => {
+    setCurrChainId(props.chainId)
+  }, [props.chainId])
   return (
     <StyledAccountButton>
       {!account ? (

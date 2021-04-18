@@ -10,7 +10,7 @@ export const AccountProvider = ({ children }) => {
   const { account } = useWallet();
   const [user, setUser] = useState(null);
   const [currChainId, setCurrChainId] = useState(false);
-  const [usdPerEth, setUsdPerEth] = useState(0);
+  const [usdPerEth, setUsdPerEth] = useState(1);
 
   const fetchUsdPerEth = async () => {
     console.log("fetchinafioe");
@@ -42,6 +42,7 @@ export const AccountProvider = ({ children }) => {
 
   useEffect(() => {
     if (window.ethereum) {
+      console.log("getting chain");
       getChain();
     }
     if (!usdPerEth) fetchUsdPerEth();

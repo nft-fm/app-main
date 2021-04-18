@@ -28,10 +28,10 @@ const Profile = () => {
   // TODO switch back to get-user-nfts
   const getUserNfts = async () => {
     console.log("here");
-    axios
-      .post("api/nft-type/get-user-nfts", user)
-      .then((res) => setOwnedNfts(res.data));
-    // axios.get("api/nft-type/featured").then((res) => setOwnedNfts(res.data));
+    // axios
+    //   .post("api/nft-type/get-user-nfts", user)
+    //   .then((res) => setOwnedNfts(res.data));
+    axios.get("api/nft-type/featured").then((res) => setOwnedNfts(res.data));
   };
   useEffect(() => {
     getUserNfts();
@@ -204,10 +204,11 @@ const NftScroll = styled.div`
     height: 12px;
     background-color: rgba(256, 256, 256, 0.1);
   }
+  margin-bottom: 20px;
   &::-webkit-scrollbar-thumb {
     background-color: rgba(240, 31, 103, 0.4);
     border-radius: 15px;
-}`;
+  }`;
 
 const ToggleSlider = styled.span`
   position: absolute;

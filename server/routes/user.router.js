@@ -26,7 +26,9 @@ router.post('/update-account', async (req, res) => {
   try {
 
     let user = await User.findOneAndUpdate({ address: req.body.address },
-      { username: req.body.username, email: req.body.email }, {new: true});
+      { username: req.body.username, 
+        // email: req.body.email 
+      }, {new: true});
     res.send(user);
     // const pictureColor = req.body.pictureColor ? req.body.pictureColor : "#002450";
     // let s = { address: req.body.address, nickname: req.body.nickname, picture: req.body.picture, pictureColor }

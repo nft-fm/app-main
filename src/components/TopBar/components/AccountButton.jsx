@@ -84,6 +84,10 @@ const AccountButton = (props) => {
   );
 };
 
+const AddressSpan = styled.span`
+font: Compita;
+`;
+
 const Button = styled.button`
   border: none;
   background-color: transparent;

@@ -36,13 +36,15 @@ const Profile = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
 
-  const saveDetails = () => {
+  const saveDetails = (e) => {
+    e.preventDefault();
     setEdit(false);
+    setUser({ ...user, username: username });
     axios
       .post("/api/user/update-account", {
         address: account,
         username: username,
-        email: email,
+        // email: email,
       })
       .then((res) => setUser(res.data));
   };
@@ -60,14 +62,42 @@ const Profile = () => {
         <ProfileHolder>
           <ProfilePicHolder>
             <ProfilePic src={default_pic} alt="default-profile-pic" />
-            <Cog src={cog} alt="edit icon" />
+            <Cog
+              src={cog}
+              alt="edit icon"
+              onClick={account ? () => setEdit(!edit) : null}
+            />
           </ProfilePicHolder>
-          <span>{user?.username}</span>
-          <span>{user?.address}</span>
+          {edit ? (
+            <form onSubmit={(e) => saveDetails(e)}>
+              <StyledInput
+                type="text"
+                placeholder="Enter Username"
+                defaultValue={user?.username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </form>
+          ) : (
+            <Username>
+              {user && user.username != "" ? user.username : "No username"}
+            </Username>
+          )}
+
+          <AddressSpan>
+            {user
+              ? user.address.substring(0, 6) +
+                "..." +
+                user.address.substring(user.address.length - 4)
+              : " "}
+          </AddressSpan>
         </ProfileHolder>
         <Side>
-          <span>12 /NFTs</span>
-          <span>8 Traded</span>
+          <SideSpan>
+            12 <BlueSpan>/NFTs</BlueSpan>
+          </SideSpan>
+          <SideSpan>
+            8 <BlueSpan>Traded</BlueSpan>
+          </SideSpan>
         </Side>
       </ProfileHeading>
       {user?.isArtist && (
@@ -77,6 +107,26 @@ const Profile = () => {
     </BaseView>
   );
 };
+
+const Username = styled.span`
+font-size: ${(props) => props.theme.fontSizes.md};
+`
+
+const AddressSpan = styled.span`
+color: ${(props) => props.theme.color.gray};
+`;
+const SideSpan = styled.span`
+  font-size: ${(props) => props.theme.fontSizes.sm};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const BlueSpan = styled.span`
+  padding-left: ${(props) => props.theme.spacing[1]}px;
+  color: ${(props) => props.theme.color.blue};
+  font-size: ${(props) => props.theme.fontSizes.xs};
+`;
 
 const Cog = styled.img`
   width: 15px;
@@ -96,9 +146,9 @@ const Cog = styled.img`
 `;
 
 const ProfilePicHolder = styled.div`
-  background-color: ${(props) => props.theme.boxBorderColor};
+  background-color: ${(props) => props.theme.color.lightgray};
   border-width: 4px;
-  border-color: ${(props) => props.theme.boxBorderColor};
+  border-color: ${(props) => props.theme.color.lightgray};
   border-style: solid;
   border-radius: 75px;
   width: 100px;
@@ -134,10 +184,14 @@ const ProfileHeading = styled.div`
 `;
 
 const StyledInput = styled.input`
-  background-color: #eaeaea;
-  border: none;
-  border-bottom: 1px solid #bababa;
+  background-color: ${(props) => props.theme.bgColor};
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-width: 1px;
+  border-bottom-color: ${(props) => props.theme.color.gray};
   outline: none;
+  color: white;
 `;
 
 const AccountDetails = styled.div`

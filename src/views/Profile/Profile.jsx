@@ -6,7 +6,7 @@ import styled, { keyframes } from "styled-components";
 import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
 import Create from "./components/Create";
 import { useAccountConsumer } from "../../contexts/Account";
-
+import { ReactComponent as CopyIcon } from "../../assets/img/Icons/copy_icon.svg";
 import cog from "../../assets/img/Icons/cog.svg";
 
 const Profile = () => {
@@ -50,6 +50,7 @@ const Profile = () => {
   };
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
   const hide = (e) => {
     setIsOpen(false);
     console.log("isOpen", isOpen);
@@ -68,28 +69,37 @@ const Profile = () => {
               onClick={account ? () => setEdit(!edit) : null}
             />
           </ProfilePicHolder>
-          {edit ? (
-            <form onSubmit={(e) => saveDetails(e)}>
-              <StyledInput
-                type="text"
-                placeholder="Enter Username"
-                defaultValue={user?.username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </form>
-          ) : (
-            <Username>
-              {user && user.username != "" ? user.username : "No username"}
-            </Username>
-          )}
+          <ProfileInfoHolder>
+            {edit ? (
+              <form onSubmit={(e) => saveDetails(e)}>
+                <StyledInput
+                  type="text"
+                  placeholder="Enter Username"
+                  defaultValue={user?.username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </form>
+            ) : (
+              <Username>
+                {user && user.username != "" ? user.username : "No username"}
+              </Username>
+            )}
 
-          <AddressSpan>
-            {user
-              ? user.address.substring(0, 6) +
-                "..." +
-                user.address.substring(user.address.length - 4)
-              : " "}
-          </AddressSpan>
+            <AddressSpan>
+              {user
+                ? user.address.substring(0, 10) +
+                  "..." +
+                  user.address.substring(user.address.length - 4)
+                : " "}
+              {user && (
+                <CopyButton
+                  onClick={() => {
+                    navigator.clipboard.writeText(user.address);
+                  }}
+                />
+              )}
+            </AddressSpan>
+          </ProfileInfoHolder>
         </ProfileHolder>
         <Side>
           <SideSpan>
@@ -100,6 +110,46 @@ const Profile = () => {
           </SideSpan>
         </Side>
       </ProfileHeading>
+      <MidSection>
+        <MidSectionSide>
+          <span>
+            Platform news <br /> New feature <br />
+            Anouncement
+            <br /> New artist
+          </span>
+        </MidSectionSide>
+        <MidSectionMiddle>
+          <ListenSlashCreate>
+            <Highlight highlight={isCreating}>Listen</Highlight>
+            <span>/</span>
+            <Highlight highlight={!isCreating}>Create</Highlight>
+          </ListenSlashCreate>
+          <MidSectionMessage>
+            Create NFTs and keep track of your stats and trends !
+          </MidSectionMessage>
+          <ToggleHolder>
+            <ToggleLabel>
+              <ToggleInput
+                type="checkbox"
+                value={isCreating}
+                checked={isCreating}
+                onClick={() => setIsCreating(!isCreating)}
+              />
+              <ToggleSlider active={isCreating} />
+            </ToggleLabel>
+          </ToggleHolder>
+        </MidSectionMiddle>
+        {!isCreating ? 
+        <MidSectionSide>
+          Link to feature, staking etc Or marketplace or to buy
+          <br />
+          nft fm tokens
+          <br />
+          Maybe could cycle between
+          <br />
+          these things ?
+        </MidSectionSide> : <BigCreateButton><span>Create <br /> NFTs</span></BigCreateButton>}
+      </MidSection>
       {user?.isArtist && (
         <button onClick={() => setIsOpen(!isOpen)}>Create NFT!</button>
       )}
@@ -108,12 +158,154 @@ const Profile = () => {
   );
 };
 
+const BigCreateButton = styled.div`
+
+width: 130px;
+
+color: white;
+border-width: 1px;
+background-color: ${(props) => props.theme.boxColor};
+border-color: ${(props) => props.theme.boxBorderColor};
+border-radius: ${(props) => props.theme.borderRadius}px;
+padding: 20px;
+text-align: left;
+font-size: ${(props) => props.theme.fontSizes.sm};
+display: flex;
+/* justify-content: center; */
+align-items: flex-start;
+`;
+
+const ToggleSlider = styled.span`
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  /* ${({ active }) => active && `background-color: #383838`} */
+  background-color: ${(props) => props.theme.boxBorderColor};
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  border-radius: 17px;
+
+  &::before {
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    height: 13px;
+    width: 13px;
+    left: 2px;
+    bottom: 2px;
+    background-color: ${(props) => props.theme.color.lightgray};
+    ${({ active }) => active && `background-color: #383838`};
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+    z-index: 1;
+  }
+`;
+
+const ToggleInput = styled.input`
+  opacity: 0;
+  width: 0;
+  height: 0;
+  &:checked + ${ToggleSlider} {
+    background-color: ${(props) => props.theme.color.blue};
+    &::before {
+      transform: translateX(13px);
+    }
+  }
+`;
+
+const ToggleLabel = styled.label`
+  float: right;
+  position: relative;
+  width: 30px;
+  height: 17px;
+`;
+
+const ToggleHolder = styled.div`
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+`;
+
+const Highlight = styled.span`
+  color: white;
+  ${({ highlight }, props) =>
+    highlight && `color: #5c5c5c`};
+`;
+
+const MidSectionMessage = styled.span``;
+const ListenSlashCreate = styled.span`
+font-size: ${(props) => props.theme.fontSizes.md};`;
+const MidSectionMiddle = styled.div`
+  width: 400px;
+  background-color: ${(props) => props.theme.boxColor};
+  border-width: 1px;
+  border-color: ${(props) => props.theme.boxBorderColor};
+  border-radius: ${(props) => props.theme.borderRadius}px;
+  padding: 20px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  position: relative;
+`;
+const MidSectionSide = styled.div`
+  width: 110px;
+
+  color: ${(props) => props.theme.color.gray};
+  border-width: 1px;
+  background-color: ${(props) => props.theme.boxColor};
+  border-color: ${(props) => props.theme.boxBorderColor};
+  border-radius: ${(props) => props.theme.borderRadius}px;
+  padding: 30px;
+  text-align: right;
+  font-size: ${(props) => props.theme.fontSizes.xxs};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const MidSection = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 900px;
+  height: 150px;
+  @media only screen and (max-width: 800px) {
+    width: 95%;
+    flex-direction: column;
+  }
+`;
+
+const CopyButton = styled(CopyIcon)`
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  transition: all 0.2s linear;
+  position: absolute;
+  margin-left: 150px;
+  & path {
+    fill: ${(props) => props.theme.color.gray};
+  }
+
+  &:hover {
+    & path {
+      fill: ${(props) => props.theme.color.lightgray};
+    }
+  }
+`;
+
 const Username = styled.span`
-font-size: ${(props) => props.theme.fontSizes.md};
-`
+  font-size: ${(props) => props.theme.fontSizes.md};
+`;
 
 const AddressSpan = styled.span`
-color: ${(props) => props.theme.color.gray};
+  color: ${(props) => props.theme.color.gray};
+  display: flex;
+  /* align-items: center;s */
+  position: relative;
 `;
 const SideSpan = styled.span`
   font-size: ${(props) => props.theme.fontSizes.sm};
@@ -145,6 +337,13 @@ const Cog = styled.img`
   }
 `;
 
+const ProfileInfoHolder = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 const ProfilePicHolder = styled.div`
   background-color: ${(props) => props.theme.color.lightgray};
   border-width: 4px;
@@ -173,14 +372,19 @@ const ProfileHolder = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
 `;
 
 const ProfileHeading = styled.div`
   margin-left: auto;
   margin-right: auto;
   display: flex;
-  width: 50%;
+  height: 200px;
   color: ${(props) => props.theme.fontColor.white};
+  width: 800px;
+  @media only screen and (max-width: 800px) {
+    width: 90%;
+  }
 `;
 
 const StyledInput = styled.input`

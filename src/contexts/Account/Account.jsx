@@ -40,17 +40,17 @@ export const AccountProvider = ({ children }) => {
     if (isMobile() && !window.ethereum) {
       Swal.fire("Mobile staking is only supported via MetaMask Browser. All other aspects of the site are Browser only.")
       return;
-    } else if (!window.ethereum) {
-      Swal.fire("Metamask is required for interacting with this site.");
-      return;
+    }
+    if (window.ethereum) {
+      window.ethereum.on('accountsChanged', (accounts) => {
+        window.location.reload();
+      });
+      window.ethereum.on('chainChanged', (chainId) => {
+        window.location.reload();
+      });
     }
 
-    window.ethereum.on('accountsChanged', (accounts) => {
-      window.location.reload();
-    });
-    window.ethereum.on('chainChanged', (chainId) => {
-      window.location.reload();
-    });
+
 
     if (account && !user) initialize();
   }, [account, currChainId]);

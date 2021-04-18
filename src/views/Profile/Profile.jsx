@@ -2,178 +2,425 @@ import React, { useCallback, useEffect, useState, useRef } from "react";
 import { useWallet } from "use-wallet";
 import BaseView from "../BaseView";
 import axios from "axios";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
 import Create from "./components/Create";
-import {useAccountConsumer} from "../../contexts/Account";
+import { useAccountConsumer } from "../../contexts/Account";
+import { ReactComponent as CopyIcon } from "../../assets/img/Icons/copy_icon.svg";
+import cog from "../../assets/img/Icons/cog.svg";
+import { ReactComponent as plus_icon } from "../../assets/img/Icons/plus_icon.svg";
 
 const Profile = () => {
+  const [ownedNfts, setOwnedNfts] = useState([]);
+  console.log("ownedNfts", ownedNfts);
   const { account, user, setUser } = useAccountConsumer();
-
-  // const [songList, setSongList] = useState([]);
-
   const getUser = async () => {
     axios
       .post("api/user/get-account", { address: account })
       .then((res) => setUser(res.data));
   };
 
-  // const getSongList = async () => {
-  //   console.log(account);
-  //   if (account) {
-  //     const _songList = await axios.post("api/nft-type/getSongList", {
-  //       account: account.toString(),
-  //     });
-  //     setSongList(_songList.data.Contents);
-  //   }
-  // };
-
+  const getUserNfts = async () => {
+    console.log("here");
+    axios
+      .post("api/nft-type/get-user-nfts", user)
+      .then((res) => setOwnedNfts(res.data));
+  };
   useEffect(() => {
-    // getSongList();
+    getUserNfts();
+  }, [user]);
+  useEffect(() => {
     getUser();
   }, [account]);
-  // const toArrayBuffer = (buf) => {
-  //   var ab = new ArrayBuffer(buf.length);
-  //   var view = new Uint8Array(ab);
-  //   for (var i = 0; i < buf.length; ++i) {
-  //     view[i] = buf[i];
-  //   }
-  //   return ab;
-  // };
-  // const playSong = async (song) => {
-  //   const _songFile = await axios.post("api/nft-type/getSong", {
-  //     key: song.Key,
-  //   });
-  //   console.log(_songFile);
-  //   const abSong = toArrayBuffer(_songFile.data.Body.data);
-  //   var audioCtx = new window.AudioContext();
-  //   var source = audioCtx.createBufferSource();
-  //   audioCtx.decodeAudioData(
-  //     abSong,
-  //     (buffer) => {
-  //       source.buffer = buffer;
-  //       source.connect(audioCtx.destination);
-  //       source.loop = true;
-  //     },
-  //     (e) => {
-  //       console.log("Error: ", e.err);
-  //     }
-  //   );
-  //   source.start(0);
-  // };
 
   const [edit, setEdit] = useState(false);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
 
-  const saveDetails = () => {
+  const saveDetails = (e) => {
+    e.preventDefault();
     setEdit(false);
+    setUser({ ...user, username: username });
     axios
       .post("/api/user/update-account", {
         address: account,
         username: username,
-        email: email,
+        // email: email,
       })
       .then((res) => setUser(res.data));
   };
 
-  const [isCreating, setIsCreating] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
   const hide = (e) => {
     setIsOpen(false);
     console.log("isOpen", isOpen);
   };
-  if (account) {
-    return (
-      <BaseView>
-        <LandingSection>
-          <Banner>
-            <ProfilePic src={default_pic} alt="profile picture" />
-          </Banner>
-        </LandingSection>
-        <AccountDetails>
-          {/* {!user?.username && <span>no username, click to add</span>}
-          {!user?.username ? <StyledInput type="text" /> : <span>{user.username}</span>}
-          {!user?.email ? <StyledInput type="email" /> : <span>{user.email}</span>} */}
-          <span>
-            Username:{" "}
-            {edit ? (
-              <StyledInput
-                type="text"
-                defaultValue={user?.username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            ) : (
-              user?.username
-            )}
-          </span>
-          <span>
-            Email:{" "}
-            {edit ? (
-              <StyledInput
-                type="email"
-                defaultValue={user?.email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            ) : (
-              user?.email
-            )}
-          </span>
-          {edit ? (
-            <button onClick={() => saveDetails()}>Save</button>
-          ) : (
-            <button onClick={() => setEdit(true)}>Edit</button>
-          )}
-        </AccountDetails>
-
-        {user?.isArtist && (
-          <button onClick={() => setIsOpen(!isOpen)}>Create NFT!</button>
-        )}
-        <Create open={isOpen} hide={hide} />
-        {/* {songList.length <= 0 ? (
-          <h1>
-            No songs owned. Go to the 'listen' page to build your collection!
-          </h1>
-        ) : (
-          <div key={songList}>
-            {songList.map((song) => {
-              if (song.Key)
-                return (
-                  <div>
-                    {song.Key.split("/")[1]}
-                    <button
-                      onClick={() => {
-                        playSong(song);
-                      }}
-                    >
-                      Download and play!
-                    </button>
-                  </div>
-                );
-            })}
-          </div>
-        )} */}
-      </BaseView>
-    );
-  }
   return (
     <BaseView>
-      <LandingSection>
-        <Banner>
-          <ProfilePic src={default_pic} alt="profile picture" />
-        </Banner>
-      </LandingSection>
-      <AccountDetails></AccountDetails>
-      <h1> Connect your wallet to view your collection!</h1>
+      <Banner />
+      <ProfileHeading>
+        <Side />
+        <ProfileHolder>
+          <ProfilePicHolder>
+            <ProfilePic src={default_pic} alt="default-profile-pic" />
+            <Cog
+              src={cog}
+              alt="edit icon"
+              onClick={account ? () => setEdit(!edit) : null}
+            />
+          </ProfilePicHolder>
+          <ProfileInfoHolder>
+            {edit ? (
+              <form onSubmit={(e) => saveDetails(e)}>
+                <StyledInput
+                  type="text"
+                  placeholder="Enter Username"
+                  defaultValue={user?.username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </form>
+            ) : (
+              <Username>
+                {user && user.username != "" ? user.username : "No username"}
+              </Username>
+            )}
+
+            <AddressSpan>
+              {user
+                ? user.address.substring(0, 10) +
+                  "..." +
+                  user.address.substring(user.address.length - 4)
+                : " "}
+              {user && (
+                <CopyButton
+                  onClick={() => {
+                    navigator.clipboard.writeText(user.address);
+                  }}
+                />
+              )}
+            </AddressSpan>
+          </ProfileInfoHolder>
+        </ProfileHolder>
+        <Side>
+          <SideSpan>
+            12 <BlueSpan>/NFTs</BlueSpan>
+          </SideSpan>
+          <SideSpan>
+            8 <BlueSpan>Traded</BlueSpan>
+          </SideSpan>
+        </Side>
+      </ProfileHeading>
+      <MidSection>
+        <BigButton>
+          <span>Listen</span>
+        </BigButton>
+        <MidSectionMiddle creating={isCreating}>
+          <MidSectionTopRow>
+            <ListenSlashCreate>
+              <Highlight
+                onClick={() => setIsCreating(!isCreating)}
+                creating={isCreating}
+              >
+                Listen
+              </Highlight>
+              {/* <span> / </span> */}
+              <Highlight
+                onClick={() => setIsCreating(!isCreating)}
+                creating={!isCreating}
+              >
+                Create
+              </Highlight>
+            </ListenSlashCreate>
+            <ToggleHolder>
+              <ToggleLabel>
+                <ToggleInput
+                  type="checkbox"
+                  value={isCreating}
+                  checked={isCreating}
+                  onClick={() => setIsCreating(!isCreating)}
+                />
+                <ToggleSlider active={isCreating} />
+              </ToggleLabel>
+            </ToggleHolder>
+          </MidSectionTopRow>
+        </MidSectionMiddle>
+        <BigButton onClick={() => setIsOpen(!isOpen)}>
+          <span>
+            Create <br /> NFTs
+          </span>
+                <PlusButton
+                  onClick={() => {
+                    navigator.clipboard.writeText(user.address);
+                  }} />
+        </BigButton>
+      </MidSection>
+      <Create open={isOpen} hide={hide} />
     </BaseView>
   );
 };
 
+
+
+const ToggleSlider = styled.span`
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  /* ${({ active }) => active && `background-color: #383838`} */
+  background-color: ${(props) => props.theme.boxBorderColor};
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  border-radius: 17px;
+
+  &::before {
+    position: absolute;
+    border-radius: 50%;
+    content: "";
+    height: 28px;
+    width: 28px;
+    left: 2px;
+    top: 1px;
+    background-color: ${(props) => props.theme.color.lightgray};
+    ${({ active }) => active && `background-color: #383838`};
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+    z-index: 1;
+  }
+`;
+
+const ToggleInput = styled.input`
+  opacity: 0;
+  width: 0;
+  height: 0;
+  &:checked + ${ToggleSlider} {
+    background-color: ${(props) => props.theme.color.blue};
+    &::before {
+      transform: translateX(28px);
+    }
+  }
+`;
+
+const ToggleLabel = styled.label`
+  float: right;
+  position: relative;
+  width: 60px;
+  height: 30px;
+  top: 80%;
+  left: 90%;
+`;
+
+const ToggleHolder = styled.div`
+  /* position: absolute; */
+  bottom: 10px;
+  right: 10px;
+  height: 100%;
+`;
+
+const MidSectionTopRow = styled.div`
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const PlusButton = styled(plus_icon)`
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: all 0.2s linear;
+  & path {
+    fill: ${(props) => props.theme.color.gray};
+  }
+
+  &:hover {
+    & path {
+      fill: ${(props) => props.theme.color.lightgray};
+    }
+  }
+`;
+
+const BigButton = styled.div`
+  width: 35%;
+  color: white;
+  border-width: 1px;
+  background-color: ${(props) => props.theme.boxColor};
+  border-color: ${(props) => props.theme.boxBorderColor};
+  border-radius: ${(props) => props.theme.borderRadius}px;
+  /* padding: 20px; */
+  text-align: left;
+  font-size: ${(props) => props.theme.fontSizes.md};
+  display: flex;
+  /* justify-content: center; */
+  align-items: flex-start;
+  cursor: pointer;
+  & > span {
+    padding: 20px;
+  }
+  & ${PlusButton} {
+    margin-top: 55%;
+  }
+`;
+const MidSectionMiddle = styled.div`
+  width: 50%;
+  height: 110px;
+  background-color: ${(props) => props.theme.boxColor};
+  border-width: 1px;
+  border-color: ${(props) => props.theme.boxBorderColor};
+  border-radius: ${(props) => props.theme.borderRadius}px;
+  padding: 20px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  position: absolute;
+  right: 0;
+  transition: transform 1s ease-in-out;
+  ${({ creating }) => creating && `transform: translateX(-73%);`}
+`;
+
+const MidSection = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  width: 500px;
+  height: 150px;
+  margin-top: 20px;
+`;
+
+const Highlight = styled.span`
+  color: white;
+  cursor: pointer;
+  ${({ creating }) => creating && `color: #5c5c5c`};
+`;
+
+const MidSectionMessage = styled.span``;
+const ListenSlashCreate = styled.span`
+  font-size: ${(props) => props.theme.fontSizes.xl};
+  display: flex;
+  flex-direction: column;
+`;
+
+const CopyButton = styled(CopyIcon)`
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  transition: all 0.2s linear;
+  position: absolute;
+  margin-left: 150px;
+  & path {
+    fill: ${(props) => props.theme.color.gray};
+  }
+
+  &:hover {
+    & path {
+      fill: ${(props) => props.theme.color.lightgray};
+    }
+  }
+`;
+
+const Username = styled.span`
+  font-size: ${(props) => props.theme.fontSizes.md};
+`;
+
+const AddressSpan = styled.span`
+  color: ${(props) => props.theme.color.gray};
+  display: flex;
+  /* align-items: center;s */
+  position: relative;
+`;
+const SideSpan = styled.span`
+  font-size: ${(props) => props.theme.fontSizes.sm};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const BlueSpan = styled.span`
+  padding-left: ${(props) => props.theme.spacing[1]}px;
+  color: ${(props) => props.theme.color.blue};
+  font-size: ${(props) => props.theme.fontSizes.xs};
+`;
+
+const Cog = styled.img`
+  width: 15px;
+  position: absolute;
+  cursor: pointer;
+  :hover {
+    animation: rotation 4s infinite linear;
+  }
+  @keyframes rotation {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(359deg);
+    }
+  }
+`;
+
+const ProfileInfoHolder = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const ProfilePicHolder = styled.div`
+  background-color: ${(props) => props.theme.color.lightgray};
+  border-width: 4px;
+  border-color: ${(props) => props.theme.color.lightgray};
+  border-style: solid;
+  border-radius: 75px;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+`;
+
+const ProfilePic = styled.img`
+  width: 100%;
+`;
+
+const Side = styled.div`
+  width: calc(100% / 3);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+`;
+
+const ProfileHolder = styled.div`
+  width: calc(100% / 3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const ProfileHeading = styled.div`
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  height: 200px;
+  color: ${(props) => props.theme.fontColor.white};
+  width: 800px;
+  @media only screen and (max-width: 800px) {
+    width: 90%;
+  }
+`;
+
 const StyledInput = styled.input`
-  background-color: #eaeaea;
-  border: none;
-  border-bottom: 1px solid #bababa;
+  background-color: ${(props) => props.theme.bgColor};
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-width: 1px;
+  border-bottom-color: ${(props) => props.theme.color.gray};
   outline: none;
+  color: white;
 `;
 
 const AccountDetails = styled.div`
@@ -182,48 +429,46 @@ const AccountDetails = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
-
-const ProfilePic = styled.img`
-  width: 150px;
-  position: absolute;
-  bottom: -75px;
-  border: 4px solid#7e2ce3;
-  border-radius: 75px;
-  background-color: #7e2ce3;
-`;
-
-const LandingSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-  width: 100%;
-`;
-
-const HeaderContents = styled.span`
   color: white;
-  width: 80%;
-  font-family: "Compita";
-  font-weight: bold;
-  letter-spacing: 2px;
-  font-size: 40px;
-  /* margin-top: -40px; */
-  /* margin-top: 50px; */
 `;
+
+const LandingSection = styled.div``;
 
 const Banner = styled.div`
-  margin-top: -65px;
-  width: 100%;
-  height: 365px;
-  background-color: black;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  border-bottom: 4px solid#7e2ce3;
-  z-index: 0;
-  position: relative;
+  height: 100px;
 `;
 export default Profile;
+
+{
+  /* <AccountDetails>
+<span>
+  Username:{" "}
+  {edit ? (
+    <StyledInput
+      type="text"
+      defaultValue={user?.username}
+      onChange={(e) => setUsername(e.target.value)}
+    />
+  ) : (
+    user?.username
+  )}
+</span>
+<span>
+  Email:{" "}
+  {edit ? (
+    <StyledInput
+      type="email"
+      defaultValue={user?.email}
+      onChange={(e) => setEmail(e.target.value)}
+    />
+  ) : (
+    user?.email
+  )}
+</span>
+{edit ? (
+  <button onClick={() => saveDetails()}>Save</button>
+) : (
+  <button onClick={() => setEdit(true)}>Edit</button>
+)}
+</AccountDetails> */
+}

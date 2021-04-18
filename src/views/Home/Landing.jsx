@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import axios from "axios";
-import NftCard from "../../components/NftCard/NftCard";
-import GenericBanner from "../../assets/img/generic_banner.jpg";
+import NftCard from "../../components/NftCards/HomeNftCard";
 import logo from "../../assets/img/logos/logo.png";
 import discord from "../../assets/img/socials/social_discord.png";
 import medium from "../../assets/img/socials/social_medium.png";
@@ -11,12 +10,9 @@ import twitter from "../../assets/img/socials/social_twitter.png";
 
 const Listen = () => {
   const [nfts, setNfts] = useState([])
-  const getNfts = () => {
-    axios.get("/api/nft-type/all").then((res) => setNfts(res.data))
-  }
 
   useEffect(() => {
-    getNfts()
+    axios.get("/api/nft-type/featured").then((res) => setNfts(res.data));
   }, [])
 
   const showNfts = nfts.map((nft) => {
@@ -36,21 +32,19 @@ const Listen = () => {
           Good Tagline.
         </NftFmTagline>
       </LandingTitle>
-      <Container>
+      <LaunchContainer>
         <ContainerTitle>
-          <text>
-            {`PROUD TO`}
-            <span style={{ "color": "blue", "padding": "3px" }}>{`LAUNCH`}</span>
-            <span style={{ "color": "yellow", "padding": "3px" }}>{`ALONGSIDE`}</span>
-            <span style={{ "color": "green", "padding": "3px" }}>{`AMAZING`}</span>
-            <span style={{ "color": "red", "padding": "3px" }}>{`ARTISTS`}</span>
-          </text>
+          PROUD TO
+          <ContainerTitleText style={{ "color": "#20a4fc" }}>{`LAUNCH`}</ContainerTitleText>
+          <ContainerTitleText style={{ "color": "#fde404" }}>{`ALONGSIDE`}</ContainerTitleText>
+          <ContainerTitleText style={{ "color": "#68c12f" }}>{`AMAZING`}</ContainerTitleText>
+          <ContainerTitleText style={{ "color": "#fa423e" }}>{`ARTISTS`}</ContainerTitleText>
         </ContainerTitle>
         <ContainerOutline />
         <NftScroll>
           {showNfts}
         </NftScroll>
-      </Container>
+      </LaunchContainer>
       <SocialsBar>
         <SocialsLine />
         <SocialsIcons>
@@ -80,9 +74,13 @@ const Listen = () => {
           </IconContainer>
         </SocialsIcons>
       </SocialsBar>
-    </Landing>
+    </Landing >
   );
 };
+
+const ContainerTitleText = styled.span`
+padding-left: 6px;
+`
 
 const LandingTitle = styled.div`
 display: flex;
@@ -149,48 +147,54 @@ const SocialsBar = styled.div`
 
 const NftScroll = styled.div`
 justify-content: center;
-z-index: 4;
-margin-top: 1.5%;
 display: flex;
 flex-direction: row;
-max-width: 115%;
-overflow-x: auto;
-&::-webkit-scrollbar {
-  height: 12px;
-  background-color: rgba(256, 256, 256, 0.1);
-}
-&::-webkit-scrollbar-thumb {
-  background-color: rgba(240, 31, 103, 0.4);
-  border-radius: 15px;
-}`;
+width: 100%;
+justify-content: space-around;
+        &:nth-child(2) {
+          background-color: white;
+        }
+        &:nth-child(0) {
+          display: none;
+        }
+        &:nth-child(1) {
+          display: none;
+        }
+@media only screen and (min-width: 991px) {
+    }
+`
+  ;
 
-const Container = styled.div`
+const LaunchContainer = styled.div`
   position:relative;
-  width: 85%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
-const ContainerTitle = styled.div`
-position:absolute;
-  top: -10px;
-  left: 5%;
-  padding-left:2px;
-  padding-right:2px;
-  z-index:2;
-  color: #383838;
+const ContainerTitle = styled.span`
+  position: absolute;
+  font-weight: bold;
+  left: calc(10% + 50px);
+  top: -4px;
+  padding: 0 12px;
   font: Compita;
-  background-color: #131313;
+  background-color: ${props => props.theme.bgColor};
+  font-size: ${props => props.theme.fontSizes.xs};
+  color: ${props => props.theme.color.gray};
   display: flex;
   flex-direction: row;
+  display: flex;
+  align-items: center;
 `;
 
 const ContainerOutline = styled.div`
-  z-index: 1;
-  position:absolute;
-  border: 10px;
-  border-radius: 15px;
-  border: solid #383838;
-  height: 200px;
-  width: 100%;
+  border-radius: 24px 24px 0 0;
+  border: 6px solid #383838;
+  border-bottom: none;
+  height: 40px;
+  width: 80%;
   display: flex;
   flex-direction: row;
 `;

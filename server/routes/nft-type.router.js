@@ -7,17 +7,18 @@ const fs = require('fs')
 const multer = require('multer');
 const User = require('../schemas/User.schema');
 
-router.post('/fetchNFT', async (req, res) => {
+
+router.post('/get-NFT', async (req, res) => {
   try {
     console.log("fetchNFT Hit", req.body.account);
     let nft = await NftType.findOne({
       address: req.body.account,
-      draft: true,
+      isDraft: true,
     });
     if (!nft) {
       const newNft = await new NftType({
         address: req.body.account,
-        draft: true,
+        isDraft: true,
       });
       await newNft.save();
       res.send(newNft);
@@ -30,12 +31,25 @@ router.post('/fetchNFT', async (req, res) => {
   }
 })
 
+router.post('/get-user-nfts', async (req, res) => {
+  try {
+    console.log("/get-user-nfts hit", req.body)
+    let ids = req.body.x_nfts;
+    let nfts = await NftType.find({ '_id': { $in: ids}})
+    res.status(200).send(nfts)
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("server error")
+  }
+})
+
 router.post('/update', async (req, res) => {
   try {
     console.log('/update hit', req.body)
     let newData = req.body;
-    newData.draft = false;
-    let updateNFT = await NftType.findByIdAndUpdate(newData._id, newData, { new: true })
+    newData.isDraft = false;
+
+    let updateNFT = await NftType.findByIdAndUpdate(newData._id, newData)
     if (updateNFT) {
       res.status(200).send("success")
     } else {
@@ -60,16 +74,87 @@ router.post('/get-one', async (req, res) => {
   }
 })
 
-
-router.get('/all', async (req, res) => {
+router.get('/featured', async (req, res) => {
   try {
-    let nftTypes = await NftType.find({ draft: false });
+    let nftTypes = await NftType.find({
+      // featured: true 
+    })
+      .limit(5)
+
+
     res.send(nftTypes);
   } catch (error) {
     console.log(error);
     res.status(500).send("server error")
   }
 })
+
+
+//flesh out pagination
+router.post('/get-many', async (req, res) => {
+  // try {
+  //   console.log(
+  //     "get suggestions!\naddress: ",
+  //     req.body.address,
+  //     "\npage: ",
+  //     req.body.page,
+  //     "\nsort: ",
+  //     req.body.sort,
+  //     "\n"
+  //   );
+  //   const sort =
+  //     req.body.sort === "new" ? { timestamp: -1 } : { totalVotes: -1 };
+  //   let initialSuggestions = await Suggestion.find()
+  //     .sort(sort)
+  //     .skip(req.body.page * 5)
+  //     .limit(5);
+
+  //   let suggestions = [];
+  //   for (let suggestion of initialSuggestions) {
+  //     let user = await User.findOne({ _id: suggestion.userId });
+  //     const { address, picture, pictureColor, nickname } = user;
+  //     const { totalVotes, _id, userId, message, timestamp } = suggestion;
+  //     let upDooted;
+  //     let downDooted;
+  //     const voteIndex = suggestion.votes.findIndex(
+  //       (vote) => vote.address === req.body.address
+  //     );
+  //     if (voteIndex !== -1) {
+  //       upDooted = suggestion.votes[voteIndex].amount > 0 ? true : false;
+  //       downDooted = suggestion.votes[voteIndex].amount < 0 ? true : false;
+  //     }
+  //     // console.log("\n\n\nuser: ", user, suggestion)
+  //     suggestions.push({
+  //       totalVotes,
+  //       _id,
+  //       userId,
+  //       message,
+  //       address,
+  //       picture,
+  //       pictureColor,
+  //       nickname,
+  //       upDooted,
+  //       downDooted,
+  //       timestamp,
+  //     });
+  //   }
+  //   let totalPages = (await Suggestion.countDocuments()) / 5;
+  //   totalPages = Math.ceil(totalPages);
+  //   // console.log("done: ", suggestions)
+  //   res.send({ suggestions, totalPages });
+})
+
+
+router.get('/all', async (req, res) => {
+  try {
+    let nftTypes = await NftType.find({ isDraft: false });
+    res.send(nftTypes);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("server error")
+  }
+})
+
 
 router.post('/uploadAudioS3', async (req, res) => {
   var AWS = require('aws-sdk');
@@ -260,33 +345,29 @@ router.post('/getSongList', async (req, res) => {
   });
 })
 
+//this will change dramatically with the introduction of smart contracts
 router.post("/purchase", async (req, res) => {
   try {
-    console.log("/purchase hit", req.body.id)
+    console.log("/purchase hit", req.body)
     const nft = await NftType.findById(req.body.id)
-    const user = await User.find({ address: req.body.address })
     if (!nft) {
       res.status(500).send('No NFT found')
-      return
-    }
-    if (!user) {
-      res.status(500).send('No user found')
       return
     }
     if (nft.x_numSold >= nft.numMinted) {
       res.status(500).send('None available for purchase')
       return
     }
-
-    user.x_nfts.push({ nft: nft._id })
+    const user = await User.findOne({ address: req.body.address })
+    if (!user) {
+      res.status(500).send('No user found')
+      return
+    }
+    user.x_nfts.push({ _id: nft._id })
     await user.save();
-
     nft.x_numSold++
     await nft.save();
     res.status(200).send("Success!")
-
-
-
   } catch (err) {
     res.status(500).send(err)
   }

@@ -61,8 +61,8 @@ const MusicPlayer = (props) => {
 }
 
 const Image = styled.img`
-  max-width: 70px;
-  max-height: 70px;
+  max-width: 50px;
+  max-height: 50px;
 `;
 
 const AudioControlSection = styled.div`

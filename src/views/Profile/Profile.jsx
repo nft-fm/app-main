@@ -68,9 +68,9 @@ const Profile = () => {
     return (
       <NftCardWrapper>
         <NftCard nft={nft} />
-        <button onClick={() => setSelectedNft(nft)}>
+        <PlayButton onClick={() => setSelectedNft(nft)}>
           Play!
-        </button>
+        </PlayButton>
       </NftCardWrapper>
     )
   });
@@ -188,6 +188,14 @@ const Profile = () => {
     </BaseView>
   );
 };
+
+const PlayButton = styled.button`
+  border-radius: 5px;
+  max-width: 50%;
+  background-color: #20a4fc;
+  color: white;
+  align-self: center;
+`;
 
 const NftCardWrapper = styled.div`
   display: flex;

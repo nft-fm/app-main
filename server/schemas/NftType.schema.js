@@ -7,6 +7,10 @@ const NftTypeSchema = new Schema({
     type: String,
     default: "",
   },
+  artist: {
+    type: String,
+    default: "",
+  },
   genre: {
     type: String,
     default: "",

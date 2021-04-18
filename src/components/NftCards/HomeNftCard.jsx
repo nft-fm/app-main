@@ -1,21 +1,25 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
-import image from "../../assets/img/logos/fm_logo_1.png";
-import Modal from "../Modal/Modal";
 import BuyNftModal from "../BuyNftModal";
 import { ReactComponent as IconHeart } from "../../assets/img/Icons/heart.svg";
 import { ReactComponent as IconShare } from "../../assets/img/Icons/share.svg";
-import {ReactComponent as IconCart} from "../../assets/img/Icons/cart.svg";
+import { ReactComponent as IconCart } from "../../assets/img/Icons/cart.svg";
+import { ReactComponent as IconEth } from "../../assets/img/Icons/ethereum.svg";
+import { ReactComponent as IconUsd } from "../../assets/img/Icons/dollar.svg";
+import { useAccountConsumer } from "../../contexts/Account";
 
 const NftCard = (props) => {
+  const { usdPerEth } = useAccountConsumer();
   const { nft } = props;
   const [isOpen, setIsOpen] = useState(false);
+
   const show = () => setIsOpen(true);
   const hide = (e) => {
     setIsOpen(false);
     console.log("isOpen", isOpen);
   };
   console.log('nft', nft)
+
 
   const like = () => {
     //${!}
@@ -41,24 +45,76 @@ const NftCard = (props) => {
         </Side>
         <Side>
           <IconArea>
-            {nft.x_numSold}<span style={{margin: "0 1px"}}>
+            {nft.x_numSold}
+            <span style={{ margin: "0 1px" }}>
               /
               </span>
-              {nft.numMinted}
-            <Cart/>
+            {nft.numMinted}
+            <Cart />
           </IconArea>
         </Side>
       </CardTop>
       <Image src={nft.imageUrl} alt="image" onClick={() => setIsOpen(!isOpen)} />
-      <BottomContainer>
-        <InfoContainer>
-          <TrackName>{nft.title}</TrackName>
-          <Artist>{nft.artist}</Artist>
-        </InfoContainer>
-      </BottomContainer>
+      <TrackName>{nft.title}</TrackName>
+      <Artist>{nft.artist}</Artist>
+      <CostFields>
+        <CostEth>
+          {nft.price.toLocaleString(undefined, {
+            minimumFractionDigits: 3,
+            maximumFractionDigits: 3,
+          })}
+          <Eth />
+        </CostEth>
+        <CostUsd>
+          {usdPerEth ?
+            (usdPerEth * nft.price).toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            }) : "..."
+          }
+          <Usd />
+        </CostUsd>
+      </CostFields>
     </Container>
   );
 };
+
+const Usd = styled(IconUsd)`
+width: 18px;
+height: 18px;
+margin: -2px 0 0 8px;
+transition: all 0.2s ease-in-out;
+ & path {
+     fill: ${props => props.theme.color.gray};
+    }
+`
+
+const Eth = styled(IconEth)`
+width: 18px;
+height: 18px;
+margin: -2px 0 0 4px;
+transition: all 0.2s ease-in-out;
+ & path {
+     fill: ${props => props.theme.color.white};
+    }
+`
+
+const CostUsd = styled.span`
+display: flex;
+color: white;
+color: ${props => props.theme.color.gray};
+`
+
+const CostEth = styled.span`
+display: flex;
+color: white;
+`
+
+const CostFields = styled.div`
+display: flex;
+width: 100%;
+justify-content: space-between;
+`
 
 const Cart = styled(IconCart)`
 width: 20px;
@@ -111,20 +167,6 @@ transition: all 0.2s ease-in-out;
 }
 `
 
-// const Heart = styled(SVG)`
-// width: 32px;
-// height: 32px;
-// /* fill: palevioletred; */
-// cursor: pointer;
-// transition: all 0.2s linear;
-// & g path {
-//   /* stroke: pink; */
-//     /* fill: pink; */
-//   }
-// /* &:hover {
-//   stroke: rgb(205,154,24);
-// } */
-// `
 
 const Side = styled.div`
 display: flex;
@@ -143,7 +185,7 @@ const CardTop = styled.div`
 /* width: calc(100% - 4px); */
 /* padding: 0px 2px; */
 width: 100%;
-margin-bottom: 8px;
+margin-bottom: 12px;
 display: flex;
 justify-content: space-between;
 font-weight: bold;
@@ -169,42 +211,26 @@ const Image = styled.img`
   border-radius: 12px;
   object-fit: cover;
   margin-bottom: 12px;
-`;
+  border: 1px solid ${props => props.theme.boxBorderColor};
+  background-color: #1E1E1E;
 
-const BottomContainer = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const InfoContainer = styled.div`
-  width: 80%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding-left: 10px;
 `;
 
 const TrackName = styled.span`
 color: white;
-font-weight: bold;
+font-weight: 500;
 width: 100%;
 text-align: center;
 font-size: ${props => props.theme.fontSizes.xs}px;
+margin-bottom: 12px;
 `;
 
 const Artist = styled.span`
-  font-size: 0.8rem;
-  color: #7e2ce3;
-  padding-left: 5px;
+  font-size: ${props => props.theme.fontSizes.xxs}px;
+  text-align: center;
+  color: ${props => props.theme.gray};
+  margin-bottom: 12px;
 `;
 
-const Buy = styled.img`
-  width: 25px;
-  height: 25px;
-  padding-right: 10px;
-  cursor: pointer;
-`;
 
 export default NftCard;

@@ -151,14 +151,19 @@ display: flex;
 flex-direction: row;
 width: 100%;
 justify-content: space-around;
-&::-webkit-scrollbar {
-  height: 12px;
-  background-color: rgba(256, 256, 256, 0.1);
-}
-&::-webkit-scrollbar-thumb {
-  background-color: rgba(240, 31, 103, 0.4);
-  border-radius: 15px;
-}`;
+        &:nth-child(2) {
+          background-color: white;
+        }
+        &:nth-child(0) {
+          display: none;
+        }
+        &:nth-child(1) {
+          display: none;
+        }
+@media only screen and (min-width: 991px) {
+    }
+`
+  ;
 
 const LaunchContainer = styled.div`
   position:relative;

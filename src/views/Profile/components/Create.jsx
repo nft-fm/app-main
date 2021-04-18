@@ -12,7 +12,7 @@ import eth_icon_white from "../../../assets/img/profile_page_assets/eth_icon_whi
 import usd_icon from "../../../assets/img/profile_page_assets/usd_icon.svg";
 
 import BaseView from "../../BaseView";
-import {useAccountConsumer} from "../../../contexts/Account";
+import { useAccountConsumer } from "../../../contexts/Account";
 
 const initialNftState = {
   address: "",
@@ -28,10 +28,8 @@ const initialNftState = {
 };
 
 const Create = ({ open, hide }) => {
-  const { account, user, setUser } = useAccountConsumer();
-  const [currency, setCurrency] = useState(0);
+  const { account, user, setUser, usdPerEth } = useAccountConsumer();
   const [isLoading, setIsLoading] = useState(false);
-
   const [nftData, setNftData] = useState(initialNftState);
   const [audioFile, setAudioFile] = useState(null);
   const [imageFile, setImageFile] = useState(null);
@@ -40,13 +38,7 @@ const Create = ({ open, hide }) => {
     console.log("nftData", nftData);
   }, [nftData]);
 
-  const fetchCurrencyRates = async () => {
-    await axios
-      .get(
-        "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=USD"
-      )
-      .then((res) => setCurrency(res.data.ethereum.usd));
-  };
+
   const fetchNFT = async () => {
     await axios
       .post("/api/nft-type/get-NFT", { account: account })
@@ -57,10 +49,6 @@ const Create = ({ open, hide }) => {
     setNftData({ ...nftData, address: account });
     fetchNFT();
   }, [account]);
-
-  useEffect(() => {
-    fetchCurrencyRates();
-  }, []);
 
   const getExtension = (filename) => {
     var parts = filename.split(".");
@@ -306,13 +294,13 @@ const Create = ({ open, hide }) => {
                   <div>
                     <CurrencyIcon src={eth_icon_white} /> ETH
                   </div>
-                  <Subtext>{currency}</Subtext>
+                  <Subtext>{usdPerEth}</Subtext>
                 </CurrencyButton>
                 <CurrencyButton type="button" className="BTU">
                   <div>
                     <CurrencyIcon src={eth_icon} /> ABC
                   </div>
-                  <Subtext>{currency}</Subtext>
+                  <Subtext>{usdPerEth}</Subtext>
                 </CurrencyButton>
                 <CurrencyButton type="button" className="USD">
                   <div>
@@ -321,7 +309,7 @@ const Create = ({ open, hide }) => {
                   </div>
                   <Subtext>
                     $
-                    {(currency * nftData.price).toLocaleString(undefined, {
+                    {(usdPerEth * nftData.price).toLocaleString(undefined, {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   })}

@@ -7,6 +7,7 @@ const fs = require('fs')
 const multer = require('multer');
 const User = require('../schemas/User.schema');
 
+
 router.post('/get-NFT', async (req, res) => {
   try {
     console.log("fetchNFT Hit", req.body.account);

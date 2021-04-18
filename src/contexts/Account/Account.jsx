@@ -10,6 +10,16 @@ export const AccountProvider = ({ children }) => {
   const { account } = useWallet();
   const [user, setUser] = useState(null);
   const [currChainId, setCurrChainId] = useState(false);
+  const [usdPerEth, setUsdPerEth] = useState(0);
+
+  const fetchUsdPerEth = async () => {
+    console.log("fetchinafioe");
+    await axios
+      .get(
+        "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=USD"
+      )
+      .then((res) => setUsdPerEth(res.data.ethereum.usd));
+  };
 
   const getUser = async () => {
     await axios.post(`api/user/get-account`,
@@ -20,8 +30,8 @@ export const AccountProvider = ({ children }) => {
       })
   }
 
-  const initialize = async () => {
-    if (account) await getUser();
+  const initialize = () => {
+    if (account) getUser();
   }
 
   const getChain = async () => {
@@ -34,6 +44,7 @@ export const AccountProvider = ({ children }) => {
     if (window.ethereum) {
       getChain();
     }
+    if (!usdPerEth) fetchUsdPerEth();
   }, [])
 
   useEffect(() => {
@@ -61,7 +72,8 @@ export const AccountProvider = ({ children }) => {
         account,
         initialize,
         user, getUser, setUser,
-        currChainId, setCurrChainId
+        currChainId, setCurrChainId,
+        usdPerEth
       }}>
       {children}
     </AccountContext.Provider>

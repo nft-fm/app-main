@@ -9,8 +9,12 @@ import { useAccountConsumer } from "../../contexts/Account";
 import { ReactComponent as CopyIcon } from "../../assets/img/Icons/copy_icon.svg";
 import cog from "../../assets/img/Icons/cog.svg";
 import { ReactComponent as plus_icon } from "../../assets/img/Icons/plus_icon.svg";
+import NftCard from "../Home/NftCard";
+import Slide from 'react-reveal/Slide';
+import MusicPlayer from '../../components/MusicPlayer/MusicPlayer'
 
 const Profile = () => {
+  const [selectedNft, setSelectedNft] = useState();
   const [ownedNfts, setOwnedNfts] = useState([]);
   console.log("ownedNfts", ownedNfts);
   const { account, user, setUser } = useAccountConsumer();
@@ -20,11 +24,14 @@ const Profile = () => {
       .then((res) => setUser(res.data));
   };
 
+
+  // TODO switch back to get-user-nfts
   const getUserNfts = async () => {
     console.log("here");
     axios
       .post("api/nft-type/get-user-nfts", user)
       .then((res) => setOwnedNfts(res.data));
+    // axios.get("api/nft-type/featured").then((res) => setOwnedNfts(res.data));
   };
   useEffect(() => {
     getUserNfts();
@@ -56,6 +63,18 @@ const Profile = () => {
     setIsOpen(false);
     console.log("isOpen", isOpen);
   };
+
+  const showNfts = ownedNfts.map((nft) => {
+    return (
+      <NftCardWrapper>
+        <NftCard nft={nft} />
+        <button onClick={() => setSelectedNft(nft)}>
+          Play!
+        </button>
+      </NftCardWrapper>
+    )
+  });
+
   return (
     <BaseView>
       <Banner />
@@ -89,8 +108,8 @@ const Profile = () => {
             <AddressSpan>
               {user
                 ? user.address.substring(0, 10) +
-                  "..." +
-                  user.address.substring(user.address.length - 4)
+                "..." +
+                user.address.substring(user.address.length - 4)
                 : " "}
               {user && (
                 <CopyButton
@@ -149,18 +168,46 @@ const Profile = () => {
           <span>
             Create <br /> NFTs
           </span>
-                <PlusButton
-                  onClick={() => {
-                    navigator.clipboard.writeText(user.address);
-                  }} />
+          <PlusButton
+            onClick={() => {
+              navigator.clipboard.writeText(user.address);
+            }} />
         </BigButton>
       </MidSection>
+      <NftScroll>
+        {showNfts}
+      </NftScroll>
+      {selectedNft ?
+        <Slide bottom duration={1000}>
+          <MusicPlayer nft={selectedNft} />
+        </Slide>
+        :
+        <div />
+      }
       <Create open={isOpen} hide={hide} />
     </BaseView>
   );
 };
 
+const NftCardWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
+const NftScroll = styled.div`
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-around;
+  &::-webkit-scrollbar {
+    height: 12px;
+    background-color: rgba(256, 256, 256, 0.1);
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(240, 31, 103, 0.4);
+    border-radius: 15px;
+}`;
 
 const ToggleSlider = styled.span`
   position: absolute;

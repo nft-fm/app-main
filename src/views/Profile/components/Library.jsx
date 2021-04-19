@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import axios from "axios";
-import NftCard from "../../../components/NftCards/SaleNftCard";
+import NftCard from "../../../components/NftCards/LibraryCard";
 
 const Library = ({ user }) => {
   const [nfts, setNfts] = useState([]);
@@ -32,9 +32,6 @@ const Library = ({ user }) => {
   );
 };
 
-const ContainerTitleText = styled.span`
-  padding-left: 6px;
-`;
 
 const Landing = styled.div`
   display: flex;

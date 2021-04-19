@@ -4,12 +4,11 @@ import axios from "axios";
 import LibraryCard from "../../../components/NftCards/LibraryCard";
 import ArtistCard from "../../../components/NftCards/ArtistCard";
 
-<<<<<<< HEAD
+import MusicPlayer from "../../../components/MusicPlayer"
+import Slide from 'react-reveal/Slide';
 const Library = ({ user, isCreating }) => {
-=======
-const Library = ({ user, selectNft }) => {
->>>>>>> e20d1b4f256d10baf12d018274fe64d5a97cf28c
   const [nfts, setNfts] = useState([]);
+  const [selectedNft, setSelectedNft] = useState();
 
   const getArtistNfts = async () => {
     console.log("here");
@@ -23,10 +22,6 @@ const Library = ({ user, selectNft }) => {
     axios
       .post("api/nft-type/get-user-nfts", user)
       .then((res) => setNfts(res.data));
-<<<<<<< HEAD
-=======
-    // axios.get("api/nft-type/featured").then((res) => setNfts(res.data));
->>>>>>> e20d1b4f256d10baf12d018274fe64d5a97cf28c
   };
 
   useEffect(() => {
@@ -36,11 +31,7 @@ const Library = ({ user, selectNft }) => {
 
 
   const showNfts = nfts.map((nft) => {
-<<<<<<< HEAD
-    return isCreating ? <ArtistCard nft={nft} /> : <LibraryCard nft={nft} />;
-=======
-    return <NftCard nft={nft} selectNft={selectNft} />;
->>>>>>> e20d1b4f256d10baf12d018274fe64d5a97cf28c
+    return isCreating ? <ArtistCard nft={nft} /> : <LibraryCard nft={nft} selectNft={setSelectedNft}/>;
   });
 
   return (
@@ -50,6 +41,11 @@ const Library = ({ user, selectNft }) => {
         <ContainerOutline />
         <NftScroll> {showNfts} </NftScroll>
       </LaunchContainer>
+      {selectedNft &&
+        <Slide bottom duration={1000}>
+          <MusicPlayer nft={selectedNft} />
+        </Slide>
+      } 
     </Landing>
   );
 };

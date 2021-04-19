@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import image from "../../assets/img/logos/fm_logo_1.png";
 import cart from "../../assets/img/listen/cart.svg";
-import Modal from "../Modal/Modal";
-import BuyNftModal from "../BuyNftModal";
+// import Modal from "../Modal/Modal";
+// import BuyNftModal from "../BuyNftModal";
 
 const NftCard = (props) => {
   const { nft } = props;
@@ -16,7 +16,7 @@ const NftCard = (props) => {
   console.log('nft', nft)
   return (
     <Container>
-      <BuyNftModal open={isOpen} hide={hide} nft={nft} />
+      {/* <BuyNftModal open={isOpen} hide={hide} nft={nft} /> */}
       <Image src={nft.imageUrl} alt="image" onClick={() => setIsOpen(!isOpen)} />
       <BottomContainer>
         <InfoContainer>

@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import styled from "styled-components";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlay, faAngleDoubleRight, faAngleDoubleLeft, faPause } from '@fortawesome/free-solid-svg-icons'
 import axios from "axios";
 
 import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
@@ -28,7 +26,10 @@ const MusicPlayer = (props) => {
     return (
       <TrackInfoWrapper>
         <Image src={nft.imageUrl} />
-        <text>{`${nft.trackTitle}`}</text>
+        <TitleAndArtistSection>
+          <Title>{`${nft.title}`}</Title>
+          <Artist>{`${nft.artist}`}</Artist>
+        </TitleAndArtistSection>
       </TrackInfoWrapper>
     )
   }
@@ -47,11 +48,18 @@ const MusicPlayer = (props) => {
         onPlay={e => console.log("onPlay")}
         customProgressBarSection={
           [
-            TrackInfo(),
             RHAP_UI.PROGRESS_BAR,
             RHAP_UI.CURRENT_TIME,
             <div>/</div>,
             RHAP_UI.DURATION
+          ]
+        }
+        customControlsSection={
+          [
+            TrackInfo(),
+            <DummyContainer />,
+            RHAP_UI.MAIN_CONTROLS,
+            RHAP_UI.VOLUME_CONTROLS
           ]
         }
       // other props here */}
@@ -59,6 +67,24 @@ const MusicPlayer = (props) => {
     </Wrapper>
   )
 }
+
+const DummyContainer = styled.div`
+  width: 30%;
+`;
+
+const Artist = styled.div`
+  color: #5c5c5c;
+`;
+
+const Title = styled.div`
+  color: white;
+`;
+
+const TitleAndArtistSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+`;
 
 const Image = styled.img`
   max-width: 50px;
@@ -83,7 +109,7 @@ const TrackInfoWrapper = styled.div`
     justify-content: center;
     margin-left: 14px;
     display: flex;
-    flex-direction: Column;
+    flex-direction: Row;
     color: white;
 `;
 

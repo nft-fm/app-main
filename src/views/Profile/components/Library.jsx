@@ -4,7 +4,11 @@ import axios from "axios";
 import LibraryCard from "../../../components/NftCards/LibraryCard";
 import ArtistCard from "../../../components/NftCards/ArtistCard";
 
+<<<<<<< HEAD
 const Library = ({ user, isCreating }) => {
+=======
+const Library = ({ user, selectNft }) => {
+>>>>>>> e20d1b4f256d10baf12d018274fe64d5a97cf28c
   const [nfts, setNfts] = useState([]);
 
   const getArtistNfts = async () => {
@@ -19,14 +23,24 @@ const Library = ({ user, isCreating }) => {
     axios
       .post("api/nft-type/get-user-nfts", user)
       .then((res) => setNfts(res.data));
+<<<<<<< HEAD
+=======
+    // axios.get("api/nft-type/featured").then((res) => setNfts(res.data));
+>>>>>>> e20d1b4f256d10baf12d018274fe64d5a97cf28c
   };
 
   useEffect(() => {
     !isCreating ? getUserNfts() : getArtistNfts();
   }, [user, isCreating]);
 
+
+
   const showNfts = nfts.map((nft) => {
+<<<<<<< HEAD
     return isCreating ? <ArtistCard nft={nft} /> : <LibraryCard nft={nft} />;
+=======
+    return <NftCard nft={nft} selectNft={selectNft} />;
+>>>>>>> e20d1b4f256d10baf12d018274fe64d5a97cf28c
   });
 
   return (

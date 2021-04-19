@@ -8,9 +8,11 @@ import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 
+import PlayIcon from "../../assets/img/icons/listen_play.svg"
+
 const NftCard = (props) => {
   const { usdPerEth } = useAccountConsumer();
-  const { nft } = props;
+  const { nft, selectNft } = props;
   const [isOpen, setIsOpen] = useState(false);
 
   const show = () => setIsOpen(true);
@@ -54,13 +56,40 @@ const NftCard = (props) => {
         alt="image"
         onClick={() => setIsOpen(!isOpen)}
       />
-      <Bottom>
-        <TrackName>{nft.title}</TrackName>
-        <Artist>{nft.artist}</Artist>
-      </Bottom>
+      <BottomWrapper>
+        <Bottom>
+          <TrackName>{nft.title}</TrackName>
+          <Artist>{nft.artist}</Artist>
+        </Bottom>
+        <PlayButton src={PlayIcon} onClick={() => selectNft(nft)} />
+      </BottomWrapper>
     </Container>
   );
 };
+
+const PlayButton = styled.img`
+  opacity: .4;
+  max-height: 50 px;
+  max-width: 50px;
+  align-self: flex-end;
+`;
+
+const BottomWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: left;
+`;
+
+const Bottom = styled.div`
+width: 85%;
+display: flex;
+flex-direction: column;
+/* justify-content: column; */
+align-items: flex-start;
+`
 
 const Cart = styled(IconCart)`
   width: 20px;
@@ -177,13 +206,5 @@ const Artist = styled.span`
   /* text-align: center; */
   color: ${(props) => props.theme.gray};
 `;
-
-const Bottom = styled.div`
-width: 100%;
-display: flex;
-flex-direction: column;
-/* justify-content: column; */
-align-items: flex-start;
-`
 
 export default NftCard;

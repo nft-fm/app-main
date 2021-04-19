@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import axios from "axios";
-import NftCard from "../../components/NftCards/HomeNftCard";
+import NftCard from "../../components/NftCards/BuyNftCard";
 import logo from "../../assets/img/logos/logo.png";
 import discord from "../../assets/img/socials/social_discord.png";
 import medium from "../../assets/img/socials/social_medium.png";
@@ -29,7 +29,7 @@ const Listen = () => {
           NFT FM
         </StyledTitle>
         <NftFmTagline>
-          Good Tagline.
+          Tune in to your favorite artists.
         </NftFmTagline>
       </LandingTitle>
       <LaunchContainer>
@@ -150,20 +150,23 @@ justify-content: center;
 display: flex;
 flex-direction: row;
 width: 100%;
-justify-content: space-around;
-        &:nth-child(2) {
-          background-color: white;
-        }
-        &:nth-child(0) {
-          display: none;
-        }
-        &:nth-child(1) {
-          display: none;
-        }
-@media only screen and (min-width: 991px) {
-    }
-`
-  ;
+justify-content: space-between;
+@media only screen and (max-width: 1500px) {
+  & > * {
+    &:nth-last-child(1) {
+        display: none;
+   }}}
+   @media only screen and (max-width: 1191px) {
+  & > * {
+    &:nth-last-child(2) {
+        display: none;
+   }}}
+   @media only screen and (max-width: 890px) {
+  & > * {
+    &:nth-last-child(3) {
+        display: none;
+   }}}
+`;
 
 const LaunchContainer = styled.div`
   position:relative;

@@ -6,18 +6,9 @@ import styled, { keyframes } from "styled-components";
 import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
 import Create from "./components/Create";
 import { useAccountConsumer } from "../../contexts/Account";
-<<<<<<< HEAD
-import cog from "../../assets/img/Icons/cog.svg";
-import { ReactComponent as CopyIcon } from "../../assets/img/Icons/copy_icon.svg";
-import { ReactComponent as plus_icon } from "../../assets/img/Icons/plus_icon.svg";
-=======
-import { ReactComponent as CopyIcon } from "../../assets/img/icons/copy_icon.svg";
 import cog from "../../assets/img/icons/cog.svg";
+import { ReactComponent as CopyIcon } from "../../assets/img/icons/copy_icon.svg";
 import { ReactComponent as plus_icon } from "../../assets/img/icons/plus_icon.svg";
-import NftCard from "../Home/NftCard";
-import Slide from 'react-reveal/Slide';
-import MusicPlayer from '../../components/MusicPlayer/MusicPlayer'
->>>>>>> new-Music-Player
 
 const Profile = () => {
   const [selectedNft, setSelectedNft] = useState();
@@ -70,16 +61,16 @@ const Profile = () => {
     console.log("isOpen", isOpen);
   };
 
-  const showNfts = ownedNfts.map((nft) => {
-    return (
-      <NftCardWrapper>
-        <NftCard nft={nft} />
-        <PlayButton onClick={() => setSelectedNft(nft)}>
-          Play!
-        </PlayButton>
-      </NftCardWrapper>
-    )
-  });
+  // const showNfts = ownedNfts.map((nft) => {
+  //   return (
+  //     <NftCardWrapper>
+  //       <NftCard nft={nft} />
+  //       <PlayButton onClick={() => setSelectedNft(nft)}>
+  //         Play!
+  //       </PlayButton>
+  //     </NftCardWrapper>
+  //   )
+  // });
 
   return (
     <BaseView>
@@ -171,63 +162,23 @@ const Profile = () => {
             View your <br />
             library below
           </span>
-<<<<<<< HEAD
         </BigButtonLeft>
-=======
-          <PlusButton
-            onClick={() => {
-              navigator.clipboard.writeText(user.address);
-            }} />
-        </BigButton>
->>>>>>> new-Music-Player
       </MidSection>
-      <NftScroll>
+      {/* <NftScroll>
         {showNfts}
-      </NftScroll>
-      {selectedNft ?
+      </NftScroll> */}
+      {/* {selectedNft ?
         <Slide bottom duration={1000}>
           <MusicPlayer nft={selectedNft} />
         </Slide>
         :
         <div />
-      }
+      } */}
       <Create open={isOpen} hide={hide} />
     </BaseView>
   );
 };
 
-<<<<<<< HEAD
-=======
-const PlayButton = styled.button`
-  border-radius: 5px;
-  max-width: 50%;
-  background-color: #20a4fc;
-  color: white;
-  align-self: center;
-`;
-
-const NftCardWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const NftScroll = styled.div`
-  justify-content: center;
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  justify-content: space-around;
-  &::-webkit-scrollbar {
-    height: 12px;
-    background-color: rgba(256, 256, 256, 0.1);
-  }
-  margin-bottom: 20px;
-  &::-webkit-scrollbar-thumb {
-    background-color: rgba(240, 31, 103, 0.4);
-    border-radius: 15px;
-  }`;
-
->>>>>>> new-Music-Player
 const ToggleSlider = styled.span`
   position: absolute;
   cursor: pointer;
@@ -235,17 +186,9 @@ const ToggleSlider = styled.span`
   left: 0;
   right: 0;
   bottom: 0;
-<<<<<<< HEAD
-  background-color: ${(props) => props.theme.boxBorderColor};
+  background-color: ${(props) => props.theme.color.boxBorder};
   -webkit-transition: 1s;
   transition: 1s;
-=======
-
-  /* ${({ active }) => active && `background-color: #383838`} */
-  background-color: ${(props) => props.theme.color.boxBorder};
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
->>>>>>> new-Music-Player
   border-radius: 17px;
 
   &::before {
@@ -317,9 +260,8 @@ const PlusButton = styled(plus_icon)`
 const BigButtonLeft = styled.div`
   width: 35%;
   color: white;
-<<<<<<< HEAD
-  background-color: ${(props) => props.theme.boxColor};
-  border: 1px solid ${(props) => props.theme.boxBorderColor};
+  background-color: ${(props) => props.theme.color.box};
+  border: 1px solid ${(props) => props.theme.color.boxBorder};
   border-radius: ${(props) => props.theme.borderRadius}px;
   text-align: left;
   font-size: ${(props) => props.theme.fontSizes.md};
@@ -341,13 +283,8 @@ const BigButtonLeft = styled.div`
 const BigButtonRight = styled.div`
   width: 35%;
   color: white;
-  background-color: ${(props) => props.theme.boxColor};
-  border: 1px solid ${(props) => props.theme.boxBorderColor};
-=======
-  border-width: 1px;
   background-color: ${(props) => props.theme.color.box};
-  border-color: ${(props) => props.theme.color.boxBorder};
->>>>>>> new-Music-Player
+  border: 1px solid ${(props) => props.theme.color.boxBorder};
   border-radius: ${(props) => props.theme.borderRadius}px;
   text-align: left;
   font-size: ${(props) => props.theme.fontSizes.md};
@@ -364,14 +301,8 @@ const BigButtonRight = styled.div`
 const MidSectionMiddle = styled.div`
   width: 50%;
   height: 110px;
-<<<<<<< HEAD
-  background-color: ${(props) => props.theme.boxColor};
-  border: 1px solid ${(props) => props.theme.boxBorderColor};
-=======
   background-color: ${(props) => props.theme.color.box};
-  border-width: 1px;
-  border-color: ${(props) => props.theme.color.boxBorder};
->>>>>>> new-Music-Player
+  border: 1px solid ${(props) => props.theme.color.boxBorder};
   border-radius: ${(props) => props.theme.borderRadius}px;
   padding: 20px;
   color: white;

@@ -10,10 +10,10 @@ import upload_icon from "../../../assets/img/profile_page_assets/upload_icon.svg
 // import eth_icon from "../../../assets/img/profile_page_assets/eth_icon.svg";
 // import eth_icon_white from "../../../assets/img/profile_page_assets/eth_icon_white.svg";
 // import usd_icon from "../../../assets/img/profile_page_assets/usd_icon.svg";
-import { ReactComponent as usd_icon } from "../../../assets/img/Icons/dollar.svg";
-import { ReactComponent as eth_icon } from "../../../assets/img/Icons/ethereum.svg";
-import { ReactComponent as arrow } from "../../../assets/img/Icons/arrow_cropped.svg";
-// import { ReactComponent as arrow_down } from "../../../assets/img/Icons/arrow_down.svg";
+import { ReactComponent as usd_icon } from "../../../assets/img/icons/dollar.svg";
+import { ReactComponent as eth_icon } from "../../../assets/img/icons/ethereum.svg";
+import { ReactComponent as arrow } from "../../../assets/img/icons/arrow_cropped.svg";
+// import { ReactComponent as arrow_down } from "../../../assets/img/icons/arrow_down.svg";
 
 import BaseView from "../../BaseView";
 import { useAccountConsumer } from "../../../contexts/Account";
@@ -474,7 +474,7 @@ const StyledInput = styled.input`
   color: white;
   background-color: ${(props) => props.theme.bgColor};
   border: none;
-  border-bottom: 1px solid ${(props) => props.theme.boxBorderColor};
+  border-bottom: 1px solid ${(props) => props.theme.color.boxBorder};
   outline: none;
   margin-bottom: 5px;
 `;
@@ -532,7 +532,7 @@ const StyledNumberInput2 = styled.input`
   font-size: ${(props) => props.theme.fontSizes.sm};
   background-color: ${(props) => props.theme.bgColor};
   border: none;
-  border-bottom: 1px solid ${(props) => props.theme.boxBorderColor};
+  border-bottom: 1px solid ${(props) => props.theme.color.boxBorder};
   outline: none;
   &.mint {
     width: 100%;
@@ -554,7 +554,7 @@ const StyledNumberInput = styled.input`
   font-size: ${(props) => props.theme.fontSizes.xs};
   background-color: ${(props) => props.theme.bgColor};
   border: none;
-  border-bottom: 2px solid ${(props) => props.theme.boxBorderColor};
+  border-bottom: 2px solid ${(props) => props.theme.color.boxBorder};
   outline: none;
   &.mint {
     width: 100%;
@@ -617,7 +617,7 @@ const FileNames = styled.div`
 `;
 
 const MediaButton = styled.button`
-  background-color: ${(props) => props.theme.boxColor};
+  background-color: ${(props) => props.theme.color.box};
 
   border-radius: 10px;
   color: ${(props) => props.theme.fontColor.gray};
@@ -693,7 +693,7 @@ const FormContainer = styled.div`
   /* height: 600px; */
   border-radius: 15px;
   background-color: ${(props) => props.theme.bgColor};
-  border: 1px solid ${(props) => props.theme.boxBorderColor};
+  border: 1px solid ${(props) => props.theme.color.boxBorder};
   display: flex;
   flex-direction: column;
   padding: 20px;

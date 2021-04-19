@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import axios from "axios";
-import NftCard from "../../components/NftCards/SaleNftCard";
+import NftCard from "../../../components/NftCards/SaleNftCard";
 
 
 const Library = () => {
     const [nfts, setNfts] = useState([])
   
     useEffect(() => {
-    //   axios.get("/api/nft-type/featured").then((res) => setNfts(res.data));
+      axios.get("/api/nft-type/all").then((res) => setNfts(res.data));
     }, [])
   
     const showNfts = nfts.map((nft) => {
@@ -21,11 +21,7 @@ const Library = () => {
       <Landing>
         <LaunchContainer>
           <ContainerTitle>
-            PROUD TO
-            <ContainerTitleText style={{ "color": "#20a4fc" }}>{`LAUNCH`}</ContainerTitleText>
-            <ContainerTitleText style={{ "color": "#fde404" }}>{`ALONGSIDE`}</ContainerTitleText>
-            <ContainerTitleText style={{ "color": "#68c12f" }}>{`AMAZING`}</ContainerTitleText>
-            <ContainerTitleText style={{ "color": "#fa423e" }}>{`ARTISTS`}</ContainerTitleText>
+              MY LIBRARY
           </ContainerTitle>
           <ContainerOutline />
           <NftScroll> {showNfts} </NftScroll>
@@ -60,7 +56,8 @@ const Library = () => {
   flex-direction: row;
   width: 100%;
   justify-content: space-between;
-  @media only screen and (max-width: 1500px) {
+  flex-wrap: wrap;
+  /* @media only screen and (max-width: 1500px) {
     & > * {
       &:nth-last-child(1) {
           display: none;
@@ -74,7 +71,7 @@ const Library = () => {
     & > * {
       &:nth-last-child(3) {
           display: none;
-     }}}
+     }}} */
   `;
   
   const LaunchContainer = styled.div`

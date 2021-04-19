@@ -11,6 +11,8 @@ import { ReactComponent as CopyIcon } from "../../assets/img/icons/copy_icon.svg
 import { ReactComponent as plus_icon } from "../../assets/img/icons/plus_icon.svg";
 import { ReactComponent as lock_icon } from "../../assets/img/icons/lock.svg";
 
+import Library from "./components/Library"
+
 const Profile = () => {
   const [selectedNft, setSelectedNft] = useState();
   const [ownedNfts, setOwnedNfts] = useState([]);
@@ -195,6 +197,7 @@ const Profile = () => {
         <div />
       } */}
       <Create open={isOpen} hide={hide} />
+      <Library />
     </BaseView>
   );
 };

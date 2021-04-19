@@ -155,7 +155,7 @@ width: 80%;
 height: 4px;
 border-radius: 2px;
 background-color: ${props => props.theme.color.boxBorder};
-margin-bottom: 80px;
+/* margin-bottom: 80px; */
 `
 
 const FaqQuestion = styled.div`

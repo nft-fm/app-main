@@ -13,11 +13,12 @@ import Listen from './views/Home'
 import Profile from './views/Profile'
 import Login from './views/Login/Login';
 import Register from './views/Register';
+import Discover from "./views/Discover";
 import isMobile from "./utils/isMobile";
 import theme from './theme'
 import Error404 from "./views/404";
-import {AccountProvider} from "./contexts/Account";
-import {PlaylistProvider} from "./contexts/Playlist/Playlist";
+import { AccountProvider } from "./contexts/Account";
+import { PlaylistProvider } from "./contexts/Playlist/Playlist";
 
 if (window.location.hostname !== 'localhost')
   console.log = function () { };
@@ -36,6 +37,9 @@ const App = () => {
             </Route>
             <Route path="/profile" exact>
               <Profile />
+            </Route>
+            <Route path="/discover" exact>
+              <Discover />
             </Route>
             <Route path="*">
               <Error404 />

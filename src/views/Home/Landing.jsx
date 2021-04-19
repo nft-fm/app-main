@@ -137,7 +137,6 @@ width: 100%;
 padding-top: 40px;
 color: white;
   font-size: ${props => props.theme.fontSizes.xs};
-  padding-right: 4px;
 `
 
 const IconContainer = styled.a`

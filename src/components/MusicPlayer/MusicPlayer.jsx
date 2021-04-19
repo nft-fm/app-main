@@ -6,11 +6,6 @@ import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import loading from '../../assets/img/loading.gif';
 
-import PlayIcon from "../../assets/img/icons/listen_play.svg"
-import PauseIcon from "../../assets/img/icons/listen_pause.svg"
-import SkipBackwardsIcon from "../../assets/img/icons/listen_skip_backward.svg"
-import SkipForwardsIcon from "../../assets/img/icons/listen_skip_forward.svg"
-
 const MusicPlayer = (props) => {
   const { nft } = props;
   const [url, setUrl] = useState();
@@ -51,19 +46,20 @@ const MusicPlayer = (props) => {
       <AudioPlayer
         src={url}
         onPlay={e => console.log("onPlay")}
-        layout={'horizontal-reverse'}
         customProgressBarSection={
           [
-            RHAP_UI.CURRENT_TIME,
             RHAP_UI.PROGRESS_BAR,
-            RHAP_UI.CURRENT_LEFT_TIME,
-            RHAP_UI.VOLUME_CONTROLS,
-            TrackInfo()
+            RHAP_UI.CURRENT_TIME,
+            <div>/</div>,
+            RHAP_UI.DURATION
           ]
         }
         customControlsSection={
           [
+            TrackInfo(),
+            <DummyContainer />,
             RHAP_UI.MAIN_CONTROLS,
+            RHAP_UI.VOLUME_CONTROLS
           ]
         }
       // other props here */}
@@ -71,6 +67,10 @@ const MusicPlayer = (props) => {
     </Wrapper>
   )
 }
+
+const DummyContainer = styled.div`
+  width: 30%;
+`;
 
 const Artist = styled.div`
   color: #5c5c5c;
@@ -81,11 +81,9 @@ const Title = styled.div`
 `;
 
 const TitleAndArtistSection = styled.div`
-  font-family: "Compita";
   display: flex;
   flex-direction: column;
   margin-left: 10px;
-  mrgin-right: 10px;
 `;
 
 const Image = styled.img`

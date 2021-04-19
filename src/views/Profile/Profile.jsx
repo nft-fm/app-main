@@ -92,7 +92,7 @@ const Profile = () => {
 
   return (
     <BaseView>
-      <Banner />
+      {/* <Banner /> */}
       <ProfileHeading>
         <Side />
         <ProfileHolder>
@@ -203,7 +203,10 @@ const Profile = () => {
         <Slide bottom duration={1000}>
           <MusicPlayer nft={selectedNft} />
         </Slide>
-      }
+      } 
+      <Create open={isOpen} hide={hide} />
+      <Library user={user} isCreating={isCreating}/>
+      
     </BaseView>
   );
 };

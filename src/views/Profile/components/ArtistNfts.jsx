@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import axios from "axios";
-import NftCard from "../../../components/NftCards/SaleNftCard";
+import NftCard from "../../../components/NftCards/ArtistCard";
 
 const ArtistNfts = ({ user, selectNft }) => {
   const [nfts, setNfts] = useState([]);

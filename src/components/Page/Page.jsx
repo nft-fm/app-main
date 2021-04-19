@@ -20,7 +20,7 @@ const Page = ({ children }) => (
 );
 
 const StyledPage = styled.div`
-  /* height: 100vh; */
+  min-height: 100vh;
   margin: 0;
 background-color: #131313;
 display: flex;

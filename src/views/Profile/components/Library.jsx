@@ -1,24 +1,26 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import axios from "axios";
-import NftCard from "../../../components/NftCards/SaleNftCard";
+import NftCard from "../../../components/NftCards/LibraryCard";
 
-const Library = ({ user }) => {
+const Library = ({ user, selectNft }) => {
   const [nfts, setNfts] = useState([]);
 
   const getUserNfts = async () => {
     console.log("here");
-    axios
-      .post("api/nft-type/get-user-nfts", user)
-      .then((res) => setNfts(res.data));
-    // axios.get("api/nft-type/featured").then((res) => setOwnedNfts(res.data));
+    // axios
+    //   .post("api/nft-type/get-user-nfts", user)
+    //   .then((res) => setNfts(res.data));
+    axios.get("api/nft-type/featured").then((res) => setNfts(res.data));
   };
   useEffect(() => {
     getUserNfts();
   }, [user]);
 
+
+
   const showNfts = nfts.map((nft) => {
-    return <NftCard nft={nft} />;
+    return <NftCard nft={nft} selectNft={selectNft} />;
   });
 
   return (
@@ -32,9 +34,6 @@ const Library = ({ user }) => {
   );
 };
 
-const ContainerTitleText = styled.span`
-  padding-left: 6px;
-`;
 
 const Landing = styled.div`
   display: flex;

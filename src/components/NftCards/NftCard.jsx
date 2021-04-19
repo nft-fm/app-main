@@ -17,7 +17,7 @@ const NftCard = (props) => {
   return (
     <Container>
       <BuyNftModal open={isOpen} hide={hide} nft={nft} />
-      <Image src={nft.imageUrl} alt="image" onClick={() => setIsOpen(!isOpen)}/>
+      <Image src={nft.imageUrl} alt="image" onClick={() => setIsOpen(!isOpen)} />
       <BottomContainer>
         <InfoContainer>
           <TrackName>{nft.title}</TrackName>

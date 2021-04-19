@@ -3,7 +3,7 @@ import styled, { keyframes } from "styled-components";
 import axios from "axios";
 import NftCard from "../../../components/NftCards/SaleNftCard";
 
-const ArtistNfts = ({ user }) => {
+const ArtistNfts = ({ user, selectNft }) => {
   const [nfts, setNfts] = useState([]);
 
   const getUserNfts = async () => {
@@ -18,7 +18,7 @@ const ArtistNfts = ({ user }) => {
   }, [user]);
 
   const showNfts = nfts.map((nft) => {
-    return <NftCard nft={nft} />;
+    return <NftCard nft={nft} selectNft={selectNft} />;
   });
 
   return (

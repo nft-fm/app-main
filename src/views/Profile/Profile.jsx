@@ -13,6 +13,9 @@ import { ReactComponent as lock_icon } from "../../assets/img/icons/lock.svg";
 
 import Library from "./components/Library"
 import ArtistNfts from "./components/ArtistNfts"
+import MusicPlayer from "../../components/MusicPlayer"
+
+import Slide from 'react-reveal/Slide';
 
 const Profile = () => {
   const [selectedNft, setSelectedNft] = useState();
@@ -25,6 +28,10 @@ const Profile = () => {
       .then((res) => setUser(res.data));
   };
 
+  const selectNft = (nft) => {
+    console.log("foobar: ", nft);
+    setSelectedNft(nft);
+  }
 
   // // TODO switch back to get-user-nfts
   // const getUserNfts = async () => {
@@ -190,16 +197,13 @@ const Profile = () => {
       {/* <NftScroll>
         {showNfts}
       </NftScroll> */}
-      {/* {selectedNft ?
+      <Create open={isOpen} hide={hide} />
+      {isCreating ? <ArtistNfts user={user} selectNft={selectNft} /> : <Library user={user} selectNft={selectNft} />}
+      {selectedNft &&
         <Slide bottom duration={1000}>
           <MusicPlayer nft={selectedNft} />
         </Slide>
-        :
-        <div />
-      } */}
-      <Create open={isOpen} hide={hide} />
-      {isCreating ? <ArtistNfts user={user} /> : <Library user={user} />}
-      
+      }
     </BaseView>
   );
 };

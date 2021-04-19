@@ -23,52 +23,24 @@ const Listen = () => {
 
   return (
     <Landing>
-      <LandingTitle>
-        <Logo src={logo} />
-        <StyledTitle>
-          NFT FM
+      <StyledTitle>
+        MARKETPLACE
         </StyledTitle>
-        <NftFmTagline>
-          Tune in to your favorite artists.
-        </NftFmTagline>
-      </LandingTitle>
       <LaunchContainer>
         <ContainerTitle>
-          PROUD TO
-          <ContainerTitleText style={{ "color": "#20a4fc" }}>{`LAUNCH`}</ContainerTitleText>
-          <ContainerTitleText style={{ "color": "#fde404" }}>{`ALONGSIDE`}</ContainerTitleText>
-          <ContainerTitleText style={{ "color": "#68c12f" }}>{`AMAZING`}</ContainerTitleText>
-          <ContainerTitleText style={{ "color": "#fa423e" }}>{`ARTISTS`}</ContainerTitleText>
+          TRENDING
         </ContainerTitle>
         <ContainerOutline />
         <NftScroll> {showNfts} </NftScroll>
       </LaunchContainer>
-      <SocialsBar>
-        <IconContainer>
-          <Telegram />
-          <IconText>
-            Telegram
-          </IconText>
-        </IconContainer>
-        <IconContainer>
-          <Medium />
-          <IconText>
-            Medium
-          </IconText>
-        </IconContainer>
-        <IconContainer>
-          <Twitter />
-          <IconText>
-            Twitter
-          </IconText>
-        </IconContainer>
-        <IconContainer>
-          <Discord />
-          <IconText>
-            Discord
-          </IconText>
-        </IconContainer>
-      </SocialsBar>
+
+      <LaunchContainer>
+        <ContainerTitle>
+          MARKET
+        </ContainerTitle>
+        <ContainerOutline />
+        <NftScroll> {showNfts} </NftScroll>
+      </LaunchContainer>
     </Landing >
   );
 };
@@ -119,13 +91,6 @@ const ContainerTitleText = styled.span`
 padding-left: 6px;
 `
 
-const LandingTitle = styled.div`
-display: flex;
-flex-direction: column;
-justify-content: space-between;
-align-items: center;
-margin-bottom: 40px;
-`
 
 const Landing = styled.div`
 display: flex;
@@ -134,10 +99,8 @@ align-items: center;
 justify-content: space-around;
 /* height: calc(100vh - ${props => props.theme.topBarSize}px + 1px); */
 width: 100%;
-padding-top: 40px;
 color: white;
   font-size: ${props => props.theme.fontSizes.xs};
-  padding-right: 4px;
 `
 
 const IconContainer = styled.a`
@@ -237,10 +200,10 @@ const Logo = styled.img`
 
 const StyledTitle = styled.div`
   font-family: Compita;
-  font-size: ${props => props.theme.fontSizes.xl};
-  margin-bottom: 16px;
+  font-size: ${props => props.theme.fontSizes.md};
+  margin: 60px 0 40px 0;
   font-weight: bold;
-  letter-spacing: 3px;
+  /* letter-spacing: 3px; */
   color: white;
 `;
 

@@ -83,7 +83,7 @@ const Profile = () => {
 
   return (
     <BaseView>
-      <Banner />
+    <Landing>
       <ProfileHeading>
         <Side />
         <ProfileHolder>
@@ -185,11 +185,20 @@ const Profile = () => {
           </span>
         </BigButtonLeft>
       </MidSection>
+      </Landing>
       <Create open={isOpen} hide={hide} />
       <Library user={user} isCreating={isCreating} />
     </BaseView>
   );
 };
+
+const Landing = styled.div`
+height: 450px;
+top: 0;
+display: flex;
+flex-direction: column;
+align-items: center;
+`
 
 const ToggleSlider = styled.span`
   position: absolute;

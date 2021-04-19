@@ -4,7 +4,7 @@ import { useWallet } from "use-wallet";
 import isMobile from "../../../utils/isMobile";
 import axios from "axios";
 import swal from "sweetalert2";
-import x from "../../../assets/img/listen/x.svg";
+import x from "../../../assets/img/icons/x.svg";
 import image from "../../../assets/img/logos/fm_logo_1.png";
 import upload_icon from "../../../assets/img/profile_page_assets/upload_icon.svg";
 // import eth_icon from "../../../assets/img/profile_page_assets/eth_icon.svg";

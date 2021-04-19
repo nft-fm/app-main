@@ -46,9 +46,7 @@ const NftCard = (props) => {
         <Side>
           <IconArea>
             {nft.x_numSold}
-            <span style={{ margin: "0 1px" }}>
-              /
-              </span>
+            <span style={{ margin: "0 1px" }}>/</span>
             {nft.numMinted}
             <Cart />
           </IconArea>

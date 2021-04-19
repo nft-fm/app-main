@@ -1,13 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useWallet } from "use-wallet";
-import Card from "../Card";
 import axios from "axios";
-import NftCard from "../NftCards/NftCard";
-import image from "../../assets/img/logos/fm_logo_1.png";
-import cart from "../../assets/img/listen/cart.svg";
-import x from "../../assets/img/listen/x.svg";
 import swal from "sweetalert2";
+import { ReactComponent as IconX } from "../../assets/img/icons/x.svg";
 
 const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
   const { account, connect } = useWallet();
@@ -34,8 +30,8 @@ const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
     <OpaqueFilter onClick={(e) => hide(e)}>
       <Container onClick={(e) => stopProp(e)}>
         <StyledModal>
-          <Buy src={cart} alt="cart" />
-          <X src={x} onClick={(e) => hide(e)} />
+          {/* <Buy src={cart} alt="cart" /> */}
+          {/* <X src={x} onClick={(e) => hide(e)} /> */}
           <Image src={nft.imageUrl} alt="image" />
           <InfoContainer>
             <TrackName>{nft.title}</TrackName>
@@ -83,12 +79,11 @@ const Container = styled.div`
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  border: solid 2px #181818;
 `;
 
 const StyledModal = styled.div`
   border-radius: 8px;
-  /* position: absolute; */
+  border: solid 2px #181818;
   width: 100%;
   height: 100%;
   background-color: ${props => props.theme.bgColor};
@@ -100,6 +95,7 @@ const StyledModal = styled.div`
   align-items: center;
   justify-content: space-evenly;
 `;
+
 const Image = styled.img`
   width: 280px;
   height: 280px;
@@ -109,6 +105,7 @@ const Image = styled.img`
   object-fit: cover;
   overflow: hidden;
 `;
+
 const BottomContainer = styled.div`
   width: 200px;
   display: flex;

@@ -20,7 +20,7 @@ const StyledModal = styled.div`
   box-shadow: 4px 4px 8px -4px ${props => props.theme.color.blue};
   width: 100%;
   height: 30vh;
-  background-color: ${props => props.theme.boxColor};
+  background-color: ${props => props.theme.color.box};
   z-index: 100000;
 `
 

@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import discord from "../../../assets/img/socials/social_discord.png";
-import medium from "../../../assets/img/socials/social_medium.png";
-import telegram from "../../../assets/img/socials/social_telegram.png";
-import twitter from "../../../assets/img/socials/social_twitter.png";
+// import discord from "../../../assets/img/socials/social_discord.png";
+// import medium from "../../../assets/img/socials/social_medium.png";
+// import telegram from "../../../assets/img/socials/social_telegram.png";
+// import twitter from "../../../assets/img/socials/social_twitter.png";
 import { Col, Row } from "../../Grid";
 import { FooterLink } from "./FooterLink";
 export const FooterNav = () => {
@@ -11,7 +11,7 @@ export const FooterNav = () => {
     <Row>
       <Col size={1} style={{ alignItems: "center" }}>
         <Row>
-          <FooterLink
+          {/* <FooterLink
             link="https://twitter.com/Blockduelers"
             icon={twitter}
             text="Twitter"
@@ -30,7 +30,7 @@ export const FooterNav = () => {
             link="https://t.me/BlockDuelers"
             icon={telegram}
             text="Telegram"
-          />
+          /> */}
         </Row>
       </Col>
     </Row>

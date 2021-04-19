@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from 'styled-components'
 import { useWallet } from "use-wallet";
-import Uniswap from '../../assets/img/socials/uniswap.svg'
+import Uniswap from '../../assets/img/icons/uniswap.svg'
 import isMobile from "../../utils/isMobile";
 
 const Value = () => {

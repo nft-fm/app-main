@@ -8,12 +8,6 @@ import NftCard from "../../components/NftCards/NftCard";
 import logo from "../../assets/img/logos/logo.png";
 import greenCheckMark from "../../assets/img/green_check.png";
 import grayCheckMark from "../../assets/img/gray_check.png";
-
-import discord from "../../assets/img/socials/social_discord.png";
-import medium from "../../assets/img/socials/social_medium.png";
-import telegram from "../../assets/img/socials/social_telegram.png";
-import twitter from "../../assets/img/socials/social_twitter.png";
-
 import Landing from "./Landing";
 
 const Listen = () => {
@@ -39,6 +33,7 @@ const Listen = () => {
     <Switch>
       <BaseView>
         <Landing />
+        <Divider />
         <DescriptionBoxContainer>
           <StyledHeader>Aliquam eu dapibus velit.</StyledHeader>
           <StyledSubHeader>Aliquam non iaculis mauris, ac placerat magna</StyledSubHeader>
@@ -155,6 +150,13 @@ const Listen = () => {
     </Switch>
   );
 };
+
+const Divider = styled.div`
+width: 80%;
+height: 2px;
+border-radius: 1px;
+background-color: ${props => props.theme.color.boxBorder};
+`
 
 const FaqQuestion = styled.div`
   font-size: large;

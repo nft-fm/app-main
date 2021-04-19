@@ -46,7 +46,7 @@ const Listen = () => {
         </NftScroll>
       </LaunchContainer>
       <SocialsBar>
-        <SocialsLine />
+        {/* <SocialsLine /> */}
         <SocialsIcons>
           <IconContainer>
             <Icon src={telegram} />
@@ -87,6 +87,7 @@ display: flex;
 flex-direction: column;
 justify-content: space-between;
 align-items: center;
+margin-bottom: 40px;
 `
 
 const Landing = styled.div`
@@ -94,10 +95,10 @@ display: flex;
 flex-direction: column;
 align-items: center;
 justify-content: space-around;
-height: calc(100vh - ${props => props.theme.topBarSize}px + 1px);
+/* height: calc(100vh - ${props => props.theme.topBarSize}px + 1px); */
 width: ${props => props.theme.homeWidth}px;
 max-width: 80vw;
-
+padding-top: 40px;
 `
 
 const IconText = styled.div`
@@ -139,7 +140,7 @@ const SocialsLine = styled.hr`
 `;
 
 const SocialsBar = styled.div`
-  width: 85%;
+  width: 100%;
   position:relative;
   display: flex;
   justify-content: center;
@@ -174,6 +175,7 @@ const LaunchContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 40px;
 `;
 
 const ContainerTitle = styled.span`

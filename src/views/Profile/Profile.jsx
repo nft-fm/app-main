@@ -83,121 +83,127 @@ const Profile = () => {
 
   return (
     <BaseView>
-    <Landing>
-      <ProfileHeading>
-        <Side />
-        <ProfileHolder>
-          <ProfilePicHolder>
-            <ProfilePic src={default_pic} alt="default-profile-pic" />
-            <Cog
-              src={cog}
-              alt="edit icon"
-              onClick={account ? () => setEdit(!edit) : null}
-            />
-          </ProfilePicHolder>
-          <ProfileInfoHolder>
-            {edit ? (
-              <form onSubmit={(e) => saveDetails(e)}>
-                <StyledInput
-                  type="text"
-                  placeholder="Enter Username"
-                  defaultValue={user?.username}
-                  onChange={(e) => setUsername(e.target.value)}
-                />
-              </form>
-            ) : (
-              <Username>
-                {user && user.username != "" ? user.username : "No username"}
-              </Username>
-            )}
-
-            <AddressSpan>
-              {user
-                ? user.address.substring(0, 10) +
-                "..." +
-                user.address.substring(user.address.length - 4)
-                : " "}
-              {user && (
-                <CopyButton
-                  onClick={() => {
-                    navigator.clipboard.writeText(user.address);
-                  }}
-                />
-              )}
-            </AddressSpan>
-          </ProfileInfoHolder>
-        </ProfileHolder>
-        <Side>
-          <SideSpan>
-            12 <BlueSpan>/NFTs</BlueSpan>
-          </SideSpan>
-          <SideSpan>
-            8 <BlueSpan>Traded</BlueSpan>
-          </SideSpan>
-        </Side>
-      </ProfileHeading>
-      <MidSection>
-        <BigButtonRight onClick={() => setIsOpen(!isOpen)}>
-          <span>
-            Create <br /> NFTs
-          </span>
-          <PlusButton />
-        </BigButtonRight>
-        <MidSectionMiddle
-          creating={isCreating}
-          onClick={
-            user && user.isArtist
-              ? () => setIsCreating(!isCreating)
-              : () => setShake(!shake)
-          }
-        >
-          <MidSectionTopRow>
-            <ListenSlashCreate>
-              <Highlight creating={isCreating}>Listen</Highlight>
-              <Highlight creating={!isCreating}>Create</Highlight>
-            </ListenSlashCreate>
-            {user && user.isArtist ? (
-              <ToggleHolder>
-                <ToggleLabel onClick={(e) => e.stopPropagation()}>
-                  <ToggleInput
-                    type="checkbox"
-                    value={!isCreating}
-                    checked={isCreating}
-                    onClick={() => setIsCreating(!isCreating)}
+      <Landing>
+        <ProfileHeading>
+          <Side />
+          <ProfileHolder>
+            <ProfilePicHolder>
+              <ProfilePic src={default_pic} alt="default-profile-pic" />
+              <Cog
+                src={cog}
+                alt="edit icon"
+                onClick={account ? () => setEdit(!edit) : null}
+              />
+            </ProfilePicHolder>
+            <ProfileInfoHolder>
+              {edit ? (
+                <form onSubmit={(e) => saveDetails(e)}>
+                  <StyledInput
+                    type="text"
+                    placeholder="Enter Username"
+                    defaultValue={user?.username}
+                    onChange={(e) => setUsername(e.target.value)}
                   />
-                  <ToggleSlider active={isCreating} />
-                </ToggleLabel>
-              </ToggleHolder>
-            ) : (
-              <LockHolder onClick={() => setShake(!shake)}>
-                {/* {shake && <ComingSoon>Feature Coming Soon!</ComingSoon>} */}
+                </form>
+              ) : (
+                <Username>
+                  {user && user.username != "" ? user.username : "No username"}
+                </Username>
+              )}
 
-                <LockIcon className={shake ? "shake" : null} />
-              </LockHolder>
-            )}
-          </MidSectionTopRow>
-        </MidSectionMiddle>
-        <BigButtonLeft>
-          <span>Listen</span>
-          <span>
-            View your <br />
+              <AddressSpan>
+                {user
+                  ? user.address.substring(0, 10) +
+                  "..." +
+                  user.address.substring(user.address.length - 4)
+                  : " "}
+                {user && (
+                  <CopyButton
+                    onClick={() => {
+                      navigator.clipboard.writeText(user.address);
+                    }}
+                  />
+                )}
+              </AddressSpan>
+            </ProfileInfoHolder>
+          </ProfileHolder>
+          <Side>
+            <SideSpan>
+              12 <BlueSpan>/NFTs</BlueSpan>
+            </SideSpan>
+            <SideSpan>
+              8 <BlueSpan>Traded</BlueSpan>
+            </SideSpan>
+          </Side>
+        </ProfileHeading>
+        <MidSection>
+          <BigButtonRight onClick={() => setIsOpen(!isOpen)}>
+            <span>
+              Create <br /> NFTs
+          </span>
+            <PlusButton />
+          </BigButtonRight>
+          <MidSectionMiddle
+            creating={isCreating}
+            onClick={
+              user && user.isArtist
+                ? () => setIsCreating(!isCreating)
+                : () => setShake(!shake)
+            }
+          >
+            <MidSectionTopRow>
+              <ListenSlashCreate>
+                <Highlight creating={isCreating}>Listen</Highlight>
+                <Highlight creating={!isCreating}>Create</Highlight>
+              </ListenSlashCreate>
+              {user && user.isArtist ? (
+                <ToggleHolder>
+                  <ToggleLabel onClick={(e) => e.stopPropagation()}>
+                    <ToggleInput
+                      type="checkbox"
+                      value={!isCreating}
+                      checked={isCreating}
+                      onClick={() => setIsCreating(!isCreating)}
+                    />
+                    <ToggleSlider active={isCreating} />
+                  </ToggleLabel>
+                </ToggleHolder>
+              ) : (
+                <LockHolder onClick={() => setShake(!shake)}>
+                  {/* {shake && <ComingSoon>Feature Coming Soon!</ComingSoon>} */}
+
+                  <LockIcon className={shake ? "shake" : null} />
+                </LockHolder>
+              )}
+            </MidSectionTopRow>
+          </MidSectionMiddle>
+          <BigButtonLeft>
+            <span>Listen</span>
+            <span>
+              View your <br />
             library below
           </span>
-        </BigButtonLeft>
-      </MidSection>
+          </BigButtonLeft>
+        </MidSection>
       </Landing>
       <Create open={isOpen} hide={hide} />
       <Library user={user} isCreating={isCreating} />
+      <Filler />
     </BaseView>
   );
 };
 
+const Filler = styled.div`
+flex: 1;
+`
+
 const Landing = styled.div`
 height: 450px;
-top: 0;
+/* margin-top: 80px; */
 display: flex;
 flex-direction: column;
 align-items: center;
+justify-content: flex-start;
 `
 
 const ToggleSlider = styled.span`

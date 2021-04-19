@@ -20,9 +20,9 @@ const Page = ({ children }) => (
 );
 
 const StyledPage = styled.div`
-  min-height: 100vh;
+  height: 100vh;
   margin: 0;
-background-color: #131313;
+background-color: ${props => props.theme.bgColor};
 display: flex;
 flex-direction: column;
 align-items: center;
@@ -33,9 +33,9 @@ const StyledMain = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  min-height: calc(100% - 64px);
+  min-height: calc(100% - 61px);
   /* overflow-y: hidden; */
-  margin-bottom: -64px;
+  margin-bottom: -61px;
   width: ${props => props.theme.homeWidth}px;
   margin: auto;
 max-width: 90vw;
@@ -46,9 +46,9 @@ max-width: 90vw;
 `
 
 const Push = styled.div`
-  height: 64px;
+  height: 61px;
   @media only screen and (max-width: 991px) {
-height: 170px;
+    height: 170px;
  }
 `
 

@@ -46,6 +46,7 @@ export const Row = styled.div`
 export const Col = styled.div`
   ${(props) => props.customStyle && props.customStyle};
   flex: ${(props) => props.size};
+  flex-direction: column;
   ${(props) => props.collapse && mediaCollapse[props.collapse]}
   ${(props) => props.expand && mediaExpand[props.expand]}
 `;

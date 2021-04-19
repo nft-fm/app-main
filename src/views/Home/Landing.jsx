@@ -169,7 +169,7 @@ const SocialsBar = styled.div`
   position:relative;
   display: flex;
   justify-content: center;
-  margin-bottom: 120px;
+  margin-bottom: 80px;
 `;
 
 const NftScroll = styled.div`

@@ -200,9 +200,7 @@ const Profile = () => {
       <Create open={isOpen} hide={hide} />
       {isCreating ? <ArtistNfts user={user} selectNft={selectNft} /> : <Library user={user} selectNft={selectNft} />}
       {selectedNft &&
-        <Slide bottom duration={1000}>
-          <MusicPlayer nft={selectedNft} />
-        </Slide>
+        <MusicPlayer nft={selectedNft} />
       }
     </BaseView>
   );

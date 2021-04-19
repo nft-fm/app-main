@@ -115,6 +115,9 @@ const TrackInfoWrapper = styled.div`
 
 
 const Wrapper = styled.div`
+position: -webkit-sticky; /* Safari */
+position: sticky;
+bottom: 0;
     display: flex;
     flex-direction: row;
     align-items: center;

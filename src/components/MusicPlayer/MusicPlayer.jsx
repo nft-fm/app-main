@@ -1,12 +1,15 @@
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import styled from "styled-components";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlay, faAngleDoubleRight, faAngleDoubleLeft, faPause } from '@fortawesome/free-solid-svg-icons'
 import axios from "axios";
 
 import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import loading from '../../assets/img/loading.gif';
+
+import PlayIcon from "../../assets/img/icons/listen_play.svg"
+import PauseIcon from "../../assets/img/icons/listen_pause.svg"
+import SkipBackwardsIcon from "../../assets/img/icons/listen_skip_backward.svg"
+import SkipForwardsIcon from "../../assets/img/icons/listen_skip_forward.svg"
 
 const MusicPlayer = (props) => {
   const { nft } = props;
@@ -28,7 +31,10 @@ const MusicPlayer = (props) => {
     return (
       <TrackInfoWrapper>
         <Image src={nft.imageUrl} />
-        <text>{`${nft.trackTitle}`}</text>
+        <TitleAndArtistSection>
+          <Title>{`${nft.title}`}</Title>
+          <Artist>{`${nft.artist}`}</Artist>
+        </TitleAndArtistSection>
       </TrackInfoWrapper>
     )
   }
@@ -45,13 +51,19 @@ const MusicPlayer = (props) => {
       <AudioPlayer
         src={url}
         onPlay={e => console.log("onPlay")}
+        layout={'horizontal-reverse'}
         customProgressBarSection={
           [
-            TrackInfo(),
-            RHAP_UI.PROGRESS_BAR,
             RHAP_UI.CURRENT_TIME,
-            <div>/</div>,
-            RHAP_UI.DURATION
+            RHAP_UI.PROGRESS_BAR,
+            RHAP_UI.CURRENT_LEFT_TIME,
+            RHAP_UI.VOLUME_CONTROLS,
+            TrackInfo()
+          ]
+        }
+        customControlsSection={
+          [
+            RHAP_UI.MAIN_CONTROLS,
           ]
         }
       // other props here */}
@@ -59,6 +71,22 @@ const MusicPlayer = (props) => {
     </Wrapper>
   )
 }
+
+const Artist = styled.div`
+  color: #5c5c5c;
+`;
+
+const Title = styled.div`
+  color: white;
+`;
+
+const TitleAndArtistSection = styled.div`
+  font-family: "Compita";
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+  mrgin-right: 10px;
+`;
 
 const Image = styled.img`
   max-width: 50px;
@@ -83,7 +111,7 @@ const TrackInfoWrapper = styled.div`
     justify-content: center;
     margin-left: 14px;
     display: flex;
-    flex-direction: Column;
+    flex-direction: Row;
     color: white;
 `;
 

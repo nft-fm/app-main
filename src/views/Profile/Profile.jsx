@@ -6,8 +6,8 @@ import styled, { keyframes } from "styled-components";
 import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
 import Create from "./components/Create";
 import { useAccountConsumer } from "../../contexts/Account";
-import { ReactComponent as CopyIcon } from "../../assets/img/Icons/copy_icon.svg";
 import cog from "../../assets/img/Icons/cog.svg";
+import { ReactComponent as CopyIcon } from "../../assets/img/Icons/copy_icon.svg";
 import { ReactComponent as plus_icon } from "../../assets/img/Icons/plus_icon.svg";
 
 const Profile = () => {
@@ -112,31 +112,26 @@ const Profile = () => {
         </Side>
       </ProfileHeading>
       <MidSection>
-        <BigButton>
-          <span>Listen</span>
-        </BigButton>
-        <MidSectionMiddle creating={isCreating}>
+        <BigButtonRight onClick={() => setIsOpen(!isOpen)}>
+          <span>
+            Create <br /> NFTs
+          </span>
+          <PlusButton />
+        </BigButtonRight>
+        <MidSectionMiddle
+          creating={isCreating}
+          onClick={() => setIsCreating(!isCreating)}
+        >
           <MidSectionTopRow>
             <ListenSlashCreate>
-              <Highlight
-                onClick={() => setIsCreating(!isCreating)}
-                creating={isCreating}
-              >
-                Listen
-              </Highlight>
-              {/* <span> / </span> */}
-              <Highlight
-                onClick={() => setIsCreating(!isCreating)}
-                creating={!isCreating}
-              >
-                Create
-              </Highlight>
+              <Highlight creating={isCreating}>Listen</Highlight>
+              <Highlight creating={!isCreating}>Create</Highlight>
             </ListenSlashCreate>
             <ToggleHolder>
-              <ToggleLabel>
+              <ToggleLabel onClick={(e) => e.stopPropagation()}>
                 <ToggleInput
                   type="checkbox"
-                  value={isCreating}
+                  value={!isCreating}
                   checked={isCreating}
                   onClick={() => setIsCreating(!isCreating)}
                 />
@@ -145,22 +140,18 @@ const Profile = () => {
             </ToggleHolder>
           </MidSectionTopRow>
         </MidSectionMiddle>
-        <BigButton onClick={() => setIsOpen(!isOpen)}>
+        <BigButtonLeft>
+          <span>Listen</span>
           <span>
-            Create <br /> NFTs
+            View your <br />
+            library below
           </span>
-                <PlusButton
-                  onClick={() => {
-                    navigator.clipboard.writeText(user.address);
-                  }} />
-        </BigButton>
+        </BigButtonLeft>
       </MidSection>
       <Create open={isOpen} hide={hide} />
     </BaseView>
   );
 };
-
-
 
 const ToggleSlider = styled.span`
   position: absolute;
@@ -169,11 +160,9 @@ const ToggleSlider = styled.span`
   left: 0;
   right: 0;
   bottom: 0;
-
-  /* ${({ active }) => active && `background-color: #383838`} */
   background-color: ${(props) => props.theme.boxBorderColor};
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
+  -webkit-transition: 1s;
+  transition: 1s;
   border-radius: 17px;
 
   &::before {
@@ -182,13 +171,12 @@ const ToggleSlider = styled.span`
     content: "";
     height: 28px;
     width: 28px;
-    left: 2px;
+    left: 2.5px;
     top: 1px;
     background-color: ${(props) => props.theme.color.lightgray};
     ${({ active }) => active && `background-color: #383838`};
-    -webkit-transition: 0.4s;
-    transition: 0.4s;
-    z-index: 1;
+    -webkit-transition: 1s;
+    transition: 1s;
   }
 `;
 
@@ -228,8 +216,8 @@ const MidSectionTopRow = styled.div`
 `;
 
 const PlusButton = styled(plus_icon)`
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   cursor: pointer;
   transition: all 0.2s linear;
   & path {
@@ -243,18 +231,38 @@ const PlusButton = styled(plus_icon)`
   }
 `;
 
-const BigButton = styled.div`
+const BigButtonLeft = styled.div`
   width: 35%;
   color: white;
-  border-width: 1px;
   background-color: ${(props) => props.theme.boxColor};
-  border-color: ${(props) => props.theme.boxBorderColor};
+  border: 1px solid ${(props) => props.theme.boxBorderColor};
   border-radius: ${(props) => props.theme.borderRadius}px;
-  /* padding: 20px; */
   text-align: left;
   font-size: ${(props) => props.theme.fontSizes.md};
   display: flex;
-  /* justify-content: center; */
+  flex-direction: column;
+  align-items: flex-start;
+  /* cursor: pointer; */
+  & > span {
+    padding: 20px 0 0 20px;
+  }
+  & span:nth-child(2) {
+    font-size: ${(props) => props.theme.fontSizes.sm};
+    color: ${(props) => props.theme.fontColor.gray};
+  }
+  & ${PlusButton} {
+    margin-top: 55%;
+  }
+`;
+const BigButtonRight = styled.div`
+  width: 35%;
+  color: white;
+  background-color: ${(props) => props.theme.boxColor};
+  border: 1px solid ${(props) => props.theme.boxBorderColor};
+  border-radius: ${(props) => props.theme.borderRadius}px;
+  text-align: left;
+  font-size: ${(props) => props.theme.fontSizes.md};
+  display: flex;
   align-items: flex-start;
   cursor: pointer;
   & > span {
@@ -268,8 +276,7 @@ const MidSectionMiddle = styled.div`
   width: 50%;
   height: 110px;
   background-color: ${(props) => props.theme.boxColor};
-  border-width: 1px;
-  border-color: ${(props) => props.theme.boxBorderColor};
+  border: 1px solid ${(props) => props.theme.boxBorderColor};
   border-radius: ${(props) => props.theme.borderRadius}px;
   padding: 20px;
   color: white;
@@ -277,9 +284,9 @@ const MidSectionMiddle = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   position: absolute;
-  right: 0;
+  left: 0;
   transition: transform 1s ease-in-out;
-  ${({ creating }) => creating && `transform: translateX(-73%);`}
+  ${({ creating }) => creating && `transform: translateX(71%);`}
 `;
 
 const MidSection = styled.div`

@@ -560,43 +560,8 @@ const AccountDetails = styled.div`
   color: white;
 `;
 
-const LandingSection = styled.div``;
 
 const Banner = styled.div`
   height: 100px;
 `;
 export default Profile;
-
-{
-  /* <AccountDetails>
-<span>
-  Username:{" "}
-  {edit ? (
-    <StyledInput
-      type="text"
-      defaultValue={user?.username}
-      onChange={(e) => setUsername(e.target.value)}
-    />
-  ) : (
-    user?.username
-  )}
-</span>
-<span>
-  Email:{" "}
-  {edit ? (
-    <StyledInput
-      type="email"
-      defaultValue={user?.email}
-      onChange={(e) => setEmail(e.target.value)}
-    />
-  ) : (
-    user?.email
-  )}
-</span>
-{edit ? (
-  <button onClick={() => saveDetails()}>Save</button>
-) : (
-  <button onClick={() => setEdit(true)}>Edit</button>
-)}
-</AccountDetails> */
-}

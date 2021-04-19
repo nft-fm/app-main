@@ -133,8 +133,7 @@ flex-direction: column;
 align-items: center;
 justify-content: space-around;
 /* height: calc(100vh - ${props => props.theme.topBarSize}px + 1px); */
-width: ${props => props.theme.homeWidth}px;
-max-width: 80vw;
+width: 100%;
 padding-top: 40px;
 color: white;
   font-size: ${props => props.theme.fontSizes.xs};
@@ -170,6 +169,7 @@ const SocialsBar = styled.div`
   position:relative;
   display: flex;
   justify-content: center;
+  margin-bottom: 120px;
 `;
 
 const NftScroll = styled.div`

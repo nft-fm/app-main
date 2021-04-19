@@ -85,7 +85,7 @@ const Profile = () => {
 
   return (
     <BaseView>
-      <Banner />
+      {/* <Banner /> */}
       <ProfileHeading>
         <Side />
         <ProfileHolder>
@@ -198,7 +198,7 @@ const Profile = () => {
         <div />
       } */}
       <Create open={isOpen} hide={hide} />
-      {isCreating ? <ArtistNfts user={user} /> : <Library user={user} />}
+      <Library user={user} isCreating={isCreating}/>
       
     </BaseView>
   );

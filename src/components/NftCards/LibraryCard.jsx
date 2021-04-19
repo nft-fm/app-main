@@ -166,7 +166,7 @@ const TrackName = styled.span`
   font-weight: 500;
   /* width: 100%; */
   /* text-align: center; */
-  /* padding-left: 10px; */
+  padding-left: 10px;
   font-size: ${(props) => props.theme.fontSizes.xs};
   /* margin-bottom: 12px; */
 `;

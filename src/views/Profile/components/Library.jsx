@@ -1,30 +1,38 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import axios from "axios";
-import NftCard from "../../../components/NftCards/LibraryCard";
+import LibraryCard from "../../../components/NftCards/LibraryCard";
+import ArtistCard from "../../../components/NftCards/ArtistCard";
 
-const Library = ({ user }) => {
+const Library = ({ user, isCreating }) => {
   const [nfts, setNfts] = useState([]);
+
+  const getArtistNfts = async () => {
+    console.log("here");
+    axios
+      .post("api/nft-type/artist-nfts", user)
+      .then((res) => setNfts(res.data));
+  };
 
   const getUserNfts = async () => {
     console.log("here");
     axios
       .post("api/nft-type/get-user-nfts", user)
       .then((res) => setNfts(res.data));
-    // axios.get("api/nft-type/featured").then((res) => setOwnedNfts(res.data));
   };
+
   useEffect(() => {
-    getUserNfts();
-  }, [user]);
+    !isCreating ? getUserNfts() : getArtistNfts();
+  }, [user, isCreating]);
 
   const showNfts = nfts.map((nft) => {
-    return <NftCard nft={nft} />;
+    return isCreating ? <ArtistCard nft={nft} /> : <LibraryCard nft={nft} />;
   });
 
   return (
     <Landing>
       <LaunchContainer>
-        <ContainerTitle>MY LIBRARY</ContainerTitle>
+        <ContainerTitle>{isCreating ? "MY NFTS" : "MY LIBRARY"}</ContainerTitle>
         <ContainerOutline />
         <NftScroll> {showNfts} </NftScroll>
       </LaunchContainer>
@@ -32,13 +40,11 @@ const Library = ({ user }) => {
   );
 };
 
-
 const Landing = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  /* height: calc(100vh - ${(props) => props.theme.topBarSize}px + 1px); */
   width: ${(props) => props.theme.homeWidth}px;
   max-width: 80vw;
   padding-top: 40px;

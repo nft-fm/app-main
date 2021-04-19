@@ -33,7 +33,7 @@ const StyledMain = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  min-height: calc(100% - 61px);
+  min-height: calc(100% - 181px);
   /* overflow-y: hidden; */
   margin-bottom: -61px;
   width: ${props => props.theme.homeWidth}px;

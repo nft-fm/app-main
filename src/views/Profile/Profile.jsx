@@ -6,9 +6,9 @@ import styled, { keyframes } from "styled-components";
 import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
 import Create from "./components/Create";
 import { useAccountConsumer } from "../../contexts/Account";
-import { ReactComponent as CopyIcon } from "../../assets/img/Icons/copy_icon.svg";
-import cog from "../../assets/img/Icons/cog.svg";
-import { ReactComponent as plus_icon } from "../../assets/img/Icons/plus_icon.svg";
+import { ReactComponent as CopyIcon } from "../../assets/img/icons/copy_icon.svg";
+import cog from "../../assets/img/icons/cog.svg";
+import { ReactComponent as plus_icon } from "../../assets/img/icons/plus_icon.svg";
 import NftCard from "../Home/NftCard";
 import Slide from 'react-reveal/Slide';
 import MusicPlayer from '../../components/MusicPlayer/MusicPlayer'
@@ -227,7 +227,7 @@ const ToggleSlider = styled.span`
   bottom: 0;
 
   /* ${({ active }) => active && `background-color: #383838`} */
-  background-color: ${(props) => props.theme.boxBorderColor};
+  background-color: ${(props) => props.theme.color.boxBorder};
   -webkit-transition: 0.4s;
   transition: 0.4s;
   border-radius: 17px;
@@ -303,8 +303,8 @@ const BigButton = styled.div`
   width: 35%;
   color: white;
   border-width: 1px;
-  background-color: ${(props) => props.theme.boxColor};
-  border-color: ${(props) => props.theme.boxBorderColor};
+  background-color: ${(props) => props.theme.color.box};
+  border-color: ${(props) => props.theme.color.boxBorder};
   border-radius: ${(props) => props.theme.borderRadius}px;
   /* padding: 20px; */
   text-align: left;
@@ -323,9 +323,9 @@ const BigButton = styled.div`
 const MidSectionMiddle = styled.div`
   width: 50%;
   height: 110px;
-  background-color: ${(props) => props.theme.boxColor};
+  background-color: ${(props) => props.theme.color.box};
   border-width: 1px;
-  border-color: ${(props) => props.theme.boxBorderColor};
+  border-color: ${(props) => props.theme.color.boxBorder};
   border-radius: ${(props) => props.theme.borderRadius}px;
   padding: 20px;
   color: white;

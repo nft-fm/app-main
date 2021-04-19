@@ -3,10 +3,10 @@ import styled, { keyframes } from "styled-components";
 import axios from "axios";
 import NftCard from "../../components/NftCards/BuyNftCard";
 import logo from "../../assets/img/logos/logo.png";
-import discord from "../../assets/img/socials/social_discord.png";
-import medium from "../../assets/img/socials/social_medium.png";
-import telegram from "../../assets/img/socials/social_telegram.png";
-import twitter from "../../assets/img/socials/social_twitter.png";
+import { ReactComponent as IconDiscord } from "../../assets/img/icons/coins.svg";
+import { ReactComponent as IconMedium } from "../../assets/img/icons/social_medium.svg";
+import { ReactComponent as IconTelegram } from "../../assets/img/icons/social_telegram.svg";
+import { ReactComponent as IconTwitter } from "../../assets/img/icons/social_twitter.svg";
 
 const Listen = () => {
   const [nfts, setNfts] = useState([])
@@ -41,42 +41,79 @@ const Listen = () => {
           <ContainerTitleText style={{ "color": "#fa423e" }}>{`ARTISTS`}</ContainerTitleText>
         </ContainerTitle>
         <ContainerOutline />
-        <NftScroll>
-          {showNfts}
-        </NftScroll>
+        <NftScroll> {showNfts} </NftScroll>
       </LaunchContainer>
       <SocialsBar>
-        {/* <SocialsLine /> */}
-        <SocialsIcons>
-          <IconContainer>
-            <Icon src={telegram} />
-            <IconText>
-              {`Telegram`}
-            </IconText>
-          </IconContainer>
-          <IconContainer>
-            <Icon src={twitter} />
-            <IconText>
-              {`Twitter`}
-            </IconText>
-          </IconContainer>
-          <IconContainer>
-            <Icon src={medium} />
-            <IconText>
-              {`Medium`}
-            </IconText>
-          </IconContainer>
-          <IconContainer>
-            <Icon src={discord} />
-            <IconText>
-              {`Discord`}
-            </IconText>
-          </IconContainer>
-        </SocialsIcons>
+        <IconContainer>
+          <Telegram />
+          <IconText>
+            Telegram
+          </IconText>
+        </IconContainer>
+        <IconContainer>
+          <Medium />
+          <IconText>
+            Medium
+          </IconText>
+        </IconContainer>
+        <IconContainer>
+          <Twitter />
+          <IconText>
+            Twitter
+          </IconText>
+        </IconContainer>
+        <IconContainer>
+          <Discord />
+          <IconText>
+            Discord
+          </IconText>
+        </IconContainer>
       </SocialsBar>
     </Landing >
   );
 };
+
+const Discord = styled(IconDiscord)`
+width: 18px;
+height: 18px;
+& path {
+    transition: all 0.2s ease-in-out;
+     fill: ${props => props.theme.color.white};
+    }
+`
+
+const Twitter = styled(IconTwitter)`
+width: 18px;
+height: 18px;
+& path {
+    transition: all 0.2s ease-in-out;
+     fill: ${props => props.theme.color.white};
+    }
+`
+
+const Medium = styled(IconMedium)`
+width: 18px;
+height: 18px;
+& path {
+    transition: all 0.2s ease-in-out;
+     fill: ${props => props.theme.color.white};
+    }
+`
+
+const Telegram = styled(IconTelegram)`
+width: 18px;
+height: 18px;
+& path {
+    transition: all 0.2s ease-in-out;
+     fill: ${props => props.theme.color.white};
+    }
+`
+
+const IconText = styled.span`
+margin: 3px 0 0 12px;
+font-weight: bold;
+letter-spacing: 1px;
+`
 
 const ContainerTitleText = styled.span`
 padding-left: 6px;
@@ -99,45 +136,34 @@ justify-content: space-around;
 width: ${props => props.theme.homeWidth}px;
 max-width: 80vw;
 padding-top: 40px;
+color: white;
+  font-size: ${props => props.theme.fontSizes.xs};
+  padding-right: 4px;
 `
 
-const IconText = styled.div`
-  color: white;
-  font-size: small;
-  padding-right: 4px;
-`;
-
-const IconContainer = styled.div`
-  margin-left:4px;
-  margin-right:4px;
+const IconContainer = styled.a`
+margin: 0 8px;
   align-items: center;
   border: solid #707070;
-  border-radius: 25px;
-  border-width: 2px 2px 2px 2px;
-  background-color: #131313;
+  height: 28px;
+  width: 98px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: solid 1px ${props => props.theme.color.boxBorder};
+  border-radius: 18px;
+  background-color: ${props => props.theme.color.box};
   display: flex;
   flex-direction: row;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  &:hover {
+  background-color: ${props => props.theme.color.boxBorder};
+  border: solid 1px #383838;
+  }
 `;
 
-const Icon = styled.img`
-  height: 20px;
-  padding-left: 4px;
-`;
-
-const SocialsIcons = styled.div`
-  z-index: 2;
-  display: flex;
-  flex-direction:row;
-  margin-left: auto;
-  margin-right: auto;
-`;
-
-const SocialsLine = styled.hr`
-  background-color: #707070;
-  z-index: 1;
-  width: 100%;
-  position: absolute;
-`;
 
 const SocialsBar = styled.div`
   width: 100%;

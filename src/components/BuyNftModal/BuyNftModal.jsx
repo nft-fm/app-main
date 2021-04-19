@@ -156,7 +156,7 @@ const BuyButton = styled.div`
   margin: 0 16px;
   height: 28px;
   border-radius: 2px;
-  background-color: ${(props) => props.theme.boxColor};
+  background-color: ${(props) => props.theme.color.box};
   &:hover {
     background-color: ${(props) => props.theme.color.red};
   }

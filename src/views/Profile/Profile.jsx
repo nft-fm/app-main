@@ -9,6 +9,7 @@ import { useAccountConsumer } from "../../contexts/Account";
 import cog from "../../assets/img/Icons/cog.svg";
 import { ReactComponent as CopyIcon } from "../../assets/img/Icons/copy_icon.svg";
 import { ReactComponent as plus_icon } from "../../assets/img/Icons/plus_icon.svg";
+import { ReactComponent as lock_icon } from "../../assets/img/Icons/lock.svg";
 
 const Profile = () => {
   const [ownedNfts, setOwnedNfts] = useState([]);
@@ -52,6 +53,13 @@ const Profile = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
+  const [shake, setShake] = useState(false);
+  if (shake) {
+    setTimeout(() => {
+      setShake(!shake);
+    }, 2000);
+  }
+
   const hide = (e) => {
     setIsOpen(false);
     console.log("isOpen", isOpen);
@@ -120,24 +128,36 @@ const Profile = () => {
         </BigButtonRight>
         <MidSectionMiddle
           creating={isCreating}
-          onClick={() => setIsCreating(!isCreating)}
+          onClick={
+            user && user.isArtist
+              ? () => setIsCreating(!isCreating)
+              : () => setShake(!shake)
+          }
         >
           <MidSectionTopRow>
             <ListenSlashCreate>
               <Highlight creating={isCreating}>Listen</Highlight>
               <Highlight creating={!isCreating}>Create</Highlight>
             </ListenSlashCreate>
-            <ToggleHolder>
-              <ToggleLabel onClick={(e) => e.stopPropagation()}>
-                <ToggleInput
-                  type="checkbox"
-                  value={!isCreating}
-                  checked={isCreating}
-                  onClick={() => setIsCreating(!isCreating)}
-                />
-                <ToggleSlider active={isCreating} />
-              </ToggleLabel>
-            </ToggleHolder>
+            {user && user.isArtist ? (
+              <ToggleHolder>
+                <ToggleLabel onClick={(e) => e.stopPropagation()}>
+                  <ToggleInput
+                    type="checkbox"
+                    value={!isCreating}
+                    checked={isCreating}
+                    onClick={() => setIsCreating(!isCreating)}
+                  />
+                  <ToggleSlider active={isCreating} />
+                </ToggleLabel>
+              </ToggleHolder>
+            ) : (
+              <LockHolder onClick={() => setShake(!shake)}>
+                {/* {shake && <ComingSoon>Feature Coming Soon!</ComingSoon>} */}
+
+                <LockIcon className={shake ? "shake" : null} />
+              </LockHolder>
+            )}
           </MidSectionTopRow>
         </MidSectionMiddle>
         <BigButtonLeft>
@@ -213,6 +233,81 @@ const MidSectionTopRow = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+`;
+
+const LockHolder = styled.div`
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  /* height: 100%; */
+`;
+
+const ComingSoon = styled.span`
+  font-size: ${(props) => props.theme.fontSizes.xxs};
+  position: absolute;
+  white-space: nowrap;
+  width: 90px;
+  right: 40px;
+  bottom: -10px;
+`;
+
+const LockIcon = styled(lock_icon)`
+  float: right;
+  /* top: 80%;
+left: 90%; */
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  transition: all 0.2s linear;
+  & path {
+    fill: ${(props) => props.theme.color.gray};
+  }
+
+  &:hover {
+    & path {
+      fill: ${(props) => props.theme.color.lightgray};
+    }
+  }
+
+  &.shake {
+    animation: shake 1s;
+  }
+
+  @keyframes shake {
+    0% {
+      transform: translate(2px, 1px) rotate(0deg);
+    }
+    10% {
+      transform: translate(-1px, -2px) rotate(-2deg);
+    }
+    20% {
+      transform: translate(-3px, 0px) rotate(3deg);
+    }
+    30% {
+      transform: translate(0px, 2px) rotate(0deg);
+    }
+    40% {
+      transform: translate(1px, -1px) rotate(1deg);
+    }
+    50% {
+      transform: translate(-1px, 2px) rotate(-1deg);
+    }
+    60% {
+      transform: translate(-3px, 1px) rotate(0deg);
+    }
+    70% {
+      transform: translate(2px, 1px) rotate(-2deg);
+    }
+    80% {
+      transform: translate(-1px, -1px) rotate(4deg);
+    }
+    90% {
+      transform: translate(2px, 2px) rotate(0deg);
+    }
+    100% {
+      transform: translate(1px, -2px) rotate(-1deg);
+    }
+  }
 `;
 
 const PlusButton = styled(plus_icon)`

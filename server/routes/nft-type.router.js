@@ -7,6 +7,16 @@ const fs = require('fs')
 const multer = require('multer');
 const User = require('../schemas/User.schema');
 
+router.post('/artist-nfts', async (req, res) => {
+  try {
+    console.log('/artist-nfts hit', req.body)
+    let nfts = await NftType.find({address: req.body.address, isDraft: false})
+    res.send(nfts)
+  } catch (err) {
+    res.status(500).send(err);
+  }
+})
+
 
 router.post('/get-NFT', async (req, res) => {
   try {

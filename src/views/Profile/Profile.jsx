@@ -12,6 +12,7 @@ import { ReactComponent as plus_icon } from "../../assets/img/icons/plus_icon.sv
 import { ReactComponent as lock_icon } from "../../assets/img/icons/lock.svg";
 
 import Library from "./components/Library"
+import ArtistNfts from "./components/ArtistNfts"
 
 const Profile = () => {
   const [selectedNft, setSelectedNft] = useState();
@@ -197,7 +198,8 @@ const Profile = () => {
         <div />
       } */}
       <Create open={isOpen} hide={hide} />
-      <Library user={user} />
+      {isCreating ? <ArtistNfts user={user} /> : <Library user={user} />}
+      
     </BaseView>
   );
 };
@@ -565,6 +567,6 @@ const AccountDetails = styled.div`
 
 
 const Banner = styled.div`
-  height: 100px;
+  height: 50px;
 `;
 export default Profile;

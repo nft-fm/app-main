@@ -103,9 +103,9 @@ const ContainerTitle = styled.span`
 `;
 
 const ContainerOutline = styled.div`
-  border-radius: 24px 24px 0 0;
-  border: 6px solid #383838;
-  border-bottom: none;
+  /* border-radius: 24px 24px 0 0; */
+  border-top: 6px solid #383838;
+  /* border-bottom: none; */
   height: 40px;
   width: 80%;
   display: flex;

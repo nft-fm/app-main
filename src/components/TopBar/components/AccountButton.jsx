@@ -17,7 +17,6 @@ const AccountButton = (props) => {
   const [onPresentInstallMetamask] = useModal(<InstallMetamaskModal />);
   const [onPresentChangeChain] = useModal(<ChangeChainModal />)
 
-  console.log(currChainId);
   const fetchAccount = async () => {
     axios.post(`api/user/get-account`,
       { address: account, }).then(res => {
@@ -27,15 +26,20 @@ const AccountButton = (props) => {
       })
   };
 
-  const handleUnlockClick = useCallback(() => {
-    console.log("CURR CHAIN ID", currChainId)
-    if (!window.ethereum) onPresentInstallMetamask();
-    else if (currChainId !== 1) onPresentChangeChain();
+  const handleUnlockClick = useCallback(async () => {
+    if (!window.ethereum) {
+      onPresentInstallMetamask();
+      return;
+    }
+
+    let chain = currChainId ? currChainId : await getChain();
+    console.log("CHAIN", chain);
+    if (chain !== 1) onPresentChangeChain();
     if (isMobile()) {
       // connect('injected');
-      connect("walletconnect")//.then(() => { getS3Bucket() });
+      await connect("walletconnect")//.then(() => { getS3Bucket() });
     } else {
-      connect("injected")//.then(() => { getS3Bucket() });
+      await connect("injected")//.then(() => { getS3Bucket() });
       // onPresentWalletProviderModal()
     }
     // fetchAccount();
@@ -50,13 +54,19 @@ const AccountButton = (props) => {
     });
   }
 
+  const getChain = async () => {
+    const newChainId = await window.ethereum.request({ method: 'eth_chainId' });
+    setCurrChainId(Number(newChainId));
+    return Number(newChainId);
+  }
+
   useEffect(() => {
     fetchAccount();
   }, [account])
 
   useEffect(() => {
-    setCurrChainId(props.chainId)
-  }, [props.chainId])
+      getChain();
+  }, [])
   return (
     <StyledAccountButton>
       {!account ? (

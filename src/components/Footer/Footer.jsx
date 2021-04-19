@@ -71,10 +71,12 @@ const Column = styled.div`
 display: flex;
 flex-direction: column;
 align-items: center;
+height: 100%;
+justify-content: space-evenly;
 `
 
 const FooterCopy = styled.span`
-margin-bottom: 12px;
+/* margin-bottom: 12px; */
 color: white;
 font-family: "Compita";
 font-size: ${props => props.theme.fontSizes.xxs};
@@ -85,25 +87,19 @@ display: flex;
 flex-direction: row;
 width: 500px;
 justify-content: space-between;
-margin-bottom: 16px;
+/* margin-bottom: 16px; */
 `
 
 const Logo = styled.img`
   width: 120px;
   height: auto;
-  margin-bottom: 16px;
+  /* margin-bottom: 16px; */
 `
 
 const StyledFooter = styled.footer`
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 10px 0 10px 0;
-`;
-
-const StyledFooterBG = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 100%;
+  justify-content: space-evenly;
+  height: 120px;
 `;

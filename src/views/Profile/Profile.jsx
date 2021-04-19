@@ -6,11 +6,16 @@ import styled, { keyframes } from "styled-components";
 import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
 import Create from "./components/Create";
 import { useAccountConsumer } from "../../contexts/Account";
-import { ReactComponent as CopyIcon } from "../../assets/img/Icons/copy_icon.svg";
-import cog from "../../assets/img/Icons/cog.svg";
-import { ReactComponent as plus_icon } from "../../assets/img/Icons/plus_icon.svg";
+import cog from "../../assets/img/icons/cog.svg";
+import { ReactComponent as CopyIcon } from "../../assets/img/icons/copy_icon.svg";
+import { ReactComponent as plus_icon } from "../../assets/img/icons/plus_icon.svg";
+import { ReactComponent as lock_icon } from "../../assets/img/icons/lock.svg";
+
+import Library from "./components/Library"
+import ArtistNfts from "./components/ArtistNfts"
 
 const Profile = () => {
+  const [selectedNft, setSelectedNft] = useState();
   const [ownedNfts, setOwnedNfts] = useState([]);
   console.log("ownedNfts", ownedNfts);
   const { account, user, setUser } = useAccountConsumer();
@@ -20,15 +25,18 @@ const Profile = () => {
       .then((res) => setUser(res.data));
   };
 
-  const getUserNfts = async () => {
-    console.log("here");
-    axios
-      .post("api/nft-type/get-user-nfts", user)
-      .then((res) => setOwnedNfts(res.data));
-  };
-  useEffect(() => {
-    getUserNfts();
-  }, [user]);
+
+  // // TODO switch back to get-user-nfts
+  // const getUserNfts = async () => {
+  //   console.log("here");
+  //   axios
+  //     .post("api/nft-type/get-user-nfts", user)
+  //     .then((res) => setOwnedNfts(res.data));
+  //   // axios.get("api/nft-type/featured").then((res) => setOwnedNfts(res.data));
+  // };
+  // useEffect(() => {
+  //   getUserNfts();
+  // }, [user]);
   useEffect(() => {
     getUser();
   }, [account]);
@@ -52,10 +60,29 @@ const Profile = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
+  const [shake, setShake] = useState(false);
+  if (shake) {
+    setTimeout(() => {
+      setShake(!shake);
+    }, 2000);
+  }
+
   const hide = (e) => {
     setIsOpen(false);
     console.log("isOpen", isOpen);
   };
+
+  // const showNfts = ownedNfts.map((nft) => {
+  //   return (
+  //     <NftCardWrapper>
+  //       <NftCard nft={nft} />
+  //       <PlayButton onClick={() => setSelectedNft(nft)}>
+  //         Play!
+  //       </PlayButton>
+  //     </NftCardWrapper>
+  //   )
+  // });
+
   return (
     <BaseView>
       <Banner />
@@ -89,8 +116,8 @@ const Profile = () => {
             <AddressSpan>
               {user
                 ? user.address.substring(0, 10) +
-                  "..." +
-                  user.address.substring(user.address.length - 4)
+                "..." +
+                user.address.substring(user.address.length - 4)
                 : " "}
               {user && (
                 <CopyButton
@@ -112,55 +139,70 @@ const Profile = () => {
         </Side>
       </ProfileHeading>
       <MidSection>
-        <BigButton>
-          <span>Listen</span>
-        </BigButton>
-        <MidSectionMiddle creating={isCreating}>
-          <MidSectionTopRow>
-            <ListenSlashCreate>
-              <Highlight
-                onClick={() => setIsCreating(!isCreating)}
-                creating={isCreating}
-              >
-                Listen
-              </Highlight>
-              {/* <span> / </span> */}
-              <Highlight
-                onClick={() => setIsCreating(!isCreating)}
-                creating={!isCreating}
-              >
-                Create
-              </Highlight>
-            </ListenSlashCreate>
-            <ToggleHolder>
-              <ToggleLabel>
-                <ToggleInput
-                  type="checkbox"
-                  value={isCreating}
-                  checked={isCreating}
-                  onClick={() => setIsCreating(!isCreating)}
-                />
-                <ToggleSlider active={isCreating} />
-              </ToggleLabel>
-            </ToggleHolder>
-          </MidSectionTopRow>
-        </MidSectionMiddle>
-        <BigButton onClick={() => setIsOpen(!isOpen)}>
+        <BigButtonRight onClick={() => setIsOpen(!isOpen)}>
           <span>
             Create <br /> NFTs
           </span>
-                <PlusButton
-                  onClick={() => {
-                    navigator.clipboard.writeText(user.address);
-                  }} />
-        </BigButton>
+          <PlusButton />
+        </BigButtonRight>
+        <MidSectionMiddle
+          creating={isCreating}
+          onClick={
+            user && user.isArtist
+              ? () => setIsCreating(!isCreating)
+              : () => setShake(!shake)
+          }
+        >
+          <MidSectionTopRow>
+            <ListenSlashCreate>
+              <Highlight creating={isCreating}>Listen</Highlight>
+              <Highlight creating={!isCreating}>Create</Highlight>
+            </ListenSlashCreate>
+            {user && user.isArtist ? (
+              <ToggleHolder>
+                <ToggleLabel onClick={(e) => e.stopPropagation()}>
+                  <ToggleInput
+                    type="checkbox"
+                    value={!isCreating}
+                    checked={isCreating}
+                    onClick={() => setIsCreating(!isCreating)}
+                  />
+                  <ToggleSlider active={isCreating} />
+                </ToggleLabel>
+              </ToggleHolder>
+            ) : (
+              <LockHolder onClick={() => setShake(!shake)}>
+                {/* {shake && <ComingSoon>Feature Coming Soon!</ComingSoon>} */}
+
+                <LockIcon className={shake ? "shake" : null} />
+              </LockHolder>
+            )}
+          </MidSectionTopRow>
+        </MidSectionMiddle>
+        <BigButtonLeft>
+          <span>Listen</span>
+          <span>
+            View your <br />
+            library below
+          </span>
+        </BigButtonLeft>
       </MidSection>
+      {/* <NftScroll>
+        {showNfts}
+      </NftScroll> */}
+      {/* {selectedNft ?
+        <Slide bottom duration={1000}>
+          <MusicPlayer nft={selectedNft} />
+        </Slide>
+        :
+        <div />
+      } */}
       <Create open={isOpen} hide={hide} />
+      {isCreating ? <ArtistNfts user={user} /> : <Library user={user} />}
+      
     </BaseView>
   );
 };
-
-
 
 const ToggleSlider = styled.span`
   position: absolute;
@@ -169,11 +211,9 @@ const ToggleSlider = styled.span`
   left: 0;
   right: 0;
   bottom: 0;
-
-  /* ${({ active }) => active && `background-color: #383838`} */
-  background-color: ${(props) => props.theme.boxBorderColor};
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
+  background-color: ${(props) => props.theme.color.boxBorder};
+  -webkit-transition: 1s;
+  transition: 1s;
   border-radius: 17px;
 
   &::before {
@@ -182,13 +222,12 @@ const ToggleSlider = styled.span`
     content: "";
     height: 28px;
     width: 28px;
-    left: 2px;
+    left: 2.5px;
     top: 1px;
     background-color: ${(props) => props.theme.color.lightgray};
     ${({ active }) => active && `background-color: #383838`};
-    -webkit-transition: 0.4s;
-    transition: 0.4s;
-    z-index: 1;
+    -webkit-transition: 1s;
+    transition: 1s;
   }
 `;
 
@@ -227,9 +266,84 @@ const MidSectionTopRow = styled.div`
   align-items: center;
 `;
 
+const LockHolder = styled.div`
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  /* height: 100%; */
+`;
+
+const ComingSoon = styled.span`
+  font-size: ${(props) => props.theme.fontSizes.xxs};
+  position: absolute;
+  white-space: nowrap;
+  width: 90px;
+  right: 40px;
+  bottom: -10px;
+`;
+
+const LockIcon = styled(lock_icon)`
+  float: right;
+  /* top: 80%;
+left: 90%; */
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  transition: all 0.2s linear;
+  & path {
+    fill: ${(props) => props.theme.color.gray};
+  }
+
+  &:hover {
+    & path {
+      fill: ${(props) => props.theme.color.lightgray};
+    }
+  }
+
+  &.shake {
+    animation: shake 1s;
+  }
+
+  @keyframes shake {
+    0% {
+      transform: translate(2px, 1px) rotate(0deg);
+    }
+    10% {
+      transform: translate(-1px, -2px) rotate(-2deg);
+    }
+    20% {
+      transform: translate(-3px, 0px) rotate(3deg);
+    }
+    30% {
+      transform: translate(0px, 2px) rotate(0deg);
+    }
+    40% {
+      transform: translate(1px, -1px) rotate(1deg);
+    }
+    50% {
+      transform: translate(-1px, 2px) rotate(-1deg);
+    }
+    60% {
+      transform: translate(-3px, 1px) rotate(0deg);
+    }
+    70% {
+      transform: translate(2px, 1px) rotate(-2deg);
+    }
+    80% {
+      transform: translate(-1px, -1px) rotate(4deg);
+    }
+    90% {
+      transform: translate(2px, 2px) rotate(0deg);
+    }
+    100% {
+      transform: translate(1px, -2px) rotate(-1deg);
+    }
+  }
+`;
+
 const PlusButton = styled(plus_icon)`
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   cursor: pointer;
   transition: all 0.2s linear;
   & path {
@@ -243,18 +357,38 @@ const PlusButton = styled(plus_icon)`
   }
 `;
 
-const BigButton = styled.div`
+const BigButtonLeft = styled.div`
   width: 35%;
   color: white;
-  border-width: 1px;
-  background-color: ${(props) => props.theme.boxColor};
-  border-color: ${(props) => props.theme.boxBorderColor};
+  background-color: ${(props) => props.theme.color.box};
+  border: 1px solid ${(props) => props.theme.color.boxBorder};
   border-radius: ${(props) => props.theme.borderRadius}px;
-  /* padding: 20px; */
   text-align: left;
   font-size: ${(props) => props.theme.fontSizes.md};
   display: flex;
-  /* justify-content: center; */
+  flex-direction: column;
+  align-items: flex-start;
+  /* cursor: pointer; */
+  & > span {
+    padding: 20px 0 0 20px;
+  }
+  & span:nth-child(2) {
+    font-size: ${(props) => props.theme.fontSizes.sm};
+    color: ${(props) => props.theme.fontColor.gray};
+  }
+  & ${PlusButton} {
+    margin-top: 55%;
+  }
+`;
+const BigButtonRight = styled.div`
+  width: 35%;
+  color: white;
+  background-color: ${(props) => props.theme.color.box};
+  border: 1px solid ${(props) => props.theme.color.boxBorder};
+  border-radius: ${(props) => props.theme.borderRadius}px;
+  text-align: left;
+  font-size: ${(props) => props.theme.fontSizes.md};
+  display: flex;
   align-items: flex-start;
   cursor: pointer;
   & > span {
@@ -267,9 +401,8 @@ const BigButton = styled.div`
 const MidSectionMiddle = styled.div`
   width: 50%;
   height: 110px;
-  background-color: ${(props) => props.theme.boxColor};
-  border-width: 1px;
-  border-color: ${(props) => props.theme.boxBorderColor};
+  background-color: ${(props) => props.theme.color.box};
+  border: 1px solid ${(props) => props.theme.color.boxBorder};
   border-radius: ${(props) => props.theme.borderRadius}px;
   padding: 20px;
   color: white;
@@ -277,9 +410,9 @@ const MidSectionMiddle = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   position: absolute;
-  right: 0;
+  left: 0;
   transition: transform 1s ease-in-out;
-  ${({ creating }) => creating && `transform: translateX(-73%);`}
+  ${({ creating }) => creating && `transform: translateX(71%);`}
 `;
 
 const MidSection = styled.div`
@@ -432,43 +565,8 @@ const AccountDetails = styled.div`
   color: white;
 `;
 
-const LandingSection = styled.div``;
 
 const Banner = styled.div`
-  height: 100px;
+  height: 50px;
 `;
 export default Profile;
-
-{
-  /* <AccountDetails>
-<span>
-  Username:{" "}
-  {edit ? (
-    <StyledInput
-      type="text"
-      defaultValue={user?.username}
-      onChange={(e) => setUsername(e.target.value)}
-    />
-  ) : (
-    user?.username
-  )}
-</span>
-<span>
-  Email:{" "}
-  {edit ? (
-    <StyledInput
-      type="email"
-      defaultValue={user?.email}
-      onChange={(e) => setEmail(e.target.value)}
-    />
-  ) : (
-    user?.email
-  )}
-</span>
-{edit ? (
-  <button onClick={() => saveDetails()}>Save</button>
-) : (
-  <button onClick={() => setEdit(true)}>Edit</button>
-)}
-</AccountDetails> */
-}

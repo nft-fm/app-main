@@ -12,7 +12,6 @@ export const BaseView = (props) => {
 };
 
 const StyledCanvas = styled.div`
-  width: 100%;
   height: 100%;
 `;
 

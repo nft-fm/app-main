@@ -20,8 +20,12 @@ const Page = ({ children }) => (
 );
 
 const StyledPage = styled.div`
-  height: 100vh;
+  min-height: 100vh;
   margin: 0;
+background-color: #131313;
+display: flex;
+flex-direction: column;
+align-items: center;
 `;
 
 const StyledMain = styled.div`
@@ -29,9 +33,11 @@ const StyledMain = styled.div`
   display: flex;
   flex-direction: column;
   min-height: calc(100% - 64px);
-  background-color: #131313;
   /* overflow-y: hidden; */
   margin-bottom: -64px;
+  width: ${props => props.theme.homeWidth}px;
+  margin: auto;
+max-width: 90vw;
   @media only screen and (max-width: 991px) {
     margin: -50px 0 -120px 0;
     }

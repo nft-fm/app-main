@@ -18,7 +18,7 @@ const StyledModal = styled.div`
   position: relative;
   width: 100%;
   height: 70vh;
-  background-color: ${props => props.theme.boxColor};
+  background-color: ${props => props.theme.color.box};
   z-index: 100000;
 `
 

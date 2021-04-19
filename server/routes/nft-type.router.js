@@ -7,6 +7,16 @@ const fs = require('fs')
 const multer = require('multer');
 const User = require('../schemas/User.schema');
 
+router.post('/artist-nfts', async (req, res) => {
+  try {
+    console.log('/artist-nfts hit', req.body)
+    let nfts = await NftType.find({address: req.body.address, isDraft: false})
+    res.send(nfts)
+  } catch (err) {
+    res.status(500).send(err);
+  }
+})
+
 
 router.post('/get-NFT', async (req, res) => {
   try {
@@ -35,7 +45,7 @@ router.post('/get-user-nfts', async (req, res) => {
   try {
     console.log("/get-user-nfts hit", req.body)
     let ids = req.body.x_nfts;
-    let nfts = await NftType.find({ '_id': { $in: ids}})
+    let nfts = await NftType.find({ '_id': { $in: ids } })
     res.status(200).send(nfts)
   } catch (error) {
     console.log(error);
@@ -303,25 +313,40 @@ router.post('/handleImage', async (req, res) => {
 })
 
 router.post('/getSong', async (req, res) => {
-  console.log(req.body);
-  var AWS = require('aws-sdk');
-  AWS.config.region = 'us-west-2';
-  const path = require('path');
+  const AWS = require('aws-sdk')
 
-  // AWS.config.loadFromPath(path.join(__dirname, '../aws_config.json'));
-  var s3 = new AWS.S3();
+  const s3 = new AWS.S3()
+  // AWS.config.update({accessKeyId: 'id-omitted', secretAccessKey: 'key-omitted'})
 
-  s3.getObject(
-    { Bucket: "nftfm-music", Key: req.body.key },
-    function (error, data) {
-      if (error != null) {
-        console.log("Failed to retrieve an object: " + error);
-      } else {
-        console.log("Loaded " + data.ContentLength + " bytes");
-        res.status(200).send(data);           // successful response
-      }
-    }
-  );
+  // Tried with and without this. Since s3 is not region-specific, I don't
+  // think it should be necessary.
+  // AWS.config.update({region: 'us-west-2'})
+
+  const params = { Bucket: "nftfm-music", Key: req.body.key, Expires: 60 * 5 };
+
+  const url = s3.getSignedUrl('getObject', params)
+
+  console.log(url)
+  res.status(200).send(url);
+  // console.log(req.body);
+  // var AWS = require('aws-sdk');
+  // AWS.config.region = 'us-west-2';
+  // const path = require('path');
+
+  // // AWS.config.loadFromPath(path.join(__dirname, '../aws_config.json'));
+  // var s3 = new AWS.S3();
+
+  // s3.getObject(
+  //   { Bucket: "nftfm-music", Key: req.body.key },
+  //   function (error, data) {
+  //     if (error != null) {
+  //       console.log("Failed to retrieve an object: " + error);
+  //     } else {
+  //       console.log("Loaded " + data.ContentLength + " bytes");
+  //       res.status(200).send(data);           // successful response
+  //     }
+  //   }
+  // );
 })
 
 router.post('/getSongList', async (req, res) => {

@@ -46,6 +46,7 @@ z-index: 20;
 const StyledTopBar = styled.div`
   background-color:#121212;
   border-bottom: 1px solid #232323;
+  width: 100%;
 `;
 
 const StyledTopBarInner = styled.div`

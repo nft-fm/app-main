@@ -8,12 +8,6 @@ import NftCard from "../../components/NftCards/NftCard";
 import logo from "../../assets/img/logos/logo.png";
 import greenCheckMark from "../../assets/img/green_check.png";
 import grayCheckMark from "../../assets/img/gray_check.png";
-
-import discord from "../../assets/img/socials/social_discord.png";
-import medium from "../../assets/img/socials/social_medium.png";
-import telegram from "../../assets/img/socials/social_telegram.png";
-import twitter from "../../assets/img/socials/social_twitter.png";
-
 import Landing from "./Landing";
 
 const Listen = () => {
@@ -39,9 +33,10 @@ const Listen = () => {
     <Switch>
       <BaseView>
         <Landing />
-        <DescriptionBoxContainer>
-          <StyledHeader>Aliquam eu dapibus velit.</StyledHeader>
-          <StyledSubHeader>Aliquam non iaculis mauris, ac placerat magna</StyledSubHeader>
+        <Divider />
+        {/* <DescriptionBoxContainer>
+          <StyledHeader>Music. Artists. NFTs.</StyledHeader>
+          <StyledSubHeader>There is dank things</StyledSubHeader>
           <StyledParagraph>*insert text about stuff, NFTs. Maybe insert button to go purchase nfts or redirect to some more info. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vel pretium orci. Morbi cursus faucibus libero vel sagittis. Vestibulum id consequat lacus. Nam porttitor ipsum ut lacinia consequat. Integer condimentum auctor convallis. Morbi tempor turpis vel diam fermentum imperdiet. Pellentesque at ex ac augue pretium cursus eget vitae sapien. Nam eu ligula a felis porta consequat a sit amet eros. Duis ornare interdum eros, quis malesuada lacus hendrerit at.</StyledParagraph>
         </DescriptionBoxContainer>
         <Container>
@@ -149,12 +144,19 @@ const Listen = () => {
               </div>
             </FaqsColumn>
           </FaqsContainer>
-        </Container>
-        <div style={{ "height": "40px", "margin-top": "250px" }} />
+        </Container> */}
       </BaseView>
     </Switch>
   );
 };
+
+const Divider = styled.div`
+width: 80%;
+height: 4px;
+border-radius: 2px;
+background-color: ${props => props.theme.color.boxBorder};
+/* margin-bottom: 80px; */
+`
 
 const FaqQuestion = styled.div`
   font-size: large;
@@ -185,7 +187,6 @@ const FaqsContainer = styled.div`
   border-radius: 20px;
   border: solid 1px #262626;
   background-color: #181818;
-  z-index: 2;
 
 `;
 
@@ -236,7 +237,6 @@ const LaunchFeaturesBox = styled.div`
   border-radius: 20px;
   border: solid 1px #262626;
   background-color: #181818;
-  z-index: 2;
   height: 220px;
 `;
 
@@ -269,10 +269,8 @@ const StyledHeader = styled.h1`
 const DescriptionBoxContainer = styled.div`
   display:flex;
   flex-direction: column;
-  width: 55%;
-  margin: 40px 240px 60px;
-  padding: 40px 153px 30px 30px;
-  border-radius: 20px;
+  width: 100%;
+
   border: solid 1px #262626;
   background-color: #181818;
 `;
@@ -288,7 +286,6 @@ position:absolute;
   left: 5%;
   padding-left:2px;
   padding-right:2px;
-  z-index:2;
   color: #383838;
   font: Compita;
   background-color: #131313;
@@ -297,7 +294,6 @@ position:absolute;
 `;
 
 const ContainerOutline = styled.div`
-  z-index: 1;
   position:absolute;
   border: 10px;
   border-radius: 15px;

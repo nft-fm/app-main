@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import BuyNftModal from "../BuyNftModal";
-import { ReactComponent as IconHeart } from "../../assets/img/Icons/heart.svg";
-import { ReactComponent as IconShare } from "../../assets/img/Icons/share.svg";
-import { ReactComponent as IconCart } from "../../assets/img/Icons/cart.svg";
-import { ReactComponent as IconEth } from "../../assets/img/Icons/ethereum.svg";
-import { ReactComponent as IconUsd } from "../../assets/img/Icons/dollar.svg";
+import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
+import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
+import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
+import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
+import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 
 const NftCard = (props) => {
@@ -195,13 +195,14 @@ font-family: Compita;
 const Container = styled.div`
   color: ${props => props.theme.color.gray};
   padding: 12px;
-  background-color: ${props => props.theme.boxColor};
-  border: 1px solid ${props => props.theme.boxBorderColor};
+  background-color: ${props => props.theme.color.box};
+  border: 1px solid ${props => props.theme.color.boxBorder};
   border-radius: ${props => props.theme.borderRadius}px;
   align-items: center;
   display: flex;
   flex-direction: column;
   width: 200px;
+  margin-bottom: 20px;
 `;
 
 const Image = styled.img`
@@ -211,7 +212,7 @@ const Image = styled.img`
   border-radius: 12px;
   object-fit: cover;
   margin-bottom: 12px;
-  border: 1px solid ${props => props.theme.boxBorderColor};
+  border: 1px solid ${props => props.theme.color.boxBorder};
   background-color: #1E1E1E;
 
 `;

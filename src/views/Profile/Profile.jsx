@@ -83,7 +83,7 @@ const Profile = () => {
 
   return (
     <BaseView>
-      {/* <Banner /> */}
+      <Banner />
       <ProfileHeading>
         <Side />
         <ProfileHolder>
@@ -525,6 +525,7 @@ const ProfileHeading = styled.div`
   margin-right: auto;
   display: flex;
   height: 200px;
+  /* margin-top: 80px; */
   color: ${(props) => props.theme.fontColor.white};
   width: 800px;
   @media only screen and (max-width: 800px) {

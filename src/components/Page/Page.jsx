@@ -32,6 +32,7 @@ const StyledMain = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   min-height: calc(100% - 64px);
   /* overflow-y: hidden; */
   margin-bottom: -64px;

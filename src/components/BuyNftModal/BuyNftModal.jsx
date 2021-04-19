@@ -83,6 +83,7 @@ const Container = styled.div`
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  border: solid 2px #181818;
 `;
 
 const StyledModal = styled.div`
@@ -90,7 +91,7 @@ const StyledModal = styled.div`
   /* position: absolute; */
   width: 100%;
   height: 100%;
-  background-color: #eaeaea;
+  background-color: ${props => props.theme.bgColor};
   padding: 15px;
   font-size: 16px;
   font-weight: normal;
@@ -100,10 +101,11 @@ const StyledModal = styled.div`
   justify-content: space-evenly;
 `;
 const Image = styled.img`
-  width: 200px;
-  height: 200px;
+  width: 280px;
+  height: 280px;
   border-radius: 15px;
-  border: 1px solid #707070;
+  border: 1px solid #262626;
+  background-color: #1e1e1e;
   object-fit: cover;
   overflow: hidden;
 `;

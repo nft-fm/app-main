@@ -36,6 +36,7 @@ const StyledMain = styled.div`
   /* overflow-y: hidden; */
   margin-bottom: -64px;
   width: ${props => props.theme.homeWidth}px;
+  margin: auto;
 max-width: 90vw;
   @media only screen and (max-width: 991px) {
     margin: -50px 0 -120px 0;

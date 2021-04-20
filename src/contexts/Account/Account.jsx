@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 const AccountContext = createContext();
 
 export const AccountProvider = ({ children }) => {
-  const { account } = useWallet();
+  const { account, connect } = useWallet();
   const [user, setUser] = useState(null);
   const [currChainId, setCurrChainId] = useState(false);
   const [usdPerEth, setUsdPerEth] = useState(1);
@@ -71,6 +71,7 @@ export const AccountProvider = ({ children }) => {
     <AccountContext.Provider
       value={{
         account,
+        connect,
         initialize,
         user, getUser, setUser,
         currChainId, setCurrChainId,

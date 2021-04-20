@@ -8,9 +8,12 @@ import logo from "../../assets/img/logos/logo_tiny.png";
 import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
 import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
+import { useAccountConsumer } from "../../contexts/Account";
+import IconMetamask from "../../assets/img/icons/metamask_icon.png";
 
 const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
-  const { account, connect } = useWallet();
+  const { account, connect, usdPerEth } = useAccountConsumer();
+
   if (!open) return null;
   const stopProp = (e) => {
     e.stopPropagation();
@@ -74,24 +77,59 @@ const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
             <TrackName>{nft.title}</TrackName>
             <Artist>{nft.artist}</Artist>
           </InfoContainer>
-          <BottomContainer>
+          <PricesContainer>
             <Row>
               <PriceItem>Price:</PriceItem>
-              <PriceItem>{nft.price} &nbsp; ETH</PriceItem>
+              <PriceItem>          {nft.price.toLocaleString(undefined, {
+            minimumFractionDigits: 3,
+            maximumFractionDigits: 3,
+          })} &nbsp; ETH</PriceItem>
             </Row>
+            <Divider/>
             <Row>
-              <AvailableItem>Available:</AvailableItem>
-              <AvailableItem>{nft.numMinted}</AvailableItem>
+              <AvailableItem>Price:</AvailableItem>
+              <AvailableItem>          {usdPerEth ?
+            (usdPerEth * nft.price).toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            }) : "..."
+          } &nbsp; USD</AvailableItem>
             </Row>
-          </BottomContainer>
-          <BuyButton onClick={() => purchase(nft._id)}>
-            <Button>Purchase NFT</Button>
+          </PricesContainer>
+          {!account ? 
+          <BuyButton onClick={() => connect("injected")}>
+            <MetaMask src={IconMetamask}/>
+            <ButtonText>Connect Wallet</ButtonText>
           </BuyButton>
+        :  
+        <BuyButton onClick={() => purchase(nft._id)}>
+          <ButtonText>Buy</ButtonText>
+      </BuyButton>
+        }
         </StyledModal>
       </Container>
     </OpaqueFilter>
   );
 };
+
+const ButtonText = styled.span`
+font-family: "Compita";
+font-size: ${props => props.theme.fontSizes.xs};
+font-weight: bold;
+color: white;
+`
+
+const MetaMask = styled.img`
+width: 32px;
+height: auto;
+`
+
+const Divider = styled.div`
+margin: 5px 0;
+width: 100%;
+height: 1px;
+background-color: ${props => props.theme.color.gray};
+`
 
 const AvailableItem = styled.div`
 font-size: 0.8rem;
@@ -105,7 +143,7 @@ color: white;
 
 const X = styled(IconX)`
     position: absolute;
-    right: 6px;
+    right: 2px;
     top: 9px;
 width: 24px;
 height: 24px;
@@ -126,8 +164,8 @@ transition: all 0.2s ease-in-out;
 
 
 const Cart = styled(IconCart)`
-width: 20px;
-height: 20px;
+width: 24px;
+height: 24px;
 margin: -2px 0 0 8px;
 cursor: pointer;
 transition: all 0.2s ease-in-out;
@@ -143,8 +181,8 @@ transition: all 0.2s ease-in-out;
 `
 
 const Share = styled(IconShare)`
-width: 16px;
-height: 16px;
+width: 19px;
+height: 19px;
 margin: 0 4px 0 0;
 cursor: pointer;
 transition: all 0.2s ease-in-out;
@@ -159,8 +197,8 @@ transition: all 0.2s ease-in-out;
 }`
 
 const Heart = styled(IconHeart)`
-width: 20px;
-height: 20px;
+width: 24px;
+height: 24px;
 margin: -3px 4px 0 0;
 cursor: pointer;
 transition: all 0.2s ease-in-out;
@@ -190,7 +228,7 @@ const IconArea = styled.div`
 
 const CardTop = styled.div`
 /* padding: 0px 2px; */
-width: 280px;
+width: 100%;
 margin-bottom: 8px;
 display: flex;
 justify-content: space-between;
@@ -213,7 +251,7 @@ font-family: Compita;
 font-weight: bold;
 color: white;
 font-size: ${props => props.theme.fontSizes.sm};
-margin-bottom: 16px;
+margin-bottom: 12px;
 `
 
 const OpaqueFilter = styled.div`
@@ -232,8 +270,7 @@ const Container = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
-  width: 320px;
-  padding: 10px;
+  width: 340px;
   position: fixed;
   left: 50%;
   top: 50%;
@@ -243,10 +280,10 @@ const Container = styled.div`
 const StyledModal = styled.div`
   border-radius: 8px;
   border: solid 2px #181818;
-  width: 100%;
+  width: calc(100% - 60px);
   height: 100%;
+  padding: 10px 30px;
   background-color: ${props => props.theme.bgColor};
-  padding: 12px;
   font-size: 16px;
   font-weight: normal;
   display: flex;
@@ -267,11 +304,12 @@ const Image = styled.img`
   margin-bottom: 16px;
 `;
 
-const BottomContainer = styled.div`
-  width: 278px;
+const PricesContainer = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 20px;
 `;
 const InfoContainer = styled.div`
   width: 80%;
@@ -282,55 +320,38 @@ const InfoContainer = styled.div`
 const TrackName = styled.span`
   color: white;
   font-size: ${props => props.theme.fontSizes.sm};
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 `;
 const Artist = styled.span`
   font-size: ${props => props.theme.fontSizes.xs};
   color: ${props => props.theme.color.lightgray};
-  margin-bottom: 8px;
-
-`;
-const Buy = styled.img`
-  width: 25px;
-  height: 25px;
+  margin-bottom: 12px;
 `;
 
 const Row = styled.div`
-  width: 100%;
+  width: 90%;
   display: flex;
   justify-content: space-between;
 `;
-const BuyButton = styled.div`
+
+const BuyButton = styled.button`
   width: 140px;
+  height: 64px;
   cursor: pointer;
   transition: all 0.1s ease-in-out;
   display: flex;
-  justify-content: center;
-  border: 2px solid rgba(0, 0, 0, 0.7);
-  margin: 0 16px;
-  height: 28px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  border: 1px solid ${props => props.theme.color.boxBorder};
   border-radius: 2px;
   background-color: ${(props) => props.theme.color.box};
+  margin-bottom: 20px;
   &:hover {
-    background-color: ${(props) => props.theme.color.red};
+    background-color: ${(props) => props.theme.color.boxBorder};
+    border: 1px solid #383838;
   }
 `;
 
-const Button = styled.button`
-  border: none;
-  background-color: rgba(0, 0, 0, 0);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  color: ${(props) => props.theme.fontColor.white};
-  @media only screen and (max-width: 767px) {
-    font-size: 14px;
-    font-weight: normal;
-    margin-top: 0px;
-    padding: 5px 0px 10px 5px;
-  }
-`;
+
 export default BuyNftModal;

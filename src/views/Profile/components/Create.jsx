@@ -19,6 +19,7 @@ import BaseView from "../../BaseView";
 import { useAccountConsumer } from "../../../contexts/Account";
 
 const initialNftState = {
+  artist: "",
   address: "",
   isDraft: true,
   genre: "",
@@ -37,10 +38,10 @@ const Create = ({ open, hide }) => {
   const [nftData, setNftData] = useState(initialNftState);
   const [audioFile, setAudioFile] = useState(null);
   const [imageFile, setImageFile] = useState(null);
-
+  console.log("nftData", nftData);
   useEffect(() => {
-    console.log("nftData", nftData);
-  }, [nftData]);
+   user && user.username && setNftData({ ...nftData, artist: user.username });
+  }, [user]);
 
   const fetchNFT = async () => {
     await axios
@@ -59,6 +60,7 @@ const Create = ({ open, hide }) => {
   };
   //TODO entry validation
   const handleSubmit = () => {
+    // setNftData({...nftData, artist: user.username})
     setIsLoading(true);
 
     let isUploadError = false;
@@ -107,6 +109,7 @@ const Create = ({ open, hide }) => {
             setNftData(initialNftState);
             setImageFile(null);
             setAudioFile(null);
+            hide();
             swal.fire({
               title: "Success!",
               background: `#000`,
@@ -710,6 +713,8 @@ const OpaqueFilter = styled.div`
   background-color: rgba(0, 0, 0, 0.9);
   -webkit-backdrop-filter: blur(4.6px);
   backdrop-filter: blur(4.6px);
+  z-index: 10;
+  top: 0;
 `;
 
 const X = styled.img`

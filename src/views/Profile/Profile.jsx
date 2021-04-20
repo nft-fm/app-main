@@ -11,8 +11,7 @@ import { ReactComponent as CopyIcon } from "../../assets/img/icons/copy_icon.svg
 import { ReactComponent as plus_icon } from "../../assets/img/icons/plus_icon.svg";
 import { ReactComponent as lock_icon } from "../../assets/img/icons/lock.svg";
 
-import Library from "./components/Library"
-import ArtistNfts from "./components/ArtistNfts"
+import Library from "./components/Library";
 
 const Profile = () => {
   const [ownedNfts, setOwnedNfts] = useState([]);
@@ -84,6 +83,7 @@ const Profile = () => {
   return (
     <BaseView>
       <Landing>
+        <Banner />
         <ProfileHeading>
           <Side />
           <ProfileHolder>
@@ -114,8 +114,8 @@ const Profile = () => {
               <AddressSpan>
                 {user
                   ? user.address.substring(0, 10) +
-                  "..." +
-                  user.address.substring(user.address.length - 4)
+                    "..." +
+                    user.address.substring(user.address.length - 4)
                   : " "}
                 {user && (
                   <CopyButton
@@ -140,7 +140,7 @@ const Profile = () => {
           <BigButtonRight onClick={() => setIsOpen(!isOpen)}>
             <span>
               Create <br /> NFTs
-          </span>
+            </span>
             <PlusButton />
           </BigButtonRight>
           <MidSectionMiddle
@@ -181,30 +181,24 @@ const Profile = () => {
             <span>Listen</span>
             <span>
               View your <br />
-            library below
-          </span>
+              library below
+            </span>
           </BigButtonLeft>
         </MidSection>
       </Landing>
       <Create open={isOpen} hide={hide} />
       <Library user={user} isCreating={isCreating} />
-      <Filler />
     </BaseView>
   );
 };
 
-const Filler = styled.div`
-flex: 1;
-`
-
 const Landing = styled.div`
-height: 450px;
-/* margin-top: 80px; */
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: flex-start;
-`
+  height: 450px;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
 const ToggleSlider = styled.span`
   position: absolute;
@@ -567,7 +561,6 @@ const AccountDetails = styled.div`
   align-items: center;
   color: white;
 `;
-
 
 const Banner = styled.div`
   height: 50px;

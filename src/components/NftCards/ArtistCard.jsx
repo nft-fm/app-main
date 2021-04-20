@@ -16,9 +16,7 @@ const NftCard = (props) => {
   const show = () => setIsOpen(true);
   const hide = (e) => {
     setIsOpen(false);
-    console.log("isOpen", isOpen);
   };
-  console.log('nft', nft)
 
 
   const like = () => {

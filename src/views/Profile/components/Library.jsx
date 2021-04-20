@@ -5,7 +5,6 @@ import LibraryCard from "../../../components/NftCards/LibraryCard";
 import ArtistCard from "../../../components/NftCards/ArtistCard";
 
 import MusicPlayer from "../../../components/MusicPlayer"
-import Slide from 'react-reveal/Slide';
 const Library = ({ user, isCreating }) => {
   const [nfts, setNfts] = useState([]);
   const [selectedNft, setSelectedNft] = useState();
@@ -18,7 +17,6 @@ const Library = ({ user, isCreating }) => {
   };
 
   const getUserNfts = async () => {
-    console.log("here");
     axios
       .post("api/nft-type/get-user-nfts", user)
       .then((res) => setNfts(res.data));
@@ -31,10 +29,22 @@ const Library = ({ user, isCreating }) => {
     !isCreating ? getUserNfts() : getArtistNfts();
   }, [user, isCreating]);
 
+  const updateNft = (index, update) => {
+    let newNfts = nfts;
+    newNfts[index] = update;
+    setNfts(newNfts);
+  }
 
+  const showNfts = nfts.map((nft, index) => {
+    return isCreating ?
+      <ArtistCard nft={nft} key={index} index={index}
+        updateNft={updateNft}
+        liked={user ? user.likes.find(like => like.toString() === nft._id.toString()) : false}/> :
+      <LibraryCard nft={nft} key={index} index={index}
+        updateNft={updateNft}
+        selectNft={setSelectedNft}
+        liked={user ? user.likes.find(like => like.toString() === nft._id.toString()) : false}/>;
 
-  const showNfts = nfts.map((nft) => {
-    return isCreating ? <ArtistCard nft={nft} /> : <LibraryCard nft={nft} selectNft={setSelectedNft} />;
   });
 
   return (
@@ -69,7 +79,7 @@ const NftScroll = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
-  justify-content: space-between;
+  justify-content: space-evenly;
   flex-wrap: wrap;
   & > * {
     margin: 0 5px 10px;

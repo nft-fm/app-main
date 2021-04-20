@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import image from "../../assets/img/logos/fm_logo_1.png";
-import cart from "../../assets/img/listen/cart.svg";
+import cart from "../../assets/img/icons/cart.svg";
 import Modal from "../Modal/Modal";
 import BuyNftModal from "../BuyNftModal";
 
@@ -36,6 +36,7 @@ z-index: 4;
   flex-direction: column;
   width: 200px;
   padding: 10px;
+  margin: 0 10px;
 `;
 const Image = styled.img`
   cursor: pointer;

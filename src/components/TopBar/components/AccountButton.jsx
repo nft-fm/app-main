@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import ReactGA from "react-ga";
 import styled from "styled-components";
 import { useWallet } from "use-wallet";
@@ -12,10 +12,10 @@ import ChangeChainModal from "../../ChangeChainModal";
 
 
 const AccountButton = (props) => {
+  const [currChainId, setCurrChainId ] = useState(props.chainId);
+  const {  account, connect } = useWallet();
   const [onPresentInstallMetamask] = useModal(<InstallMetamaskModal />);
   const [onPresentChangeChain] = useModal(<ChangeChainModal />)
-  const { account, currChainId } = useAccountConsumer();
-  const { connect } = useWallet();
 
   const fetchAccount = async () => {
     axios.post(`api/user/get-account`,
@@ -26,20 +26,25 @@ const AccountButton = (props) => {
       })
   };
 
-  const handleUnlockClick = useCallback(() => {
-    const chain = process.env.REACT_APP_IS_MAINNET ? 1 : 4;
-    if (!window.ethereum) onPresentInstallMetamask();
-    else if (currChainId !== chain) onPresentChangeChain();
+  const handleUnlockClick = useCallback(async () => {
+    if (!window.ethereum) {
+      onPresentInstallMetamask();
+      return;
+    }
+
+    let chain = currChainId ? currChainId : await getChain();
+    console.log("CHAIN", chain);
+    if (chain !== 1) onPresentChangeChain();
     if (isMobile()) {
       // connect('injected');
-      connect("walletconnect")//.then(() => { getS3Bucket() });
+      await connect("walletconnect")//.then(() => { getS3Bucket() });
     } else {
-      connect("injected")//.then(() => { getS3Bucket() });
+      await connect("injected")//.then(() => { getS3Bucket() });
       // onPresentWalletProviderModal()
     }
-    console.log('account', account)
     // fetchAccount();
   }, [connect]);
+
 
   if (account) {
     ReactGA.set({
@@ -49,11 +54,19 @@ const AccountButton = (props) => {
     });
   }
 
+  const getChain = async () => {
+    const newChainId = await window.ethereum.request({ method: 'eth_chainId' });
+    setCurrChainId(Number(newChainId));
+    return Number(newChainId);
+  }
+
   useEffect(() => {
-    console.log('account', account)
     fetchAccount();
   }, [account])
 
+  useEffect(() => {
+      getChain();
+  }, [])
   return (
     <StyledAccountButton>
       {!account ? (

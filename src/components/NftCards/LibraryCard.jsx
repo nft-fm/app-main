@@ -7,14 +7,15 @@ import { ReactComponent as IconCart } from "../../assets/img/icons/coins.svg";
 import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
 import { useAccountConsumer } from "../../contexts/Account";
+import axios from "axios";
 
 import PlayIcon from "../../assets/img/icons/listen_play.svg"
 
 const NftCard = (props) => {
-  const { usdPerEth } = useAccountConsumer();
+  const { usdPerEth, account, setUser } = useAccountConsumer();
   const { nft, selectNft } = props;
   const [isOpen, setIsOpen] = useState(false);
-
+  const [liked, setLiked] = useState(props.liked);
   const show = () => setIsOpen(true);
   const hide = (e) => {
     setIsOpen(false);
@@ -22,9 +23,20 @@ const NftCard = (props) => {
   };
   console.log("nft", nft);
 
-  const like = () => {
-    //${!}
-  };
+  const like = async () => {
+    if (account) {
+      setLiked(!liked);
+      await axios.post(`api/user/like-nft`,
+        { address: account, nft: nft._id}).then(res => {
+        if (res.data) {
+          props.updateNft(props.index, res.data.nft);
+          setUser(res.data.user);
+        }
+      }).catch(err => {
+        console.log(err);
+      })
+    }
+  }
 
   const share = () => {
     //${!}
@@ -36,7 +48,10 @@ const NftCard = (props) => {
       <CardTop>
         <Side>
           <IconArea>
-            <Heart onClick={() => like()} />
+            {liked ?
+              <LikedHeart onClick={() => like()}/> :
+              <Heart onClick={() => like()} />
+            }
             {nft.likeCount}
           </IconArea>
           <IconArea>
@@ -125,6 +140,17 @@ const Share = styled(IconShare)`
   }
 `;
 
+const LikedHeart = styled(IconHeart)`
+  width: 20px;
+  height: 20px;
+  margin: -3px 4px 0 0;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  & path {
+    stroke: ${(props) => props.theme.color.pink};
+  }
+`;
+
 const Heart = styled(IconHeart)`
   width: 20px;
   height: 20px;
@@ -137,7 +163,7 @@ const Heart = styled(IconHeart)`
   }
   &:hover {
     & path {
-      stroke: #dd4591;
+      stroke: ${(props) => props.theme.color.pink};
     }
   }
 `;

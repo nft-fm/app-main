@@ -4,6 +4,7 @@ const BigNumber = require('bignumber.js')
 
 const User = require('../schemas/User.schema')
 const Suggestion = require("../schemas/Suggestion.schema");
+const NftType = require('../schemas/NftType.schema');
 
 router.post('/get-account', async (req, res) => {
   try {
@@ -40,6 +41,31 @@ router.post('/update-account', async (req, res) => {
     // let user = await User.findOneAndUpdate({ address: req.body.address },
     //   { nickname: req.body.nickname, picture: req.body.picture, pictureColor });
     // res.send(user);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500)
+  }
+})
+
+router.post('/like-nft', async (req, res) => {
+  try {
+    let user = await User.findOne({ address: req.body.address });
+    let nft = await NftType.findOne({_id: req.body.nft});
+
+    let hasLiked = user.likes.indexOf(req.body.nft);
+    if (hasLiked < 0) {
+      user.likes = [...user.likes, req.body.nft];
+      nft.likeCount = nft.likeCount + 1;
+    }
+    else {
+      let likes = user.likes;
+      likes.splice(hasLiked, 1);
+      user.likes = likes;
+      nft.likeCount = nft.likeCount - 1;
+    }
+    user.save();
+    nft.save();
+    res.send({user, nft});
   } catch (error) {
     console.log(error);
     res.sendStatus(500)

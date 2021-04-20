@@ -1,16 +1,19 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useWallet } from "use-wallet";
-import Card from "../Card";
 import axios from "axios";
-import NftCard from "../NftCards/NftCard";
-import image from "../../assets/img/logos/fm_logo_1.png";
-import cart from "../../assets/img/listen/cart.svg";
-import x from "../../assets/img/listen/x.svg";
 import swal from "sweetalert2";
+import { ReactComponent as IconX } from "../../assets/img/icons/x.svg";
+import logo from "../../assets/img/logos/logo_tiny.png";
+import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
+import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
+import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
+import { useAccountConsumer } from "../../contexts/Account";
+import IconMetamask from "../../assets/img/icons/metamask_icon.png";
 
 const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
-  const { account, connect } = useWallet();
+  const { account, connect, usdPerEth } = useAccountConsumer();
+
   if (!open) return null;
   const stopProp = (e) => {
     e.stopPropagation();
@@ -30,35 +33,226 @@ const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
       .catch((err) => console.log(err));
   };
 
+  const like = () => {
+    //${!}
+  }
+
+  const share = () => {
+    //${!}
+  }
+
   return (
     <OpaqueFilter onClick={(e) => hide(e)}>
       <Container onClick={(e) => stopProp(e)}>
         <StyledModal>
-          <Buy src={cart} alt="cart" />
-          <X src={x} onClick={(e) => hide(e)} />
+          <X onClick={(e) => hide(e)} />
+          <CardTitle>
+            <Logo src={logo} />
+            Buy NFT
+          </CardTitle>
+          <CardTop>
+            <Side>
+              <IconArea>
+                <Heart onClick={() => like()} />
+                {nft.likeCount}
+              </IconArea>
+              <IconArea>
+                <Share onClick={() => share()} />
+                {nft.shareCount}
+              </IconArea>
+            </Side>
+            <Side>
+              <IconArea>
+                {nft.x_numSold}
+                <span style={{ margin: "0 1px" }}>
+                  /
+              </span>
+                {nft.numMinted}
+                <Cart />
+              </IconArea>
+            </Side>
+          </CardTop>
           <Image src={nft.imageUrl} alt="image" />
           <InfoContainer>
             <TrackName>{nft.title}</TrackName>
             <Artist>{nft.artist}</Artist>
           </InfoContainer>
-          <BottomContainer>
+          <PricesContainer>
             <Row>
-              <span>Price:</span>
-              <span>{nft.price} &nbsp; ETH</span>
+              <PriceItem>Price:</PriceItem>
+              <PriceItem>          {nft.price.toLocaleString(undefined, {
+            minimumFractionDigits: 3,
+            maximumFractionDigits: 3,
+          })} &nbsp; ETH</PriceItem>
             </Row>
+            <Divider/>
             <Row>
-              <span>Available:</span>
-              <span>{nft.numMinted}</span>
+              <AvailableItem>Price:</AvailableItem>
+              <AvailableItem>          {usdPerEth ?
+            (usdPerEth * nft.price).toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            }) : "..."
+          } &nbsp; USD</AvailableItem>
             </Row>
-          </BottomContainer>
-          <BuyButton onClick={() => purchase(nft._id)}>
-            <Button>Purchase NFT</Button>
+          </PricesContainer>
+          {!account ? 
+          <BuyButton onClick={() => connect("injected")}>
+            <MetaMask src={IconMetamask}/>
+            <ButtonText>Connect Wallet</ButtonText>
           </BuyButton>
+        :  
+        <BuyButton onClick={() => purchase(nft._id)}>
+          <ButtonText>Buy</ButtonText>
+      </BuyButton>
+        }
         </StyledModal>
       </Container>
     </OpaqueFilter>
   );
 };
+
+const ButtonText = styled.span`
+font-family: "Compita";
+font-size: ${props => props.theme.fontSizes.xs};
+font-weight: bold;
+color: white;
+`
+
+const MetaMask = styled.img`
+width: 32px;
+height: auto;
+`
+
+const Divider = styled.div`
+margin: 5px 0;
+width: 100%;
+height: 1px;
+background-color: ${props => props.theme.color.gray};
+`
+
+const AvailableItem = styled.div`
+font-size: 0.8rem;
+color: ${props=> props.theme.color.lightgray};
+`
+
+const PriceItem = styled.span`
+font-size: ${props => props.theme.fontSizes.xs};
+color: white;
+`
+
+const X = styled(IconX)`
+    position: absolute;
+    right: 2px;
+    top: 9px;
+width: 24px;
+height: 24px;
+margin: 0 4px 0 0;
+cursor: pointer;
+transition: all 0.2s ease-in-out;
+ & path {
+    transition: all 0.2s ease-in-out;
+    stroke: ${props => props.theme.color.gray};
+    fill: ${props => props.theme.color.gray};
+    }
+/* &:hover {
+  & path {
+    stroke: #20a4fc;
+  }
+} */
+`
+
+
+const Cart = styled(IconCart)`
+width: 24px;
+height: 24px;
+margin: -2px 0 0 8px;
+cursor: pointer;
+transition: all 0.2s ease-in-out;
+ & path {
+    transition: all 0.2s ease-in-out;
+     fill: ${props => props.theme.color.gray};
+    }
+&:hover {
+  & path {
+    fill: #20a4fc;
+  }
+}
+`
+
+const Share = styled(IconShare)`
+width: 19px;
+height: 19px;
+margin: 0 4px 0 0;
+cursor: pointer;
+transition: all 0.2s ease-in-out;
+ & path {
+    transition: all 0.2s ease-in-out;
+     fill: ${props => props.theme.color.gray};
+    }
+&:hover {
+  & path {
+    fill: #20a4fc;
+  }
+}`
+
+const Heart = styled(IconHeart)`
+width: 24px;
+height: 24px;
+margin: -3px 4px 0 0;
+cursor: pointer;
+transition: all 0.2s ease-in-out;
+ & path {
+    transition: all 0.2s ease-in-out;
+     stroke: ${props => props.theme.color.gray};
+    }
+&:hover {
+  & path {
+    stroke: #DD4591;
+  }
+}
+`
+
+const Side = styled.div`
+display: flex;
+align-items: center;
+`
+
+const IconArea = styled.div`
+  margin: 0 8px;
+  display: flex;
+  font-size: 14px;
+  height: 100%;
+  align-items: center;
+`
+
+const CardTop = styled.div`
+/* padding: 0px 2px; */
+width: 100%;
+margin-bottom: 8px;
+display: flex;
+justify-content: space-between;
+font-weight: bold;
+font-family: Compita;
+`
+
+const Logo = styled.img`
+width: 20px;
+margin-right: 8px;
+height: auto;
+`
+
+const CardTitle = styled.div`
+width: 100%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-family: Compita;
+font-weight: bold;
+color: white;
+font-size: ${props => props.theme.fontSizes.sm};
+margin-bottom: 12px;
+`
 
 const OpaqueFilter = styled.div`
   width: 100vw;
@@ -76,9 +270,7 @@ const Container = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
-  width: 300px;
-  height: 500px;
-  padding: 10px;
+  width: 340px;
   position: fixed;
   left: 50%;
   top: 50%;
@@ -87,35 +279,37 @@ const Container = styled.div`
 
 const StyledModal = styled.div`
   border-radius: 8px;
-  /* position: absolute; */
-  width: 100%;
+  border: solid 2px #181818;
+  width: calc(100% - 60px);
   height: 100%;
-  background-color: #eaeaea;
-  padding: 15px;
+  padding: 10px 30px;
+  background-color: ${props => props.theme.bgColor};
   font-size: 16px;
   font-weight: normal;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
+  position: relative;
 `;
+
 const Image = styled.img`
-  width: 200px;
-  height: 200px;
+  width: 280px;
+  height: 280px;
   border-radius: 15px;
-  border: 1px solid #707070;
+  border: 1px solid #262626;
+  background-color: #1e1e1e;
   object-fit: cover;
   overflow: hidden;
+  margin-bottom: 16px;
 `;
-const BottomContainer = styled.div`
-  width: 200px;
+
+const PricesContainer = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
-  /* justify-content: space-between; */
   align-items: center;
-  padding: 10px;
-  background-color: white;
-  border-radius: 15px;
+  margin-bottom: 20px;
 `;
 const InfoContainer = styled.div`
   width: 80%;
@@ -124,61 +318,40 @@ const InfoContainer = styled.div`
   align-items: center;
 `;
 const TrackName = styled.span`
-  font-size: 1.2rem;
+  color: white;
+  font-size: ${props => props.theme.fontSizes.sm};
+  margin-bottom: 6px;
 `;
 const Artist = styled.span`
-  font-size: 1rem;
-  color: #7e2ce3;
-  padding-left: 5px;
+  font-size: ${props => props.theme.fontSizes.xs};
+  color: ${props => props.theme.color.lightgray};
+  margin-bottom: 12px;
 `;
-const Buy = styled.img`
-  width: 25px;
-  height: 25px;
-`;
-const X = styled.img`
-  width: 25px;
-  height: 25px;
-  cursor: pointer;
-  position: absolute;
-  top: 15px;
-  right: 0px;
-`;
+
 const Row = styled.div`
-  width: 100%;
+  width: 90%;
   display: flex;
   justify-content: space-between;
 `;
-const BuyButton = styled.div`
+
+const BuyButton = styled.button`
   width: 140px;
+  height: 64px;
   cursor: pointer;
   transition: all 0.1s ease-in-out;
   display: flex;
-  justify-content: center;
-  border: 2px solid rgba(0, 0, 0, 0.7);
-  margin: 0 16px;
-  height: 28px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  border: 1px solid ${props => props.theme.color.boxBorder};
   border-radius: 2px;
   background-color: ${(props) => props.theme.color.box};
+  margin-bottom: 20px;
   &:hover {
-    background-color: ${(props) => props.theme.color.red};
+    background-color: ${(props) => props.theme.color.boxBorder};
+    border: 1px solid #383838;
   }
 `;
 
-const Button = styled.button`
-  border: none;
-  background-color: rgba(0, 0, 0, 0);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  color: ${(props) => props.theme.fontColor.white};
-  @media only screen and (max-width: 767px) {
-    font-size: 14px;
-    font-weight: normal;
-    margin-top: 0px;
-    padding: 5px 0px 10px 5px;
-  }
-`;
+
 export default BuyNftModal;

@@ -28,6 +28,11 @@ const UserSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  likes: [
+    {
+      type: String
+    }
+  ],
   x_nfts: [{
     nft: {
       type: String

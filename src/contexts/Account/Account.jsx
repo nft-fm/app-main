@@ -7,10 +7,10 @@ import Swal from 'sweetalert2';
 const AccountContext = createContext();
 
 export const AccountProvider = ({ children }) => {
-  const { account } = useWallet();
+  const { account, connect } = useWallet();
   const [user, setUser] = useState(null);
   const [currChainId, setCurrChainId] = useState(false);
-  const [usdPerEth, setUsdPerEth] = useState(0);
+  const [usdPerEth, setUsdPerEth] = useState(1);
 
   const fetchUsdPerEth = async () => {
     console.log("fetchinafioe");
@@ -42,6 +42,7 @@ export const AccountProvider = ({ children }) => {
 
   useEffect(() => {
     if (window.ethereum) {
+      console.log("getting chain");
       getChain();
     }
     if (!usdPerEth) fetchUsdPerEth();
@@ -51,17 +52,17 @@ export const AccountProvider = ({ children }) => {
     if (isMobile() && !window.ethereum) {
       Swal.fire("Mobile staking is only supported via MetaMask Browser. All other aspects of the site are Browser only.")
       return;
-    } else if (!window.ethereum) {
-      Swal.fire("Metamask is required for interacting with this site.");
-      return;
+    }
+    if (window.ethereum) {
+      window.ethereum.on('accountsChanged', (accounts) => {
+        window.location.reload();
+      });
+      window.ethereum.on('chainChanged', (chainId) => {
+        window.location.reload();
+      });
     }
 
-    window.ethereum.on('accountsChanged', (accounts) => {
-      window.location.reload();
-    });
-    window.ethereum.on('chainChanged', (chainId) => {
-      window.location.reload();
-    });
+
 
     if (account && !user) initialize();
   }, [account, currChainId, user]);
@@ -70,6 +71,7 @@ export const AccountProvider = ({ children }) => {
     <AccountContext.Provider
       value={{
         account,
+        connect,
         initialize,
         user, getUser, setUser,
         currChainId, setCurrChainId,

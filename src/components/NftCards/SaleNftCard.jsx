@@ -228,6 +228,8 @@ const Container = styled.div`
   flex-direction: column;
   width: 200px;
   margin-bottom: 20px;
+  /* margin-left: 5px;
+  margin-right: 5px; */
 `;
 
 const Image = styled.img`

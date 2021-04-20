@@ -36,6 +36,7 @@ z-index: 4;
   flex-direction: column;
   width: 200px;
   padding: 10px;
+  margin: 0 10px;
 `;
 const Image = styled.img`
   cursor: pointer;

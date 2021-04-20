@@ -82,115 +82,146 @@ const Profile = () => {
 
   return (
     <BaseView>
-      <Landing>
-        <Banner />
-        <ProfileHeading>
-          <Side />
-          <ProfileHolder>
-            <ProfilePicHolder>
-              <ProfilePic src={default_pic} alt="default-profile-pic" />
-              <Cog
-                src={cog}
-                alt="edit icon"
-                onClick={account ? () => setEdit(!edit) : null}
-              />
-            </ProfilePicHolder>
-            <ProfileInfoHolder>
-              {edit ? (
-                <form onSubmit={(e) => saveDetails(e)}>
-                  <StyledInput
-                    type="text"
-                    placeholder="Enter Username"
-                    defaultValue={user?.username}
-                    onChange={(e) => setUsername(e.target.value)}
-                  />
-                </form>
-              ) : (
-                <Username>
-                  {user && user.username != "" ? user.username : "No username"}
-                </Username>
-              )}
-
-              <AddressSpan>
-                {user
-                  ? user.address.substring(0, 10) +
-                    "..." +
-                    user.address.substring(user.address.length - 4)
-                  : " "}
-                {user && (
-                  <CopyButton
-                    onClick={() => {
-                      navigator.clipboard.writeText(user.address);
-                    }}
-                  />
-                )}
-              </AddressSpan>
-            </ProfileInfoHolder>
-          </ProfileHolder>
-          <Side>
-            <SideSpan>
-              12 <BlueSpan>/NFTs</BlueSpan>
-            </SideSpan>
-            <SideSpan>
-              8 <BlueSpan>Traded</BlueSpan>
-            </SideSpan>
-          </Side>
-        </ProfileHeading>
-        <MidSection>
-          <BigButtonRight onClick={() => setIsOpen(!isOpen)}>
-            <span>
-              Create <br /> NFTs
-            </span>
-            <PlusButton />
-          </BigButtonRight>
-          <MidSectionMiddle
-            creating={isCreating}
-            onClick={
-              user && user.isArtist
-                ? () => setIsCreating(!isCreating)
-                : () => setShake(!shake)
-            }
-          >
-            <MidSectionTopRow>
-              <ListenSlashCreate>
-                <Highlight creating={isCreating}>Listen</Highlight>
-                <Highlight creating={!isCreating}>Create</Highlight>
-              </ListenSlashCreate>
-              {user && user.isArtist ? (
-                <ToggleHolder>
-                  <ToggleLabel onClick={(e) => e.stopPropagation()}>
-                    <ToggleInput
-                      type="checkbox"
-                      value={!isCreating}
-                      checked={isCreating}
-                      onClick={() => setIsCreating(!isCreating)}
+    {!account && <IsConnected>
+      <GetConnected>
+        <span>Connect your wallet to access the profile page!</span>
+      </GetConnected>
+      </IsConnected>}
+        <Landing>
+          <Banner />
+          <ProfileHeading>
+            <Side />
+            <ProfileHolder>
+              <ProfilePicHolder>
+                <ProfilePic src={default_pic} alt="default-profile-pic" />
+                <Cog
+                  src={cog}
+                  alt="edit icon"
+                  onClick={account ? () => setEdit(!edit) : null}
+                />
+              </ProfilePicHolder>
+              <ProfileInfoHolder>
+                {edit ? (
+                  <form onSubmit={(e) => saveDetails(e)}>
+                    <StyledInput
+                      type="text"
+                      placeholder="Enter Username"
+                      defaultValue={user?.username}
+                      onChange={(e) => setUsername(e.target.value)}
                     />
-                    <ToggleSlider active={isCreating} />
-                  </ToggleLabel>
-                </ToggleHolder>
-              ) : (
-                <LockHolder onClick={() => setShake(!shake)}>
-                  {/* {shake && <ComingSoon>Feature Coming Soon!</ComingSoon>} */}
+                  </form>
+                ) : (
+                  <Username>
+                    {user && user.username != ""
+                      ? user.username
+                      : "No username"}
+                  </Username>
+                )}
 
-                  <LockIcon className={shake ? "shake" : null} />
-                </LockHolder>
-              )}
-            </MidSectionTopRow>
-          </MidSectionMiddle>
-          <BigButtonLeft>
-            <span>Listen</span>
-            <span>
-              View your <br />
-              library below
-            </span>
-          </BigButtonLeft>
-        </MidSection>
-      </Landing>
-      <Create open={isOpen} hide={hide} />
-      <Library user={user} isCreating={isCreating} />
+                <AddressSpan>
+                  {user
+                    ? user.address.substring(0, 10) +
+                      "..." +
+                      user.address.substring(user.address.length - 4)
+                    : " "}
+                  {user && (
+                    <CopyButton
+                      onClick={() => {
+                        navigator.clipboard.writeText(user.address);
+                      }}
+                    />
+                  )}
+                </AddressSpan>
+              </ProfileInfoHolder>
+            </ProfileHolder>
+            <Side>
+              <SideSpan>
+                12 <BlueSpan>/NFTs</BlueSpan>
+              </SideSpan>
+              <SideSpan>
+                8 <BlueSpan>Traded</BlueSpan>
+              </SideSpan>
+            </Side>
+          </ProfileHeading>
+          <MidSection>
+            <BigButtonRight onClick={() => setIsOpen(!isOpen)}>
+              <span>
+                Create <br /> NFTs
+              </span>
+              <PlusButton />
+            </BigButtonRight>
+            <MidSectionMiddle
+              creating={isCreating}
+              onClick={
+                user && user.isArtist
+                  ? () => setIsCreating(!isCreating)
+                  : () => setShake(!shake)
+              }
+            >
+              <MidSectionTopRow>
+                <ListenSlashCreate>
+                  <Highlight creating={isCreating}>Listen</Highlight>
+                  <Highlight creating={!isCreating}>Create</Highlight>
+                </ListenSlashCreate>
+                {user && user.isArtist ? (
+                  <ToggleHolder>
+                    <ToggleLabel onClick={(e) => e.stopPropagation()}>
+                      <ToggleInput
+                        type="checkbox"
+                        value={!isCreating}
+                        checked={isCreating}
+                        onClick={() => setIsCreating(!isCreating)}
+                      />
+                      <ToggleSlider active={isCreating} />
+                    </ToggleLabel>
+                  </ToggleHolder>
+                ) : (
+                  <LockHolder onClick={() => setShake(!shake)}>
+                    {/* {shake && <ComingSoon>Feature Coming Soon!</ComingSoon>} */}
+
+                    <LockIcon className={shake ? "shake" : null} />
+                  </LockHolder>
+                )}
+              </MidSectionTopRow>
+            </MidSectionMiddle>
+            <BigButtonLeft>
+              <span>Listen</span>
+              <span>
+                View your <br />
+                library below
+              </span>
+            </BigButtonLeft>
+          </MidSection>
+        </Landing>
+        <Create open={isOpen} hide={hide} />
+        <Library user={user} isCreating={isCreating} />
     </BaseView>
   );
 };
+
+const GetConnected = styled.div`
+width: 500px;
+height: 200px;
+color: white;
+border: 1px solid ${props => props.theme.color.boxBorder};
+background-color: ${props => props.theme.color.box};
+border-radius: ${props => props.theme.borderRadius}px;
+display: flex;
+flex-direction: column;
+justify-content: space-evenly;
+align-items: center;
+margin-left: auto;
+margin-right: auto;
+margin-top: 200px;
+`
+
+const IsConnected = styled.div`
+width: 100%;
+height: 100%;
+background-color: rgba(0,0,0,.7);
+position: absolute;
+z-index: 11;
+`;
 
 const Landing = styled.div`
   height: 450px;
@@ -297,42 +328,42 @@ left: 90%; */
   }
 
   &.shake {
-    animation: shake 1s;
+    animation: shake 0.5s;
   }
 
   @keyframes shake {
     0% {
-      transform: translate(2px, 1px) rotate(0deg);
+      transform: translate(2px, 0px) rotate(0deg);
     }
     10% {
-      transform: translate(-1px, -2px) rotate(-2deg);
+      transform: translate(-2px, 0px) rotate(0deg);
     }
     20% {
-      transform: translate(-3px, 0px) rotate(3deg);
+      transform: translate(2px, 0px) rotate(0deg);
     }
     30% {
-      transform: translate(0px, 2px) rotate(0deg);
+      transform: translate(-2px, 0px) rotate(0deg);
     }
     40% {
-      transform: translate(1px, -1px) rotate(1deg);
+      transform: translate(2px, 0px) rotate(0deg);
     }
     50% {
-      transform: translate(-1px, 2px) rotate(-1deg);
+      transform: translate(-2px, 0px) rotate(0deg);
     }
     60% {
-      transform: translate(-3px, 1px) rotate(0deg);
+      transform: translate(2px, 0px) rotate(0deg);
     }
     70% {
-      transform: translate(2px, 1px) rotate(-2deg);
+      transform: translate(-2px, 0px) rotate(0deg);
     }
     80% {
-      transform: translate(-1px, -1px) rotate(4deg);
+      transform: translate(2px, 0px) rotate(0deg);
     }
     90% {
-      transform: translate(2px, 2px) rotate(0deg);
+      transform: translate(-2px, 0px) rotate(0deg);
     }
     100% {
-      transform: translate(1px, -2px) rotate(-1deg);
+      transform: translate(2px, 0px) rotate(0deg);
     }
   }
 `;
@@ -517,8 +548,11 @@ const Side = styled.div`
   width: calc(100% / 3);
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-end;
+  & > span:nth-child(1) {
+    margin-top: 40px;
+  }
 `;
 
 const ProfileHolder = styled.div`

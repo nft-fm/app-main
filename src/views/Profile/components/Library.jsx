@@ -5,8 +5,6 @@ import LibraryCard from "../../../components/NftCards/LibraryCard";
 import ArtistCard from "../../../components/NftCards/ArtistCard";
 
 import MusicPlayer from "../../../components/MusicPlayer"
-import Slide from 'react-reveal/Slide';
-import NftCard from "../../../components/NftCards/SaleNftCard";
 const Library = ({ user, isCreating }) => {
   const [nfts, setNfts] = useState([]);
   const [selectedNft, setSelectedNft] = useState();
@@ -81,7 +79,7 @@ const NftScroll = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
-  justify-content: space-between;
+  justify-content: space-evenly;
   flex-wrap: wrap;
   & > * {
     margin: 0 5px 10px;

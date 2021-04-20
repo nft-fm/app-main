@@ -10,13 +10,14 @@ import cog from "../../assets/img/icons/cog.svg";
 import { ReactComponent as CopyIcon } from "../../assets/img/icons/copy_icon.svg";
 import { ReactComponent as plus_icon } from "../../assets/img/icons/plus_icon.svg";
 import { ReactComponent as lock_icon } from "../../assets/img/icons/lock.svg";
+import IconMetamask from "../../assets/img/icons/metamask_icon.png";
 
 import Library from "./components/Library";
 
 const Profile = () => {
   const [ownedNfts, setOwnedNfts] = useState([]);
   console.log("ownedNfts", ownedNfts);
-  const { account, user, setUser } = useAccountConsumer();
+  const { account, connect, user, setUser } = useAccountConsumer();
   const getUser = async () => {
     axios
       .post("api/user/get-account", { address: account })
@@ -85,6 +86,11 @@ const Profile = () => {
     {!account && <IsConnected>
       <GetConnected>
         <span>Connect your wallet to access the profile page!</span>
+
+        <ConnectButton onClick={() => connect("injected")}>
+            <MetaMask src={IconMetamask}/>
+            <ButtonText>Connect Wallet</ButtonText>
+          </ConnectButton>
       </GetConnected>
       </IsConnected>}
         <Landing>
@@ -198,6 +204,37 @@ const Profile = () => {
     </BaseView>
   );
 };
+
+const ButtonText = styled.span`
+font-family: "Compita";
+font-size: ${props => props.theme.fontSizes.xs};
+font-weight: bold;
+color: white;
+`
+
+const MetaMask = styled.img`
+width: 32px;
+height: auto;
+`
+
+const ConnectButton = styled.button`
+  width: 140px;
+  height: 64px;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  border: 1px solid ${props => props.theme.color.boxBorder};
+  border-radius: 2px;
+  background-color: ${(props) => props.theme.color.box};
+  margin-bottom: 20px;
+  &:hover {
+    background-color: ${(props) => props.theme.color.boxBorder};
+    border: 1px solid #383838;
+  }
+`;
 
 const GetConnected = styled.div`
 width: 500px;

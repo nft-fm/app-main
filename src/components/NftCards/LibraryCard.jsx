@@ -7,12 +7,13 @@ import { ReactComponent as IconCart } from "../../assets/img/icons/coins.svg";
 import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
 import { useAccountConsumer } from "../../contexts/Account";
+import axios from "axios";
 
 const NftCard = (props) => {
-  const { usdPerEth } = useAccountConsumer();
+  const { usdPerEth, account } = useAccountConsumer();
   const { nft } = props;
   const [isOpen, setIsOpen] = useState(false);
-
+  const [liked, setLiked] = useState(props.liked);
   const show = () => setIsOpen(true);
   const hide = (e) => {
     setIsOpen(false);
@@ -20,8 +21,15 @@ const NftCard = (props) => {
   };
   console.log("nft", nft);
 
-  const like = () => {
-    //${!}
+  const like = async () => {
+    console.log("LIKING")
+    await axios.post(`api/user/like-nft`,
+      { address: account, nft: nft.address}).then(res => {
+      setLiked(!liked);
+      console.log("response", res.data);
+    }).catch(err => {
+      console.log(err);
+    })
   };
 
   const share = () => {
@@ -34,7 +42,10 @@ const NftCard = (props) => {
       <CardTop>
         <Side>
           <IconArea>
-            <Heart onClick={() => like()} />
+            {liked ?
+              <LikedHeart onClick={() => like()}/> :
+              <Heart onClick={() => like()} />
+            }
             {nft.likeCount}
           </IconArea>
           <IconArea>
@@ -93,6 +104,17 @@ const Share = styled(IconShare)`
     & path {
       fill: #20a4fc;
     }
+  }
+`;
+
+const LikedHeart = styled(IconHeart)`
+  width: 20px;
+  height: 20px;
+  margin: -3px 4px 0 0;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  & path {
+    stroke: #dd4591;
   }
 `;
 

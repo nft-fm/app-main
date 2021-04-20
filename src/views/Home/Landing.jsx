@@ -7,18 +7,28 @@ import { ReactComponent as IconDiscord } from "../../assets/img/icons/coins.svg"
 import { ReactComponent as IconMedium } from "../../assets/img/icons/social_medium.svg";
 import { ReactComponent as IconTelegram } from "../../assets/img/icons/social_telegram.svg";
 import { ReactComponent as IconTwitter } from "../../assets/img/icons/social_twitter.svg";
+import {useAccountConsumer} from "../../contexts/Account";
 
 const Listen = () => {
+  const { user } = useAccountConsumer();
   const [nfts, setNfts] = useState([])
 
   useEffect(() => {
     axios.get("/api/nft-type/featured").then((res) => setNfts(res.data));
   }, [])
 
-  const showNfts = nfts.map((nft) => {
-    return (
-      <NftCard nft={nft} />
-    )
+  const updateNft = (index, update) => {
+    let newNfts = nfts;
+    console.log("index", index)
+    console.log(update)
+    newNfts[index] = update;
+    setNfts(newNfts);
+  }
+
+  const showNfts = nfts.map((nft, index) => {
+    return <NftCard nft={nft} key={index} index={index}
+          updateNft={updateNft}
+          liked={user ? user.likes.find(like => like.toString() === nft._id.toString()) : false}/>;
   });
 
   return (

@@ -7,20 +7,29 @@ const ArtistNfts = ({ user }) => {
   const [nfts, setNfts] = useState([]);
 
   const getUserNfts = async () => {
-    console.log("here");
     axios
       .post("api/nft-type/artist-nfts", user)
       .then((res) => setNfts(res.data));
     // axios.get("api/nft-type/featured").then((res) => setOwnedNfts(res.data));
   };
+
+  const updateNft = (index, update) => {
+    let newNfts = nfts;
+    console.log("index", index)
+    console.log(update)
+    newNfts[index] = update;
+    setNfts(newNfts);
+  }
+
+  const showNfts = nfts.map((nft, index) => {
+    return <NftCard nft={nft} key={index} index={index}
+                    updateNft={updateNft}
+                    liked={user ? user.likes.find(like => like.toString() === nft._id.toString()) : false}/>;
+  });
+
   useEffect(() => {
     getUserNfts();
   }, [user]);
-
-  const showNfts = nfts.map((nft) => {
-    return <NftCard nft={nft} />;
-  });
-
   return (
     <Landing>
       <LaunchContainer>

@@ -23,9 +23,7 @@ const StyledPage = styled.div`
   height: 100vh;
   margin: 0;
 background-color: ${props => props.theme.bgColor};
-display: flex;
-flex-direction: column;
-align-items: center;
+
 `;
 
 const StyledMain = styled.div`
@@ -35,21 +33,25 @@ const StyledMain = styled.div`
   justify-content: flex-start;
   min-height: calc(100% - 61px);
   /* overflow-y: hidden; */
-  margin-bottom: -61px;
+  margin: 0 auto -120px auto;
   width: ${props => props.theme.homeWidth}px;
-  margin: auto;
+  /* margin: auto; */
 max-width: 90vw;
-  @media only screen and (max-width: 991px) {
+display: flex;
+flex-direction: column;
+align-items: center;
+  /* @media only screen and (max-width: 991px) {
     margin: -50px 0 -120px 0;
-    }
+    } */
 
 `
 
 const Push = styled.div`
-  height: 61px;
-  @media only screen and (max-width: 991px) {
+  height: 120px;
+  /* @media only screen and (max-width: 991px) {
     height: 170px;
- }
+ } */
 `
 
 export default Page;
+

@@ -4,6 +4,7 @@ import { useWallet } from "use-wallet";
 import axios from "axios";
 import swal from "sweetalert2";
 import { ReactComponent as IconX } from "../../assets/img/icons/x.svg";
+import logo from "../../assets/img/logos/logo.png";
 
 const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
   const { account, connect } = useWallet();
@@ -30,6 +31,10 @@ const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
     <OpaqueFilter onClick={(e) => hide(e)}>
       <Container onClick={(e) => stopProp(e)}>
         <StyledModal>
+          <TopBar>
+            <Logo src={logo} />
+            Buy NFT
+          </TopBar>
           {/* <Buy src={cart} alt="cart" /> */}
           {/* <X src={x} onClick={(e) => hide(e)} /> */}
           <Image src={nft.imageUrl} alt="image" />
@@ -55,6 +60,19 @@ const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
     </OpaqueFilter>
   );
 };
+
+const Logo = styled.img`
+width: 20px;
+margin-right: 8px;
+height: auto;
+`
+
+const TopBar = styled.div`
+width: 100%;
+display: flex;
+align-items: center;
+justify-content: center;
+`
 
 const OpaqueFilter = styled.div`
   width: 100vw;

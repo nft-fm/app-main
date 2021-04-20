@@ -101,6 +101,6 @@ const StyledFooter = styled.footer`
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  min-height: 120px;
+  height: 120px;
 background-color: ${props => props.theme.bgColor};
 `;

@@ -5,6 +5,8 @@ import axios from "axios";
 import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import loading from '../../assets/img/loading.gif';
+import PlayIcon from '../../assets/img/icons/listen_play.svg';
+import SkipForward from '../../assets/img/icons/listen_skip_forward.svg'
 
 const MusicPlayer = (props) => {
   const { nft } = props;
@@ -46,30 +48,47 @@ const MusicPlayer = (props) => {
       <AudioPlayer
         src={url}
         onPlay={e => console.log("onPlay")}
+        layout={"horizontal-reverse"}
         customProgressBarSection={
           [
-            RHAP_UI.PROGRESS_BAR,
             RHAP_UI.CURRENT_TIME,
-            <div>/</div>,
-            RHAP_UI.DURATION
+            RHAP_UI.PROGRESS_BAR,
+            RHAP_UI.DURATION,
+            <DummyContainer />,
+            <DummyContainer />,
+            RHAP_UI.LOOP,
+            <DummyContainer />,
+            RHAP_UI.VOLUME_CONTROLS,
+            TrackInfo(),
+            <DummyContainer />
           ]
         }
         customControlsSection={
           [
-            TrackInfo(),
-            <DummyContainer />,
+            <DummyContainerWide />,
             RHAP_UI.MAIN_CONTROLS,
-            RHAP_UI.VOLUME_CONTROLS
           ]
         }
+        customIcons={{
+          play: <i class="icon-listen_play" />,
+          forward: <i class="icon-listen_skip_forward" />,
+          rewind: <i class="icon-listen_skip_backward" />,
+          volume: <i class="icon-listen_volume" />,
+          pause: <i class="icon-listen_pause" />,
+          loop: <i class="icon-listen_loop" />
+        }}
       // other props here */}
       />
     </Wrapper>
   )
 }
 
-const DummyContainer = styled.div`
+const DummyContainerWide = styled.div`
   width: 30%;
+`;
+
+const DummyContainer = styled.div`
+  width: 5px;
 `;
 
 const Artist = styled.div`

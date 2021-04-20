@@ -1,5 +1,5 @@
 diff --git a/node_modules/react-h5-audio-player/lib/styles.css b/node_modules/react-h5-audio-player/lib/styles.css
-index 97228bd..8c37906 100644
+index 97228bd..2446356 100644
 --- a/node_modules/react-h5-audio-player/lib/styles.css
 +++ b/node_modules/react-h5-audio-player/lib/styles.css
 @@ -6,7 +6,7 @@
@@ -7,11 +7,11 @@ index 97228bd..8c37906 100644
    width: 100%;
    padding: 10px 15px;
 -  background-color: #fff;
-+  background-color: rgb(5, 5, 5);
++  background-color: rgb(18, 18, 18);
    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
  }
  .rhap_container:focus:not(:focus-visible) {
-@@ -56,16 +56,20 @@
+@@ -56,8 +56,12 @@
  }
  
  .rhap_progress-section {
@@ -25,13 +25,12 @@ index 97228bd..8c37906 100644
    align-items: center;
  }
  
- .rhap_progress-container {
+@@ -65,7 +69,7 @@
    display: flex;
--  align-items: center;
-+  align-items: right;
+   align-items: center;
    height: 20px;
 -  flex: 1 0 auto;
-+  flex: 3 0 0;
++  flex: 6 0 0;
    align-self: center;
    margin: 0 calc(10px + 1%);
    cursor: pointer;
@@ -40,7 +39,7 @@ index 97228bd..8c37906 100644
  
  .rhap_time {
 -  color: #333;
-+  color: rgb(256, 256, 256);
++  color: #5c5c5c;
    font-size: 16px;
    user-select: none;
    -webkit-user-select: none;
@@ -58,13 +57,13 @@ index 97228bd..8c37906 100644
    position: absolute;
    z-index: 2;
 -  background-color: #868686;
-+  background-color: #20a4fc;
++  background-color: rgba(59, 59, 59, 0.979);
    border-radius: 2px;
  }
  
  .rhap_progress-bar-show-download {
 -  background-color: rgba(221, 221, 221, 0.5);
-+  background-color: rgba(59, 59, 59, 0.979);
++  background-color: #202324;
  }
  
  .rhap_download-progress {
@@ -72,7 +71,7 @@ index 97228bd..8c37906 100644
    position: absolute;
    z-index: 1;
 -  background-color: #dddddd;
-+  background-color: #5c5c5c;
++  background-color: #20a4fc;
    border-radius: 2px;
  }
  
@@ -90,7 +89,7 @@ index 97228bd..8c37906 100644
    width: 26px;
    height: 26px;
 -  color: #868686;
-+  color: #187ec2;
++  color: rgba(134, 134, 134, 0.5);
    margin-right: 6px;
  }
  
@@ -103,6 +102,15 @@ index 97228bd..8c37906 100644
    font-size: 35px;
    width: 35px;
    height: 35px;
+@@ -170,7 +174,7 @@
+ .rhap_volume-controls {
+   display: flex;
+   flex: 1 0 auto;
+-  justify-content: flex-end;
++  /* justify-content: flex-end; */
+   align-items: center;
+ }
+ 
 @@ -179,7 +183,7 @@
    font-size: 26px;
    width: 26px;

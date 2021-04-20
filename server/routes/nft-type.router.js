@@ -63,7 +63,7 @@ router.post('/update', async (req, res) => {
     if (updateNFT) {
       res.status(200).send("success")
     } else {
-      res.status(500).json(err)
+      res.status(500).json('error')
     }
   } catch (error) {
     console.log(error);

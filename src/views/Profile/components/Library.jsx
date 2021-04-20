@@ -1,21 +1,35 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import axios from "axios";
-import NftCard from "../../../components/NftCards/LibraryCard";
+import LibraryCard from "../../../components/NftCards/LibraryCard";
+import ArtistCard from "../../../components/NftCards/ArtistCard";
 
-const Library = ({ user }) => {
+import MusicPlayer from "../../../components/MusicPlayer"
+import Slide from 'react-reveal/Slide';
+import NftCard from "../../../components/NftCards/SaleNftCard";
+const Library = ({ user, isCreating }) => {
   const [nfts, setNfts] = useState([]);
+  const [selectedNft, setSelectedNft] = useState();
+
+  const getArtistNfts = async () => {
+    console.log("here");
+    axios
+      .post("api/nft-type/artist-nfts", user)
+      .then((res) => setNfts(res.data));
+  };
 
   const getUserNfts = async () => {
     axios
       .post("api/nft-type/get-user-nfts", user)
       .then((res) => setNfts(res.data));
-    // axios.get("api/nft-type/featured").then((res) => setOwnedNfts(res.data));
+    // axios
+    //   .get("api/nft-type/featured")
+    //   .then((res) => setNfts(res.data));
   };
 
   useEffect(() => {
-    getUserNfts();
-  }, [user]);
+    !isCreating ? getUserNfts() : getArtistNfts();
+  }, [user, isCreating]);
 
   const updateNft = (index, update) => {
     let newNfts = nfts;
@@ -24,29 +38,36 @@ const Library = ({ user }) => {
   }
 
   const showNfts = nfts.map((nft, index) => {
-    return <NftCard nft={nft} key={index} index={index}
-                    updateNft={updateNft}
-                    liked={user ? user.likes.find(like => like.toString() === nft._id.toString()) : false}/>;
+    return isCreating ?
+      <ArtistCard nft={nft} key={index} index={index}
+        updateNft={updateNft}
+        liked={user ? user.likes.find(like => like.toString() === nft._id.toString()) : false}/> :
+      <LibraryCard nft={nft} key={index} index={index}
+        updateNft={updateNft}
+        selectNft={setSelectedNft}
+        liked={user ? user.likes.find(like => like.toString() === nft._id.toString()) : false}/>;
+
   });
 
   return (
     <Landing>
       <LaunchContainer>
-        <ContainerTitle>MY LIBRARY</ContainerTitle>
+        <ContainerTitle>{isCreating ? "MY NFTS" : "MY LIBRARY"}</ContainerTitle>
         <ContainerOutline />
         <NftScroll> {showNfts} </NftScroll>
       </LaunchContainer>
+      {selectedNft &&
+        <MusicPlayer nft={selectedNft} />
+      }
     </Landing>
   );
 };
-
 
 const Landing = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  /* height: calc(100vh - ${(props) => props.theme.topBarSize}px + 1px); */
   width: ${(props) => props.theme.homeWidth}px;
   max-width: 80vw;
   padding-top: 40px;

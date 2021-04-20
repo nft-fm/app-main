@@ -20,35 +20,38 @@ const Page = ({ children }) => (
 );
 
 const StyledPage = styled.div`
-  min-height: 100vh;
+  height: 100vh;
   margin: 0;
-background-color: #131313;
-display: flex;
-flex-direction: column;
-align-items: center;
+background-color: ${props => props.theme.bgColor};
+
 `;
 
 const StyledMain = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
-  min-height: calc(100% - 64px);
+  justify-content: flex-start;
+  min-height: calc(100% - 61px);
   /* overflow-y: hidden; */
-  margin-bottom: -64px;
+  margin: 0 auto -120px auto;
   width: ${props => props.theme.homeWidth}px;
-  margin: auto;
+  /* margin: auto; */
 max-width: 90vw;
-  @media only screen and (max-width: 991px) {
+display: flex;
+flex-direction: column;
+align-items: center;
+  /* @media only screen and (max-width: 991px) {
     margin: -50px 0 -120px 0;
-    }
+    } */
 
 `
 
 const Push = styled.div`
-  height: 64px;
-  @media only screen and (max-width: 991px) {
-height: 170px;
- }
+  height: 120px;
+  /* @media only screen and (max-width: 991px) {
+    height: 170px;
+ } */
 `
 
 export default Page;
+

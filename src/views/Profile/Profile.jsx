@@ -11,11 +11,9 @@ import { ReactComponent as CopyIcon } from "../../assets/img/icons/copy_icon.svg
 import { ReactComponent as plus_icon } from "../../assets/img/icons/plus_icon.svg";
 import { ReactComponent as lock_icon } from "../../assets/img/icons/lock.svg";
 
-import Library from "./components/Library"
-import ArtistNfts from "./components/ArtistNfts"
+import Library from "./components/Library";
 
 const Profile = () => {
-  const [selectedNft, setSelectedNft] = useState();
   const [ownedNfts, setOwnedNfts] = useState([]);
   console.log("ownedNfts", ownedNfts);
   const { account, user, setUser } = useAccountConsumer();
@@ -24,7 +22,6 @@ const Profile = () => {
       .post("api/user/get-account", { address: account })
       .then((res) => setUser(res.data));
   };
-
 
   // // TODO switch back to get-user-nfts
   // const getUserNfts = async () => {
@@ -85,124 +82,123 @@ const Profile = () => {
 
   return (
     <BaseView>
-      <Banner />
-      <ProfileHeading>
-        <Side />
-        <ProfileHolder>
-          <ProfilePicHolder>
-            <ProfilePic src={default_pic} alt="default-profile-pic" />
-            <Cog
-              src={cog}
-              alt="edit icon"
-              onClick={account ? () => setEdit(!edit) : null}
-            />
-          </ProfilePicHolder>
-          <ProfileInfoHolder>
-            {edit ? (
-              <form onSubmit={(e) => saveDetails(e)}>
-                <StyledInput
-                  type="text"
-                  placeholder="Enter Username"
-                  defaultValue={user?.username}
-                  onChange={(e) => setUsername(e.target.value)}
-                />
-              </form>
-            ) : (
-              <Username>
-                {user && user.username != "" ? user.username : "No username"}
-              </Username>
-            )}
-
-            <AddressSpan>
-              {user
-                ? user.address.substring(0, 10) +
-                "..." +
-                user.address.substring(user.address.length - 4)
-                : " "}
-              {user && (
-                <CopyButton
-                  onClick={() => {
-                    navigator.clipboard.writeText(user.address);
-                  }}
-                />
-              )}
-            </AddressSpan>
-          </ProfileInfoHolder>
-        </ProfileHolder>
-        <Side>
-          <SideSpan>
-            12 <BlueSpan>/NFTs</BlueSpan>
-          </SideSpan>
-          <SideSpan>
-            8 <BlueSpan>Traded</BlueSpan>
-          </SideSpan>
-        </Side>
-      </ProfileHeading>
-      <MidSection>
-        <BigButtonRight onClick={() => setIsOpen(!isOpen)}>
-          <span>
-            Create <br /> NFTs
-          </span>
-          <PlusButton />
-        </BigButtonRight>
-        <MidSectionMiddle
-          creating={isCreating}
-          onClick={
-            user && user.isArtist
-              ? () => setIsCreating(!isCreating)
-              : () => setShake(!shake)
-          }
-        >
-          <MidSectionTopRow>
-            <ListenSlashCreate>
-              <Highlight creating={isCreating}>Listen</Highlight>
-              <Highlight creating={!isCreating}>Create</Highlight>
-            </ListenSlashCreate>
-            {user && user.isArtist ? (
-              <ToggleHolder>
-                <ToggleLabel onClick={(e) => e.stopPropagation()}>
-                  <ToggleInput
-                    type="checkbox"
-                    value={!isCreating}
-                    checked={isCreating}
-                    onClick={() => setIsCreating(!isCreating)}
+      <Landing>
+        <Banner />
+        <ProfileHeading>
+          <Side />
+          <ProfileHolder>
+            <ProfilePicHolder>
+              <ProfilePic src={default_pic} alt="default-profile-pic" />
+              <Cog
+                src={cog}
+                alt="edit icon"
+                onClick={account ? () => setEdit(!edit) : null}
+              />
+            </ProfilePicHolder>
+            <ProfileInfoHolder>
+              {edit ? (
+                <form onSubmit={(e) => saveDetails(e)}>
+                  <StyledInput
+                    type="text"
+                    placeholder="Enter Username"
+                    defaultValue={user?.username}
+                    onChange={(e) => setUsername(e.target.value)}
                   />
-                  <ToggleSlider active={isCreating} />
-                </ToggleLabel>
-              </ToggleHolder>
-            ) : (
-              <LockHolder onClick={() => setShake(!shake)}>
-                {/* {shake && <ComingSoon>Feature Coming Soon!</ComingSoon>} */}
+                </form>
+              ) : (
+                <Username>
+                  {user && user.username != "" ? user.username : "No username"}
+                </Username>
+              )}
 
-                <LockIcon className={shake ? "shake" : null} />
-              </LockHolder>
-            )}
-          </MidSectionTopRow>
-        </MidSectionMiddle>
-        <BigButtonLeft>
-          <span>Listen</span>
-          <span>
-            View your <br />
-            library below
-          </span>
-        </BigButtonLeft>
-      </MidSection>
-      {/* <NftScroll>
-        {showNfts}
-      </NftScroll> */}
-      {/* {selectedNft ?
-        <Slide bottom duration={1000}>
-          <MusicPlayer nft={selectedNft} />
-        </Slide>
-        :
-        <div />
-      } */}
+              <AddressSpan>
+                {user
+                  ? user.address.substring(0, 10) +
+                    "..." +
+                    user.address.substring(user.address.length - 4)
+                  : " "}
+                {user && (
+                  <CopyButton
+                    onClick={() => {
+                      navigator.clipboard.writeText(user.address);
+                    }}
+                  />
+                )}
+              </AddressSpan>
+            </ProfileInfoHolder>
+          </ProfileHolder>
+          <Side>
+            <SideSpan>
+              12 <BlueSpan>/NFTs</BlueSpan>
+            </SideSpan>
+            <SideSpan>
+              8 <BlueSpan>Traded</BlueSpan>
+            </SideSpan>
+          </Side>
+        </ProfileHeading>
+        <MidSection>
+          <BigButtonRight onClick={() => setIsOpen(!isOpen)}>
+            <span>
+              Create <br /> NFTs
+            </span>
+            <PlusButton />
+          </BigButtonRight>
+          <MidSectionMiddle
+            creating={isCreating}
+            onClick={
+              user && user.isArtist
+                ? () => setIsCreating(!isCreating)
+                : () => setShake(!shake)
+            }
+          >
+            <MidSectionTopRow>
+              <ListenSlashCreate>
+                <Highlight creating={isCreating}>Listen</Highlight>
+                <Highlight creating={!isCreating}>Create</Highlight>
+              </ListenSlashCreate>
+              {user && user.isArtist ? (
+                <ToggleHolder>
+                  <ToggleLabel onClick={(e) => e.stopPropagation()}>
+                    <ToggleInput
+                      type="checkbox"
+                      value={!isCreating}
+                      checked={isCreating}
+                      onClick={() => setIsCreating(!isCreating)}
+                    />
+                    <ToggleSlider active={isCreating} />
+                  </ToggleLabel>
+                </ToggleHolder>
+              ) : (
+                <LockHolder onClick={() => setShake(!shake)}>
+                  {/* {shake && <ComingSoon>Feature Coming Soon!</ComingSoon>} */}
+
+                  <LockIcon className={shake ? "shake" : null} />
+                </LockHolder>
+              )}
+            </MidSectionTopRow>
+          </MidSectionMiddle>
+          <BigButtonLeft>
+            <span>Listen</span>
+            <span>
+              View your <br />
+              library below
+            </span>
+          </BigButtonLeft>
+        </MidSection>
+      </Landing>
       <Create open={isOpen} hide={hide} />
-      {isCreating ? <ArtistNfts user={user} /> : <Library user={user} />}
-      
+      <Library user={user} isCreating={isCreating} />
     </BaseView>
   );
 };
+
+const Landing = styled.div`
+  height: 450px;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
 const ToggleSlider = styled.span`
   position: absolute;
@@ -538,6 +534,7 @@ const ProfileHeading = styled.div`
   margin-right: auto;
   display: flex;
   height: 200px;
+  /* margin-top: 80px; */
   color: ${(props) => props.theme.fontColor.white};
   width: 800px;
   @media only screen and (max-width: 800px) {
@@ -564,7 +561,6 @@ const AccountDetails = styled.div`
   align-items: center;
   color: white;
 `;
-
 
 const Banner = styled.div`
   height: 50px;

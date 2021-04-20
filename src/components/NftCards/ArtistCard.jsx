@@ -14,18 +14,18 @@ const NftCard = (props) => {
   const { nft } = props;
   const [isOpen, setIsOpen] = useState(false);
   const [liked, setLiked] = useState(props.liked);
-
   const show = () => setIsOpen(true);
   const hide = (e) => {
     setIsOpen(false);
-    console.log("isOpen", isOpen);
   };
+
 
   const like = async () => {
     if (account) {
       setLiked(!liked);
+
       await axios.post(`api/user/like-nft`,
-      { address: account, nft: nft._id}).then(res => {
+        { address: account, nft: nft._id}).then(res => {
         if (res.data) {
           props.updateNft(props.index, res.data.nft);
           setUser(res.data.user);
@@ -35,14 +35,10 @@ const NftCard = (props) => {
       })
     }
   }
-
   const share = () => {
     //${!}
   }
 
-  useEffect(() => {
-    setLiked(props.liked);
-  }, [props.liked])
   return (
     <Container>
       <BuyNftModal open={isOpen} hide={hide} nft={nft} />
@@ -63,7 +59,9 @@ const NftCard = (props) => {
         <Side>
           <IconArea>
             {nft.x_numSold}
-            <span style={{ margin: "0 1px" }}>/</span>
+            <span style={{ margin: "0 1px" }}>
+              /
+              </span>
             {nft.numMinted}
             <Cart />
           </IconArea>
@@ -164,6 +162,7 @@ transition: all 0.2s ease-in-out;
   }
 }
 `
+
 const LikedHeart = styled(IconHeart)`
   width: 20px;
   height: 20px;

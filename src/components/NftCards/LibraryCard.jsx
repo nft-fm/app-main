@@ -9,9 +9,11 @@ import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import axios from "axios";
 
+import PlayIcon from "../../assets/img/icons/listen_play.svg"
+
 const NftCard = (props) => {
-  const { usdPerEth, account } = useAccountConsumer();
-  const { nft } = props;
+  const { usdPerEth, account, setUser } = useAccountConsumer();
+  const { nft, selectNft } = props;
   const [isOpen, setIsOpen] = useState(false);
   const [liked, setLiked] = useState(props.liked);
   const show = () => setIsOpen(true);
@@ -22,15 +24,19 @@ const NftCard = (props) => {
   console.log("nft", nft);
 
   const like = async () => {
-    console.log("LIKING")
-    await axios.post(`api/user/like-nft`,
-      { address: account, nft: nft.address}).then(res => {
+    if (account) {
       setLiked(!liked);
-      console.log("response", res.data);
-    }).catch(err => {
-      console.log(err);
-    })
-  };
+      await axios.post(`api/user/like-nft`,
+        { address: account, nft: nft._id}).then(res => {
+        if (res.data) {
+          props.updateNft(props.index, res.data.nft);
+          setUser(res.data.user);
+        }
+      }).catch(err => {
+        console.log(err);
+      })
+    }
+  }
 
   const share = () => {
     //${!}
@@ -65,13 +71,40 @@ const NftCard = (props) => {
         alt="image"
         onClick={() => setIsOpen(!isOpen)}
       />
-      <Bottom>
-        <TrackName>{nft.title}</TrackName>
-        <Artist>{nft.artist}</Artist>
-      </Bottom>
+      <BottomWrapper>
+        <Bottom>
+          <TrackName>{nft.title}</TrackName>
+          <Artist>{nft.artist}</Artist>
+        </Bottom>
+        <PlayButton src={PlayIcon} onClick={() => selectNft(nft)} />
+      </BottomWrapper>
     </Container>
   );
 };
+
+const PlayButton = styled.img`
+  opacity: .4;
+  max-height: 50 px;
+  max-width: 50px;
+  align-self: flex-end;
+`;
+
+const BottomWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: left;
+`;
+
+const Bottom = styled.div`
+width: 85%;
+display: flex;
+flex-direction: column;
+/* justify-content: column; */
+align-items: flex-start;
+`
 
 const Cart = styled(IconCart)`
   width: 20px;
@@ -114,7 +147,7 @@ const LikedHeart = styled(IconHeart)`
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   & path {
-    stroke: #dd4591;
+    stroke: ${(props) => props.theme.color.pink};
   }
 `;
 
@@ -130,7 +163,7 @@ const Heart = styled(IconHeart)`
   }
   &:hover {
     & path {
-      stroke: #dd4591;
+      stroke: ${(props) => props.theme.color.pink};
     }
   }
 `;
@@ -188,7 +221,7 @@ const TrackName = styled.span`
   font-weight: 500;
   /* width: 100%; */
   /* text-align: center; */
-  /* padding-left: 10px; */
+  padding-left: 10px;
   font-size: ${(props) => props.theme.fontSizes.xs};
   /* margin-bottom: 12px; */
 `;
@@ -199,13 +232,5 @@ const Artist = styled.span`
   /* text-align: center; */
   color: ${(props) => props.theme.gray};
 `;
-
-const Bottom = styled.div`
-width: 100%;
-display: flex;
-flex-direction: column;
-/* justify-content: column; */
-align-items: flex-start;
-`
 
 export default NftCard;

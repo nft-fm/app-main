@@ -45,53 +45,6 @@ const Listen = () => {
   );
 };
 
-const Discord = styled(IconDiscord)`
-width: 18px;
-height: 18px;
-& path {
-    transition: all 0.2s ease-in-out;
-     fill: ${props => props.theme.color.white};
-    }
-`
-
-const Twitter = styled(IconTwitter)`
-width: 18px;
-height: 18px;
-& path {
-    transition: all 0.2s ease-in-out;
-     fill: ${props => props.theme.color.white};
-    }
-`
-
-const Medium = styled(IconMedium)`
-width: 18px;
-height: 18px;
-& path {
-    transition: all 0.2s ease-in-out;
-     fill: ${props => props.theme.color.white};
-    }
-`
-
-const Telegram = styled(IconTelegram)`
-width: 18px;
-height: 18px;
-& path {
-    transition: all 0.2s ease-in-out;
-     fill: ${props => props.theme.color.white};
-    }
-`
-
-const IconText = styled.span`
-margin: 3px 0 0 12px;
-font-weight: bold;
-letter-spacing: 1px;
-`
-
-const ContainerTitleText = styled.span`
-padding-left: 6px;
-`
-
-
 const Landing = styled.div`
 display: flex;
 flex-direction: column;
@@ -141,7 +94,7 @@ display: flex;
 flex-direction: row;
 width: 100%;
 justify-content: space-between;
-@media only screen and (max-width: 1500px) {
+/* @media only screen and (max-width: 1500px) {
   & > * {
     &:nth-last-child(1) {
         display: none;
@@ -155,7 +108,7 @@ justify-content: space-between;
   & > * {
     &:nth-last-child(3) {
         display: none;
-   }}}
+   }}} */
 `;
 
 const LaunchContainer = styled.div`

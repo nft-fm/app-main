@@ -187,7 +187,7 @@ display: flex;
 flex-flow: row wrap;
 width: 100%;
 justify-content: space-between;
-@media only screen and (max-width: 1500px) {
+/* @media only screen and (max-width: 1500px) {
   & > * {
     &:nth-last-child(1) {
         display: none;
@@ -201,7 +201,7 @@ justify-content: space-between;
   & > * {
     &:nth-last-child(3) {
         display: none;
-   }}}
+   }}} */
 `;
 
 const LaunchContainer = styled.div`

@@ -34,16 +34,23 @@ const StyledMain = styled.div`
   min-height: calc(100% - 61px);
   /* overflow-y: hidden; */
   margin: 0 auto -120px auto;
-  width: ${props => props.theme.homeWidth}px;
   /* margin: auto; */
-max-width: 90vw;
-display: flex;
-flex-direction: column;
-align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   /* @media only screen and (max-width: 991px) {
     margin: -50px 0 -120px 0;
-    } */
-
+  } */
+  width: 1226px;
+  @media only screen and (max-width: 1500px) {
+    width: 976px;
+  }
+  @media only screen and (max-width: 1200px) {
+    width: 726px;
+  }
+  @media only screen and (max-width: 776px) {
+    width: 100vw;
+  }
 `
 
 const Push = styled.div`

@@ -81,8 +81,8 @@ const Landing = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  width: ${(props) => props.theme.homeWidth}px;
-  max-width: 80vw;
+  /* width: ${(props) => props.theme.homeWidth}px; */
+  /* max-width: 80vw; */
   padding-top: 40px;
   color: white;
   font-size: ${(props) => props.theme.fontSizes.xs};

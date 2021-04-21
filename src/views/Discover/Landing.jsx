@@ -10,12 +10,21 @@ import { ReactComponent as IconTwitter } from "../../assets/img/icons/social_twi
 
 const Listen = () => {
   const [nfts, setNfts] = useState([])
+  const [allNfts, setAllNfts] = useState([])
 
   useEffect(() => {
     axios.get("/api/nft-type/featured").then((res) => setNfts(res.data));
+    axios.get("/api/nft-type/all").then((res) => setAllNfts(res.data));
   }, [])
 
   const showNfts = nfts.map((nft) => {
+    return (
+      <NftCard nft={nft} />
+    )
+  });
+
+
+  const showAllNfts = allNfts.map((nft) => {
     return (
       <NftCard nft={nft} />
     )
@@ -39,7 +48,7 @@ const Listen = () => {
           MARKET
         </ContainerTitle>
         <ContainerOutline />
-        <NftScroll> {showNfts} </NftScroll>
+        <NftScroll> {showAllNfts} </NftScroll>
       </LaunchContainer>
     </Landing >
   );

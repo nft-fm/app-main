@@ -7,16 +7,15 @@ import 'react-h5-audio-player/lib/styles.css';
 import loading from '../../assets/img/loading.gif';
 import PlayIcon from '../../assets/img/icons/listen_play.svg';
 import SkipForward from '../../assets/img/icons/listen_skip_forward.svg'
+import xIcon from '../../assets/img/icons/x.svg';
 
 const MusicPlayer = (props) => {
-  const { nft } = props;
+  const { nft, setNextNft, setPrevNft, exitPlayer } = props;
   const [url, setUrl] = useState();
-
-  console.log("nft MusicPlayer: ", nft);
 
   useEffect(() => {
     getSong();
-  }, []);
+  }, [nft]);
 
   const getSong = async () => {
     const _url = await axios.post("api/nft-type/getSong", { key: nft.address + "/" + nft.audioUrl.split('/').slice(-1)[0] });
@@ -46,6 +45,7 @@ const MusicPlayer = (props) => {
   return (
     <Wrapper>
       <AudioPlayer
+        showSkipControls={true}
         src={url}
         onPlay={e => console.log("onPlay")}
         layout={"horizontal-reverse"}
@@ -59,13 +59,15 @@ const MusicPlayer = (props) => {
             RHAP_UI.LOOP,
             <DummyContainer />,
             RHAP_UI.VOLUME_CONTROLS,
+            <DummyContainer />,
             TrackInfo(),
+            <DummyContainer />,
+            <ExitIcon src={xIcon} onClick={() => exitPlayer()} />,
             <DummyContainer />
           ]
         }
         customControlsSection={
           [
-            <DummyContainerWide />,
             RHAP_UI.MAIN_CONTROLS,
           ]
         }
@@ -75,13 +77,22 @@ const MusicPlayer = (props) => {
           rewind: <i class="icon-listen_skip_backward" />,
           volume: <i class="icon-listen_volume" />,
           pause: <i class="icon-listen_pause" />,
-          loop: <i class="icon-listen_loop" />
+          loop: <i class="icon-listen_loop" />,
         }}
+        onClickNext={() => setNextNft()}
+        onClickPrevious={() => setPrevNft()}
       // other props here */}
       />
     </Wrapper>
   )
 }
+
+const ExitIcon = styled.img`
+  filter: opacity(25%);
+  backgroundColor: #5c5c5c;
+  height: 35px;
+  width: 35px;
+`;
 
 const DummyContainerWide = styled.div`
   width: 30%;
@@ -139,11 +150,9 @@ position: sticky;
 bottom: 0;
     display: flex;
     flex-direction: row;
-    align-items: center;
+    justify-content: center;
     width: 100vw;
     background-color: #262626;
-    height: 50px;
-    border-top: 1px solid white ;
 `;
 
 export default MusicPlayer;

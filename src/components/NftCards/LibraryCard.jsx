@@ -218,7 +218,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 200px;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 `;
 
 const Image = styled.img`

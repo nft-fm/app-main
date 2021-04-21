@@ -65,7 +65,7 @@ router.post('/like-nft', async (req, res) => {
     }
     user.save();
     nft.save();
-    res.send({user, nft});
+    res.send({user, nft: {...nft._doc, liked: !!hasLiked < 0 }});
   } catch (error) {
     console.log(error);
     res.sendStatus(500)

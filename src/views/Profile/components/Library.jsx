@@ -7,6 +7,7 @@ import ArtistCard from "../../../components/NftCards/ArtistCard";
 import { usePlaylistConsumer } from "../../../contexts/Playlist";
 
 const Library = ({ user, isCreating, newNft }) => {
+  const [pureNfts, setPureNfts] = useState([]);
   const [nfts, setNfts] = useState([]);
   const [selectedNft, setSelectedNft] = useState();
   const { setNftsCallback } = usePlaylistConsumer();
@@ -18,25 +19,13 @@ const Library = ({ user, isCreating, newNft }) => {
           nft={nft}
           key={index}
           index={index}
-          updateNft={updateNft}
-          liked={
-            user
-              ? user.likes.find((like) => like.toString() === nft._id.toString())
-              : false
-          }
         />
       ) : (
         <LibraryCard
           nft={nft}
           key={index}
           index={index}
-          updateNft={updateNft}
           selectNft={setSelectedNft}
-          liked={
-            user
-              ? user.likes.find((like) => like.toString() === nft._id.toString())
-              : false
-          }
         />
       );
     });
@@ -51,7 +40,8 @@ const Library = ({ user, isCreating, newNft }) => {
       .post("api/nft-type/artist-nfts", user)
       .then((res) => {
         setNfts(formatNfts(res.data));
-        setNftsCallback(res.data)
+        setNftsCallback(res.data);
+        setPureNfts(res.data);
       });
   };
 
@@ -60,7 +50,8 @@ const Library = ({ user, isCreating, newNft }) => {
       .post("api/nft-type/get-user-nfts", user)
       .then((res) => {
         setNfts(formatNfts(res.data));
-        setNftsCallback(res.data)
+        setNftsCallback(res.data);
+        setPureNfts(res.data);
       });
     // axios
     //   .get("api/nft-type/featured")
@@ -73,13 +64,6 @@ const Library = ({ user, isCreating, newNft }) => {
   useEffect(() => {
     !isCreating ? getUserNfts() : getArtistNfts();
   }, [user, isCreating, newNft]);
-
-  const updateNft = (index, update) => {
-    let newNfts = nfts;
-    newNfts[index] = update;
-    setNfts(newNfts);
-  };
-
 
   return (
     <Landing>

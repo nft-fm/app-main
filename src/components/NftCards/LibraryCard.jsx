@@ -15,22 +15,24 @@ const NftCard = (props) => {
   const { usdPerEth, account, setUser } = useAccountConsumer();
   const { nft, selectNft } = props;
   const [isOpen, setIsOpen] = useState(false);
-  const [liked, setLiked] = useState(props.liked);
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
   const { setNftCallback } = usePlaylistConsumer();
   const show = () => setIsOpen(true);
   const hide = (e) => {
     setIsOpen(false);
     console.log("isOpen", isOpen);
   };
-  console.log("nft", nft);
 
   const like = async () => {
     if (account) {
+      console.log("setting like");
       setLiked(!liked);
       await axios.post(`api/user/like-nft`,
         { address: account, nft: nft._id }).then(res => {
           if (res.data) {
-            props.updateNft(props.index, res.data.nft);
+            setLiked(res.data.nft.liked);
+            setLikeCount(res.data.nft.likeCount);
             setUser(res.data.user);
           }
         }).catch(err => {
@@ -43,6 +45,10 @@ const NftCard = (props) => {
     //${!}
   };
 
+  useEffect(() => {
+    setLiked(nft.liked);
+    setLikeCount(nft.likeCount);
+  }, [nft])
   return (
     <Container>
       <BuyNftModal open={isOpen} hide={hide} nft={nft} />

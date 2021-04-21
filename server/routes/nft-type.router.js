@@ -9,9 +9,15 @@ const User = require('../schemas/User.schema');
 
 router.post('/artist-nfts', async (req, res) => {
   try {
-    console.log('/artist-nfts hit', req.body)
+    const likes = req.body.likes;
     let nfts = await NftType.find({address: req.body.address, isDraft: false})
-    res.send(nfts)
+
+    for (let i = 0; i < nfts.length; i++) {
+      if (likes.find(like => like.toString() === nfts[i]._doc._id.toString())) nfts[i] = {...nfts[i]._doc, liked: true}
+      else nfts[i] = {...nfts[i]._doc, liked: false};
+    }
+    console.log("Nfts after find", nfts)
+    res.send(nfts);
   } catch (err) {
     res.status(500).send(err);
   }
@@ -20,7 +26,6 @@ router.post('/artist-nfts', async (req, res) => {
 
 router.post('/get-NFT', async (req, res) => {
   try {
-    console.log("fetchNFT Hit", req.body.account);
     let nft = await NftType.findOne({
       address: req.body.account,
       isDraft: true,
@@ -43,9 +48,15 @@ router.post('/get-NFT', async (req, res) => {
 
 router.post('/get-user-nfts', async (req, res) => {
   try {
-    console.log("/get-user-nfts hit", req.body)
+    const likes = req.body.likes;
     let ids = req.body.x_nfts;
-    let nfts = await NftType.find({ '_id': { $in: ids } })
+    let nfts = await NftType.find({ '_id': { $in: ids } });
+
+    for (let i = 0; i < nfts.length; i++) {
+      if (likes.find(like => like.toString() === nfts[i]._doc._id.toString())) nfts[i] = {...nfts[i]._doc, liked: true}
+      else nfts[i] = {...nfts[i]._doc, liked: false};
+    }
+
     res.status(200).send(nfts)
   } catch (error) {
     console.log(error);
@@ -55,7 +66,6 @@ router.post('/get-user-nfts', async (req, res) => {
 
 router.post('/update', async (req, res) => {
   try {
-    console.log('/update hit', req.body)
     let newData = req.body;
     newData.isDraft = false;
 

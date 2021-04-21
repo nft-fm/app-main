@@ -24,7 +24,6 @@ const NftCard = (props) => {
 
   const like = async () => {
     if (account) {
-      setLikeCount(liked ? likeCount - 1 : likeCount + 1);
       setLiked(!liked);
       await axios.post(`api/user/like-nft`,
         { address: account, nft: nft._id}).then(res => {

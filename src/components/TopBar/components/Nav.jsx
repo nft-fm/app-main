@@ -21,7 +21,7 @@ const StyledNav = styled.nav`
 
 const StyledLink = styled(NavLink)`
   font-size: ${props => props.theme.fontSizes.xs};
-  font-weight: bold;
+  font-weight: 600;
   letter-spacing: 1px;
   padding-right: ${(props) => props.theme.spacing[5]}px;
   transition: all 0.1s ease-in-out;

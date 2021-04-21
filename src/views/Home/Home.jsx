@@ -193,7 +193,7 @@ const FaqsContainer = styled.div`
 const LaunchFeaturesHeader = styled.h3`
   align-self: center;
   color: white;
-  font-family: Compita;
+  font-family: "Compita";
 `;
 
 const Checkmark = styled.img`
@@ -218,7 +218,7 @@ const LaunchFeatureRow = styled.div`
   flex-direction: row;
   align-items: center;
   max-height: 25px;
-  font-family: Compita;
+  font-family: "Compita";
   font-size: medium;
   font-weight: 500;
   font-stretch: normal;
@@ -251,19 +251,19 @@ const LaunchFeatureBoxLeft = styled(LaunchFeaturesBox)`
 const StyledParagraph = styled.div`
   margin-top: -1%;
   color: white;
-  font-family: Compita;
+  font-family: "Compita";
 `;
 
 const StyledSubHeader = styled.h2`
   color: white;
-  font-family: Compita;
+  font-family: "Compita";
   margin-left: 7%;
   margin-top: -2%;
 `;
 
 const StyledHeader = styled.h1`
   color: white;
-  font-family: Compita;
+  font-family: "Compita";
 `;
 
 const DescriptionBoxContainer = styled.div`
@@ -287,7 +287,7 @@ position:absolute;
   padding-left:2px;
   padding-right:2px;
   color: #383838;
-  font: Compita;
+  font: "Compita";
   background-color: #131313;
   display: flex;
   flex-direction: row;

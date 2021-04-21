@@ -21,10 +21,6 @@ const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
   console.log("nft", nft);
 
   const purchase = (id) => {
-    if (!account) {
-      swal.fire("You need to connect your wallet first")
-      return;
-    }
     axios
       .post("/api/nft-type/purchase", { id: id, address: account })
       .then((res) => {
@@ -115,7 +111,7 @@ const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
 const ButtonText = styled.span`
 font-family: "Compita";
 font-size: ${props => props.theme.fontSizes.xs};
-font-weight: bold;
+font-weight: 600;
 color: white;
 `
 
@@ -232,8 +228,8 @@ width: 100%;
 margin-bottom: 8px;
 display: flex;
 justify-content: space-between;
-font-weight: bold;
-font-family: Compita;
+font-weight: 600;
+font-family: "Compita";
 `
 
 const Logo = styled.img`
@@ -247,8 +243,8 @@ width: 100%;
 display: flex;
 align-items: center;
 justify-content: center;
-font-family: Compita;
-font-weight: bold;
+font-family: "Compita";
+font-weight: 600;
 color: white;
 font-size: ${props => props.theme.fontSizes.sm};
 margin-bottom: 12px;

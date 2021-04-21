@@ -32,7 +32,7 @@ export default createGlobalStyle`
         line-height: 110%;
         color: var(---color-text);
         &.bold  {
-            font-weight: bold;
+            font-weight: 600;
         }
     }
     h5 {
@@ -42,7 +42,7 @@ export default createGlobalStyle`
         line-height: 120%;
         color: var(---color-text);
         &.bold  {
-            font-weight: bold;
+            font-weight: 600;
         }
     }
     h6 {
@@ -57,7 +57,7 @@ export default createGlobalStyle`
         font-size: 16px;
         line-height: 150%;
         &.bold  {
-            font-weight: bold;
+            font-weight: 600;
         }
     }
     a {
@@ -69,7 +69,7 @@ export default createGlobalStyle`
         font-size: 10px;
         line-height: 150%;
         &.bold  {
-            font-weight: bold;
+            font-weight: 600;
         }
     }
     

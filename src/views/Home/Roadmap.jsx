@@ -190,7 +190,7 @@ const Rectangle = !isMobile()
 
 const Title = styled.div`
   font-family: "Comic Book";
-  font-weight: bold;
+  font-weight: 600;
   font-size: 24px;
   font-stretch: normal;
   font-style: normal;

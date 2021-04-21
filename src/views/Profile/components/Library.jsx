@@ -6,7 +6,7 @@ import ArtistCard from "../../../components/NftCards/ArtistCard";
 
 import { usePlaylistConsumer } from "../../../contexts/Playlist";
 
-const Library = ({ user, isCreating }) => {
+const Library = ({ user, isCreating, newNft }) => {
   const [nfts, setNfts] = useState([]);
   const [selectedNft, setSelectedNft] = useState();
   const { setNftsCallback } = usePlaylistConsumer();
@@ -37,7 +37,7 @@ const Library = ({ user, isCreating }) => {
 
   useEffect(() => {
     !isCreating ? getUserNfts() : getArtistNfts();
-  }, [user, isCreating]);
+  }, [user, isCreating, newNft]);
 
   const updateNft = (index, update) => {
     let newNfts = nfts;
@@ -137,11 +137,11 @@ const LaunchContainer = styled.div`
 
 const ContainerTitle = styled.span`
   position: absolute;
-  font-weight: bold;
+  font-weight: 600;
   left: calc(10% + 50px);
   top: -4px;
   padding: 0 12px;
-  font: Compita;
+  font: "Compita";
   background-color: ${(props) => props.theme.bgColor};
   font-size: ${(props) => props.theme.fontSizes.xs};
   color: ${(props) => props.theme.color.gray};

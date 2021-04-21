@@ -120,7 +120,7 @@ height: 18px;
 `
 
 const IconText = styled.span`
-margin: 3px 0 0 12px;
+margin: 1px 0 0 12px;
 font-weight: 600;
 letter-spacing: 1px;
 `

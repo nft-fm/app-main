@@ -11,11 +11,46 @@ const Library = ({ user, isCreating, newNft }) => {
   const [selectedNft, setSelectedNft] = useState();
   const { setNftsCallback } = usePlaylistConsumer();
 
+  const formatNfts = (nftsData) => {
+    const formattedNfts = nftsData.map((nft, index) => {
+      return isCreating ? (
+        <ArtistCard
+          nft={nft}
+          key={index}
+          index={index}
+          updateNft={updateNft}
+          liked={
+            user
+              ? user.likes.find((like) => like.toString() === nft._id.toString())
+              : false
+          }
+        />
+      ) : (
+        <LibraryCard
+          nft={nft}
+          key={index}
+          index={index}
+          updateNft={updateNft}
+          selectNft={setSelectedNft}
+          liked={
+            user
+              ? user.likes.find((like) => like.toString() === nft._id.toString())
+              : false
+          }
+        />
+      );
+    });
+    for (let i = 0; i < 5; i++) {
+      formattedNfts.push(<FillerCard/>)
+    }
+    return formattedNfts;
+  }
+
   const getArtistNfts = async () => {
     axios
       .post("api/nft-type/artist-nfts", user)
       .then((res) => {
-        setNfts(res.data);
+        setNfts(formatNfts(res.data));
         setNftsCallback(res.data)
       });
   };
@@ -24,7 +59,7 @@ const Library = ({ user, isCreating, newNft }) => {
     axios
       .post("api/nft-type/get-user-nfts", user)
       .then((res) => {
-        setNfts(res.data);
+        setNfts(formatNfts(res.data));
         setNftsCallback(res.data)
       });
     // axios
@@ -45,50 +80,27 @@ const Library = ({ user, isCreating, newNft }) => {
     setNfts(newNfts);
   };
 
-  const showNfts = nfts.map((nft, index) => {
-    return isCreating ? (
-      <ArtistCard
-        nft={nft}
-        key={index}
-        index={index}
-        updateNft={updateNft}
-        liked={
-          user
-            ? user.likes.find((like) => like.toString() === nft._id.toString())
-            : false
-        }
-      />
-    ) : (
-      <LibraryCard
-        nft={nft}
-        key={index}
-        index={index}
-        updateNft={updateNft}
-        selectNft={setSelectedNft}
-        liked={
-          user
-            ? user.likes.find((like) => like.toString() === nft._id.toString())
-            : false
-        }
-      />
-    );
-  });
 
   return (
     <Landing>
       <LaunchContainer>
         <ContainerTitle>{isCreating ? "MY NFTS" : "MY LIBRARY"}</ContainerTitle>
         <ContainerOutline />
-        <NftScroll> {showNfts} </NftScroll>
+        <NftScroll> {nfts} </NftScroll>
       </LaunchContainer>
     </Landing>
-  )
+  );
 };
+
+const FillerCard = styled.div`
+width: 226px;
+height: 0px;
+`
 
 const Landing = styled.div`
   display: flex;
-  flex-direction: column;);
-
+  flex-direction: column;
+  width: 100%;
   align-items: center;
   justify-content: space-around;
   /* width: ${(props) => props.theme.homeWidth}px; */
@@ -104,11 +116,11 @@ const NftScroll = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
-  justify-content: space-evenly;
+  justify-content: space-between;
   flex-wrap: wrap;
-  & > * {
-    margin: 0 5px 10px;
-  }
+  /* & > * {
+    margin: 0 5px 20px;
+  } */
   /* @media only screen and (max-width: 1500px) {
     & > * {
       &:nth-last-child(1) {

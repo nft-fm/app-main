@@ -6,10 +6,9 @@ import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../assets/img/icons/coins.svg";
 import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
+import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import axios from "axios";
-
-import PlayIcon from "../../assets/img/icons/listen_play.svg"
 import { usePlaylistConsumer } from "../../contexts/Playlist";
 
 const NftCard = (props) => {
@@ -38,7 +37,7 @@ const NftCard = (props) => {
           console.log(err);
         })
     }
-  }
+  };
 
   const share = () => {
     //${!}
@@ -84,12 +83,20 @@ const NftCard = (props) => {
   );
 };
 
-const PlayButton = styled.img`
-  opacity: .4;
-  max-height: 50 px;
-  max-width: 50px;
-  align-self: flex-end;
+const PlayButton = styled(PlayIcon)`
+  width: 50px;
+  height: 50px;
   cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  & path {
+    transition: all 0.2s ease-in-out;
+    fill: ${(props) => props.theme.color.gray};
+  }
+  &:hover {
+    & path {
+      fill: #20a4fc;
+    }
+  }
 `;
 
 const BottomWrapper = styled.div`
@@ -102,12 +109,12 @@ const BottomWrapper = styled.div`
 `;
 
 const Bottom = styled.div`
-width: 85%;
-display: flex;
-flex-direction: column;
-/* justify-content: column; */
-align-items: flex-start;
-`
+  width: 85%;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: column; */
+  align-items: flex-start;
+`;
 
 const Cart = styled(IconCart)`
   width: 20px;
@@ -205,7 +212,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 200px;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 `;
 
 const Image = styled.img`

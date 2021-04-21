@@ -89,6 +89,7 @@ const PlayButton = styled.img`
   max-height: 50 px;
   max-width: 50px;
   align-self: flex-end;
+  cursor: pointer;
 `;
 
 const BottomWrapper = styled.div`

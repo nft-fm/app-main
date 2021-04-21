@@ -147,6 +147,9 @@ code {
 .swal2-confirm {
   font-size: 30px;
   font-stretch: normal;
+  font-weight: 600 !important;
+  font-family: "Compita" !important;
+
   font-style: normal;
   line-height: 1;
   text-decoration: none;
@@ -168,6 +171,9 @@ code {
 .swal2-deny {
   font-size: 30px;
   font-stretch: normal;
+  font-weight: 600 !important;
+  font-family: "Compita" !important;
+
   font-style: normal;
   line-height: 1;
   text-decoration: none;

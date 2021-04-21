@@ -17,7 +17,6 @@ min-width: 300px;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-font-family: "Gilroy";
   font-size: 25px;
   font-weight: bold;
   font-stretch: normal;

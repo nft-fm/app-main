@@ -21,10 +21,6 @@ const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
   console.log("nft", nft);
 
   const purchase = (id) => {
-    if (!account) {
-      swal.fire("You need to connect your wallet first")
-      return;
-    }
     axios
       .post("/api/nft-type/purchase", { id: id, address: account })
       .then((res) => {
@@ -233,7 +229,7 @@ margin-bottom: 8px;
 display: flex;
 justify-content: space-between;
 font-weight: bold;
-font-family: Compita;
+font-family: "Compita";
 `
 
 const Logo = styled.img`
@@ -247,7 +243,7 @@ width: 100%;
 display: flex;
 align-items: center;
 justify-content: center;
-font-family: Compita;
+font-family: "Compita";
 font-weight: bold;
 color: white;
 font-size: ${props => props.theme.fontSizes.sm};

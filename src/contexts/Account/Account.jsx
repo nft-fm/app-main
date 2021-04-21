@@ -10,7 +10,7 @@ export const AccountProvider = ({ children }) => {
   const { account, connect } = useWallet();
   const [user, setUser] = useState(null);
   const [currChainId, setCurrChainId] = useState(false);
-  const [usdPerEth, setUsdPerEth] = useState(1);
+  const [usdPerEth, setUsdPerEth] = useState(0);
 
   const fetchUsdPerEth = async () => {
     console.log("fetchinafioe");

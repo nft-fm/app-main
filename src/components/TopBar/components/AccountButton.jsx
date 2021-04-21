@@ -98,7 +98,7 @@ const AccountButton = (props) => {
 };
 
 const AddressSpan = styled.span`
-font: Compita;
+font: "Compita";
 `;
 
 const Button = styled.button`

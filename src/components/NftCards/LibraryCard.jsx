@@ -189,7 +189,7 @@ const CardTop = styled.div`
   display: flex;
   justify-content: space-between;
   font-weight: bold;
-  font-family: Compita;
+  font-family: "Compita";
 `;
 
 const Container = styled.div`

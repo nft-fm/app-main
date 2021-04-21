@@ -1,22 +1,46 @@
 @font-face {
   font-family: "Compita";
-  src: url(./assets/fonts/Compita-Regular.ttf) format("truetype");
-  font-weight: normal;
+  src: url(./assets/fonts/Compita-Thin.ttf) format("truetype");
+  font-weight: 100;
+  font-style: normal;
+}
+
+
+@font-face {
+  font-family: "Compita";
+  src: url(./assets/fonts/Compita-Light.ttf) format("truetype");
+  font-weight: 200;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "Gilroy-Bold";
-  src: url(./assets/fonts/Gilroy-Bold.otf) format ("opentype");
-  /* font-weight: normal;
-  font-style: normal; */
+  font-family: "Compita";
+  src: url(./assets/fonts/Compita-Regular.ttf) format("truetype");
+  font-weight: 300;
+  font-style: normal;
 }
+
 @font-face {
-  font-family: "Gilroy-Medium";
-  src: url(./assets/fonts/Gilroy-Medium.otf) format ("opentype");
-  /* font-weight: normal;
-  font-style: normal; */
+  font-family: "Compita";
+  src: url(./assets/fonts/Compita-Medium.ttf) format("truetype");
+  font-weight: 400;
+  font-style: normal;
 }
+
+@font-face {
+  font-family: "Compita";
+  src: url(./assets/fonts/Compita-SemiBold.ttf) format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Compita";
+  src: url(./assets/fonts/Compita-Bold.ttf) format("truetype");
+  font-weight: 800;
+  font-style: normal;
+}
+
 
 @font-face {
   font-family: 'icomoon';

@@ -219,7 +219,7 @@ const ContainerTitle = styled.span`
   left: calc(10% + 50px);
   top: -4px;
   padding: 0 12px;
-  font: Compita;
+  font: "Compita";
   background-color: ${props => props.theme.bgColor};
   font-size: ${props => props.theme.fontSizes.xs};
   color: ${props => props.theme.color.gray};
@@ -245,7 +245,7 @@ const Logo = styled.img`
 `;
 
 const StyledTitle = styled.div`
-  font-family: Compita;
+  font-family: "Compita";
   font-size: ${props => props.theme.fontSizes.xl};
   margin-bottom: 16px;
   font-weight: bold;

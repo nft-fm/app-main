@@ -92,7 +92,7 @@ const ExitIcon = styled.img`
   backgroundColor: #5c5c5c;
   height: 35px;
   width: 35px;
-  cursor: hover;
+  cursor: pointer;
 `;
 
 const DummyContainerWide = styled.div`

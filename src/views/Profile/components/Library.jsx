@@ -9,8 +9,20 @@ const Library = ({ user, isCreating }) => {
   const [nfts, setNfts] = useState([]);
   const [selectedNft, setSelectedNft] = useState();
 
+  const setNextNft = () => {
+    const index = nfts.indexOf(selectedNft);
+    const newIndex = index == nfts.length ? 0 : index + 1;
+    setSelectedNft(nfts[newIndex]);
+  }
+
+  const setPrevNft = () => {
+    const index = nfts.indexOf(selectedNft);
+    const newIndex = index == 0 ? nfts.length - 1 : index - 1;
+    console.log("index, new Index, nfts.length:", index, newIndex, nfts.length);
+    setSelectedNft(nfts[newIndex]);
+  }
+
   const getArtistNfts = async () => {
-    console.log("here");
     axios
       .post("api/nft-type/artist-nfts", user)
       .then((res) => setNfts(res.data));
@@ -39,11 +51,11 @@ const Library = ({ user, isCreating }) => {
     return isCreating ?
       <ArtistCard nft={nft} key={index} index={index}
         updateNft={updateNft}
-        liked={user ? user.likes.find(like => like.toString() === nft._id.toString()) : false}/> :
+        liked={user ? user.likes.find(like => like.toString() === nft._id.toString()) : false} /> :
       <LibraryCard nft={nft} key={index} index={index}
         updateNft={updateNft}
         selectNft={setSelectedNft}
-        liked={user ? user.likes.find(like => like.toString() === nft._id.toString()) : false}/>;
+        liked={user ? user.likes.find(like => like.toString() === nft._id.toString()) : false} />;
 
   });
 
@@ -55,15 +67,16 @@ const Library = ({ user, isCreating }) => {
         <NftScroll> {showNfts} </NftScroll>
       </LaunchContainer>
       {selectedNft &&
-        <MusicPlayer nft={selectedNft} />
+        <MusicPlayer nft={selectedNft} setNextNft={setNextNft} setPrevNft={setPrevNft} exitPlayer={() => { setSelectedNft(null) }} />
       }
     </Landing>
-  );
+  )
 };
 
 const Landing = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: column;);
+
   align-items: center;
   justify-content: space-around;
   width: ${(props) => props.theme.homeWidth}px;

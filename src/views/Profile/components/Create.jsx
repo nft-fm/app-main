@@ -40,7 +40,7 @@ const Create = ({ open, hide }) => {
   const [imageFile, setImageFile] = useState(null);
   console.log("nftData", nftData);
   useEffect(() => {
-   user && user.username && setNftData({ ...nftData, artist: user.username });
+    user && user.username && setNftData({ ...nftData, artist: user.username });
   }, [user]);
 
   const fetchNFT = async () => {
@@ -116,6 +116,13 @@ const Create = ({ open, hide }) => {
               boxShadow: `24px 24px 48px -24px #131313`,
               text: "Nft successfully created!",
             });
+          } else {
+            swal.fire({
+              title: "Error",
+              background: `#000`,
+              boxShadow: `24px 24px 48px -24px #131313`,
+              text: "Nft creation failed, please try again.",
+            })
           }
         })
         .catch((err) => console.log(err));
@@ -333,8 +340,20 @@ const Create = ({ open, hide }) => {
                 />
               </MediaButtons>
               <FileNames>
-                <span>{audioFile?.name}</span>
-                <span>{imageFile?.name}</span>
+                <span>
+                  {audioFile?.name.length > 10
+                    ? audioFile?.name.substring(0, 10) +
+                      "-" +
+                      audioFile?.name.substring(audioFile.name.lastIndexOf("."))
+                    : audioFile?.name}
+                </span>
+                <span>
+                  {imageFile?.name.length > 10
+                    ? imageFile?.name.substring(0, 10) +
+                      "-" +
+                      imageFile?.name.substring(imageFile.name.lastIndexOf("."))
+                    : imageFile?.name}
+                </span>
               </FileNames>
             </BottomInput>
           </Inputs>
@@ -605,14 +624,15 @@ const SubmitButton = styled.button`
 const FileNames = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   /* position: absolute; */
   left: 0;
   bottom: -10px;
   margin-top: 5px;
   & > span {
-    color: ${(props) => props.theme.fontColor.gray};
-    width: 30%;
+    /* color: ${(props) => props.theme.fontColor.gray}; */
+    color: white;
+    width: 40%;
     font-size: 0.7rem;
     text-align: center;
     opacity: 0.7;

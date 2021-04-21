@@ -4,7 +4,7 @@ import axios from "axios";
 import LibraryCard from "../../../components/NftCards/LibraryCard";
 import ArtistCard from "../../../components/NftCards/ArtistCard";
 
-import MusicPlayer from "../../../components/MusicPlayer"
+import MusicPlayer from "../../../components/MusicPlayer";
 const Library = ({ user, isCreating }) => {
   const [nfts, setNfts] = useState([]);
   const [selectedNft, setSelectedNft] = useState();
@@ -33,18 +33,35 @@ const Library = ({ user, isCreating }) => {
     let newNfts = nfts;
     newNfts[index] = update;
     setNfts(newNfts);
-  }
+  };
 
   const showNfts = nfts.map((nft, index) => {
-    return isCreating ?
-      <ArtistCard nft={nft} key={index} index={index}
+    return isCreating ? (
+      <ArtistCard
+        nft={nft}
+        key={index}
+        index={index}
         updateNft={updateNft}
-        liked={user ? user.likes.find(like => like.toString() === nft._id.toString()) : false}/> :
-      <LibraryCard nft={nft} key={index} index={index}
+        liked={
+          user
+            ? user.likes.find((like) => like.toString() === nft._id.toString())
+            : false
+        }
+      />
+    ) : (
+      <LibraryCard
+        nft={nft}
+        key={index}
+        index={index}
         updateNft={updateNft}
         selectNft={setSelectedNft}
-        liked={user ? user.likes.find(like => like.toString() === nft._id.toString()) : false}/>;
-
+        liked={
+          user
+            ? user.likes.find((like) => like.toString() === nft._id.toString())
+            : false
+        }
+      />
+    );
   });
 
   return (
@@ -54,9 +71,7 @@ const Library = ({ user, isCreating }) => {
         <ContainerOutline />
         <NftScroll> {showNfts} </NftScroll>
       </LaunchContainer>
-      {selectedNft &&
-        <MusicPlayer nft={selectedNft} />
-      }
+      {selectedNft && <MusicPlayer nft={selectedNft} />}
     </Landing>
   );
 };

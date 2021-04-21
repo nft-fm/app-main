@@ -32,7 +32,7 @@ const initialNftState = {
   audioUrl: "",
 };
 
-const Create = ({ open, hide }) => {
+const Create = ({ open, hide, setNewNft }) => {
   const { account, user, setUser, usdPerEth } = useAccountConsumer();
   const [isLoading, setIsLoading] = useState(false);
   const [nftData, setNftData] = useState(initialNftState);
@@ -40,11 +40,9 @@ const Create = ({ open, hide }) => {
   const [imageFile, setImageFile] = useState(null);
   const [curr, setCurr] = useState("ETH");
 
-  console.log("usdPerEth", usdPerEth);
   useEffect(() => {
     user && user.username && setNftData({ ...nftData, artist: user.username });
   }, [user]);
-
   const fetchNFT = async () => {
     await axios
       .post("/api/nft-type/get-NFT", { account: account })
@@ -69,9 +67,11 @@ const Create = ({ open, hide }) => {
 
     let newNftData = nftData;
     if (curr === "USD") {
-      newNftData = { ...nftData, price: (nftData.price / usdPerEth).toFixed(4) }
+      newNftData = {
+        ...nftData,
+        price: (nftData.price / usdPerEth).toFixed(4),
+      };
     }
-
 
     setIsLoading(true);
     let isUploadError = false;
@@ -121,13 +121,15 @@ const Create = ({ open, hide }) => {
             setNftData(initialNftState);
             setImageFile(null);
             setAudioFile(null);
-            hide();
             swal.fire({
               title: "Success!",
               background: `#000`,
               boxShadow: `24px 24px 48px -24px #131313`,
               text: "Nft successfully created!",
             });
+
+            setNewNft(true);
+            hide();
           } else {
             swal.fire({
               title: "Error",

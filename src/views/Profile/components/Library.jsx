@@ -5,7 +5,7 @@ import LibraryCard from "../../../components/NftCards/LibraryCard";
 import ArtistCard from "../../../components/NftCards/ArtistCard";
 
 import MusicPlayer from "../../../components/MusicPlayer";
-const Library = ({ user, isCreating }) => {
+const Library = ({ user, isCreating, newNft }) => {
   const [nfts, setNfts] = useState([]);
   const [selectedNft, setSelectedNft] = useState();
 
@@ -27,7 +27,7 @@ const Library = ({ user, isCreating }) => {
 
   useEffect(() => {
     !isCreating ? getUserNfts() : getArtistNfts();
-  }, [user, isCreating]);
+  }, [user, isCreating, newNft]);
 
   const updateNft = (index, update) => {
     let newNfts = nfts;

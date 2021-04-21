@@ -66,12 +66,13 @@ export function usePlaylistConsumer() {
 }
 
 const Wrapper = styled.div`
-position: -webkit-sticky; /* Safari */
-position: fixed;
-bottom: 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    width: 100vw;
-    background-color: #262626;
+  position: -webkit-sticky; /* Safari */
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100vw;
+  background-color: #262626;
+  border-top: 1px solid #232323;
 `;

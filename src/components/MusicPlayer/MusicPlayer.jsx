@@ -63,6 +63,7 @@ const MusicPlayer = (props) => {
           TrackInfo(),
           <DummyContainer />,
           <ExitIcon src={xIcon} onClick={() => exitPlayer()} />,
+          <DummyContainer />,
           <DummyContainer />
         ]
       }
@@ -91,6 +92,7 @@ const ExitIcon = styled.img`
   backgroundColor: #5c5c5c;
   height: 35px;
   width: 35px;
+  cursor: hover;
 `;
 
 const DummyContainerWide = styled.div`

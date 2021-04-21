@@ -21,18 +21,18 @@ const Library = ({ user, isCreating, newNft }) => {
   };
 
   const getUserNfts = async () => {
-    axios
-      .post("api/nft-type/get-user-nfts", user)
-      .then((res) => {
-        setNfts(res.data);
-        setNftsCallback(res.data)
-      });
     // axios
-    //   .get("api/nft-type/featured")
+    //   .post("api/nft-type/get-user-nfts", user)
     //   .then((res) => {
     //     setNfts(res.data);
     //     setNftsCallback(res.data)
     //   });
+    axios
+      .get("api/nft-type/featured")
+      .then((res) => {
+        setNfts(res.data);
+        setNftsCallback(res.data)
+      });
   };
 
   useEffect(() => {

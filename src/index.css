@@ -114,11 +114,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.swal2-container {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+}
+
 .swal2-title {
   color: white !important;
 }
 .swal2-popup {
   color: white !important;
+  background-color: #131313 !important;
   border: solid #000 !important;
   border-width: 5px 3px 4px 3px !important;
   border-radius: 16px !important;
@@ -127,7 +133,7 @@ code {
 
 .swal2-html-container {
   color: white !important;
-  background-color: #000;
+  background-color: #000 !important;
 }
 
 .swal2-popup .swal2-styled:focus {
@@ -155,6 +161,27 @@ code {
   min-width: 100px;
   color: white !important;
   background: #20a4fc !important;
+  background-size: 12px, 100% !important;
+  margin: 0px 30px !important;
+}
+
+.swal2-deny {
+  font-size: 30px;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1;
+  text-decoration: none;
+  letter-spacing: normal;
+  display: flex;
+  align-items: center;
+  color: white;
+  border-radius: 12px !important;
+  text-transform: uppercase !important;
+  border: 4px solid #000 !important;
+  padding: 12px !important;
+  min-width: 100px;
+  color: white !important;
+  background: #fa423e !important;
   background-size: 12px, 100% !important;
   margin: 0px 30px !important;
 }

@@ -49,18 +49,19 @@ export const AccountProvider = ({ children }) => {
   }, [])
 
   useEffect(() => {
-    if (isMobile() && !window.ethereum) {
-      Swal.fire("Mobile staking is only supported via MetaMask Browser. All other aspects of the site are Browser only.")
+    // if (isMobile() && !window.ethereum) {
+      Swal.fire("Mobile site only supported via MetaMask Browser")
       return;
-    }
-    if (window.ethereum) {
-      window.ethereum.on('accountsChanged', (accounts) => {
-        window.location.reload();
-      });
-      window.ethereum.on('chainChanged', (chainId) => {
-        window.location.reload();
-      });
-    }
+    // }
+    
+    // if (window.ethereum) {
+    //   window.ethereum.on('accountsChanged', (accounts) => {
+    //     window.location.reload();
+    //   });
+    //   window.ethereum.on('chainChanged', (chainId) => {
+    //     window.location.reload();
+    //   });
+    // }
 
 
 

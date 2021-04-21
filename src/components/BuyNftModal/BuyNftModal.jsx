@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
-import { useWallet } from "use-wallet";
 import axios from "axios";
-import swal from "sweetalert2";
 import { ReactComponent as IconX } from "../../assets/img/icons/x.svg";
 import logo from "../../assets/img/logos/logo_tiny.png";
 import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
@@ -10,9 +8,13 @@ import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import IconMetamask from "../../assets/img/icons/metamask_icon.png";
+import loading from "../../assets/img/loading.gif"
+import { NavLink } from "react-router-dom";
 
 const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
   const { account, connect, usdPerEth } = useAccountConsumer();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isBought, setIsBought] = useState(false);
 
   if (!open) return null;
   const stopProp = (e) => {
@@ -21,10 +23,15 @@ const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
   console.log("nft", nft);
 
   const purchase = (id) => {
+    setIsLoading(true);
     axios
       .post("/api/nft-type/purchase", { id: id, address: account })
       .then((res) => {
         console.log("purchase res", res);
+        setTimeout(function () {
+          setIsLoading(false)
+          setIsBought(true);
+        }, 1000);
       })
       .catch((err) => console.log(err));
   };
@@ -76,37 +83,60 @@ const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
           <PricesContainer>
             <Row>
               <PriceItem>Price:</PriceItem>
-              <PriceItem>          {nft.price.toLocaleString(undefined, {
-            minimumFractionDigits: 3,
-            maximumFractionDigits: 3,
-          })} &nbsp; ETH</PriceItem>
+              <PriceItem> {nft.price.toLocaleString(undefined, {
+                minimumFractionDigits: 3,
+                maximumFractionDigits: 3,
+              })} &nbsp; ETH</PriceItem>
             </Row>
-            <Divider/>
+            <Divider />
             <Row>
               <AvailableItem>Price:</AvailableItem>
               <AvailableItem>          {usdPerEth ?
-            (usdPerEth * nft.price).toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            }) : "..."
-          } &nbsp; USD</AvailableItem>
+                (usdPerEth * nft.price).toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }) : "..."
+              } &nbsp; USD</AvailableItem>
             </Row>
           </PricesContainer>
-          {!account ? 
-          <BuyButton onClick={() => connect("injected")}>
-            <MetaMask src={IconMetamask}/>
-            <ButtonText>Connect Wallet</ButtonText>
-          </BuyButton>
-        :  
-        <BuyButton onClick={() => purchase(nft._id)}>
-          <ButtonText>Buy</ButtonText>
-      </BuyButton>
-        }
+          {!account ?
+            <BuyButton onClick={() => connect("injected")}>
+              <MetaMask src={IconMetamask} />
+              <ButtonText>Connect Wallet</ButtonText>
+            </BuyButton>
+            :
+            !isLoading ?
+              isBought ?
+                <BoughtText to="/profile">
+                  NFT bought, listen to it on your profile!
+              </BoughtText>
+                :
+                <BuyButton onClick={() => purchase(nft._id)}>
+                  <ButtonText>Buy</ButtonText>
+                </BuyButton>
+              :
+              <BuyButton style={{ backgroundColor: "#262626", border: "1px solid #383838" }}>
+                <Loading src={loading} />
+              </BuyButton>
+          }
         </StyledModal>
       </Container>
     </OpaqueFilter>
   );
 };
+
+const BoughtText = styled(NavLink)`
+  height: 86px;
+  width: 60%;
+  /* margin-bottom: 20px; */
+  text-align: center;
+  color: white;
+`
+
+const Loading = styled.img`
+width: 40px;
+height: auto;
+`
 
 const ButtonText = styled.span`
 font-family: "Compita";
@@ -129,7 +159,7 @@ background-color: ${props => props.theme.color.gray};
 
 const AvailableItem = styled.div`
 font-size: 0.8rem;
-color: ${props=> props.theme.color.lightgray};
+color: ${props => props.theme.color.lightgray};
 `
 
 const PriceItem = styled.span`

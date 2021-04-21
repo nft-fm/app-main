@@ -22,36 +22,23 @@ const Listen = () => {
   }
 
   const getFeatured = () => {
-    axios.get("/api/nft-type/featured").then((res) =>setNfts(res.data));
+    axios.get("/api/nft-type/featured").then((res) => setNfts(res.data));
   }
 
   const getAll = () => {
-    // axios.get("/api/nft-type/all").then((res) => {
-    //   const formattedNfts = formatNfts(res.data);
-    //   for (let i = 0; i < 5; i++) {
-    //     formattedNfts.push(<FillerCard/>)
-    //   }
-    //   setAllNfts(formattedNfts);
-    // })
+    axios.get("/api/nft-type/all").then((res) => {
+      const formattedNfts = formatNfts(res.data);
+      for (let i = 0; i < 5; i++) {
+        formattedNfts.push(<FillerCard />)
+      }
+      setAllNfts(formattedNfts);
+    })
   }
 
   useEffect(() => {
     getFeatured();
     getAll();
   }, [])
-
-  const showNfts = nfts.map((nft) => {
-    return (
-      <NftCard nft={nft} />
-    )
-  });
-
-
-  const showAllNfts = allNfts.map((nft) => {
-    return (
-      <NftCard nft={nft} />
-    )
-  });
 
   return (
     <Landing>
@@ -63,7 +50,7 @@ const Listen = () => {
           TRENDING
         </ContainerTitle>
         <ContainerOutline />
-        <NftScroll> {showNfts} </NftScroll>
+        <NftScroll> {nfts} </NftScroll>
       </LaunchContainer>
 
       <LaunchContainer>
@@ -71,7 +58,7 @@ const Listen = () => {
           MARKET
         </ContainerTitle>
         <ContainerOutline />
-        {/* <NftScroll> {showAllNfts} </NftScroll> */}
+        <NftScroll> {allNfts} </NftScroll>
       </LaunchContainer>
     </Landing >
   );

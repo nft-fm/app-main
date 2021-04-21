@@ -116,6 +116,7 @@ const NftScroll = styled.div`
 justify-content: center;
 display: flex;
 flex-direction: row;
+flex-wrap: wrap;
 width: 100%;
 justify-content: space-between;
 /* @media only screen and (max-width: 1500px) {

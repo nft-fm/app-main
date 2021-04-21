@@ -6,6 +6,8 @@ import Swal from 'sweetalert2';
 import { useAccountConsumer } from "../Account";
 import styled from "styled-components";
 import MusicPlayer from "../../components/MusicPlayer"
+import Slide from "react-reveal/Slide"
+
 
 const PlaylistContext = createContext();
 
@@ -14,6 +16,7 @@ export const PlaylistProvider = ({ children }) => {
 
   const [nfts, setNfts] = useState([]);
   const [selectedNft, setSelectedNft] = useState();
+  const [nftIsSelected, setNftIsSelected] = useState(false);
 
   const setNextNft = () => {
     const index = nfts.indexOf(selectedNft);
@@ -32,7 +35,12 @@ export const PlaylistProvider = ({ children }) => {
   }
 
   const setNftCallback = (_nft) => {
+    console.log("hello", _nft);
     setSelectedNft(_nft);
+    if (_nft)
+      setNftIsSelected(true);
+    else
+      setNftIsSelected(false);
   }
 
   useEffect(() => {
@@ -47,11 +55,18 @@ export const PlaylistProvider = ({ children }) => {
         setNftsCallback, setNftCallback
       }}>
       {children}
-      <Wrapper>
-        {selectedNft &&
-          <MusicPlayer nft={selectedNft} setNextNft={setNextNft} setPrevNft={setPrevNft} exitPlayer={() => { setSelectedNft(null) }} />
-        }
-      </Wrapper>
+      {/* {selectedNft && */}
+      {/* <Slide bottom={true} duration={1000} when={nftIsSelected}> */}
+      {selectedNft &&
+        <Wrapper>
+          <MusicPlayer nft={selectedNft}
+            setNextNft={setNextNft}
+            setPrevNft={setPrevNft}
+            exitPlayer={() => { setSelectedNft(null) }} />
+        </Wrapper>
+      }
+      {/* </Slide> */}
+      {/* // } */}
     </PlaylistContext.Provider>
   );
 }
@@ -65,14 +80,14 @@ export function usePlaylistConsumer() {
   return context;
 }
 
+
 const Wrapper = styled.div`
   position: -webkit-sticky; /* Safari */
   position: fixed;
-  bottom: 0;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
   width: 100vw;
-  background-color: #262626;
-  border-top: 1px solid #232323;
-`;
+  animation: onSetNft 1.25s forwards;
+  @keyframes onSetNft {
+    0% { bottom: -50px}
+    100% {bottom: 0px}
+  }
+  `;

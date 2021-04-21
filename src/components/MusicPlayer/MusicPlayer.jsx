@@ -43,47 +43,49 @@ const MusicPlayer = (props) => {
     )
 
   return (
-    <AudioPlayer
-      showSkipControls={true}
-      autoPlay={true}
-      src={url}
-      onPlay={e => console.log("onPlay")}
-      layout={"horizontal-reverse"}
-      customProgressBarSection={
-        [
-          RHAP_UI.CURRENT_TIME,
-          RHAP_UI.PROGRESS_BAR,
-          RHAP_UI.DURATION,
-          <DummyContainer />,
-          <DummyContainer />,
-          RHAP_UI.LOOP,
-          <DummyContainer />,
-          RHAP_UI.VOLUME_CONTROLS,
-          <DummyContainer />,
-          TrackInfo(),
-          <DummyContainer />,
-          <ExitIcon src={xIcon} onClick={() => exitPlayer()} />,
-          <DummyContainer />,
-          <DummyContainer />
-        ]
-      }
-      customControlsSection={
-        [
-          RHAP_UI.MAIN_CONTROLS,
-        ]
-      }
-      customIcons={{
-        play: <i class="icon-listen_play" />,
-        forward: <i class="icon-listen_skip_forward" />,
-        rewind: <i class="icon-listen_skip_backward" />,
-        volume: <i class="icon-listen_volume" />,
-        pause: <i class="icon-listen_pause" />,
-        loop: <i class="icon-listen_loop" />,
-      }}
-      onClickNext={() => setNextNft()}
-      onClickPrevious={() => setPrevNft()}
-    // other props here */}
-    />
+    <Wrapper>
+      <AudioPlayer
+        showSkipControls={true}
+        autoPlay={true}
+        src={url}
+        onPlay={e => console.log("onPlay")}
+        layout={"horizontal-reverse"}
+        customProgressBarSection={
+          [
+            RHAP_UI.CURRENT_TIME,
+            RHAP_UI.PROGRESS_BAR,
+            RHAP_UI.DURATION,
+            <DummyContainer />,
+            <DummyContainer />,
+            RHAP_UI.LOOP,
+            <DummyContainer />,
+            RHAP_UI.VOLUME_CONTROLS,
+            <DummyContainer />,
+            TrackInfo(),
+            <DummyContainer />,
+            <ExitIcon src={xIcon} onClick={() => exitPlayer()} />,
+            <DummyContainer />,
+            <DummyContainer />
+          ]
+        }
+        customControlsSection={
+          [
+            RHAP_UI.MAIN_CONTROLS,
+          ]
+        }
+        customIcons={{
+          play: <i class="icon-listen_play" />,
+          forward: <i class="icon-listen_skip_forward" />,
+          rewind: <i class="icon-listen_skip_backward" />,
+          volume: <i class="icon-listen_volume" />,
+          pause: <i class="icon-listen_pause" />,
+          loop: <i class="icon-listen_loop" />,
+        }}
+        onClickNext={() => setNextNft()}
+        onClickPrevious={() => setPrevNft()}
+      // other props here */}
+      />
+    </Wrapper>
   )
 }
 
@@ -146,9 +148,6 @@ const TrackInfoWrapper = styled.div`
 
 
 const Wrapper = styled.div`
-  position: -webkit-sticky; /* Safari */
-  position: fixed;
-  bottom: 0;
   display: flex;
   flex-direction: row;
   justify-content: center;

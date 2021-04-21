@@ -1,1 +1,1 @@
-export { useAccountConsumer, AccountProvider } from './Playlist'
+export { usePlaylistConsumer } from './Playlist'

@@ -90,8 +90,8 @@ const MusicPlayer = (props) => {
 const ExitIcon = styled.img`
   filter: opacity(25%);
   backgroundColor: #5c5c5c;
-  height: 50px;
-  width: 50px;
+  height: 35px;
+  width: 35px;
 `;
 
 const DummyContainerWide = styled.div`

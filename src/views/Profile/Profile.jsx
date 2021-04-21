@@ -85,7 +85,7 @@ const Profile = () => {
     <BaseView>
     {!account && <IsConnected>
       <GetConnected>
-        <span>Connect your wallet to access the profile page!</span>
+        {/* <span>Connect your wallet to access the profile page!</span> */}
 
         <ConnectButton onClick={() => connect("injected")}>
             <MetaMask src={IconMetamask}/>
@@ -229,7 +229,7 @@ const ConnectButton = styled.button`
   border: 1px solid ${props => props.theme.color.boxBorder};
   border-radius: 2px;
   background-color: ${(props) => props.theme.color.box};
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
   &:hover {
     background-color: ${(props) => props.theme.color.boxBorder};
     border: 1px solid #383838;
@@ -237,8 +237,8 @@ const ConnectButton = styled.button`
 `;
 
 const GetConnected = styled.div`
-width: 500px;
-height: 200px;
+width: 300px;
+height: 150px;
 color: white;
 border: 1px solid ${props => props.theme.color.boxBorder};
 background-color: ${props => props.theme.color.box};
@@ -249,7 +249,7 @@ justify-content: space-evenly;
 align-items: center;
 margin-left: auto;
 margin-right: auto;
-margin-top: 200px;
+margin-top: 300px;
 `
 
 const IsConnected = styled.div`

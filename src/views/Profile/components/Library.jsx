@@ -4,7 +4,7 @@ import axios from "axios";
 import LibraryCard from "../../../components/NftCards/LibraryCard";
 import ArtistCard from "../../../components/NftCards/ArtistCard";
 
-import MusicPlayer from "../../../components/MusicPlayer"
+import MusicPlayer from "../../../components/MusicPlayer";
 const Library = ({ user, isCreating }) => {
   const [nfts, setNfts] = useState([]);
   const [selectedNft, setSelectedNft] = useState();
@@ -45,18 +45,35 @@ const Library = ({ user, isCreating }) => {
     let newNfts = nfts;
     newNfts[index] = update;
     setNfts(newNfts);
-  }
+  };
 
   const showNfts = nfts.map((nft, index) => {
-    return isCreating ?
-      <ArtistCard nft={nft} key={index} index={index}
+    return isCreating ? (
+      <ArtistCard
+        nft={nft}
+        key={index}
+        index={index}
         updateNft={updateNft}
-        liked={user ? user.likes.find(like => like.toString() === nft._id.toString()) : false} /> :
-      <LibraryCard nft={nft} key={index} index={index}
+        liked={
+          user
+            ? user.likes.find((like) => like.toString() === nft._id.toString())
+            : false
+        }
+      />
+    ) : (
+      <LibraryCard
+        nft={nft}
+        key={index}
+        index={index}
         updateNft={updateNft}
         selectNft={setSelectedNft}
-        liked={user ? user.likes.find(like => like.toString() === nft._id.toString()) : false} />;
-
+        liked={
+          user
+            ? user.likes.find((like) => like.toString() === nft._id.toString())
+            : false
+        }
+      />
+    );
   });
 
   return (
@@ -79,8 +96,8 @@ const Landing = styled.div`
 
   align-items: center;
   justify-content: space-around;
-  width: ${(props) => props.theme.homeWidth}px;
-  max-width: 80vw;
+  /* width: ${(props) => props.theme.homeWidth}px; */
+  /* max-width: 80vw; */
   padding-top: 40px;
   color: white;
   font-size: ${(props) => props.theme.fontSizes.xs};

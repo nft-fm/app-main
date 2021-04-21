@@ -33,12 +33,20 @@ const UserSchema = new Schema({
       type: String
     }
   ],
+  shared: [
+    {
+      type: String
+    }
+  ],
+  sold: {
+    type: Number
+  },
   x_nfts: [{
     nft: {
       type: String
     },
   },
-  ]
+  ],
 })
 
 module.exports = User = mongoose.model('user', UserSchema)

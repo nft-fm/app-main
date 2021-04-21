@@ -118,9 +118,9 @@ const NftScroll = styled.div`
   width: 100%;
   justify-content: space-between;
   flex-wrap: wrap;
-  & > * {
-    margin: 0 5px 10px;
-  }
+  /* & > * {
+    margin: 0 5px 20px;
+  } */
   /* @media only screen and (max-width: 1500px) {
     & > * {
       &:nth-last-child(1) {

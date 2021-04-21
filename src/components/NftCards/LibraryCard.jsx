@@ -10,12 +10,14 @@ import { useAccountConsumer } from "../../contexts/Account";
 import axios from "axios";
 
 import PlayIcon from "../../assets/img/icons/listen_play.svg"
+import { usePlaylistConsumer } from "../../contexts/Playlist";
 
 const NftCard = (props) => {
   const { usdPerEth, account, setUser } = useAccountConsumer();
   const { nft, selectNft } = props;
   const [isOpen, setIsOpen] = useState(false);
   const [liked, setLiked] = useState(props.liked);
+  const { setNftCallback } = usePlaylistConsumer();
   const show = () => setIsOpen(true);
   const hide = (e) => {
     setIsOpen(false);
@@ -27,14 +29,14 @@ const NftCard = (props) => {
     if (account) {
       setLiked(!liked);
       await axios.post(`api/user/like-nft`,
-        { address: account, nft: nft._id}).then(res => {
-        if (res.data) {
-          props.updateNft(props.index, res.data.nft);
-          setUser(res.data.user);
-        }
-      }).catch(err => {
-        console.log(err);
-      })
+        { address: account, nft: nft._id }).then(res => {
+          if (res.data) {
+            props.updateNft(props.index, res.data.nft);
+            setUser(res.data.user);
+          }
+        }).catch(err => {
+          console.log(err);
+        })
     }
   }
 
@@ -49,7 +51,7 @@ const NftCard = (props) => {
         <Side>
           <IconArea>
             {liked ?
-              <LikedHeart onClick={() => like()}/> :
+              <LikedHeart onClick={() => like()} /> :
               <Heart onClick={() => like()} />
             }
             {nft.likeCount}
@@ -76,7 +78,7 @@ const NftCard = (props) => {
           <TrackName>{nft.title}</TrackName>
           <Artist>{nft.artist}</Artist>
         </Bottom>
-        <PlayButton src={PlayIcon} onClick={() => selectNft(nft)} />
+        <PlayButton src={PlayIcon} onClick={() => setNftCallback(nft)} />
       </BottomWrapper>
     </Container>
   );

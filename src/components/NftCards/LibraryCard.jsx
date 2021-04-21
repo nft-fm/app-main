@@ -9,7 +9,6 @@ import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
 import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import axios from "axios";
-
 import { usePlaylistConsumer } from "../../contexts/Playlist";
 
 const NftCard = (props) => {

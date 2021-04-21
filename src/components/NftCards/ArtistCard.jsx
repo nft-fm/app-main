@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
-import BuyNftModal from "../BuyNftModal";
+import CreatedNftModal from "../BuyNftModal/CreatedNftModal";
 import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
 import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
@@ -41,7 +41,7 @@ const NftCard = (props) => {
 
   return (
     <Container>
-      <BuyNftModal open={isOpen} hide={hide} nft={nft} />
+      <CreatedNftModal open={isOpen} hide={hide} nft={nft} />
       <CardTop>
         <Side>
           <IconArea>

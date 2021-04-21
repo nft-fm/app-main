@@ -38,7 +38,9 @@ const Create = ({ open, hide }) => {
   const [nftData, setNftData] = useState(initialNftState);
   const [audioFile, setAudioFile] = useState(null);
   const [imageFile, setImageFile] = useState(null);
-  console.log("nftData", nftData);
+  const [curr, setCurr] = useState("ETH");
+
+  console.log("usdPerEth", usdPerEth);
   useEffect(() => {
     user && user.username && setNftData({ ...nftData, artist: user.username });
   }, [user]);
@@ -58,11 +60,20 @@ const Create = ({ open, hide }) => {
     var parts = filename.split(".");
     return parts[parts.length - 1];
   };
+
+  const [isCompleted, setIsCompleted] = useState(false);
+
   //TODO entry validation
   const handleSubmit = () => {
     // setNftData({...nftData, artist: user.username})
-    setIsLoading(true);
 
+    let newNftData = nftData;
+    if (curr === "USD") {
+      newNftData = { ...nftData, price: (nftData.price / usdPerEth).toFixed(4) }
+    }
+
+
+    setIsLoading(true);
     let isUploadError = false;
 
     //run these two, store the returns in the nftData state object
@@ -102,9 +113,10 @@ const Create = ({ open, hide }) => {
       // after nftData has both audio and image references, run this route
       console.log("upload route called");
       axios
-        .post("/api/nft-type/update", nftData)
+        .post("/api/nft-type/update", newNftData)
         .then((res) => {
           console.log("update res", res);
+
           if (res.status === 200) {
             setNftData(initialNftState);
             setImageFile(null);
@@ -122,13 +134,14 @@ const Create = ({ open, hide }) => {
               background: `#000`,
               boxShadow: `24px 24px 48px -24px #131313`,
               text: "Nft creation failed, please try again.",
-            })
+            });
           }
         })
         .catch((err) => console.log(err));
     } else {
       //do something
     }
+
     setIsLoading(false);
   };
 
@@ -172,6 +185,14 @@ const Create = ({ open, hide }) => {
         return;
       }
     }
+    // if (e.target.name === "price") {
+    //   curr === "ETH"
+    //     ? setNftData({ ...nftData, [e.target.name]: e.target.value })
+    //     : setNftData({
+    //         ...nftData,
+    //         [e.target.name]: (e.target.value / usdPerEth).toFixed(4),
+    //       });
+    // }
     setNftData({ ...nftData, [e.target.name]: e.target.value });
   };
 
@@ -200,6 +221,9 @@ const Create = ({ open, hide }) => {
       </BaseView>
     );
   }
+
+  console.log("imageFile", imageFile);
+
   return (
     <OpaqueFilter onClick={(e) => hideCreate(e)}>
       <FormContainer onClick={(e) => stopProp(e)}>
@@ -210,7 +234,10 @@ const Create = ({ open, hide }) => {
         <Main>
           <Files>
             <ImagePreview>
-              <Image src={image} alt="image" />
+              <Image
+                src={imageFile ? URL.createObjectURL(imageFile) : image}
+                alt="image"
+              />
             </ImagePreview>
           </Files>
           <Inputs autoComplete="off">
@@ -278,7 +305,8 @@ const Create = ({ open, hide }) => {
               <StyledDivInput2>
                 <label>
                   NFT Price /ea &nbsp;
-                  <EthIcon /> <UsdIcon />
+                  <EthIcon onClick={() => setCurr("ETH")} />{" "}
+                  <UsdIcon onClick={() => setCurr("USD")} />
                 </label>
                 <StyledNumberInput
                   className="cost"
@@ -307,7 +335,7 @@ const Create = ({ open, hide }) => {
                     }
                   />
                 </Spinner>
-                <span>/ETH</span>
+                <span>/{curr}</span>
               </StyledDivInput2>
             </MiddleInputs>
             <BottomInput>

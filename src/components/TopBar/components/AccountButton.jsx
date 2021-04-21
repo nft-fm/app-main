@@ -109,7 +109,7 @@ const Button = styled.button`
   letter-spacing: 1px;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
+  font-weight: 600;
   cursor: pointer;
   color: white;
   /* @media only screen and (max-width: 767px) {

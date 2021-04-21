@@ -121,7 +121,7 @@ height: 18px;
 
 const IconText = styled.span`
 margin: 3px 0 0 12px;
-font-weight: bold;
+font-weight: 600;
 letter-spacing: 1px;
 `
 
@@ -215,7 +215,7 @@ const LaunchContainer = styled.div`
 
 const ContainerTitle = styled.span`
   position: absolute;
-  font-weight: bold;
+  font-weight: 600;
   left: calc(10% + 50px);
   top: -4px;
   padding: 0 12px;
@@ -248,7 +248,7 @@ const StyledTitle = styled.div`
   font-family: "Compita";
   font-size: ${props => props.theme.fontSizes.xl};
   margin-bottom: 16px;
-  font-weight: bold;
+  font-weight: 600;
   letter-spacing: 3px;
   color: white;
 `;

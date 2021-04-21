@@ -142,7 +142,7 @@ const LaunchContainer = styled.div`
 
 const ContainerTitle = styled.span`
   position: absolute;
-  font-weight: bold;
+  font-weight: 600;
   left: calc(10% + 50px);
   top: -4px;
   padding: 0 12px;

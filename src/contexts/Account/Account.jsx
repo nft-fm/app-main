@@ -50,9 +50,10 @@ export const AccountProvider = ({ children }) => {
 
   useEffect(() => {
     if (isMobile() && !window.ethereum) {
-      Swal.fire("Mobile staking is only supported via MetaMask Browser. All other aspects of the site are Browser only.")
+      Swal.fire("Mobile site only supported via MetaMask Browser")
       return;
     }
+
     if (window.ethereum) {
       window.ethereum.on('accountsChanged', (accounts) => {
         window.location.reload();

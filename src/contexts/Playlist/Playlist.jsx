@@ -3,39 +3,55 @@ import { useWallet } from 'use-wallet'
 import axios from "axios";
 import isMobile from "../../utils/isMobile";
 import Swal from 'sweetalert2';
-import {useAccountConsumer} from "../Account";
+import { useAccountConsumer } from "../Account";
+import styled from "styled-components";
+import MusicPlayer from "../../components/MusicPlayer"
 
 const PlaylistContext = createContext();
 
 export const PlaylistProvider = ({ children }) => {
   const { account, user } = useAccountConsumer();
-  const [allTracks, setAllTracks] = useState([]);
-  const [currTrackIndex, setCurrTrackIndex] = useState(0);
-  const [pause, setPause] = useState(true);
 
-  const prevTrack = () => setCurrTrackIndex(currTrackIndex - 1);
-  const nextTrack = () => setCurrTrackIndex(currTrackIndex + 1);
+  const [nfts, setNfts] = useState([]);
+  const [selectedNft, setSelectedNft] = useState();
 
-  const initialize = async () => {
-    if (account && user) {
-      //FETCH ALL USER NFTS OR GET FROM MYNFTS CONTEXT
-      const fakeTracksList = ["https://youtu.be/2XEmFuEbpzM", "https://youtu.be/9s9qxz8dXuA", "https://youtu.be/NNfzIgFsXEA"]
-      setAllTracks(fakeTracksList);
-    }
+  const setNextNft = () => {
+    const index = nfts.indexOf(selectedNft);
+    const newIndex = index == nfts.length - 1 ? 0 : index + 1;
+    setSelectedNft(nfts[newIndex]);
+  }
+
+  const setPrevNft = () => {
+    const index = nfts.indexOf(selectedNft);
+    const newIndex = index == 0 ? nfts.length - 1 : index - 1;
+    setSelectedNft(nfts[newIndex]);
+  }
+
+  const setNftsCallback = (_nfts) => {
+    setNfts(_nfts);
+  }
+
+  const setNftCallback = (_nft) => {
+    setSelectedNft(_nft);
   }
 
   useEffect(() => {
-    if (account && user && !allTracks[0]) initialize();
-  }, [account]);
+    setNfts([]);
+    setSelectedNft();
+  }, [user]);
 
   return (
     <PlaylistContext.Provider
       value={{
-        initialize,
-        pause, setPause,
-        prevTrack, nextTrack
+        setPrevNft, setNextNft,
+        setNftsCallback, setNftCallback
       }}>
       {children}
+      <Wrapper>
+        {selectedNft &&
+          <MusicPlayer nft={selectedNft} setNextNft={setNextNft} setPrevNft={setPrevNft} exitPlayer={() => { setSelectedNft(null) }} />
+        }
+      </Wrapper>
     </PlaylistContext.Provider>
   );
 }
@@ -48,3 +64,15 @@ export function usePlaylistConsumer() {
 
   return context;
 }
+
+const Wrapper = styled.div`
+  position: -webkit-sticky; /* Safari */
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100vw;
+  background-color: #262626;
+  border-top: 1px solid #232323;
+`;

@@ -4,37 +4,35 @@ import axios from "axios";
 import LibraryCard from "../../../components/NftCards/LibraryCard";
 import ArtistCard from "../../../components/NftCards/ArtistCard";
 
-import MusicPlayer from "../../../components/MusicPlayer";
+import { usePlaylistConsumer } from "../../../contexts/Playlist";
+
 const Library = ({ user, isCreating, newNft }) => {
   const [nfts, setNfts] = useState([]);
   const [selectedNft, setSelectedNft] = useState();
-
-  const setNextNft = () => {
-    const index = nfts.indexOf(selectedNft);
-    const newIndex = index == nfts.length ? 0 : index + 1;
-    setSelectedNft(nfts[newIndex]);
-  };
-
-  const setPrevNft = () => {
-    const index = nfts.indexOf(selectedNft);
-    const newIndex = index == 0 ? nfts.length - 1 : index - 1;
-    console.log("index, new Index, nfts.length:", index, newIndex, nfts.length);
-    setSelectedNft(nfts[newIndex]);
-  };
+  const { setNftsCallback } = usePlaylistConsumer();
 
   const getArtistNfts = async () => {
     axios
       .post("api/nft-type/artist-nfts", user)
-      .then((res) => setNfts(res.data));
+      .then((res) => {
+        setNfts(res.data);
+        setNftsCallback(res.data)
+      });
   };
 
   const getUserNfts = async () => {
     axios
       .post("api/nft-type/get-user-nfts", user)
-      .then((res) => setNfts(res.data));
+      .then((res) => {
+        setNfts(res.data);
+        setNftsCallback(res.data)
+      });
     // axios
     //   .get("api/nft-type/featured")
-    //   .then((res) => setNfts(res.data));
+    //   .then((res) => {
+    //     setNfts(res.data);
+    //     setNftsCallback(res.data)
+    //   });
   };
 
   useEffect(() => {
@@ -83,16 +81,6 @@ const Library = ({ user, isCreating, newNft }) => {
         <ContainerOutline />
         <NftScroll> {showNfts} </NftScroll>
       </LaunchContainer>
-      {selectedNft && (
-        <MusicPlayer
-          nft={selectedNft}
-          setNextNft={setNextNft}
-          setPrevNft={setPrevNft}
-          exitPlayer={() => {
-            setSelectedNft(null);
-          }}
-        />
-      )}
     </Landing>
   );
 };
@@ -149,7 +137,7 @@ const LaunchContainer = styled.div`
 
 const ContainerTitle = styled.span`
   position: absolute;
-  font-weight: bold;
+  font-weight: 600;
   left: calc(10% + 50px);
   top: -4px;
   padding: 0 12px;

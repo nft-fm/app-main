@@ -18,7 +18,7 @@ min-width: 300px;
   flex-direction: column;
   justify-content: space-evenly;
   font-size: 25px;
-  font-weight: bold;
+  font-weight: 600;
   font-stretch: normal;
   font-style: normal;
   line-height: 1;

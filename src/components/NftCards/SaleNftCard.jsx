@@ -213,7 +213,7 @@ width: 100%;
 margin-bottom: 12px;
 display: flex;
 justify-content: space-between;
-font-weight: bold;
+font-weight: 600;
 font-family: "Compita";
 `
 

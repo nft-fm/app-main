@@ -111,7 +111,7 @@ const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
 const ButtonText = styled.span`
 font-family: "Compita";
 font-size: ${props => props.theme.fontSizes.xs};
-font-weight: bold;
+font-weight: 600;
 color: white;
 `
 
@@ -228,7 +228,7 @@ width: 100%;
 margin-bottom: 8px;
 display: flex;
 justify-content: space-between;
-font-weight: bold;
+font-weight: 600;
 font-family: "Compita";
 `
 
@@ -244,7 +244,7 @@ display: flex;
 align-items: center;
 justify-content: center;
 font-family: "Compita";
-font-weight: bold;
+font-weight: 600;
 color: white;
 font-size: ${props => props.theme.fontSizes.sm};
 margin-bottom: 12px;

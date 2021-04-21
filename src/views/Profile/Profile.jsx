@@ -207,7 +207,7 @@ const Profile = () => {
 const ButtonText = styled.span`
   font-family: "Compita";
   font-size: ${(props) => props.theme.fontSizes.xs};
-  font-weight: bold;
+  font-weight: 600;
   color: white;
 `;
 

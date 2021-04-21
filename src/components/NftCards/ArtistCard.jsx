@@ -13,12 +13,13 @@ const NftCard = (props) => {
   const { usdPerEth, account, setUser } = useAccountConsumer();
   const { nft } = props;
   const [isOpen, setIsOpen] = useState(false);
-  const [liked, setLiked] = useState(props.liked);
+  const [liked, setLiked] = useState(false);
   const show = () => setIsOpen(true);
   const hide = (e) => {
     setIsOpen(false);
   };
 
+  console.log("ARTIST NFT CARD", liked)
 
   const like = async () => {
     if (account) {
@@ -39,6 +40,9 @@ const NftCard = (props) => {
     //${!}
   }
 
+  useEffect(() => {
+    setLiked(nft.liked);
+  }, [nft])
   return (
     <Container>
       <BuyNftModal open={isOpen} hide={hide} nft={nft} />

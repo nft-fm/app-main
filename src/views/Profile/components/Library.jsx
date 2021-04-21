@@ -52,11 +52,6 @@ const Library = ({ user, isCreating, newNft }) => {
         key={index}
         index={index}
         updateNft={updateNft}
-        liked={
-          user
-            ? user.likes.find((like) => like.toString() === nft._id.toString())
-            : false
-        }
       />
     ) : (
       <LibraryCard

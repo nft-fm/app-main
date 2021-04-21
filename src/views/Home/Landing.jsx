@@ -19,8 +19,6 @@ const Listen = () => {
 
   const updateNft = (index, update) => {
     let newNfts = nfts;
-    console.log("index", index)
-    console.log(update)
     newNfts[index] = update;
     setNfts(newNfts);
   }

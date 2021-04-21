@@ -13,14 +13,14 @@ const Library = ({ user, isCreating, newNft }) => {
     const index = nfts.indexOf(selectedNft);
     const newIndex = index == nfts.length ? 0 : index + 1;
     setSelectedNft(nfts[newIndex]);
-  }
+  };
 
   const setPrevNft = () => {
     const index = nfts.indexOf(selectedNft);
     const newIndex = index == 0 ? nfts.length - 1 : index - 1;
     console.log("index, new Index, nfts.length:", index, newIndex, nfts.length);
     setSelectedNft(nfts[newIndex]);
-  }
+  };
 
   const getArtistNfts = async () => {
     axios
@@ -83,16 +83,23 @@ const Library = ({ user, isCreating, newNft }) => {
         <ContainerOutline />
         <NftScroll> {showNfts} </NftScroll>
       </LaunchContainer>
-      {selectedNft &&
-        <MusicPlayer nft={selectedNft} setNextNft={setNextNft} setPrevNft={setPrevNft} exitPlayer={() => { setSelectedNft(null) }} />
-      }
+      {selectedNft && (
+        <MusicPlayer
+          nft={selectedNft}
+          setNextNft={setNextNft}
+          setPrevNft={setPrevNft}
+          exitPlayer={() => {
+            setSelectedNft(null);
+          }}
+        />
+      )}
     </Landing>
-  )
+  );
 };
 
 const Landing = styled.div`
   display: flex;
-  flex-direction: column;);
+  flex-direction: column;
 
   align-items: center;
   justify-content: space-around;

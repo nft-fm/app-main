@@ -88,7 +88,7 @@ const Library = ({ user, isCreating, newNft }) => {
 const Landing = styled.div`
   display: flex;
   flex-direction: column;
-
+  width: 100%;
   align-items: center;
   justify-content: space-around;
   /* width: ${(props) => props.theme.homeWidth}px; */
@@ -104,7 +104,7 @@ const NftScroll = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
-  justify-content: space-evenly;
+  justify-content: space-between;
   flex-wrap: wrap;
   & > * {
     margin: 0 5px 10px;

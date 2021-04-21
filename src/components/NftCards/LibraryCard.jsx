@@ -9,13 +9,7 @@ import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
 import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import axios from "axios";
-
-<<<<<<< HEAD
-// import PlayIcon from "../../assets/img/icons/listen_play.svg"
-=======
-import PlayIcon from "../../assets/img/icons/listen_play.svg"
 import { usePlaylistConsumer } from "../../contexts/Playlist";
->>>>>>> 57c0829491d010eace135e5fbd8b08e960dafac8
 
 const NftCard = (props) => {
   const { usdPerEth, account, setUser } = useAccountConsumer();
@@ -33,28 +27,15 @@ const NftCard = (props) => {
   const like = async () => {
     if (account) {
       setLiked(!liked);
-<<<<<<< HEAD
-      await axios
-        .post(`api/user/like-nft`, { address: account, nft: nft._id })
-        .then((res) => {
-=======
       await axios.post(`api/user/like-nft`,
         { address: account, nft: nft._id }).then(res => {
->>>>>>> 57c0829491d010eace135e5fbd8b08e960dafac8
           if (res.data) {
             props.updateNft(props.index, res.data.nft);
             setUser(res.data.user);
           }
-<<<<<<< HEAD
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-=======
         }).catch(err => {
           console.log(err);
         })
->>>>>>> 57c0829491d010eace135e5fbd8b08e960dafac8
     }
   };
 
@@ -68,16 +49,10 @@ const NftCard = (props) => {
       <CardTop>
         <Side>
           <IconArea>
-<<<<<<< HEAD
-            {liked ? (
-              <LikedHeart onClick={() => like()} />
-            ) : (
-=======
             {liked ?
               <LikedHeart onClick={() => like()} /> :
->>>>>>> 57c0829491d010eace135e5fbd8b08e960dafac8
               <Heart onClick={() => like()} />
-            )}
+            }
             {nft.likeCount}
           </IconArea>
           <IconArea>
@@ -102,11 +77,7 @@ const NftCard = (props) => {
           <TrackName>{nft.title}</TrackName>
           <Artist>{nft.artist}</Artist>
         </Bottom>
-<<<<<<< HEAD
-        <PlayButton onClick={() => selectNft(nft)} />
-=======
         <PlayButton src={PlayIcon} onClick={() => setNftCallback(nft)} />
->>>>>>> 57c0829491d010eace135e5fbd8b08e960dafac8
       </BottomWrapper>
     </Container>
   );

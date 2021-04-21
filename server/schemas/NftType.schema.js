@@ -48,6 +48,10 @@ const NftTypeSchema = new Schema({
     type: String,
     default: "",
   },
+  numListens: {
+    type: Number,
+    default: 0,
+  },
   likeCount: {
     type: Number,
     default: 0,

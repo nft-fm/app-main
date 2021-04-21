@@ -13,7 +13,7 @@ const theme = {
     yellow: "#fde404",
     green: "#68c12f",
     pink: "#DD4591",
-    gray: "#5c5c5c",
+    gray: "#666",
     lightgray: "#888",
     box: "#181818",
     boxBorder: "#262626",

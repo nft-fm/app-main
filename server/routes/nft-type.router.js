@@ -10,7 +10,7 @@ const User = require('../schemas/User.schema');
 router.post('/artist-nfts', async (req, res) => {
   try {
     console.log('/artist-nfts hit', req.body)
-    let nfts = await NftType.find({address: req.body.address, isDraft: false})
+    let nfts = await NftType.find({ address: req.body.address, isDraft: false })
     res.send(nfts)
   } catch (err) {
     res.status(500).send(err);
@@ -248,11 +248,11 @@ router.post('/uploadImageS3', async (req, res) => {
   var s3Client = new AWS.S3();
 
   const fileFilter = (req, file, cb) => {
-    if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
-      cb(null, true);
-    } else {
-      cb(new Error("Invalid file type, only jpeg's and png's are allowed!"), false);
-    }
+    // if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+    cb(null, true);
+    // } else {
+    //   cb(new Error("Invalid file type, only jpeg's and png's are allowed!"), false);
+    // }
   };
 
   let upload = multer({

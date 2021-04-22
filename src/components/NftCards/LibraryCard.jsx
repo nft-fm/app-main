@@ -1,11 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
-import BuyNftModal from "../BuyNftModal";
+import BuyNftModal from "../NftModals";
 import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
 import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../assets/img/icons/coins.svg";
-import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
-import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
 import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import axios from "axios";

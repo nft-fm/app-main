@@ -6,15 +6,16 @@ const NftType = require('../schemas/NftType.schema')
 const fs = require('fs')
 const multer = require('multer');
 const User = require('../schemas/User.schema');
+const UserSchema = require('../schemas/User.schema');
 
 router.post('/artist-nfts', async (req, res) => {
   try {
     const likes = req.body.likes;
-    let nfts = await NftType.find({address: req.body.address, isDraft: false})
+    let nfts = await NftType.find({ address: req.body.address, isDraft: false })
 
     for (let i = 0; i < nfts.length; i++) {
-      if (likes.find(like => like.toString() === nfts[i]._doc._id.toString())) nfts[i] = {...nfts[i]._doc, liked: true}
-      else nfts[i] = {...nfts[i]._doc, liked: false};
+      if (likes.find(like => like.toString() === nfts[i]._doc._id.toString())) nfts[i] = { ...nfts[i]._doc, liked: true }
+      else nfts[i] = { ...nfts[i]._doc, liked: false };
     }
     console.log("Nfts after find", nfts)
     res.send(nfts);
@@ -53,8 +54,8 @@ router.post('/get-user-nfts', async (req, res) => {
     let nfts = await NftType.find({ '_id': { $in: ids } });
 
     for (let i = 0; i < nfts.length; i++) {
-      if (likes.find(like => like.toString() === nfts[i]._doc._id.toString())) nfts[i] = {...nfts[i]._doc, liked: true}
-      else nfts[i] = {...nfts[i]._doc, liked: false};
+      if (likes.find(like => like.toString() === nfts[i]._doc._id.toString())) nfts[i] = { ...nfts[i]._doc, liked: true }
+      else nfts[i] = { ...nfts[i]._doc, liked: false };
     }
 
     res.status(200).send(nfts)
@@ -66,6 +67,7 @@ router.post('/get-user-nfts', async (req, res) => {
 
 router.post('/update', async (req, res) => {
   try {
+    console.log("updating? ", req.body);
     let newData = req.body;
     newData.isDraft = false;
 
@@ -97,7 +99,7 @@ router.post('/get-one', async (req, res) => {
 router.get('/featured', async (req, res) => {
   try {
     let nftTypes = await NftType.find({
-      featured: true,
+      isFeatured: true,
       isDraft: false,
     })
       .limit(5)
@@ -258,11 +260,11 @@ router.post('/uploadImageS3', async (req, res) => {
   var s3Client = new AWS.S3();
 
   const fileFilter = (req, file, cb) => {
-    if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
-      cb(null, true);
-    } else {
-      cb(new Error("Invalid file type, only jpeg's and png's are allowed!"), false);
-    }
+    // if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+    cb(null, true);
+    // } else {
+    //   cb(new Error("Invalid file type, only jpeg's and png's are allowed!"), false);
+    // }
   };
 
   let upload = multer({
@@ -385,26 +387,30 @@ router.post('/getSongList', async (req, res) => {
 router.post("/purchase", async (req, res) => {
   try {
     console.log("/purchase hit", req.body)
-    const nft = await NftType.findById(req.body.id)
+    let nft = await NftType.findOne({ _id: req.body.id })
     if (!nft) {
       res.status(500).send('No NFT found')
       return
     }
     if (nft.x_numSold >= nft.numMinted) {
-      res.status(500).send('None available for purchase')
+      res.status(500).send('Out of Stock')
       return
     }
-    const user = await User.findOne({ address: req.body.address })
+    let user = await User.findOne({ address: req.body.address })
     if (!user) {
       res.status(500).send('No user found')
       return
     }
-    user.x_nfts.push({ _id: nft._id })
+    console.log("mid", user, nft);
+
+    user.x_nfts = [...user.x_nfts, { _id: nft._id }];
     await user.save();
-    nft.x_numSold++
+    nft.x_numSold++;
     await nft.save();
+    console.log("end?", user, nft);
     res.status(200).send("Success!")
   } catch (err) {
+    console.log("err", err);
     res.status(500).send(err)
   }
 })

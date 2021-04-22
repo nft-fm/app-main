@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
-import CreatedNftModal from "../BuyNftModal/CreatedNftModal";
+import CreatedNftModal from "../NftModals/CreatedNftModal";
 import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
 import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
@@ -24,7 +24,6 @@ const NftCard = (props) => {
 
   const like = async () => {
     if (account) {
-      setLikeCount(liked ? likeCount - 1 : likeCount + 1);
       setLiked(!liked);
       await axios.post(`api/user/like-nft`,
         { address: account, nft: nft._id}).then(res => {

@@ -4,11 +4,28 @@ import BaseView from "../BaseView";
 import Trending from "./Trending";
 import Market from "./Market";
 import styled, { keyframes } from "styled-components";
+import NftModalHook from "../../components/NftModalHook";
 
 const Listen = () => {
+  const [id, setId] = useState(null)
+  useEffect(() => {
+    if (window.location.pathname.length > 10) {
+      setId(window.location.pathname.slice(10))
+    }
+  })
+
+  const [isOpen, setIsOpen] = useState(true);
+  const show = () => setIsOpen(true);
+  const hide = (e) => {
+    setIsOpen(false);
+    console.log("isOpen", isOpen);
+  };
+
   return (
     <Switch>
       <BaseView>
+      {/*  pathname && nftmocdalhook */}
+      {id && <NftModalHook hide={hide} id={id} open={isOpen}/>}
         <Container>
 
           <StyledTitle>

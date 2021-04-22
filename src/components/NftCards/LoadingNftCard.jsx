@@ -6,87 +6,43 @@ import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
-import { useAccountConsumer } from "../../contexts/Account";
-import axios from "axios";
+import loading from "../../assets/img/loading.gif";
 
-const NftCard = (props) => {
-  const { usdPerEth, account, setUser } = useAccountConsumer();
-  const { nft } = props;
-  const [isOpen, setIsOpen] = useState(false);
-  const [liked, setLiked] = useState(props.liked);
-
-  const show = () => setIsOpen(true);
-  const hide = (e) => {
-    setIsOpen(false);
-    console.log("isOpen", isOpen);
-  };
-
-  const like = async () => {
-    if (account) {
-      setLiked(!liked);
-      await axios.post(`api/user/like-nft`,
-      { address: account, nft: nft._id}).then(res => {
-        if (res.data) {
-          props.updateNft(props.index, res.data.nft);
-          setUser(res.data.user);
-        }
-      }).catch(err => {
-        console.log(err);
-      })
-    }
-  }
-
-  const share = () => {
-    //${!}
-  }
-
-  useEffect(() => {
-    setLiked(props.liked);
-  }, [props.liked])
+const NftCard = () => {
   return (
     <Container>
-      <BuyNftModal open={isOpen} hide={hide} nft={nft} />
       <CardTop>
         <Side>
           <IconArea>
-            {liked ?
-              <LikedHeart onClick={() => like()}/> :
-              <Heart onClick={() => like()} />
-            }
-            {nft.likeCount}
+            <Heart />
+            ...
           </IconArea>
           <IconArea>
-            <Share onClick={() => share()} />
-            {nft.shareCount}
+            <Share />
+            ...
           </IconArea>
         </Side>
         <Side>
           <IconArea>
-            {nft.x_numSold}
+            ...
             <span style={{ margin: "0 1px" }}>/</span>
-            {nft.numMinted}
+            ...
             <Cart />
           </IconArea>
         </Side>
       </CardTop>
-      <Image src={nft.imageUrl} alt="image" onClick={() => setIsOpen(!isOpen)} />
-      <TrackName>{nft.title}</TrackName>
-      <Artist>{nft.artist}</Artist>
+      <ImageContainer>
+        <Image src={loading} alt="image" />
+      </ImageContainer>
+      <TrackName>...</TrackName>
+      <Artist>...</Artist>
       <CostFields>
         <CostEth>
-          {nft.price.toLocaleString(undefined, {
-            minimumFractionDigits: 3,
-            maximumFractionDigits: 3,
-          })}
+          ...
           <Eth />
         </CostEth>
         <CostUsd>
-          {usdPerEth ?
-            (usdPerEth * nft.price).toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            }) : "..."
-          }
+          ...
           <Usd />
         </CostUsd>
       </CostFields>
@@ -232,16 +188,23 @@ const Container = styled.div`
   margin-right: 5px; */
 `;
 
-const Image = styled.img`
+const ImageContainer = styled.div`
   cursor: pointer;
   width: 200px;
   height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 12px;
   object-fit: cover;
   margin-bottom: 12px;
   border: 1px solid ${props => props.theme.color.boxBorder};
   background-color: #1E1E1E;
+`
 
+const Image = styled.img`
+  width: 50px;
+  height: 50px;
 `;
 
 const TrackName = styled.span`

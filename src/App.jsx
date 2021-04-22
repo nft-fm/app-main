@@ -38,10 +38,10 @@ const App = () => {
             <Route path="/profile" exact>
               <Profile />
             </Route>
-            <Route path="/discover" exact>
+            <Route path="/discover">
               <Discover />
             </Route>
-            <Route path="*">
+            <Route path="/*">
               <Error404 />
             </Route>
           </Switch>

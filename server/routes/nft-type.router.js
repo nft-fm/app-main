@@ -393,7 +393,7 @@ router.post("/purchase", async (req, res) => {
       return
     }
     if (nft.x_numSold >= nft.numMinted) {
-      res.status(500).send('None available for purchase')
+      res.status(500).send('Out of Stock')
       return
     }
     let user = await User.findOne({ address: req.body.address })

@@ -21,7 +21,7 @@ const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
   const stopProp = (e) => {
     e.stopPropagation();
   };
-  console.log("nft", nft);
+  console.log("HERE", nft);
 
   const purchase = (id) => {
     setIsLoading(true);

@@ -33,7 +33,7 @@ const AccountButton = (props) => {
     }
 
     let chain = currChainId ? currChainId : await getChain();
-    console.log("CHAIN", chain);
+
     if (chain !== 1) onPresentChangeChain();
     if (isMobile()) {
       // connect('injected');

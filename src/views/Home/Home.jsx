@@ -64,6 +64,7 @@ const Listen = () => {
                   <LaunchFeatureText>
                     Smart contracts audited
                   </LaunchFeatureText>
+                  <FillerLine />
                   <Checkmark src={greenCheckMark} />
                 </LaunchFeatureRow>
               </LaunchFeatureList>
@@ -307,6 +308,7 @@ const LaunchContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 80px;
   margin-bottom: 40px;
 `;
 
@@ -336,7 +338,7 @@ const ContainerTitle = styled.span`
   position: absolute;
   font-weight: 600;
   left: calc(10% + 50px);
-  top: -4px;
+  top: -8px;
   padding: 0 12px;
   font: "Compita";
   background-color: ${props => props.theme.bgColor};
@@ -350,6 +352,7 @@ const ContainerTitle = styled.span`
     margin-left: 5px;
     // font-size: 18px;
     color: ${props => props.theme.color.gray};
+    font-size: ${props => props.theme.fontSizes.sm}
   }
   b.first{
     margin-left: 0px;

@@ -10,6 +10,7 @@ import { useAccountConsumer } from "../../contexts/Account";
 import IconMetamask from "../../assets/img/icons/metamask_icon.png";
 import loading from "../../assets/img/loading.gif"
 import { NavLink } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
   const { account, connect, usdPerEth } = useAccountConsumer();
@@ -33,7 +34,12 @@ const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
           setIsBought(true);
         }, 1000);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.error(err.status, err.message, err.error);
+        Swal.fire(`Error: ${err.response ? err.response.status : 404}`, `${err.response ? err.response.data : "server error"}`, "error");
+        setIsLoading(false);
+        console.log(err)
+      });
   };
 
   const like = () => {

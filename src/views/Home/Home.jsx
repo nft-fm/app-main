@@ -38,7 +38,6 @@ const Listen = () => {
         <Divider />
         <DescriptionBoxContainer>
           <DescriptionColumn>
-
             <StyledHeader>Music. Artists. NFTs.</StyledHeader>
             <StyledSubHeader>There is dank things</StyledSubHeader>
             <StyledParagraph>*insert text about stuff, NFTs. Maybe insert button to go purchase nfts or redirect to some more info. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vel pretium orci. Morbi cursus faucibus libero vel sagittis. Vestibulum id consequat lacus. Nam porttitor ipsum ut lacinia consequat. Integer condimentum auctor convallis. Morbi tempor turpis vel diam fermentum imperdiet. Pellentesque at ex ac augue pretium cursus eget vitae sapien. Nam eu ligula a felis porta consequat a sit amet eros. Duis ornare interdum eros, quis malesuada lacus hendrerit at.</StyledParagraph>

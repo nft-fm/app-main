@@ -2,16 +2,10 @@ import React, { useCallback, useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import axios from "axios";
 import NftCard from "../../components/NftCards/SaleNftCard";
-import logo from "../../assets/img/logos/logo.png";
-import { ReactComponent as IconDiscord } from "../../assets/img/icons/coins.svg";
-import { ReactComponent as IconMedium } from "../../assets/img/icons/social_medium.svg";
-import { ReactComponent as IconTelegram } from "../../assets/img/icons/social_telegram.svg";
-import { ReactComponent as IconTwitter } from "../../assets/img/icons/social_twitter.svg";
+import LoadingFeatured from "../../components/NftCards/LoadingFeatured";
 
 const Listen = () => {
-  const [nfts, setNfts] = useState([])
-  const [allNfts, setAllNfts] = useState([])
-
+  const [nfts, setNfts] = useState(<LoadingFeatured />)
 
   const formatNfts = (nftsData) => {
     return nftsData.map((nft) => {
@@ -22,45 +16,28 @@ const Listen = () => {
   }
 
   const getFeatured = () => {
-    axios.get("/api/nft-type/featured").then((res) => setNfts(formatNfts(res.data)));
-  }
-
-  const getAll = () => {
-    axios.get("/api/nft-type/all").then((res) => {
+    axios.get("/api/nft-type/featured").then((res) => {
       const formattedNfts = formatNfts(res.data);
-      for (let i = 0; i < 5; i++) {
-        formattedNfts.push(<FillerCard />)
-      }
-      setAllNfts(formattedNfts);
+      setTimeout(function () {
+        formattedNfts.push(<FillerCard />);
+        setNfts(formattedNfts);
+      }, 1000)
+
     })
   }
 
   useEffect(() => {
     getFeatured();
-    getAll();
   }, [])
 
   return (
-    <Landing>
-      <StyledTitle>
-        MARKETPLACE
-        </StyledTitle>
-      <LaunchContainer>
-        <ContainerTitle>
-          TRENDING
+    <LaunchContainer>
+      <ContainerTitle>
+        TRENDING
         </ContainerTitle>
-        <ContainerOutline />
-        <NftScroll> {nfts} </NftScroll>
-      </LaunchContainer>
-
-      <LaunchContainer>
-        <ContainerTitle>
-          MARKET
-        </ContainerTitle>
-        <ContainerOutline />
-        <NftScroll> {allNfts} </NftScroll>
-      </LaunchContainer>
-    </Landing >
+      <ContainerOutline />
+      <NftScroll> {nfts} </NftScroll>
+    </LaunchContainer>
   );
 };
 
@@ -68,49 +45,6 @@ const FillerCard = styled.div`
 width: 226px;
 height: 0px;
 `
-
-const Landing = styled.div`
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: space-around;
-/* height: calc(100vh - ${props => props.theme.topBarSize}px + 1px); */
-width: 100%;
-color: white;
-  font-size: ${props => props.theme.fontSizes.xs};
-`
-
-const IconContainer = styled.a`
-margin: 0 8px;
-  align-items: center;
-  border: solid #707070;
-  height: 28px;
-  width: 98px;
-  padding: 0 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: solid 1px ${props => props.theme.color.boxBorder};
-  border-radius: 18px;
-  background-color: ${props => props.theme.color.box};
-  display: flex;
-  flex-direction: row;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  &:hover {
-  background-color: ${props => props.theme.color.boxBorder};
-  border: solid 1px #383838;
-  }
-`;
-
-
-const SocialsBar = styled.div`
-  width: 100%;
-  position:relative;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 80px;
-`;
 
 const NftScroll = styled.div`
 justify-content: center;

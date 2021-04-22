@@ -33,6 +33,7 @@ const NftModalHook = ({ id, open, children, hide, onClose }) => {
   if (!open) return null;
   const stopProp = (e) => {
     e.stopPropagation();
+    e.preventDefault();
   };
   console.log("HERE", nft);
 
@@ -68,10 +69,12 @@ const NftModalHook = ({ id, open, children, hide, onClose }) => {
   };
   if (!nft) return null;
   return (
-    <OpaqueFilter onClick={(e) => hide(e)}>
+    <OpaqueFilter to="/discover" onClick={(e) => hide(e)}>
       <Container onClick={(e) => stopProp(e)}>
         <StyledModal>
+          <XWrapper to="/discover">
           <X onClick={(e) => hide(e)} />
+          </XWrapper>
           <CardTitle>
             <Logo src={logo} />
             Buy NFT
@@ -201,6 +204,8 @@ const PriceItem = styled.span`
   color: white;
 `;
 
+const XWrapper = styled(NavLink)``;
+
 const X = styled(IconX)`
   position: absolute;
   right: 2px;
@@ -314,7 +319,7 @@ const CardTitle = styled.div`
   margin-bottom: 12px;
 `;
 
-const OpaqueFilter = styled.div`
+const OpaqueFilter = styled(NavLink)`
   width: 100vw;
   height: 100vh;
   position: fixed;
@@ -324,6 +329,7 @@ const OpaqueFilter = styled.div`
   background-color: rgba(0, 0, 0, 0.8);
   z-index: 500;
   backdrop-filter: blur(4.6px);
+  cursor: auto;
 `;
 
 const Container = styled.div`

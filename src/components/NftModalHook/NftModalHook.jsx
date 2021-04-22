@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useWallet } from "use-wallet";
 import axios from "axios";
-import BuyNftModal from "../BuyNftModal/BuyNftModal";
+// import BuyNftModal from "../BuyNftModal/BuyNftModal";
+
+import BuyNftModal from "../NftModals/BuyNftModal";
 
 import { ReactComponent as IconX } from "../../assets/img/icons/x.svg";
 import logo from "../../assets/img/logos/logo_tiny.png";

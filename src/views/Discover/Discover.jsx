@@ -27,7 +27,6 @@ const Listen = () => {
       {/*  pathname && nftmocdalhook */}
       {id && <NftModalHook hide={hide} id={id} open={isOpen}/>}
         <Container>
-
           <StyledTitle>
             MARKETPLACE
         </StyledTitle>

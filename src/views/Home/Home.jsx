@@ -23,13 +23,12 @@ const Listen = () => {
         <Divider />
         <DescriptionBoxContainer>
           <DescriptionColumn>
-            <StyledHeader>Music. Artists. NFTs.</StyledHeader>
-            <StyledSubHeader>There is dank things</StyledSubHeader>
+            <StyledHeader>Welcome to NFT FM</StyledHeader>
+            <StyledSubHeader>collect music from artists you know and love</StyledSubHeader>
             <StyledParagraph>*insert text about stuff, NFTs. Maybe insert button to go purchase nfts or redirect to some more info. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vel pretium orci. Morbi cursus faucibus libero vel sagittis. Vestibulum id consequat lacus. Nam porttitor ipsum ut lacinia consequat. Integer condimentum auctor convallis. Morbi tempor turpis vel diam fermentum imperdiet. Pellentesque at ex ac augue pretium cursus eget vitae sapien. Nam eu ligula a felis porta consequat a sit amet eros. Duis ornare interdum eros, quis malesuada lacus hendrerit at.</StyledParagraph>
           </DescriptionColumn>
           <DemoImage src={demoImage} />
         </DescriptionBoxContainer>
-
         <LaunchContainer>
           <ContainerTitle>
             ROADMAP
@@ -101,7 +100,7 @@ const Listen = () => {
                   <Checkmark src={grayCheckMark} />
                 </LaunchFeatureRow>
               </LaunchFeatureList>
-            </LaunchFeaturesBox> 
+            </LaunchFeaturesBox>
           </LaunchFeaturesContainer>
         </LaunchContainer>
         <LaunchContainer>
@@ -343,7 +342,7 @@ const ContainerTitle = styled.span`
   font: "Compita";
   background-color: ${props => props.theme.bgColor};
   font-size: ${props => props.theme.fontSizes.xs};
-  color: ${props => props.faq ? "#3d3d3d":props.theme.color.gray};
+  color: ${props => props.faq ? "#3d3d3d" : props.theme.color.gray};
   display: flex;
   flex-direction: row;
   display: flex;

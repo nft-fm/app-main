@@ -47,6 +47,7 @@ const NftCard = (props) => {
     setLiked(nft.liked);
     setLikeCount(nft.likeCount);
   }, [nft])
+  
   return (
     <Container>
       <BuyNftModal open={isOpen} hide={hide} nft={nft} />

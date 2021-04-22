@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useWallet } from "use-wallet";
 import axios from "axios";
-// import BuyNftModal from "../BuyNftModal/BuyNftModal";
-
-import BuyNftModal from "../NftModals/BuyNftModal";
-
+import PlayIcon from "../../assets/img/icons/listen_play.svg";
 import { ReactComponent as IconX } from "../../assets/img/icons/x.svg";
 import logo from "../../assets/img/logos/logo_tiny.png";
 import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
@@ -16,26 +12,33 @@ import IconMetamask from "../../assets/img/icons/metamask_icon.png";
 import loading from "../../assets/img/loading.gif";
 import { NavLink } from "react-router-dom";
 import Swal from "sweetalert2";
+import { usePlaylistConsumer } from "../../contexts/Playlist";
+
 const NftModalHook = ({ id, open, children, hide, onClose }) => {
   const { account, connect, usdPerEth } = useAccountConsumer();
+  const { setNftCallback } = usePlaylistConsumer();
   const [isLoading, setIsLoading] = useState(false);
   const [isBought, setIsBought] = useState(false);
-  console.log("nftModalhook", id);
   const [nft, setNft] = useState(null);
+
   useEffect(() => {
     axios.post("/api/nft-type/get-one", { id: id }).then((res) => {
       console.log("res", res.data);
       setNft(res.data);
     });
   }, [id]);
-  console.log("THERE", nft);
 
-  if (!open) return null;
   const stopProp = (e) => {
     e.stopPropagation();
     e.preventDefault();
   };
-  console.log("HERE", nft);
+
+  const playSong = () => {
+    hide();
+    setTimeout(() => {
+      setNftCallback(nft);
+    }, 500)
+  }
 
   const purchase = (id) => {
     setIsLoading(true);
@@ -67,13 +70,16 @@ const NftModalHook = ({ id, open, children, hide, onClose }) => {
   const share = () => {
     //${!}
   };
+
+  if (!open) return null;
+
   if (!nft) return null;
   return (
     <OpaqueFilter to="/discover" onClick={(e) => hide(e)}>
       <Container onClick={(e) => stopProp(e)}>
         <StyledModal>
           <XWrapper to="/discover">
-          <X onClick={(e) => hide(e)} />
+            <X onClick={(e) => hide(e)} />
           </XWrapper>
           <CardTitle>
             <Logo src={logo} />
@@ -123,9 +129,9 @@ const NftModalHook = ({ id, open, children, hide, onClose }) => {
                 {" "}
                 {usdPerEth
                   ? (usdPerEth * nft.price).toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })
                   : "..."}{" "}
                 &nbsp; USD
               </AvailableItem>
@@ -138,9 +144,9 @@ const NftModalHook = ({ id, open, children, hide, onClose }) => {
             </BuyButton>
           ) : !isLoading ? (
             isBought ? (
-              <BoughtText to="/profile">
-                NFT bought, listen to it on your profile!
-              </BoughtText>
+              <BuyButton onClick={() => playSong()}>
+                <Loading src={PlayIcon} />
+              </BuyButton>
             ) : (
               <BuyButton onClick={() => purchase(nft._id)}>
                 <ButtonText>Buy</ButtonText>

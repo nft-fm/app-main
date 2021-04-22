@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
 import { useWallet } from "use-wallet";
-import styled, { keyframes } from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import BaseView from "../BaseView";
 import axios from "axios";
 import NftCard from "../../components/NftCards/NftCard";
@@ -10,7 +10,7 @@ import greenCheckMark from "../../assets/img/green_check.png";
 import grayCheckMark from "../../assets/img/gray_check.png";
 import Landing from "./Landing";
 import demoImage from "../../assets/img/metamask_fox.svg";
-
+import { FAQ } from "./FAQ/FAQ"
 
 const Listen = () => {
   const { path } = useRouteMatch();
@@ -45,84 +45,89 @@ const Listen = () => {
           </DescriptionColumn>
           <DemoImage src={demoImage} />
         </DescriptionBoxContainer>
-        <Container>
+
+        <LaunchContainer>
           <ContainerTitle>
-            <text style={{ "color": "#5c5c5c" }}>ROADMAP</text>
+            ROADMAP
           </ContainerTitle>
           <ContainerOutline />
-          <LaunchFeatureBoxLeft>
-            <LaunchFeaturesHeader>Launch Features</LaunchFeaturesHeader>
-            <LaunchFeatureList>
-              <LaunchFeatureRow>
-                <LaunchFeatureText>
-                  Minting and Selling NFTs
-                </LaunchFeatureText>
-                <Checkmark src={greenCheckMark} />
-              </LaunchFeatureRow>
-              <LaunchFeatureRow>
-                <LaunchFeatureText>
-                  Claiming $$$ earned from contract
-                </LaunchFeatureText>
-                <Checkmark src={greenCheckMark} />
-              </LaunchFeatureRow>
-              <LaunchFeatureRow>
-                <LaunchFeatureText>
-                  Browsing available NFTs (toggle sort used vs resale)
-                </LaunchFeatureText>
-                <Checkmark src={greenCheckMark} />
-              </LaunchFeatureRow>
-              <LaunchFeatureRow>
-                <LaunchFeatureText>
-                  Purchasing and reselling via OpenSea links
-                </LaunchFeatureText>
-                <Checkmark src={greenCheckMark} />
-              </LaunchFeatureRow>
-              <LaunchFeatureRow>
-                <LaunchFeatureText>
-                  Social media sharing
-                </LaunchFeatureText>
-                <Checkmark src={greenCheckMark} />
-              </LaunchFeatureRow>
-              <LaunchFeatureRow>
-                <LaunchFeatureText>
-                  Public artist profile page
-                </LaunchFeatureText>
-                <Checkmark src={greenCheckMark} />
-              </LaunchFeatureRow>
-            </LaunchFeatureList>
-          </LaunchFeatureBoxLeft>
-          <LaunchFeatureBoxRight>
-            <LaunchFeaturesHeader>Immediate Post-Launch Features</LaunchFeaturesHeader>
-            <LaunchFeatureList>
-              <LaunchFeatureRow>
-                <LaunchFeatureText>
-                  Auction NFTs
-                </LaunchFeatureText>
-                <Checkmark src={grayCheckMark} />
-              </LaunchFeatureRow>
-              <LaunchFeatureRow>
-                <LaunchFeatureText>
-                  Public profile pages
-                </LaunchFeatureText>
-                <Checkmark src={grayCheckMark} />
-              </LaunchFeatureRow>
-              <LaunchFeatureRow>
-                <LaunchFeatureText>
-                  Artist can set their sub-url
-                </LaunchFeatureText>
-                <Checkmark src={grayCheckMark} />
-              </LaunchFeatureRow>
-              <LaunchFeatureRow>
-                <LaunchFeatureText>
-                  'Share via social media' buttons
-                </LaunchFeatureText>
-                <Checkmark src={grayCheckMark} />
-              </LaunchFeatureRow>
-            </LaunchFeatureList>
-          </LaunchFeatureBoxRight>
-        </Container>
-        <div style={{ "height": "40px", "margin-top": "250px" }} />
-        <Container>
+          <LaunchFeaturesContainer>
+            <LaunchFeaturesBox>
+              <LaunchFeaturesHeader>Pre-Launch</LaunchFeaturesHeader>
+              <LaunchFeatureList>
+                <LaunchFeatureRow>
+                  <LaunchFeatureText>
+                    Artist outreach
+                  </LaunchFeatureText>
+                  <FillerLine />
+                  <Checkmark src={greenCheckMark} />
+                </LaunchFeatureRow>
+                <LaunchFeatureRow>
+                  <LaunchFeatureText>
+                    Smart contracts developed
+                  </LaunchFeatureText>
+                  <FillerLine />
+                  <Checkmark src={greenCheckMark} />
+                </LaunchFeatureRow>
+                <LaunchFeatureRow>
+                  <LaunchFeatureText>
+                    Opensea integration completed
+                  </LaunchFeatureText>
+                  <FillerLine />
+                  <Checkmark src={greenCheckMark} />
+                </LaunchFeatureRow>
+                <LaunchFeatureRow>
+                  <LaunchFeatureText>
+                    Smart contracts audited
+                  </LaunchFeatureText>
+                  <Checkmark src={greenCheckMark} />
+                </LaunchFeatureRow>
+              </LaunchFeatureList>
+            </LaunchFeaturesBox>
+            <LaunchFeaturesBox>
+              <LaunchFeaturesHeader>Q2</LaunchFeaturesHeader>
+              <LaunchFeatureList>
+                <LaunchFeatureRow>
+                  <LaunchFeatureText>
+                    NFT auctions*
+                  </LaunchFeatureText>
+                  <FillerLine />
+                  <Checkmark src={grayCheckMark} />
+                </LaunchFeatureRow>
+                <LaunchFeatureRow>
+                  <LaunchFeatureText>
+                    Public profiles
+                  </LaunchFeatureText>
+                  <FillerLine />
+                  <Checkmark src={grayCheckMark} />
+                </LaunchFeatureRow>
+                <LaunchFeatureRow>
+                  <LaunchFeatureText>
+                    On-platform resale
+                  </LaunchFeatureText>
+                  <FillerLine />
+                  <Checkmark src={grayCheckMark} />
+                </LaunchFeatureRow>
+                <LaunchFeatureRow>
+                  <LaunchFeatureText>
+                    Governance token
+                  </LaunchFeatureText>
+                  <FillerLine />
+                  <Checkmark src={grayCheckMark} />
+                </LaunchFeatureRow>
+              </LaunchFeatureList>
+            </LaunchFeaturesBox> 
+          </LaunchFeaturesContainer>
+        </LaunchContainer>
+        <LaunchContainer>
+          <ContainerTitle faq>
+            <b className="first">F</b>requently<b>A</b>sked<b>Q</b>uestions
+          </ContainerTitle>
+          <ContainerOutline />
+          <FAQ />
+        </LaunchContainer>
+
+        {/* <Container>
           <ContainerTitle>
             <text style={{ "color": "#5c5c5c" }}>Frequently Asked Questions</text>
           </ContainerTitle>
@@ -135,8 +140,8 @@ const Listen = () => {
               <FaqAnswer>A : Yes it is perfectly possible they have smelly feet, We will only be able to confirm this after launch</FaqAnswer>
               <FaqQuestion> Q: Does Quinn's cat have smelly feet?</FaqQuestion>
               <FaqAnswer>A : Yes it is perfectly possible they have smelly feet, We will only be able to confirm this after launch</FaqAnswer>
-            </FaqsColumn>
-            <FaqsColumn>
+            {/* </FaqsColumn>
+            <FaqsColumn> 
               <FaqQuestion> Q: Does Quinn's cat have smelly feet?</FaqQuestion>
               <FaqAnswer>A : Yes it is perfectly possible they have smelly feet, We will only be able to confirm this after launch</FaqAnswer>
               <FaqQuestion> Q: Does Quinn's cat have smelly feet?</FaqQuestion>
@@ -150,7 +155,7 @@ const Listen = () => {
               </div>
             </FaqsColumn>
           </FaqsContainer>
-        </Container>
+        </Container> */}
       </BaseView>
     </Switch>
   );
@@ -209,6 +214,8 @@ const FaqsContainer = styled.div`
 `;
 
 const LaunchFeaturesHeader = styled.h3`
+  margin-top: 0;
+  margin-bottom: 30px;
   align-self: center;
   color: white;
   font-family: "Compita";
@@ -218,11 +225,11 @@ const Checkmark = styled.img`
   max-height: 25px;
   max-width: 25px;
   margin-left: auto;
-  margin-right: 5px;
+  // margin-right: 5px;
   `;
 
 const LaunchFeatureText = styled.div`
-  margin-left: 4px;
+  // margin-left: 4px;
 `;
 
 const LaunchFeatureList = styled.div`
@@ -250,20 +257,13 @@ const LaunchFeatureRow = styled.div`
 const LaunchFeaturesBox = styled.div`
   display: flex;
   flex-direction: column;
-  position: absolute;
-  width: 50%;
-  border-radius: 20px;
+  justify-content: flex-start;
+  width: calc(48% - 64px);
+  padding: 32px;
+  border-radius: ${props => props.theme.borderRadius}px;
   border: solid 1px #262626;
   background-color: #181818;
-  height: 220px;
-`;
-
-const LaunchFeatureBoxRight = styled(LaunchFeaturesBox)`
-  margin: 2.5% -2% 0 52%;
-`;
-
-const LaunchFeatureBoxLeft = styled(LaunchFeaturesBox)`
-  /* margin: 2.5% 0 0 -2%; */
+  padding-bottom: 50px;
 `;
 
 const StyledParagraph = styled.p`
@@ -295,33 +295,102 @@ const DescriptionBoxContainer = styled.div`
   background-color: #181818;
 `;
 
+
 const Container = styled.div`
-  position:relative;
-  width: 85%;
-`;
+  background-color: #181818;
+  border-radius: ${props => props.theme.borderRadius}px;
 
-const ContainerTitle = styled.div`
-position:absolute;
-  top: -10px;
-  left: 5%;
-  padding-left:2px;
-  padding-right:2px;
-  color: #383838;
-  font: "Compita";
-  background-color: #131313;
+  // display: flex;
+  // flex-direction: column;
+  // align-items: center;
+  // justify-content: space-around;
+  // /* height: calc(100vh - ${props => props.theme.topBarSize}px + 1px); */
+  // width: calc(48% - 64px);
+  // padding-top: 32px;
+  // color: white;
+  //   font-size: ${props => props.theme.fontSizes.xs};
+
   display: flex;
+  width: 100%;
   flex-direction: row;
-`;
+  justify-content: space-between;
+`
 
-const ContainerOutline = styled.div`
-  position:absolute;
-  border: 10px;
-  border-radius: 15px;
-  border: solid #383838;
-  height: 200px;
+const LaunchContainer = styled.div`
+  position:relative;
+  // border-radius: ${props => props.theme.borderRadius}px;
   width: 100%;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px;
+`;
+
+const FillerLine = styled.div`
+  flex: 1;
+  height: 1px;
+  background-color: gray;
+  margin-left: 10px;
+  margin-right: 10px;
+`
+
+// const ContainerTitle = styled.div`
+// position:absolute;
+//   top: -10px;
+//   left: 5%;
+//   padding-left:2px;
+//   padding-right:2px;
+//   color: #383838;
+//   font: "Compita";
+//   background-color: #131313;
+//   display: flex;
+//   flex-direction: row;
+// `;
+
+
+const ContainerTitle = styled.span`
+  position: absolute;
+  font-weight: 600;
+  left: calc(10% + 50px);
+  top: -4px;
+  padding: 0 12px;
+  font: "Compita";
+  background-color: ${props => props.theme.bgColor};
+  font-size: ${props => props.theme.fontSizes.xs};
+  color: ${props => props.faq ? "#3d3d3d":props.theme.color.gray};
+  display: flex;
+  flex-direction: row;
+  display: flex;
+  align-items: center;
+  b {
+    margin-left: 5px;
+    // font-size: 18px;
+    color: ${props => props.theme.color.gray};
+  }
+  b.first{
+    margin-left: 0px;
+  }
+`;
+
+
+const ContainerOutline = styled.div`
+  border-radius: 24px 24px 0 0;
+  border: 6px solid #383838;
+  border-bottom: none;
+  height: 40px;
+  width: 80%;
+  display: flex;
   flex-direction: row;
 `;
 
+const ContainerTitleText = styled.span`
+padding-left: 6px;
+`
+
+const LaunchFeaturesContainer = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+`
 export default Listen;

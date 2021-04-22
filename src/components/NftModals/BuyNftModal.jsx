@@ -6,11 +6,10 @@ import logo from "../../assets/img/logos/logo_tiny.png";
 import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
 import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
-import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.svg";
+import PlayIcon from "../../assets/img/icons/listen_play.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import IconMetamask from "../../assets/img/icons/metamask_icon.png";
 import loading from "../../assets/img/loading.gif"
-import { NavLink } from "react-router-dom";
 import Swal from "sweetalert2";
 import { usePlaylistConsumer } from "../../contexts/Playlist";
 
@@ -141,13 +140,6 @@ const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
   );
 };
 
-const BoughtText = styled(NavLink)`
-  height: 86px;
-  width: 60%;
-  /* margin-bottom: 20px; */
-  text-align: center;
-  color: white;
-`
 
 const Loading = styled.img`
 width: 40px;

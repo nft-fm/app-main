@@ -6,16 +6,19 @@ import logo from "../../assets/img/logos/logo_tiny.png";
 import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
 import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
+import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import IconMetamask from "../../assets/img/icons/metamask_icon.png";
 import loading from "../../assets/img/loading.gif"
 import { NavLink } from "react-router-dom";
 import Swal from "sweetalert2";
+import { usePlaylistConsumer } from "../../contexts/Playlist";
 
 const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
-  const { account, connect, usdPerEth } = useAccountConsumer();
   const [isLoading, setIsLoading] = useState(false);
   const [isBought, setIsBought] = useState(false);
+  const { account, connect, usdPerEth } = useAccountConsumer();
+  const { setNftCallback } = usePlaylistConsumer();
 
   if (!open) return null;
   const stopProp = (e) => {
@@ -41,6 +44,13 @@ const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
         console.log(err)
       });
   };
+
+  const playSong = () => {
+    hide();
+    setTimeout(() => {
+      setNftCallback(nft);
+    }, 500)
+  }
 
   const like = () => {
     //${!}
@@ -113,9 +123,9 @@ const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
             :
             !isLoading ?
               isBought ?
-                <BoughtText to="/profile">
-                  NFT bought, listen to it on your profile!
-              </BoughtText>
+                <BuyButton onClick={() => playSong()}>
+                  <Loading src={PlayIcon} />
+                </BuyButton>
                 :
                 <BuyButton onClick={() => purchase(nft._id)}>
                   <ButtonText>Buy</ButtonText>

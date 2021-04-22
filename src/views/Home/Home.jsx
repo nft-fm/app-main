@@ -16,21 +16,6 @@ const Listen = () => {
   const { path } = useRouteMatch();
   const { account, connect } = useWallet();
 
-  const [nfts, setNfts] = useState([])
-  const getNfts = () => {
-    axios.get("/api/nft-type/all").then((res) => setNfts(res.data))
-  }
-
-  useEffect(() => {
-    getNfts()
-  }, [])
-
-  const showNfts = nfts.map((nft) => {
-    return (
-      <NftCard nft={nft} />
-    )
-  });
-
   return (
     <Switch>
       <BaseView>

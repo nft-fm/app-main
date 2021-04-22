@@ -18,10 +18,9 @@ const Listen = () => {
   const getFeatured = () => {
     axios.get("/api/nft-type/featured").then((res) => {
       const formattedNfts = formatNfts(res.data);
-      setTimeout(function () {
+
         formattedNfts.push(<FillerCard />);
         setNfts(formattedNfts);
-      }, 1000)
 
     })
   }

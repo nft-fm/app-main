@@ -54,7 +54,7 @@ const Library = ({ user, isCreating, newNft }) => {
         setPureNfts(res.data);
       });
     // axios
-    //   .get("api/nft-type/featured")
+    //   .post("api/nft-type/featured")
     //   .then((res) => {
     //     setNfts(res.data);
     //     setNftsCallback(res.data)

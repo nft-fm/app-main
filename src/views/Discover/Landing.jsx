@@ -7,8 +7,10 @@ import { ReactComponent as IconDiscord } from "../../assets/img/icons/coins.svg"
 import { ReactComponent as IconMedium } from "../../assets/img/icons/social_medium.svg";
 import { ReactComponent as IconTelegram } from "../../assets/img/icons/social_telegram.svg";
 import { ReactComponent as IconTwitter } from "../../assets/img/icons/social_twitter.svg";
+import {useAccountConsumer} from "../../contexts/Account";
 
 const Listen = () => {
+  const { user } = useAccountConsumer();
   const [nfts, setNfts] = useState([])
   const [allNfts, setAllNfts] = useState([])
 
@@ -22,7 +24,7 @@ const Listen = () => {
   }
 
   const getFeatured = () => {
-    axios.get("/api/nft-type/featured").then((res) => setNfts(res.data));
+    axios.post("/api/nft-type/featured", user).then((res) => setNfts(res.data));
   }
 
   const getAll = () => {
@@ -39,6 +41,11 @@ const Listen = () => {
     getFeatured();
     getAll();
   }, [])
+
+  useEffect(() => {
+    getFeatured();
+    getAll();
+  }, [user])
 
   return (
     <Landing>

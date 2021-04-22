@@ -14,7 +14,7 @@ const Listen = () => {
   const [nfts, setNfts] = useState([])
 
   useEffect(() => {
-    axios.get("/api/nft-type/featured").then((res) => setNfts(res.data));
+    axios.post("/api/nft-type/featured", user).then((res) => setNfts(res.data));
   }, [])
 
   const updateNft = (index, update) => {
@@ -24,9 +24,7 @@ const Listen = () => {
   }
 
   const showNfts = nfts.map((nft, index) => {
-    return <NftCard nft={nft} key={index} index={index}
-          updateNft={updateNft}
-          liked={user ? user.likes.find(like => like.toString() === nft._id.toString()) : false}/>;
+    return <NftCard nft={nft}/>;
   });
 
   return (

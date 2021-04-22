@@ -99,7 +99,7 @@ router.post('/get-one', async (req, res) => {
 router.get('/featured', async (req, res) => {
   try {
     let nftTypes = await NftType.find({
-      featured: true,
+      isFeatured: true,
       isDraft: false,
     })
       .limit(5)

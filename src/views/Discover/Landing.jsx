@@ -22,7 +22,7 @@ const Listen = () => {
   }
 
   const getFeatured = () => {
-    axios.get("/api/nft-type/featured").then((res) => setNfts(res.data));
+    axios.get("/api/nft-type/featured").then((res) => setNfts(formatNfts(res.data)));
   }
 
   const getAll = () => {

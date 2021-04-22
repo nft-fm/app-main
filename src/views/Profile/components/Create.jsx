@@ -37,29 +37,63 @@ const Create = ({ open, hide, setNewNft }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [nftData, setNftData] = useState(initialNftState);
   const [audioFile, setAudioFile] = useState(null);
+  const [audioUploadError, setAudioUploadError] = useState(false);
   const [imageFile, setImageFile] = useState(null);
+  const [imageUploadError, setImageUploadError] = useState(false);
   const [curr, setCurr] = useState("ETH");
 
   useEffect(() => {
     user && user.username && setNftData({ ...nftData, artist: user.username });
   }, [user]);
-  const fetchNFT = async () => {
-    await axios
-      .post("/api/nft-type/get-NFT", { account: account })
-      .then((res) => setNftData(res.data));
-  };
 
   useEffect(() => {
     setNftData({ ...nftData, address: account });
-    fetchNFT();
+    axios
+      .post("/api/nft-type/get-NFT", { account: account })
+      .then((res) => setNftData(res.data));
   }, [account]);
 
-  const getExtension = (filename) => {
-    var parts = filename.split(".");
-    return parts[parts.length - 1];
-  };
+  useEffect(() => {
+    if (audioFile) {
 
-  const [isCompleted, setIsCompleted] = useState(false);
+      const audioFormData = new FormData();
+      audioFormData.append("artist", account);
+      audioFormData.append("audioFile", audioFile);
+
+      axios
+        .post("api/nft-type/uploadAudioS3", audioFormData, {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+          setAudioUploadError(true);
+        });
+    }
+  }, [audioFile])
+
+  useEffect(() => {
+    if (imageFile) {
+
+      const imageFormData = new FormData();
+      imageFormData.append("artist", account);
+      imageFormData.append("imageFile", imageFile);
+
+      axios
+        .post("/api/nft-type/uploadImageS3", imageFormData)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+          setImageUploadError(true);
+        });
+    }
+  }, [imageFile])
 
   //TODO entry validation
   const handleSubmit = () => {
@@ -74,42 +108,9 @@ const Create = ({ open, hide, setNewNft }) => {
     }
 
     setIsLoading(true);
-    let isUploadError = false;
-
     //run these two, store the returns in the nftData state object
-    const audioFormData = new FormData();
-    audioFormData.append("artist", account);
-    audioFormData.append("audioFile", audioFile);
 
-    axios
-      .post("api/nft-type/uploadAudioS3", audioFormData, {
-        headers: {
-          "content-type": "multipart/form-data",
-        },
-      })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-        isUploadError = true;
-      });
-
-    const imageFormData = new FormData();
-    imageFormData.append("artist", account);
-    imageFormData.append("imageFile", imageFile);
-
-    axios
-      .post("/api/nft-type/uploadImageS3", imageFormData)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-        isUploadError = true;
-      });
-
-    if (!isUploadError) {
+    if (!audioUploadError && !imageUploadError) {
       // after nftData has both audio and image references, run this route
       console.log("upload route called");
       axios
@@ -206,7 +207,6 @@ const Create = ({ open, hide, setNewNft }) => {
   //   );
   // }
 
-  if (!open) return null;
   const stopProp = (e) => {
     e.stopPropagation();
   };
@@ -226,9 +226,11 @@ const Create = ({ open, hide, setNewNft }) => {
 
   console.log("imageFile", imageFile);
 
+  if (!open) return null;
+
   return (
-    <OpaqueFilter onClick={(e) => hideCreate(e)}>
-      <FormContainer onClick={(e) => stopProp(e)}>
+    <OpaqueFilter>
+      <FormContainer>
         <Header>
           <span>Create NFTs</span>
           <X src={x} onClick={(e) => hideCreate(e)} />
@@ -373,15 +375,15 @@ const Create = ({ open, hide, setNewNft }) => {
                 <span>
                   {audioFile?.name.length > 10
                     ? audioFile?.name.substring(0, 10) +
-                      "-" +
-                      audioFile?.name.substring(audioFile.name.lastIndexOf("."))
+                    "-" +
+                    audioFile?.name.substring(audioFile.name.lastIndexOf("."))
                     : audioFile?.name}
                 </span>
                 <span>
                   {imageFile?.name.length > 10
                     ? imageFile?.name.substring(0, 10) +
-                      "-" +
-                      imageFile?.name.substring(imageFile.name.lastIndexOf("."))
+                    "-" +
+                    imageFile?.name.substring(imageFile.name.lastIndexOf("."))
                     : imageFile?.name}
                 </span>
               </FileNames>
@@ -639,6 +641,7 @@ const BottomInput = styled.div`
 `;
 
 const SubmitButton = styled.button`
+cursor: pointer;
   width: 100%;
   height: 60px;
   color: white;

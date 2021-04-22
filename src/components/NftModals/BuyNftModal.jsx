@@ -348,6 +348,7 @@ const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  white-space: nowrap;
 `;
 const TrackName = styled.span`
   color: white;

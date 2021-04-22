@@ -162,48 +162,6 @@ const NftModalHook = ({ id, open, children, hide, onClose }) => {
   );
 };
 
-const BoughtText = styled(NavLink)`
-  height: 86px;
-  width: 60%;
-  /* margin-bottom: 20px; */
-  text-align: center;
-  color: white;
-`;
-
-const Loading = styled.img`
-  width: 40px;
-  height: auto;
-`;
-
-const ButtonText = styled.span`
-  font-family: "Compita";
-  font-size: ${(props) => props.theme.fontSizes.xs};
-  font-weight: 600;
-  color: white;
-`;
-
-const MetaMask = styled.img`
-  width: 32px;
-  height: auto;
-`;
-
-const Divider = styled.div`
-  margin: 5px 0;
-  width: 100%;
-  height: 1px;
-  background-color: ${(props) => props.theme.color.gray};
-`;
-
-const AvailableItem = styled.div`
-  font-size: 0.8rem;
-  color: ${(props) => props.theme.color.lightgray};
-`;
-
-const PriceItem = styled.span`
-  font-size: ${(props) => props.theme.fontSizes.xs};
-  color: white;
-`;
-
 const XWrapper = styled(NavLink)``;
 
 const X = styled(IconX)`
@@ -227,98 +185,6 @@ const X = styled(IconX)`
 } */
 `;
 
-const Cart = styled(IconCart)`
-  width: 24px;
-  height: 24px;
-  margin: -2px 0 0 8px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  & path {
-    transition: all 0.2s ease-in-out;
-    fill: ${(props) => props.theme.color.gray};
-  }
-  &:hover {
-    & path {
-      fill: #20a4fc;
-    }
-  }
-`;
-
-const Share = styled(IconShare)`
-  width: 19px;
-  height: 19px;
-  margin: 0 4px 0 0;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  & path {
-    transition: all 0.2s ease-in-out;
-    fill: ${(props) => props.theme.color.gray};
-  }
-  &:hover {
-    & path {
-      fill: #20a4fc;
-    }
-  }
-`;
-
-const Heart = styled(IconHeart)`
-  width: 24px;
-  height: 24px;
-  margin: -3px 4px 0 0;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  & path {
-    transition: all 0.2s ease-in-out;
-    stroke: ${(props) => props.theme.color.gray};
-  }
-  &:hover {
-    & path {
-      stroke: #dd4591;
-    }
-  }
-`;
-
-const Side = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const IconArea = styled.div`
-  margin: 0 8px;
-  display: flex;
-  font-size: 14px;
-  height: 100%;
-  align-items: center;
-`;
-
-const CardTop = styled.div`
-  /* padding: 0px 2px; */
-  width: 100%;
-  margin-bottom: 8px;
-  display: flex;
-  justify-content: space-between;
-  font-weight: 600;
-  font-family: "Compita";
-`;
-
-const Logo = styled.img`
-  width: 20px;
-  margin-right: 8px;
-  height: auto;
-`;
-
-const CardTitle = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "Compita";
-  font-weight: 600;
-  color: white;
-  font-size: ${(props) => props.theme.fontSizes.sm};
-  margin-bottom: 12px;
-`;
-
 const OpaqueFilter = styled(NavLink)`
   width: 100vw;
   height: 100vh;
@@ -330,7 +196,145 @@ const OpaqueFilter = styled(NavLink)`
   z-index: 500;
   backdrop-filter: blur(4.6px);
   cursor: auto;
+color: ${props => props.theme.color.lightgray};
 `;
+
+
+
+const BoughtText = styled(NavLink)`
+  height: 86px;
+  width: 60%;
+  /* margin-bottom: 20px; */
+  text-align: center;
+  color: white;
+`
+
+const Loading = styled.img`
+width: 40px;
+height: auto;
+`
+
+const ButtonText = styled.span`
+font-family: "Compita";
+font-size: ${props => props.theme.fontSizes.xs};
+font-weight: 600;
+color: white;
+`
+
+const MetaMask = styled.img`
+width: 32px;
+height: auto;
+`
+
+const Divider = styled.div`
+margin: 5px 0;
+width: 100%;
+height: 1px;
+background-color: ${props => props.theme.color.gray};
+`
+
+const AvailableItem = styled.div`
+font-size: 0.8rem;
+color: ${props => props.theme.color.lightgray};
+`
+
+const PriceItem = styled.span`
+font-size: ${props => props.theme.fontSizes.xs};
+color: white;
+`
+
+
+
+const Cart = styled(IconCart)`
+width: 24px;
+height: 24px;
+margin: -2px 0 0 8px;
+cursor: pointer;
+transition: all 0.2s ease-in-out;
+ & path {
+    transition: all 0.2s ease-in-out;
+     fill: ${props => props.theme.color.gray};
+    }
+&:hover {
+  & path {
+    fill: #20a4fc;
+  }
+}
+`
+
+const Share = styled(IconShare)`
+width: 19px;
+height: 19px;
+margin: 0 4px 0 0;
+cursor: pointer;
+transition: all 0.2s ease-in-out;
+ & path {
+    transition: all 0.2s ease-in-out;
+     fill: ${props => props.theme.color.gray};
+    }
+&:hover {
+  & path {
+    fill: #20a4fc;
+  }
+}`
+
+const Heart = styled(IconHeart)`
+width: 24px;
+height: 24px;
+margin: -3px 4px 0 0;
+cursor: pointer;
+transition: all 0.2s ease-in-out;
+ & path {
+    transition: all 0.2s ease-in-out;
+     stroke: ${props => props.theme.color.gray};
+    }
+&:hover {
+  & path {
+    stroke: #DD4591;
+  }
+}
+`
+
+const Side = styled.div`
+display: flex;
+align-items: center;
+`
+
+const IconArea = styled.div`
+  margin: 0 8px;
+  display: flex;
+  font-size: 14px;
+  height: 100%;
+  align-items: center;
+`
+
+const CardTop = styled.div`
+/* padding: 0px 2px; */
+width: 100%;
+margin-bottom: 8px;
+display: flex;
+justify-content: space-between;
+font-weight: 600;
+font-family: "Compita";
+`
+
+const Logo = styled.img`
+width: 20px;
+margin-right: 8px;
+height: auto;
+`
+
+const CardTitle = styled.div`
+width: 100%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-family: "Compita";
+font-weight: 600;
+color: white;
+font-size: ${props => props.theme.fontSizes.sm};
+margin-bottom: 12px;
+`
 
 const Container = styled.div`
   align-items: center;
@@ -349,7 +353,7 @@ const StyledModal = styled.div`
   width: calc(100% - 60px);
   height: 100%;
   padding: 10px 30px;
-  background-color: ${(props) => props.theme.bgColor};
+  background-color: ${props => props.theme.bgColor};
   font-size: 16px;
   font-weight: normal;
   display: flex;
@@ -382,15 +386,16 @@ const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  white-space: nowrap;
 `;
 const TrackName = styled.span`
   color: white;
-  font-size: ${(props) => props.theme.fontSizes.sm};
+  font-size: ${props => props.theme.fontSizes.sm};
   margin-bottom: 6px;
 `;
 const Artist = styled.span`
-  font-size: ${(props) => props.theme.fontSizes.xs};
-  color: ${(props) => props.theme.color.lightgray};
+  font-size: ${props => props.theme.fontSizes.xs};
+  color: ${props => props.theme.color.lightgray};
   margin-bottom: 12px;
 `;
 
@@ -409,7 +414,7 @@ const BuyButton = styled.button`
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-  border: 1px solid ${(props) => props.theme.color.boxBorder};
+  border: 1px solid ${props => props.theme.color.boxBorder};
   border-radius: 2px;
   background-color: ${(props) => props.theme.color.box};
   margin-bottom: 20px;
@@ -418,4 +423,6 @@ const BuyButton = styled.button`
     border: 1px solid #383838;
   }
 `;
+
+
 export default NftModalHook;

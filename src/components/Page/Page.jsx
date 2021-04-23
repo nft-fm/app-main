@@ -49,7 +49,7 @@ const StyledMain = styled.div`
     width: 726px;
   }
   @media only screen and (max-width: 776px) {
-    width: 100vw;
+    width: 100%;
   }
 `
 

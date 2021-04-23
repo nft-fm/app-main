@@ -52,10 +52,11 @@ const NftTypeSchema = new Schema({
     type: Number,
     default: 0,
   },
-  likeCount: {
-    type: Number,
-    default: 0,
-  },
+  likes: [
+    {
+      type: String
+    }
+  ],
   shareCount: {
     type: Number,
     default: 0,

@@ -9,65 +9,53 @@ import { useAccountConsumer } from "../../contexts/Account";
 import axios from "axios";
 import { usePlaylistConsumer } from "../../contexts/Playlist";
 import ShareModal from "../SMShareModal/SMShareModal";
+import LikeShare from "./LikeShare";
 
 const NftCard = (props) => {
-  const { usdPerEth, account, setUser } = useAccountConsumer();
+  const { user } = useAccountConsumer();
   const { nft, selectNft } = props;
   const [isOpen, setIsOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
-  const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(0);
   const { setNftCallback } = usePlaylistConsumer();
+  const [liked, setLiked] = useState(props.nft.liked);
+  const [likeCount, setLikeCount] = useState(props.nft.likeCount);
+
   const show = () => setIsOpen(true);
   const hide = (e) => {
     setIsOpen(false);
     console.log("isOpen", isOpen);
   };
 
-  const like = async () => {
-    if (account) {
-      console.log("setting like");
-      setLiked(!liked);
-      await axios.post(`api/user/like-nft`,
-        { address: account, nft: nft._id }).then(res => {
-          if (res.data) {
-            setLiked(res.data.nft.liked);
-            setLikeCount(res.data.nft.likeCount);
-            setUser(res.data.user);
-          }
-        }).catch(err => {
-          console.log(err);
-        })
-    }
-  };
-
-  const share = () => {
-    //${!}
-  };
-
   useEffect(() => {
-    setLiked(nft.liked);
-    setLikeCount(nft.likeCount);
-  }, [nft])
-  
+    setLiked(props.nft.liked);
+    setLikeCount(props.nft.likeCount);
+  }, [props, user]);
   return (
     <Container>
-    <ShareModal open={isShareOpen} hide={() => setIsShareOpen(!isShareOpen)} nft={nft} />
-      <BuyNftModal open={isOpen} hide={hide} nft={nft} setIsShareOpen={() => setIsShareOpen(!isShareOpen)}/>
+      <ShareModal
+        open={isShareOpen}
+        hide={() => setIsShareOpen(!isShareOpen)}
+        nft={nft}
+      />
+      <BuyNftModal
+        open={isOpen}
+        hide={hide}
+        nft={nft}
+        liked={liked}
+        setLiked={setLiked}
+        likeCount={likeCount}
+        setLikeCount={setLikeCount}
+        setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
+      />
       <CardTop>
-        <Side>
-          <IconArea>
-            {liked ?
-              <LikedHeart onClick={() => like()} /> :
-              <Heart onClick={() => like()} />
-            }
-            {nft.likeCount}
-          </IconArea>
-          <IconArea>
-            <Share onClick={() => setIsShareOpen(!isShareOpen)} />
-            {nft.shareCount}
-          </IconArea>
-        </Side>
+        <LikeShare
+          nft={nft}
+          liked={liked}
+          setLiked={setLiked}
+          likeCount={likeCount}
+          setLikeCount={setLikeCount}
+          setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
+        />
         <Side>
           <IconArea>
             Trade

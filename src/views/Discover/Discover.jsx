@@ -24,13 +24,13 @@ const Listen = () => {
   return (
     <Switch>
       <BaseView>
-      {/*  pathname && nftmocdalhook */}
-      {id && <NftModalHook hide={hide} id={id} open={isOpen}/>}
+        {/*  pathname && nftmocdalhook */}
+        {id && <NftModalHook hide={hide} id={id} open={isOpen} />}
         <Container>
           <StyledTitle>
             MARKETPLACE
         </StyledTitle>
-          <Trending />
+          {/* <Trending /> */}
           <Market />
         </Container>
       </BaseView>

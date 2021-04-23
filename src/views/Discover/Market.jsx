@@ -2,8 +2,10 @@ import React, { useCallback, useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import axios from "axios";
 import NftCard from "../../components/NftCards/SaleNftCard";
+import {useAccountConsumer} from "../../contexts/Account";
 
 const Listen = () => {
+  const { user, account, justLiked, setJustLiked } = useAccountConsumer();
   const [allNfts, setAllNfts] = useState([])
 
   const formatNfts = (nftsData) => {
@@ -15,7 +17,7 @@ const Listen = () => {
   }
 
   const getAll = () => {
-    axios.get("/api/nft-type/all").then((res) => {
+    axios.post("/api/nft-type/all", {address: account}).then((res) => {
       const formattedNfts = formatNfts(res.data);
       for (let i = 0; i < 5; i++) {
         formattedNfts.push(<FillerCard />)
@@ -26,8 +28,7 @@ const Listen = () => {
 
   useEffect(() => {
     getAll();
-  }, [])
-
+  }, [user])
   return (
       <LaunchContainer>
         <ContainerTitle>

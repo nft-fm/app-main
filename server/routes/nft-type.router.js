@@ -8,17 +8,24 @@ const multer = require('multer');
 const User = require('../schemas/User.schema');
 const UserSchema = require('../schemas/User.schema');
 
+const findLikes = (nfts, account) => {
+  for (let i = 0; i < nfts.length; i++) {
+    const likes = nfts[i]._doc.likes;
+    if (likes && likes.find(like => like.toString() === account)) {
+      nfts[i] = { ...nfts[i]._doc, likes: [], likeCount: nfts[i]._doc.likes.length, liked: true }
+    }
+    else {
+      nfts[i] = { ...nfts[i]._doc, likes: [], likeCount: nfts[i]._doc.likes.length || 0, liked: false };
+    }
+  }
+  return nfts;
+}
+
 router.post('/artist-nfts', async (req, res) => {
   try {
-    const likes = req.body.likes;
     let nfts = await NftType.find({ address: req.body.address, isDraft: false })
 
-    for (let i = 0; i < nfts.length; i++) {
-      if (likes.find(like => like.toString() === nfts[i]._doc._id.toString())) nfts[i] = { ...nfts[i]._doc, liked: true }
-      else nfts[i] = { ...nfts[i]._doc, liked: false };
-    }
-    console.log("Nfts after find", nfts)
-    res.send(nfts);
+    res.send(findLikes(nfts, req.body.address));
   } catch (err) {
     res.status(500).send(err);
   }
@@ -49,16 +56,10 @@ router.post('/get-NFT', async (req, res) => {
 
 router.post('/get-user-nfts', async (req, res) => {
   try {
-    const likes = req.body.likes;
     let ids = req.body.x_nfts;
     let nfts = await NftType.find({ '_id': { $in: ids } });
 
-    for (let i = 0; i < nfts.length; i++) {
-      if (likes.find(like => like.toString() === nfts[i]._doc._id.toString())) nfts[i] = { ...nfts[i]._doc, liked: true }
-      else nfts[i] = { ...nfts[i]._doc, liked: false };
-    }
-
-    res.status(200).send(nfts)
+    res.status(200).send(findLikes(nfts, req.body.address));
   } catch (error) {
     console.log(error);
     res.status(500).send("server error")
@@ -96,7 +97,7 @@ router.post('/get-one', async (req, res) => {
   }
 })
 
-router.get('/featured', async (req, res) => {
+router.post('/featured', async (req, res) => {
   try {
     let nftTypes = await NftType.find({
       isFeatured: true,
@@ -104,8 +105,7 @@ router.get('/featured', async (req, res) => {
     })
       .limit(5)
 
-
-    res.send(nftTypes);
+    res.send(findLikes(nftTypes, req.body.address));
   } catch (error) {
     console.log(error);
     res.status(500).send("server error")
@@ -168,10 +168,10 @@ router.post('/get-many', async (req, res) => {
 })
 
 
-router.get('/all', async (req, res) => {
+router.post('/all', async (req, res) => {
   try {
-    let nftTypes = await NftType.find({ isDraft: false });
-    res.send(nftTypes);
+    let nftTypes = await NftType.find({ isDraft: false, isFeatured: false });
+    res.send(findLikes(nftTypes, req.body.address));
   } catch (error) {
     console.log(error);
     res.status(500).send("server error")

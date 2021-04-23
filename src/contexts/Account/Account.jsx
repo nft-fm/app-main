@@ -11,7 +11,6 @@ export const AccountProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [currChainId, setCurrChainId] = useState(false);
   const [usdPerEth, setUsdPerEth] = useState(0);
-
   const fetchUsdPerEth = async () => {
     console.log("fetchinafioe");
     await axios

@@ -13,7 +13,7 @@ import loading from "../../assets/img/loading.gif"
 import Swal from "sweetalert2";
 import { usePlaylistConsumer } from "../../contexts/Playlist";
 
-const BuyNftModal = ({ open, children, hide, onClose, nft, setIsShareOpen }) => {
+const BuyNftModal = ({ open, children, hide, onClose, nft, liked, setLiked, likeCount, setLikeCount, setIsShareOpen }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isBought, setIsBought] = useState(false);
   const { account, connect, usdPerEth } = useAccountConsumer();
@@ -50,8 +50,13 @@ const BuyNftModal = ({ open, children, hide, onClose, nft, setIsShareOpen }) => 
     }, 500)
   }
 
-  const like = () => {
-    //${!}
+  const like = async () => {
+    if (account) {
+      setLikeCount(liked ? likeCount - 1 : likeCount + 1)
+      setLiked(!liked);
+      await axios.post(`api/user/like-nft`,{ address: account, nft: nft._id})
+        .catch(err => {console.log(err)})
+    }
   }
 
   const share = () => {
@@ -71,8 +76,11 @@ const BuyNftModal = ({ open, children, hide, onClose, nft, setIsShareOpen }) => 
           <CardTop>
             <Side>
               <IconArea>
-                <Heart onClick={() => like()} />
-                {nft.likeCount}
+                {liked ?
+                  <LikedHeart onClick={() => like()}/> :
+                  <Heart onClick={() => like()} />
+                }
+                {likeCount}
               </IconArea>
               <IconArea>
                 <Share onClick={() => share()} />
@@ -196,6 +204,16 @@ transition: all 0.2s ease-in-out;
 } */
 `
 
+const LikedHeart = styled(IconHeart)`
+  width: 24px;
+  height: 24px;
+  margin: -3px 4px 0 0;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  & path {
+    stroke: ${props => props.theme.color.pink};
+  }
+`;
 
 const Cart = styled(IconCart)`
 width: 24px;

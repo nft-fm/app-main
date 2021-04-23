@@ -30,7 +30,7 @@ const Profile = () => {
   //   axios
   //     .post("api/nft-type/get-user-nfts", user)
   //     .then((res) => setOwnedNfts(res.data));
-  //   // axios.get("api/nft-type/featured").then((res) => setOwnedNfts(res.data));
+  //   // axios.post("api/nft-type/featured").then((res) => setOwnedNfts(res.data));
   // };
   // useEffect(() => {
   //   getUserNfts();

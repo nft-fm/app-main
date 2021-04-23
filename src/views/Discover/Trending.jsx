@@ -3,8 +3,10 @@ import styled, { keyframes } from "styled-components";
 import axios from "axios";
 import NftCard from "../../components/NftCards/SaleNftCard";
 import LoadingFeatured from "../../components/NftCards/LoadingFeatured";
+import {useAccountConsumer} from "../../contexts/Account";
 
 const Listen = () => {
+  const {account, user, justLiked, setJustLiked } = useAccountConsumer();
   const [nfts, setNfts] = useState(<LoadingFeatured />)
 
   const formatNfts = (nftsData) => {
@@ -16,19 +18,16 @@ const Listen = () => {
   }
 
   const getFeatured = () => {
-    axios.get("/api/nft-type/featured").then((res) => {
+    axios.post("/api/nft-type/featured", {address: account}).then((res) => {
       const formattedNfts = formatNfts(res.data);
-
         formattedNfts.push(<FillerCard />);
         setNfts(formattedNfts);
-
     })
   }
 
   useEffect(() => {
     getFeatured();
-  }, [])
-
+  }, [user])
   return (
     <LaunchContainer>
       <ContainerTitle>

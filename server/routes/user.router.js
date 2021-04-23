@@ -49,23 +49,24 @@ router.post('/update-account', async (req, res) => {
 
 router.post('/like-nft', async (req, res) => {
   try {
-    let user = await User.findOne({ address: req.body.address });
+    console.log("LIKING")
     let nft = await NftType.findOne({_id: req.body.nft});
+    let likeCount = 0;
 
-    let hasLiked = user.likes.indexOf(req.body.nft);
+    let hasLiked = nft.likes.indexOf(req.body.address);
     if (hasLiked < 0) {
-      user.likes = [...user.likes, req.body.nft];
-      nft.likeCount = nft.likeCount + 1;
+      likeCount = nft._doc.likes.length + 1;
+      nft.likes = [...nft.likes, req.body.address];
     }
     else {
-      let likes = user.likes;
+      let likes = nft.likes;
+      likeCount = likes.length - 1;
       likes.splice(hasLiked, 1);
-      user.likes = likes;
-      nft.likeCount = nft.likeCount - 1;
+      nft.likes = likes;
     }
-    user.save();
     nft.save();
-    res.send({user, nft: {...nft._doc, liked: !!hasLiked < 0 }});
+    console.log("NFT", nft);
+    res.send({nft: {...nft._doc, liked: hasLiked < 0, likes: [], likeCount: likeCount }});
   } catch (error) {
     console.log(error);
     res.sendStatus(500)

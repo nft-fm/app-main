@@ -11,6 +11,7 @@ export const AccountProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [currChainId, setCurrChainId] = useState(false);
   const [usdPerEth, setUsdPerEth] = useState(0);
+  const [justLiked, setJustLiked] = useState("");
 
   const fetchUsdPerEth = async () => {
     console.log("fetchinafioe");
@@ -75,6 +76,7 @@ export const AccountProvider = ({ children }) => {
         connect,
         initialize,
         user, getUser, setUser,
+        justLiked, setJustLiked,
         currChainId, setCurrChainId,
         usdPerEth
       }}>

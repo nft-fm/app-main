@@ -5,13 +5,13 @@ import NftCard from "../../components/NftCards/SaleNftCard";
 import {useAccountConsumer} from "../../contexts/Account";
 
 const Listen = () => {
-  const { user, account } = useAccountConsumer();
+  const { user, account, justLiked, setJustLiked } = useAccountConsumer();
   const [allNfts, setAllNfts] = useState([])
 
   const formatNfts = (nftsData) => {
     return nftsData.map((nft) => {
       return (
-        <NftCard nft={nft} />
+        <NftCard nft={nft} source={"MARKET"}/>
       )
     });
   }
@@ -29,6 +29,13 @@ const Listen = () => {
   useEffect(() => {
     getAll();
   }, [user])
+  useEffect(() => {
+    if (justLiked === "TRENDING") {
+      console.log("gettin all for market")
+      getAll();
+      setJustLiked("");
+    }
+  }, [justLiked])
 
   return (
       <LaunchContainer>

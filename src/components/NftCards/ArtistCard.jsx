@@ -8,62 +8,22 @@ import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import axios from "axios";
+import LikeShare from "./LikeShare";
 
 const NftCard = (props) => {
-  const { usdPerEth, account, setUser } = useAccountConsumer();
+  const { usdPerEth } = useAccountConsumer();
   const { nft } = props;
   const [isOpen, setIsOpen] = useState(false);
-  const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(0);
   const show = () => setIsOpen(true);
   const hide = (e) => {
     setIsOpen(false);
   };
 
-  console.log("ARTIST NFT CARD", liked)
-
-  const like = async () => {
-    if (account) {
-      setLikeCount(liked ? likeCount - 1 : likeCount + 1)
-      setLiked(!liked);
-
-      await axios.post(`api/user/like-nft`,
-        { address: account, nft: nft._id}).then(res => {
-        if (res.data) {
-          console.log(res.data);
-          setLiked(res.data.nft.liked);
-          setLikeCount(res.data.nft.likeCount);
-        }
-      }).catch(err => {
-        console.log(err);
-      })
-    }
-  }
-  const share = () => {
-    //${!}
-  }
-
-  useEffect(() => {
-    setLiked(nft.liked);
-    setLikeCount(nft.likeCount);
-  }, [nft])
   return (
     <Container>
       <CreatedNftModal open={isOpen} hide={hide} nft={nft} />
       <CardTop>
-        <Side>
-          <IconArea>
-            {liked ?
-              <LikedHeart onClick={() => like()}/> :
-              <Heart onClick={() => like()} />
-            }
-            {likeCount}
-          </IconArea>
-          <IconArea>
-            <Share onClick={() => share()} />
-            {nft.shareCount}
-          </IconArea>
-        </Side>
+        <LikeShare nft={nft} />
         <Side>
           <IconArea>
             {nft.x_numSold}

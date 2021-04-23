@@ -3,20 +3,23 @@ import styled, { keyframes } from "styled-components";
 import axios from "axios";
 import NftCard from "../../components/NftCards/SaleNftCard";
 import LoadingFeatured from "../../components/NftCards/LoadingFeatured";
+import {useAccountConsumer} from "../../contexts/Account";
 
 const Listen = () => {
+  const {account, user, justLiked, setJustLiked } = useAccountConsumer();
   const [nfts, setNfts] = useState(<LoadingFeatured />)
 
   const formatNfts = (nftsData) => {
+    console.log("reruning formatNfts");
     return nftsData.map((nft) => {
       return (
-        <NftCard nft={nft} />
+        <NftCard nft={nft} source={"TRENDING"}/>
       )
     });
   }
 
   const getFeatured = () => {
-    axios.post("/api/nft-type/featured").then((res) => {
+    axios.post("/api/nft-type/featured", {address: account}).then((res) => {
       const formattedNfts = formatNfts(res.data);
         formattedNfts.push(<FillerCard />);
         setNfts(formattedNfts);
@@ -25,8 +28,14 @@ const Listen = () => {
 
   useEffect(() => {
     getFeatured();
-  }, [])
-
+  }, [user])
+  useEffect(() => {
+    if (justLiked === "MARKET") {
+      console.log("GETTIN ALL FOR TRENDING")
+      getFeatured();
+      setJustLiked("");
+    }
+  }, [justLiked])
   return (
     <LaunchContainer>
       <ContainerTitle>

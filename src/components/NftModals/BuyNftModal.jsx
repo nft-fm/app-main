@@ -18,6 +18,8 @@ const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
   const [isBought, setIsBought] = useState(false);
   const { account, connect, usdPerEth } = useAccountConsumer();
   const { setNftCallback } = usePlaylistConsumer();
+  const [ liked, setLiked ] = useState(nft.liked);
+  const [ likeCount, setLikeCount ] = useState(nft.likeCount)
 
   if (!open) return null;
   const stopProp = (e) => {
@@ -51,8 +53,13 @@ const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
     }, 500)
   }
 
-  const like = () => {
-    //${!}
+  const like = async () => {
+    if (account) {
+      setLikeCount(liked ? likeCount - 1 : likeCount + 1)
+      setLiked(!liked);
+      await axios.post(`api/user/like-nft`,{ address: account, nft: nft._id})
+        .catch(err => {console.log(err);})
+    }
   }
 
   const share = () => {
@@ -71,8 +78,11 @@ const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
           <CardTop>
             <Side>
               <IconArea>
-                <Heart onClick={() => like()} />
-                {nft.likeCount}
+                {liked ?
+                  <LikedHeart onClick={() => like()}/> :
+                  <Heart onClick={() => like()} />
+                }
+                {likeCount}
               </IconArea>
               <IconArea>
                 <Share onClick={() => share()} />
@@ -196,6 +206,16 @@ transition: all 0.2s ease-in-out;
 } */
 `
 
+const LikedHeart = styled(IconHeart)`
+  width: 20px;
+  height: 20px;
+  margin: -3px 4px 0 0;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  & path {
+    stroke: ${props => props.theme.color.pink};
+  }
+`;
 
 const Cart = styled(IconCart)`
 width: 24px;

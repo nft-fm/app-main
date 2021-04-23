@@ -8,13 +8,12 @@ import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.s
 import { useAccountConsumer } from "../../contexts/Account";
 import axios from "axios";
 import { usePlaylistConsumer } from "../../contexts/Playlist";
+import LikeShare from "./LikeShare";
 
 const NftCard = (props) => {
-  const { usdPerEth, account, setUser } = useAccountConsumer();
+  const { justLiked } = useAccountConsumer();
   const { nft, selectNft } = props;
   const [isOpen, setIsOpen] = useState(false);
-  const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(0);
   const { setNftCallback } = usePlaylistConsumer();
   const show = () => setIsOpen(true);
   const hide = (e) => {
@@ -22,49 +21,11 @@ const NftCard = (props) => {
     console.log("isOpen", isOpen);
   };
 
-  const like = async () => {
-    if (account) {
-      console.log("setting like");
-      setLiked(!liked);
-      await axios.post(`api/user/like-nft`,
-        { address: account, nft: nft._id }).then(res => {
-          if (res.data) {
-            setLiked(res.data.nft.liked);
-            setLikeCount(res.data.nft.likeCount);
-            setUser(res.data.user);
-          }
-        }).catch(err => {
-          console.log(err);
-        })
-    }
-  };
-
-  const share = () => {
-    //${!}
-  };
-
-  useEffect(() => {
-    setLiked(nft.liked);
-    setLikeCount(nft.likeCount);
-  }, [nft])
-  
   return (
     <Container>
       <BuyNftModal open={isOpen} hide={hide} nft={nft} />
       <CardTop>
-        <Side>
-          <IconArea>
-            {liked ?
-              <LikedHeart onClick={() => like()} /> :
-              <Heart onClick={() => like()} />
-            }
-            {nft.likeCount}
-          </IconArea>
-          <IconArea>
-            <Share onClick={() => share()} />
-            {nft.shareCount}
-          </IconArea>
-        </Side>
+        <LikeShare nft={nft}/>
         <Side>
           <IconArea>
             Trade

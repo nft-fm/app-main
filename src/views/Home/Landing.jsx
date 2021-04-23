@@ -16,9 +16,7 @@ const Listen = () => {
 
   const formatNfts = (nftsData) => {
     return nftsData.map((nft) => {
-      return (
-        <NftCard nft={nft} />
-      )
+      return (<NftCard nft={nft} />)
     });
   }
 

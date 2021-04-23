@@ -16,9 +16,7 @@ const Listen = () => {
 
   const formatNfts = (nftsData) => {
     return nftsData.map((nft) => {
-      return (
-        <NftCard nft={nft} />
-      )
+      return (<NftCard nft={nft} />)
     });
   }
 
@@ -194,6 +192,15 @@ const SocialsBar = styled.div`
   display: flex;
   justify-content: center;
   margin-bottom: 80px;
+  @media only screen and (max-width: 776px) {
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    margin-bottom: 40px;
+    & > * {
+      margin-bottom: 16px;
+    }
+  }
 `;
 
 const NftScroll = styled.div`
@@ -202,6 +209,11 @@ display: flex;
 flex-flow: row wrap;
 width: 100%;
 justify-content: space-between;
+@media only screen and (max-width: 776px) {
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+  }
 /* @media only screen and (max-width: 1500px) {
   & > * {
     &:nth-last-child(1) {
@@ -242,6 +254,12 @@ const ContainerTitle = styled.span`
   flex-direction: row;
   display: flex;
   align-items: center;
+  @media only screen and (max-width: 776px) {
+    position: relative;
+    left: 0;
+    border-bottom: 1px solid;
+    padding-bottom: 6px
+  }
 `;
 
 const ContainerOutline = styled.div`
@@ -252,6 +270,9 @@ const ContainerOutline = styled.div`
   width: 80%;
   display: flex;
   flex-direction: row;
+  @media only screen and (max-width: 776px) {
+    border: none;
+  }
 `;
 
 const Logo = styled.img`

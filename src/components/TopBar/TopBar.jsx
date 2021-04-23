@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import Container from "../Container";
@@ -17,8 +17,10 @@ const TopBar = () => {
             <Logo />
           </NavLink>
           <NavRight>
-            <Nav />
-            <AccountButton/>
+            <NavContainer>
+              <Nav />
+            </NavContainer>
+            <AccountButton />
           </NavRight>
         </StyledTopBarInner>
       </Container>
@@ -26,7 +28,15 @@ const TopBar = () => {
   );
 };
 
-console.log(window.location.pathname)
+const NavContainer = styled.div`
+display: flex;
+align-items: center;
+justify-content: center;
+  @media only screen and (max-width: 776px) {
+    display: none;
+  }
+`
+
 
 const NavRight = styled.div`
 display: flex;

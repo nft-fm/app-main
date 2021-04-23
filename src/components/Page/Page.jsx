@@ -8,9 +8,9 @@ import { Nav } from "../TopBar/components/Nav";
 const Page = ({ children }) => (
   <StyledPage>
     <TopBar />
-    <Col expand="sm" style={{ marginTop: "10px" }}>
+    <NavContainer>
       <Nav />
-    </Col>
+    </NavContainer>
     <StyledMain>
       {children}
       <Push />
@@ -19,11 +19,21 @@ const Page = ({ children }) => (
   </StyledPage>
 );
 
+const NavContainer = styled.div`
+  display: none;
+  @media only screen and (max-width: 776px) {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 0 0 32px;
+  }
+`
+
 const StyledPage = styled.div`
   height: 100vh;
   margin: 0;
 background-color: ${props => props.theme.bgColor};
-
 `;
 
 const StyledMain = styled.div`
@@ -38,9 +48,6 @@ const StyledMain = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* @media only screen and (max-width: 991px) {
-    margin: -50px 0 -120px 0;
-  } */
   width: 1226px;
   @media only screen and (max-width: 1500px) {
     width: 976px;

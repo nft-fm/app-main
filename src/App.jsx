@@ -74,12 +74,12 @@ const StyledCanvas = !isMobile() ? styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
-  background: white;
+  background: ${props => props.theme.bgColor};
 ` : styled.div`
 position: absolute;
 width: 100%;
 height: 100%;
-background: white;
+background: ${props => props.theme.bgColor};
 overflow-x: hidden;
 `
 

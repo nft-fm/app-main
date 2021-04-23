@@ -3,7 +3,7 @@ import styled, { keyframes } from "styled-components";
 import axios from "axios";
 import NftCard from "../../components/NftCards/SaleNftCard";
 import logo from "../../assets/img/logos/logo.png";
-import { ReactComponent as IconDiscord } from "../../assets/img/icons/coins.svg";
+import { ReactComponent as IconDiscord } from "../../assets/img/icons/social_discord.svg";
 import { ReactComponent as IconMedium } from "../../assets/img/icons/social_medium.svg";
 import { ReactComponent as IconTelegram } from "../../assets/img/icons/social_telegram.svg";
 import { ReactComponent as IconTwitter } from "../../assets/img/icons/social_twitter.svg";
@@ -23,7 +23,7 @@ const Listen = () => {
   }
 
   const getFeatured = () => {
-    axios.post("/api/nft-type/featured", {address: account}).then((res) => {
+    axios.post("/api/nft-type/featured", { address: account }).then((res) => {
       const formattedNfts = formatNfts(res.data);
       setTimeout(function () {
         formattedNfts.push(<FillerCard />);
@@ -94,8 +94,9 @@ height: 0px;
 `
 
 const Discord = styled(IconDiscord)`
-width: 18px;
-height: 18px;
+margin-top: 1px;
+width: 19px;
+height: 19px;
 & path {
     transition: all 0.2s ease-in-out;
      fill: ${props => props.theme.color.white};
@@ -103,8 +104,9 @@ height: 18px;
 `
 
 const Twitter = styled(IconTwitter)`
-width: 18px;
-height: 18px;
+margin-top: 1px;
+width: 17px;
+height: 17px;
 & path {
     transition: all 0.2s ease-in-out;
      fill: ${props => props.theme.color.white};
@@ -112,8 +114,10 @@ height: 18px;
 `
 
 const Medium = styled(IconMedium)`
-width: 18px;
-height: 18px;
+margin-top: 1px;
+
+width: 21px;
+height: 21px;
 & path {
     transition: all 0.2s ease-in-out;
      fill: ${props => props.theme.color.white};
@@ -121,8 +125,9 @@ height: 18px;
 `
 
 const Telegram = styled(IconTelegram)`
-width: 18px;
-height: 18px;
+width: 19px;
+height: 19px;
+margin-top: 1px;
 & path {
     transition: all 0.2s ease-in-out;
      fill: ${props => props.theme.color.white};

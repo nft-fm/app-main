@@ -9,21 +9,29 @@ import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import axios from "axios";
 import LikeShare from "./LikeShare";
+import BuyNftModal from "../NftModals";
 
 const NftCard = (props) => {
-  const { usdPerEth } = useAccountConsumer();
+  const { usdPerEth, user } = useAccountConsumer();
   const { nft } = props;
   const [isOpen, setIsOpen] = useState(false);
+  const [liked, setLiked] = useState(props.nft.liked);
+  const [likeCount, setLikeCount] = useState(props.nft.likeCount);
+
   const show = () => setIsOpen(true);
   const hide = (e) => {
     setIsOpen(false);
   };
 
+  useEffect(() => {
+    setLiked(props.nft.liked);
+    setLikeCount(props.nft.likeCount);
+  }, [props, user])
   return (
     <Container>
-      <CreatedNftModal open={isOpen} hide={hide} nft={nft} />
+      <CreatedNftModal open={isOpen} hide={hide} liked={liked}  nft={nft} setLiked={setLiked} likeCount={likeCount} setLikeCount={setLikeCount} />
       <CardTop>
-        <LikeShare nft={nft} />
+        <LikeShare nft={nft} liked={liked} setLiked={setLiked} likeCount={likeCount} setLikeCount={setLikeCount}/>
         <Side>
           <IconArea>
             {nft.x_numSold}

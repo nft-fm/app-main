@@ -10,10 +10,8 @@ import { useAccountConsumer } from "../../contexts/Account";
 import axios from "axios";
 
 const LikeShare = (props) => {
-  const {account, user, setJustLiked, justLiked} = useAccountConsumer();
-  const { nft } = props;
-  const [liked, setLiked] = useState(props.nft.liked);
-  const [likeCount, setLikeCount] = useState(props.nft.likeCount);
+  const {account } = useAccountConsumer();
+  const { nft, liked, setLiked, likeCount, setLikeCount } = props;
 
   const like = async () => {
     if (account) {
@@ -21,9 +19,6 @@ const LikeShare = (props) => {
       setLiked(!liked);
       await axios.post(`api/user/like-nft`,{ address: account, nft: nft._id})
         .then(res => {
-          if (res.data && props.source) {
-            setJustLiked(props.source);
-          }
         })
         .catch(err => {console.log(err)})
     }
@@ -32,14 +27,6 @@ const LikeShare = (props) => {
   const share = () => {
     //${!}
   }
-
-  useEffect(() => {
-    console.log("changes in", props.source);
-    console.log("like share updates", props.nft);
-
-    setLiked(props.nft.liked);
-    setLikeCount(props.nft.likeCount);
-  }, [props, user])
   return (
         <Side>
           <IconArea>

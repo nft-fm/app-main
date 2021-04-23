@@ -11,7 +11,7 @@ const Listen = () => {
   const formatNfts = (nftsData) => {
     return nftsData.map((nft) => {
       return (
-        <NftCard nft={nft} source={"MARKET"}/>
+        <NftCard nft={nft} />
       )
     });
   }
@@ -29,14 +29,6 @@ const Listen = () => {
   useEffect(() => {
     getAll();
   }, [user])
-  useEffect(() => {
-    if (justLiked === "TRENDING") {
-      console.log("gettin all for market")
-      getAll();
-      setJustLiked("");
-    }
-  }, [justLiked])
-
   return (
       <LaunchContainer>
         <ContainerTitle>

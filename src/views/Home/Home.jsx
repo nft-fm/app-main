@@ -4,7 +4,6 @@ import { useWallet } from "use-wallet";
 import styled, { keyframes, css } from "styled-components";
 import BaseView from "../BaseView";
 import axios from "axios";
-import NftCard from "../../components/NftCards/NftCard";
 import logo from "../../assets/img/logos/logo.png";
 import greenCheckMark from "../../assets/img/green_check.png";
 import grayCheckMark from "../../assets/img/gray_check.png";

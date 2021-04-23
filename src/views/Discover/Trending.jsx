@@ -10,10 +10,9 @@ const Listen = () => {
   const [nfts, setNfts] = useState(<LoadingFeatured />)
 
   const formatNfts = (nftsData) => {
-    console.log("reruning formatNfts");
     return nftsData.map((nft) => {
       return (
-        <NftCard nft={nft} source={"TRENDING"}/>
+        <NftCard nft={nft} />
       )
     });
   }
@@ -29,13 +28,6 @@ const Listen = () => {
   useEffect(() => {
     getFeatured();
   }, [user])
-  useEffect(() => {
-    if (justLiked === "MARKET") {
-      console.log("GETTIN ALL FOR TRENDING")
-      getFeatured();
-      setJustLiked("");
-    }
-  }, [justLiked])
   return (
     <LaunchContainer>
       <ContainerTitle>

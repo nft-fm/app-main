@@ -11,21 +11,28 @@ import { usePlaylistConsumer } from "../../contexts/Playlist";
 import LikeShare from "./LikeShare";
 
 const NftCard = (props) => {
-  const { justLiked } = useAccountConsumer();
+  const { user } = useAccountConsumer();
   const { nft, selectNft } = props;
   const [isOpen, setIsOpen] = useState(false);
   const { setNftCallback } = usePlaylistConsumer();
+  const [liked, setLiked] = useState(props.nft.liked);
+  const [likeCount, setLikeCount] = useState(props.nft.likeCount);
+
   const show = () => setIsOpen(true);
   const hide = (e) => {
     setIsOpen(false);
     console.log("isOpen", isOpen);
   };
 
+  useEffect(() => {
+    setLiked(props.nft.liked);
+    setLikeCount(props.nft.likeCount);
+  }, [props, user])
   return (
     <Container>
-      <BuyNftModal open={isOpen} hide={hide} nft={nft} />
+      <BuyNftModal open={isOpen} hide={hide} nft={nft} liked={liked} setLiked={setLiked} likeCount={likeCount} setLikeCount={setLikeCount} />
       <CardTop>
-        <LikeShare nft={nft}/>
+        <LikeShare nft={nft} liked={liked} setLiked={setLiked} likeCount={likeCount} setLikeCount={setLikeCount}/>
         <Side>
           <IconArea>
             Trade

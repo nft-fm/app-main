@@ -9,21 +9,15 @@ const User = require('../schemas/User.schema');
 const UserSchema = require('../schemas/User.schema');
 
 const findLikes = (nfts, account) => {
-  console.log("_____findind likes_____")
-  console.log("nfts: ", nfts);
-  console.log("account: ", account);
   for (let i = 0; i < nfts.length; i++) {
     const likes = nfts[i]._doc.likes;
     if (likes && likes.find(like => like.toString() === account)) {
-      console.log("FOUND LIKES")
       nfts[i] = { ...nfts[i]._doc, likes: [], likeCount: nfts[i]._doc.likes.length, liked: true }
     }
     else {
-      console.log("DIDNT");
       nfts[i] = { ...nfts[i]._doc, likes: [], likeCount: nfts[i]._doc.likes.length || 0, liked: false };
     }
   }
-  console.log("FOUND LIKES NFT", nfts);
   return nfts;
 }
 
@@ -176,8 +170,7 @@ router.post('/get-many', async (req, res) => {
 
 router.post('/all', async (req, res) => {
   try {
-    console.log("HA", req.body);
-    let nftTypes = await NftType.find({ isDraft: false });
+    let nftTypes = await NftType.find({ isDraft: false, isFeatured: false });
     res.send(findLikes(nftTypes, req.body.address));
   } catch (error) {
     console.log(error);

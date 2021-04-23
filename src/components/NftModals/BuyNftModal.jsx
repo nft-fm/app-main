@@ -13,19 +13,16 @@ import loading from "../../assets/img/loading.gif"
 import Swal from "sweetalert2";
 import { usePlaylistConsumer } from "../../contexts/Playlist";
 
-const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
+const BuyNftModal = ({ open, children, hide, onClose, nft, liked, setLiked, likeCount, setLikeCount }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isBought, setIsBought] = useState(false);
   const { account, connect, usdPerEth } = useAccountConsumer();
   const { setNftCallback } = usePlaylistConsumer();
-  const [ liked, setLiked ] = useState(nft.liked);
-  const [ likeCount, setLikeCount ] = useState(nft.likeCount)
 
   if (!open) return null;
   const stopProp = (e) => {
     e.stopPropagation();
   };
-  console.log("HERE", nft);
 
   const purchase = (id) => {
     setIsLoading(true);
@@ -58,7 +55,7 @@ const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
       setLikeCount(liked ? likeCount - 1 : likeCount + 1)
       setLiked(!liked);
       await axios.post(`api/user/like-nft`,{ address: account, nft: nft._id})
-        .catch(err => {console.log(err);})
+        .catch(err => {console.log(err)})
     }
   }
 
@@ -207,8 +204,8 @@ transition: all 0.2s ease-in-out;
 `
 
 const LikedHeart = styled(IconHeart)`
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   margin: -3px 4px 0 0;
   cursor: pointer;
   transition: all 0.2s ease-in-out;

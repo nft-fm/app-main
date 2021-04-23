@@ -1,6 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useWallet } from "use-wallet";
 import axios from "axios";
+// import BuyNftModal from "../BuyNftModal/BuyNftModal";
+
+import BuyNftModal from "../NftModals/BuyNftModal";
+
 import { ReactComponent as IconX } from "../../assets/img/icons/x.svg";
 import logo from "../../assets/img/logos/logo_tiny.png";
 import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
@@ -8,19 +13,29 @@ import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import IconMetamask from "../../assets/img/icons/metamask_icon.png";
-import loading from "../../assets/img/loading.gif"
+import loading from "../../assets/img/loading.gif";
 import { NavLink } from "react-router-dom";
-
-const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
+import Swal from "sweetalert2";
+const NftModalHook = ({ id, open, children, hide, onClose }) => {
   const { account, connect, usdPerEth } = useAccountConsumer();
   const [isLoading, setIsLoading] = useState(false);
   const [isBought, setIsBought] = useState(false);
+  console.log("nftModalhook", id);
+  const [nft, setNft] = useState(null);
+  useEffect(() => {
+    axios.post("/api/nft-type/get-one", { id: id }).then((res) => {
+      console.log("res", res.data);
+      setNft(res.data);
+    });
+  }, [id]);
+  console.log("THERE", nft);
 
   if (!open) return null;
   const stopProp = (e) => {
     e.stopPropagation();
+    e.preventDefault();
   };
-  console.log("nft", nft);
+  console.log("HERE", nft);
 
   const purchase = (id) => {
     setIsLoading(true);
@@ -29,26 +44,37 @@ const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
       .then((res) => {
         console.log("purchase res", res);
         setTimeout(function () {
-          setIsLoading(false)
+          setIsLoading(false);
           setIsBought(true);
         }, 1000);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.error(err.status, err.message, err.error);
+        Swal.fire(
+          `Error: ${err.response ? err.response.status : 404}`,
+          `${err.response ? err.response.data : "server error"}`,
+          "error"
+        );
+        setIsLoading(false);
+        console.log(err);
+      });
   };
 
   const like = () => {
     //${!}
-  }
+  };
 
   const share = () => {
     //${!}
-  }
-
+  };
+  if (!nft) return null;
   return (
-    <OpaqueFilter onClick={(e) => hide(e)}>
+    <OpaqueFilter to="/discover" onClick={(e) => hide(e)}>
       <Container onClick={(e) => stopProp(e)}>
         <StyledModal>
+          <XWrapper to="/discover">
           <X onClick={(e) => hide(e)} />
+          </XWrapper>
           <CardTitle>
             <Logo src={logo} />
             Buy NFT
@@ -67,9 +93,7 @@ const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
             <Side>
               <IconArea>
                 {nft.x_numSold}
-                <span style={{ margin: "0 1px" }}>
-                  /
-              </span>
+                <span style={{ margin: "0 1px" }}>/</span>
                 {nft.numMinted}
                 <Cart />
               </IconArea>
@@ -83,47 +107,99 @@ const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
           <PricesContainer>
             <Row>
               <PriceItem>Price:</PriceItem>
-              <PriceItem> {nft.price.toLocaleString(undefined, {
-                minimumFractionDigits: 3,
-                maximumFractionDigits: 3,
-              })} &nbsp; ETH</PriceItem>
+              <PriceItem>
+                {" "}
+                {nft.price.toLocaleString(undefined, {
+                  minimumFractionDigits: 3,
+                  maximumFractionDigits: 3,
+                })}{" "}
+                &nbsp; ETH
+              </PriceItem>
             </Row>
             <Divider />
             <Row>
               <AvailableItem>Price:</AvailableItem>
-              <AvailableItem>          {usdPerEth ?
-                (usdPerEth * nft.price).toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                }) : "..."
-              } &nbsp; USD</AvailableItem>
+              <AvailableItem>
+                {" "}
+                {usdPerEth
+                  ? (usdPerEth * nft.price).toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })
+                  : "..."}{" "}
+                &nbsp; USD
+              </AvailableItem>
             </Row>
           </PricesContainer>
-          {!account ?
+          {!account ? (
             <BuyButton onClick={() => connect("injected")}>
               <MetaMask src={IconMetamask} />
               <ButtonText>Connect Wallet</ButtonText>
             </BuyButton>
-            :
-            !isLoading ?
-              isBought ?
-                <BoughtText to="/profile">
-                  NFT bought, listen to it on your profile!
+          ) : !isLoading ? (
+            isBought ? (
+              <BoughtText to="/profile">
+                NFT bought, listen to it on your profile!
               </BoughtText>
-                :
-                <BuyButton onClick={() => purchase(nft._id)}>
-                  <ButtonText>Buy</ButtonText>
-                </BuyButton>
-              :
-              <BuyButton style={{ backgroundColor: "#262626", border: "1px solid #383838" }}>
-                <Loading src={loading} />
+            ) : (
+              <BuyButton onClick={() => purchase(nft._id)}>
+                <ButtonText>Buy</ButtonText>
               </BuyButton>
-          }
+            )
+          ) : (
+            <BuyButton
+              style={{
+                backgroundColor: "#262626",
+                border: "1px solid #383838",
+              }}
+            >
+              <Loading src={loading} />
+            </BuyButton>
+          )}
         </StyledModal>
       </Container>
     </OpaqueFilter>
   );
 };
+
+const XWrapper = styled(NavLink)``;
+
+const X = styled(IconX)`
+  position: absolute;
+  right: 2px;
+  top: 9px;
+  width: 24px;
+  height: 24px;
+  margin: 0 4px 0 0;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  & path {
+    transition: all 0.2s ease-in-out;
+    stroke: ${(props) => props.theme.color.gray};
+    fill: ${(props) => props.theme.color.gray};
+  }
+  /* &:hover {
+  & path {
+    stroke: #20a4fc;
+  }
+} */
+`;
+
+const OpaqueFilter = styled(NavLink)`
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 500;
+  backdrop-filter: blur(4.6px);
+  cursor: auto;
+color: ${props => props.theme.color.lightgray};
+`;
+
+
 
 const BoughtText = styled(NavLink)`
   height: 86px;
@@ -167,26 +243,6 @@ font-size: ${props => props.theme.fontSizes.xs};
 color: white;
 `
 
-const X = styled(IconX)`
-    position: absolute;
-    right: 2px;
-    top: 9px;
-width: 24px;
-height: 24px;
-margin: 0 4px 0 0;
-cursor: pointer;
-transition: all 0.2s ease-in-out;
- & path {
-    transition: all 0.2s ease-in-out;
-    stroke: ${props => props.theme.color.gray};
-    fill: ${props => props.theme.color.gray};
-    }
-/* &:hover {
-  & path {
-    stroke: #20a4fc;
-  }
-} */
-`
 
 
 const Cart = styled(IconCart)`
@@ -280,18 +336,6 @@ font-size: ${props => props.theme.fontSizes.sm};
 margin-bottom: 12px;
 `
 
-const OpaqueFilter = styled.div`
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(0, 0, 0, 0.8);
-  z-index: 500;
-  backdrop-filter: blur(4.6px);
-`;
-
 const Container = styled.div`
   align-items: center;
   display: flex;
@@ -342,6 +386,7 @@ const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  white-space: nowrap;
 `;
 const TrackName = styled.span`
   color: white;
@@ -380,4 +425,4 @@ const BuyButton = styled.button`
 `;
 
 
-export default BuyNftModal;
+export default NftModalHook;

@@ -9,6 +9,9 @@ const User = require('../schemas/User.schema');
 const UserSchema = require('../schemas/User.schema');
 
 const findLikes = (nfts, account) => {
+  console.log("_____findind likes_____")
+  console.log("nfts: ", nfts);
+  console.log("account: ", account);
   for (let i = 0; i < nfts.length; i++) {
     const likes = nfts[i]._doc.likes;
     if (likes && likes.find(like => like.toString() === account)) {
@@ -103,7 +106,7 @@ router.post('/get-one', async (req, res) => {
 router.post('/featured', async (req, res) => {
   try {
     let nftTypes = await NftType.find({
-      featured: true,
+      isFeatured: true,
       isDraft: false,
     })
       .limit(5)
@@ -171,10 +174,11 @@ router.post('/get-many', async (req, res) => {
 })
 
 
-router.get('/all', async (req, res) => {
+router.post('/all', async (req, res) => {
   try {
+    console.log("HA", req.body);
     let nftTypes = await NftType.find({ isDraft: false });
-    res.send(findLikes(nftTypes));
+    res.send(findLikes(nftTypes, req.body.address));
   } catch (error) {
     console.log(error);
     res.status(500).send("server error")
@@ -396,7 +400,7 @@ router.post("/purchase", async (req, res) => {
       return
     }
     if (nft.x_numSold >= nft.numMinted) {
-      res.status(500).send('None available for purchase')
+      res.status(500).send('Out of Stock')
       return
     }
     let user = await User.findOne({ address: req.body.address })

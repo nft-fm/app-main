@@ -1,98 +1,48 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
-import CreatedNftModal from "../NftModals/CreatedNftModal";
+import BuyNftModal from "../NftModals";
 import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
 import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
-import { useAccountConsumer } from "../../contexts/Account";
-import axios from "axios";
+import loading from "../../assets/img/loading.gif";
 
-const NftCard = (props) => {
-  const { usdPerEth, account, setUser } = useAccountConsumer();
-  const { nft } = props;
-  const [isOpen, setIsOpen] = useState(false);
-  const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(0);
-  const show = () => setIsOpen(true);
-  const hide = (e) => {
-    setIsOpen(false);
-  };
-
-  console.log("ARTIST NFT CARD", liked)
-
-  const like = async () => {
-    if (account) {
-      setLikeCount(liked ? likeCount - 1 : likeCount + 1)
-      setLiked(!liked);
-
-      await axios.post(`api/user/like-nft`,
-        { address: account, nft: nft._id}).then(res => {
-        if (res.data) {
-          console.log(res.data);
-          setLiked(res.data.nft.liked);
-          setLikeCount(res.data.nft.likeCount);
-        }
-      }).catch(err => {
-        console.log(err);
-      })
-    }
-  }
-  const share = () => {
-    //${!}
-  }
-
-  useEffect(() => {
-    setLiked(nft.liked);
-    setLikeCount(nft.likeCount);
-  }, [nft])
+const NftCard = () => {
   return (
     <Container>
-      <CreatedNftModal open={isOpen} hide={hide} nft={nft} />
       <CardTop>
         <Side>
           <IconArea>
-            {liked ?
-              <LikedHeart onClick={() => like()}/> :
-              <Heart onClick={() => like()} />
-            }
-            {likeCount}
+            <Heart />
+            ...
           </IconArea>
           <IconArea>
-            <Share onClick={() => share()} />
-            {nft.shareCount}
+            <Share />
+            ...
           </IconArea>
         </Side>
         <Side>
           <IconArea>
-            {nft.x_numSold}
-            <span style={{ margin: "0 1px" }}>
-              /
-              </span>
-            {nft.numMinted}
+            ...
+            <span style={{ margin: "0 1px" }}>/</span>
+            ...
             <Cart />
           </IconArea>
         </Side>
       </CardTop>
-      <Image src={nft.imageUrl} alt="image" onClick={() => setIsOpen(!isOpen)} />
-      <TrackName>{nft.title}</TrackName>
-      <Artist>{nft.artist}</Artist>
+      <ImageContainer>
+        <Image src={loading} alt="image" />
+      </ImageContainer>
+      <TrackName>...</TrackName>
+      <Artist>...</Artist>
       <CostFields>
         <CostEth>
-          {nft.price.toLocaleString(undefined, {
-            minimumFractionDigits: 3,
-            maximumFractionDigits: 3,
-          })}
+          ...
           <Eth />
         </CostEth>
         <CostUsd>
-          {usdPerEth ?
-            (usdPerEth * nft.price).toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            }) : "..."
-          }
+          ...
           <Usd />
         </CostUsd>
       </CostFields>
@@ -170,7 +120,6 @@ transition: all 0.2s ease-in-out;
   }
 }
 `
-
 const LikedHeart = styled(IconHeart)`
   width: 20px;
   height: 20px;
@@ -235,18 +184,27 @@ const Container = styled.div`
   flex-direction: column;
   width: 200px;
   margin-bottom: 20px;
+  /* margin-left: 5px;
+  margin-right: 5px; */
 `;
 
-const Image = styled.img`
+const ImageContainer = styled.div`
   cursor: pointer;
   width: 200px;
   height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 12px;
   object-fit: cover;
   margin-bottom: 12px;
   border: 1px solid ${props => props.theme.color.boxBorder};
   background-color: #1E1E1E;
+`
 
+const Image = styled.img`
+  width: 50px;
+  height: 50px;
 `;
 
 const TrackName = styled.span`

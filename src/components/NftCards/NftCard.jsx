@@ -3,7 +3,7 @@ import styled from "styled-components";
 import image from "../../assets/img/logos/fm_logo_1.png";
 import cart from "../../assets/img/icons/cart.svg";
 import Modal from "../Modal/Modal";
-import BuyNftModal from "../BuyNftModal";
+import BuyNftModal from "../NftModals/BuyNftModal";
 
 const NftCard = (props) => {
   const { nft } = props;

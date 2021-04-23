@@ -6,8 +6,6 @@ import Swal from 'sweetalert2';
 import { useAccountConsumer } from "../Account";
 import styled from "styled-components";
 import MusicPlayer from "../../components/MusicPlayer"
-import Slide from "react-reveal/Slide"
-
 
 const PlaylistContext = createContext();
 
@@ -16,7 +14,8 @@ export const PlaylistProvider = ({ children }) => {
 
   const [nfts, setNfts] = useState([]);
   const [selectedNft, setSelectedNft] = useState();
-  const [nftIsSelected, setNftIsSelected] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const animTime = 0.45;
 
   const setNextNft = () => {
     const index = nfts.indexOf(selectedNft);
@@ -35,12 +34,17 @@ export const PlaylistProvider = ({ children }) => {
   }
 
   const setNftCallback = (_nft) => {
-    console.log("hello", _nft);
     setSelectedNft(_nft);
     if (_nft)
-      setNftIsSelected(true);
-    else
-      setNftIsSelected(false);
+      setIsOpen(true);
+  }
+
+  const exitPlayer = () => {
+    setIsOpen(false);
+    const timer = setTimeout(() => {
+      setSelectedNft(null)
+      clearTimeout(timer);
+    }, animTime * 1000)
   }
 
   useEffect(() => {
@@ -55,18 +59,14 @@ export const PlaylistProvider = ({ children }) => {
         setNftsCallback, setNftCallback
       }}>
       {children}
-      {/* {selectedNft && */}
-      {/* <Slide bottom={true} duration={1000} when={nftIsSelected}> */}
       {selectedNft &&
-        <Wrapper>
+        <Wrapper animTime={animTime} isOpen={isOpen}>
           <MusicPlayer nft={selectedNft}
             setNextNft={setNextNft}
             setPrevNft={setPrevNft}
-            exitPlayer={() => { setSelectedNft(null) }} />
+            exitPlayer={exitPlayer} />
         </Wrapper>
       }
-      {/* </Slide> */}
-      {/* // } */}
     </PlaylistContext.Provider>
   );
 }
@@ -85,9 +85,14 @@ const Wrapper = styled.div`
   position: -webkit-sticky; /* Safari */
   position: fixed;
   width: 100vw;
-  animation: onSetNft 1.25s forwards;
+  bottom: 0;
+  animation: ${({ isOpen, animTime }) => isOpen ? `onSetNft ${animTime}s forwards` : `onCloseNft ${animTime}s forwards`};
   @keyframes onSetNft {
     0% { bottom: -50px}
     100% {bottom: 0px}
+  }
+  @keyframes onCloseNft {
+    0% { bottom: 0px}
+    100% {bottom: -100px}
   }
   `;

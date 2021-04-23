@@ -7,25 +7,34 @@ import { ReactComponent as IconDiscord } from "../../assets/img/icons/coins.svg"
 import { ReactComponent as IconMedium } from "../../assets/img/icons/social_medium.svg";
 import { ReactComponent as IconTelegram } from "../../assets/img/icons/social_telegram.svg";
 import { ReactComponent as IconTwitter } from "../../assets/img/icons/social_twitter.svg";
-import {useAccountConsumer} from "../../contexts/Account";
+import { useAccountConsumer } from "../../contexts/Account";
+import LoadingFeatured from "../../components/NftCards/LoadingFeatured";
 
 const Listen = () => {
-  const { user } = useAccountConsumer();
-  const [nfts, setNfts] = useState([])
+  const { user, account } = useAccountConsumer();
+  const [nfts, setNfts] = useState(<LoadingFeatured />)
 
-  useEffect(() => {
-    axios.post("/api/nft-type/featured", user).then((res) => setNfts(res.data));
-  }, [])
-
-  const updateNft = (index, update) => {
-    let newNfts = nfts;
-    newNfts[index] = update;
-    setNfts(newNfts);
+  const formatNfts = (nftsData) => {
+    return nftsData.map((nft) => {
+      return (
+        <NftCard nft={nft} />
+      )
+    });
   }
 
-  const showNfts = nfts.map((nft, index) => {
-    return <NftCard nft={nft}/>;
-  });
+  const getFeatured = () => {
+    axios.post("/api/nft-type/featured", {address: account}).then((res) => {
+      const formattedNfts = formatNfts(res.data);
+      setTimeout(function () {
+        formattedNfts.push(<FillerCard />);
+        setNfts(formattedNfts);
+      }, 800)
+    })
+  }
+
+  useEffect(() => {
+    getFeatured();
+  }, [user])
 
   return (
     <Landing>
@@ -47,7 +56,7 @@ const Listen = () => {
           <ContainerTitleText style={{ "color": "#fa423e" }}>{`ARTISTS`}</ContainerTitleText>
         </ContainerTitle>
         <ContainerOutline />
-        <NftScroll> {showNfts} </NftScroll>
+        <NftScroll> {nfts} </NftScroll>
       </LaunchContainer>
       <SocialsBar>
         <IconContainer>
@@ -78,6 +87,11 @@ const Listen = () => {
     </Landing >
   );
 };
+
+const FillerCard = styled.div`
+width: 226px;
+height: 0px;
+`
 
 const Discord = styled(IconDiscord)`
 width: 18px;
@@ -237,6 +251,7 @@ const ContainerOutline = styled.div`
 
 const Logo = styled.img`
   width: 100px;
+  height: 153.84px;
   margin-bottom: 24px;
 `;
 

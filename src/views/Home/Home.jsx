@@ -9,35 +9,25 @@ import logo from "../../assets/img/logos/logo.png";
 import greenCheckMark from "../../assets/img/green_check.png";
 import grayCheckMark from "../../assets/img/gray_check.png";
 import Landing from "./Landing";
+import demoImage from "../../assets/img/metamask_fox.svg";
+
 
 const Listen = () => {
   const { path } = useRouteMatch();
   const { account, connect } = useWallet();
-
-  const [nfts, setNfts] = useState([])
-  const getNfts = () => {
-    axios.get("/api/nft-type/all").then((res) => setNfts(res.data))
-  }
-
-  useEffect(() => {
-    getNfts()
-  }, [])
-
-  const showNfts = nfts.map((nft) => {
-    return (
-      <NftCard nft={nft} />
-    )
-  });
 
   return (
     <Switch>
       <BaseView>
         <Landing />
         <Divider />
-        {/* <DescriptionBoxContainer>
-          <StyledHeader>Music. Artists. NFTs.</StyledHeader>
-          <StyledSubHeader>There is dank things</StyledSubHeader>
-          <StyledParagraph>*insert text about stuff, NFTs. Maybe insert button to go purchase nfts or redirect to some more info. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vel pretium orci. Morbi cursus faucibus libero vel sagittis. Vestibulum id consequat lacus. Nam porttitor ipsum ut lacinia consequat. Integer condimentum auctor convallis. Morbi tempor turpis vel diam fermentum imperdiet. Pellentesque at ex ac augue pretium cursus eget vitae sapien. Nam eu ligula a felis porta consequat a sit amet eros. Duis ornare interdum eros, quis malesuada lacus hendrerit at.</StyledParagraph>
+        <DescriptionBoxContainer>
+          <DescriptionColumn>
+            <StyledHeader>Music. Artists. NFTs.</StyledHeader>
+            <StyledSubHeader>There is dank things</StyledSubHeader>
+            <StyledParagraph>*insert text about stuff, NFTs. Maybe insert button to go purchase nfts or redirect to some more info. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vel pretium orci. Morbi cursus faucibus libero vel sagittis. Vestibulum id consequat lacus. Nam porttitor ipsum ut lacinia consequat. Integer condimentum auctor convallis. Morbi tempor turpis vel diam fermentum imperdiet. Pellentesque at ex ac augue pretium cursus eget vitae sapien. Nam eu ligula a felis porta consequat a sit amet eros. Duis ornare interdum eros, quis malesuada lacus hendrerit at.</StyledParagraph>
+          </DescriptionColumn>
+          <DemoImage src={demoImage} />
         </DescriptionBoxContainer>
         <Container>
           <ContainerTitle>
@@ -144,11 +134,23 @@ const Listen = () => {
               </div>
             </FaqsColumn>
           </FaqsContainer>
-        </Container> */}
+        </Container>
       </BaseView>
     </Switch>
   );
 };
+
+const DescriptionColumn = styled.div`
+display: flex;
+flex-direction: column;
+flex: 1;
+`
+
+const DemoImage = styled.img`
+  height: 213px;
+  width: auto;
+  margin: auto 0 auto 20%;
+`
 
 const Divider = styled.div`
 width: 80%;
@@ -245,11 +247,11 @@ const LaunchFeatureBoxRight = styled(LaunchFeaturesBox)`
 `;
 
 const LaunchFeatureBoxLeft = styled(LaunchFeaturesBox)`
-  margin: 2.5% 0 0 -2%;
+  /* margin: 2.5% 0 0 -2%; */
 `;
 
-const StyledParagraph = styled.div`
-  margin-top: -1%;
+const StyledParagraph = styled.p`
+  margin: 0;
   color: white;
   font-family: "Compita";
 `;
@@ -257,20 +259,22 @@ const StyledParagraph = styled.div`
 const StyledSubHeader = styled.h2`
   color: white;
   font-family: "Compita";
-  margin-left: 7%;
-  margin-top: -2%;
+  margin: 0 0 24px 32px;
 `;
 
 const StyledHeader = styled.h1`
   color: white;
+  margin: 0 0 24px 0;
   font-family: "Compita";
 `;
 
 const DescriptionBoxContainer = styled.div`
+  border-radius: ${props => props.theme.borderRadius}px;
   display:flex;
-  flex-direction: column;
-  width: 100%;
-
+  flex-direction: row;
+  width: calc(100% - 64px);
+  padding: 32px;
+  margin-bottom: 40px;
   border: solid 1px #262626;
   background-color: #181818;
 `;

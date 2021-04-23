@@ -154,6 +154,9 @@ const DemoImage = styled.img`
   height: 213px;
   width: auto;
   margin: auto 0 auto 20%;
+  @media only screen and (max-width: 776px) {
+    display: none;
+  }
 `
 
 const Divider = styled.div`
@@ -278,26 +281,6 @@ const DescriptionBoxContainer = styled.div`
   background-color: #181818;
 `;
 
-
-const Container = styled.div`
-  background-color: #181818;
-  border-radius: ${props => props.theme.borderRadius}px;
-
-  // display: flex;
-  // flex-direction: column;
-  // align-items: center;
-  // justify-content: space-around;
-  // /* height: calc(100vh - ${props => props.theme.topBarSize}px + 1px); */
-  // width: calc(48% - 64px);
-  // padding-top: 32px;
-  // color: white;
-  //   font-size: ${props => props.theme.fontSizes.xs};
-
-  display: flex;
-  width: 100%;
-  flex-direction: row;
-  justify-content: space-between;
-`
 
 const LaunchContainer = styled.div`
   position:relative;

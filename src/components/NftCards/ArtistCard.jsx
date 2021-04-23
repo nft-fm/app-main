@@ -8,6 +8,7 @@ import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import axios from "axios";
+import ShareModal from   "../SMShareModal/CreatedShareModal"
 
 const NftCard = (props) => {
   const { usdPerEth, account, setUser } = useAccountConsumer();
@@ -15,6 +16,7 @@ const NftCard = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
+  const [isShareOpen, setIsShareOpen] = useState(false);
   const show = () => setIsOpen(true);
   const hide = (e) => {
     setIsOpen(false);
@@ -47,7 +49,9 @@ const NftCard = (props) => {
   }, [nft])
   return (
     <Container>
-      <CreatedNftModal open={isOpen} hide={hide} nft={nft} />
+
+      <ShareModal open={isShareOpen} hide={() => setIsShareOpen(!isShareOpen)} nft={nft} />
+      <CreatedNftModal open={isOpen} hide={hide} nft={nft} setIsShareOpen={() => setIsShareOpen(!isShareOpen)} />
       <CardTop>
         <Side>
           <IconArea>
@@ -58,7 +62,7 @@ const NftCard = (props) => {
             {likeCount}
           </IconArea>
           <IconArea>
-            <Share onClick={() => share()} />
+            <Share onClick={() => setIsShareOpen(!isShareOpen)} />
             {nft.shareCount}
           </IconArea>
         </Side>

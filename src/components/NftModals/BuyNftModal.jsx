@@ -13,7 +13,7 @@ import loading from "../../assets/img/loading.gif"
 import Swal from "sweetalert2";
 import { usePlaylistConsumer } from "../../contexts/Playlist";
 
-const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
+const BuyNftModal = ({ open, children, hide, onClose, nft, setIsShareOpen }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isBought, setIsBought] = useState(false);
   const { account, connect, usdPerEth } = useAccountConsumer();
@@ -23,7 +23,6 @@ const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
   const stopProp = (e) => {
     e.stopPropagation();
   };
-  console.log("HERE", nft);
 
   const purchase = (id) => {
     setIsLoading(true);
@@ -56,7 +55,8 @@ const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
   }
 
   const share = () => {
-    //${!}
+    setIsShareOpen()
+    hide();
   }
 
   return (

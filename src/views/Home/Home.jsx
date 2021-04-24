@@ -167,38 +167,6 @@ background-color: ${props => props.theme.color.boxBorder};
 margin-bottom: 80px;
 `
 
-const FaqQuestion = styled.div`
-  font-size: large;
-  color: white;
-`;
-
-const FaqAnswer = styled.div`
-  color: white;
-  margin-bottom: 4px;
-`;
-
-const FaqsColumn = styled.div`
-  width: 33%;
-  max-width: 33%;
-  display:flex;
-  flex-direction: column;
-  text-align: center;
-  justify-content: center;
-`;
-
-const FaqsContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-top: 2.5%;
-  margin-left: -2.5%;
-  position: absolute;
-  width: 105%;
-  border-radius: 20px;
-  border: solid 1px #262626;
-  background-color: #181818;
-
-`;
-
 const LaunchFeaturesHeader = styled.h3`
   margin-top: 0;
   margin-bottom: 30px;
@@ -250,6 +218,12 @@ const LaunchFeaturesBox = styled.div`
   border: solid 1px #262626;
   background-color: #181818;
   padding-bottom: 50px;
+  @media only screen and (max-width: 776px) {
+    width: calc(100% - 64px);
+    &:first-child {
+      margin-bottom: 20px;
+    }
+  }
 `;
 
 const StyledParagraph = styled.p`
@@ -301,25 +275,11 @@ const FillerLine = styled.div`
   margin-right: 10px;
 `
 
-// const ContainerTitle = styled.div`
-// position:absolute;
-//   top: -10px;
-//   left: 5%;
-//   padding-left:2px;
-//   padding-right:2px;
-//   color: #383838;
-//   font: "Compita";
-//   background-color: #131313;
-//   display: flex;
-//   flex-direction: row;
-// `;
-
-
 const ContainerTitle = styled.span`
   position: absolute;
   font-weight: 600;
   left: calc(10% + 50px);
-  top: -8px;
+  top: ${props => props.faq ? "-8px" : "-4px"};
   padding: 0 12px;
   font: "Compita";
   background-color: ${props => props.theme.bgColor};
@@ -351,14 +311,16 @@ const ContainerOutline = styled.div`
   flex-direction: row;
 `;
 
-const ContainerTitleText = styled.span`
-padding-left: 6px;
-`
 
 const LaunchFeaturesContainer = styled.div`
   display: flex;
   width: 100%;
   flex-direction: row;
   justify-content: space-between;
+  @media only screen and (max-width: 776px) {
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+  }
 `
 export default Listen;

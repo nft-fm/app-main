@@ -1,9 +1,7 @@
 import React, { useState, useRef } from "react";
 import styled, { css } from "styled-components";
-import demoImage from "../../../assets/img/metamask_fox.svg";
 import { ReactComponent as down_arrow } from "../../../assets/img/icons/down_arrow.svg";
 
-const ExpandMoreIcon = styled.img``;
 //what is happening
 // import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 // import ExpandLessIcon from '@material-ui/icons/ExpandLess';
@@ -20,9 +18,12 @@ export const Question = (props) => {
   };
 
   return (
-    <FaqCard>
-      <FaqQuestion onClick={toggleActive}>
-        {props.question}
+    <FaqCard onClick={toggleActive}>
+      <FaqQuestion >
+        <QuestionText>
+          {props.question}
+
+        </QuestionText>
         <LockIcon style={active ? { transform: 'rotate(180deg)' } : null} />
         {/* <Toggle>
           <ExpandMoreIcon src={demoImage}style={active ? { transform: 'rotate(180deg)' } : null} />
@@ -36,19 +37,30 @@ export const Question = (props) => {
   );
 };
 
+const QuestionText = styled.h2`
+  font-size: ${(props) => props.theme.fontSizes.sm}px;
+  width: calc(100% - 32px);
+  margin: 0px;
+  /* margin: 0px 50px 0 20px; */
+  font-weight: 400;
+`
+
 const LockIcon = styled(down_arrow)`
   /* float: right; */
   /* top: 80%;
 left: 90%; */
 position: absolute;
-  margin-top: -3px;
-  right: -60px;
+  right: 0px;
   width: 30px;
   height: 30px;
   cursor: pointer;
   transition: all 0.2s linear;
+  width: 28px;
+  height: 28px;
   & path {
     fill: ${(props) => props.theme.color.gray};
+  }
+  @media only screen and (max-width: 776px) {
   }
 `;
 
@@ -56,27 +68,14 @@ const FaqBody = styled.div`
   display: flex;
   flex-direction: column;
   max-height: 0px;
-  transition: max-height 0.2s ease;
+  transition: all 0.2s ease;
   overflow: hidden;
-  width: calc(100% - 40px);
+  width: 100%;
   ${(props) =>
     props.active &&
     css`
       max-height: ${props.height}px;
     `};
-`;
-
-const Toggle = styled.div`
-  position: absolute;
-  right: -50px;
-  margin-top: -3px;
-  width: 50px;
-  height: 50px;
-  & > svg {
-    width: 100%;
-    height: 100%;
-    transition: all 0.3s ease;
-  }
 `;
 
 const FaqAnswer = styled.p`
@@ -86,24 +85,24 @@ const FaqAnswer = styled.p`
 `;
 
 const FaqDivider = styled.div`
-  width: 80%;
+  width: 100%;
   margin: 20px auto 10px auto;
   border-bottom: 1px solid #383838;
 `;
 
-const FaqQuestion = styled.h2`
-  font-size: ${(props) => props.theme.fontSizes.sm};
-  margin: 0px 50px 0 20px;
+const FaqQuestion = styled.div`
   position: relative;
-  width: calc(100% - 64px);
+  width: 100%;
   display: flex;
   text-align: left;
-  cursor: pointer;
+  @media only screen and (max-width: 776px) {
+    width: 100%;
 `;
 
 const FaqCard = styled.div`
   margin-bottom: 15px;
-  border: 2px solid #383838;
+  cursor: pointer;
+  border: 1px solid ${props => props.theme.color.boxBorder};
   // border-radius: 2px;
   border-radius: ${(props) => props.theme.borderRadius}px;
   background-color: #181818;

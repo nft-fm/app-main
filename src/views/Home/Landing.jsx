@@ -3,7 +3,7 @@ import styled, { keyframes } from "styled-components";
 import axios from "axios";
 import NftCard from "../../components/NftCards/SaleNftCard";
 import logo from "../../assets/img/logos/logo.png";
-import { ReactComponent as IconDiscord } from "../../assets/img/icons/coins.svg";
+import { ReactComponent as IconDiscord } from "../../assets/img/icons/social_discord.svg";
 import { ReactComponent as IconMedium } from "../../assets/img/icons/social_medium.svg";
 import { ReactComponent as IconTelegram } from "../../assets/img/icons/social_telegram.svg";
 import { ReactComponent as IconTwitter } from "../../assets/img/icons/social_twitter.svg";
@@ -16,14 +16,12 @@ const Listen = () => {
 
   const formatNfts = (nftsData) => {
     return nftsData.map((nft) => {
-      return (
-        <NftCard nft={nft} />
-      )
+      return (<NftCard nft={nft} />)
     });
   }
 
   const getFeatured = () => {
-    axios.post("/api/nft-type/featured", {address: account}).then((res) => {
+    axios.post("/api/nft-type/featured", { address: account }).then((res) => {
       const formattedNfts = formatNfts(res.data);
       setTimeout(function () {
         formattedNfts.push(<FillerCard />);
@@ -50,12 +48,13 @@ const Listen = () => {
       <LaunchContainer>
         <ContainerTitle>
           PROUD TO
-          <ContainerTitleText style={{ "color": "#20a4fc" }}>{`LAUNCH`}</ContainerTitleText>
-          <ContainerTitleText style={{ "color": "#fde404" }}>{`ALONGSIDE`}</ContainerTitleText>
-          <ContainerTitleText style={{ "color": "#68c12f" }}>{`AMAZING`}</ContainerTitleText>
-          <ContainerTitleText style={{ "color": "#fa423e" }}>{`ARTISTS`}</ContainerTitleText>
+          <ContainerTitleTextContainer>
+            <ContainerTitleText style={{ "color": "#20a4fc" }}>{`LAUNCH`}</ContainerTitleText>
+            <ContainerTitleText style={{ "color": "#fde404" }}>{`ALONGSIDE`}</ContainerTitleText>
+            <ContainerTitleText style={{ "color": "#68c12f" }}>{`AMAZING`}</ContainerTitleText>
+            <ContainerTitleText style={{ "color": "#fa423e" }}>{`ARTISTS`}</ContainerTitleText>
+          </ContainerTitleTextContainer>
         </ContainerTitle>
-        <ContainerOutline />
         <NftScroll> {nfts} </NftScroll>
       </LaunchContainer>
       <SocialsBar>
@@ -88,14 +87,21 @@ const Listen = () => {
   );
 };
 
+const ContainerTitleTextContainer = styled.div`
+@media only screen and (max-width: 776px) {
+  margin-top: 6px;
+  }
+`
+
 const FillerCard = styled.div`
 width: 226px;
 height: 0px;
 `
 
 const Discord = styled(IconDiscord)`
-width: 18px;
-height: 18px;
+margin-top: 1px;
+width: 19px;
+height: 19px;
 & path {
     transition: all 0.2s ease-in-out;
      fill: ${props => props.theme.color.white};
@@ -103,8 +109,9 @@ height: 18px;
 `
 
 const Twitter = styled(IconTwitter)`
-width: 18px;
-height: 18px;
+margin-top: 1px;
+width: 17px;
+height: 17px;
 & path {
     transition: all 0.2s ease-in-out;
      fill: ${props => props.theme.color.white};
@@ -112,8 +119,10 @@ height: 18px;
 `
 
 const Medium = styled(IconMedium)`
-width: 18px;
-height: 18px;
+margin-top: 1px;
+
+width: 21px;
+height: 21px;
 & path {
     transition: all 0.2s ease-in-out;
      fill: ${props => props.theme.color.white};
@@ -121,8 +130,9 @@ height: 18px;
 `
 
 const Telegram = styled(IconTelegram)`
-width: 18px;
-height: 18px;
+width: 19px;
+height: 19px;
+margin-top: 1px;
 & path {
     transition: all 0.2s ease-in-out;
      fill: ${props => props.theme.color.white};
@@ -189,6 +199,16 @@ const SocialsBar = styled.div`
   display: flex;
   justify-content: center;
   margin-bottom: 80px;
+  @media only screen and (max-width: 776px) {
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    margin-top: 40px;
+    margin-bottom: 80px;
+    & > * {
+      margin-bottom: 16px;
+    }
+  }
 `;
 
 const NftScroll = styled.div`
@@ -197,21 +217,11 @@ display: flex;
 flex-flow: row wrap;
 width: 100%;
 justify-content: space-between;
-/* @media only screen and (max-width: 1500px) {
-  & > * {
-    &:nth-last-child(1) {
-        display: none;
-   }}}
-   @media only screen and (max-width: 1191px) {
-  & > * {
-    &:nth-last-child(2) {
-        display: none;
-   }}}
-   @media only screen and (max-width: 890px) {
-  & > * {
-    &:nth-last-child(3) {
-        display: none;
-   }}} */
+@media only screen and (max-width: 776px) {
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+  }
 `;
 
 const LaunchContainer = styled.div`
@@ -237,16 +247,14 @@ const ContainerTitle = styled.span`
   flex-direction: row;
   display: flex;
   align-items: center;
-`;
-
-const ContainerOutline = styled.div`
-  border-radius: 24px 24px 0 0;
-  border: 6px solid #383838;
-  border-bottom: none;
-  height: 40px;
-  width: 80%;
-  display: flex;
-  flex-direction: row;
+  @media only screen and (max-width: 776px) {
+    position: relative;
+    flex-direction: column;
+    left: auto;
+    right: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    }
 `;
 
 const Logo = styled.img`
@@ -269,7 +277,7 @@ const NftFmTagline = styled.div`
   font-size: large;
   color: white;
   text-align: center;
-  text-wrap: wrap;
+  white-space: wrap;
 `;
 
 export default Listen;

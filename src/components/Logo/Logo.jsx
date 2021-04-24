@@ -21,10 +21,6 @@ const StyledLogo = styled.img`
   z-index: 20;
   cursor: pointer;
   height: 50px;
-  @media only screen and (max-width: 767px) {
-    height: 80px;
-    margin-top: 40px;
-  }
 `;
 
 const StyledText = styled.span`

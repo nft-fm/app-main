@@ -8,12 +8,14 @@ import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.s
 import { useAccountConsumer } from "../../contexts/Account";
 import axios from "axios";
 import { usePlaylistConsumer } from "../../contexts/Playlist";
+import ShareModal from "../SMShareModal/SMShareModal";
 import LikeShare from "./LikeShare";
 
 const NftCard = (props) => {
   const { user } = useAccountConsumer();
   const { nft, selectNft } = props;
   const [isOpen, setIsOpen] = useState(false);
+  const [isShareOpen, setIsShareOpen] = useState(false);
   const { setNftCallback } = usePlaylistConsumer();
   const [liked, setLiked] = useState(props.nft.liked);
   const [likeCount, setLikeCount] = useState(props.nft.likeCount);
@@ -27,12 +29,33 @@ const NftCard = (props) => {
   useEffect(() => {
     setLiked(props.nft.liked);
     setLikeCount(props.nft.likeCount);
-  }, [props, user])
+  }, [props, user]);
   return (
     <Container>
-      <BuyNftModal open={isOpen} hide={hide} nft={nft} liked={liked} setLiked={setLiked} likeCount={likeCount} setLikeCount={setLikeCount} />
+      <ShareModal
+        open={isShareOpen}
+        hide={() => setIsShareOpen(!isShareOpen)}
+        nft={nft}
+      />
+      <BuyNftModal
+        open={isOpen}
+        hide={hide}
+        nft={nft}
+        liked={liked}
+        setLiked={setLiked}
+        likeCount={likeCount}
+        setLikeCount={setLikeCount}
+        setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
+      />
       <CardTop>
-        <LikeShare nft={nft} liked={liked} setLiked={setLiked} likeCount={likeCount} setLikeCount={setLikeCount}/>
+        <LikeShare
+          nft={nft}
+          liked={liked}
+          setLiked={setLiked}
+          likeCount={likeCount}
+          setLikeCount={setLikeCount}
+          setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
+        />
         <Side>
           <IconArea>
             Trade

@@ -109,36 +109,6 @@ const Listen = () => {
           <ContainerOutline />
           <FAQ />
         </LaunchContainer>
-
-        {/* <Container>
-          <ContainerTitle>
-            <text style={{ "color": "#5c5c5c" }}>Frequently Asked Questions</text>
-          </ContainerTitle>
-          <ContainerOutline />
-          <FaqsContainer>
-            <FaqsColumn>
-              <FaqQuestion> Q: Does Quinn's cat have smelly feet?</FaqQuestion>
-              <FaqAnswer>A : Yes it is perfectly possible they have smelly feet, We will only be able to confirm this after launch</FaqAnswer>
-              <FaqQuestion> Q: Does Quinn's cat have smelly feet?</FaqQuestion>
-              <FaqAnswer>A : Yes it is perfectly possible they have smelly feet, We will only be able to confirm this after launch</FaqAnswer>
-              <FaqQuestion> Q: Does Quinn's cat have smelly feet?</FaqQuestion>
-              <FaqAnswer>A : Yes it is perfectly possible they have smelly feet, We will only be able to confirm this after launch</FaqAnswer>
-            {/* </FaqsColumn>
-            <FaqsColumn> 
-              <FaqQuestion> Q: Does Quinn's cat have smelly feet?</FaqQuestion>
-              <FaqAnswer>A : Yes it is perfectly possible they have smelly feet, We will only be able to confirm this after launch</FaqAnswer>
-              <FaqQuestion> Q: Does Quinn's cat have smelly feet?</FaqQuestion>
-              <FaqAnswer>A : Yes it is perfectly possible they have smelly feet, We will only be able to confirm this after launch</FaqAnswer>
-              <FaqQuestion> Q: Does Quinn's cat have smelly feet?</FaqQuestion>
-              <FaqAnswer>A : Yes it is perfectly possible they have smelly feet, We will only be able to confirm this after launch</FaqAnswer>
-            </FaqsColumn>
-            <FaqsColumn>
-              <div style={{ "color": "white" }}>
-                Insert photo and styled box
-              </div>
-            </FaqsColumn>
-          </FaqsContainer>
-        </Container> */}
       </BaseView>
     </Switch>
   );
@@ -154,6 +124,9 @@ const DemoImage = styled.img`
   height: 213px;
   width: auto;
   margin: auto 0 auto 20%;
+  @media only screen and (max-width: 776px) {
+    display: none;
+  }
 `
 
 const Divider = styled.div`
@@ -162,39 +135,10 @@ height: 4px;
 border-radius: 2px;
 background-color: ${props => props.theme.color.boxBorder};
 margin-bottom: 80px;
+@media only screen and (max-width: 776px) {
+    display: none;
+  }
 `
-
-const FaqQuestion = styled.div`
-  font-size: large;
-  color: white;
-`;
-
-const FaqAnswer = styled.div`
-  color: white;
-  margin-bottom: 4px;
-`;
-
-const FaqsColumn = styled.div`
-  width: 33%;
-  max-width: 33%;
-  display:flex;
-  flex-direction: column;
-  text-align: center;
-  justify-content: center;
-`;
-
-const FaqsContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-top: 2.5%;
-  margin-left: -2.5%;
-  position: absolute;
-  width: 105%;
-  border-radius: 20px;
-  border: solid 1px #262626;
-  background-color: #181818;
-
-`;
 
 const LaunchFeaturesHeader = styled.h3`
   margin-top: 0;
@@ -247,6 +191,12 @@ const LaunchFeaturesBox = styled.div`
   border: solid 1px #262626;
   background-color: #181818;
   padding-bottom: 50px;
+  @media only screen and (max-width: 776px) {
+    width: calc(100% - 64px);
+    &:first-child {
+      margin-bottom: 20px;
+    }
+  }
 `;
 
 const StyledParagraph = styled.p`
@@ -259,6 +209,9 @@ const StyledSubHeader = styled.h2`
   color: white;
   font-family: "Compita";
   margin: 0 0 24px 32px;
+  @media only screen and (max-width: 776px) {
+    display: none;
+  }
 `;
 
 const StyledHeader = styled.h1`
@@ -279,26 +232,6 @@ const DescriptionBoxContainer = styled.div`
 `;
 
 
-const Container = styled.div`
-  background-color: #181818;
-  border-radius: ${props => props.theme.borderRadius}px;
-
-  // display: flex;
-  // flex-direction: column;
-  // align-items: center;
-  // justify-content: space-around;
-  // /* height: calc(100vh - ${props => props.theme.topBarSize}px + 1px); */
-  // width: calc(48% - 64px);
-  // padding-top: 32px;
-  // color: white;
-  //   font-size: ${props => props.theme.fontSizes.xs};
-
-  display: flex;
-  width: 100%;
-  flex-direction: row;
-  justify-content: space-between;
-`
-
 const LaunchContainer = styled.div`
   position:relative;
   // border-radius: ${props => props.theme.borderRadius}px;
@@ -318,25 +251,11 @@ const FillerLine = styled.div`
   margin-right: 10px;
 `
 
-// const ContainerTitle = styled.div`
-// position:absolute;
-//   top: -10px;
-//   left: 5%;
-//   padding-left:2px;
-//   padding-right:2px;
-//   color: #383838;
-//   font: "Compita";
-//   background-color: #131313;
-//   display: flex;
-//   flex-direction: row;
-// `;
-
-
 const ContainerTitle = styled.span`
   position: absolute;
   font-weight: 600;
   left: calc(10% + 50px);
-  top: -8px;
+  top: ${props => props.faq ? "-8px" : "-4px"};
   padding: 0 12px;
   font: "Compita";
   background-color: ${props => props.theme.bgColor};
@@ -368,14 +287,16 @@ const ContainerOutline = styled.div`
   flex-direction: row;
 `;
 
-const ContainerTitleText = styled.span`
-padding-left: 6px;
-`
 
 const LaunchFeaturesContainer = styled.div`
   display: flex;
   width: 100%;
   flex-direction: row;
   justify-content: space-between;
+  @media only screen and (max-width: 776px) {
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+  }
 `
 export default Listen;

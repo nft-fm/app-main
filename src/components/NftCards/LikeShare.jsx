@@ -25,7 +25,7 @@ const LikeShare = (props) => {
   }
 
   const share = () => {
-    //${!}
+    props.setIsShareOpen();
   }
   return (
         <Side>

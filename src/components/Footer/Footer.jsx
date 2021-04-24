@@ -87,7 +87,12 @@ display: flex;
 flex-direction: row;
 width: 500px;
 justify-content: space-between;
-/* margin-bottom: 16px; */
+
+@media only screen and (max-width: 776px) {
+    width: 100vw;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
 `
 
 const Logo = styled.img`

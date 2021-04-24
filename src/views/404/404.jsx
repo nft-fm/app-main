@@ -30,7 +30,7 @@ const Farms = () => {
                 </SubText>
           <StyledLinkContainer>
 
-            <StyledLink exact to="/home">
+            <StyledLink exact to="/">
               to home
                  </StyledLink>
           </StyledLinkContainer>
@@ -50,7 +50,6 @@ justify-content: center;
 `
 
 const StyledLink = styled(NavLink)`
-font-family: "Comic Book";
 font-size: 30px;
 font-stretch: normal;
 font-style: normal;
@@ -62,26 +61,19 @@ align-items: center;
 transition: all 0.2s ease-in-out;
 color: black;
   text-transform: uppercase;
-  background: url('data:image/svg+xml;utf8,<svg width="100" height="100" transform="rotate(25)" opacity="0.3" version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g fill="%23250E17"><circle cx="25" cy="25" r="12.5" /><circle cx="75" cy="75" r="12.5" /><circle cx="75" cy="25" r="12.5" /><circle cx="25" cy="75" r="12.5" /></g></svg>'),
-    #fff;
-  background-size: 12px, 100%;
   border: 4px solid #000;
   position: relative;
   padding: 12px;
-  box-shadow:10px 10px 0 #222;
   width: fit-content;
 &:hover {
           color: black;
-    background: url('data:image/svg+xml;utf8,<svg width="100" height="100" transform="rotate(25)" opacity="0.8" version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g fill="%23d68810"><circle cx="25" cy="25" r="12.5" /><circle cx="75" cy="75" r="12.5" /><circle cx="75" cy="25" r="12.5" /><circle cx="25" cy="75" r="12.5" /></g></svg>'),
-    #ffcd28;
+          background-color: ${props => props.theme.color.gray};
     background-size: 12px, 100%;
     font-size: 32px;
   }
 `
 
 const SubText = !isMobile() ? styled.div`
-text-shadow: 5px 5px 0 #000000;
-font-family: Bangers;
 font-size: 60px;
 font-weight: normal;
 font-stretch: normal;
@@ -90,8 +82,6 @@ letter-spacing: normal;
 text-align: center;
 color: #fef9ed;
 ` : styled.div`
-text-shadow: 5px 5px 0 #000000;
-font-family: Bangers;
 font-size: 40px;
 font-weight: normal;
 font-stretch: normal;
@@ -102,8 +92,6 @@ color: #fef9ed;
 `
 
 const HeaderText = !isMobile() ? styled.div`
-text-shadow: 10px 10px 0 #000000;
-font-family: Bangers;
 font-size: 200px;
 font-weight: normal;
 font-stretch: normal;
@@ -114,8 +102,6 @@ text-align: center;
 color: #fef9ed;
 margin-top: 14vh;
 ` : styled.div`
-text-shadow: 10px 10px 0 #000000;
-font-family: Bangers;
 font-size: 160px;
 font-weight: normal;
 font-stretch: normal;

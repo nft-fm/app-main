@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from "react";
-import styled from "styled-components";
 import { Question } from "./Question";
 
 export const FAQ = () => {
@@ -28,16 +27,3 @@ export const FAQ = () => {
     </div>
   );
 };
-
-const Header = styled.h1`
-  margin: 15;
-  font-size: 4vw;
-  font-family: "PlatNomor";
-  color: white;
-  @media only screen and (max-width: 1337px) {
-    font-size: 8vw;
-  }
-  @media only screen and (max-width: 991px) {
-    font-size: 10vw;
-  }
-`;

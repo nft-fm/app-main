@@ -11,7 +11,7 @@ import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import IconMetamask from "../../assets/img/icons/metamask_icon.png";
 
-const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
+const BuyNftModal = ({ open, children, hide, onClose, nft, setIsShareOpen }) => {
   const { account, connect, usdPerEth } = useAccountConsumer();
 
   if (!open) return null;
@@ -34,7 +34,8 @@ const BuyNftModal = ({ open, children, hide, onClose, nft }) => {
   };
 
   const share = () => {
-    //${!}
+    setIsShareOpen()
+    hide();
   };
 
   return (

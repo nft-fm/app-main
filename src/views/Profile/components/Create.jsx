@@ -166,7 +166,7 @@ const Create = ({ open, hide, setNewNft }) => {
   };
 
   const hiddenImageInput = useRef(null);
-  const handleImage = (e) => {
+  const handleImage = () => {
     hiddenImageInput.current.click();
   };
   const handleImageChange = (e) => {

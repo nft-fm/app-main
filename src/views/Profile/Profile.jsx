@@ -13,15 +13,28 @@ import { ReactComponent as lock_icon } from "../../assets/img/icons/lock.svg";
 import IconMetamask from "../../assets/img/icons/metamask_icon.png";
 
 import Library from "./components/Library";
+import upload_icon from "../../assets/img/profile_page_assets/upload_icon.svg";
+import ProfilePic from "./components/ProfilePic";
 
 const Profile = () => {
   const [ownedNfts, setOwnedNfts] = useState([]);
   console.log("ownedNfts", ownedNfts);
   const { account, connect, user, setUser } = useAccountConsumer();
+  const [edit, setEdit] = useState(false);
+  const [username, setUsername] = useState("");
+  const [profilePic, setProfilePic] = useState("");
+  const [email, setEmail] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
+  const [shake, setShake] = useState(false);
+
   const getUser = async () => {
     axios
       .post("api/user/get-account", { address: account })
-      .then((res) => setUser(res.data));
+      .then((res) => {
+        setUser(res.data);
+        if(res.data.profilePic) setProfilePic(res.data.profilePic);
+      });
   };
 
   // // TODO switch back to get-user-nfts
@@ -39,10 +52,6 @@ const Profile = () => {
     getUser();
   }, [account]);
 
-  const [edit, setEdit] = useState(false);
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-
   const saveDetails = (e) => {
     e.preventDefault();
     setEdit(false);
@@ -51,14 +60,12 @@ const Profile = () => {
       .post("/api/user/update-account", {
         address: account,
         username: username,
+        profilePic: profilePic
         // email: email,
       })
       .then((res) => setUser(res.data));
   };
 
-  const [isOpen, setIsOpen] = useState(false);
-  const [isCreating, setIsCreating] = useState(false);
-  const [shake, setShake] = useState(false);
   if (shake) {
     setTimeout(() => {
       setShake(!shake);
@@ -99,14 +106,13 @@ const Profile = () => {
         <ProfileHeading>
           <Side />
           <ProfileHolder>
-            <ProfilePicHolder>
-              <ProfilePic src={default_pic} alt="default-profile-pic" />
-              <Cog
-                src={cog}
-                alt="edit icon"
-                onClick={account ? () => setEdit(!edit) : null}
-              />
-            </ProfilePicHolder>
+            <Cog
+              src={cog}
+              alt="edit icon"
+              onClick={account ? () => setEdit(!edit) : null}
+            />
+            <ProfilePic profilePic={profilePic && profilePic !== "" ? profilePic : default_pic}
+                        setProfilePic={setProfilePic} edit={edit} setEdit={setEdit}/>
             <ProfileInfoHolder>
               {edit ? (
                 <form onSubmit={(e) => saveDetails(e)}>
@@ -543,6 +549,7 @@ const BlueSpan = styled.span`
 
 const Cog = styled.img`
   width: 15px;
+  right: 45px;
   position: absolute;
   cursor: pointer;
   :hover {
@@ -565,21 +572,6 @@ const ProfileInfoHolder = styled.div`
   align-items: center;
 `;
 
-const ProfilePicHolder = styled.div`
-  background-color: ${(props) => props.theme.color.lightgray};
-  border-width: 4px;
-  border-color: ${(props) => props.theme.color.lightgray};
-  border-style: solid;
-  border-radius: 75px;
-  width: 100px;
-  height: 100px;
-  overflow: hidden;
-`;
-
-const ProfilePic = styled.img`
-  width: 100%;
-`;
-
 const Side = styled.div`
   width: calc(100% / 3);
   display: flex;
@@ -592,6 +584,7 @@ const Side = styled.div`
 `;
 
 const ProfileHolder = styled.div`
+  position: relative;
   width: calc(100% / 3);
   display: flex;
   flex-direction: column;
@@ -621,6 +614,7 @@ const StyledInput = styled.input`
   border-bottom-color: ${(props) => props.theme.color.gray};
   outline: none;
   color: white;
+  text-align: center;
 `;
 
 const AccountDetails = styled.div`

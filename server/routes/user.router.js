@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const BigNumber = require('bignumber.js')
-
+const multer = require('multer');
 const User = require('../schemas/User.schema')
 const Suggestion = require("../schemas/Suggestion.schema");
 const NftType = require('../schemas/NftType.schema');
@@ -319,6 +319,48 @@ router.post("/uploadNft/:address", async (req, res) => {
     }
   }
   run();
+})
+
+router.post('/uploadProfilePicS3', async (req, res) => {
+  var AWS = require('aws-sdk');
+  AWS.config.region = 'us-west-2';
+  const path = require('path');
+  const multerS3 = require("multer-s3");
+  var s3Client = new AWS.S3();
+
+  const fileFilter = (req, file, cb) => {
+    cb(null, true);
+  };
+
+  let upload = multer({
+    fileFilter,
+    storage: multerS3({
+      ACL: "public-read",
+      s3: s3Client,
+      bucket: "nftfm-profilepic",
+      metadata: function (req, file, cb) {
+        cb(null, { fieldName: "imageFile" });
+      },
+      key: function (req, file, cb) {
+        cb(null, req.body.user + "/" + file.originalname);
+      },
+    })
+  })
+  const singleUpload = upload.single("imageFile");
+  singleUpload(req, res, function (err) {
+    console.log("uploadImageS3: ", req.body);
+    if (err instanceof multer.MulterError) {
+      console.log('uploadImageS3 multer', err)
+      return res.status(500).json(err)
+    } else if (err) {
+      console.log('uploadImageS3', err)
+      return res.status(500).json(err)
+    }
+    User.findOneAndUpdate({address: req.body.user}, {profilePic: req.file.location})
+        .then(() => {
+          return res.status(200).send(req.file)
+        })
+  })
 })
 
 module.exports = router

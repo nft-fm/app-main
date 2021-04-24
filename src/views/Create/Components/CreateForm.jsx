@@ -225,15 +225,10 @@ const CreateForm = ({ setNewNft }) => {
     if (!audioUploadError && !imageUploadError) {
       // after nftData has both audio and image references, run this route
       axios
-<<<<<<< HEAD
         .post("/api/nft-type/finalize", newNftData)
         .then((res) => {
           console.log("finalize res", res);
 
-=======
-        .post("/api/nft-type/update", newNftData)
-        .then(async (res) => {
->>>>>>> 2704d9da32db1060156afc1865eba509efb2118a
           if (res.status === 200) {
             setNftData(initialNftState);
             setImageFile(null);

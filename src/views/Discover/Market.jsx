@@ -46,12 +46,15 @@ height: 0px;
 `
 
 const NftScroll = styled.div`
-justify-content: center;
 display: flex;
 flex-direction: row;
 flex-wrap: wrap;
 width: 100%;
 justify-content: space-between;
+@media only screen and (max-width: 776px) {
+  flex-direction: column;
+  align-items: center;
+}
 `;
 
 const LaunchContainer = styled.div`
@@ -77,6 +80,9 @@ const ContainerTitle = styled.span`
   flex-direction: row;
   display: flex;
   align-items: center;
+@media only screen and (max-width: 776px) {
+  left: auto;
+}
 `;
 
 const ContainerOutline = styled.div`
@@ -85,8 +91,12 @@ const ContainerOutline = styled.div`
   border-bottom: none;
   height: 40px;
   width: 80%;
-  display: flex;
-  flex-direction: row;
+  /* display: flex;
+  flex-direction: row; */
+@media only screen and (max-width: 776px) {
+  border-radius: 0;
+  width: 100%;
+}
 `;
 
 

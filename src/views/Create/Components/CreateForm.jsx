@@ -140,8 +140,31 @@ const CreateForm = ({ setNewNft }) => {
     });
   };
 
+
+  const isComplete = () => {
+    if (nftData.title === "" || 
+    nftData.genre === "" || 
+    nftData.producer === "" || 
+    nftData.writer === "" || 
+    nftData.numMinted === 0 || 
+    nftData.numMinted === "0" || 
+    nftData.numMinted === "" || 
+    nftData.price === 0 || 
+    nftData.price === "0" || 
+    nftData.price === "" || 
+    !isAudioUploaded || 
+    !isImageUploaded) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!isComplete()) {
+      return;
+    }
     let newNftData = nftData;
     if (curr === "USD") {
       newNftData = {
@@ -155,9 +178,11 @@ const CreateForm = ({ setNewNft }) => {
         artist: user.username,
       };
     }
+    console.log('handleSubmit', newNftData)
 
     //Input validation below here
     if (nftData.numMinted === "0" || nftData.numMinted === 0) {
+      console.log("e")
       swal.fire({
         title: "Created amount cannot be 0.",
         timer: 5000,
@@ -166,6 +191,7 @@ const CreateForm = ({ setNewNft }) => {
       return;
     }
     if (nftData.price === "0" || nftData.price === 0) {
+      console.log("re")
       swal.fire({
         title: "Created amount cannot be 0.",
         timer: 5000,
@@ -174,6 +200,7 @@ const CreateForm = ({ setNewNft }) => {
       return;
     }
     if (!imageFile || !audioFile) {
+      console.log("ere")
       swal.fire({
         title: "Cannot submit without audio and image files.",
         timer: 5000,
@@ -182,6 +209,7 @@ const CreateForm = ({ setNewNft }) => {
       return;
     }
     if (!isAudioUploaded || !isImageUploaded) {
+      console.log("here")
       swal.fire({
         title: "Please wait for your audio and image files to be processed.",
         timer: 5000,
@@ -192,14 +220,14 @@ const CreateForm = ({ setNewNft }) => {
 
     setIsLoading(true);
     //run these two, store the returns in the nftData state object
-
+    console.log("here")
     if (!audioUploadError && !imageUploadError) {
       // after nftData has both audio and image references, run this route
       console.log("upload route called");
       axios
-        .post("/api/nft-type/update", newNftData)
+        .post("/api/nft-type/finalize", newNftData)
         .then((res) => {
-          console.log("update res", res);
+          console.log("finalize res", res);
 
           if (res.status === 200) {
             setNftData(initialNftState);
@@ -261,27 +289,9 @@ const CreateForm = ({ setNewNft }) => {
     setAudioFile(null);
   };
 
-  const isComplete = () => {
-    if (nftData.title === "" || 
-    nftData.genre === "" || 
-    nftData.producer === "" || 
-    nftData.writer === "" || 
-    nftData.numMinted === 0 || 
-    nftData.numMinted === "0" || 
-    nftData.numMinted === "" || 
-    nftData.price === 0 || 
-    nftData.price === "0" || 
-    nftData.price === "" || 
-    !isAudioUploaded || 
-    !isImageUploaded) {
-      return false;
-    } else {
-      return true;
-    }
-  }
 
   return (
-    <FormContainer onSubmit={!isComplete() ? (e) => handleSubmit(e) : null}>
+    <FormContainer onSubmit={(e) => handleSubmit(e)}>
       <Header>
         <span>Create NFTs</span>
         <X src={x} onClick={(e) => hideCreate(e)} />

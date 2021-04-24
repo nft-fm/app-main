@@ -29,7 +29,6 @@ router.post('/artist-nfts', async (req, res) => {
   }
 })
 
-
 router.post('/get-NFT', async (req, res) => {
   try {
     let nft = await NftType.findOne({

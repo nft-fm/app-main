@@ -17,6 +17,7 @@ import { ReactComponent as arrow } from "../../../assets/img/icons/arrow_cropped
 import ImagePreview from "./ImagePreview";
 
 import { useAccountConsumer } from "../../../contexts/Account";
+import {mintNFT} from "../../../web3/utils";
 
 const initialNftState = {
   artist: "",
@@ -169,7 +170,7 @@ const CreateForm = ({ setNewNft }) => {
     if (curr === "USD") {
       newNftData = {
         ...nftData,
-        price: (nftData.price / usdPerEth).toFixed(4),
+        price: (nftData.price / usdPerEth).toFixed(4)
       };
     }
     if (newNftData.artist === "") {
@@ -223,24 +224,29 @@ const CreateForm = ({ setNewNft }) => {
     console.log("here")
     if (!audioUploadError && !imageUploadError) {
       // after nftData has both audio and image references, run this route
-      console.log("upload route called");
       axios
+<<<<<<< HEAD
         .post("/api/nft-type/finalize", newNftData)
         .then((res) => {
           console.log("finalize res", res);
 
+=======
+        .post("/api/nft-type/update", newNftData)
+        .then(async (res) => {
+>>>>>>> 2704d9da32db1060156afc1865eba509efb2118a
           if (res.status === 200) {
             setNftData(initialNftState);
             setImageFile(null);
             setAudioFile(null);
-            swal.fire({
+            const mint = await mintNFT(res.data, () => console.log("pending..."), () => console.log("final"));
+            console.log("MINT")
+            /*swal.fire({
               title: "Success!",
               background: `#000`,
               boxShadow: `24px 24px 48px -24px #131313`,
               text: "Nft successfully created!",
             });
-
-            setNewNft(true);
+            setNewNft(true);*/
           } else {
             swal.fire({
               title: "Error",

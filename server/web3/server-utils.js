@@ -1,10 +1,6 @@
 const { Contract, utils, providers, constants, BigNumber, getDefaultProvider } = require("ethers");
 
-const Lootbox = require('../schemas/Lootbox.schema')
-const Receipt = require('../schemas/Receipt.schema')
-const NftType = require('../schemas/NftType.schema')
-
-
+const NFTType = require('../schemas/BF.schema')
 
 
 

@@ -3,10 +3,8 @@ const express = require('express')
 const { flushSync } = require('react-dom')
 const router = express.Router()
 const NftType = require('../schemas/NftType.schema')
-const fs = require('fs')
 const multer = require('multer');
 const User = require('../schemas/User.schema');
-const UserSchema = require('../schemas/User.schema');
 
 const findLikes = (nfts, account) => {
   for (let i = 0; i < nfts.length; i++) {

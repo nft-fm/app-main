@@ -2,7 +2,7 @@ import { black, white, green, grey, blue, red, yellow } from './colors'
 
 const theme = {
   borderRadius: 4,
-  bgColor: "#131313",
+  bgColor: "#090909",
   fontColor: {
     white,
     gray: "#5c5c5c",

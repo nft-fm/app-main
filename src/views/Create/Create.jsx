@@ -13,7 +13,7 @@ const Create = ({ open, hide, setNewNft }) => {
   const { account, user, setUser, usdPerEth } = useAccountConsumer();
   return (
     <BaseView>
-      <CreateForm />
+    {user ? <CreateForm /> : <h1>Connect your wallet and set a username on the profile page to upload content!</h1>} 
     </BaseView>
   );
 };

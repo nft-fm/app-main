@@ -14,7 +14,6 @@ import { ReactComponent as eth_icon } from "../../../assets/img/icons/ethereum.s
 import { ReactComponent as arrow } from "../../../assets/img/icons/arrow_cropped.svg";
 // import { ReactComponent as arrow_down } from "../../../assets/img/icons/arrow_down.svg";
 
-import ImagePreview from "./ImagePreview";
 
 import { useAccountConsumer } from "../../../contexts/Account";
 
@@ -41,8 +40,6 @@ const CreateForm = ({ setNewNft }) => {
   const [imageFile, setImageFile] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(false);
   const [curr, setCurr] = useState("ETH");
-  const [isAudioUploaded, setIsAudioUploaded] = useState(false)
-  const [isImageUploaded, setIsImageUploaded] = useState(false)
 
   useEffect(() => {
     user && user.username && setNftData({ ...nftData, artist: user.username });
@@ -57,6 +54,7 @@ const CreateForm = ({ setNewNft }) => {
 
   useEffect(() => {
     if (audioFile) {
+
       const audioFormData = new FormData();
       audioFormData.append("artist", account);
       audioFormData.append("audioFile", audioFile);
@@ -68,9 +66,6 @@ const CreateForm = ({ setNewNft }) => {
           },
         })
         .then((res) => {
-          if (res.status === 200) {
-            setIsAudioUploaded(true)
-          }
           console.log(res);
         })
         .catch((err) => {
@@ -78,10 +73,11 @@ const CreateForm = ({ setNewNft }) => {
           setAudioUploadError(true);
         });
     }
-  }, [audioFile]);
+  }, [audioFile])
 
   useEffect(() => {
     if (imageFile) {
+
       const imageFormData = new FormData();
       imageFormData.append("artist", account);
       imageFormData.append("imageFile", imageFile);
@@ -89,9 +85,6 @@ const CreateForm = ({ setNewNft }) => {
       axios
         .post("/api/nft-type/uploadImageS3", imageFormData)
         .then((res) => {
-          if (res.status === 200) {
-            setIsImageUploaded(true)
-          }
           console.log(res);
         })
         .catch((err) => {
@@ -99,83 +92,18 @@ const CreateForm = ({ setNewNft }) => {
           setImageUploadError(true);
         });
     }
-  }, [imageFile]);
+  }, [imageFile])
 
+  //TODO entry validation
+  const handleSubmit = () => {
+    // setNftData({...nftData, artist: user.username})
 
-
-  //this is all to handle the image and audio
-  const hiddenAudioInput = useRef(null);
-  const handleAudio = (e) => {
-    hiddenAudioInput.current.click();
-  };
-  const handleAudioChange = (e) => {
-    setAudioFile(e.target.files[0]);
-    setNftData({
-      ...nftData,
-      audioUrl:
-        "https://nftfm-music.s3-us-west-1.amazonaws.com/" +
-        account +
-        "/" +
-        e.target.files[0].name,
-    });
-  };
-
-  const hiddenImageInput = useRef(null);
-  const handleImage = () => {
-    hiddenImageInput.current.click();
-  };
-  const handleImageChange = (e) => {
-    setImageFile(e.target.files[0]);
-    setNftData({
-      ...nftData,
-      imageUrl:
-        "https://nftfm-images.s3-us-west-1.amazonaws.com/" +
-        account +
-        "/" +
-        e.target.files[0].name,
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
     let newNftData = nftData;
     if (curr === "USD") {
       newNftData = {
         ...nftData,
         price: (nftData.price / usdPerEth).toFixed(4),
       };
-    }
-    if (nftData.numMinted === 0) {
-      swal.fire({
-        title: "Created amount cannot be 0.",
-        timer: 5000,
-        icon: "error",
-      })
-      return;
-    }
-    if (nftData.price === 0) {
-      swal.fire({
-        title: "Created amount cannot be 0.",
-        timer: 5000,
-        icon: "error",
-      })
-      return;
-    }
-    if (!imageFile || !audioFile) {
-      swal.fire({
-        title: "Cannot submit without audio and image files.",
-        timer: 5000,
-        icon: "error",
-      })
-      return;
-    }
-    if (!isAudioUploaded || !isImageUploaded) {
-      swal.fire({
-        title: "Please wait for your audio and image files to be processed.",
-        timer: 5000,
-        icon: "error",
-      })
-      return;
     }
 
     setIsLoading(true);
@@ -213,12 +141,42 @@ const CreateForm = ({ setNewNft }) => {
         .catch((err) => console.log(err));
     } else {
       //do something
-      swal.fire({
-        title: ""
-      })
     }
 
     setIsLoading(false);
+  };
+
+  //this is all to handle the image and audio
+  const hiddenAudioInput = useRef(null);
+  const handleAudio = (e) => {
+    hiddenAudioInput.current.click();
+  };
+  const handleAudioChange = (e) => {
+    setAudioFile(e.target.files[0]);
+    setNftData({
+      ...nftData,
+      audioUrl:
+        "https://nftfm-music.s3-us-west-1.amazonaws.com/" +
+        account +
+        "/" +
+        e.target.files[0].name,
+    });
+  };
+
+  const hiddenImageInput = useRef(null);
+  const handleImage = () => {
+    hiddenImageInput.current.click();
+  };
+  const handleImageChange = (e) => {
+    setImageFile(e.target.files[0]);
+    setNftData({
+      ...nftData,
+      imageUrl:
+        "https://nftfm-images.s3-us-west-1.amazonaws.com/" +
+        account +
+        "/" +
+        e.target.files[0].name,
+    });
   };
 
   const updateState = (e) => {
@@ -255,182 +213,182 @@ const CreateForm = ({ setNewNft }) => {
     setImageFile(null);
     setAudioFile(null);
   };
-  // if (isLoading) {
-  //   return (
-  //     <div>
-  //       <h1>Loading...</h1>
-  //     </div>
-  //   );
-  // }
+  if (isLoading) {
+    return (
+      <div>
+        <h1>Loading...</h1>
+      </div>
+    );
+  }
+
+  console.log("imageFile", imageFile);
+
 
   return (
-    <FormContainer onSubmit={(e) => handleSubmit(e)}>
-      <Header>
-        <span>Create NFTs</span>
-        <X src={x} onClick={(e) => hideCreate(e)} />
-      </Header>
-      <Main>
-        <Files>
-          <ImagePreview imageFile={imageFile} />
-        </Files>
-        <Inputs autoComplete="off">
-          <TopInputs>
-            <MediaButtons>
-              <MediaButton onClick={() => handleAudio()}>
-                <span>Upload audio</span>
-                <span>.mp3, .flac</span>
-                <img src={upload_icon} alt="upload-file-icon" />
-              </MediaButton>
-              <StyledInput
-                type="file"
-                accept=".mp3,.flac"
-                ref={hiddenAudioInput}
-                onChange={handleAudioChange}
-                style={{ display: "none" }}
-                defaultValue={audioFile}
-                // required
+      <FormContainer>
+        <Header>
+          <span>Create NFTs</span>
+          <X src={x} onClick={(e) => hideCreate(e)} />
+        </Header>
+        <Main>
+          <Files>
+            <ImagePreview>
+              <Image
+                src={imageFile ? URL.createObjectURL(imageFile) : image}
+                alt="image"
               />
-              <MediaButton onClick={() => handleImage()}>
-                <span>Upload image</span>
-                <span>.png, .jpeg</span>
-                <img src={upload_icon} alt="upload-file-icon" />
-              </MediaButton>
+            </ImagePreview>
+          </Files>
+          <Inputs autoComplete="off">
+            <TopInputs>
               <StyledInput
-                type="file"
-                accept=".jpg,.jpeg,.png,.gif"
-                ref={hiddenImageInput}
-                onChange={handleImageChange}
-                style={{ display: "none" }}
-                defaultValue={imageFile}
-                // required
+                type="text"
+                placeholder="Title"
+                name="title"
+                onChange={(e) => updateState(e)}
+                defaultValue={nftData.title}
               />
-            </MediaButtons>
-            <FileNames>
-              <span>
-                {audioFile?.name.length > 10
-                  ? audioFile?.name.substring(0, 10) +
+              <StyledInput
+                type="text"
+                placeholder="Genre"
+                name="genre"
+                onChange={(e) => updateState(e)}
+                defaultValue={nftData.genre}
+              />
+              <StyledInput
+                type="text"
+                placeholder="Producer"
+                name="producer"
+                onChange={(e) => updateState(e)}
+                defaultValue={nftData.producer}
+              />
+              <StyledInput
+                type="text"
+                placeholder="Writer"
+                name="writer"
+                onChange={(e) => updateState(e)}
+                defaultValue={nftData.writer}
+              />
+            </TopInputs>
+            <MiddleInputs>
+              <StyledDivInput1>
+                <label>NFT Created</label>
+                <StyledNumberInput
+                  className="mint"
+                  type="number"
+                  name="numMinted"
+                  onChange={(e) => updateState(e)}
+                  min="0"
+                  value={nftData.numMinted}
+                />
+                <Spinner>
+                  <ArrowUp
+                    onClick={() =>
+                      setNftData({
+                        ...nftData,
+                        numMinted: Number(nftData.numMinted) + 1,
+                      })
+                    }
+                  />
+                  <ArrowDown
+                    onClick={() =>
+                      nftData.numMinted > 0 &&
+                      setNftData({
+                        ...nftData,
+                        numMinted: Number(nftData.numMinted) - 1,
+                      })
+                    }
+                  />
+                </Spinner>
+              </StyledDivInput1>
+              <StyledDivInput2>
+                <label>
+                  NFT Price /ea &nbsp;
+                  <EthIcon onClick={() => setCurr("ETH")} />{" "}
+                  <UsdIcon onClick={() => setCurr("USD")} />
+                </label>
+                <StyledNumberInput
+                  className="cost"
+                  type="number"
+                  name="price"
+                  onChange={(e) => updateState(e)}
+                  min="0"
+                  value={nftData.price}
+                />
+                <Spinner>
+                  <ArrowUp
+                    onClick={() =>
+                      setNftData({
+                        ...nftData,
+                        price: (Number(nftData.price) + 0.01).toFixed(4),
+                      })
+                    }
+                  />
+                  <ArrowDown
+                    onClick={() =>
+                      nftData.price > 0 &&
+                      setNftData({
+                        ...nftData,
+                        price: (Number(nftData.price) - 0.01).toFixed(4),
+                      })
+                    }
+                  />
+                </Spinner>
+                <span>/{curr}</span>
+              </StyledDivInput2>
+            </MiddleInputs>
+            <BottomInput>
+              <MediaButtons>
+                <MediaButton onClick={() => handleAudio()}>
+                  <span>Upload audio</span>
+                  <span>.mp3, .flac</span>
+                  <img src={upload_icon} alt="upload-file-icon" />
+                </MediaButton>
+                <StyledInput
+                  type="file"
+                  accept=".mp3,.flac"
+                  ref={hiddenAudioInput}
+                  onChange={handleAudioChange}
+                  style={{ display: "none" }}
+                  defaultValue={audioFile}
+                />
+                <MediaButton onClick={() => handleImage()}>
+                  <span>Upload image</span>
+                  <span>.png, .jpeg</span>
+                  <img src={upload_icon} alt="upload-file-icon" />
+                </MediaButton>
+                <StyledInput
+                  type="file"
+                  accept=".jpg,.jpeg,.png,.gif"
+                  ref={hiddenImageInput}
+                  onChange={handleImageChange}
+                  style={{ display: "none" }}
+                  defaultValue={imageFile}
+                />
+              </MediaButtons>
+              <FileNames>
+                <span>
+                  {audioFile?.name.length > 10
+                    ? audioFile?.name.substring(0, 10) +
                     "-" +
                     audioFile?.name.substring(audioFile.name.lastIndexOf("."))
-                  : audioFile?.name}
-              </span>
-              <span>
-                {imageFile?.name.length > 10
-                  ? imageFile?.name.substring(0, 10) +
+                    : audioFile?.name}
+                </span>
+                <span>
+                  {imageFile?.name.length > 10
+                    ? imageFile?.name.substring(0, 10) +
                     "-" +
                     imageFile?.name.substring(imageFile.name.lastIndexOf("."))
-                  : imageFile?.name}
-              </span>
-            </FileNames>
-          </TopInputs>
-          <MiddleInputs>
-            <StyledInput
-              type="text"
-              placeholder="Title"
-              name="title"
-              onChange={(e) => updateState(e)}
-              defaultValue={nftData.title}
-              required
-            />
-            <StyledInput
-              type="text"
-              placeholder="Genre"
-              name="genre"
-              onChange={(e) => updateState(e)}
-              defaultValue={nftData.genre}
-              required
-            />
-            <StyledInput
-              type="text"
-              placeholder="Producer"
-              name="producer"
-              onChange={(e) => updateState(e)}
-              defaultValue={nftData.producer}
-              required
-            />
-            <StyledInput
-              type="text"
-              placeholder="Writer"
-              name="writer"
-              onChange={(e) => updateState(e)}
-              defaultValue={nftData.writer}
-              required
-            />
-          </MiddleInputs>
-          <BottomInput>
-            <StyledDivInput1>
-              <label>NFT Created</label>
-              <StyledNumberInput
-                className="mint"
-                type="number"
-                name="numMinted"
-                onChange={(e) => updateState(e)}
-                min="0"
-                value={nftData.numMinted}
-                required
-              />
-              <Spinner>
-                <ArrowUp
-                  onClick={() =>
-                    setNftData({
-                      ...nftData,
-                      numMinted: Number(nftData.numMinted) + 1,
-                    })
-                  }
-                />
-                <ArrowDown
-                  onClick={() =>
-                    nftData.numMinted > 0 &&
-                    setNftData({
-                      ...nftData,
-                      numMinted: Number(nftData.numMinted) - 1,
-                    })
-                  }
-                />
-              </Spinner>
-            </StyledDivInput1>
-            <StyledDivInput2>
-              <label>
-                NFT Price /ea &nbsp;
-                <EthIcon onClick={() => setCurr("ETH")} />{" "}
-                <UsdIcon onClick={() => setCurr("USD")} />
-              </label>
-              <StyledNumberInput
-                className="cost"
-                type="number"
-                name="price"
-                onChange={(e) => updateState(e)}
-                min="0"
-                value={nftData.price}
-                required
-              />
-              <Spinner>
-                <ArrowUp
-                  onClick={() =>
-                    setNftData({
-                      ...nftData,
-                      price: (Number(nftData.price) + 0.01).toFixed(4),
-                    })
-                  }
-                />
-                <ArrowDown
-                  onClick={() =>
-                    nftData.price > 0 &&
-                    setNftData({
-                      ...nftData,
-                      price: (Number(nftData.price) - 0.01).toFixed(4),
-                    })
-                  }
-                />
-              </Spinner>
-              <span>/{curr}</span>
-            </StyledDivInput2>
-          </BottomInput>
-        </Inputs>
-      </Main>
-      <SubmitButton type="submit">
-        Approve and Create
-      </SubmitButton>
-    </FormContainer>
+                    : imageFile?.name}
+                </span>
+              </FileNames>
+            </BottomInput>
+          </Inputs>
+        </Main>
+        <SubmitButton onClick={() => handleSubmit()}>
+          Approve and Create
+        </SubmitButton>
+      </FormContainer>
   );
 };
 
@@ -474,7 +432,7 @@ const Spinner = styled.div`
   display: flex;
   flex-direction: column;
   position: absolute;
-  bottom: 15px;
+  bottom: 0px;
   right: 5px;
 `;
 
@@ -569,6 +527,48 @@ const StyledInput = styled.input`
   margin-bottom: 5px;
 `;
 
+const TopInputs = styled.div`
+  width: 100%;
+  height: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+`;
+
+const StyledDivInput1 = styled.div`
+  width: 35%;
+  position: relative;
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  & > label {
+    display: flex;
+    align-items: center;
+  }
+`;
+const StyledDivInput2 = styled.div`
+  width: 60%;
+  position: relative;
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  & > span {
+    position: absolute;
+    bottom: 0;
+    right: 20px;
+    color: white;
+  }
+  & > label {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+`;
+
 const StyledNumberInput2 = styled.input`
   width: 100%;
   border: none;
@@ -613,87 +613,29 @@ const StyledNumberInput = styled.input`
   }
 `;
 
-const FileNames = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  /* position: absolute; */
-  left: 0;
-  bottom: -10px;
-  margin-top: 5px;
-  height: 15px;
-  & > span {
-    /* color: ${(props) => props.theme.fontColor.gray}; */
-    color: white;
-    width: 40%;
-    font-size: 0.7rem;
-    text-align: center;
-    opacity: 0.7;
-  }
-`;
-
-const TopInputs = styled.div`
-  width: 100%;
-  height: 30%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  position: relative;
-`;
-
 const MiddleInputs = styled.div`
-  height: 40%;
+  height: 30%;
   width: 100%;
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
   justify-content: space-between;
   color: white;
+  margin-top: 10px;
+  & > label {
+    font-size: 0.8rem;
+  }
 `;
 
 const BottomInput = styled.div`
-  height: 30%;
+  /* height: 20%; */
   width: 100%;
   display: flex;
-  color: white;
-  justify-content: space-between;
-`;
-
-const StyledDivInput1 = styled.div`
-  width: 35%;
-  position: relative;
-  height: 100%;
-  display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  & > label {
-    display: flex;
-    align-items: center;
-  }
-`;
-const StyledDivInput2 = styled.div`
-  width: 60%;
-  position: relative;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  & > span {
-    position: absolute;
-    bottom: 15px;
-    right: 20px;
-    color: white;
-  }
-  & > label {
-    display: flex;
-    align-items: center;
-    position: relative;
-  }
+  /* justify-content: flex-end; */
 `;
 
 const SubmitButton = styled.button`
-  cursor: pointer;
+cursor: pointer;
   width: 100%;
   height: 60px;
   color: white;
@@ -704,6 +646,24 @@ const SubmitButton = styled.button`
   margin-right: auto;
   margin-left: auto;
   margin-top: 20px;
+`;
+
+const FileNames = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  /* position: absolute; */
+  left: 0;
+  bottom: -10px;
+  margin-top: 5px;
+  & > span {
+    /* color: ${(props) => props.theme.fontColor.gray}; */
+    color: white;
+    width: 40%;
+    font-size: 0.7rem;
+    text-align: center;
+    opacity: 0.7;
+  }
 `;
 
 const MediaButton = styled.button`
@@ -741,7 +701,7 @@ const Image = styled.img`
   overflow: hidden;
   object-fit: cover;
 `;
-// const ImagePreview = styled.div``;
+const ImagePreview = styled.div``;
 const Files = styled.div`
   width: 50%;
   /* height: 100%; */
@@ -778,7 +738,7 @@ const Header = styled.div`
   }
 `;
 
-const FormContainer = styled.form`
+const FormContainer = styled.div`
   width: 600px;
   /* height: 600px; */
   border-radius: 15px;

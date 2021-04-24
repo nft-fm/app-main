@@ -41,8 +41,8 @@ const CreateForm = ({ setNewNft }) => {
   const [imageFile, setImageFile] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(false);
   const [curr, setCurr] = useState("ETH");
-  const [isAudioUploaded, setIsAudioUploaded] = useState(false)
-  const [isImageUploaded, setIsImageUploaded] = useState(false)
+  const [isAudioUploaded, setIsAudioUploaded] = useState(false);
+  const [isImageUploaded, setIsImageUploaded] = useState(false);
 
   useEffect(() => {
     user && user.username && setNftData({ ...nftData, artist: user.username });
@@ -69,7 +69,7 @@ const CreateForm = ({ setNewNft }) => {
         })
         .then((res) => {
           if (res.status === 200) {
-            setIsAudioUploaded(true)
+            setIsAudioUploaded(true);
           }
           console.log(res);
         })
@@ -90,7 +90,7 @@ const CreateForm = ({ setNewNft }) => {
         .post("/api/nft-type/uploadImageS3", imageFormData)
         .then((res) => {
           if (res.status === 200) {
-            setIsImageUploaded(true)
+            setIsImageUploaded(true);
           }
           console.log(res);
         })
@@ -101,14 +101,15 @@ const CreateForm = ({ setNewNft }) => {
     }
   }, [imageFile]);
 
-
-
   //this is all to handle the image and audio
   const hiddenAudioInput = useRef(null);
   const handleAudio = (e) => {
     hiddenAudioInput.current.click();
   };
   const handleAudioChange = (e) => {
+    if (!e.target.files[0]) {
+      return;
+    }
     setAudioFile(e.target.files[0]);
     setNftData({
       ...nftData,
@@ -125,6 +126,9 @@ const CreateForm = ({ setNewNft }) => {
     hiddenImageInput.current.click();
   };
   const handleImageChange = (e) => {
+    if (!e.target.files[0]) {
+      return;
+    }
     setImageFile(e.target.files[0]);
     setNftData({
       ...nftData,
@@ -137,7 +141,7 @@ const CreateForm = ({ setNewNft }) => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     let newNftData = nftData;
     if (curr === "USD") {
       newNftData = {
@@ -145,20 +149,28 @@ const CreateForm = ({ setNewNft }) => {
         price: (nftData.price / usdPerEth).toFixed(4),
       };
     }
-    if (nftData.numMinted === 0) {
+    if (newNftData.artist === "") {
+      newNftData = {
+        ...nftData,
+        artist: user.username,
+      };
+    }
+
+    //Input validation below here
+    if (nftData.numMinted === "0" || nftData.numMinted === 0) {
       swal.fire({
         title: "Created amount cannot be 0.",
         timer: 5000,
         icon: "error",
-      })
+      });
       return;
     }
-    if (nftData.price === 0) {
+    if (nftData.price === "0" || nftData.price === 0) {
       swal.fire({
         title: "Created amount cannot be 0.",
         timer: 5000,
         icon: "error",
-      })
+      });
       return;
     }
     if (!imageFile || !audioFile) {
@@ -166,7 +178,7 @@ const CreateForm = ({ setNewNft }) => {
         title: "Cannot submit without audio and image files.",
         timer: 5000,
         icon: "error",
-      })
+      });
       return;
     }
     if (!isAudioUploaded || !isImageUploaded) {
@@ -174,7 +186,7 @@ const CreateForm = ({ setNewNft }) => {
         title: "Please wait for your audio and image files to be processed.",
         timer: 5000,
         icon: "error",
-      })
+      });
       return;
     }
 
@@ -212,10 +224,11 @@ const CreateForm = ({ setNewNft }) => {
         })
         .catch((err) => console.log(err));
     } else {
-      //do something
       swal.fire({
-        title: ""
-      })
+        title: "Error uploading audio or image.",
+        text: "Please refresh the page and try again. If the issues persists, contact NFT FM.",
+        icon: "error",
+      });
     }
 
     setIsLoading(false);
@@ -239,14 +252,6 @@ const CreateForm = ({ setNewNft }) => {
     setNftData({ ...nftData, [e.target.name]: e.target.value });
   };
 
-  // if (!account) {
-  //   return (
-  //     <BaseView>
-  //       <h1>Connect your wallet!!</h1>
-  //     </BaseView>
-  //   );
-  // }
-
   const stopProp = (e) => {
     e.stopPropagation();
   };
@@ -255,16 +260,28 @@ const CreateForm = ({ setNewNft }) => {
     setImageFile(null);
     setAudioFile(null);
   };
-  // if (isLoading) {
-  //   return (
-  //     <div>
-  //       <h1>Loading...</h1>
-  //     </div>
-  //   );
-  // }
+
+  const isComplete = () => {
+    if (nftData.title === "" || 
+    nftData.genre === "" || 
+    nftData.producer === "" || 
+    nftData.writer === "" || 
+    nftData.numMinted === 0 || 
+    nftData.numMinted === "0" || 
+    nftData.numMinted === "" || 
+    nftData.price === 0 || 
+    nftData.price === "0" || 
+    nftData.price === "" || 
+    !isAudioUploaded || 
+    !isImageUploaded) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   return (
-    <FormContainer onSubmit={(e) => handleSubmit(e)}>
+    <FormContainer onSubmit={!isComplete() ? (e) => handleSubmit(e) : null}>
       <Header>
         <span>Create NFTs</span>
         <X src={x} onClick={(e) => hideCreate(e)} />
@@ -276,7 +293,7 @@ const CreateForm = ({ setNewNft }) => {
         <Inputs autoComplete="off">
           <TopInputs>
             <MediaButtons>
-              <MediaButton onClick={() => handleAudio()}>
+              <MediaButton onClick={() => handleAudio()} type="button">
                 <span>Upload audio</span>
                 <span>.mp3, .flac</span>
                 <img src={upload_icon} alt="upload-file-icon" />
@@ -290,7 +307,7 @@ const CreateForm = ({ setNewNft }) => {
                 defaultValue={audioFile}
                 // required
               />
-              <MediaButton onClick={() => handleImage()}>
+              <MediaButton onClick={() => handleImage()} type="button">
                 <span>Upload image</span>
                 <span>.png, .jpeg</span>
                 <img src={upload_icon} alt="upload-file-icon" />
@@ -427,9 +444,7 @@ const CreateForm = ({ setNewNft }) => {
           </BottomInput>
         </Inputs>
       </Main>
-      <SubmitButton type="submit">
-        Approve and Create
-      </SubmitButton>
+      <SubmitButton type="submit" style={!isComplete() ? {filter: "saturate(.2)", cursor: "not-allowed"} : null}>Approve and Create</SubmitButton>
     </FormContainer>
   );
 };
@@ -562,7 +577,7 @@ const CurrencyButtons = styled.div`
 `;
 const StyledInput = styled.input`
   color: white;
-  background-color: ${(props) => props.theme.bgColor};
+  background-color: ${(props) => props.theme.color.box};
   border: none;
   border-bottom: 1px solid ${(props) => props.theme.color.boxBorder};
   outline: none;
@@ -578,7 +593,7 @@ const StyledNumberInput2 = styled.input`
   padding-bottom: 5px;
   margin-top: 20px;
   font-size: ${(props) => props.theme.fontSizes.sm};
-  background-color: ${(props) => props.theme.bgColor};
+  background-color: ${(props) => props.theme.color.box};
   border: none;
   border-bottom: 1px solid ${(props) => props.theme.color.boxBorder};
   outline: none;
@@ -600,7 +615,7 @@ const StyledNumberInput = styled.input`
   padding-bottom: 5px;
   margin-top: 20px;
   font-size: ${(props) => props.theme.fontSizes.xs};
-  background-color: ${(props) => props.theme.bgColor};
+  background-color: ${(props) => props.theme.color.box};
   border: none;
   border-bottom: 2px solid ${(props) => props.theme.color.boxBorder};
   outline: none;
@@ -782,7 +797,7 @@ const FormContainer = styled.form`
   width: 600px;
   /* height: 600px; */
   border-radius: 15px;
-  background-color: ${(props) => props.theme.bgColor};
+  background-color: ${(props) => props.theme.color.box};
   border: 1px solid ${(props) => props.theme.color.boxBorder};
   display: flex;
   flex-direction: column;

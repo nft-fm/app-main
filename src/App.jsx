@@ -14,6 +14,7 @@ import Profile from './views/Profile'
 import Login from './views/Login/Login';
 import Register from './views/Register';
 import Discover from "./views/Discover";
+import Create from "./views/Create";
 import isMobile from "./utils/isMobile";
 import theme from './theme'
 import Error404 from "./views/404";
@@ -37,6 +38,9 @@ const App = () => {
             </Route>
             <Route path="/profile" exact>
               <Profile />
+            </Route>
+            <Route path="/create">
+              <Create />
             </Route>
             <Route path="/discover">
               <Discover />

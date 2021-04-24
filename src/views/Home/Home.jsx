@@ -109,36 +109,6 @@ const Listen = () => {
           <ContainerOutline />
           <FAQ />
         </LaunchContainer>
-
-        {/* <Container>
-          <ContainerTitle>
-            <text style={{ "color": "#5c5c5c" }}>Frequently Asked Questions</text>
-          </ContainerTitle>
-          <ContainerOutline />
-          <FaqsContainer>
-            <FaqsColumn>
-              <FaqQuestion> Q: Does Quinn's cat have smelly feet?</FaqQuestion>
-              <FaqAnswer>A : Yes it is perfectly possible they have smelly feet, We will only be able to confirm this after launch</FaqAnswer>
-              <FaqQuestion> Q: Does Quinn's cat have smelly feet?</FaqQuestion>
-              <FaqAnswer>A : Yes it is perfectly possible they have smelly feet, We will only be able to confirm this after launch</FaqAnswer>
-              <FaqQuestion> Q: Does Quinn's cat have smelly feet?</FaqQuestion>
-              <FaqAnswer>A : Yes it is perfectly possible they have smelly feet, We will only be able to confirm this after launch</FaqAnswer>
-            {/* </FaqsColumn>
-            <FaqsColumn> 
-              <FaqQuestion> Q: Does Quinn's cat have smelly feet?</FaqQuestion>
-              <FaqAnswer>A : Yes it is perfectly possible they have smelly feet, We will only be able to confirm this after launch</FaqAnswer>
-              <FaqQuestion> Q: Does Quinn's cat have smelly feet?</FaqQuestion>
-              <FaqAnswer>A : Yes it is perfectly possible they have smelly feet, We will only be able to confirm this after launch</FaqAnswer>
-              <FaqQuestion> Q: Does Quinn's cat have smelly feet?</FaqQuestion>
-              <FaqAnswer>A : Yes it is perfectly possible they have smelly feet, We will only be able to confirm this after launch</FaqAnswer>
-            </FaqsColumn>
-            <FaqsColumn>
-              <div style={{ "color": "white" }}>
-                Insert photo and styled box
-              </div>
-            </FaqsColumn>
-          </FaqsContainer>
-        </Container> */}
       </BaseView>
     </Switch>
   );
@@ -165,6 +135,9 @@ height: 4px;
 border-radius: 2px;
 background-color: ${props => props.theme.color.boxBorder};
 margin-bottom: 80px;
+@media only screen and (max-width: 776px) {
+    display: none;
+  }
 `
 
 const LaunchFeaturesHeader = styled.h3`
@@ -236,6 +209,9 @@ const StyledSubHeader = styled.h2`
   color: white;
   font-family: "Compita";
   margin: 0 0 24px 32px;
+  @media only screen and (max-width: 776px) {
+    display: none;
+  }
 `;
 
 const StyledHeader = styled.h1`

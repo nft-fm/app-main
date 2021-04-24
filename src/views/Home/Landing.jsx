@@ -46,15 +46,14 @@ const Listen = () => {
         </NftFmTagline>
       </LandingTitle>
       <LaunchContainer>
-        <ContainerOutline />
         <ContainerTitle>
           PROUD TO
-          <div>
-          <ContainerTitleText style={{ "color": "#20a4fc" }}>{`LAUNCH`}</ContainerTitleText>
-          <ContainerTitleText style={{ "color": "#fde404" }}>{`ALONGSIDE`}</ContainerTitleText>
-          <ContainerTitleText style={{ "color": "#68c12f" }}>{`AMAZING`}</ContainerTitleText>
-          <ContainerTitleText style={{ "color": "#fa423e" }}>{`ARTISTS`}</ContainerTitleText>
-          </div>
+          <ContainerTitleTextContainer>
+            <ContainerTitleText style={{ "color": "#20a4fc" }}>{`LAUNCH`}</ContainerTitleText>
+            <ContainerTitleText style={{ "color": "#fde404" }}>{`ALONGSIDE`}</ContainerTitleText>
+            <ContainerTitleText style={{ "color": "#68c12f" }}>{`AMAZING`}</ContainerTitleText>
+            <ContainerTitleText style={{ "color": "#fa423e" }}>{`ARTISTS`}</ContainerTitleText>
+          </ContainerTitleTextContainer>
         </ContainerTitle>
         <NftScroll> {nfts} </NftScroll>
       </LaunchContainer>
@@ -87,6 +86,12 @@ const Listen = () => {
     </Landing >
   );
 };
+
+const ContainerTitleTextContainer = styled.div`
+@media only screen and (max-width: 776px) {
+  margin-top: 6px;
+  }
+`
 
 const FillerCard = styled.div`
 width: 226px;
@@ -198,7 +203,8 @@ const SocialsBar = styled.div`
     flex-direction: column;
     width: 100%;
     align-items: center;
-    margin-bottom: 40px;
+    margin-top: 40px;
+    margin-bottom: 80px;
     & > * {
       margin-bottom: 16px;
     }
@@ -249,20 +255,6 @@ const ContainerTitle = styled.span`
     margin-top: 20px;
     margin-bottom: 20px;
     }
-`;
-
-const ContainerOutline = styled.div`
-  border-radius: 24px 24px 0 0;
-  border: 6px solid #383838;
-  border-bottom: none;
-  height: 40px;
-  width: 80%;
-  display: flex;
-  flex-direction: row;
-  @media only screen and (max-width: 776px) {
-    width: 100%;
-    border-radius: 0;
-  }
 `;
 
 const Logo = styled.img`

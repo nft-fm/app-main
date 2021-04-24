@@ -46,6 +46,7 @@ const Listen = () => {
         </NftFmTagline>
       </LandingTitle>
       <LaunchContainer>
+
         <ContainerTitle>
           PROUD TO
           <ContainerTitleTextContainer>
@@ -55,6 +56,7 @@ const Listen = () => {
             <ContainerTitleText style={{ "color": "#fa423e" }}>{`ARTISTS`}</ContainerTitleText>
           </ContainerTitleTextContainer>
         </ContainerTitle>
+        <ContainerOutline />
         <NftScroll> {nfts} </NftScroll>
       </LaunchContainer>
       <SocialsBar>
@@ -255,6 +257,18 @@ const ContainerTitle = styled.span`
     margin-top: 20px;
     margin-bottom: 20px;
     }
+`;
+const ContainerOutline = styled.div`
+  border-radius: 24px 24px 0 0;
+  border: 6px solid #383838;
+  border-bottom: none;
+  height: 40px;
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  @media only screen and (max-width: 776px) {
+    display: none;
+  }
 `;
 
 const Logo = styled.img`

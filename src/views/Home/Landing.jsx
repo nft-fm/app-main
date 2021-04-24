@@ -46,14 +46,16 @@ const Listen = () => {
         </NftFmTagline>
       </LandingTitle>
       <LaunchContainer>
+        <ContainerOutline />
         <ContainerTitle>
           PROUD TO
+          <div>
           <ContainerTitleText style={{ "color": "#20a4fc" }}>{`LAUNCH`}</ContainerTitleText>
           <ContainerTitleText style={{ "color": "#fde404" }}>{`ALONGSIDE`}</ContainerTitleText>
           <ContainerTitleText style={{ "color": "#68c12f" }}>{`AMAZING`}</ContainerTitleText>
           <ContainerTitleText style={{ "color": "#fa423e" }}>{`ARTISTS`}</ContainerTitleText>
+          </div>
         </ContainerTitle>
-        <ContainerOutline />
         <NftScroll> {nfts} </NftScroll>
       </LaunchContainer>
       <SocialsBar>
@@ -214,21 +216,6 @@ justify-content: space-between;
     width: 100%;
     align-items: center;
   }
-/* @media only screen and (max-width: 1500px) {
-  & > * {
-    &:nth-last-child(1) {
-        display: none;
-   }}}
-   @media only screen and (max-width: 1191px) {
-  & > * {
-    &:nth-last-child(2) {
-        display: none;
-   }}}
-   @media only screen and (max-width: 890px) {
-  & > * {
-    &:nth-last-child(3) {
-        display: none;
-   }}} */
 `;
 
 const LaunchContainer = styled.div`
@@ -256,10 +243,12 @@ const ContainerTitle = styled.span`
   align-items: center;
   @media only screen and (max-width: 776px) {
     position: relative;
-    left: 0;
-    border-bottom: 1px solid;
-    padding-bottom: 6px
-  }
+    flex-direction: column;
+    left: auto;
+    right: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    }
 `;
 
 const ContainerOutline = styled.div`
@@ -271,7 +260,8 @@ const ContainerOutline = styled.div`
   display: flex;
   flex-direction: row;
   @media only screen and (max-width: 776px) {
-    border: none;
+    width: 100%;
+    border-radius: 0;
   }
 `;
 
@@ -295,7 +285,7 @@ const NftFmTagline = styled.div`
   font-size: large;
   color: white;
   text-align: center;
-  text-wrap: wrap;
+  white-space: wrap;
 `;
 
 export default Listen;

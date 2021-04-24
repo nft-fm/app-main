@@ -1,3 +1,4 @@
+const { BigNumber } = require("ethers");
 const { AnalyticsExportDestination } = require('@aws-sdk/client-s3');
 const express = require('express')
 const { flushSync } = require('react-dom')
@@ -5,6 +6,8 @@ const router = express.Router()
 const NftType = require('../schemas/NftType.schema')
 const multer = require('multer');
 const User = require('../schemas/User.schema');
+const { sign } = require('../web3/server-utils');
+const { NFTSale } = require('../web3/constants');
 
 const findLikes = (nfts, account) => {
   for (let i = 0; i < nfts.length; i++) {
@@ -65,14 +68,27 @@ router.post('/get-user-nfts', async (req, res) => {
 
 router.post('/update', async (req, res) => {
   try {
-    console.log("updating? ", req.body);
     let newData = req.body;
     newData.isDraft = false;
 
+    console.log("REQ BODY", req.body)
     let updateNFT = await NftType.findByIdAndUpdate(newData._id, newData)
     if (updateNFT) {
-      res.status(200).send("success")
+      console.log("Nft sale", NFTSale)
+      const startTime = Date.now();
+      const price = BigNumber.from(newData.price);
+      const signature = sign(newData.address, newData.numMinted, price, startTime, NFTSale);
+
+      res.status(200).send({...signature,
+        amount: newData.numMinted,
+        price: price,
+        address: newData.address,
+        startTime: startTime,
+        saleAddress: NFTSale,
+        databaseID: newData._id
+      })
     } else {
+      console.log("no nft");
       res.status(500).json('error')
     }
   } catch (error) {

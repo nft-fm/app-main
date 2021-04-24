@@ -3,6 +3,9 @@ import { Contract, utils, providers, constants, BigNumber, getDefaultProvider } 
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import isMobile from "../utils/isMobile";
 
+import { NFTToken, NFTSale } from "./constants"
+import NFTTokenABI from "./abi/NFTToken.abi.js";
+
 export const require = async (statement, error) => {
 	let provider;
 	let walletAddress;
@@ -36,3 +39,20 @@ export const require = async (statement, error) => {
 	}
 	return { provider, walletAddress }
 }
+
+export const mintNFT = async (data, pendingCallback, finalCallback) => {
+	const { provider, walletAddress  } = await require()
+	const signer = provider.getSigner();
+	console.log("SIGNER", signer)
+	let contract = new Contract(NFTToken, NFTTokenABI, signer);
+	console.log("DATA", data);
+	let result = await contract.mintAndStake(data.amount, data.price, data.startTime, NFTSale , data.databaseID, parseInt(data.v), data.r, data.s)
+		.then(res => {
+		console.log("HERE", res);
+		pendingCallback();
+		return res.wait();
+	})
+	console.log("redeem nft result", result);
+	finalCallback(result)
+}
+

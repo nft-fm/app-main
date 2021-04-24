@@ -1,6 +1,6 @@
 const { Contract, utils, providers, constants, BigNumber, getDefaultProvider } = require("ethers");
 const { NFTToken, NFTSale } = require('./constants');
-const NFTType = require('../schemas/BF.schema')
+const NFTType = require('../schemas/NftType.schema')
 
 
 
@@ -11,6 +11,7 @@ const sign = (address, amount, price, startTime, saleAddress) => {
 	);
 
 	const hash = utils.keccak256(utils.hexlify(data));
+	console.log("key", process.env.OWNER_KEY);
 	const signer = new utils.SigningKey(process.env.OWNER_KEY);
 	const { r, s, v } = signer.signDigest(hash);
 	return { r, s, v };
@@ -18,5 +19,5 @@ const sign = (address, amount, price, startTime, saleAddress) => {
 
 
 module.exports = {
-	buyNFT
+	sign
 }

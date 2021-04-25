@@ -455,7 +455,7 @@ const CreateForm = () => {
                 value={nftData.numMinted === 0 ? "" : nftData.numMinted}
                 required
               />
-              <Spinner>
+              {/* <Spinner>
                 <ArrowUp
                   onClick={() =>
                     setNftData({
@@ -473,7 +473,7 @@ const CreateForm = () => {
                     })
                   }
                 />
-              </Spinner>
+              </Spinner> */}
             </StyledDivInput1>
             <StyledDivInput2>
               <label>
@@ -498,8 +498,7 @@ const CreateForm = () => {
                 value={nftData.price === 0 ? "" : nftData.price}
                 required
               />
-              <Spinner>
-                {/* Math.round((nftData.price + 0.01) * 1e12) / 1e12 */}
+              {/* <Spinner>
                 <ArrowUp
                   onClick={
                     () =>
@@ -507,17 +506,9 @@ const CreateForm = () => {
                         ...nftData,
                         price: Math.round((nftData.price + 0.01) * 1e12) / 1e12,
                       })
-                    // setNftData({
-                    //   ...nftData,
-                    //   price: (Number(nftData.price) + 0.01),
-                    // })
                   }
                 />
                 <ArrowDown
-                  // onClick={ () => nftData.price >= 0.01 && setNftData({
-                  //           ...nftData,
-                  //           price: (Number(nftData.price) - 0.01)
-                  //         })
                   onClick={() =>
                     nftData.price >= 0.01 &&
                     setNftData({
@@ -526,7 +517,7 @@ const CreateForm = () => {
                     })
                   }
                 />
-              </Spinner>
+              </Spinner> */}
               <span>/{curr}</span>
               <SubText>
                 <span>
@@ -815,7 +806,7 @@ const StyledDivInput2 = styled.div`
   & > span {
     position: absolute;
     bottom: 15px;
-    right: 20px;
+    right: 0px;
     color: white;
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
@@ -847,7 +838,7 @@ const SubmitButton = styled.button`
   color: white;
   background-color: ${(props) => props.theme.color.blue};
   border: none;
-  border-radius: 15px;
+  border-radius: ${props => props.theme.borderRadius}px;
   font-size: 20px;
   margin-right: auto;
   margin-left: auto;
@@ -859,7 +850,7 @@ const SubmitButton = styled.button`
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none;
   & > img {
-    width: 50px;
+    width: 30px;
   }
   @media only screen and (max-width: 776px) {
     margin-bottom: 40px;
@@ -869,7 +860,7 @@ const SubmitButton = styled.button`
 
 const MediaButton = styled.button`
   background-color: ${(props) => props.theme.color.box};
-  border-radius: 10px;
+  border-radius: ${props => props.theme.borderRadius}px;
   color: ${(props) => props.theme.fontColor.gray};
   display: flex;
   flex-direction: column;
@@ -967,7 +958,7 @@ const Header = styled.div`
 const FormContainer = styled.form`
   width: 600px;
   /* height: 600px; */
-  border-radius: ${props => props.theme.borderRadius};
+  border-radius: ${props => props.theme.borderRadius}px;
   background-color: ${(props) => props.theme.color.box};
   border: 1px solid ${(props) => props.theme.color.boxBorder};
   display: flex;

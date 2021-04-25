@@ -59,15 +59,15 @@ letter-spacing: normal;
 display: flex;
 align-items: center;
 transition: all 0.2s ease-in-out;
-color: black;
+color: white;
   text-transform: uppercase;
-  border: 4px solid #000;
+  border: 1px solid ${props => props.theme.color.red};
   position: relative;
   padding: 12px;
   width: fit-content;
+          background-color: #181818;
 &:hover {
-          color: black;
-          background-color: ${props => props.theme.color.gray};
+          background-color: rgba(256,256,256,0.2);
     background-size: 12px, 100%;
     font-size: 32px;
   }
@@ -80,7 +80,7 @@ font-stretch: normal;
 font-style: normal;
 letter-spacing: normal;
 text-align: center;
-color: #fef9ed;
+color: white;
 ` : styled.div`
 font-size: 40px;
 font-weight: normal;
@@ -88,7 +88,7 @@ font-stretch: normal;
 font-style: normal;
 letter-spacing: normal;
 text-align: center;
-color: #fef9ed;
+color: white;
 `
 
 const HeaderText = !isMobile() ? styled.div`
@@ -99,7 +99,7 @@ font-style: normal;
 line-height: 1.07;
 letter-spacing: normal;
 text-align: center;
-color: #fef9ed;
+color: white;
 margin-top: 14vh;
 ` : styled.div`
 font-size: 160px;
@@ -109,7 +109,7 @@ font-style: normal;
 line-height: 1.07;
 letter-spacing: normal;
 text-align: center;
-color: #fef9ed;
+color: white;
 margin-top: 12vh;
 `
 

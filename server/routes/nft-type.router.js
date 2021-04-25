@@ -74,7 +74,7 @@ router.post('/finalize', async (req, res) => {
 
     let updateNFT = await NftType.findByIdAndUpdate(newData._id, newData)
     if (updateNFT) {
-      const startTime = Date.now();
+      const startTime = 0;
       // const price = BigNumber.from(newData.price.mul(constants.WeiPerEther));
       const price = utils.parseUnits(newData.price);
       const signature = sign(newData.address, newData.numMinted, price, startTime, NFTSale);

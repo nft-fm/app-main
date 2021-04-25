@@ -6,6 +6,7 @@ const NftType = require("../schemas/NftType.schema");
 
 
 const listenForMint = async () => {
+	console.log("ACTIVATE LISTEN FOR MINT")
 	let provider = new providers.WebSocketProvider(process.env.WSS_PROVIDER_URL);
 	let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
 	const contract = new Contract(NFTToken, NFTTokenABI, walletWithProvider);
@@ -16,6 +17,9 @@ const listenForMint = async () => {
 
 		console.log("mint and stake listened", event[0]);
 		await NftType.findByIdAndUpdate(event[0].args.databaseID.toString(), { isMinted: true, nftId: event[0].args.nftID })
+			.catch(err => {
+				console.log(err);
+			})
 	})
 };
 

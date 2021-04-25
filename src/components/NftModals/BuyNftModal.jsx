@@ -27,7 +27,8 @@ const BuyNftModal = ({ open, children, hide, onClose, nft, liked, setLiked, like
 
   const purchase = async (id) => {
     setIsLoading(true);
-    await buyNFT({ nftId: id, ammount: 1, saleId: nft.saleId }, () => { console.log("pending") }, () => {
+
+    await buyNFT({ nftID: id, amount: 1, saleId: nft.nftId, account: account }, () => { console.log("pending") }, () => {
       axios
         .post("/api/nft-type/purchase", { id: id, address: account })
         .then((res) => {

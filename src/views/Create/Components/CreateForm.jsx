@@ -310,18 +310,11 @@ const CreateForm = ({ setNewNft }) => {
         <Inputs autoComplete="off">
           <TopInputs>
             <MediaButtons>
-              {audioFile && !isAudioUploaded ? (
-                <MediaButton type="button">
-                <Loading src={loading_gif} alt="loading" />
-                </MediaButton>
-              ) : (
                 <MediaButton onClick={() => handleAudio()} type="button">
                   <span>Upload audio</span>
                   <span>.mp3, .flac</span>
-                  <img src={upload_icon} alt="upload-file-icon" />
+                  {audioFile && !isAudioUploaded ? <img src={loading_gif} alt="loading" /> : <img src={upload_icon} alt="upload-file-icon" />}
                 </MediaButton>
-              )}
-
               <StyledInput
                 type="file"
                 accept=".mp3,.flac"
@@ -331,17 +324,11 @@ const CreateForm = ({ setNewNft }) => {
                 defaultValue={audioFile}
                 // required
               />
-              {audioFile && !isAudioUploaded ? (
-                <MediaButton type="button">
-                <Loading src={loading_gif} alt="loading" />
-                </MediaButton>
-              ) : (
                 <MediaButton onClick={() => handleImage()} type="button">
                   <span>Upload image</span>
                   <span>.png, .jpeg, .gif</span>
-                  <img src={upload_icon} alt="upload-file-icon" />
+                  {imageFile && !isImageUploaded ? <img src={loading_gif} alt="loading" /> : <img src={upload_icon} alt="upload-file-icon" />}
                 </MediaButton>
-              )}
               <StyledInput
                 type="file"
                 accept=".jpg,.jpeg,.png,.gif"
@@ -405,7 +392,7 @@ const CreateForm = ({ setNewNft }) => {
           </MiddleInputs>
           <BottomInput>
             <StyledDivInput1>
-              <label>NFT Created</label>
+              <label>Total Copies</label>
               <StyledNumberInput
                 className="mint"
                 type="number"
@@ -447,6 +434,7 @@ const CreateForm = ({ setNewNft }) => {
                 name="price"
                 onChange={(e) => updateState(e)}
                 min="0"
+                step="0.0001"
                 value={nftData.price}
                 required
               />
@@ -487,13 +475,6 @@ const CreateForm = ({ setNewNft }) => {
     </FormContainer>
   );
 };
-
-const Loading = styled.img`
-width: 30px;
-aspect-ratio: 1;
-margin-top: auto;
-margin-bottom: auto;
-`
 
 const EthIcon = styled(eth_icon)`
   width: 20px;
@@ -748,6 +729,7 @@ const SubmitButton = styled.button`
   }
 `;
 
+
 const MediaButton = styled.button`
   background-color: ${(props) => props.theme.color.box};
   border-radius: 10px;
@@ -760,8 +742,10 @@ const MediaButton = styled.button`
   cursor: pointer;
   /* margin-top: 30px; */
   /* position: relative; */
+  /* height: 50px; */
   width: 40%;
   & > img {
+    margin-top: 5px;
     height: 20px;
     opacity: 0.5;
   }

@@ -847,7 +847,7 @@ const SubmitButton = styled.button`
   color: white;
   background-color: ${(props) => props.theme.color.blue};
   border: none;
-  border-radius: 15px;
+  border-radius: ${props => props.theme.borderRadius}px;
   font-size: 20px;
   margin-right: auto;
   margin-left: auto;
@@ -859,7 +859,7 @@ const SubmitButton = styled.button`
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none;
   & > img {
-    width: 50px;
+    width: 30px;
   }
   @media only screen and (max-width: 776px) {
     margin-bottom: 40px;
@@ -869,7 +869,7 @@ const SubmitButton = styled.button`
 
 const MediaButton = styled.button`
   background-color: ${(props) => props.theme.color.box};
-  border-radius: 10px;
+  border-radius: ${props => props.theme.borderRadius}px;
   color: ${(props) => props.theme.fontColor.gray};
   display: flex;
   flex-direction: column;
@@ -967,7 +967,7 @@ const Header = styled.div`
 const FormContainer = styled.form`
   width: 600px;
   /* height: 600px; */
-  border-radius: ${props => props.theme.borderRadius};
+  border-radius: ${props => props.theme.borderRadius}px;
   background-color: ${(props) => props.theme.color.box};
   border: 1px solid ${(props) => props.theme.color.boxBorder};
   display: flex;

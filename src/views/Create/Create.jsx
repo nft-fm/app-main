@@ -156,7 +156,7 @@ const IsConnected = styled.div`
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
-  position: absolute;
+  /* position: absolute; */
   z-index: 11;
 `;
 

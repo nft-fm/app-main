@@ -136,12 +136,12 @@ const Profile = () => {
             </ProfileInfoHolder>
           </ProfileHolder>
           <Side>
-            <SideSpan>
+            {/* <SideSpan>
               12 <BlueSpan>/NFTs</BlueSpan>
             </SideSpan>
             <SideSpan>
               8 <BlueSpan>Traded</BlueSpan>
-            </SideSpan>
+            </SideSpan> */}
           </Side>
         </ProfileHeading>
       </Landing>

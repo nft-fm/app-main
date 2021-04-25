@@ -73,13 +73,13 @@ const BuyNftModal = ({ open, children, hide, onClose, nft, setIsShareOpen }) => 
             <Artist>{nft.artist}</Artist>
           </InfoContainer>
           <StatsContainer>
-            <span>Earnings</span>
             <br />
+            <span>Earnings</span>
             <span>Eth: {nft.x_numSold * nft.price} </span>
             <span> USD: ${(nft.x_numSold * nft.price * usdPerEth).toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}</span>
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}</span>
           </StatsContainer>
         </StyledModal>
       </Container>

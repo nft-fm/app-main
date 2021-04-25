@@ -31,9 +31,8 @@ const NftCard = (props) => {
   })
   const [isOpen, setIsOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
-  const [liked, setLiked] = useState(props.liked);
-  const [likeCount, setLikeCount] = useState(props.nft.likeCount);
-
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
   const show = () => setIsOpen(true);
   const hide = (e) => {
     setIsOpen(false);
@@ -41,8 +40,8 @@ const NftCard = (props) => {
 
   useEffect(() => {
     setNft(props.nft);
-    setLiked(nft.liked);
-    setLikeCount(nft.likeCount);
+    setLiked(props.nft.liked);
+    setLikeCount(props.nft.likeCount);
   }, [props, user]);
 
   useEffect(() => {

@@ -40,6 +40,11 @@ const StyledLink = styled(NavLink)`
     text-decoration-thickness: 1px;
     color: white;
   }
+  @media only screen and (max-width: 776px) {
+    &:last-child{
+      padding-right: 0px;
+    }
+  }
 `;
 
 

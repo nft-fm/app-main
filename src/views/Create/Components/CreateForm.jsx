@@ -17,7 +17,7 @@ import { ReactComponent as arrow } from "../../../assets/img/icons/arrow_cropped
 import ImagePreview from "./ImagePreview";
 
 import { useAccountConsumer } from "../../../contexts/Account";
-import {mintNFT} from "../../../web3/utils";
+import { mintNFT } from "../../../web3/utils";
 
 const initialNftState = {
   artist: "",
@@ -144,17 +144,17 @@ const CreateForm = ({ setNewNft }) => {
 
   const isComplete = () => {
     if (nftData.title === "" ||
-    nftData.genre === "" ||
-    nftData.producer === "" ||
-    nftData.writer === "" ||
-    nftData.numMinted === 0 ||
-    nftData.numMinted === "0" ||
-    nftData.numMinted === "" ||
-    nftData.price === 0 ||
-    nftData.price === "0" ||
-    nftData.price === "" ||
-    !isAudioUploaded ||
-    !isImageUploaded) {
+      nftData.genre === "" ||
+      nftData.producer === "" ||
+      nftData.writer === "" ||
+      nftData.numMinted === 0 ||
+      nftData.numMinted === "0" ||
+      nftData.numMinted === "" ||
+      nftData.price === 0 ||
+      nftData.price === "0" ||
+      nftData.price === "" ||
+      !isAudioUploaded ||
+      !isImageUploaded) {
       return false;
     } else {
       return true;
@@ -316,7 +316,7 @@ const CreateForm = ({ setNewNft }) => {
                 onChange={handleAudioChange}
                 style={{ display: "none" }}
                 defaultValue={audioFile}
-                // required
+              // required
               />
               <MediaButton onClick={() => handleImage()} type="button">
                 <span>Upload image</span>
@@ -330,22 +330,22 @@ const CreateForm = ({ setNewNft }) => {
                 onChange={handleImageChange}
                 style={{ display: "none" }}
                 defaultValue={imageFile}
-                // required
+              // required
               />
             </MediaButtons>
             <FileNames>
               <span>
                 {audioFile?.name.length > 10
                   ? audioFile?.name.substring(0, 10) +
-                    "-" +
-                    audioFile?.name.substring(audioFile.name.lastIndexOf("."))
+                  "-" +
+                  audioFile?.name.substring(audioFile.name.lastIndexOf("."))
                   : audioFile?.name}
               </span>
               <span>
                 {imageFile?.name.length > 10
                   ? imageFile?.name.substring(0, 10) +
-                    "-" +
-                    imageFile?.name.substring(imageFile.name.lastIndexOf("."))
+                  "-" +
+                  imageFile?.name.substring(imageFile.name.lastIndexOf("."))
                   : imageFile?.name}
               </span>
             </FileNames>
@@ -455,7 +455,7 @@ const CreateForm = ({ setNewNft }) => {
           </BottomInput>
         </Inputs>
       </Main>
-      <SubmitButton type="submit" style={!isComplete() ? {filter: "saturate(.2)", cursor: "not-allowed"} : null}>Approve and Create</SubmitButton>
+      <SubmitButton type="submit" style={!isComplete() ? { filter: "saturate(.2)", cursor: "not-allowed" } : null}>Approve and Create</SubmitButton>
     </FormContainer>
   );
 };

@@ -15,27 +15,27 @@ const Create = () => {
   const { account, connect, user, setUser, usdPerEth } = useAccountConsumer();
   return (
     <BaseView>
-    {!account && (
-      <IsConnected>
-        <GetConnected>
-          <ConnectButton onClick={() => connect("injected")}>
-            <MetaMask src={IconMetamask} />
-            <ButtonText>Connect Wallet</ButtonText>
-          </ConnectButton>
-        </GetConnected>
-      </IsConnected>
-    )}
-    {user && !user?.username && (
-      <IsConnected>
-        <GetConnectedNav>
-          <span>Head to the Profile page and set a username. Then you can start making NFT's!</span>
-          <ConnectNavLink to="/profile">
-            <ButtonTextNav>Profiles</ButtonTextNav>
-          </ConnectNavLink>
-        </GetConnectedNav>
-      </IsConnected>
-    )}
-     <CreateForm />
+      {!account && (
+        <IsConnected>
+          <GetConnected>
+            <ConnectButton onClick={() => connect("injected")}>
+              <MetaMask src={IconMetamask} />
+              <ButtonText>Connect Wallet</ButtonText>
+            </ConnectButton>
+          </GetConnected>
+        </IsConnected>
+      )}
+      {user && !user?.username && (
+        <IsConnected>
+          <GetConnectedNav>
+            <span>Head to the Profile page and set a username. Then you can start making NFT's!</span>
+            <ConnectNavLink to="/profile">
+              <ButtonTextNav>Profiles</ButtonTextNav>
+            </ConnectNavLink>
+          </GetConnectedNav>
+        </IsConnected>
+      )}
+      <CreateForm />
     </BaseView>
   );
 };
@@ -140,7 +140,7 @@ const IsConnected = styled.div`
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
-  position: absolute;
+  /* position: absolute; */
   z-index: 11;
 `;
 

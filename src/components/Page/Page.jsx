@@ -26,7 +26,7 @@ const NavContainer = styled.div`
     width: 100%;
     align-items: center;
     justify-content: center;
-    padding: 12px 0 0 32px;
+    padding: 12px 0 0 0px;
   }
 `
 

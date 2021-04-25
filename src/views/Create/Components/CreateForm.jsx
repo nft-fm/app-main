@@ -34,7 +34,7 @@ const initialNftState = {
   audioUrl: "",
 };
 
-const CreateForm = ({ setNewNft }) => {
+const CreateForm = () => {
   const { account, user, setUser, usdPerEth } = useAccountConsumer();
   const [isLoading, setIsLoading] = useState(false);
   const [nftData, setNftData] = useState(initialNftState);
@@ -106,6 +106,8 @@ const CreateForm = ({ setNewNft }) => {
   //this is all to handle the image and audio
   const hiddenAudioInput = useRef(null);
   const handleAudio = (e) => {
+    setIsImageUploaded(null);
+    setAudioFile(null);
     hiddenAudioInput.current.click();
   };
   const handleAudioChange = (e) => {
@@ -125,6 +127,8 @@ const CreateForm = ({ setNewNft }) => {
 
   const hiddenImageInput = useRef(null);
   const handleImage = () => {
+    setIsImageUploaded(null);
+    setImageFile(null);
     hiddenImageInput.current.click();
   };
   const handleImageChange = (e) => {
@@ -222,7 +226,6 @@ const CreateForm = ({ setNewNft }) => {
     }
     console.log();
 
-    setIsLoading(true);
     //run these two, store the returns in the nftData state object
     console.log("here");
     if (!audioUploadError && !imageUploadError) {
@@ -233,23 +236,28 @@ const CreateForm = ({ setNewNft }) => {
           console.log("finalize res", res);
 
           if (res.status === 200) {
+            mintNFT(
+              res.data,
+              () => {
+                console.log("pending...");
+                setIsLoading(true);
+              },
+              () => {
+                console.log("final");
             setNftData(initialNftState);
             setImageFile(null);
             setAudioFile(null);
-            mintNFT(
-              res.data,
-              () => console.log("pending..."),
-              () => console.log("final")
+                setIsLoading(false);
+                swal.fire({
+                  title: "NFT Minted!",
+                  text: "See the new NFT in your Library. Redirecting in 3 seconds.",
+                  timer: 3000,
+                }).then(() => window.location ="/library");
+              }
             );
             console.log("MINT");
-            /*swal.fire({
-              title: "Success!",
-              background: `#000`,
-              boxShadow: `24px 24px 48px -24px #131313`,
-              text: "Nft successfully created!",
-            });
-            setNewNft(true);*/
           } else {
+            setIsLoading(false);
             swal.fire({
               title: "Error",
               background: `#000`,
@@ -258,8 +266,17 @@ const CreateForm = ({ setNewNft }) => {
             });
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          setIsLoading(false);
+          swal.fire({
+            title: "Error",
+            background: `#000`,
+            boxShadow: `24px 24px 48px -24px #131313`,
+            text: "Nft creation failed, please try again.",
+          });
+        });
     } else {
+      setIsLoading(false);
       swal.fire({
         title: "Error uploading audio or image.",
         text:
@@ -276,12 +293,12 @@ const CreateForm = ({ setNewNft }) => {
       if (curr === "USD") {
         setNftData({
           ...nftData,
-          price: (nftData.price * usdPerEth),
+          price: nftData.price * usdPerEth,
         });
       } else {
         setNftData({
           ...nftData,
-          price: (nftData.price / usdPerEth),
+          price: nftData.price / usdPerEth,
         });
       }
     }
@@ -299,7 +316,7 @@ const CreateForm = ({ setNewNft }) => {
       if (curr === "ETH" && Number(e.target.value) > 1000) {
         return;
       }
-      if (curr === "USD" && Number(e.target.value) > (1000 * usdPerEth)) {
+      if (curr === "USD" && Number(e.target.value) > 1000 * usdPerEth) {
         return;
       }
     }
@@ -432,7 +449,7 @@ const CreateForm = ({ setNewNft }) => {
                 name="numMinted"
                 onChange={(e) => updateState(e)}
                 min="0"
-                value={nftData.numMinted}
+                value={nftData.numMinted === 0 ? null : nftData.numMinted}
                 required
               />
               <Spinner>
@@ -462,10 +479,10 @@ const CreateForm = ({ setNewNft }) => {
                   onClick={() => setCurr("ETH")}
                   active={curr === "ETH" ? true : false}
                 />{" "}
-                <UsdIcon
+                {/* <UsdIcon
                   onClick={() => setCurr("USD")}
                   active={curr === "USD" ? true : false}
-                />
+                /> */}
               </label>
               <StyledNumberInput
                 className="cost"
@@ -475,59 +492,88 @@ const CreateForm = ({ setNewNft }) => {
                 min="0"
                 max={curr === "ETH" ? "1000" : `1000 * ${usdPerEth}`}
                 step="0.0001"
-                value={nftData.price === 0 ? null : nftData.price }
+                value={nftData.price === 0 ? null : nftData.price}
                 required
               />
               <Spinner>
+                {/* Math.round((nftData.price + 0.01) * 1e12) / 1e12 */}
                 <ArrowUp
                   onClick={
-                    curr === "ETH"
-                      ? () =>
-                          setNftData({
-                            ...nftData,
-                            price: (Number(nftData.price) + 0.01),
-                          })
-                      : () =>
-                          setNftData({
-                            ...nftData,
-                            price: (Number(nftData.price) + 1),
-                          })
+                    () =>
+                      setNftData({
+                        ...nftData,
+                        price: Math.round((nftData.price + 0.01) * 1e12) / 1e12,
+                      })
+                    // setNftData({
+                    //   ...nftData,
+                    //   price: (Number(nftData.price) + 0.01),
+                    // })
                   }
                 />
                 <ArrowDown
-                  onClick={
-                    nftData.price > 0 && curr === "ETH"
-                      ? () =>
-                          setNftData({
-                            ...nftData,
-                            price: (Number(nftData.price) - 0.01).toFixed(4),
-                          })
-                      : () =>
-                          setNftData({
-                            ...nftData,
-                            price: (Number(nftData.price) - 1).toFixed(2),
-                          })
+                  // onClick={ () => nftData.price >= 0.01 && setNftData({
+                  //           ...nftData,
+                  //           price: (Number(nftData.price) - 0.01)
+                  //         })
+                  onClick={() =>
+                    nftData.price >= 0.01 &&
+                    setNftData({
+                      ...nftData,
+                      price: Math.round((nftData.price - 0.01) * 1e12) / 1e12,
+                    })
                   }
                 />
               </Spinner>
               <span>/{curr}</span>
+              <SubText>
+                <span>
+                  ${" "}
+                  {nftData.price &&
+                    (nftData.price * usdPerEth).toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                </span>
+              </SubText>
             </StyledDivInput2>
           </BottomInput>
         </Inputs>
       </Main>
-      <SubmitButton
-        type="submit"
-        style={
-          !isComplete()
-            ? { filter: "saturate(.2)", cursor: "not-allowed" }
-            : null
-        }
-      >
-        Approve and Create
-      </SubmitButton>
+      {isLoading ? (
+        <SubmitButton type="button">
+          <img src={loading_gif} alt="loading" />
+        </SubmitButton>
+      ) : (
+        <SubmitButton
+          type="submit"
+          style={
+            !isComplete()
+              ? { filter: "saturate(.2)", cursor: "not-allowed" }
+              : null
+          }
+        >
+          <span>Approve and Create</span>
+        </SubmitButton>
+      )}
     </FormContainer>
   );
 };
+const SubText = styled.div`
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  & > span {
+    width: 50%;
+    font-size: 0.8rem;
+    color: ${(props) => props.theme.color.gray};
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none;
+  }
+`;
 
 const EthIcon = styled(eth_icon)`
   width: 20px;
@@ -746,6 +792,12 @@ const StyledDivInput1 = styled.div`
   & > label {
     display: flex;
     align-items: center;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none;
   }
 `;
 const StyledDivInput2 = styled.div`
@@ -761,7 +813,12 @@ const StyledDivInput2 = styled.div`
     bottom: 15px;
     right: 20px;
     color: white;
-
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none;
     @media only screen and (max-width: 776px) {
       bottom: 5px;
     }
@@ -770,6 +827,12 @@ const StyledDivInput2 = styled.div`
     display: flex;
     align-items: center;
     position: relative;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none;
   }
 `;
 
@@ -785,7 +848,15 @@ const SubmitButton = styled.button`
   margin-right: auto;
   margin-left: auto;
   margin-top: 20px;
-
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none;
+  & > img {
+    width: 50px;
+  }
   @media only screen and (max-width: 776px) {
     margin-bottom: 40px;
     width: 95%;

@@ -16,6 +16,7 @@ import { ReactComponent as arrow } from "../../../assets/img/icons/arrow_cropped
 // import { ReactComponent as arrow_down } from "../../../assets/img/icons/arrow_down.svg";
 
 import ImagePreview from "./ImagePreview";
+import { NavLink, useHistory } from "react-router-dom";
 
 import { useAccountConsumer } from "../../../contexts/Account";
 import { mintNFT } from "../../../web3/utils";
@@ -45,6 +46,7 @@ const CreateForm = () => {
   const [curr, setCurr] = useState("ETH");
   const [isAudioUploaded, setIsAudioUploaded] = useState(false);
   const [isImageUploaded, setIsImageUploaded] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     user && user.username && setNftData({ ...nftData, artist: user.username });
@@ -250,9 +252,9 @@ const CreateForm = () => {
                 setIsLoading(false);
                 swal.fire({
                   title: "NFT Minted!",
-                  text: "See the new NFT in your Library. Redirecting in 3 seconds.",
-                  timer: 3000,
-                }).then(() => window.location ="/library");
+                  text: "See the new NFT in your Library",
+                  confirmButtonText: "Library",
+                }).then(res => res.isConfirmed && history.push('/library'))
                 //CHANGE TO NAVLINK INSTEAD OF FORCED REDIRECT
               }
             );
@@ -413,7 +415,7 @@ const CreateForm = () => {
               placeholder="Title"
               name="title"
               onChange={(e) => updateState(e)}
-              defaultValue={nftData.title}
+              value={nftData.title}
               required
             />
             <StyledInput
@@ -421,7 +423,7 @@ const CreateForm = () => {
               placeholder="Genre"
               name="genre"
               onChange={(e) => updateState(e)}
-              defaultValue={nftData.genre}
+              value={nftData.genre}
               required
             />
             <StyledInput
@@ -429,7 +431,7 @@ const CreateForm = () => {
               placeholder="Producer"
               name="producer"
               onChange={(e) => updateState(e)}
-              defaultValue={nftData.producer}
+              value={nftData.producer}
               required
             />
             <StyledInput
@@ -437,7 +439,7 @@ const CreateForm = () => {
               placeholder="Writer"
               name="writer"
               onChange={(e) => updateState(e)}
-              defaultValue={nftData.writer}
+              value={nftData.writer}
               required
             />
           </MiddleInputs>
@@ -450,7 +452,7 @@ const CreateForm = () => {
                 name="numMinted"
                 onChange={(e) => updateState(e)}
                 min="0"
-                value={nftData.numMinted === 0 ? null : nftData.numMinted}
+                value={nftData.numMinted === 0 ? "" : nftData.numMinted}
                 required
               />
               <Spinner>
@@ -493,7 +495,7 @@ const CreateForm = () => {
                 min="0"
                 max={curr === "ETH" ? "1000" : `1000 * ${usdPerEth}`}
                 step="0.0001"
-                value={nftData.price === 0 ? null : nftData.price}
+                value={nftData.price === 0 ? "" : nftData.price}
                 required
               />
               <Spinner>

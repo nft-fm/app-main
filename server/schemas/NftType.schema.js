@@ -3,9 +3,9 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const NftTypeSchema = new Schema({
-  saleId: {
+  nftId: {
     type: String,
-    default: ""
+    default: "",
   },
   title: {
     type: String,

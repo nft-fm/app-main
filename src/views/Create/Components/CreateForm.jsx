@@ -296,7 +296,6 @@ const CreateForm = ({ setNewNft }) => {
     <FormContainer onSubmit={(e) => handleSubmit(e)}>
       <Header>
         <span>Create NFTs</span>
-        <X src={x} onClick={(e) => hideCreate(e)} />
       </Header>
       <Main>
         <Files>
@@ -321,7 +320,7 @@ const CreateForm = ({ setNewNft }) => {
               />
               <MediaButton onClick={() => handleImage()} type="button">
                 <span>Upload image</span>
-                <span>.png, .jpeg</span>
+                <span>.png, .jpeg, .gif</span>
                 <img src={upload_icon} alt="upload-file-icon" />
               </MediaButton>
               <StyledInput
@@ -544,49 +543,6 @@ const ArrowDown = styled(arrow)`
     }
   }
 `;
-
-const CurrencyIcon = styled.img`
-  width: 12px;
-  height: 12px;
-`;
-
-const CurrencyButton = styled.div`
-  width: 32%;
-  border-radius: 5px;
-  outline: none;
-  border-width: 1px;
-  border-style: solid;
-  background-color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  &.ETH {
-    background-color: black;
-    color: white;
-    border-color: black;
-  }
-  &.BTU {
-    color: #7e2ce3;
-    border-color: #7e2ce3;
-  }
-
-  &.USD {
-    color: #038542;
-    border-color: #038542;
-  }
-`;
-
-const Subtext = styled.span`
-  font-size: 0.6rem;
-`;
-
-const CurrencyButtons = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  width: 100%;
-`;
 const StyledInput = styled.input`
   color: white;
   background-color: ${(props) => props.theme.color.box};
@@ -594,30 +550,11 @@ const StyledInput = styled.input`
   border-bottom: 1px solid ${(props) => props.theme.color.boxBorder};
   outline: none;
   margin-bottom: 5px;
-`;
 
-const StyledNumberInput2 = styled.input`
-  width: 100%;
-  border: none;
-  color: white;
-  border-radius: 5px;
-  text-indent: 100px;
-  padding-bottom: 5px;
-  margin-top: 20px;
-  font-size: ${(props) => props.theme.fontSizes.sm};
-  background-color: ${(props) => props.theme.color.box};
-  border: none;
-  border-bottom: 1px solid ${(props) => props.theme.color.boxBorder};
-  outline: none;
-  &.mint {
-    width: 100%;
-  }
-  ::-webkit-inner-spin-button,
-  ::-webkit-outer-spin-button {
-    display: none;
-  }
+ @media only screen and (max-width: 776px) {
+  background-color: transparent;
+   }
 `;
-
 const StyledNumberInput = styled.input`
   width: 100%;
   border: none;
@@ -657,6 +594,17 @@ const FileNames = styled.div`
     text-align: center;
     opacity: 0.7;
   }
+  @media only screen and (max-width: 776px) {
+
+  & > span {
+    /* color: ${(props) => props.theme.fontColor.gray}; */
+    color: white;
+    width: 50%;
+    font-size: 0.7rem;
+    text-align: center;
+    opacity: 0.7;
+  }
+   }
 `;
 
 const TopInputs = styled.div`
@@ -735,7 +683,6 @@ const SubmitButton = styled.button`
 
 const MediaButton = styled.button`
   background-color: ${(props) => props.theme.color.box};
-
   border-radius: 10px;
   color: ${(props) => props.theme.fontColor.gray};
   display: flex;
@@ -751,12 +698,22 @@ const MediaButton = styled.button`
     height: 20px;
     opacity: 0.5;
   }
+
+ @media only screen and (max-width: 776px) {
+   width: 45%;
+   }
 `;
 
 const MediaButtons = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+
+ @media only screen and (max-width: 776px) {
+   width: 95%;
+   margin-left: auto;
+   margin-right: auto;
+   }
 `;
 
 const Image = styled.img`
@@ -776,6 +733,11 @@ const Files = styled.div`
   flex-direction: column;
   /* padding: 10px; */
   position: relative;
+ @media only screen and (max-width: 776px) {
+   width: 95%;
+   flex-direction: column;
+   align-items: center;
+   }
 `;
 
 const Inputs = styled.div`
@@ -784,11 +746,20 @@ const Inputs = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0 0 0 20px;
+ @media only screen and (max-width: 776px) {
+   width: 100%;
+   padding: 0;
+   margin-top: 20px;
+   }
 `;
 const Main = styled.div`
   width: 100%;
   height: calc(100% - 40px);
   display: flex;
+ @media only screen and (max-width: 776px) {
+   flex-direction: column;
+   align-items: center;
+   }
 `;
 
 const Header = styled.div`
@@ -818,6 +789,12 @@ const FormContainer = styled.form`
   left: 50%;
   transform: translate(-50%, -50%);
   position: absolute;
+ @media only screen and (max-width: 776px) {
+   width: 95vw;
+   background-color: transparent;
+   border: none;
+   margin-top: 100px;
+   }
 `;
 
 const OpaqueFilter = styled.div`
@@ -841,3 +818,7 @@ const X = styled.img`
 `;
 
 export default CreateForm;
+
+// @media only screen and (max-width: 776px) {
+//   margin-top: 6px;
+//   }

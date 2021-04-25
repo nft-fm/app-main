@@ -69,8 +69,8 @@ const Library = ({ user, isCreating, newNft }) => {
     <Landing>
       <LaunchContainer>
         {/* <ContainerTitleLeft>{isCreating ? "MY NFTS" : "MY LIBRARY"}</ContainerTitleLeft> */}
-        <ContainerTitleLeft onClick={() => setIsViewingLibrary(true)}  active={isViewingLibrary}>MY LIBRARY</ContainerTitleLeft>
-        <ContainerTitleRight onClick={() => setIsViewingLibrary(false)} active={isViewingLibrary}>MY NFTS</ContainerTitleRight>
+        <ContainerTitleLeft onClick={() => setIsViewingLibrary(true)}  active={isViewingLibrary}>LIBRARY</ContainerTitleLeft>
+        <ContainerTitleRight onClick={() => setIsViewingLibrary(false)} active={isViewingLibrary}>CREATED</ContainerTitleRight>
         <ContainerOutline />
         <NftScroll> {nfts} </NftScroll>
       </LaunchContainer>
@@ -137,8 +137,8 @@ const ContainerTitleLeft = styled.span`
   position: absolute;
   font-weight: 600;
   left: calc(10% + 50px);
-  top: -4px;
-  padding: 0 12px;
+  top: -10px;
+  padding: 5px 12px 3px;
   font: "Compita";
   background-color: ${(props) => props.theme.bgColor};
   font-size: ${(props) => props.theme.fontSizes.xs};
@@ -146,20 +146,27 @@ const ContainerTitleLeft = styled.span`
   display: flex;
   flex-direction: row;
   display: flex;
+  justify-content: center;
   align-items: center;
   cursor: pointer;
+  border: 1px solid ${props => props.theme.color.gray};
+  border-radius: 20px;
 
   ${({ active }) => active && `
   color: white;
   `}
+  &:hover {
+    color: white;
+
+  }
 `;
 
 const ContainerTitleRight = styled.span`
   position: absolute;
   font-weight: 600;
   right: calc(10% + 50px);
-  top: -4px;
-  padding: 0 12px;
+  top: -10px;
+  padding: 5px 12px 3px;
   font: "Compita";
   background-color: ${(props) => props.theme.bgColor};
   font-size: ${(props) => props.theme.fontSizes.xs};
@@ -168,12 +175,17 @@ const ContainerTitleRight = styled.span`
   flex-direction: row;
   display: flex;
   align-items: center;
+  justify-content: center;
   cursor: pointer;
-  /* border: 1px solid ${props => props.theme.color.red}; */
+  border: 1px solid ${props => props.theme.color.gray};
+  border-radius: 20px;
 
   ${({ active }) => !active && `
-  color: white;
+  color:  white;
   `}
+  &:hover {
+    color: white;
+  }
 `;
 
 const ContainerOutline = styled.div`

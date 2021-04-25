@@ -543,7 +543,8 @@ const CreateForm = () => {
         </Inputs>
       </Main>
       {isLoading ? (
-        <SubmitButton type="button">
+        <SubmitButton type="button" 
+        style={{ filter: "saturate(.2)", cursor: "not-allowed" }}>
           <img src={loading_gif} alt="loading" />
         </SubmitButton>
       ) : (
@@ -966,7 +967,7 @@ const Header = styled.div`
 const FormContainer = styled.form`
   width: 600px;
   /* height: 600px; */
-  border-radius: 15px;
+  border-radius: ${props => props.theme.borderRadius};
   background-color: ${(props) => props.theme.color.box};
   border: 1px solid ${(props) => props.theme.color.boxBorder};
   display: flex;

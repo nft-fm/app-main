@@ -28,9 +28,9 @@ const Create = () => {
     {user && !user?.username && (
       <IsConnected>
         <GetConnectedNav>
-          <span>Head to the Profile page and set a username. Then you can start making NFT's!</span>
-          <ConnectNavLink to="/profile">
-            <ButtonTextNav>Profiles</ButtonTextNav>
+          <span>Head to the Library page and set a username. Then you can start making NFT's!</span>
+          <ConnectNavLink to="/library">
+            <ButtonTextNav>Library</ButtonTextNav>
           </ConnectNavLink>
         </GetConnectedNav>
       </IsConnected>
@@ -156,7 +156,7 @@ const IsConnected = styled.div`
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
-  /* position: absolute; */
+  position: absolute;
   z-index: 11;
 `;
 

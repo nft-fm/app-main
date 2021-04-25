@@ -104,24 +104,12 @@ const NftScroll = styled.div`
   width: 100%;
   justify-content: space-between;
   flex-wrap: wrap;
-  /* & > * {
-    margin: 0 5px 20px;
-  } */
-  /* @media only screen and (max-width: 1500px) {
-    & > * {
-      &:nth-last-child(1) {
-          display: none;
-     }}}
-     @media only screen and (max-width: 1191px) {
-    & > * {
-      &:nth-last-child(2) {
-          display: none;
-     }}}
-     @media only screen and (max-width: 890px) {
-    & > * {
-      &:nth-last-child(3) {
-          display: none;
-     }}} */
+
+@media only screen and (max-width: 776px) {
+  flex-direction: column;
+  align-items: center;
+   }
+
 `;
 
 const LaunchContainer = styled.div`
@@ -136,7 +124,7 @@ const LaunchContainer = styled.div`
 const ContainerTitleLeft = styled.span`
   position: absolute;
   font-weight: 600;
-  left: calc(10% + 50px);
+  left: calc(10% + 20px);
   top: -10px;
   padding: 5px 12px 3px;
   font: "Compita";
@@ -151,7 +139,7 @@ const ContainerTitleLeft = styled.span`
   cursor: pointer;
   border: 1px solid ${props => props.theme.color.gray};
   border-radius: 20px;
-
+  transition: 0.2s;
   ${({ active }) => active && `
   color: white;
   `}
@@ -164,7 +152,7 @@ const ContainerTitleLeft = styled.span`
 const ContainerTitleRight = styled.span`
   position: absolute;
   font-weight: 600;
-  right: calc(10% + 50px);
+  right: calc(10% + 20px);
   top: -10px;
   padding: 5px 12px 3px;
   font: "Compita";
@@ -179,7 +167,7 @@ const ContainerTitleRight = styled.span`
   cursor: pointer;
   border: 1px solid ${props => props.theme.color.gray};
   border-radius: 20px;
-
+  transition: 0.2s;
   ${({ active }) => !active && `
   color:  white;
   `}
@@ -196,5 +184,9 @@ const ContainerOutline = styled.div`
   width: 80%;
   display: flex;
   flex-direction: row;
+
+@media only screen and (max-width: 776px) {
+  width: 100%;
+   }
 `;
 export default Library;

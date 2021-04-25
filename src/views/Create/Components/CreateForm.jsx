@@ -6,6 +6,7 @@ import swal from "sweetalert2";
 import x from "../../../assets/img/icons/x.svg";
 import image from "../../../assets/img/logos/fm_logo_1.png";
 import upload_icon from "../../../assets/img/profile_page_assets/upload_icon.svg";
+import loading_gif from "../../../assets/img/loading.gif";
 // import eth_icon from "../../../assets/img/profile_page_assets/eth_icon.svg";
 // import eth_icon_white from "../../../assets/img/profile_page_assets/eth_icon_white.svg";
 // import usd_icon from "../../../assets/img/profile_page_assets/usd_icon.svg";
@@ -141,9 +142,9 @@ const CreateForm = ({ setNewNft }) => {
     });
   };
 
-
   const isComplete = () => {
-    if (nftData.title === "" ||
+    if (
+      nftData.title === "" ||
       nftData.genre === "" ||
       nftData.producer === "" ||
       nftData.writer === "" ||
@@ -154,12 +155,13 @@ const CreateForm = ({ setNewNft }) => {
       nftData.price === "0" ||
       nftData.price === "" ||
       !isAudioUploaded ||
-      !isImageUploaded) {
+      !isImageUploaded
+    ) {
       return false;
     } else {
       return true;
     }
-  }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -170,7 +172,7 @@ const CreateForm = ({ setNewNft }) => {
     if (curr === "USD") {
       newNftData = {
         ...nftData,
-        price: (nftData.price / usdPerEth).toFixed(4)
+        price: (nftData.price / usdPerEth).toFixed(4),
       };
     }
     if (newNftData.artist === "") {
@@ -179,11 +181,11 @@ const CreateForm = ({ setNewNft }) => {
         artist: user.username,
       };
     }
-    console.log('handleSubmit', newNftData)
+    console.log("handleSubmit", newNftData);
 
     //Input validation below here
     if (nftData.numMinted === "0" || nftData.numMinted === 0) {
-      console.log("e")
+      console.log("e");
       swal.fire({
         title: "Created amount cannot be 0.",
         timer: 5000,
@@ -192,7 +194,7 @@ const CreateForm = ({ setNewNft }) => {
       return;
     }
     if (nftData.price === "0" || nftData.price === 0) {
-      console.log("re")
+      console.log("re");
       swal.fire({
         title: "Created amount cannot be 0.",
         timer: 5000,
@@ -201,7 +203,7 @@ const CreateForm = ({ setNewNft }) => {
       return;
     }
     if (!imageFile || !audioFile) {
-      console.log("ere")
+      console.log("ere");
       swal.fire({
         title: "Cannot submit without audio and image files.",
         timer: 5000,
@@ -210,7 +212,7 @@ const CreateForm = ({ setNewNft }) => {
       return;
     }
     if (!isAudioUploaded || !isImageUploaded) {
-      console.log("here")
+      console.log("here");
       swal.fire({
         title: "Please wait for your audio and image files to be processed.",
         timer: 5000,
@@ -218,11 +220,11 @@ const CreateForm = ({ setNewNft }) => {
       });
       return;
     }
-    console.log()
+    console.log();
 
     setIsLoading(true);
     //run these two, store the returns in the nftData state object
-    console.log("here")
+    console.log("here");
     if (!audioUploadError && !imageUploadError) {
       // after nftData has both audio and image references, run this route
       axios
@@ -234,8 +236,12 @@ const CreateForm = ({ setNewNft }) => {
             setNftData(initialNftState);
             setImageFile(null);
             setAudioFile(null);
-            mintNFT(res.data, () => console.log("pending..."), () => console.log("final"));
-            console.log("MINT")
+            mintNFT(
+              res.data,
+              () => console.log("pending..."),
+              () => console.log("final")
+            );
+            console.log("MINT");
             /*swal.fire({
               title: "Success!",
               background: `#000`,
@@ -256,7 +262,8 @@ const CreateForm = ({ setNewNft }) => {
     } else {
       swal.fire({
         title: "Error uploading audio or image.",
-        text: "Please refresh the page and try again. If the issues persists, contact NFT FM.",
+        text:
+          "Please refresh the page and try again. If the issues persists, contact NFT FM.",
         icon: "error",
       });
     }
@@ -291,7 +298,6 @@ const CreateForm = ({ setNewNft }) => {
     setAudioFile(null);
   };
 
-
   return (
     <FormContainer onSubmit={(e) => handleSubmit(e)}>
       <Header>
@@ -304,11 +310,18 @@ const CreateForm = ({ setNewNft }) => {
         <Inputs autoComplete="off">
           <TopInputs>
             <MediaButtons>
-              <MediaButton onClick={() => handleAudio()} type="button">
-                <span>Upload audio</span>
-                <span>.mp3, .flac</span>
-                <img src={upload_icon} alt="upload-file-icon" />
-              </MediaButton>
+              {audioFile && !isAudioUploaded ? (
+                <MediaButton type="button">
+                <Loading src={loading_gif} alt="loading" />
+                </MediaButton>
+              ) : (
+                <MediaButton onClick={() => handleAudio()} type="button">
+                  <span>Upload audio</span>
+                  <span>.mp3, .flac</span>
+                  <img src={upload_icon} alt="upload-file-icon" />
+                </MediaButton>
+              )}
+
               <StyledInput
                 type="file"
                 accept=".mp3,.flac"
@@ -316,13 +329,19 @@ const CreateForm = ({ setNewNft }) => {
                 onChange={handleAudioChange}
                 style={{ display: "none" }}
                 defaultValue={audioFile}
-              // required
+                // required
               />
-              <MediaButton onClick={() => handleImage()} type="button">
-                <span>Upload image</span>
-                <span>.png, .jpeg, .gif</span>
-                <img src={upload_icon} alt="upload-file-icon" />
-              </MediaButton>
+              {audioFile && !isAudioUploaded ? (
+                <MediaButton type="button">
+                <Loading src={loading_gif} alt="loading" />
+                </MediaButton>
+              ) : (
+                <MediaButton onClick={() => handleImage()} type="button">
+                  <span>Upload image</span>
+                  <span>.png, .jpeg, .gif</span>
+                  <img src={upload_icon} alt="upload-file-icon" />
+                </MediaButton>
+              )}
               <StyledInput
                 type="file"
                 accept=".jpg,.jpeg,.png,.gif"
@@ -330,22 +349,22 @@ const CreateForm = ({ setNewNft }) => {
                 onChange={handleImageChange}
                 style={{ display: "none" }}
                 defaultValue={imageFile}
-              // required
+                // required
               />
             </MediaButtons>
             <FileNames>
               <span>
                 {audioFile?.name.length > 10
                   ? audioFile?.name.substring(0, 10) +
-                  "-" +
-                  audioFile?.name.substring(audioFile.name.lastIndexOf("."))
+                    "-" +
+                    audioFile?.name.substring(audioFile.name.lastIndexOf("."))
                   : audioFile?.name}
               </span>
               <span>
                 {imageFile?.name.length > 10
                   ? imageFile?.name.substring(0, 10) +
-                  "-" +
-                  imageFile?.name.substring(imageFile.name.lastIndexOf("."))
+                    "-" +
+                    imageFile?.name.substring(imageFile.name.lastIndexOf("."))
                   : imageFile?.name}
               </span>
             </FileNames>
@@ -455,10 +474,26 @@ const CreateForm = ({ setNewNft }) => {
           </BottomInput>
         </Inputs>
       </Main>
-      <SubmitButton type="submit" style={!isComplete() ? { filter: "saturate(.2)", cursor: "not-allowed" } : null}>Approve and Create</SubmitButton>
+      <SubmitButton
+        type="submit"
+        style={
+          !isComplete()
+            ? { filter: "saturate(.2)", cursor: "not-allowed" }
+            : null
+        }
+      >
+        Approve and Create
+      </SubmitButton>
     </FormContainer>
   );
 };
+
+const Loading = styled.img`
+width: 30px;
+aspect-ratio: 1;
+margin-top: auto;
+margin-bottom: auto;
+`
 
 const EthIcon = styled(eth_icon)`
   width: 20px;
@@ -503,9 +538,9 @@ const Spinner = styled.div`
   bottom: 15px;
   right: 5px;
 
- @media only screen and (max-width: 776px) {
-   bottom: 5px;
-   }
+  @media only screen and (max-width: 776px) {
+    bottom: 5px;
+  }
 `;
 
 const ArrowUp = styled(arrow)`
@@ -555,10 +590,10 @@ const StyledInput = styled.input`
   outline: none;
   margin-bottom: 5px;
 
- @media only screen and (max-width: 776px) {
-  background-color: transparent;
-  height: 20px;
-   }
+  @media only screen and (max-width: 776px) {
+    background-color: transparent;
+    height: 20px;
+  }
 `;
 const StyledNumberInput = styled.input`
   width: 100%;
@@ -581,11 +616,11 @@ const StyledNumberInput = styled.input`
     display: none;
   }
 
- @media only screen and (max-width: 776px) {
-  background-color: transparent;
-   height: 20px;
-   padding-bottom: 0;
-   }
+  @media only screen and (max-width: 776px) {
+    background-color: transparent;
+    height: 20px;
+    padding-bottom: 0;
+  }
 `;
 
 const FileNames = styled.div`
@@ -606,16 +641,15 @@ const FileNames = styled.div`
     opacity: 0.7;
   }
   @media only screen and (max-width: 776px) {
-
-  & > span {
-    /* color: ${(props) => props.theme.fontColor.gray}; */
-    color: white;
-    width: 50%;
-    font-size: 0.7rem;
-    text-align: center;
-    opacity: 0.7;
+    & > span {
+      /* color: ${(props) => props.theme.fontColor.gray}; */
+      color: white;
+      width: 50%;
+      font-size: 0.7rem;
+      text-align: center;
+      opacity: 0.7;
+    }
   }
-   }
 `;
 
 const TopInputs = styled.div`
@@ -635,10 +669,10 @@ const MiddleInputs = styled.div`
   justify-content: space-between;
   color: white;
 
-@media only screen and (max-width: 776px) {
-  width: 95%;
-  margin-left: auto;
-  margin-right: auto;
+  @media only screen and (max-width: 776px) {
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
   }
 `;
 
@@ -649,12 +683,12 @@ const BottomInput = styled.div`
   color: white;
   justify-content: space-between;
 
- @media only screen and (max-width: 776px) {
-  width: 95%;
-  margin-left: auto;
-  margin-right: auto;
-   margin-top: 20px;
-   }
+  @media only screen and (max-width: 776px) {
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+  }
 `;
 
 const StyledDivInput1 = styled.div`
@@ -684,9 +718,9 @@ const StyledDivInput2 = styled.div`
     right: 20px;
     color: white;
 
- @media only screen and (max-width: 776px) {
-   bottom: 5px;
-   }
+    @media only screen and (max-width: 776px) {
+      bottom: 5px;
+    }
   }
   & > label {
     display: flex;
@@ -707,11 +741,11 @@ const SubmitButton = styled.button`
   margin-right: auto;
   margin-left: auto;
   margin-top: 20px;
-  
- @media only screen and (max-width: 776px) {
+
+  @media only screen and (max-width: 776px) {
     margin-bottom: 40px;
     width: 95%;
-   }
+  }
 `;
 
 const MediaButton = styled.button`
@@ -732,9 +766,9 @@ const MediaButton = styled.button`
     opacity: 0.5;
   }
 
- @media only screen and (max-width: 776px) {
-   width: 45%;
-   }
+  @media only screen and (max-width: 776px) {
+    width: 45%;
+  }
 `;
 
 const MediaButtons = styled.div`
@@ -742,11 +776,11 @@ const MediaButtons = styled.div`
   display: flex;
   justify-content: space-between;
 
- @media only screen and (max-width: 776px) {
-   width: 95%;
-   margin-left: auto;
-   margin-right: auto;
-   }
+  @media only screen and (max-width: 776px) {
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+  }
 `;
 
 const Image = styled.img`
@@ -766,11 +800,11 @@ const Files = styled.div`
   flex-direction: column;
   /* padding: 10px; */
   position: relative;
- @media only screen and (max-width: 776px) {
-   width: 95%;
-   flex-direction: column;
-   align-items: center;
-   }
+  @media only screen and (max-width: 776px) {
+    width: 95%;
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const Inputs = styled.div`
@@ -779,20 +813,20 @@ const Inputs = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0 0 0 20px;
- @media only screen and (max-width: 776px) {
-   width: 100%;
-   padding: 0;
-   margin-top: 20px;
-   }
+  @media only screen and (max-width: 776px) {
+    width: 100%;
+    padding: 0;
+    margin-top: 20px;
+  }
 `;
 const Main = styled.div`
   width: 100%;
   height: calc(100% - 40px);
   display: flex;
- @media only screen and (max-width: 776px) {
-   flex-direction: column;
-   align-items: center;
-   }
+  @media only screen and (max-width: 776px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const Header = styled.div`
@@ -819,12 +853,12 @@ const FormContainer = styled.form`
   flex-direction: column;
   padding: 20px;
   /* left: 50%; */
- @media only screen and (max-width: 776px) {
-   width: 95vw;
-   background-color: transparent;
-   border: none;
-   /* margin-top: 100px; */
-   }
+  @media only screen and (max-width: 776px) {
+    width: 95vw;
+    background-color: transparent;
+    border: none;
+    /* margin-top: 100px; */
+  }
 `;
 
 const OpaqueFilter = styled.div`

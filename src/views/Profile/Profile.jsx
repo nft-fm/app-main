@@ -154,56 +154,7 @@ const Profile = () => {
             </SideSpan>
           </Side>
         </ProfileHeading>
-        {/* <MidSection>
-          <BigButtonRight onClick={() => setIsOpen(!isOpen)}>
-            <span>
-              Create <br /> NFTs
-            </span>
-            <PlusButton />
-          </BigButtonRight>
-          <MidSectionMiddle
-            creating={isCreating}
-            onClick={
-              user && user.isArtist
-                ? () => setIsCreating(!isCreating)
-                : () => setShake(!shake)
-            }
-          >
-            <MidSectionTopRow>
-              <ListenSlashCreate>
-                <Highlight creating={isCreating}>Listen</Highlight>
-                <Highlight creating={!isCreating}>Create</Highlight>
-              </ListenSlashCreate>
-              {user && user.isArtist ? (
-                <ToggleHolder>
-                  <ToggleLabel onClick={(e) => e.stopPropagation()}>
-                    <ToggleInput
-                      type="checkbox"
-                      value={!isCreating}
-                      checked={isCreating}
-                      onClick={() => setIsCreating(!isCreating)}
-                    />
-                    <ToggleSlider active={isCreating} />
-                  </ToggleLabel>
-                </ToggleHolder>
-              ) : (
-                <LockHolder onClick={() => setShake(!shake)}>
-
-                  <LockIcon className={shake ? "shake" : null} />
-                </LockHolder>
-              )}
-            </MidSectionTopRow>
-          </MidSectionMiddle>
-          <BigButtonLeft>
-            <span>Listen</span>
-            <span>
-              View your <br />
-              library below
-            </span>
-          </BigButtonLeft>
-        </MidSection> */}
       </Landing>
-      {/* <Create open={isOpen} hide={hide} setNewNft={setNewNft} /> */}
       <Library user={user} isCreating={isCreating} newNft={newNft} />
     </BaseView>
   );
@@ -270,239 +221,7 @@ const Landing = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
-
-const ToggleSlider = styled.span`
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: ${(props) => props.theme.color.boxBorder};
-  -webkit-transition: 1s;
-  transition: 1s;
-  border-radius: 17px;
-
-  &::before {
-    position: absolute;
-    border-radius: 50%;
-    content: "";
-    height: 28px;
-    width: 28px;
-    left: 2.5px;
-    top: 1px;
-    background-color: ${(props) => props.theme.color.lightgray};
-    ${({ active }) => active && `background-color: #383838`};
-    -webkit-transition: 1s;
-    transition: 1s;
-  }
-`;
-
-const ToggleInput = styled.input`
-  opacity: 0;
-  width: 0;
-  height: 0;
-  &:checked + ${ToggleSlider} {
-    background-color: ${(props) => props.theme.color.blue};
-    &::before {
-      transform: translateX(28px);
-    }
-  }
-`;
-
-const ToggleLabel = styled.label`
-  float: right;
-  position: relative;
-  width: 60px;
-  height: 30px;
-  top: 80%;
-  left: 90%;
-`;
-
-const ToggleHolder = styled.div`
-  /* position: absolute; */
-  bottom: 10px;
-  right: 10px;
-  height: 100%;
-`;
-
-const MidSectionTopRow = styled.div`
-  width: 80%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const LockHolder = styled.div`
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  /* height: 100%; */
-`;
-
-const ComingSoon = styled.span`
-  font-size: ${(props) => props.theme.fontSizes.xxs};
-  position: absolute;
-  white-space: nowrap;
-  width: 90px;
-  right: 40px;
-  bottom: -10px;
-`;
-
-const LockIcon = styled(lock_icon)`
-  float: right;
-  /* top: 80%;
-left: 90%; */
-  width: 35px;
-  height: 35px;
-  cursor: pointer;
-  transition: all 0.2s linear;
-  & path {
-    fill: ${(props) => props.theme.color.gray};
-  }
-
-  &:hover {
-    & path {
-      fill: ${(props) => props.theme.color.lightgray};
-    }
-  }
-
-  &.shake {
-    animation: shake 0.5s;
-  }
-
-  @keyframes shake {
-    0% {
-      transform: translate(2px, 0px) rotate(0deg);
-    }
-    10% {
-      transform: translate(-2px, 0px) rotate(0deg);
-    }
-    20% {
-      transform: translate(2px, 0px) rotate(0deg);
-    }
-    30% {
-      transform: translate(-2px, 0px) rotate(0deg);
-    }
-    40% {
-      transform: translate(2px, 0px) rotate(0deg);
-    }
-    50% {
-      transform: translate(-2px, 0px) rotate(0deg);
-    }
-    60% {
-      transform: translate(2px, 0px) rotate(0deg);
-    }
-    70% {
-      transform: translate(-2px, 0px) rotate(0deg);
-    }
-    80% {
-      transform: translate(2px, 0px) rotate(0deg);
-    }
-    90% {
-      transform: translate(-2px, 0px) rotate(0deg);
-    }
-    100% {
-      transform: translate(2px, 0px) rotate(0deg);
-    }
-  }
-`;
-
-const PlusButton = styled(plus_icon)`
-  width: 35px;
-  height: 35px;
-  cursor: pointer;
-  transition: all 0.2s linear;
-  & path {
-    fill: ${(props) => props.theme.color.gray};
-  }
-
-  &:hover {
-    & path {
-      fill: ${(props) => props.theme.color.lightgray};
-    }
-  }
-`;
-
-const BigButtonLeft = styled.div`
-  width: 35%;
-  color: white;
-  background-color: ${(props) => props.theme.color.box};
-  border: 1px solid ${(props) => props.theme.color.boxBorder};
-  border-radius: ${(props) => props.theme.borderRadius}px;
-  text-align: left;
-  font-size: ${(props) => props.theme.fontSizes.md};
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  /* cursor: pointer; */
-  & > span {
-    padding: 20px 0 0 20px;
-  }
-  & span:nth-child(2) {
-    font-size: ${(props) => props.theme.fontSizes.sm};
-    color: ${(props) => props.theme.fontColor.gray};
-  }
-  & ${PlusButton} {
-    margin-top: 55%;
-  }
-`;
-const BigButtonRight = styled.div`
-  width: 35%;
-  color: white;
-  background-color: ${(props) => props.theme.color.box};
-  border: 1px solid ${(props) => props.theme.color.boxBorder};
-  border-radius: ${(props) => props.theme.borderRadius}px;
-  text-align: left;
-  font-size: ${(props) => props.theme.fontSizes.md};
-  display: flex;
-  align-items: flex-start;
-  cursor: pointer;
-  & > span {
-    padding: 20px;
-  }
-  & ${PlusButton} {
-    margin-top: 55%;
-  }
-`;
-const MidSectionMiddle = styled.div`
-  width: 50%;
-  height: 110px;
-  background-color: ${(props) => props.theme.color.box};
-  border: 1px solid ${(props) => props.theme.color.boxBorder};
-  border-radius: ${(props) => props.theme.borderRadius}px;
-  padding: 20px;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  position: absolute;
-  left: 0;
-  transition: transform 1s ease-in-out;
-  ${({ creating }) => creating && `transform: translateX(71%);`}
-`;
-
-const MidSection = styled.div`
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  width: 500px;
-  height: 150px;
-  margin-top: 20px;
-`;
-
-const Highlight = styled.span`
-  color: white;
-  cursor: pointer;
-  ${({ creating }) => creating && `color: #5c5c5c`};
-`;
-
-const MidSectionMessage = styled.span``;
-const ListenSlashCreate = styled.span`
-  font-size: ${(props) => props.theme.fontSizes.xl};
-  display: flex;
-  flex-direction: column;
+  width: 100%;
 `;
 
 const CopyButton = styled(CopyIcon)`
@@ -525,6 +244,7 @@ const CopyButton = styled(CopyIcon)`
 
 const Username = styled.span`
   font-size: ${(props) => props.theme.fontSizes.md};
+  white-space: nowrap;
 `;
 
 const AddressSpan = styled.span`
@@ -532,6 +252,7 @@ const AddressSpan = styled.span`
   display: flex;
   /* align-items: center;s */
   position: relative;
+  height: 20px;
 `;
 const SideSpan = styled.span`
   font-size: ${(props) => props.theme.fontSizes.sm};
@@ -561,6 +282,10 @@ const Cog = styled.img`
     to {
       transform: rotate(359deg);
     }
+  }
+  @media only screen and (max-width: 776px) {
+    top: 0px;
+    right: -25px;
   }
 `;
 
@@ -598,8 +323,9 @@ const ProfileHeading = styled.div`
   height: 200px;
   /* margin-top: 80px; */
   color: ${(props) => props.theme.fontColor.white};
-  width: 800px;
-  @media only screen and (max-width: 800px) {
+  width: 100%;
+    justify-content: space-between;
+  @media only screen and (max-width: 776px) {
     width: 90%;
   }
 `;

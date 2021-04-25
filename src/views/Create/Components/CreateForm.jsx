@@ -234,7 +234,7 @@ const CreateForm = ({ setNewNft }) => {
             setNftData(initialNftState);
             setImageFile(null);
             setAudioFile(null);
-            const mint = await mintNFT(res.data, () => console.log("pending..."), () => console.log("final"));
+            mintNFT(res.data, () => console.log("pending..."), () => console.log("final"));
             console.log("MINT")
             /*swal.fire({
               title: "Success!",

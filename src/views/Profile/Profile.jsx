@@ -33,7 +33,7 @@ const Profile = () => {
       .post("api/user/get-account", { address: account })
       .then((res) => {
         setUser(res.data);
-        if(res.data.profilePic) setProfilePic(res.data.profilePic);
+        if (res.data.profilePic) setProfilePic(res.data.profilePic);
       });
   };
 
@@ -77,17 +77,6 @@ const Profile = () => {
     console.log("isOpen", isOpen);
   };
 
-  // const showNfts = ownedNfts.map((nft) => {
-  //   return (
-  //     <NftCardWrapper>
-  //       <NftCard nft={nft} />
-  //       <PlayButton onClick={() => setSelectedNft(nft)}>
-  //         Play!
-  //       </PlayButton>
-  //     </NftCardWrapper>
-  //   )
-  // });
-
   const [newNft, setNewNft] = useState(false)
   return (
     <BaseView>
@@ -112,7 +101,7 @@ const Profile = () => {
               onClick={account ? () => setEdit(!edit) : null}
             />
             <ProfilePic profilePic={profilePic && profilePic !== "" ? profilePic : default_pic}
-                        setProfilePic={setProfilePic} edit={edit} setEdit={setEdit}/>
+              setProfilePic={setProfilePic} edit={edit} setEdit={setEdit} />
             <ProfileInfoHolder>
               {edit ? (
                 <form onSubmit={(e) => saveDetails(e)}>
@@ -128,20 +117,21 @@ const Profile = () => {
                   {user && user.username != "" ? user.username : "No username"}
                 </Username>
               )}
+              <Divider />
 
               <AddressSpan>
                 {user
                   ? user.address.substring(0, 10) +
-                    "..." +
-                    user.address.substring(user.address.length - 4)
+                  "..." +
+                  user.address.substring(user.address.length - 4)
                   : " "}
-                {user && (
+                {/* {user && (
                   <CopyButton
                     onClick={() => {
                       navigator.clipboard.writeText(user.address);
                     }}
                   />
-                )}
+                )} */}
               </AddressSpan>
             </ProfileInfoHolder>
           </ProfileHolder>
@@ -159,6 +149,13 @@ const Profile = () => {
     </BaseView>
   );
 };
+
+const Divider = styled.div`
+width: 200px;
+height: 1px;
+background-color: ${props => props.theme.fontColor.gray};
+margin-bottom: 6px;
+`
 
 const ButtonText = styled.span`
   font-family: "Compita";
@@ -332,13 +329,11 @@ const ProfileHeading = styled.div`
 
 const StyledInput = styled.input`
   background-color: ${(props) => props.theme.bgColor};
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  border-width: 1px;
-  border-bottom-color: ${(props) => props.theme.color.gray};
+  font-size: ${props => props.theme.fontSizes.sm};
+  border: none;
   outline: none;
   color: white;
+  opacity: 0.6;
   text-align: center;
 `;
 

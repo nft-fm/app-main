@@ -46,7 +46,12 @@ export const getSetSale = async (nftId, callback) => {
 
 	contract.sets(nftId).then(r => {
 		console.log("got ret", r);
-		callback(r);
+		const res = {
+			price: utils.formatEther(r.price),
+			quantity: r.quantity,
+			sold: r.sold,
+		};
+		callback(res);
 	});
 }
 

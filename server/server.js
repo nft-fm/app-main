@@ -11,6 +11,7 @@ const nftTypeRouter = require('./routes/nft-type.router')
 const connectDB = require('./modules/db')
 const sessionMiddleware = require('./middleware/session-middleware')
 const path = require('path')
+const { listenForMint } = require("./web3/mint-listener");
 
 const PORT = process.env.PORT || 5000
 
@@ -23,8 +24,10 @@ app.use(function (req, res, next) {
   next();
 });
 
-dotenv.config()
-connectDB()
+dotenv.config();
+connectDB();
+
+listenForMint();
 
 app.use(cookieParser())
 app.use(sessionMiddleware)

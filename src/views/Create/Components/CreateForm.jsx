@@ -253,6 +253,7 @@ const CreateForm = () => {
                   text: "See the new NFT in your Library. Redirecting in 3 seconds.",
                   timer: 3000,
                 }).then(() => window.location ="/library");
+                //CHANGE TO NAVLINK INSTEAD OF FORCED REDIRECT
               }
             );
             console.log("MINT");

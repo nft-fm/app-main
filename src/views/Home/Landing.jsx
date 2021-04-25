@@ -60,25 +60,35 @@ const Listen = () => {
         <NftScroll> {nfts} </NftScroll>
       </LaunchContainer>
       <SocialsBar>
-        <IconContainer>
+        <IconContainer
+          href="https://t.me/joinchat/q6_q25NWr99kOGUx"
+          target="_blank"
+          rel="noopener noreferrer">
           <Telegram />
           <IconText>
             Telegram
           </IconText>
         </IconContainer>
-        <IconContainer>
+        <IconContainer
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <Medium />
           <IconText>
             Medium
           </IconText>
         </IconContainer>
-        <IconContainer>
+        <IconContainer
+          target="_blank"
+          rel="noopener noreferrer">
           <Twitter />
           <IconText>
             Twitter
           </IconText>
         </IconContainer>
-        <IconContainer>
+        <IconContainer
+          target="_blank"
+          rel="noopener noreferrer">
           <Discord />
           <IconText>
             Discord
@@ -172,6 +182,7 @@ color: white;
 `
 
 const IconContainer = styled.a`
+text-decoration: none;
 margin: 0 8px;
   align-items: center;
   border: solid #707070;

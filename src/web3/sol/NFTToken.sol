@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 
-import "./lib/ReentrancyGuard.sol";
-import "./lib/Context.sol";
-import "./lib/Ownable.sol";
-import "./lib/SafeMath.sol";
-import "./lib/Address.sol";
-import "./lib/IERC1155.sol";
-import "./lib/ERC1155.sol";
+import "./ReentrancyGuard.sol";
+import "./Context.sol";
+import "./Ownable.sol";
+import "./SafeMath.sol";
+import "./Address.sol";
+import "./IERC1155.sol";
+import "./ERC1155.sol";
 import "./NFTSale.sol";
 
 pragma solidity 0.8.4;

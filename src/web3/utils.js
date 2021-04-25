@@ -74,7 +74,9 @@ export const buyNFT = async (data, pendingCallback, finalCallback) => {
 	const signer = provider.getSigner();
 	let contract = new Contract(NFTSale, NFTSaleABI, signer);
 
-	let result = await contract.buyNFT(data.saleId, data.amount)
+	console.log("pricceee", data.price, utils.parseUnits(data.price));
+
+	let result = await contract.buyNFT(data.saleId, data.amount, { value: utils.parseUnits(data.price) })
 		.then(res => {
 			pendingCallback();
 			return res.wait();

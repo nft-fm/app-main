@@ -2,8 +2,8 @@
 // export const NFTAddress = "0x923b5D21F3F040204ba8Ea7A08166D4aa7922C5C";
 
 /* TEST */
-const NFTToken = "0x833D6fAE89B283d704d4939bCd5746E2D8085a23";
-const NFTSale = "0xABaBb8bbEBbd522ED480A75fAaf2354B8B92b9E9";
+const NFTToken = "0xEb42deBCE40b98f9dDD9dbF0Cb8829e9402C88D4";
+const NFTSale = "0x466a798eD09080282f9B07985CCdBea11B8C9acc";
 
 module.exports = {
 	NFTToken,

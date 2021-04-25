@@ -58,7 +58,7 @@ contract NFTSale is Context, Ownable, ReentrancyGuard {
 		require(amount > 0, "Must select an amount of tokens");
 		require(block.timestamp > set.startTime, "Sale has not started yet.");
 		require(!set.isPaused, "Sale is paused.");
-		require(set.sold + amount > amount, "Addition overflow");
+		require(set.sold + amount >= amount, "Addition overflow");
 		require(set.sold + amount <= set.quantity, "Insufficient stock.");
 
 		totalSales++;

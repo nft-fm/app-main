@@ -15,30 +15,46 @@ const Create = () => {
   const { account, connect, user, setUser, usdPerEth } = useAccountConsumer();
   return (
     <BaseView>
-      {!account && (
-        <IsConnected>
-          <GetConnected>
-            <ConnectButton onClick={() => connect("injected")}>
-              <MetaMask src={IconMetamask} />
-              <ButtonText>Connect Wallet</ButtonText>
-            </ConnectButton>
-          </GetConnected>
-        </IsConnected>
-      )}
-      {user && !user?.username && (
-        <IsConnected>
-          <GetConnectedNav>
-            <span>Head to the Profile page and set a username. Then you can start making NFT's!</span>
-            <ConnectNavLink to="/profile">
-              <ButtonTextNav>Profiles</ButtonTextNav>
-            </ConnectNavLink>
-          </GetConnectedNav>
-        </IsConnected>
-      )}
-      <CreateForm />
+    {!account && (
+      <IsConnected>
+        <GetConnected>
+          <ConnectButton onClick={() => connect("injected")}>
+            <MetaMask src={IconMetamask} />
+            <ButtonText>Connect Wallet</ButtonText>
+          </ConnectButton>
+        </GetConnected>
+      </IsConnected>
+    )}
+    {user && !user?.username && (
+      <IsConnected>
+        <GetConnectedNav>
+          <span>Head to the Profile page and set a username. Then you can start making NFT's!</span>
+          <ConnectNavLink to="/profile">
+            <ButtonTextNav>Profiles</ButtonTextNav>
+          </ConnectNavLink>
+        </GetConnectedNav>
+      </IsConnected>
+    )}
+    <CreateHolder>
+
+     <CreateForm />
+    </CreateHolder>
     </BaseView>
   );
 };
+
+const CreateHolder = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
+height: calc(100vh - 250px);
+min-height: 500px;
+
+@media only screen and (max-width: 776px) {
+  height: auto;
+  min-height: auto;
+   }
+`
 
 
 const ButtonTextNav = styled.span`

@@ -12,7 +12,7 @@ import IconMetamask from "../../assets/img/icons/metamask_icon.png";
 import loading from "../../assets/img/loading.gif"
 import Swal from "sweetalert2";
 import { usePlaylistConsumer } from "../../contexts/Playlist";
-import {buyNFT} from "../../web3/utils";
+import { buyNFT } from "../../web3/utils";
 
 const BuyNftModal = ({ open, children, hide, onClose, nft, liked, setLiked, likeCount, setLikeCount, setIsShareOpen }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -27,7 +27,7 @@ const BuyNftModal = ({ open, children, hide, onClose, nft, liked, setLiked, like
 
   const purchase = async (id) => {
     setIsLoading(true);
-    await buyNFT({nftId: id, ammount: 1, saleId: nft.saleId}, () => {console.log("pending")}, () => {
+    await buyNFT({ nftId: id, ammount: 1, saleId: nft.saleId }, () => { console.log("pending") }, () => {
       axios
         .post("/api/nft-type/purchase", { id: id, address: account })
         .then((res) => {
@@ -58,8 +58,8 @@ const BuyNftModal = ({ open, children, hide, onClose, nft, liked, setLiked, like
     if (account) {
       setLikeCount(liked ? likeCount - 1 : likeCount + 1)
       setLiked(!liked);
-      await axios.post(`api/user/like-nft`,{ address: account, nft: nft._id})
-        .catch(err => {console.log(err)})
+      await axios.post(`api/user/like-nft`, { address: account, nft: nft._id })
+        .catch(err => { console.log(err) })
     }
   }
 
@@ -81,7 +81,7 @@ const BuyNftModal = ({ open, children, hide, onClose, nft, liked, setLiked, like
             <Side>
               <IconArea>
                 {liked ?
-                  <LikedHeart onClick={() => like()}/> :
+                  <LikedHeart onClick={() => like()} /> :
                   <Heart onClick={() => like()} />
                 }
                 {likeCount}
@@ -110,10 +110,10 @@ const BuyNftModal = ({ open, children, hide, onClose, nft, liked, setLiked, like
           <PricesContainer>
             <Row>
               <PriceItem>Price:</PriceItem>
-              <PriceItem> {nft.price.toLocaleString(undefined, {
+              <PriceItem> {nft.price ? nft.price.toLocaleString(undefined, {
                 minimumFractionDigits: 3,
                 maximumFractionDigits: 3,
-              })} &nbsp; ETH</PriceItem>
+              }) : "--"} &nbsp; ETH</PriceItem>
             </Row>
             <Divider />
             <Row>

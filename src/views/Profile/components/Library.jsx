@@ -30,7 +30,7 @@ const Library = ({ user, isCreating, newNft }) => {
       );
     });
     for (let i = 0; i < 5; i++) {
-      formattedNfts.push(<FillerCard/>)
+      formattedNfts.push(<FillerCard />)
     }
     return formattedNfts;
   }
@@ -69,7 +69,7 @@ const Library = ({ user, isCreating, newNft }) => {
     <Landing>
       <LaunchContainer>
         {/* <ContainerTitleLeft>{isCreating ? "MY NFTS" : "MY LIBRARY"}</ContainerTitleLeft> */}
-        <ContainerTitleLeft onClick={() => setIsViewingLibrary(true)}  active={isViewingLibrary}>LIBRARY</ContainerTitleLeft>
+        <ContainerTitleLeft onClick={() => setIsViewingLibrary(true)} active={isViewingLibrary}>LIBRARY</ContainerTitleLeft>
         <ContainerTitleRight onClick={() => setIsViewingLibrary(false)} active={isViewingLibrary}>CREATED</ContainerTitleRight>
         <ContainerOutline />
         <NftScroll> {nfts} </NftScroll>
@@ -125,7 +125,7 @@ const ContainerTitleLeft = styled.span`
   position: absolute;
   font-weight: 600;
   left: calc(10% + 20px);
-  top: -10px;
+  top: -13px;
   padding: 5px 12px 3px;
   font: "Compita";
   background-color: ${(props) => props.theme.bgColor};
@@ -137,7 +137,7 @@ const ContainerTitleLeft = styled.span`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  border: 1px solid ${props => props.theme.color.gray};
+  border: 4px solid #383838;
   border-radius: 20px;
   transition: 0.2s;
   ${({ active }) => active && `
@@ -145,7 +145,6 @@ const ContainerTitleLeft = styled.span`
   `}
   &:hover {
     color: white;
-
   }
 `;
 
@@ -153,7 +152,7 @@ const ContainerTitleRight = styled.span`
   position: absolute;
   font-weight: 600;
   right: calc(10% + 20px);
-  top: -10px;
+  top: -13px;
   padding: 5px 12px 3px;
   font: "Compita";
   background-color: ${(props) => props.theme.bgColor};
@@ -165,7 +164,7 @@ const ContainerTitleRight = styled.span`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  border: 1px solid ${props => props.theme.color.gray};
+  border: 4px solid #383838;
   border-radius: 20px;
   transition: 0.2s;
   ${({ active }) => !active && `

@@ -54,8 +54,6 @@ const NftCard = (props) => {
     }
   }, [nft])
 
-  console.log("card", props);
-
   return (
     <Container>
       <ShareModal

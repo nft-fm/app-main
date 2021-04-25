@@ -11,7 +11,8 @@ const Library = ({ user, isCreating, newNft }) => {
   const [nfts, setNfts] = useState([]);
   const [selectedNft, setSelectedNft] = useState();
   const { setNftsCallback } = usePlaylistConsumer();
-  const [isViewingLibrary, setIsViewingLibrary] = useState(true)
+  const [isViewingLibrary, setIsViewingLibrary] = useState(false)
+  // const [isViewingLibrary, setIsViewingLibrary] = useState(true) //to default to library 
   const formatNfts = (nftsData) => {
     const formattedNfts = nftsData.map((nft, index) => {
       return isViewingLibrary ? (

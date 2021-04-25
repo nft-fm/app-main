@@ -1,4 +1,4 @@
-const { BigNumber } = require("ethers");
+const { BigNumber, constants, utils } = require("ethers");
 const { AnalyticsExportDestination } = require('@aws-sdk/client-s3');
 const express = require('express')
 const { flushSync } = require('react-dom')
@@ -75,13 +75,13 @@ router.post('/finalize', async (req, res) => {
     let updateNFT = await NftType.findByIdAndUpdate(newData._id, newData)
     if (updateNFT) {
       const startTime = 0;
-      console.log("start time",startTime )
-      const signature = sign(newData.address, newData.numMinted, newData.price, startTime, NFTSale);
-      listenForMint();
+      // const price = BigNumber.from(newData.price.mul(constants.WeiPerEther));
+      const price = utils.parseUnits(newData.price);
+      const signature = sign(newData.address, newData.numMinted, price, startTime, NFTSale);
       res.status(200).send({
         ...signature,
         amount: newData.numMinted,
-        price: newData.price,
+        price: price,
         address: newData.address,
         startTime: startTime,
         saleAddress: NFTSale,

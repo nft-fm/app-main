@@ -61,6 +61,9 @@ const BuyNftModal = ({ open, children, hide, onClose, nft, liked, setLiked, like
       setLiked(!liked);
       await axios.post(`api/user/like-nft`, { address: account, nft: nft._id })
         .catch(err => { console.log(err) })
+    } else {
+      hide();
+      Swal.fire("Connect a wallet");
     }
   }
 
@@ -111,16 +114,16 @@ const BuyNftModal = ({ open, children, hide, onClose, nft, liked, setLiked, like
           <PricesContainer>
             <Row>
               <PriceItem>Price:</PriceItem>
-              <PriceItem> {nft.price ? nft.price.toLocaleString(undefined, {
-                minimumFractionDigits: 3,
-                maximumFractionDigits: 3,
+              <PriceItem> {nft.price ? parseFloat(nft.price).toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 6,
               }) : "--"} &nbsp; ETH</PriceItem>
             </Row>
             <Divider />
             <Row>
               <AvailableItem>Price:</AvailableItem>
               <AvailableItem>          {usdPerEth ?
-                (usdPerEth * nft.price).toLocaleString(undefined, {
+                parseFloat(usdPerEth * nft.price).toLocaleString(undefined, {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 }) : "..."
@@ -202,11 +205,6 @@ transition: all 0.2s ease-in-out;
     stroke: ${props => props.theme.color.gray};
     fill: ${props => props.theme.color.gray};
     }
-/* &:hover {
-  & path {
-    stroke: #20a4fc;
-  }
-} */
 `
 
 const LikedHeart = styled(IconHeart)`
@@ -224,17 +222,11 @@ const Cart = styled(IconCart)`
 width: 24px;
 height: 24px;
 margin: -2px 0 0 8px;
-cursor: pointer;
 transition: all 0.2s ease-in-out;
  & path {
     transition: all 0.2s ease-in-out;
      fill: ${props => props.theme.color.gray};
     }
-&:hover {
-  & path {
-    fill: #20a4fc;
-  }
-}
 `
 
 const Share = styled(IconShare)`

@@ -66,7 +66,7 @@ router.post('/get-user-nfts', async (req, res) => {
   }
 })
 
-router.post('/update', async (req, res) => {
+router.post('/finalize', async (req, res) => {
   try {
     let newData = req.body;
     newData.isDraft = false;

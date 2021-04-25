@@ -71,14 +71,11 @@ router.post('/finalize', async (req, res) => {
     let newData = req.body;
     newData.isDraft = false;
 
-    console.log("REQ BODY", req.body)
     let updateNFT = await NftType.findByIdAndUpdate(newData._id, newData)
     if (updateNFT) {
-      console.log("Nft sale", NFTSale)
       const startTime = Date.now();
       const price = BigNumber.from(newData.price);
       const signature = sign(newData.address, newData.numMinted, price, startTime, NFTSale);
-
       res.status(200).send({...signature,
         amount: newData.numMinted,
         price: price,
@@ -400,7 +397,6 @@ router.post('/getSongList', async (req, res) => {
 //this will change dramatically with the introduction of smart contracts
 router.post("/purchase", async (req, res) => {
   try {
-    console.log("/purchase hit", req.body)
     let nft = await NftType.findOne({ _id: req.body.id })
     if (!nft) {
       res.status(500).send('No NFT found')

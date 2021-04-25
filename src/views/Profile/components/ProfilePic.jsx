@@ -43,6 +43,8 @@ const ProfilePic = (props) => {
         .post("/api/user/uploadProfilePicS3", imageFormData)
         .then((res) => {
           setLoading(false);
+          console.log("RES", res.data);
+          setProfilePic(res.data.location)
           setImageFile(null);
           props.setEdit(false);
         })
@@ -61,7 +63,7 @@ const ProfilePic = (props) => {
     }
   }, [imageFile])
   return (
-      <ProfilePicHolder>
+      <ProfilePicHolder imageUrl={profilePic}>
         {loading && edit &&
         <EditProfilePic>
           <img src={Loading}/>
@@ -84,7 +86,7 @@ const ProfilePic = (props) => {
           defaultValue={imageFile !== "" ? imageFile : null}
         />
         }
-        <Pic src={profilePic} />
+
       </ProfilePicHolder>
   );
 };
@@ -118,7 +120,10 @@ const EditProfilePic = styled.div`
 
 const ProfilePicHolder = styled.div`
   position: relative;
+  background-image: url('${(props) => props.imageUrl}');
   background-color: ${(props) => props.theme.color.lightgray};
+  background-repeat: no-repeat;
+  background-size: cover;
   border-width: 4px;
   border-color: ${(props) => props.theme.color.lightgray};
   border-style: solid;
@@ -128,7 +133,7 @@ const ProfilePicHolder = styled.div`
   overflow: hidden;
 `;
 
-const Pic = styled.img`
+const Pic = styled.div`
   width: 100%;
 `;
 

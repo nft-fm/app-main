@@ -154,7 +154,7 @@ const Profile = () => {
             </SideSpan>
           </Side>
         </ProfileHeading>
-        <MidSection>
+        {/* <MidSection>
           <BigButtonRight onClick={() => setIsOpen(!isOpen)}>
             <span>
               Create <br /> NFTs
@@ -188,7 +188,6 @@ const Profile = () => {
                 </ToggleHolder>
               ) : (
                 <LockHolder onClick={() => setShake(!shake)}>
-                  {/* {shake && <ComingSoon>Feature Coming Soon!</ComingSoon>} */}
 
                   <LockIcon className={shake ? "shake" : null} />
                 </LockHolder>
@@ -202,9 +201,9 @@ const Profile = () => {
               library below
             </span>
           </BigButtonLeft>
-        </MidSection>
+        </MidSection> */}
       </Landing>
-      <Create open={isOpen} hide={hide} setNewNft={setNewNft} />
+      {/* <Create open={isOpen} hide={hide} setNewNft={setNewNft} /> */}
       <Library user={user} isCreating={isCreating} newNft={newNft} />
     </BaseView>
   );
@@ -266,7 +265,7 @@ const IsConnected = styled.div`
 `;
 
 const Landing = styled.div`
-  height: 450px;
+  /* height: 450px; */
   top: 0;
   display: flex;
   flex-direction: column;

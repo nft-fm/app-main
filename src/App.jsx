@@ -36,7 +36,7 @@ const App = () => {
             <Route path="/register" exact>
               <Register />
             </Route>
-            <Route path="/profile" exact>
+            <Route path="/library" exact>
               <Profile />
             </Route>
             <Route path="/create">

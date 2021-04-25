@@ -11,21 +11,21 @@ const Library = ({ user, isCreating, newNft }) => {
   const [nfts, setNfts] = useState([]);
   const [selectedNft, setSelectedNft] = useState();
   const { setNftsCallback } = usePlaylistConsumer();
-
+  const [isViewingLibrary, setIsViewingLibrary] = useState(true)
   const formatNfts = (nftsData) => {
     const formattedNfts = nftsData.map((nft, index) => {
-      return isCreating ? (
-        <ArtistCard
-          nft={nft}
-          key={index}
-          index={index}
-        />
-      ) : (
+      return isViewingLibrary ? (
         <LibraryCard
           nft={nft}
           key={index}
           index={index}
           selectNft={setSelectedNft}
+        />
+      ) : (
+        <ArtistCard
+          nft={nft}
+          key={index}
+          index={index}
         />
       );
     });
@@ -62,13 +62,15 @@ const Library = ({ user, isCreating, newNft }) => {
   };
 
   useEffect(() => {
-    !isCreating ? getUserNfts() : getArtistNfts();
-  }, [user, isCreating, newNft]);
+    isViewingLibrary ? getUserNfts() : getArtistNfts();
+  }, [user, isViewingLibrary, newNft]);
 
   return (
     <Landing>
       <LaunchContainer>
-        <ContainerTitle>{isCreating ? "MY NFTS" : "MY LIBRARY"}</ContainerTitle>
+        {/* <ContainerTitleLeft>{isCreating ? "MY NFTS" : "MY LIBRARY"}</ContainerTitleLeft> */}
+        <ContainerTitleLeft onClick={() => setIsViewingLibrary(true)}  active={isViewingLibrary}>LIBRARY</ContainerTitleLeft>
+        <ContainerTitleRight onClick={() => setIsViewingLibrary(false)} active={isViewingLibrary}>CREATED</ContainerTitleRight>
         <ContainerOutline />
         <NftScroll> {nfts} </NftScroll>
       </LaunchContainer>
@@ -131,12 +133,40 @@ const LaunchContainer = styled.div`
   margin-bottom: 40px;
 `;
 
-const ContainerTitle = styled.span`
+const ContainerTitleLeft = styled.span`
   position: absolute;
   font-weight: 600;
   left: calc(10% + 50px);
-  top: -4px;
-  padding: 0 12px;
+  top: -10px;
+  padding: 5px 12px 3px;
+  font: "Compita";
+  background-color: ${(props) => props.theme.bgColor};
+  font-size: ${(props) => props.theme.fontSizes.xs};
+  color: ${(props) => props.theme.color.gray};
+  display: flex;
+  flex-direction: row;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: 1px solid ${props => props.theme.color.gray};
+  border-radius: 20px;
+
+  ${({ active }) => active && `
+  color: white;
+  `}
+  &:hover {
+    color: white;
+
+  }
+`;
+
+const ContainerTitleRight = styled.span`
+  position: absolute;
+  font-weight: 600;
+  right: calc(10% + 50px);
+  top: -10px;
+  padding: 5px 12px 3px;
   font: "Compita";
   background-color: ${(props) => props.theme.bgColor};
   font-size: ${(props) => props.theme.fontSizes.xs};
@@ -145,6 +175,17 @@ const ContainerTitle = styled.span`
   flex-direction: row;
   display: flex;
   align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 1px solid ${props => props.theme.color.gray};
+  border-radius: 20px;
+
+  ${({ active }) => !active && `
+  color:  white;
+  `}
+  &:hover {
+    color: white;
+  }
 `;
 
 const ContainerOutline = styled.div`

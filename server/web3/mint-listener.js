@@ -15,7 +15,7 @@ const listenForMint = async () => {
 		let event = await contract.queryFilter(filter);
 
 		console.log("mint and stake listened", event[0]);
-		await NftType.findByIdAndUpdate(event[0].args.databaseID.toString(), { isMinted: true, saleId: event[0].args.nftID })
+		await NftType.findByIdAndUpdate(event[0].args.databaseID.toString(), { isMinted: true, nftId: event[0].args.nftID })
 	})
 };
 

@@ -4,8 +4,7 @@ const Schema = mongoose.Schema;
 
 const NftTypeSchema = new Schema({
   nftId: {
-    type: String,
-    default: "",
+    type: Number,
   },
   title: {
     type: String,

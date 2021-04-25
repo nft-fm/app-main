@@ -8,13 +8,14 @@ import NftModalHook from "../../components/NftModalHook";
 
 const Listen = () => {
   const [id, setId] = useState(null)
+  const [isOpen, setIsOpen] = useState(true);
+
   useEffect(() => {
     if (window.location.pathname.length > 10) {
       setId(window.location.pathname.slice(10))
     }
   })
 
-  const [isOpen, setIsOpen] = useState(true);
   const show = () => setIsOpen(true);
   const hide = (e) => {
     setIsOpen(false);

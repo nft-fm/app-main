@@ -78,7 +78,8 @@ router.post('/finalize', async (req, res) => {
       const price = BigNumber.from(newData.price);
       const signature = sign(newData.address, newData.numMinted, price, startTime, NFTSale);
       listenForMint();
-      res.status(200).send({...signature,
+      res.status(200).send({
+        ...signature,
         amount: newData.numMinted,
         price: price,
         address: newData.address,
@@ -114,6 +115,7 @@ router.post('/featured', async (req, res) => {
     let nftTypes = await NftType.find({
       isFeatured: true,
       isDraft: false,
+      isMinted: true,
     })
       .limit(5)
 
@@ -182,7 +184,10 @@ router.post('/get-many', async (req, res) => {
 
 router.post('/all', async (req, res) => {
   try {
-    let nftTypes = await NftType.find({ isDraft: false, isFeatured: false });
+    let nftTypes = await NftType.find({
+      isDraft: false,
+      isMinted: true,
+    });
     res.send(findLikes(nftTypes, req.body.address));
   } catch (error) {
     console.log(error);

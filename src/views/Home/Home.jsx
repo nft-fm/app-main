@@ -24,7 +24,9 @@ const Listen = () => {
           <DescriptionColumn>
             <StyledHeader>Welcome to NFT FM</StyledHeader>
             <StyledSubHeader>collect music from artists you know and love</StyledSubHeader>
-            <StyledParagraph>*insert text about stuff, NFTs. Maybe insert button to go purchase nfts or redirect to some more info. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vel pretium orci. Morbi cursus faucibus libero vel sagittis. Vestibulum id consequat lacus. Nam porttitor ipsum ut lacinia consequat. Integer condimentum auctor convallis. Morbi tempor turpis vel diam fermentum imperdiet. Pellentesque at ex ac augue pretium cursus eget vitae sapien. Nam eu ligula a felis porta consequat a sit amet eros. Duis ornare interdum eros, quis malesuada lacus hendrerit at.</StyledParagraph>
+            <StyledParagraph>
+              We are a music distribution platform dedicated to artists and fans alike. We aim to add legitimacy to both the Music and the Crypto industry by providing fans a way to directly support the artists they love. On NFT FM, artists have full control over how they distribute their music. Over 90% of all purchases go directly to the Musicians.
+            </StyledParagraph>
           </DescriptionColumn>
           <DemoImage src={demoImage} />
         </DescriptionBoxContainer>
@@ -200,9 +202,9 @@ const LaunchFeaturesBox = styled.div`
 `;
 
 const StyledParagraph = styled.p`
-  margin: 0;
   color: white;
   font-family: "Compita";
+  margin: auto 0;
 `;
 
 const StyledSubHeader = styled.h2`

@@ -69,7 +69,7 @@ const Listen = () => {
             Telegram
           </IconText>
         </IconContainer>
-        <IconContainer
+        {/* <IconContainer
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -77,8 +77,9 @@ const Listen = () => {
           <IconText>
             Medium
           </IconText>
-        </IconContainer>
+        </IconContainer> */}
         <IconContainer
+          href="https://twitter.com/fm_nft"
           target="_blank"
           rel="noopener noreferrer">
           <Twitter />
@@ -86,14 +87,14 @@ const Listen = () => {
             Twitter
           </IconText>
         </IconContainer>
-        <IconContainer
+        {/* <IconContainer
           target="_blank"
           rel="noopener noreferrer">
           <Discord />
           <IconText>
             Discord
           </IconText>
-        </IconContainer>
+        </IconContainer> */}
       </SocialsBar>
     </Landing >
   );

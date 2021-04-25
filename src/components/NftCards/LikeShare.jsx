@@ -2,45 +2,45 @@ import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import CreatedNftModal from "../NftModals/CreatedNftModal";
 import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
-import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
-import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
-import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
-import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
-import { useAccountConsumer } from "../../contexts/Account";
+import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";import { useAccountConsumer } from "../../contexts/Account";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const LikeShare = (props) => {
-  const {account } = useAccountConsumer();
+  const { account } = useAccountConsumer();
   const { nft, liked, setLiked, likeCount, setLikeCount } = props;
 
   const like = async () => {
     if (account) {
       setLikeCount(liked ? likeCount - 1 : likeCount + 1)
       setLiked(!liked);
-      await axios.post(`api/user/like-nft`,{ address: account, nft: nft._id})
+      await axios.post(`api/user/like-nft`, { address: account, nft: nft._id })
         .then(res => {
         })
-        .catch(err => {console.log(err)})
+        .catch(err => { console.log(err) })
+    } else {
+      Swal.fire("Connect a wallet");
     }
   }
 
   const share = () => {
     props.setIsShareOpen();
   }
+
   return (
-        <Side>
-          <IconArea>
-            {liked ?
-              <LikedHeart onClick={() => like()}/> :
-              <Heart onClick={() => like()} />
-            }
-            {likeCount}
-          </IconArea>
-          <IconArea>
-            <Share onClick={() => share()} />
-            {nft.shareCount}
-          </IconArea>
-        </Side>
+    <Side>
+      <IconArea>
+        {liked ?
+          <LikedHeart onClick={() => like()} /> :
+          <Heart onClick={() => like()} />
+        }
+        {likeCount}
+      </IconArea>
+      <IconArea>
+        <Share onClick={() => share()} />
+        {nft.shareCount}
+      </IconArea>
+    </Side>
   );
 };
 

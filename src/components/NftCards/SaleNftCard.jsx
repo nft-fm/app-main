@@ -87,7 +87,7 @@ const NftCard = (props) => {
             {nft.x_numSold}
             <span style={{ margin: "0 1px" }}>/</span>
             {nft.numMinted}
-            <Cart />
+            <Cart onClick={() => setIsOpen(!isOpen)} />
           </IconArea>
         </Side>
       </CardTop>
@@ -96,7 +96,7 @@ const NftCard = (props) => {
         alt="image"
         onClick={() => setIsOpen(!isOpen)}
       />
-      <TrackName>{nft.title}</TrackName>
+      <TrackName onClick={() => setIsOpen(!isOpen)}>{nft.title}</TrackName>
       <Artist>{nft.artist}</Artist>
       <CostFields>
         <CostEth>
@@ -174,50 +174,6 @@ const Cart = styled(IconCart)`
   }
 `;
 
-const Share = styled(IconShare)`
-  width: 16px;
-  height: 16px;
-  margin: 0 4px 0 0;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  & path {
-    transition: all 0.2s ease-in-out;
-    fill: ${(props) => props.theme.color.gray};
-  }
-  &:hover {
-    & path {
-      fill: #20a4fc;
-    }
-  }
-`;
-const LikedHeart = styled(IconHeart)`
-  width: 20px;
-  height: 20px;
-  margin: -3px 4px 0 0;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  & path {
-    stroke: ${(props) => props.theme.color.pink};
-  }
-`;
-
-const Heart = styled(IconHeart)`
-  width: 20px;
-  height: 20px;
-  margin: -3px 4px 0 0;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  & path {
-    transition: all 0.2s ease-in-out;
-    stroke: ${(props) => props.theme.color.gray};
-  }
-  &:hover {
-    & path {
-      stroke: ${(props) => props.theme.color.pink};
-    }
-  }
-`;
-
 const Side = styled.div`
   display: flex;
   align-items: center;
@@ -269,6 +225,7 @@ const Image = styled.img`
 `;
 
 const TrackName = styled.span`
+  cursor: pointer;
   color: white;
   font-weight: 500;
   width: 100%;

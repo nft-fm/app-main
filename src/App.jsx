@@ -11,7 +11,6 @@ import styled from 'styled-components'
 import ModalsProvider from './contexts/Modals'
 import Listen from './views/Home'
 import Profile from './views/Profile'
-import Login from './views/Login/Login';
 import Register from './views/Register';
 import Discover from "./views/Discover";
 import Create from "./views/Create";

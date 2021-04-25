@@ -2,5 +2,5 @@
 // export const NFTAddress = "0x923b5D21F3F040204ba8Ea7A08166D4aa7922C5C";
 
 /* TEST */
-export const NFTToken = "0x9D477E7d3f8823faf49Bbb5E2A0fa7A509cee1c6";
-export const NFTSale = "0xeA4bD8cBb142a790C5Ff0F6515e124236f5E6DB5";
+export const NFTToken = "0x01ECBb7870ca2A471ea4A7621547c4B1f33D5ca6";
+export const NFTSale = "0xf359A5Bee7FE81825fF7AD5Bbb876CA1C2CE924E";

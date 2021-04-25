@@ -7,13 +7,28 @@ import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
 import { useAccountConsumer } from "../../contexts/Account";
+import { getSetSale } from "../../web3/utils";
 import axios from "axios";
 import ShareModal from "../SMShareModal/SMShareModal";
 import LikeShare from "./LikeShare";
 
 const NftCard = (props) => {
   const { usdPerEth, user } = useAccountConsumer();
-  const { nft } = props;
+  const [nft, setNft] = useState({
+    address: "",
+    artist: "",
+    audioUrl: "",
+    genre: "",
+    imageUrl: "",
+    likeCount: 0,
+    liked: false,
+    nftId: 0,
+    title: "",
+    writer: "",
+    price: "--",
+    quantity: "--",
+    sold: "--",
+  })
   const [isOpen, setIsOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [liked, setLiked] = useState(props.liked);
@@ -25,9 +40,22 @@ const NftCard = (props) => {
   };
 
   useEffect(() => {
-    setLiked(props.nft.liked);
-    setLikeCount(props.nft.likeCount);
+    setNft(props.nft);
+    setLiked(nft.liked);
+    setLikeCount(nft.likeCount);
   }, [props, user]);
+
+  useEffect(() => {
+    if (nft) {
+      getSetSale(nft.nftId, (res) => {
+        const { price, quantity, sold } = res;
+        setNft(prevState => ({ ...prevState, price, quantity, sold }));
+      });
+    }
+  }, [nft])
+
+  console.log("card", props);
+
   return (
     <Container>
       <ShareModal
@@ -81,9 +109,9 @@ const NftCard = (props) => {
         <CostUsd>
           {usdPerEth
             ? (usdPerEth * nft.price).toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })
             : "..."}
           <Usd />
         </CostUsd>

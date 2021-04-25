@@ -1,8 +1,6 @@
 import { Contract, utils, providers, constants, BigNumber, getDefaultProvider } from "ethers";
-
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import isMobile from "../utils/isMobile";
-
 import { NFTToken, NFTSale } from "./constants"
 import NFTTokenABI from "./abi/NFTToken.abi.js";
 import NFTSaleABI from "./abi/NFTSale.abi.js";
@@ -41,16 +39,28 @@ export const require = async (statement, error) => {
 	return { provider, walletAddress }
 }
 
+export const getSetSale = async (nftId, callback) => {
+	const { provider, walletAddress } = await require()
+	const signer = provider.getSigner();
+	let contract = new Contract(NFTSale, NFTSaleABI, signer);
+
+	contract.sets(nftId).then(r => {
+		console.log("got ret", r);
+		callback(r);
+	});
+}
+
+
 export const mintNFT = async (data, pendingCallback, finalCallback) => {
-	const { provider, walletAddress  } = await require()
+	const { provider, walletAddress } = await require()
 	const signer = provider.getSigner();
 	let contract = new Contract(NFTToken, NFTTokenABI, signer);
 
-	let result = await contract.mintAndStake(data.amount, data.price, data.startTime, NFTSale , data.databaseID, parseInt(data.v), data.r, data.s)
+	let result = await contract.mintAndStake(data.amount, data.price, data.startTime, NFTSale, data.databaseID, parseInt(data.v), data.r, data.s)
 		.then(res => {
-		pendingCallback();
-		return res.wait();
-	})
+			pendingCallback();
+			return res.wait();
+		})
 
 	finalCallback(result)
 }

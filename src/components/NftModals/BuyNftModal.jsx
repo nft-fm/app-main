@@ -12,6 +12,7 @@ import IconMetamask from "../../assets/img/icons/metamask_icon.png";
 import loading from "../../assets/img/loading.gif"
 import Swal from "sweetalert2";
 import { usePlaylistConsumer } from "../../contexts/Playlist";
+import {buyNFT} from "../../web3/utils";
 
 const BuyNftModal = ({ open, children, hide, onClose, nft, liked, setLiked, likeCount, setLikeCount, setIsShareOpen }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -24,23 +25,26 @@ const BuyNftModal = ({ open, children, hide, onClose, nft, liked, setLiked, like
     e.stopPropagation();
   };
 
-  const purchase = (id) => {
+  const purchase = async (id) => {
     setIsLoading(true);
-    axios
-      .post("/api/nft-type/purchase", { id: id, address: account })
-      .then((res) => {
-        console.log("purchase res", res);
-        setTimeout(function () {
-          setIsLoading(false)
-          setIsBought(true);
-        }, 1000);
-      })
-      .catch((err) => {
-        console.error(err.status, err.message, err.error);
-        Swal.fire(`Error: ${err.response ? err.response.status : 404}`, `${err.response ? err.response.data : "server error"}`, "error");
-        setIsLoading(false);
-        console.log(err)
-      });
+    await buyNFT({nftId: id, ammount: 1}, () => {console.log("pending")}, () => {
+      axios
+        .post("/api/nft-type/purchase", { id: id, address: account })
+        .then((res) => {
+          console.log("purchase res", res);
+          setTimeout(function () {
+            setIsLoading(false)
+            setIsBought(true);
+          }, 1000);
+        })
+        .catch((err) => {
+          console.error(err.status, err.message, err.error);
+          Swal.fire(`Error: ${err.response ? err.response.status : 404}`, `${err.response ? err.response.data : "server error"}`, "error");
+          setIsLoading(false);
+          console.log(err)
+        });
+    })
+
   };
 
   const playSong = () => {

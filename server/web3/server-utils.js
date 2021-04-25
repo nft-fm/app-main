@@ -5,6 +5,7 @@ const NFTType = require('../schemas/NftType.schema')
 
 
 const sign = (address, amount, price, startTime, saleAddress) => {
+	console.log("signing", address, amount, price, startTime, saleAddress)
 	let data = utils.defaultAbiCoder.encode(
 		["address", "uint256", "uint256", "uint256", "address"],
 		[String(address), BigNumber.from(amount), BigNumber.from(price), BigNumber.from(startTime), String(saleAddress)]

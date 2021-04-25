@@ -5,6 +5,7 @@ import isMobile from "../utils/isMobile";
 
 import { NFTToken, NFTSale } from "./constants"
 import NFTTokenABI from "./abi/NFTToken.abi.js";
+import NFTSaleABI from "./abi/NFTSale.abi.js";
 
 export const require = async (statement, error) => {
 	let provider;
@@ -43,16 +44,30 @@ export const require = async (statement, error) => {
 export const mintNFT = async (data, pendingCallback, finalCallback) => {
 	const { provider, walletAddress  } = await require()
 	const signer = provider.getSigner();
-	console.log("SIGNER", signer)
 	let contract = new Contract(NFTToken, NFTTokenABI, signer);
-	console.log("DATA", data);
+
 	let result = await contract.mintAndStake(data.amount, data.price, data.startTime, NFTSale , data.databaseID, parseInt(data.v), data.r, data.s)
 		.then(res => {
-		console.log("HERE", res);
 		pendingCallback();
 		return res.wait();
 	})
+
+	finalCallback(result)
+}
+
+export const buyNFT = async (data, pendingCallback, finalCallback) => {
+	const { provider } = await require()
+	const signer = provider.getSigner();
+	let contract = new Contract(NFTSale, NFTSaleABI, signer);
+	console.log("DATA", data);
+	let result = await contract.buyNFT(data.nftId, data.amount)
+		.then(res => {
+			console.log("HERE", res);
+			pendingCallback();
+			return res.wait();
+		})
 	console.log("redeem nft result", result);
 	finalCallback(result)
 }
+
 

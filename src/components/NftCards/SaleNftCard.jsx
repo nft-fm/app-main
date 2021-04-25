@@ -100,15 +100,15 @@ const NftCard = (props) => {
       <Artist>{nft.artist}</Artist>
       <CostFields>
         <CostEth>
-          {nft.price.toLocaleString(undefined, {
-            minimumFractionDigits: 3,
-            maximumFractionDigits: 3,
+          {parseFloat(nft.price).toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 6,
           })}
-          <Eth />
+          < Eth />
         </CostEth>
         <CostUsd>
           {usdPerEth
-            ? (usdPerEth * nft.price).toLocaleString(undefined, {
+            ? parseFloat(usdPerEth * nft.price).toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             })

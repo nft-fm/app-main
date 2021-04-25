@@ -113,16 +113,16 @@ const BuyNftModal = ({ open, children, hide, onClose, nft, liked, setLiked, like
           <PricesContainer>
             <Row>
               <PriceItem>Price:</PriceItem>
-              <PriceItem> {nft.price ? nft.price.toLocaleString(undefined, {
-                minimumFractionDigits: 3,
-                maximumFractionDigits: 3,
+              <PriceItem> {nft.price ? parseFloat(nft.price).toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 6,
               }) : "--"} &nbsp; ETH</PriceItem>
             </Row>
             <Divider />
             <Row>
               <AvailableItem>Price:</AvailableItem>
               <AvailableItem>          {usdPerEth ?
-                (usdPerEth * nft.price).toLocaleString(undefined, {
+                parseFloat(usdPerEth * nft.price).toLocaleString(undefined, {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 }) : "..."

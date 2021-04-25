@@ -1,8 +1,8 @@
-import {NFTToken} from "./constants";
-import NFTTokenABI from "./abi/NFTToken.abi.js";
-import NftType from "../../src/web3/constants"
-
 const { Contract, Wallet, providers } = require("ethers");
+
+const {NFTToken} =  require( "./constants");
+const NFTTokenABI = require( "./abi/NFTToken.abi.js");
+const NftType = require("../schemas/NftType.schema");
 
 const listenForMint = async () => {
 	let provider = new providers.WebsocketProvider(process.env.WSS_PROVIDER_URL);
@@ -12,4 +12,8 @@ const listenForMint = async () => {
 	contract.on("MintAndStake", async (data) => {
 		await NftType.findByIdAndUpdate(data.nftID, {isMinted: true, saleId: data.databaseID})
 	})
+}
+
+module.exports = {
+	listenForMint
 }

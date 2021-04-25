@@ -2,8 +2,6 @@ const { Contract, utils, providers, constants, BigNumber, getDefaultProvider } =
 const { NFTToken, NFTSale } = require('./constants');
 const NFTType = require('../schemas/NftType.schema')
 
-
-
 const sign = (address, amount, price, startTime, saleAddress) => {
 	console.log("signing", address, amount, price, startTime, saleAddress)
 	let data = utils.defaultAbiCoder.encode(

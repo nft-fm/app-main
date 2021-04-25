@@ -25,8 +25,8 @@ const initialNftState = {
   address: "",
   isDraft: true,
   genre: "",
-  numMinted: "",
-  price: "",
+  numMinted: 0,
+  price: 0,
   producer: "",
   title: "",
   writer: "",
@@ -271,21 +271,46 @@ const CreateForm = ({ setNewNft }) => {
     setIsLoading(false);
   };
 
+  useEffect(() => {
+    if (nftData.price > 0) {
+      if (curr === "USD") {
+        setNftData({
+          ...nftData,
+          price: (nftData.price * usdPerEth),
+        });
+      } else {
+        setNftData({
+          ...nftData,
+          price: (nftData.price / usdPerEth),
+        });
+      }
+    }
+  }, [curr]);
+
   const updateState = (e) => {
-    if (e.target.name === "price" || e.target.name === "numMinted") {
+    if (e.target.name === "numMinted" && Number(e.target.value) > 10000) {
+      return;
+    }
+    if (e.target.name === "price") {
       let string = e.target.value.toString();
-      if (string.length > 6) {
+      if (string.length > 8) {
+        return;
+      }
+      if (curr === "ETH" && Number(e.target.value) > 1000) {
+        return;
+      }
+      if (curr === "USD" && Number(e.target.value) > (1000 * usdPerEth)) {
         return;
       }
     }
-    // if (e.target.name === "price") {
-    //   curr === "ETH"
-    //     ? setNftData({ ...nftData, [e.target.name]: e.target.value })
-    //     : setNftData({
-    //         ...nftData,
-    //         [e.target.name]: (e.target.value / usdPerEth).toFixed(4),
-    //       });
-    // }
+    if (e.target.name === "price") {
+      curr === "ETH"
+        ? setNftData({ ...nftData, [e.target.name]: Number(e.target.value) })
+        : setNftData({
+            ...nftData,
+            [e.target.name]: Number(e.target.value / usdPerEth),
+          });
+    }
     setNftData({ ...nftData, [e.target.name]: e.target.value });
   };
 
@@ -310,11 +335,15 @@ const CreateForm = ({ setNewNft }) => {
         <Inputs autoComplete="off">
           <TopInputs>
             <MediaButtons>
-                <MediaButton onClick={() => handleAudio()} type="button">
-                  <span>Upload audio</span>
-                  <span>.mp3, .flac</span>
-                  {audioFile && !isAudioUploaded ? <img src={loading_gif} alt="loading" /> : <img src={upload_icon} alt="upload-file-icon" />}
-                </MediaButton>
+              <MediaButton onClick={() => handleAudio()} type="button">
+                <span>Upload audio</span>
+                <span>.mp3, .flac</span>
+                {audioFile && !isAudioUploaded ? (
+                  <img src={loading_gif} alt="loading" />
+                ) : (
+                  <img src={upload_icon} alt="upload-file-icon" />
+                )}
+              </MediaButton>
               <StyledInput
                 type="file"
                 accept=".mp3,.flac"
@@ -324,11 +353,15 @@ const CreateForm = ({ setNewNft }) => {
                 defaultValue={audioFile}
                 // required
               />
-                <MediaButton onClick={() => handleImage()} type="button">
-                  <span>Upload image</span>
-                  <span>.png, .jpeg, .gif</span>
-                  {imageFile && !isImageUploaded ? <img src={loading_gif} alt="loading" /> : <img src={upload_icon} alt="upload-file-icon" />}
-                </MediaButton>
+              <MediaButton onClick={() => handleImage()} type="button">
+                <span>Upload image</span>
+                <span>.png, .jpeg, .gif</span>
+                {imageFile && !isImageUploaded ? (
+                  <img src={loading_gif} alt="loading" />
+                ) : (
+                  <img src={upload_icon} alt="upload-file-icon" />
+                )}
+              </MediaButton>
               <StyledInput
                 type="file"
                 accept=".jpg,.jpeg,.png,.gif"
@@ -425,8 +458,14 @@ const CreateForm = ({ setNewNft }) => {
             <StyledDivInput2>
               <label>
                 NFT Price /ea &nbsp;
-                <EthIcon onClick={() => setCurr("ETH")} />{" "}
-                <UsdIcon onClick={() => setCurr("USD")} />
+                <EthIcon
+                  onClick={() => setCurr("ETH")}
+                  active={curr === "ETH" ? true : false}
+                />{" "}
+                <UsdIcon
+                  onClick={() => setCurr("USD")}
+                  active={curr === "USD" ? true : false}
+                />
               </label>
               <StyledNumberInput
                 className="cost"
@@ -434,26 +473,40 @@ const CreateForm = ({ setNewNft }) => {
                 name="price"
                 onChange={(e) => updateState(e)}
                 min="0"
+                max={curr === "ETH" ? "1000" : `1000 * ${usdPerEth}`}
                 step="0.0001"
-                value={nftData.price}
+                value={nftData.price === 0 ? null : nftData.price }
                 required
               />
               <Spinner>
                 <ArrowUp
-                  onClick={() =>
-                    setNftData({
-                      ...nftData,
-                      price: (Number(nftData.price) + 0.01).toFixed(4),
-                    })
+                  onClick={
+                    curr === "ETH"
+                      ? () =>
+                          setNftData({
+                            ...nftData,
+                            price: (Number(nftData.price) + 0.01),
+                          })
+                      : () =>
+                          setNftData({
+                            ...nftData,
+                            price: (Number(nftData.price) + 1),
+                          })
                   }
                 />
                 <ArrowDown
-                  onClick={() =>
-                    nftData.price > 0 &&
-                    setNftData({
-                      ...nftData,
-                      price: (Number(nftData.price) - 0.01).toFixed(4),
-                    })
+                  onClick={
+                    nftData.price > 0 && curr === "ETH"
+                      ? () =>
+                          setNftData({
+                            ...nftData,
+                            price: (Number(nftData.price) - 0.01).toFixed(4),
+                          })
+                      : () =>
+                          setNftData({
+                            ...nftData,
+                            price: (Number(nftData.price) - 1).toFixed(2),
+                          })
                   }
                 />
               </Spinner>
@@ -482,9 +535,14 @@ const EthIcon = styled(eth_icon)`
   cursor: pointer;
   position: absolute;
   right: -15px;
-  /* transition: all 0.2s linear; */
+  transition: all 0.2s;
   & path {
-    fill: ${(props) => props.theme.color.blue};
+    fill: ${(props) => props.theme.color.gray};
+    ${({ active }) =>
+      active &&
+      `
+  fill: #20a4fc;
+  `}
   }
 
   &:hover {
@@ -500,9 +558,14 @@ const UsdIcon = styled(usd_icon)`
   cursor: pointer;
   position: absolute;
   right: -35px;
-  /* transition: all 0.2s linear; */
+  transition: all 0.2s;
   & path {
     fill: ${(props) => props.theme.color.gray};
+    ${({ active }) =>
+      active &&
+      `
+      fill: #68c12f;
+`}
   }
 
   &:hover {
@@ -728,7 +791,6 @@ const SubmitButton = styled.button`
     width: 95%;
   }
 `;
-
 
 const MediaButton = styled.button`
   background-color: ${(props) => props.theme.color.box};

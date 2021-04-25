@@ -502,6 +502,10 @@ const Spinner = styled.div`
   position: absolute;
   bottom: 15px;
   right: 5px;
+
+ @media only screen and (max-width: 776px) {
+   bottom: 5px;
+   }
 `;
 
 const ArrowUp = styled(arrow)`
@@ -553,6 +557,7 @@ const StyledInput = styled.input`
 
  @media only screen and (max-width: 776px) {
   background-color: transparent;
+  height: 20px;
    }
 `;
 const StyledNumberInput = styled.input`
@@ -575,6 +580,12 @@ const StyledNumberInput = styled.input`
   ::-webkit-outer-spin-button {
     display: none;
   }
+
+ @media only screen and (max-width: 776px) {
+  background-color: transparent;
+   height: 20px;
+   padding-bottom: 0;
+   }
 `;
 
 const FileNames = styled.div`
@@ -623,6 +634,12 @@ const MiddleInputs = styled.div`
   flex-direction: column;
   justify-content: space-between;
   color: white;
+
+@media only screen and (max-width: 776px) {
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+  }
 `;
 
 const BottomInput = styled.div`
@@ -631,6 +648,13 @@ const BottomInput = styled.div`
   display: flex;
   color: white;
   justify-content: space-between;
+
+ @media only screen and (max-width: 776px) {
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+   margin-top: 20px;
+   }
 `;
 
 const StyledDivInput1 = styled.div`
@@ -659,6 +683,10 @@ const StyledDivInput2 = styled.div`
     bottom: 15px;
     right: 20px;
     color: white;
+
+ @media only screen and (max-width: 776px) {
+   bottom: 5px;
+   }
   }
   & > label {
     display: flex;
@@ -679,6 +707,11 @@ const SubmitButton = styled.button`
   margin-right: auto;
   margin-left: auto;
   margin-top: 20px;
+  
+ @media only screen and (max-width: 776px) {
+    margin-bottom: 40px;
+    width: 95%;
+   }
 `;
 
 const MediaButton = styled.button`
@@ -785,15 +818,12 @@ const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
   padding: 20px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  position: absolute;
+  /* left: 50%; */
  @media only screen and (max-width: 776px) {
    width: 95vw;
    background-color: transparent;
    border: none;
-   margin-top: 100px;
+   /* margin-top: 100px; */
    }
 `;
 

@@ -35,10 +35,26 @@ const Create = () => {
         </GetConnectedNav>
       </IsConnected>
     )}
+    <CreateHolder>
+
      <CreateForm />
+    </CreateHolder>
     </BaseView>
   );
 };
+
+const CreateHolder = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
+height: calc(100vh - 250px);
+min-height: 500px;
+
+@media only screen and (max-width: 776px) {
+  height: auto;
+  min-height: auto;
+   }
+`
 
 
 const ButtonTextNav = styled.span`

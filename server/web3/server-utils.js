@@ -22,9 +22,8 @@ const getSetSale = async (nftId, callback) => {
 	let provider = new providers.WebSocketProvider(process.env.WSS_PROVIDER_URL);
 	let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
 	const contract = new Contract(NFTSale, NFTSaleABI, walletWithProvider);
-
 	const r = await contract.sets(nftId);
-	console.log("R", r)
+
 	return r;
 }
 

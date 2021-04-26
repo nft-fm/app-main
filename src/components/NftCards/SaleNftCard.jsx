@@ -13,7 +13,7 @@ import ShareModal from "../SMShareModal/SMShareModal";
 import LikeShare from "./LikeShare";
 
 const NftCard = (props) => {
-  const { usdPerEth, user } = useAccountConsumer();
+  const { usdPerEth, user, account } = useAccountConsumer();
   const [nft, setNft] = useState({
     address: "",
     artist: "",
@@ -25,10 +25,11 @@ const NftCard = (props) => {
     nftId: 0,
     title: "",
     writer: "",
-    price: "--",
+    price: "...",
     quantity: "--",
     sold: "--",
   })
+
   const [isOpen, setIsOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [liked, setLiked] = useState(false);
@@ -39,12 +40,20 @@ const NftCard = (props) => {
   };
 
   useEffect(() => {
-    setNft(props.nft);
-    setLiked(props.nft.liked);
+    setNft({
+      ...props.nft,
+      price: nft.price === "..." ? "..." : nft.price,
+      quantity: nft.quantity === "--" ? "--" : nft.quantity,
+      sold: nft.sold === "--" ? "--" : nft.sold,
+    });
     setLikeCount(props.nft.likeCount);
-  }, [props, user]);
-
-  // console.log("card", props);
+    setLiked(props.nft.liked);
+    axios.post("/api/nft-type/full-nft-info", { nft: props.nft, account: account })
+    .then((res) => {
+      setNft(res.data)
+    })
+    .catch(err => console.log(err));
+  }, [props.nft, user]);
 
   return (
     <Container>
@@ -90,10 +99,10 @@ const NftCard = (props) => {
       <Artist>{nft.artist}</Artist>
       <CostFields>
         <CostEth>
-          {parseFloat(nft.price).toLocaleString(undefined, {
+          {nft.price !== "..." ? parseFloat(nft.price).toLocaleString(undefined, {
             minimumFractionDigits: 0,
             maximumFractionDigits: 6,
-          })}
+          }) : nft.price}
           < Eth />
         </CostEth>
         <CostUsd>

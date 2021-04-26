@@ -7,7 +7,7 @@ import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
 import { useAccountConsumer } from "../../contexts/Account";
-import { getSetSale } from "../../web3/utils";
+
 import axios from "axios";
 import ShareModal from "../SMShareModal/SMShareModal";
 import LikeShare from "./LikeShare";
@@ -43,15 +43,6 @@ const NftCard = (props) => {
     setLiked(props.nft.liked);
     setLikeCount(props.nft.likeCount);
   }, [props, user]);
-
-  useEffect(() => {
-    if (nft && typeof(nft.price) != Number) {
-      getSetSale(nft.nftId, (res) => {
-        const { price, quantity, sold } = res;
-        setNft(prevState => ({ ...prevState, price, quantity, sold }));
-      });
-    }
-  }, [nft])
 
   // console.log("card", props);
 

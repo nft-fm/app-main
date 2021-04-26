@@ -10,7 +10,6 @@ import { useAccountConsumer } from "../../contexts/Account";
 import axios from "axios";
 import ShareModal from "../SMShareModal/CreatedShareModal";
 import LikeShare from "./LikeShare";
-import { getSetSale } from "../../web3/utils";
 
 const NftCard = (props) => {
   const { usdPerEth, user } = useAccountConsumer();
@@ -43,17 +42,6 @@ const NftCard = (props) => {
     setLiked(props.nft.liked);
     setLikeCount(props.nft.likeCount);
   }, [props, user]);
-
-  console.log("i am the nft", nft);
-
-  useEffect(() => {
-    if (nft && typeof(nft.price) != Number) {
-      getSetSale(nft.nftId, (res) => {
-        const { price, quantity, sold } = res;
-        setNft(prevState => ({ ...prevState, price, quantity, sold }));
-      });
-    }
-  }, [nft]);
 
   return (
     <Container>

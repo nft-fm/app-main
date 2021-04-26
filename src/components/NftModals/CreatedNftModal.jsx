@@ -58,6 +58,7 @@ const BuyNftModal = ({
     setIsShareOpen();
     hide();
   };
+  console.log('nftprice', nft.price)
 
   return (
     <OpaqueFilter onClick={(e) => hide(e)}>
@@ -111,13 +112,13 @@ const BuyNftModal = ({
               <TableRow>
                 <td>ETH</td>
                 <td><EthIcon
-                />{nft.x_numSold * nft.price}</td>
+                />{Number(nft.x_numSold * nft.price)}</td>
               </TableRow>
               <TableRow>
                 <td>USD</td>
                 <td>
                   ${" "}
-                  {(nft.x_numSold * nft.price * usdPerEth).toLocaleString(
+                  {Number(nft.x_numSold * nft.price * usdPerEth).toLocaleString(
                     undefined,
                     {
                       minimumFractionDigits: 2,

@@ -11,7 +11,15 @@ import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import IconMetamask from "../../assets/img/icons/metamask_icon.png";
 
-const BuyNftModal = ({ open, children, hide, onClose, nft, setIsShareOpen }) => {
+import { ReactComponent as eth_icon } from "../../assets/img/icons/ethereum.svg";
+const BuyNftModal = ({
+  open,
+  children,
+  hide,
+  onClose,
+  nft,
+  setIsShareOpen,
+}) => {
   const { account, connect, usdPerEth } = useAccountConsumer();
 
   if (!open) return null;
@@ -34,7 +42,7 @@ const BuyNftModal = ({ open, children, hide, onClose, nft, setIsShareOpen }) => 
   };
 
   const share = () => {
-    setIsShareOpen()
+    setIsShareOpen();
     hide();
   };
 
@@ -45,7 +53,7 @@ const BuyNftModal = ({ open, children, hide, onClose, nft, setIsShareOpen }) => 
           <X onClick={(e) => hide(e)} />
           <CardTitle>
             <Logo src={logo} />
-            Buy NFT
+            {/* Buy NFT */}
           </CardTitle>
           <CardTop>
             <Side>
@@ -73,13 +81,36 @@ const BuyNftModal = ({ open, children, hide, onClose, nft, setIsShareOpen }) => 
             <Artist>{nft.artist}</Artist>
           </InfoContainer>
           <StatsContainer>
-            <br />
+            {/* <br />
             <span>Earnings</span>
             <span>Eth: {nft.x_numSold * nft.price} </span>
             <span> USD: ${(nft.x_numSold * nft.price * usdPerEth).toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
-            })}</span>
+            })}</span> */}
+            <StyledTable>
+              <TableRow className="header">
+                <th>Earnings</th>
+              </TableRow>
+              <TableRow>
+                <td>ETH</td>
+                <td><EthIcon
+                />{nft.x_numSold * nft.price}</td>
+              </TableRow>
+              <TableRow>
+                <td>USD</td>
+                <td>
+                  ${" "}
+                  {(nft.x_numSold * nft.price * usdPerEth).toLocaleString(
+                    undefined,
+                    {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }
+                  )}
+                </td>
+              </TableRow>
+            </StyledTable>
           </StatsContainer>
         </StyledModal>
       </Container>
@@ -87,35 +118,18 @@ const BuyNftModal = ({ open, children, hide, onClose, nft, setIsShareOpen }) => 
   );
 };
 
-const ButtonText = styled.span`
-  font-family: "Compita";
-  font-size: ${(props) => props.theme.fontSizes.xs};
-  font-weight: 600;
-  color: white;
+const EthIcon = styled(eth_icon)`
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  /* position: absolute; */
+  /* right: -12px; */
+  margin-right: 3px;
+  transition: all 0.2s;
+  & path {
+    fill: white;
+  }
 `;
-
-const MetaMask = styled.img`
-  width: 32px;
-  height: auto;
-`;
-
-const Divider = styled.div`
-  margin: 5px 0;
-  width: 100%;
-  height: 1px;
-  background-color: ${(props) => props.theme.color.gray};
-`;
-
-const AvailableItem = styled.div`
-  font-size: 0.8rem;
-  color: ${(props) => props.theme.color.lightgray};
-`;
-
-const PriceItem = styled.span`
-  font-size: ${(props) => props.theme.fontSizes.xs};
-  color: white;
-`;
-
 const X = styled(IconX)`
   position: absolute;
   right: 2px;
@@ -130,11 +144,6 @@ const X = styled(IconX)`
     stroke: ${(props) => props.theme.color.gray};
     fill: ${(props) => props.theme.color.gray};
   }
-  /* &:hover {
-  & path {
-    stroke: #20a4fc;
-  }
-} */
 `;
 
 const Cart = styled(IconCart)`
@@ -299,6 +308,24 @@ const StatsContainer = styled.div`
   align-items: center;
   color: white;
   padding-bottom: 16px;
+`;
+
+const StyledTable = styled.table`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
+const TableRow = styled.table`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  &.header {
+    justify-content: center;
+    border-bottom: 1px solid ${props => props.theme.color.gray};
+    margin-bottom: 5px;
+    
+  }
 `;
 const TrackName = styled.span`
   color: white;

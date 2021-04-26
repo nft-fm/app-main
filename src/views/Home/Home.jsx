@@ -257,11 +257,11 @@ const ContainerTitle = styled.span`
   position: absolute;
   font-weight: 600;
   left: calc(10% + 50px);
-  top: ${props => props.faq ? "-8px" : "-4px"};
+  top: ${props => props.faq ? "-8px" : "-8px"};
   padding: 0 12px;
   font: "Compita";
   background-color: ${props => props.theme.bgColor};
-  font-size: ${props => props.theme.fontSizes.xs};
+  font-size: ${props => props.theme.fontSizes.sm};
   color: ${props => props.faq ? "#3d3d3d" : props.theme.color.gray};
   display: flex;
   flex-direction: row;

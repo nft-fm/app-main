@@ -143,11 +143,9 @@ const ContainerTitleLeft = styled.span`
   transition: 0.2s;
   ${({ active }) => active && `
   color: white;
-  background-color: #606060;
   `}
   &:hover {
     color: white;
-  background-color: #606060;
   }
 `;
 
@@ -172,11 +170,9 @@ const ContainerTitleRight = styled.span`
   transition: 0.2s;
   ${({ active }) => !active && `
   color:  white;
-  background-color: #606060;
   `}
   &:hover {
     color: white;
-  background-color: #606060;
   }
 `;
 

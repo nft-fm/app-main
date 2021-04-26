@@ -126,7 +126,7 @@ letter-spacing: normal;
 color: rgba(0,0,0,0.5);
 text-decoration: line-through;`
 
-const Space = styled.div`height: 20px`;
+const Space = styled.div`height: 20px;`
 
 const RecDesc = styled.div`
   font-family: "Comic Book";
@@ -151,6 +151,9 @@ const RecTitle = styled.div`
   letter-spacing: normal;
   padding: 30px;
   padding-bottom: 10px;
+  & > u {
+    color: white;
+  }
 `;
 
 const Rectangle = !isMobile()

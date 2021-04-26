@@ -33,7 +33,6 @@ const Listen = () => {
   useEffect(() => {
     getFeatured();
   }, [user])
-
   return (
     <Landing>
       <LandingTitle>

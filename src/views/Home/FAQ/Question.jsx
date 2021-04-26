@@ -81,6 +81,8 @@ const FaqBody = styled.div`
 const FaqAnswer = styled.p`
   // font-size: 20px;
   width: 100%;
+  line-height: 1.5;
+  margin-bottom: 0px;
   text-align: left;
 `;
 

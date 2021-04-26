@@ -7,7 +7,7 @@ const NftType = require('../schemas/NftType.schema')
 const multer = require('multer');
 const User = require('../schemas/User.schema');
 const { NFTSale } = require('../web3/constants');
-const { sign } = require('../web3/server-utils');
+const { sign, getSetSale } = require('../web3/server-utils');
 const { listenForMint } = require("../web3/mint-listener");
 
 const findLikes = (nfts, account) => {
@@ -19,9 +19,42 @@ const findLikes = (nfts, account) => {
     else {
       nfts[i] = { ...nfts[i]._doc, likes: [], likeCount: nfts[i]._doc.likes.length || 0, liked: false };
     }
+    // const extraInfo = await getSetSale(nfts[i].nftId)
+    // console.log("EXTRA INFO", extraInfo)
+    // nfts[i] = {
+    //   ...nfts[i],
+    //   price: extraInfo.price,
+    //   quantity: extraInfo.quantity,
+    //   sold: extraInfo.sold
+    // }
   }
+  // console.log("NFTS", nfts);
   return nfts;
 }
+
+const findRemainingInfo = async (nft) => {
+  const extraInfo = await getSetSale(nft.nftId)
+  // console.log("remaining info", extraInfo, nft);
+  let newNft = {
+    ...nft,
+    price: utils.formatEther(extraInfo.price),
+    quantity: extraInfo.quantity,
+    sold: extraInfo.sold
+  }
+  // console.log("3", newNft);
+
+  return newNft;
+}
+
+router.post('/full-nft-info', async (req, res) => {
+  try {
+    const fullInfo = await findRemainingInfo(req.body.nft).catch(err => console.log(err));
+    res.send(fullInfo);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
 
 router.post('/artist-nfts', async (req, res) => {
   try {
@@ -58,7 +91,6 @@ router.post('/get-NFT', async (req, res) => {
 router.post('/get-user-nfts', async (req, res) => {
   try {
     let ids = req.body.x_nfts;
-    console.log("jiefoawioj", req.body)
     let nfts = await NftType.find({ '_id': { $in: ids } });
 
     res.status(200).send(findLikes(nfts, req.body.address));
@@ -100,10 +132,22 @@ router.post('/finalize', async (req, res) => {
 
 router.post('/get-one', async (req, res) => {
   try {
-    let id = req.body.id
+    let { id, address } = req.body;
     let nftType = await NftType.findById(id);
-    console.log(nftType);
+    console.log("1", nftType);
 
+    //for some reason this isn't pulling the likeCount
+    nftType = JSON.parse(JSON.stringify(findLikes(nftType, address)));
+
+    const extraInfo = await getSetSale(nftType.nftId)
+    console.log("nftType", nftType);
+    nftType = {
+      ...nftType,
+      price: utils.formatEther(extraInfo.price),
+      quantity: extraInfo.quantity,
+      sold: extraInfo.sold,
+      likeCount: nftType.likeCount ? nftType.likeCount : nftType.likes.length,
+    }
     res.send(nftType);
   } catch (error) {
     console.log(error);
@@ -430,16 +474,6 @@ router.post("/purchase", async (req, res) => {
   } catch (err) {
     console.log("err", err);
     res.status(500).send(err)
-  }
-})
-
-router.post('/delete-not-minted', async (req, res) => {
-  try {
-    let nfts = await NftType.find({ address: req.body.address, isDraft: false })
-
-    res.send(findLikes(nfts, req.body.address));
-  } catch (err) {
-    res.status(500).send(err);
   }
 })
 

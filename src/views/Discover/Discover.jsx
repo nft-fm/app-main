@@ -10,12 +10,12 @@ const Listen = () => {
   const [isOpen, setIsOpen] = useState(true);
 
   useEffect(() => {
+    console.log("win", window.location.pathname, window.location.pathname.length, window.location.pathname.slice(10))
     if (window.location.pathname.length > 10) {
       setId(window.location.pathname.slice(10))
     }
   })
 
-  const show = () => setIsOpen(true);
   const hide = (e) => {
     setIsOpen(false);
     console.log("isOpen", isOpen);

@@ -7,13 +7,13 @@ import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
 import { useAccountConsumer } from "../../contexts/Account";
-import { getSetSale } from "../../web3/utils";
+import loading from "../../assets/img/loading.gif";
 import axios from "axios";
 import ShareModal from "../SMShareModal/SMShareModal";
 import LikeShare from "./LikeShare";
 
 const NftCard = (props) => {
-  const { usdPerEth, user } = useAccountConsumer();
+  const { usdPerEth, user, account } = useAccountConsumer();
   const [nft, setNft] = useState({
     address: "",
     artist: "",
@@ -25,10 +25,12 @@ const NftCard = (props) => {
     nftId: 0,
     title: "",
     writer: "",
-    price: "--",
+    price: "...",
     quantity: "--",
     sold: "--",
   })
+
+  const [imageLoaded, setImageLoaded] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [liked, setLiked] = useState(false);
@@ -39,21 +41,20 @@ const NftCard = (props) => {
   };
 
   useEffect(() => {
-    setNft(props.nft);
-    setLiked(props.nft.liked);
+    setNft({
+      ...props.nft,
+      price: nft.price === "..." ? "..." : nft.price,
+      quantity: nft.quantity === "--" ? "--" : nft.quantity,
+      sold: nft.sold === "--" ? "--" : nft.sold,
+    });
     setLikeCount(props.nft.likeCount);
-  }, [props, user]);
-
-  useEffect(() => {
-    if (nft && typeof(nft.price) != Number) {
-      getSetSale(nft.nftId, (res) => {
-        const { price, quantity, sold } = res;
-        setNft(prevState => ({ ...prevState, price, quantity, sold }));
-      });
-    }
-  }, [nft])
-
-  // console.log("card", props);
+    setLiked(props.nft.liked);
+    axios.post("/api/nft-type/full-nft-info", { nft: props.nft, account: account })
+      .then((res) => {
+        setNft(res.data)
+      })
+      .catch(err => console.log(err));
+  }, [props.nft, user]);
 
   return (
     <Container>
@@ -90,19 +91,26 @@ const NftCard = (props) => {
           </IconArea>
         </Side>
       </CardTop>
+      {
+        imageLoaded ? null :
+          <Image src={loading} alt="image" />
+
+      }
       <Image
         src={nft.imageUrl}
+        style={imageLoaded ? {} : { display: 'none' }}
         alt="image"
         onClick={() => setIsOpen(!isOpen)}
+        onLoad={() => setImageLoaded(true)}
       />
       <TrackName onClick={() => setIsOpen(!isOpen)}>{nft.title}</TrackName>
       <Artist>{nft.artist}</Artist>
       <CostFields>
         <CostEth>
-          {parseFloat(nft.price).toLocaleString(undefined, {
+          {nft.price !== "..." ? parseFloat(nft.price).toLocaleString(undefined, {
             minimumFractionDigits: 0,
             maximumFractionDigits: 6,
-          })}
+          }) : nft.price}
           < Eth />
         </CostEth>
         <CostUsd>

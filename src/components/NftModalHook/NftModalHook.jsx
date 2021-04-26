@@ -24,19 +24,12 @@ const NftModalHook = ({ id, open, children, hide, onClose }) => {
   console.log("here", nft);
 
   useEffect(() => {
-    axios.post("/api/nft-type/get-one", { id: id }).then((res) => {
-      setNft(res.data
-      //   , () => {
-      //   getSetSale(nft.nftId, (res) => {
-      // console.log("res", res);
-      //     const { price, quantity, sold } = res;
-      //     setNft({ ...nft, price, quantity, sold });
-      //   });
-      // }
-      );
+    axios.post("/api/nft-type/get-one", { id: id, address: account }).then((res) => {
+      console.log("res", res.data);
+      setNft(res.data);
     });
-  }, [id]);
-  console.log('nft here', nft)
+  }, []);
+
   const stopProp = (e) => {
     e.stopPropagation();
     e.preventDefault();
@@ -80,14 +73,7 @@ const NftModalHook = ({ id, open, children, hide, onClose }) => {
     //${!}
   };
 
-  useEffect(() => {
-    if (nft && typeof nft.price != Number && !nft.price) {
-      getSetSale(nft.nftId, (res) => {
-        const { price, quantity, sold } = res;
-        setNft((prevState) => ({ ...prevState, price, quantity, sold }));
-      });
-    }
-  }, [nft]);
+  console.log("here what I got", id, nft);
 
   if (!open) return null;
 

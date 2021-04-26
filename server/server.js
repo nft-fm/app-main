@@ -51,7 +51,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use('/api/user', userRouter)
 app.use('/api/nft-type', nftTypeRouter)
-app.use('/api/card', nftRouter)
+app.use('/api/nft', nftRouter)
 
 app.get('/*', function (req, res) {
   res.sendFile(path.join(__dirname, '../build/index.html'), function (err) {

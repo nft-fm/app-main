@@ -3,8 +3,35 @@ import { useWallet } from 'use-wallet'
 import axios from "axios";
 import isMobile from "../../utils/isMobile";
 import Swal from 'sweetalert2';
+import styled from "styled-components";
 
 const AccountContext = createContext();
+
+
+
+const NoChainModal = ({}) => {
+  return (
+    <OpaqueFilter>
+      <Container>
+        <StyledModal>
+          <h1>MetaMask not detected. Please go to <a href="https://metamask.io/">MetaMask's site</a> and install the application before proceeding.</h1>
+        </StyledModal>
+      </Container>
+    </OpaqueFilter>
+  );
+};
+
+const WrongChainModal = ({}) => {
+  return (
+    <OpaqueFilter>
+      <Container>
+        <StyledModal>
+          <h1>You are on the wrong chain. Go to your Metamask wallet and select Rinkeby Test Network to interact with the site.</h1>
+        </StyledModal>
+      </Container>
+    </OpaqueFilter>
+  );
+};
 
 export const AccountProvider = ({ children }) => {
   const { account, connect } = useWallet();
@@ -77,6 +104,8 @@ export const AccountProvider = ({ children }) => {
         currChainId, setCurrChainId,
         usdPerEth
       }}>
+        {!currChainId && <NoChainModal />}
+        {currChainId && currChainId != 4 && <WrongChainModal />}
       {children}
     </AccountContext.Provider>
   );
@@ -90,3 +119,44 @@ export function useAccountConsumer() {
 
   return context;
 }
+
+
+const OpaqueFilter = styled.div`
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 500;
+`;
+
+const Container = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  width: 340px;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+`;
+
+const StyledModal = styled.div`
+  border-radius: 8px;
+  border: solid 2px #181818;
+  width: calc(100% - 60px);
+  height: 100%;
+  padding: 10px 30px;
+  background-color: ${(props) => props.theme.bgColor};
+  font-size: 16px;
+  font-weight: normal;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  position: relative;
+  color: white;
+  text-align: center;
+`;

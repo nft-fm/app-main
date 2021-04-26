@@ -60,7 +60,7 @@ const NftCard = (props) => {
         />
         <Side>
           <IconArea
-            href={`https://testnets.opensea.io/assets/0xf9677d179e965ae2af25e11ef8d131df565c58f3/${nft.nftId}`}
+            href={`https://testnets.opensea.io/assets/0x66B9f92D1167EeFd6f49dFeA83BCCFBDDa721409/${nft.nftId}`}
             target="_blank"
             rel="noopener noreferrer"
           >

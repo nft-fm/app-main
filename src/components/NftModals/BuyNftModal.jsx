@@ -18,7 +18,7 @@ import swal from "sweetalert2";
 const BuyNftModal = ({ open, children, hide, onClose, nft, liked, setLiked, likeCount, setLikeCount, setIsShareOpen }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isBought, setIsBought] = useState(false);
-  const { account, connect, usdPerEth } = useAccountConsumer();
+  const { account, connect, usdPerEth, getUser } = useAccountConsumer();
   const { setNftCallback } = usePlaylistConsumer();
 
   if (!open) return null;
@@ -36,6 +36,7 @@ const BuyNftModal = ({ open, children, hide, onClose, nft, liked, setLiked, like
           setTimeout(function () {
             setIsLoading(false)
             setIsBought(true);
+            getUser();
           }, 1000);
         })
         .catch((err) => {

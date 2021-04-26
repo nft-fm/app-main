@@ -13,6 +13,7 @@ import loading from "../../assets/img/loading.gif"
 import Swal from "sweetalert2";
 import { usePlaylistConsumer } from "../../contexts/Playlist";
 import { buyNFT } from "../../web3/utils";
+import swal from "sweetalert2";
 
 const BuyNftModal = ({ open, children, hide, onClose, nft, liked, setLiked, likeCount, setLikeCount, setIsShareOpen }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -27,7 +28,6 @@ const BuyNftModal = ({ open, children, hide, onClose, nft, liked, setLiked, like
 
   const purchase = async (id) => {
     setIsLoading(true);
-
     await buyNFT({ nftID: id, amount: 1, saleId: nft.nftId, price: nft.price }, () => { console.log("pending") }, () => {
       axios
         .post("/api/nft-type/purchase", { id: id, address: account })
@@ -45,6 +45,13 @@ const BuyNftModal = ({ open, children, hide, onClose, nft, liked, setLiked, like
           console.log(err)
         });
     })
+      .catch(err => {
+        swal.fire({
+          icon: "error",
+          title: "Couldn't complete sale!",
+          text: "Please try again",
+        })
+      })
 
   };
 

@@ -187,7 +187,6 @@ const CreateForm = () => {
         artist: user.username,
       };
     }
-    console.log("handleSubmit", newNftData);
 
     //Input validation below here
     if (nftData.numMinted === "0" || nftData.numMinted === 0) {
@@ -226,10 +225,8 @@ const CreateForm = () => {
       });
       return;
     }
-    console.log();
 
     //run these two, store the returns in the nftData state object
-    console.log("here");
     if (!audioUploadError && !imageUploadError) {
       // after nftData has both audio and image references, run this route
       axios
@@ -257,7 +254,13 @@ const CreateForm = () => {
                 }).then(res => res.isConfirmed && history.push('/library'))
                 //CHANGE TO NAVLINK INSTEAD OF FORCED REDIRECT
               }
-            );
+            ).catch(err => {
+              swal.fire({
+                icon: "error",
+                title: "Couldn't create NFT!",
+                text: "Please try again",
+              })
+            })
             console.log("MINT");
           } else {
             setIsLoading(false);

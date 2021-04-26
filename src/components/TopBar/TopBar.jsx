@@ -47,6 +47,8 @@ const StyledTopBar = styled.div`
   background-color:#121212;
   border-bottom: 1px solid #232323;
   width: 100%;
+  z-index: 50;
+  position: relative;
 `;
 
 const StyledTopBarInner = styled.div`

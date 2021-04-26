@@ -16,6 +16,18 @@ const { listenForMint } = require("./web3/mint-listener");
 
 const PORT = process.env.PORT || 5000
 
+function ensureSecure(req, res, next) {
+  if (req.headers["x-forwarded-proto"] === "https") {
+    // OK, continue
+    return next();
+  };
+  res.redirect('https://' + req.hostname + req.url);
+};
+
+if (process.env.PRODUCTION) {
+  app.all('*', ensureSecure);
+}
+
 app.use(cors())
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", '*');

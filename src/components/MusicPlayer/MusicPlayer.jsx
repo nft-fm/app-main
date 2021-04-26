@@ -45,7 +45,7 @@ const MusicPlayer = (props) => {
   return (
     <Wrapper>
       <AudioPlayer
-        showSkipControls={true}
+        // showSkipControls={true}
         autoPlay={true}
         src={url}
         onPlay={e => console.log("onPlay")}
@@ -121,20 +121,7 @@ const TitleAndArtistSection = styled.div`
 
 const Image = styled.img`
   max-width: 50px;
-  max-height: 50px;
-`;
-
-const AudioControlSection = styled.div`
-    margin-left: auto;
-    margin-right: 25px;
-`;
-
-const TrackArtist = styled.div`
-    color: grey;
-`;
-
-const TrackTitle = styled.div`
-    color: white;
+  height: 50px;
 `;
 
 const TrackInfoWrapper = styled.div`

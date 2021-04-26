@@ -6,8 +6,7 @@ import ArtistCard from "../../../components/NftCards/ArtistCard";
 
 import { usePlaylistConsumer } from "../../../contexts/Playlist";
 
-const Library = ({ user, isCreating, newNft }) => {
-  const [pureNfts, setPureNfts] = useState([]);
+const Library = ({ user }) => {
   const [nfts, setNfts] = useState([]);
   const [selectedNft, setSelectedNft] = useState();
   const { setNftsCallback } = usePlaylistConsumer();
@@ -42,7 +41,6 @@ const Library = ({ user, isCreating, newNft }) => {
       .then((res) => {
         setNfts(formatNfts(res.data));
         setNftsCallback(res.data);
-        setPureNfts(res.data);
       });
   };
 
@@ -52,7 +50,6 @@ const Library = ({ user, isCreating, newNft }) => {
       .then((res) => {
         setNfts(formatNfts(res.data));
         setNftsCallback(res.data);
-        setPureNfts(res.data);
       });
     // axios
     //   .post("api/nft-type/featured")
@@ -64,7 +61,7 @@ const Library = ({ user, isCreating, newNft }) => {
 
   useEffect(() => {
     isViewingLibrary ? getUserNfts() : getArtistNfts();
-  }, [user, isViewingLibrary, newNft]);
+  }, [user, isViewingLibrary]);
 
   return (
     <Landing>

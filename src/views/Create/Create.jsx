@@ -36,7 +36,6 @@ const Create = () => {
       </IsConnected>
     )}
     <CreateHolder>
-
      <CreateForm />
     </CreateHolder>
     </BaseView>

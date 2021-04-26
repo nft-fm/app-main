@@ -12,8 +12,8 @@ const NoChainModal = ({ }) => {
     <OpaqueFilter>
       <Container>
         <StyledModal>
-          <h1>MetaMask not detected. Please go to <a target="_blank"
-            rel="noopener noreferrer" href="https://metamask.io/">MetaMask's site</a> and install the application before proceeding.</h1>
+          <h2>MetaMask not detected. Please go to <a target="_blank"
+            rel="noopener noreferrer" href="https://metamask.io/">MetaMask's site</a> and install the application before proceeding.</h2>
         </StyledModal>
       </Container>
     </OpaqueFilter>
@@ -25,7 +25,8 @@ const WrongChainModal = ({ }) => {
     <OpaqueFilter>
       <Container>
         <StyledModal>
-          <h1>You are on the wrong chain. Go to your Metamask wallet and select Rinkeby Test Network to interact with the site.</h1>
+          <h2>You are on the wrong chain. Go to your Metamask wallet and select Rinkeby Test Network to interact with the site.  <a target="_blank"
+            rel="noopener noreferrer" href="https://nft-fm.medium.com/nft-fm-private-beta-10be433c90de">Click me for more detailed instructions.</a></h2>
         </StyledModal>
       </Container>
     </OpaqueFilter>

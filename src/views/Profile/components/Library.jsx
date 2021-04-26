@@ -36,6 +36,7 @@ const Library = ({ user }) => {
   }
 
   const getArtistNfts = async () => {
+    setNfts([]);
     axios
       .post("api/nft-type/artist-nfts", user)
       .then((res) => {
@@ -45,6 +46,7 @@ const Library = ({ user }) => {
   };
 
   const getUserNfts = async () => {
+    setNfts([]);
     axios
       .post("api/nft-type/get-user-nfts", user)
       .then((res) => {

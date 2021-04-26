@@ -81,7 +81,7 @@ export const buyNFT = async (data, pendingCallback, finalCallback) => {
 			pendingCallback();
 			return res.wait();
 		})
-	console.log("buy result", result);
+
 	finalCallback(result)
 }
 

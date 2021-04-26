@@ -22,6 +22,7 @@ const Listen = () => {
 
   const getFeatured = () => {
     axios.post("/api/nft-type/featured", { address: account }).then((res) => {
+      console.log("RES.DATA", res.data);
       const formattedNfts = formatNfts(res.data);
       setTimeout(function () {
         formattedNfts.push(<FillerCard />);

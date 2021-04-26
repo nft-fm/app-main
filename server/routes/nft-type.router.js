@@ -7,10 +7,11 @@ const NftType = require('../schemas/NftType.schema')
 const multer = require('multer');
 const User = require('../schemas/User.schema');
 const { NFTSale } = require('../web3/constants');
-const { sign } = require('../web3/server-utils');
+const { sign, getSetSale } = require('../web3/server-utils');
 const { listenForMint } = require("../web3/mint-listener");
 
-const findLikes = (nfts, account) => {
+const findRemainingInfo = async (nfts, account) => {
+  //Remaining info => likes, likeCount, price, quantity, sold
   for (let i = 0; i < nfts.length; i++) {
     const likes = nfts[i]._doc.likes;
     if (likes && likes.find(like => like.toString() === account)) {
@@ -19,7 +20,15 @@ const findLikes = (nfts, account) => {
     else {
       nfts[i] = { ...nfts[i]._doc, likes: [], likeCount: nfts[i]._doc.likes.length || 0, liked: false };
     }
+    const extraInfo = await getSetSale(nfts[i].nftId)
+    console.log("EXTRA INFO", extraInfo)
+    nfts[i] = {...nfts[i],
+               price: extraInfo.price,
+               quantity: extraInfo.quantity,
+               sold: extraInfo.sold
+              }
   }
+  console.log("extra info", nfts);
   return nfts;
 }
 
@@ -27,7 +36,7 @@ router.post('/artist-nfts', async (req, res) => {
   try {
     let nfts = await NftType.find({ address: req.body.address, isDraft: false })
 
-    res.send(findLikes(nfts, req.body.address));
+    res.send(await findRemainingInfo(nfts, req.body.address));
   } catch (err) {
     res.status(500).send(err);
   }
@@ -61,7 +70,7 @@ router.post('/get-user-nfts', async (req, res) => {
     console.log("jiefoawioj", req.body)
     let nfts = await NftType.find({ '_id': { $in: ids } });
 
-    res.status(200).send(findLikes(nfts, req.body.address));
+    res.status(200).send(await findRemainingInfo(nfts, req.body.address));
   } catch (error) {
     console.log(error);
     res.status(500).send("server error")
@@ -120,7 +129,7 @@ router.post('/featured', async (req, res) => {
     })
       .limit(5)
 
-    res.send(findLikes(nftTypes, req.body.address));
+    res.send(await findRemainingInfo(nftTypes, req.body.address));
   } catch (error) {
     console.log(error);
     res.status(500).send("server error")
@@ -189,7 +198,7 @@ router.post('/all', async (req, res) => {
       isDraft: false,
       isMinted: true,
     });
-    res.send(findLikes(nftTypes, req.body.address));
+    res.send(await findRemainingInfo(nftTypes, req.body.address));
   } catch (error) {
     console.log(error);
     res.status(500).send("server error")
@@ -430,16 +439,6 @@ router.post("/purchase", async (req, res) => {
   } catch (err) {
     console.log("err", err);
     res.status(500).send(err)
-  }
-})
-
-router.post('/delete-not-minted', async (req, res) => {
-  try {
-    let nfts = await NftType.find({ address: req.body.address, isDraft: false })
-
-    res.send(findLikes(nfts, req.body.address));
-  } catch (err) {
-    res.status(500).send(err);
   }
 })
 

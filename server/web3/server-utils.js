@@ -1,4 +1,4 @@
-const { Contract, utils, providers, constants, BigNumber, getDefaultProvider } = require("ethers");
+const { Contract, utils, providers, Wallet, BigNumber, getDefaultProvider } = require("ethers");
 const { NFTToken, NFTSale } = require('./constants');
 const NFTSaleABI = require('./abi/NFTSale.abi');
 const NFTTokenABI = require('./abi/NFTToken.abi');
@@ -23,10 +23,9 @@ const getSetSale = async (nftId, callback) => {
 	let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
 	const contract = new Contract(NFTSale, NFTSaleABI, walletWithProvider);
 
-	contract.sets(nftId).then(r => {
-		console.log("got ret", r);
-		return (r);
-	});
+	const r = await contract.sets(nftId);
+	console.log("R", r)
+	return r;
 }
 
 

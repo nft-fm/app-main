@@ -58,6 +58,7 @@ router.post('/get-NFT', async (req, res) => {
 router.post('/get-user-nfts', async (req, res) => {
   try {
     let ids = req.body.x_nfts;
+    console.log("jiefoawioj", req.body)
     let nfts = await NftType.find({ '_id': { $in: ids } });
 
     res.status(200).send(findLikes(nfts, req.body.address));

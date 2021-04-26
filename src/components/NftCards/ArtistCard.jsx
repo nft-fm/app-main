@@ -47,13 +47,14 @@ const NftCard = (props) => {
   console.log("i am the nft", nft);
 
   useEffect(() => {
-    if (nft) {
+    if (nft && nft.price === "--") {
       getSetSale(nft.nftId, (res) => {
         const { price, quantity, sold } = res;
         setNft(prevState => ({ ...prevState, price, quantity, sold }));
       });
     }
-  }, [nft])
+  }, [nft]);
+
   return (
     <Container>
       <ShareModal

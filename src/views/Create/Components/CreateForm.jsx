@@ -550,7 +550,7 @@ const CreateForm = () => {
               : null
           }
         >
-          <span>Approve and Create</span>
+          <span>Mint NFTs!</span>
         </SubmitButton>
       )}
     </FormContainer>

@@ -10,11 +10,25 @@ import { useAccountConsumer } from "../../contexts/Account";
 import axios from "axios";
 import ShareModal from "../SMShareModal/CreatedShareModal";
 import LikeShare from "./LikeShare";
-import BuyNftModal from "../NftModals";
+import { getSetSale } from "../../web3/utils";
 
 const NftCard = (props) => {
   const { usdPerEth, user } = useAccountConsumer();
-  const { nft } = props;
+  const [nft, setNft] = useState({
+    address: "",
+    artist: "",
+    audioUrl: "",
+    genre: "",
+    imageUrl: "",
+    likeCount: 0,
+    liked: false,
+    nftId: 0,
+    title: "",
+    writer: "",
+    price: "--",
+    quantity: "--",
+    sold: "--",
+  })
   const [isOpen, setIsOpen] = useState(false);
   const [liked, setLiked] = useState(props.nft.liked);
   const [likeCount, setLikeCount] = useState(props.nft.likeCount);
@@ -26,9 +40,21 @@ const NftCard = (props) => {
   };
 
   useEffect(() => {
+    setNft(props.nft);
     setLiked(props.nft.liked);
     setLikeCount(props.nft.likeCount);
   }, [props, user]);
+
+  console.log("i am the nft", nft);
+
+  useEffect(() => {
+    if (nft) {
+      getSetSale(nft.nftId, (res) => {
+        const { price, quantity, sold } = res;
+        setNft(prevState => ({ ...prevState, price, quantity, sold }));
+      });
+    }
+  }, [nft])
   return (
     <Container>
       <ShareModal
@@ -82,9 +108,9 @@ const NftCard = (props) => {
         <CostUsd>
           {usdPerEth
             ? (usdPerEth * nft.price).toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })
             : "..."}
           <Usd />
         </CostUsd>

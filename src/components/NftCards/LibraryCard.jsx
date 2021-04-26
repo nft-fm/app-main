@@ -30,6 +30,8 @@ const NftCard = (props) => {
     setLiked(props.nft.liked);
     setLikeCount(props.nft.likeCount);
   }, [props, user]);
+
+  console.log("nftfiaj", nft);
   return (
     <Container>
       <ShareModal
@@ -57,7 +59,11 @@ const NftCard = (props) => {
           setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
         />
         <Side>
-          <IconArea>
+          <IconArea
+            href={`https://testnets.opensea.io/assets/0xf9677d179e965ae2af25e11ef8d131df565c58f3/${nft.nftId}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Trade
             <Cart />
           </IconArea>
@@ -66,7 +72,7 @@ const NftCard = (props) => {
       <Image
         src={nft.imageUrl}
         alt="image"
-        // onClick={() => setIsOpen(!isOpen)}
+      // onClick={() => setIsOpen(!isOpen)}
       />
       <BottomWrapper>
         <Bottom>
@@ -122,11 +128,6 @@ const Cart = styled(IconCart)`
     transition: all 0.2s ease-in-out;
     fill: ${(props) => props.theme.color.gray};
   }
-  &:hover {
-    & path {
-      fill: #20a4fc;
-    }
-  }
 `;
 
 const Share = styled(IconShare)`
@@ -179,12 +180,23 @@ const Side = styled.div`
   align-items: center;
 `;
 
-const IconArea = styled.div`
+const IconArea = styled.a`
   margin: 0 8px;
+  cursor: pointer;
+  text-decoration: none;
   display: flex;
   font-size: 14px;
   height: 100%;
   align-items: center;
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    transition: all 0.2s ease-in-out;
+    color: #20a4fc;
+    & svg > path {
+    transition: all 0.2s ease-in-out;
+      fill: #20a4fc;
+    }
+  }
 `;
 
 const CardTop = styled.div`

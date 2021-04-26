@@ -26,18 +26,6 @@ const NftTypeSchema = new Schema({
     type: String,
     default: "",
   },
-  x_numSold: {
-    type: Number,
-    default: 0,
-  },
-  numMinted: {
-    type: Number,
-    default: 0,
-  },
-  price: {
-    type: Number,
-    default: 0,
-  },
   address: {
     type: String,
     required: true,

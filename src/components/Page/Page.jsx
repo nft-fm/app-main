@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useCallback, useEffect, useState }  from "react";
 import styled from "styled-components";
 import { Footer } from "../Footer/Footer";
 import { Col } from "../Grid";
 import TopBar from "../TopBar";
 import { Nav } from "../TopBar/components/Nav";
 
-const Page = ({ children }) => (
+const Page = ({ children }) =>(
   <StyledPage>
     <Aesthetics>
       <Aesthetics1 />
@@ -23,7 +23,8 @@ const Page = ({ children }) => (
     </StyledMain>
     <Footer />
   </StyledPage>
-);
+  )
+  
 
 const Aesthetics4 = styled.div`
 width: 100%;

@@ -13,6 +13,7 @@ import loading from "../../assets/img/loading.gif";
 import { NavLink } from "react-router-dom";
 import Swal from "sweetalert2";
 import { usePlaylistConsumer } from "../../contexts/Playlist";
+import { getSetSale } from "../../web3/utils";
 
 const NftModalHook = ({ id, open, children, hide, onClose }) => {
   const { account, connect, usdPerEth } = useAccountConsumer();
@@ -20,14 +21,22 @@ const NftModalHook = ({ id, open, children, hide, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isBought, setIsBought] = useState(false);
   const [nft, setNft] = useState(null);
+  console.log("here", nft);
 
   useEffect(() => {
     axios.post("/api/nft-type/get-one", { id: id }).then((res) => {
-      console.log("res", res.data);
-      setNft(res.data);
+      setNft(res.data
+      //   , () => {
+      //   getSetSale(nft.nftId, (res) => {
+      // console.log("res", res);
+      //     const { price, quantity, sold } = res;
+      //     setNft({ ...nft, price, quantity, sold });
+      //   });
+      // }
+      );
     });
   }, [id]);
-
+  console.log('nft here', nft)
   const stopProp = (e) => {
     e.stopPropagation();
     e.preventDefault();
@@ -37,8 +46,8 @@ const NftModalHook = ({ id, open, children, hide, onClose }) => {
     hide();
     setTimeout(() => {
       setNftCallback(nft);
-    }, 500)
-  }
+    }, 500);
+  };
 
   const purchase = (id) => {
     setIsLoading(true);
@@ -71,6 +80,15 @@ const NftModalHook = ({ id, open, children, hide, onClose }) => {
     //${!}
   };
 
+  useEffect(() => {
+    if (nft && typeof nft.price != Number && !nft.price) {
+      getSetSale(nft.nftId, (res) => {
+        const { price, quantity, sold } = res;
+        setNft((prevState) => ({ ...prevState, price, quantity, sold }));
+      });
+    }
+  }, [nft]);
+
   if (!open) return null;
 
   if (!nft) return null;
@@ -98,7 +116,7 @@ const NftModalHook = ({ id, open, children, hide, onClose }) => {
             </Side>
             <Side>
               <IconArea>
-                {nft.x_numSold}
+                {nft.sold}
                 <span style={{ margin: "0 1px" }}>/</span>
                 {nft.numMinted}
                 <Cart />
@@ -115,7 +133,7 @@ const NftModalHook = ({ id, open, children, hide, onClose }) => {
               <PriceItem>Price:</PriceItem>
               <PriceItem>
                 {" "}
-                {nft.price.toLocaleString(undefined, {
+                {nft?.price?.toLocaleString(undefined, {
                   minimumFractionDigits: 3,
                   maximumFractionDigits: 3,
                 })}{" "}
@@ -129,9 +147,9 @@ const NftModalHook = ({ id, open, children, hide, onClose }) => {
                 {" "}
                 {usdPerEth
                   ? (usdPerEth * nft.price).toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })
                   : "..."}{" "}
                 &nbsp; USD
               </AvailableItem>
@@ -202,10 +220,8 @@ const OpaqueFilter = styled(NavLink)`
   z-index: 500;
   backdrop-filter: blur(4.6px);
   cursor: auto;
-color: ${props => props.theme.color.lightgray};
+  color: ${(props) => props.theme.color.lightgray};
 `;
-
-
 
 const BoughtText = styled(NavLink)`
   height: 86px;
@@ -213,98 +229,97 @@ const BoughtText = styled(NavLink)`
   /* margin-bottom: 20px; */
   text-align: center;
   color: white;
-`
+`;
 
 const Loading = styled.img`
-width: 40px;
-height: auto;
-`
+  width: 40px;
+  height: auto;
+`;
 
 const ButtonText = styled.span`
-font-family: "Compita";
-font-size: ${props => props.theme.fontSizes.xs};
-font-weight: 600;
-color: white;
-`
+  font-family: "Compita";
+  font-size: ${(props) => props.theme.fontSizes.xs};
+  font-weight: 600;
+  color: white;
+`;
 
 const MetaMask = styled.img`
-width: 32px;
-height: auto;
-`
+  width: 32px;
+  height: auto;
+`;
 
 const Divider = styled.div`
-margin: 5px 0;
-width: 100%;
-height: 1px;
-background-color: ${props => props.theme.color.gray};
-`
+  margin: 5px 0;
+  width: 100%;
+  height: 1px;
+  background-color: ${(props) => props.theme.color.gray};
+`;
 
 const AvailableItem = styled.div`
-font-size: 0.8rem;
-color: ${props => props.theme.color.lightgray};
-`
+  font-size: 0.8rem;
+  color: ${(props) => props.theme.color.lightgray};
+`;
 
 const PriceItem = styled.span`
-font-size: ${props => props.theme.fontSizes.xs};
-color: white;
-`
-
-
+  font-size: ${(props) => props.theme.fontSizes.xs};
+  color: white;
+`;
 
 const Cart = styled(IconCart)`
-width: 24px;
-height: 24px;
-margin: -2px 0 0 8px;
-cursor: pointer;
-transition: all 0.2s ease-in-out;
- & path {
-    transition: all 0.2s ease-in-out;
-     fill: ${props => props.theme.color.gray};
-    }
-&:hover {
+  width: 24px;
+  height: 24px;
+  margin: -2px 0 0 8px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
   & path {
-    fill: #20a4fc;
+    transition: all 0.2s ease-in-out;
+    fill: ${(props) => props.theme.color.gray};
   }
-}
-`
+  &:hover {
+    & path {
+      fill: #20a4fc;
+    }
+  }
+`;
 
 const Share = styled(IconShare)`
-width: 19px;
-height: 19px;
-margin: 0 4px 0 0;
-cursor: pointer;
-transition: all 0.2s ease-in-out;
- & path {
-    transition: all 0.2s ease-in-out;
-     fill: ${props => props.theme.color.gray};
-    }
-&:hover {
+  width: 19px;
+  height: 19px;
+  margin: 0 4px 0 0;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
   & path {
-    fill: #20a4fc;
+    transition: all 0.2s ease-in-out;
+    fill: ${(props) => props.theme.color.gray};
   }
-}`
+  &:hover {
+    & path {
+      fill: #20a4fc;
+    }
+  }
+`;
 
 const Heart = styled(IconHeart)`
-width: 24px;
-height: 24px;
-margin: -3px 4px 0 0;
-cursor: pointer;
-transition: all 0.2s ease-in-out;
- & path {
-    transition: all 0.2s ease-in-out;
-     stroke: ${props => props.theme.color.gray};
-    }
-&:hover {
+  width: 24px;
+  height: 24px;
+  margin: -3px 4px 0 0;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
   & path {
-    stroke: #DD4591;
+    transition: all 0.2s ease-in-out;
+    stroke: ${(props) => props.theme.color.gray};
   }
-}
-`
+  &:hover {
+    & path {
+      stroke: #dd4591;
+    }
+  }
+`;
 
 const Side = styled.div`
-display: flex;
-align-items: center;
-`
+  display: flex;
+  align-items: center;
+`;
 
 const IconArea = styled.div`
   margin: 0 8px;
@@ -312,35 +327,35 @@ const IconArea = styled.div`
   font-size: 14px;
   height: 100%;
   align-items: center;
-`
+`;
 
 const CardTop = styled.div`
-/* padding: 0px 2px; */
-width: 100%;
-margin-bottom: 8px;
-display: flex;
-justify-content: space-between;
-font-weight: 600;
-font-family: "Compita";
-`
+  /* padding: 0px 2px; */
+  width: 100%;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  font-family: "Compita";
+`;
 
 const Logo = styled.img`
-width: 20px;
-margin-right: 8px;
-height: auto;
-`
+  width: 20px;
+  margin-right: 8px;
+  height: auto;
+`;
 
 const CardTitle = styled.div`
-width: 100%;
-display: flex;
-align-items: center;
-justify-content: center;
-font-family: "Compita";
-font-weight: 600;
-color: white;
-font-size: ${props => props.theme.fontSizes.sm};
-margin-bottom: 12px;
-`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Compita";
+  font-weight: 600;
+  color: white;
+  font-size: ${(props) => props.theme.fontSizes.sm};
+  margin-bottom: 12px;
+`;
 
 const Container = styled.div`
   align-items: center;
@@ -359,7 +374,7 @@ const StyledModal = styled.div`
   width: calc(100% - 60px);
   height: 100%;
   padding: 10px 30px;
-  background-color: ${props => props.theme.bgColor};
+  background-color: ${(props) => props.theme.bgColor};
   font-size: 16px;
   font-weight: normal;
   display: flex;
@@ -396,12 +411,12 @@ const InfoContainer = styled.div`
 `;
 const TrackName = styled.span`
   color: white;
-  font-size: ${props => props.theme.fontSizes.sm};
+  font-size: ${(props) => props.theme.fontSizes.sm};
   margin-bottom: 6px;
 `;
 const Artist = styled.span`
-  font-size: ${props => props.theme.fontSizes.xs};
-  color: ${props => props.theme.color.lightgray};
+  font-size: ${(props) => props.theme.fontSizes.xs};
+  color: ${(props) => props.theme.color.lightgray};
   margin-bottom: 12px;
 `;
 
@@ -420,7 +435,7 @@ const BuyButton = styled.button`
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-  border: 1px solid ${props => props.theme.color.boxBorder};
+  border: 1px solid ${(props) => props.theme.color.boxBorder};
   border-radius: 2px;
   background-color: ${(props) => props.theme.color.box};
   margin-bottom: 20px;
@@ -429,6 +444,5 @@ const BuyButton = styled.button`
     border: 1px solid #383838;
   }
 `;
-
 
 export default NftModalHook;

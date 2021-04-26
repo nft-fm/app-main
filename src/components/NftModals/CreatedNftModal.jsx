@@ -16,9 +16,7 @@ import { ReactComponent as eth_icon } from "../../assets/img/icons/ethereum.svg"
 import Swal from "sweetalert2";
 const BuyNftModal = ({
   open,
-  children,
   hide,
-  onClose,
   nft,
   liked,
   setLiked,
@@ -68,7 +66,6 @@ const BuyNftModal = ({
           <X onClick={(e) => hide(e)} />
           <CardTitle>
             <Logo src={logo} />
-            {/* Buy NFT */}
           </CardTitle>
           <CardTop>
             <Side>
@@ -99,13 +96,6 @@ const BuyNftModal = ({
             <Artist>{nft.artist}</Artist>
           </InfoContainer>
           <StatsContainer>
-            {/* <br />
-            <span>Earnings</span>
-            <span>Eth: {nft.x_numSold * nft.price} </span>
-            <span> USD: ${(nft.x_numSold * nft.price * usdPerEth).toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}</span> */}
             <StyledTable>
               <TableRow className="header">
                 <th>Earnings</th>

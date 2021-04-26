@@ -22,11 +22,12 @@ const findRemainingInfo = async (nfts, account) => {
     }
     const extraInfo = await getSetSale(nfts[i].nftId)
     console.log("EXTRA INFO", extraInfo)
-    nfts[i] = {...nfts[i],
-               price: extraInfo.price,
-               quantity: extraInfo.quantity,
-               sold: extraInfo.sold
-              }
+    nfts[i] = {
+      ...nfts[i],
+      price: extraInfo.price,
+      quantity: extraInfo.quantity,
+      sold: extraInfo.sold
+    }
   }
   console.log("extra info", nfts);
   return nfts;
@@ -111,6 +112,7 @@ router.post('/get-one', async (req, res) => {
   try {
     let id = req.body.id
     let nftType = await NftType.findById(id);
+    console.log("route", id, nftType);
     console.log(nftType);
 
     res.send(nftType);

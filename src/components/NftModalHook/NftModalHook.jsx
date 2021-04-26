@@ -71,6 +71,8 @@ const NftModalHook = ({ id, open, children, hide, onClose }) => {
     //${!}
   };
 
+  console.log("here what I got", id, nft);
+
   if (!open) return null;
 
   if (!nft) return null;

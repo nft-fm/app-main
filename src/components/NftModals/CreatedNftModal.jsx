@@ -9,6 +9,7 @@ import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
 import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { useAccountConsumer } from "../../contexts/Account";
+import { getSetSale } from "../../web3/utils";
 import IconMetamask from "../../assets/img/icons/metamask_icon.png";
 
 import { ReactComponent as eth_icon } from "../../assets/img/icons/ethereum.svg";
@@ -58,7 +59,7 @@ const BuyNftModal = ({
     setIsShareOpen();
     hide();
   };
-  console.log('nftprice', nft.price)
+  console.log('nftprice', nft.title, nft.price)
 
   return (
     <OpaqueFilter onClick={(e) => hide(e)}>
@@ -112,13 +113,13 @@ const BuyNftModal = ({
               <TableRow>
                 <td>ETH</td>
                 <td><EthIcon
-                />{Number(nft.x_numSold * nft.price)}</td>
+                />{parseFloat(nft.sold * nft.price)}</td>
               </TableRow>
               <TableRow>
                 <td>USD</td>
                 <td>
                   ${" "}
-                  {Number(nft.x_numSold * nft.price * usdPerEth).toLocaleString(
+                  {parseFloat(nft.sold * nft.price * usdPerEth).toLocaleString(
                     undefined,
                     {
                       minimumFractionDigits: 2,

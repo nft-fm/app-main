@@ -26,7 +26,7 @@ const Listen = () => {
       setTimeout(function () {
         formattedNfts.push(<FillerCard />);
         setNfts(formattedNfts);
-      }, 800)
+      }, 300)
     })
   }
 

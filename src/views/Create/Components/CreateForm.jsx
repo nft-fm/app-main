@@ -168,7 +168,6 @@ const CreateForm = () => {
       return true;
     }
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!isComplete()) {
@@ -199,10 +198,10 @@ const CreateForm = () => {
       });
       return;
     }
-    if (nftData.price === "0" || nftData.price === 0) {
+    if (Number(nftData.price) === 0) {
       console.log("re");
       swal.fire({
-        title: "Created amount cannot be 0.",
+        title: "Total Copies or NFT Price cannot be 0.",
         timer: 5000,
         icon: "error",
       });
@@ -322,6 +321,7 @@ const CreateForm = () => {
       if (curr === "USD" && Number(e.target.value) > 1000 * usdPerEth) {
         return;
       }
+      
     }
     if (e.target.name === "price") {
       curr === "ETH"

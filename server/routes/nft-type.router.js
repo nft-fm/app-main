@@ -432,4 +432,14 @@ router.post("/purchase", async (req, res) => {
   }
 })
 
+router.post('/delete-not-minted', async (req, res) => {
+  try {
+    let nfts = await NftType.find({ address: req.body.address, isDraft: false })
+
+    res.send(findLikes(nfts, req.body.address));
+  } catch (err) {
+    res.status(500).send(err);
+  }
+})
+
 module.exports = router

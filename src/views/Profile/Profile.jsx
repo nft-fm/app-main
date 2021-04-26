@@ -1,56 +1,30 @@
 import React, { useCallback, useEffect, useState, useRef } from "react";
-import { useWallet } from "use-wallet";
 import BaseView from "../BaseView";
 import axios from "axios";
 import styled, { keyframes } from "styled-components";
 import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
-import Create from "./components/Create";
 import { useAccountConsumer } from "../../contexts/Account";
 import cog from "../../assets/img/icons/cog.svg";
 import { ReactComponent as CopyIcon } from "../../assets/img/icons/copy_icon.svg";
 import { ReactComponent as plus_icon } from "../../assets/img/icons/plus_icon.svg";
 import { ReactComponent as lock_icon } from "../../assets/img/icons/lock.svg";
 import IconMetamask from "../../assets/img/icons/metamask_icon.png";
-
 import Library from "./components/Library";
-import upload_icon from "../../assets/img/profile_page_assets/upload_icon.svg";
 import ProfilePic from "./components/ProfilePic";
 
 const Profile = () => {
-  const [ownedNfts, setOwnedNfts] = useState([]);
-  console.log("ownedNfts", ownedNfts);
   const { account, connect, user, setUser } = useAccountConsumer();
   const [edit, setEdit] = useState(false);
   const [username, setUsername] = useState("");
   const [profilePic, setProfilePic] = useState("");
-  const [email, setEmail] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
-  const [isCreating, setIsCreating] = useState(false);
   const [shake, setShake] = useState(false);
 
-  const getUser = async () => {
-    axios
-      .post("api/user/get-account", { address: account })
-      .then((res) => {
-        setUser(res.data);
-        if (res.data.profilePic) setProfilePic(res.data.profilePic);
-      });
-  };
 
-  // // TODO switch back to get-user-nfts
-  // const getUserNfts = async () => {
-  //   console.log("here");
-  //   axios
-  //     .post("api/nft-type/get-user-nfts", user)
-  //     .then((res) => setOwnedNfts(res.data));
-  //   // axios.post("api/nft-type/featured").then((res) => setOwnedNfts(res.data));
-  // };
-  // useEffect(() => {
-  //   getUserNfts();
-  // }, [user]);
   useEffect(() => {
-    getUser();
-  }, [account]);
+    if (user?.profilePic) {
+      setProfilePic(user.profilePic);
+    }
+  }, [user])
 
   const saveDetails = (e) => {
     e.preventDefault();
@@ -72,12 +46,6 @@ const Profile = () => {
     }, 2000);
   }
 
-  const hide = (e) => {
-    setIsOpen(false);
-    console.log("isOpen", isOpen);
-  };
-
-  const [newNft, setNewNft] = useState(false)
   return (
     <BaseView>
       {!account && (
@@ -145,7 +113,7 @@ const Profile = () => {
           </Side>
         </ProfileHeading>
       </Landing>
-      <Library user={user} isCreating={isCreating} newNft={newNft} />
+      <Library user={user} />
     </BaseView>
   );
 };

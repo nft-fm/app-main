@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
 import BaseView from "../BaseView";
-import Trending from "./Trending";
 import Market from "./Market";
 import styled, { keyframes } from "styled-components";
 import NftModalHook from "../../components/NftModalHook";

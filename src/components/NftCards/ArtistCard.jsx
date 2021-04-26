@@ -32,7 +32,6 @@ const NftCard = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [liked, setLiked] = useState(props.nft.liked);
   const [likeCount, setLikeCount] = useState(props.nft.likeCount);
-
   const [isShareOpen, setIsShareOpen] = useState(false);
   const show = () => setIsOpen(true);
   const hide = (e) => {
@@ -83,9 +82,9 @@ const NftCard = (props) => {
         />
         <Side>
           <IconArea>
-            {nft.x_numSold}
+            {nft.sold}
             <span style={{ margin: "0 1px" }}>/</span>
-            {nft.numMinted}
+            {nft.quantity}
             <Cart />
           </IconArea>
         </Side>

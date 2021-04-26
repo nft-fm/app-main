@@ -97,11 +97,11 @@ const BuyNftModal = ({ open, children, hide, onClose, nft, liked, setLiked, like
             </Side>
             <Side>
               <IconArea>
-                {nft.x_numSold}
+                {nft.sold}
                 <span style={{ margin: "0 1px" }}>
                   /
               </span>
-                {nft.numMinted}
+                {nft.quantity}
                 <Cart />
               </IconArea>
             </Side>
@@ -136,18 +136,22 @@ const BuyNftModal = ({ open, children, hide, onClose, nft, liked, setLiked, like
               <ButtonText>Connect Wallet</ButtonText>
             </BuyButton>
             :
-            !isLoading ?
-              isBought ?
-                <BuyButton onClick={() => playSong()}>
-                  <Loading src={PlayIcon} />
-                </BuyButton>
+            nft.sold !== nft.quantity ?
+              !isLoading ?
+                isBought ?
+                  <BuyButton style={{ backgroundColor: "#bbb" }} onClick={() => playSong()}>
+                    <Loading src={PlayIcon} />
+                  </BuyButton>
+                  :
+                  <BuyButton onClick={() => purchase(nft._id)}>
+                    <ButtonText>Buy</ButtonText>
+                  </BuyButton>
                 :
-                <BuyButton onClick={() => purchase(nft._id)}>
-                  <ButtonText>Buy</ButtonText>
-                </BuyButton>
-              :
+                <BuyButton style={{ backgroundColor: "#262626", border: "1px solid #383838" }}>
+                  <Loading src={loading} />
+                </BuyButton> :
               <BuyButton style={{ backgroundColor: "#262626", border: "1px solid #383838" }}>
-                <Loading src={loading} />
+                <ButtonText>Sold Out!</ButtonText>
               </BuyButton>
           }
         </StyledModal>

@@ -10,7 +10,7 @@ import Loading from '../../../assets/img/loading.gif';
 const ProfilePic = (props) => {
   const { account, user, setUser } = useAccountConsumer();
   const { profilePic, setProfilePic, edit } = props;
-  const [ imageFile, setImageFile ] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(false);
   const [loading, setLoading] = useState(false)
   const hiddenImageInput = useRef(null);
@@ -63,20 +63,20 @@ const ProfilePic = (props) => {
     }
   }, [imageFile])
   return (
-      <ProfilePicHolder imageUrl={profilePic}>
-        {loading && edit &&
+    <ProfilePicHolder imageUrl={profilePic}>
+      {loading && edit &&
         <EditProfilePic>
-          <img src={Loading}/>
+          <img src={Loading} />
         </EditProfilePic>
-        }
-        {!loading && edit &&
+      }
+      {!loading && edit &&
         <EditProfilePic onClick={handleImage}>
           <div>Change</div>
           <div>Picture</div>
           <img src={upload_icon} alt="upload-file-icon" />
         </EditProfilePic>
-        }
-        {edit &&
+      }
+      {edit &&
         <input
           type="file"
           accept=".jpg,.jpeg,.png,.gif"
@@ -85,9 +85,9 @@ const ProfilePic = (props) => {
           style={{ display: "none" }}
           defaultValue={imageFile !== "" ? imageFile : null}
         />
-        }
+      }
 
-      </ProfilePicHolder>
+    </ProfilePicHolder>
   );
 };
 
@@ -124,6 +124,7 @@ const ProfilePicHolder = styled.div`
   background-color: ${(props) => props.theme.color.lightgray};
   background-repeat: no-repeat;
   background-size: cover;
+  background-position: center;
   border-width: 4px;
   border-color: ${(props) => props.theme.color.lightgray};
   border-style: solid;

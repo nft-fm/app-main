@@ -37,7 +37,7 @@ const NftCard = (props) => {
         hide={() => setIsShareOpen(!isShareOpen)}
         nft={nft}
       />
-      <BuyNftModal
+      {/* <BuyNftModal
         open={isOpen}
         hide={hide}
         nft={nft}
@@ -46,7 +46,7 @@ const NftCard = (props) => {
         likeCount={likeCount}
         setLikeCount={setLikeCount}
         setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
-      />
+      /> */}
       <CardTop>
         <LikeShare
           nft={nft}
@@ -66,7 +66,7 @@ const NftCard = (props) => {
       <Image
         src={nft.imageUrl}
         alt="image"
-        onClick={() => setIsOpen(!isOpen)}
+        // onClick={() => setIsOpen(!isOpen)}
       />
       <BottomWrapper>
         <Bottom>
@@ -212,7 +212,6 @@ const Container = styled.div`
 `;
 
 const Image = styled.img`
-  cursor: pointer;
   width: 200px;
   height: 200px;
   border-radius: 12px;

@@ -7,26 +7,26 @@ import styled from "styled-components";
 
 const AccountContext = createContext();
 
-
-
-const NoChainModal = ({}) => {
+const NoChainModal = ({ }) => {
   return (
     <OpaqueFilter>
       <Container>
         <StyledModal>
-          <h1>MetaMask not detected. Please go to <a href="https://metamask.io/">MetaMask's site</a> and install the application before proceeding.</h1>
+          <h2>MetaMask not detected. Please go to <a target="_blank"
+            rel="noopener noreferrer" href="https://metamask.io/">MetaMask's site</a> and install the application before proceeding.</h2>
         </StyledModal>
       </Container>
     </OpaqueFilter>
   );
 };
 
-const WrongChainModal = ({}) => {
+const WrongChainModal = ({ }) => {
   return (
     <OpaqueFilter>
       <Container>
         <StyledModal>
-          <h1>You are on the wrong chain. Go to your Metamask wallet and select Rinkeby Test Network to interact with the site.</h1>
+          <h2>You are on the wrong chain. Go to your Metamask wallet and select Rinkeby Test Network to interact with the site.  <a target="_blank"
+            rel="noopener noreferrer" href="https://nft-fm.medium.com/nft-fm-private-beta-10be433c90de">Click me for more detailed instructions.</a></h2>
         </StyledModal>
       </Container>
     </OpaqueFilter>
@@ -38,6 +38,8 @@ export const AccountProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [currChainId, setCurrChainId] = useState(false);
   const [usdPerEth, setUsdPerEth] = useState(0);
+  const [oneSecToLoadMetaMask, setOneSecToLoadMetaMask] = useState(false);
+
   const fetchUsdPerEth = async () => {
     console.log("fetchinafioe");
     await axios
@@ -72,6 +74,11 @@ export const AccountProvider = ({ children }) => {
       getChain();
     }
     if (!usdPerEth) fetchUsdPerEth();
+    if (!oneSecToLoadMetaMask) {
+      setTimeout(() => {
+        setOneSecToLoadMetaMask(true);
+      }, 100);
+    }
   }, [])
 
   useEffect(() => {
@@ -89,8 +96,6 @@ export const AccountProvider = ({ children }) => {
       });
     }
 
-
-
     if (account && !user) initialize();
   }, [account, currChainId, user]);
 
@@ -104,8 +109,8 @@ export const AccountProvider = ({ children }) => {
         currChainId, setCurrChainId,
         usdPerEth
       }}>
-        {!currChainId && <NoChainModal />}
-        {currChainId && currChainId != 4 && <WrongChainModal />}
+      {oneSecToLoadMetaMask && !currChainId && <NoChainModal />}
+      {currChainId && currChainId != 4 && <WrongChainModal />}
       {children}
     </AccountContext.Provider>
   );

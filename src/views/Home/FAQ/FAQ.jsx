@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Question } from "./Question";
 
 export const FAQ = () => {
@@ -14,16 +14,20 @@ export const FAQ = () => {
       />
       <Question
         question="I’m new to crypto, how do I use your platform?"
-       answer="Our platform is built on the decentralized web. To use our platform you must first install the extension MetaMask. After that, get some ethereum through a trading platform such as Coinbase. For more in depth instructions, please follow our How To Use NFT FM Guide."
+        answer="Our platform is built on the decentralized web. To use our platform you must first install the extension MetaMask. After that, get some ethereum through a trading platform such as Coinbase. For more in depth instructions, please follow our How To Use NFT FM Guide."
       />
       <Question
         question="How do I upload my music here?"
         answer="While our goal is to expand this platform to allow anyone to use it, we currently only allow verified artists to upload music. Please reach out to our team to get verified."
-      />      
+      />
       <Question
         question="How do I get my money once a sale has been made?"
         answer="Once a sale has been made the money is immediately deposited in your wallet!"
-      />      
+      />
+      <Question
+        question="Can an NFT Platform be Carbon Neutral?"
+        answer="We use the industry leading cryptoart-footprint API to calculate the global emissions caused by all transactions on our platform. At the end of each month, we purchase Carbon Credists equivilient to the estimated CO2 output. We publish these documents on our Medium each month for full transparency."
+      />
     </div>
   );
 };

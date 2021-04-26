@@ -41,7 +41,7 @@ const Listen = () => {
               <LaunchFeatureList>
                 <LaunchFeatureRow>
                   <LaunchFeatureText>
-                    Artist outreach
+                    Carbon Neutrality Partnerships
                   </LaunchFeatureText>
                   <FillerLine />
                   <Checkmark src={greenCheckMark} />

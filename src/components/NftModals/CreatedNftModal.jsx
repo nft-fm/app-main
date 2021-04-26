@@ -12,12 +12,17 @@ import { useAccountConsumer } from "../../contexts/Account";
 import IconMetamask from "../../assets/img/icons/metamask_icon.png";
 
 import { ReactComponent as eth_icon } from "../../assets/img/icons/ethereum.svg";
+import Swal from "sweetalert2";
 const BuyNftModal = ({
   open,
   children,
   hide,
   onClose,
   nft,
+  liked,
+  setLiked,
+  likeCount,
+  setLikeCount,
   setIsShareOpen,
 }) => {
   const { account, connect, usdPerEth } = useAccountConsumer();
@@ -37,9 +42,17 @@ const BuyNftModal = ({
       .catch((err) => console.log(err));
   };
 
-  const like = () => {
-    //${!}
-  };
+  const like = async () => {
+    if (account) {
+      setLikeCount(liked ? likeCount - 1 : likeCount + 1)
+      setLiked(!liked);
+      await axios.post(`api/user/like-nft`, { address: account, nft: nft._id })
+        .catch(err => { console.log(err) })
+    } else {
+      hide();
+      Swal.fire("Connect a wallet");
+    }
+  }
 
   const share = () => {
     setIsShareOpen();
@@ -58,8 +71,11 @@ const BuyNftModal = ({
           <CardTop>
             <Side>
               <IconArea>
-                <Heart onClick={() => like()} />
-                {nft.likeCount}
+                {liked ?
+                  <LikedHeart onClick={() => like()} /> :
+                  <Heart onClick={() => like()} />
+                }
+                {likeCount}
               </IconArea>
               <IconArea>
                 <Share onClick={() => share()} />
@@ -177,6 +193,17 @@ const Share = styled(IconShare)`
     & path {
       fill: #20a4fc;
     }
+  }
+`;
+
+const LikedHeart = styled(IconHeart)`
+  width: 24px;
+  height: 24px;
+  margin: -3px 4px 0 0;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  & path {
+    stroke: ${props => props.theme.color.pink};
   }
 `;
 

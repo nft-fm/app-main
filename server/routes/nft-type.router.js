@@ -140,6 +140,7 @@ router.post('/get-one', async (req, res) => {
     nftType = JSON.parse(JSON.stringify(findLikes(nftType, address)));
 
     const extraInfo = await getSetSale(nftType.nftId)
+    console.log("nftType", nftType);
     nftType = {
       ...nftType,
       price: utils.formatEther(extraInfo.price),

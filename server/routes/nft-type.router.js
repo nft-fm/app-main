@@ -10,8 +10,7 @@ const { NFTSale } = require('../web3/constants');
 const { sign, getSetSale } = require('../web3/server-utils');
 const { listenForMint } = require("../web3/mint-listener");
 
-const findRemainingInfo = async (nfts, account) => {
-  //Remaining info => likes, likeCount, price, quantity, sold
+const findLikes = (nfts, account) => {
   for (let i = 0; i < nfts.length; i++) {
     const likes = nfts[i]._doc.likes;
     if (likes && likes.find(like => like.toString() === account)) {
@@ -20,24 +19,48 @@ const findRemainingInfo = async (nfts, account) => {
     else {
       nfts[i] = { ...nfts[i]._doc, likes: [], likeCount: nfts[i]._doc.likes.length || 0, liked: false };
     }
-    const extraInfo = await getSetSale(nfts[i].nftId)
-    console.log("EXTRA INFO", extraInfo)
-    nfts[i] = {
-      ...nfts[i],
-      price: extraInfo.price,
-      quantity: extraInfo.quantity,
-      sold: extraInfo.sold
-    }
+    // const extraInfo = await getSetSale(nfts[i].nftId)
+    // console.log("EXTRA INFO", extraInfo)
+    // nfts[i] = {
+    //   ...nfts[i],
+    //   price: extraInfo.price,
+    //   quantity: extraInfo.quantity,
+    //   sold: extraInfo.sold
+    // }
   }
-  console.log("extra info", nfts);
+  // console.log("NFTS", nfts);
   return nfts;
 }
+
+const findRemainingInfo = async (nft) => {
+  const extraInfo = await getSetSale(nft.nftId)
+  // console.log("remaining info", extraInfo, nft);
+  let newNft = {
+    ...nft,
+    price: utils.formatEther(extraInfo.price),
+    quantity: extraInfo.quantity,
+    sold: extraInfo.sold
+  }
+  // console.log("3", newNft);
+
+  return newNft;
+}
+
+router.post('/full-nft-info', async (req, res) => {
+  try {
+    const fullInfo = await findRemainingInfo(req.body.nft).catch(err => console.log(err));
+    res.send(fullInfo);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
 
 router.post('/artist-nfts', async (req, res) => {
   try {
     let nfts = await NftType.find({ address: req.body.address, isDraft: false })
 
-    res.send(await findRemainingInfo(nfts, req.body.address));
+    res.send(findLikes(nfts, req.body.address));
   } catch (err) {
     res.status(500).send(err);
   }
@@ -68,10 +91,9 @@ router.post('/get-NFT', async (req, res) => {
 router.post('/get-user-nfts', async (req, res) => {
   try {
     let ids = req.body.x_nfts;
-    console.log("jiefoawioj", req.body)
     let nfts = await NftType.find({ '_id': { $in: ids } });
 
-    res.status(200).send(await findRemainingInfo(nfts, req.body.address));
+    res.status(200).send(findLikes(nfts, req.body.address));
   } catch (error) {
     console.log(error);
     res.status(500).send("server error")
@@ -110,11 +132,21 @@ router.post('/finalize', async (req, res) => {
 
 router.post('/get-one', async (req, res) => {
   try {
-    let id = req.body.id
+    let { id, address } = req.body;
     let nftType = await NftType.findById(id);
-    console.log("route", id, nftType);
-    console.log(nftType);
+    console.log("1", nftType);
 
+    //for some reason this isn't pulling the likeCount
+    nftType = JSON.parse(JSON.stringify(findLikes(nftType, address)));
+
+    const extraInfo = await getSetSale(nftType.nftId)
+    nftType = {
+      ...nftType,
+      price: utils.formatEther(extraInfo.price),
+      quantity: extraInfo.quantity,
+      sold: extraInfo.sold,
+      likeCount: nftType.likeCount ? nftType.likeCount : nftType.likes.length,
+    }
     res.send(nftType);
   } catch (error) {
     console.log(error);
@@ -131,7 +163,7 @@ router.post('/featured', async (req, res) => {
     })
       .limit(5)
 
-    res.send(await findRemainingInfo(nftTypes, req.body.address));
+    res.send(findLikes(nftTypes, req.body.address));
   } catch (error) {
     console.log(error);
     res.status(500).send("server error")
@@ -200,7 +232,7 @@ router.post('/all', async (req, res) => {
       isDraft: false,
       isMinted: true,
     });
-    res.send(await findRemainingInfo(nftTypes, req.body.address));
+    res.send(findLikes(nftTypes, req.body.address));
   } catch (error) {
     console.log(error);
     res.status(500).send("server error")

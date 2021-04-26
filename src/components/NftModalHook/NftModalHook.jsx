@@ -22,11 +22,11 @@ const NftModalHook = ({ id, open, children, hide, onClose }) => {
   const [nft, setNft] = useState(null);
 
   useEffect(() => {
-    axios.post("/api/nft-type/get-one", { id: id }).then((res) => {
+    axios.post("/api/nft-type/get-one", { id: id, address: account }).then((res) => {
       console.log("res", res.data);
       setNft(res.data);
     });
-  }, [id]);
+  }, []);
 
   const stopProp = (e) => {
     e.stopPropagation();

@@ -7,7 +7,7 @@ import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
 import { useAccountConsumer } from "../../contexts/Account";
-
+import loading from "../../assets/img/loading.gif";
 import axios from "axios";
 import ShareModal from "../SMShareModal/SMShareModal";
 import LikeShare from "./LikeShare";
@@ -30,6 +30,7 @@ const NftCard = (props) => {
     sold: "--",
   })
 
+  const [imageLoaded, setImageLoaded] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [liked, setLiked] = useState(false);
@@ -49,10 +50,10 @@ const NftCard = (props) => {
     setLikeCount(props.nft.likeCount);
     setLiked(props.nft.liked);
     axios.post("/api/nft-type/full-nft-info", { nft: props.nft, account: account })
-    .then((res) => {
-      setNft(res.data)
-    })
-    .catch(err => console.log(err));
+      .then((res) => {
+        setNft(res.data)
+      })
+      .catch(err => console.log(err));
   }, [props.nft, user]);
 
   return (
@@ -90,10 +91,17 @@ const NftCard = (props) => {
           </IconArea>
         </Side>
       </CardTop>
+      {
+        imageLoaded ? null :
+          <Image src={loading} alt="image" />
+
+      }
       <Image
         src={nft.imageUrl}
+        style={imageLoaded ? {} : { display: 'none' }}
         alt="image"
         onClick={() => setIsOpen(!isOpen)}
+        onLoad={() => setImageLoaded(true)}
       />
       <TrackName onClick={() => setIsOpen(!isOpen)}>{nft.title}</TrackName>
       <Artist>{nft.artist}</Artist>

@@ -19,11 +19,20 @@ import theme from './theme'
 import Error404 from "./views/404";
 import { AccountProvider } from "./contexts/Account";
 import { PlaylistProvider } from "./contexts/Playlist/Playlist";
+import preloadImage from "./utils/preloadImg";
+import recordPlayer from "./assets/img/record_player.png";
+import recordPlayerSpin from "./assets/img/record_player_spin.png";
 
 if (window.location.hostname !== 'localhost')
   console.log = function () { };
 
+
+
 const App = () => {
+  useEffect(() => {
+    preloadImage(recordPlayer);
+    preloadImage(recordPlayerSpin);
+  }, [])
   return (
     <Providers>
       <StyledCanvas>

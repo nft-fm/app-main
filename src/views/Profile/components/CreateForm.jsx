@@ -13,6 +13,7 @@ import { ReactComponent as eth_icon } from "../../../assets/img/icons/ethereum.s
 import { ReactComponent as arrow } from "../../../assets/img/icons/arrow_cropped.svg";
 // import { ReactComponent as arrow_down } from "../../../assets/img/icons/arrow_down.svg";
 
+import x from "../../../assets/img/icons/x.svg";
 import ImagePreview from "./ImagePreview";
 import { NavLink, useHistory } from "react-router-dom";
 
@@ -33,7 +34,7 @@ const initialNftState = {
   audioUrl: "",
 };
 
-const CreateForm = () => {
+const CreateForm = ({open, hide}) => {
   const { account, user, setUser, usdPerEth } = useAccountConsumer();
   const [isLoading, setIsLoading] = useState(false);
   const [nftData, setNftData] = useState(initialNftState);
@@ -344,10 +345,13 @@ const CreateForm = () => {
     setAudioFile(null);
   };
 
+  if (!open) return false;
   return (
+    <OpaqueFilter>
     <FormContainer onSubmit={(e) => handleSubmit(e)}>
       <Header>
         <span>Create NFTs</span>
+          <X src={x} onClick={() => hide()} />
       </Header>
       <Main>
         <Files>
@@ -552,8 +556,23 @@ const CreateForm = () => {
         </SubmitButton>
       )}
     </FormContainer>
+    </OpaqueFilter>
   );
 };
+
+
+// const OpaqueFilter = styled.div`
+//   width: 100vw;
+//   height: 100vh;
+//   position: fixed;
+//   left: 50%;
+//   top: 50%;
+//   transform: translate(-50%, -50%);
+//   background-color: rgba(0, 0, 0, 0.8);
+//   z-index: 500;
+// `;
+
+
 const SubText = styled.div`
   position: absolute;
   bottom: -10px;
@@ -965,7 +984,10 @@ const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
   padding: 20px;
-  /* left: 50%; */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
   @media only screen and (max-width: 776px) {
     width: 95vw;
     background-color: transparent;
@@ -975,14 +997,15 @@ const FormContainer = styled.form`
 `;
 
 const OpaqueFilter = styled.div`
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  background-color: rgba(0, 0, 0, 0.9);
-  -webkit-backdrop-filter: blur(4.6px);
-  backdrop-filter: blur(4.6px);
-  z-index: 10;
-  top: 0;
+/* position: absolute; */
+width: 100%;
+height: 100%;
+position: fixed;
+background-color: rgba(0, 0, 0, 0.9);
+-webkit-backdrop-filter: blur(4.6px);
+backdrop-filter: blur(4.6px);
+z-index: 10;
+top: 0;
 `;
 
 const X = styled.img`

@@ -35,7 +35,7 @@ const ArtistNfts = ({ user }) => {
   return (
     <Landing>
       <LaunchContainer>
-        <ContainerTitle>CREATED</ContainerTitle>
+        <ContainerTitle>CREATED NFTs</ContainerTitle>
         <ContainerOutline />
         <NftScroll> {nfts} </NftScroll>
       </LaunchContainer>

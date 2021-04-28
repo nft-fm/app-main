@@ -88,7 +88,6 @@ const OpaqueFilter = styled.div`
   transform: translate(-50%, -50%);
   background-color: rgba(0, 0, 0, 0.8);
   z-index: 500;
-  backdrop-filter: blur(4.6px);
 `;
 
 const Container = styled.div`

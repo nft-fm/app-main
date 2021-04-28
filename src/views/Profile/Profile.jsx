@@ -14,12 +14,14 @@ import cog from "../../assets/img/icons/cog.svg";
 import ProfilePic from "./Components/ProfilePic";
 import ArtistNfts from "./Components/ArtistNfts";
 import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
+import Error404 from "../404/404"
 
 const Profile = () => {
   const { account, connect, user, setUser, usdPerEth } = useAccountConsumer();
   const [edit, setEdit] = useState(false);
   const [username, setUsername] = useState("");
   const [profilePic, setProfilePic] = useState("");
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     if (user?.profilePic) {
@@ -41,6 +43,9 @@ const Profile = () => {
       .then((res) => setUser(res.data));
   };
 
+  //this probably needs some work
+  if (!user || (user && !user.isArtist)) return <Error404 />
+
   return (
     <BaseView>
     {!account && (
@@ -53,7 +58,7 @@ const Profile = () => {
         </GetConnected>
       </IsConnected>
     )}
-    {user && !user?.username && (
+    {/* {user && !user?.username && (
       <IsConnected>
         <GetConnectedNav>
           <span>Head to the Library page and set a username. Then you can start making NFT's!</span>
@@ -62,7 +67,7 @@ const Profile = () => {
           </ConnectNavLink>
         </GetConnectedNav>
       </IsConnected>
-    )}
+    )} */}
     <Landing>
       <Banner />
       <ProfileHeading>
@@ -119,7 +124,8 @@ const Profile = () => {
       </ProfileHeading>
     </Landing>
     <ArtistNfts user={user}/>
-     <CreateForm />
+    <button onClick={() => setOpen(!open)}>Click me to make NFTs!</button>
+     <CreateForm open={open} hide={() => setOpen(false)}/>
     </BaseView>
   );
 };

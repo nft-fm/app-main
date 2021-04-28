@@ -68,8 +68,11 @@ const Library = ({ user }) => {
   return (
     <Landing>
       <LaunchContainer>
+          <StyledTitle>
+            LIBRARY
+        </StyledTitle>
         {/* <ContainerTitleLeft>{isCreating ? "MY NFTS" : "MY LIBRARY"}</ContainerTitleLeft> */}
-        <ContainerTitleLeft onClick={() => setIsViewingLibrary(true)} active={isViewingLibrary}>LIBRARY</ContainerTitleLeft>
+        {/* <ContainerTitleLeft onClick={() => setIsViewingLibrary(true)} active={isViewingLibrary}>YOUR LIBRARY</ContainerTitleLeft> */}
         {/* <ContainerTitleRight onClick={() => setIsViewingLibrary(false)} active={isViewingLibrary}>CREATED</ContainerTitleRight> */}
         <ContainerOutline />
         <NftScroll> {nfts} </NftScroll>
@@ -78,6 +81,15 @@ const Library = ({ user }) => {
   );
 };
 
+
+const StyledTitle = styled.div`
+  font-family: "Compita";
+  font-size: ${props => props.theme.fontSizes.md};
+  margin: 60px 0 40px 0;
+  font-weight: 600;
+  /* letter-spacing: 3px; */
+  color: white;
+`;
 const FillerCard = styled.div`
 width: 226px;
 height: 0px;
@@ -91,7 +103,7 @@ const Landing = styled.div`
   justify-content: space-around;
   /* width: ${(props) => props.theme.homeWidth}px; */
   /* max-width: 80vw; */
-  padding-top: 40px;
+  /* padding-top: 40px; */
   color: white;
   font-size: ${(props) => props.theme.fontSizes.xs};
   padding-right: 4px;

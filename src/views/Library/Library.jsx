@@ -11,16 +11,31 @@ import { ReactComponent as lock_icon } from "../../assets/img/icons/lock.svg";
 import IconMetamask from "../../assets/img/icons/metamask_icon.png";
 import Library from "./components/Library";
 import ProfilePic from "./components/ProfilePic";
+import swal from "sweetalert2";
 
 const Profile = () => {
   const { account, connect, user, setUser } = useAccountConsumer();
+
+  const connectWallet = async () => {
+    const newChainId = await window.ethereum.request({ method: "eth_chainId" });
+    if ((Number(newChainId) === 4)) {
+      connect("injected");
+    } else {
+      swal.fire({
+        title: "Wrong Chain",
+        text:
+          "You are on the wrong chain. Open MetaMask and select Rinkeby Test Network before connecting.",
+        icon: "warning",
+      });
+    }
+  }
 
   return (
     <BaseView>
       {!account && (
         <IsConnected>
           <GetConnected>
-            <ConnectButton onClick={() => connect("injected")}>
+            <ConnectButton onClick={() => connectWallet()}>
               <MetaMask src={IconMetamask} />
               <ButtonText>Connect Wallet</ButtonText>
             </ConnectButton>

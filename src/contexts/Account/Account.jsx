@@ -109,8 +109,8 @@ export const AccountProvider = ({ children }) => {
         currChainId, setCurrChainId,
         usdPerEth
       }}>
-      {oneSecToLoadMetaMask && !currChainId && <NoChainModal />}
-      {currChainId && currChainId != 4 && <WrongChainModal />}
+      {/* {oneSecToLoadMetaMask && !currChainId && <NoChainModal />}
+      {currChainId && currChainId != 4 && <WrongChainModal />} */}
       {children}
     </AccountContext.Provider>
   );

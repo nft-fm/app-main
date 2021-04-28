@@ -9,77 +9,123 @@ import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import PlayIcon from "../../assets/img/icons/listen_play.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import IconMetamask from "../../assets/img/icons/metamask_icon.png";
-import loading from "../../assets/img/loading.gif"
+import loading from "../../assets/img/loading.gif";
 import Swal from "sweetalert2";
 import { usePlaylistConsumer } from "../../contexts/Playlist";
 import { buyNFT } from "../../web3/utils";
 import swal from "sweetalert2";
 
-const BuyNftModal = ({ open, children, hide, onClose, nft, liked, setLiked, likeCount, setLikeCount, setIsShareOpen }) => {
+const BuyNftModal = ({
+  open,
+  children,
+  hide,
+  onClose,
+  nft,
+  liked,
+  setLiked,
+  likeCount,
+  setLikeCount,
+  setIsShareOpen,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isBought, setIsBought] = useState(false);
   const { account, connect, usdPerEth, getUser } = useAccountConsumer();
   const { setNftCallback } = usePlaylistConsumer();
 
-  if (!open) return null;
   const stopProp = (e) => {
     e.stopPropagation();
   };
 
   const purchase = async (id) => {
     setIsLoading(true);
-    await buyNFT({ nftID: id, amount: 1, saleId: nft.nftId, price: nft.price }, () => { console.log("pending") }, () => {
-      axios
-        .post("/api/nft-type/purchase", { id: id, address: account })
-        .then((res) => {
-          console.log("purchase res", res);
-          setTimeout(function () {
-            setIsLoading(false)
-            setIsBought(true);
-            getUser();
-          }, 1000);
-        })
-        .catch((err) => {
-          console.error(err.status, err.message, err.error);
-          Swal.fire(`Error: ${err.response ? err.response.status : 404}`, `${err.response ? err.response.data : "server error"}`, "error");
-          setIsLoading(false);
-          console.log(err)
-        });
-    })
-      .catch(err => {
-        swal.fire({
-          icon: "error",
-          title: "Couldn't complete sale!",
-          text: "Please try again",
-        })
-      })
-
+    await buyNFT(
+      { nftID: id, amount: 1, saleId: nft.nftId, price: nft.price },
+      () => {
+        console.log("pending");
+      },
+      () => {
+        axios
+          .post("/api/nft-type/purchase", { id: id, address: account })
+          .then((res) => {
+            console.log("purchase res", res);
+            setTimeout(function () {
+              setIsLoading(false);
+              setIsBought(true);
+              getUser();
+            }, 1000);
+          })
+          .catch((err) => {
+            console.error(err.status, err.message, err.error);
+            Swal.fire(
+              `Error: ${err.response ? err.response.status : 404}`,
+              `${err.response ? err.response.data : "server error"}`,
+              "error"
+            );
+            setIsLoading(false);
+            console.log(err);
+          });
+      }
+    ).catch((err) => {
+      swal.fire({
+        icon: "error",
+        title: "Couldn't complete sale!",
+        text: "Please try again",
+      });
+    });
   };
 
   const playSong = () => {
     hide();
     setTimeout(() => {
       setNftCallback(nft);
-    }, 500)
-  }
+    }, 500);
+  };
 
   const like = async () => {
     if (account) {
-      setLikeCount(liked ? likeCount - 1 : likeCount + 1)
+      setLikeCount(liked ? likeCount - 1 : likeCount + 1);
       setLiked(!liked);
-      await axios.post(`api/user/like-nft`, { address: account, nft: nft._id })
-        .catch(err => { console.log(err) })
+      await axios
+        .post(`api/user/like-nft`, { address: account, nft: nft._id })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
       hide();
       Swal.fire("Connect a wallet");
     }
-  }
+  };
 
   const share = () => {
-    setIsShareOpen()
+    setIsShareOpen();
     hide();
-  }
+  };
 
+  const [currChainId, setCurrChainId] = useState(null);
+
+  // const getChain = async () => {
+  //   console.log('here')
+  //   const newChainId = await window.ethereum.request({ method: 'eth_chainId' });
+  //   setCurrChainId(Number(newChainId));
+  //   console.log("chainId", Number(newChainId));
+  //   return Number(newChainId);
+  // }
+
+  const connectWallet = async () => {
+    const newChainId = await window.ethereum.request({ method: "eth_chainId" });
+    if ((Number(newChainId) === 4)) {
+      connect("injected");
+    } else {
+      swal.fire({
+        title: "Wrong Chain",
+        text:
+          "You are on the wrong chain. Open MetaMask and select Rinkeby Test Network before connecting.",
+        icon: "warning",
+      });
+    }
+  };
+
+  if (!open) return null;
   return (
     <OpaqueFilter onClick={(e) => hide(e)}>
       <Container onClick={(e) => stopProp(e)}>
@@ -92,10 +138,11 @@ const BuyNftModal = ({ open, children, hide, onClose, nft, liked, setLiked, like
           <CardTop>
             <Side>
               <IconArea>
-                {liked ?
-                  <LikedHeart onClick={() => like()} /> :
+                {liked ? (
+                  <LikedHeart onClick={() => like()} />
+                ) : (
                   <Heart onClick={() => like()} />
-                }
+                )}
                 {likeCount}
               </IconArea>
               <IconArea>
@@ -106,9 +153,7 @@ const BuyNftModal = ({ open, children, hide, onClose, nft, liked, setLiked, like
             <Side>
               <IconArea>
                 {nft.sold}
-                <span style={{ margin: "0 1px" }}>
-                  /
-              </span>
+                <span style={{ margin: "0 1px" }}>/</span>
                 {nft.quantity}
                 <Cart />
               </IconArea>
@@ -122,102 +167,130 @@ const BuyNftModal = ({ open, children, hide, onClose, nft, liked, setLiked, like
           <PricesContainer>
             <Row>
               <PriceItem>Price:</PriceItem>
-              <PriceItem> {nft.price ? parseFloat(nft.price).toLocaleString(undefined, {
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 6,
-              }) : "--"} &nbsp; ETH</PriceItem>
+              <PriceItem>
+                {" "}
+                {nft.price
+                  ? parseFloat(nft.price).toLocaleString(undefined, {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 6,
+                    })
+                  : "--"}{" "}
+                &nbsp; ETH
+              </PriceItem>
             </Row>
             <Divider />
             <Row>
               <AvailableItem>Price:</AvailableItem>
-              <AvailableItem>          {usdPerEth ?
-                parseFloat(usdPerEth * nft.price).toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                }) : "..."
-              } &nbsp; USD</AvailableItem>
+              <AvailableItem>
+                {" "}
+                {usdPerEth
+                  ? parseFloat(usdPerEth * nft.price).toLocaleString(
+                      undefined,
+                      {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      }
+                    )
+                  : "..."}{" "}
+                &nbsp; USD
+              </AvailableItem>
             </Row>
           </PricesContainer>
-          {!account ?
-            <BuyButton onClick={() => connect("injected")}>
+          {!account ? (
+            <BuyButton onClick={() => connectWallet()}>
+              {/* <BuyButton onClick={() => connect("injected")}> */}
               <MetaMask src={IconMetamask} />
               <ButtonText>Connect Wallet</ButtonText>
             </BuyButton>
-            :
-            nft.sold !== nft.quantity ?
-              !isLoading ?
-                isBought ?
-                  <BuyButton style={{ backgroundColor: "#bbb" }} onClick={() => playSong()}>
-                    <Loading src={PlayIcon} />
-                  </BuyButton>
-                  :
-                  <BuyButton onClick={() => purchase(nft._id)}>
-                    <ButtonText>Buy</ButtonText>
-                  </BuyButton>
-                :
-                <BuyButton style={{ backgroundColor: "#262626", border: "1px solid #383838" }}>
-                  <Loading src={loading} />
-                </BuyButton> :
-              <BuyButton style={{ backgroundColor: "#262626", border: "1px solid #383838" }}>
-                <ButtonText>Sold Out!</ButtonText>
+          ) : nft.sold !== nft.quantity ? (
+            !isLoading ? (
+              isBought ? (
+                <BuyButton
+                  style={{ backgroundColor: "#bbb" }}
+                  onClick={() => playSong()}
+                >
+                  <Loading src={PlayIcon} />
+                </BuyButton>
+              ) : (
+                <BuyButton onClick={() => purchase(nft._id)}>
+                  <ButtonText>Buy</ButtonText>
+                </BuyButton>
+              )
+            ) : (
+              <BuyButton
+                style={{
+                  backgroundColor: "#262626",
+                  border: "1px solid #383838",
+                }}
+              >
+                <Loading src={loading} />
               </BuyButton>
-          }
+            )
+          ) : (
+            <BuyButton
+              style={{
+                backgroundColor: "#262626",
+                border: "1px solid #383838",
+              }}
+            >
+              <ButtonText>Sold Out!</ButtonText>
+            </BuyButton>
+          )}
         </StyledModal>
       </Container>
     </OpaqueFilter>
   );
 };
 
-
 const Loading = styled.img`
-width: 40px;
-height: auto;
-`
+  width: 40px;
+  height: auto;
+`;
 
 const ButtonText = styled.span`
-font-family: "Compita";
-font-size: ${props => props.theme.fontSizes.xs};
-font-weight: 600;
-color: white;
-`
+  font-family: "Compita";
+  font-size: ${(props) => props.theme.fontSizes.xs};
+  font-weight: 600;
+  color: white;
+`;
 
 const MetaMask = styled.img`
-width: 32px;
-height: auto;
-`
+  width: 32px;
+  height: auto;
+`;
 
 const Divider = styled.div`
-margin: 5px 0;
-width: 100%;
-height: 1px;
-background-color: ${props => props.theme.color.gray};
-`
+  margin: 5px 0;
+  width: 100%;
+  height: 1px;
+  background-color: ${(props) => props.theme.color.gray};
+`;
 
 const AvailableItem = styled.div`
-font-size: 0.8rem;
-color: ${props => props.theme.color.lightgray};
-`
+  font-size: 0.8rem;
+  color: ${(props) => props.theme.color.lightgray};
+`;
 
 const PriceItem = styled.span`
-font-size: ${props => props.theme.fontSizes.xs};
-color: white;
-`
+  font-size: ${(props) => props.theme.fontSizes.xs};
+  color: white;
+`;
 
 const X = styled(IconX)`
-    position: absolute;
-    right: 2px;
-    top: 9px;
-width: 24px;
-height: 24px;
-margin: 0 4px 0 0;
-cursor: pointer;
-transition: all 0.2s ease-in-out;
- & path {
+  position: absolute;
+  right: 2px;
+  top: 9px;
+  width: 24px;
+  height: 24px;
+  margin: 0 4px 0 0;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  & path {
     transition: all 0.2s ease-in-out;
-    stroke: ${props => props.theme.color.gray};
-    fill: ${props => props.theme.color.gray};
-    }
-`
+    stroke: ${(props) => props.theme.color.gray};
+    fill: ${(props) => props.theme.color.gray};
+  }
+`;
 
 const LikedHeart = styled(IconHeart)`
   width: 24px;
@@ -226,58 +299,59 @@ const LikedHeart = styled(IconHeart)`
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   & path {
-    stroke: ${props => props.theme.color.pink};
+    stroke: ${(props) => props.theme.color.pink};
   }
 `;
 
 const Cart = styled(IconCart)`
-width: 24px;
-height: 24px;
-margin: -2px 0 0 8px;
-transition: all 0.2s ease-in-out;
- & path {
+  width: 24px;
+  height: 24px;
+  margin: -2px 0 0 8px;
+  transition: all 0.2s ease-in-out;
+  & path {
     transition: all 0.2s ease-in-out;
-     fill: ${props => props.theme.color.gray};
-    }
-`
+    fill: ${(props) => props.theme.color.gray};
+  }
+`;
 
 const Share = styled(IconShare)`
-width: 19px;
-height: 19px;
-margin: 0 4px 0 0;
-cursor: pointer;
-transition: all 0.2s ease-in-out;
- & path {
-    transition: all 0.2s ease-in-out;
-     fill: ${props => props.theme.color.gray};
-    }
-&:hover {
+  width: 19px;
+  height: 19px;
+  margin: 0 4px 0 0;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
   & path {
-    fill: #20a4fc;
+    transition: all 0.2s ease-in-out;
+    fill: ${(props) => props.theme.color.gray};
   }
-}`
+  &:hover {
+    & path {
+      fill: #20a4fc;
+    }
+  }
+`;
 
 const Heart = styled(IconHeart)`
-width: 24px;
-height: 24px;
-margin: -3px 4px 0 0;
-cursor: pointer;
-transition: all 0.2s ease-in-out;
- & path {
-    transition: all 0.2s ease-in-out;
-     stroke: ${props => props.theme.color.gray};
-    }
-&:hover {
+  width: 24px;
+  height: 24px;
+  margin: -3px 4px 0 0;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
   & path {
-    stroke: #DD4591;
+    transition: all 0.2s ease-in-out;
+    stroke: ${(props) => props.theme.color.gray};
   }
-}
-`
+  &:hover {
+    & path {
+      stroke: #dd4591;
+    }
+  }
+`;
 
 const Side = styled.div`
-display: flex;
-align-items: center;
-`
+  display: flex;
+  align-items: center;
+`;
 
 const IconArea = styled.div`
   margin: 0 8px;
@@ -285,35 +359,35 @@ const IconArea = styled.div`
   font-size: 14px;
   height: 100%;
   align-items: center;
-`
+`;
 
 const CardTop = styled.div`
-/* padding: 0px 2px; */
-width: 100%;
-margin-bottom: 8px;
-display: flex;
-justify-content: space-between;
-font-weight: 600;
-font-family: "Compita";
-`
+  /* padding: 0px 2px; */
+  width: 100%;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  font-family: "Compita";
+`;
 
 const Logo = styled.img`
-width: 20px;
-margin-right: 8px;
-height: auto;
-`
+  width: 20px;
+  margin-right: 8px;
+  height: auto;
+`;
 
 const CardTitle = styled.div`
-width: 100%;
-display: flex;
-align-items: center;
-justify-content: center;
-font-family: "Compita";
-font-weight: 600;
-color: white;
-font-size: ${props => props.theme.fontSizes.sm};
-margin-bottom: 12px;
-`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Compita";
+  font-weight: 600;
+  color: white;
+  font-size: ${(props) => props.theme.fontSizes.sm};
+  margin-bottom: 12px;
+`;
 
 const OpaqueFilter = styled.div`
   width: 100vw;
@@ -324,7 +398,6 @@ const OpaqueFilter = styled.div`
   transform: translate(-50%, -50%);
   background-color: rgba(0, 0, 0, 0.8);
   z-index: 500;
-  backdrop-filter: blur(4.6px);
 `;
 
 const Container = styled.div`
@@ -344,7 +417,7 @@ const StyledModal = styled.div`
   width: calc(100% - 60px);
   height: 100%;
   padding: 10px 30px;
-  background-color: ${props => props.theme.bgColor};
+  background-color: ${(props) => props.theme.bgColor};
   font-size: 16px;
   font-weight: normal;
   display: flex;
@@ -381,12 +454,12 @@ const InfoContainer = styled.div`
 `;
 const TrackName = styled.span`
   color: white;
-  font-size: ${props => props.theme.fontSizes.sm};
+  font-size: ${(props) => props.theme.fontSizes.sm};
   margin-bottom: 6px;
 `;
 const Artist = styled.span`
-  font-size: ${props => props.theme.fontSizes.xs};
-  color: ${props => props.theme.color.lightgray};
+  font-size: ${(props) => props.theme.fontSizes.xs};
+  color: ${(props) => props.theme.color.lightgray};
   margin-bottom: 12px;
 `;
 
@@ -405,7 +478,7 @@ const BuyButton = styled.button`
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-  border: 1px solid ${props => props.theme.color.boxBorder};
+  border: 1px solid ${(props) => props.theme.color.boxBorder};
   border-radius: 2px;
   background-color: ${(props) => props.theme.color.box};
   margin-bottom: 20px;
@@ -414,6 +487,5 @@ const BuyButton = styled.button`
     border: 1px solid #383838;
   }
 `;
-
 
 export default BuyNftModal;

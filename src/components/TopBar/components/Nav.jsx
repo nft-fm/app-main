@@ -8,7 +8,7 @@ export const Nav = () => {
       <StyledLink exact tab="home" activeClassName="active" to="/">Home</StyledLink>
       <StyledLink exact tab="discover" activeClassName="active" to="/discover">Discover</StyledLink>
       <StyledLink exact tab="profile" activeClassName="active" to="/library">Library</StyledLink>
-      <StyledLink exact tab="profile" activeClassName="active" to="/create">Create</StyledLink>
+      <StyledLink exact tab="profile" activeClassName="active" to="/profile">Profile</StyledLink>
     </StyledNav>
   );
 };

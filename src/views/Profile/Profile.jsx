@@ -1,24 +1,25 @@
 import React, { useCallback, useEffect, useState, useRef } from "react";
-import BaseView from "../BaseView";
+import styled from "styled-components";
+import { useWallet } from "use-wallet";
 import axios from "axios";
-import styled, { keyframes } from "styled-components";
-import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
+import swal from "sweetalert2";
+
+import { NavLink } from "react-router-dom";
+import BaseView from "../BaseView";
 import { useAccountConsumer } from "../../contexts/Account";
-import cog from "../../assets/img/icons/cog.svg";
-import { ReactComponent as CopyIcon } from "../../assets/img/icons/copy_icon.svg";
-import { ReactComponent as plus_icon } from "../../assets/img/icons/plus_icon.svg";
-import { ReactComponent as lock_icon } from "../../assets/img/icons/lock.svg";
+
+import CreateForm from "./Components/CreateForm";
 import IconMetamask from "../../assets/img/icons/metamask_icon.png";
-import Library from "./components/Library";
-import ProfilePic from "./components/ProfilePic";
+import cog from "../../assets/img/icons/cog.svg";
+import ProfilePic from "./Components/ProfilePic";
+import ArtistNfts from "./Components/ArtistNfts";
+import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
 
 const Profile = () => {
-  const { account, connect, user, setUser } = useAccountConsumer();
+  const { account, connect, user, setUser, usdPerEth } = useAccountConsumer();
   const [edit, setEdit] = useState(false);
   const [username, setUsername] = useState("");
   const [profilePic, setProfilePic] = useState("");
-  const [shake, setShake] = useState(false);
-
 
   useEffect(() => {
     if (user?.profilePic) {
@@ -40,90 +41,149 @@ const Profile = () => {
       .then((res) => setUser(res.data));
   };
 
-  if (shake) {
-    setTimeout(() => {
-      setShake(!shake);
-    }, 2000);
-  }
-
   return (
     <BaseView>
-      {!account && (
-        <IsConnected>
-          <GetConnected>
-            <ConnectButton onClick={() => connect("injected")}>
-              <MetaMask src={IconMetamask} />
-              <ButtonText>Connect Wallet</ButtonText>
-            </ConnectButton>
-          </GetConnected>
-        </IsConnected>
-      )}
-      <Landing>
-        <Banner />
-        <ProfileHeading>
-          <Side />
-          <ProfileHolder>
-            <Cog
-              src={cog}
-              alt="edit icon"
-              onClick={account ? () => setEdit(!edit) : null}
-            />
-            <ProfilePic profilePic={profilePic && profilePic !== "" ? profilePic : default_pic}
-              setProfilePic={setProfilePic} edit={edit} setEdit={setEdit} />
-            <ProfileInfoHolder>
-              {edit ? (
-                <form onSubmit={(e) => saveDetails(e)}>
-                  <StyledInput
-                    type="text"
-                    placeholder="Enter Username"
-                    defaultValue={user?.username}
-                    onChange={(e) => setUsername(e.target.value)}
-                  />
-                </form>
-              ) : (
-                <Username>
-                  {user && user.username != "" ? user.username : "No username"}
-                </Username>
-              )}
-              <Divider />
+    {!account && (
+      <IsConnected>
+        <GetConnected>
+          <ConnectButton onClick={() => connect("injected")}>
+            <MetaMask src={IconMetamask} />
+            <ButtonText>Connect Wallet</ButtonText>
+          </ConnectButton>
+        </GetConnected>
+      </IsConnected>
+    )}
+    {user && !user?.username && (
+      <IsConnected>
+        <GetConnectedNav>
+          <span>Head to the Library page and set a username. Then you can start making NFT's!</span>
+          <ConnectNavLink to="/library">
+            <ButtonTextNav>Library</ButtonTextNav>
+          </ConnectNavLink>
+        </GetConnectedNav>
+      </IsConnected>
+    )}
+    <Landing>
+      <Banner />
+      <ProfileHeading>
+        <Side />
+        <ProfileHolder>
+          <Cog
+            src={cog}
+            alt="edit icon"
+            onClick={account ? () => setEdit(!edit) : null}
+          />
+          <ProfilePic profilePic={profilePic && profilePic !== "" ? profilePic : default_pic}
+            setProfilePic={setProfilePic} edit={edit} setEdit={setEdit} />
+          <ProfileInfoHolder>
+            {edit ? (
+              <form onSubmit={(e) => saveDetails(e)}>
+                <StyledInput
+                  type="text"
+                  placeholder="Enter Username"
+                  defaultValue={user?.username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </form>
+            ) : (
+              <Username>
+                {user && user.username != "" ? user.username : "No username"}
+              </Username>
+            )}
+            <Divider />
 
-              <AddressSpan>
-                {user
-                  ? user.address.substring(0, 10) +
-                  "..." +
-                  user.address.substring(user.address.length - 4)
-                  : " "}
-                {/* {user && (
-                  <CopyButton
-                    onClick={() => {
-                      navigator.clipboard.writeText(user.address);
-                    }}
-                  />
-                )} */}
-              </AddressSpan>
-            </ProfileInfoHolder>
-          </ProfileHolder>
-          <Side>
-            {/* <SideSpan>
-              12 <BlueSpan>/NFTs</BlueSpan>
-            </SideSpan>
-            <SideSpan>
-              8 <BlueSpan>Traded</BlueSpan>
-            </SideSpan> */}
-          </Side>
-        </ProfileHeading>
-      </Landing>
-      <Library user={user} />
+            <AddressSpan>
+              {user
+                ? user.address.substring(0, 10) +
+                "..." +
+                user.address.substring(user.address.length - 4)
+                : " "}
+              {/* {user && (
+                <CopyButton
+                  onClick={() => {
+                    navigator.clipboard.writeText(user.address);
+                  }}
+                />
+              )} */}
+            </AddressSpan>
+          </ProfileInfoHolder>
+        </ProfileHolder>
+        <Side>
+          {/* <SideSpan>
+            12 <BlueSpan>/NFTs</BlueSpan>
+          </SideSpan>
+          <SideSpan>
+            8 <BlueSpan>Traded</BlueSpan>
+          </SideSpan> */}
+        </Side>
+      </ProfileHeading>
+    </Landing>
+    <ArtistNfts user={user}/>
+     <CreateForm />
     </BaseView>
   );
 };
 
-const Divider = styled.div`
-width: 200px;
-height: 1px;
-background-color: ${props => props.theme.fontColor.gray};
-margin-bottom: 6px;
-`
+// const CreateHolder = styled.div`
+// display: flex;
+// justify-content: center;
+// align-items: center;
+// height: calc(100vh - 250px);
+// min-height: 500px;
+
+// @media only screen and (max-width: 776px) {
+//   height: auto;
+//   min-height: auto;
+//    }
+// `
+
+const ButtonTextNav = styled.span`
+  font-family: "Compita";
+  font-size: ${(props) => props.theme.fontSizes.sm};
+  font-weight: 600;
+  color: white;
+  padding: 5px;
+`;
+const GetConnectedNav = styled.div`
+  width: 400px;
+  height: 200px;
+  color: white;
+  border: 1px solid ${(props) => props.theme.color.boxBorder};
+  background-color: ${(props) => props.theme.color.box};
+  border-radius: ${(props) => props.theme.borderRadius}px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 300px;
+  font-size: ${props => props.theme.fontSizes.md};
+  text-align: center;
+  padding: 20px;
+`;
+
+
+const ConnectNavLink = styled(NavLink)`
+text-decoration: none;
+  width: 140px;
+  /* height: 64px; */
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  border: 1px solid ${(props) => props.theme.color.boxBorder};
+  border-radius: 2px;
+  background-color: ${(props) => props.theme.color.box};
+  /* margin-bottom: 20px; */
+  &:hover {
+    background-color: ${(props) => props.theme.color.boxBorder};
+    border: 1px solid #383838;
+  }
+`;
+
 
 const ButtonText = styled.span`
   font-family: "Compita";
@@ -180,57 +240,8 @@ const IsConnected = styled.div`
   z-index: 11;
 `;
 
-const Landing = styled.div`
-  /* height: 450px; */
-  top: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-`;
 
-const CopyButton = styled(CopyIcon)`
-  width: 15px;
-  height: 15px;
-  cursor: pointer;
-  transition: all 0.2s linear;
-  position: absolute;
-  margin-left: 150px;
-  & path {
-    fill: ${(props) => props.theme.color.gray};
-  }
-
-  &:hover {
-    & path {
-      fill: ${(props) => props.theme.color.lightgray};
-    }
-  }
-`;
-
-const Username = styled.span`
-  font-size: ${(props) => props.theme.fontSizes.md};
-  white-space: nowrap;
-`;
-
-const AddressSpan = styled.span`
-  color: ${(props) => props.theme.color.gray};
-  display: flex;
-  /* align-items: center;s */
-  position: relative;
-  height: 20px;
-`;
-const SideSpan = styled.span`
-  font-size: ${(props) => props.theme.fontSizes.sm};
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const BlueSpan = styled.span`
-  padding-left: ${(props) => props.theme.spacing[1]}px;
-  color: ${(props) => props.theme.color.blue};
-  font-size: ${(props) => props.theme.fontSizes.xs};
-`;
+//Profile Stuff below here
 
 const Cog = styled.img`
   width: 15px;
@@ -305,16 +316,37 @@ const StyledInput = styled.input`
   text-align: center;
 `;
 
-const AccountDetails = styled.div`
-  width: 100%;
-  margin-top: 75px;
+
+
+const Username = styled.span`
+  font-size: ${(props) => props.theme.fontSizes.md};
+  white-space: nowrap;
+`;
+
+const AddressSpan = styled.span`
+  color: ${(props) => props.theme.color.gray};
+  display: flex;
+  /* align-items: center;s */
+  position: relative;
+  height: 20px;
+`;
+const Landing = styled.div`
+  /* height: 450px; */
+  top: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: white;
+  width: 100%;
 `;
 
 const Banner = styled.div`
   height: 50px;
 `;
+
+const Divider = styled.div`
+width: 200px;
+height: 1px;
+background-color: ${props => props.theme.fontColor.gray};
+margin-bottom: 6px;
+`
 export default Profile;

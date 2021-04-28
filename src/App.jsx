@@ -10,10 +10,10 @@ import { UseWalletProvider } from 'use-wallet'
 import styled from 'styled-components'
 import ModalsProvider from './contexts/Modals'
 import Listen from './views/Home'
-import Profile from './views/Profile'
+import Library from './views/Library'
 import Register from './views/Register';
 import Discover from "./views/Discover";
-import Create from "./views/Create";
+import Profile from "./views/Profile";
 import isMobile from "./utils/isMobile";
 import theme from './theme'
 import Error404 from "./views/404";
@@ -45,10 +45,10 @@ const App = () => {
               <Register />
             </Route>
             <Route path="/library" exact>
-              <Profile />
+              <Library />
             </Route>
-            <Route path="/create">
-              <Create />
+            <Route path="/profile">
+              <Profile />
             </Route>
             <Route path="/discover">
               <Discover />

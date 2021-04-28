@@ -10,7 +10,7 @@ const Library = ({ user }) => {
   const [nfts, setNfts] = useState([]);
   const [selectedNft, setSelectedNft] = useState();
   const { setNftsCallback } = usePlaylistConsumer();
-  const [isViewingLibrary, setIsViewingLibrary] = useState(false)
+  const [isViewingLibrary, setIsViewingLibrary] = useState(true)
   // const [isViewingLibrary, setIsViewingLibrary] = useState(true) //to default to library 
   const formatNfts = (nftsData) => {
     const formattedNfts = nftsData.map((nft, index) => {
@@ -70,7 +70,7 @@ const Library = ({ user }) => {
       <LaunchContainer>
         {/* <ContainerTitleLeft>{isCreating ? "MY NFTS" : "MY LIBRARY"}</ContainerTitleLeft> */}
         <ContainerTitleLeft onClick={() => setIsViewingLibrary(true)} active={isViewingLibrary}>LIBRARY</ContainerTitleLeft>
-        <ContainerTitleRight onClick={() => setIsViewingLibrary(false)} active={isViewingLibrary}>CREATED</ContainerTitleRight>
+        {/* <ContainerTitleRight onClick={() => setIsViewingLibrary(false)} active={isViewingLibrary}>CREATED</ContainerTitleRight> */}
         <ContainerOutline />
         <NftScroll> {nfts} </NftScroll>
       </LaunchContainer>

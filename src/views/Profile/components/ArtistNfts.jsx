@@ -33,13 +33,13 @@ const ArtistNfts = ({ user }) => {
   }, [user]);
 
   return (
-    <Landing>
-      <LaunchContainer>
-        <ContainerTitle>CREATED NFTs</ContainerTitle>
-        <ContainerOutline />
+    // <CreatedNftHolder>
+    //   <NftContainer>
+    //     <NftContainerTitle>CREATED NFTs</NftContainerTitle>
+    //     <NftContainerOutline />
         <NftScroll> {nfts} </NftScroll>
-      </LaunchContainer>
-    </Landing>
+    //   </NftContainer>
+    // </CreatedNftHolder>
   );
 };
 
@@ -48,7 +48,7 @@ const FillerCard = styled.div`
   height: 0px;
 `;
 
-const Landing = styled.div`
+const CreatedNftHolder = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -76,7 +76,7 @@ const NftScroll = styled.div`
   }
 `;
 
-const LaunchContainer = styled.div`
+const NftContainer = styled.div`
   position: relative;
   width: 100%;
   display: flex;
@@ -85,7 +85,7 @@ const LaunchContainer = styled.div`
   margin-bottom: 40px;
 `;
 
-const ContainerTitle = styled.span`
+const NftContainerTitle = styled.span`
   position: absolute;
   font-weight: 600;
   margin-left: auto;
@@ -114,7 +114,7 @@ const ContainerTitle = styled.span`
   }
 `;
 
-const ContainerOutline = styled.div`
+const NftContainerOutline = styled.div`
   /* border-radius: 24px 24px 0 0; */
   border-top: 6px solid #383838;
   /* border-bottom: none; */

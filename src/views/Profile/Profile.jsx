@@ -14,20 +14,21 @@ import cog from "../../assets/img/icons/cog.svg";
 import ProfilePic from "./Components/ProfilePic";
 import ArtistNfts from "./Components/ArtistNfts";
 import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
-import Error404 from "../404/404"
+import Error404 from "../404/404";
 
+import { ReactComponent as plus_icon } from "../../assets/img/icons/plus_icon.svg";
 const Profile = () => {
   const { account, connect, user, setUser, usdPerEth } = useAccountConsumer();
   const [edit, setEdit] = useState(false);
   const [username, setUsername] = useState("");
   const [profilePic, setProfilePic] = useState("");
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (user?.profilePic) {
       setProfilePic(user.profilePic);
     }
-  }, [user])
+  }, [user]);
 
   const saveDetails = (e) => {
     e.preventDefault();
@@ -37,28 +38,28 @@ const Profile = () => {
       .post("/api/user/update-account", {
         address: account,
         username: username,
-        profilePic: profilePic
+        profilePic: profilePic,
         // email: email,
       })
       .then((res) => setUser(res.data));
   };
 
   //this probably needs some work
-  if (!user || (user && !user.isArtist)) return <Error404 />
+  if (!user || (user && !user.isArtist)) return <Error404 />;
 
   return (
     <BaseView>
-    {!account && (
-      <IsConnected>
-        <GetConnected>
-          <ConnectButton onClick={() => connect("injected")}>
-            <MetaMask src={IconMetamask} />
-            <ButtonText>Connect Wallet</ButtonText>
-          </ConnectButton>
-        </GetConnected>
-      </IsConnected>
-    )}
-    {/* {user && !user?.username && (
+      {!account && (
+        <IsConnected>
+          <GetConnected>
+            <ConnectButton onClick={() => connect("injected")}>
+              <MetaMask src={IconMetamask} />
+              <ButtonText>Connect Wallet</ButtonText>
+            </ConnectButton>
+          </GetConnected>
+        </IsConnected>
+      )}
+      {/* {user && !user?.username && (
       <IsConnected>
         <GetConnectedNav>
           <span>Head to the Library page and set a username. Then you can start making NFT's!</span>
@@ -68,68 +69,202 @@ const Profile = () => {
         </GetConnectedNav>
       </IsConnected>
     )} */}
-    <Landing>
-      <Banner />
-      <ProfileHeading>
-        <Side />
-        <ProfileHolder>
-          <Cog
-            src={cog}
-            alt="edit icon"
-            onClick={account ? () => setEdit(!edit) : null}
-          />
-          <ProfilePic profilePic={profilePic && profilePic !== "" ? profilePic : default_pic}
-            setProfilePic={setProfilePic} edit={edit} setEdit={setEdit} />
-          <ProfileInfoHolder>
-            {edit ? (
-              <form onSubmit={(e) => saveDetails(e)}>
-                <StyledInput
-                  type="text"
-                  placeholder="Enter Username"
-                  defaultValue={user?.username}
-                  onChange={(e) => setUsername(e.target.value)}
-                />
-              </form>
-            ) : (
-              <Username>
-                {user && user.username != "" ? user.username : "No username"}
-              </Username>
-            )}
-            <Divider />
+      <Landing>
+        <Banner />
+        <ProfileHeading>
+          <Side />
+          <ProfileHolder>
+            <Cog
+              src={cog}
+              alt="edit icon"
+              onClick={account ? () => setEdit(!edit) : null}
+            />
+            <ProfilePic
+              profilePic={
+                profilePic && profilePic !== "" ? profilePic : default_pic
+              }
+              setProfilePic={setProfilePic}
+              edit={edit}
+              setEdit={setEdit}
+            />
+            <ProfileInfoHolder>
+              {edit ? (
+                <form onSubmit={(e) => saveDetails(e)}>
+                  <StyledInput
+                    type="text"
+                    placeholder="Enter Username"
+                    defaultValue={user?.username}
+                    onChange={(e) => setUsername(e.target.value)}
+                  />
+                </form>
+              ) : (
+                <Username>
+                  {user && user.username != "" ? user.username : "No username"}
+                </Username>
+              )}
+              <Divider />
 
-            <AddressSpan>
-              {user
-                ? user.address.substring(0, 10) +
-                "..." +
-                user.address.substring(user.address.length - 4)
-                : " "}
-              {/* {user && (
+              <AddressSpan>
+                {user
+                  ? user.address.substring(0, 10) +
+                    "..." +
+                    user.address.substring(user.address.length - 4)
+                  : " "}
+                {/* {user && (
                 <CopyButton
                   onClick={() => {
                     navigator.clipboard.writeText(user.address);
                   }}
                 />
               )} */}
-            </AddressSpan>
-          </ProfileInfoHolder>
-        </ProfileHolder>
-        <Side>
-          {/* <SideSpan>
+              </AddressSpan>
+            </ProfileInfoHolder>
+          </ProfileHolder>
+          <Side>
+            {/* <SideSpan>
             12 <BlueSpan>/NFTs</BlueSpan>
           </SideSpan>
           <SideSpan>
             8 <BlueSpan>Traded</BlueSpan>
           </SideSpan> */}
-        </Side>
-      </ProfileHeading>
-    </Landing>
-    <ArtistNfts user={user}/>
-    <button onClick={() => setOpen(!open)}>Click me to make NFTs!</button>
-     <CreateForm open={open} hide={() => setOpen(false)}/>
+          </Side>
+        </ProfileHeading>
+      </Landing>
+
+      <CreatedNftHolder>
+        <NftContainer>
+          <NftContainerTitle>YOUR MUSIC</NftContainerTitle>
+          <NftContainerRight onClick={() => setOpen(!open)}>
+             
+            <PlusIcon />
+          </NftContainerRight>
+          <NftContainerOutline />
+          <ArtistNfts user={user}/>
+        </NftContainer>
+      </CreatedNftHolder>
+      <CreateForm open={open} hide={() => setOpen(false)}/>
     </BaseView>
   );
 };
 
+const PlusIcon = styled(plus_icon)`
+  width: 17px;
+  height: 17px;
+  cursor: pointer;
+  right: -15px;
+  margin-bottom: 2px;
+`;
+
+const CreatedNftHolder = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  justify-content: space-around;
+  /* width: ${(props) => props.theme.homeWidth}px; */
+  /* max-width: 80vw; */
+  padding-top: 40px;
+  color: white;
+  font-size: ${(props) => props.theme.fontSizes.xs};
+  padding-right: 4px;
+`;
+
+const NftScroll = styled.div`
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  @media only screen and (max-width: 776px) {
+    flex-direction: column;
+    align-items: center;
+  }
+`;
+
+const NftContainer = styled.div`
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px;
+`;
+
+const NftContainerTitle = styled.span`
+  position: absolute;
+  font-weight: 600;
+  margin-left: auto;
+  margin-right: auto;
+  top: -13px;
+  padding: 5px 12px 3px;
+  font: "Compita";
+  background-color: ${(props) => props.theme.bgColor};
+  font-size: ${(props) => props.theme.fontSizes.xs};
+  color: ${(props) => props.theme.color.gray};
+  display: flex;
+  flex-direction: row;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid #383838;
+  border-radius: 20px;
+  transition: 0.2s;
+  ${({ active }) =>
+    !active &&
+    `
+  color:  white;
+  `}
+  &:hover {
+    color: white;
+  }
+`;
+
+const NftContainerRight = styled.span`
+  position: absolute;
+  font-weight: 600;
+  margin-left: 85%;
+  margin-right: 15%;
+  height: 17px;
+  width: 17px;
+  top: -13px;
+  padding: 5px 5px 3px 5px;
+  font: "Compita";
+  background-color: ${(props) => props.theme.bgColor};
+  font-size: ${(props) => props.theme.fontSizes.xs};
+  color: ${(props) => props.theme.color.gray};
+  display: flex;
+  flex-direction: row;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid #383838;
+  border-radius: 20px;
+  transition: 0.2s;
+  ${({ active }) =>
+    !active &&
+    `
+  color:  white;
+  `}
+  &:hover {
+    color: white;
+  }
+`;
+
+const NftContainerOutline = styled.div`
+  /* border-radius: 24px 24px 0 0; */
+  border-top: 6px solid #383838;
+  /* border-bottom: none; */
+  height: 40px;
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+
+  @media only screen and (max-width: 776px) {
+    width: 100%;
+  }
+`;
 // const CreateHolder = styled.div`
 // display: flex;
 // justify-content: center;
@@ -164,14 +299,13 @@ const GetConnectedNav = styled.div`
   margin-left: auto;
   margin-right: auto;
   margin-top: 300px;
-  font-size: ${props => props.theme.fontSizes.md};
+  font-size: ${(props) => props.theme.fontSizes.md};
   text-align: center;
   padding: 20px;
 `;
 
-
 const ConnectNavLink = styled(NavLink)`
-text-decoration: none;
+  text-decoration: none;
   width: 140px;
   /* height: 64px; */
   cursor: pointer;
@@ -189,7 +323,6 @@ text-decoration: none;
     border: 1px solid #383838;
   }
 `;
-
 
 const ButtonText = styled.span`
   font-family: "Compita";
@@ -245,7 +378,6 @@ const IsConnected = styled.div`
   position: absolute;
   z-index: 11;
 `;
-
 
 //Profile Stuff below here
 
@@ -306,7 +438,7 @@ const ProfileHeading = styled.div`
   /* margin-top: 80px; */
   color: ${(props) => props.theme.fontColor.white};
   width: 100%;
-    justify-content: space-between;
+  justify-content: space-between;
   @media only screen and (max-width: 776px) {
     width: 90%;
   }
@@ -314,15 +446,13 @@ const ProfileHeading = styled.div`
 
 const StyledInput = styled.input`
   background-color: ${(props) => props.theme.bgColor};
-  font-size: ${props => props.theme.fontSizes.sm};
+  font-size: ${(props) => props.theme.fontSizes.sm};
   border: none;
   outline: none;
   color: white;
   opacity: 0.6;
   text-align: center;
 `;
-
-
 
 const Username = styled.span`
   font-size: ${(props) => props.theme.fontSizes.md};
@@ -350,9 +480,9 @@ const Banner = styled.div`
 `;
 
 const Divider = styled.div`
-width: 200px;
-height: 1px;
-background-color: ${props => props.theme.fontColor.gray};
-margin-bottom: 6px;
-`
+  width: 200px;
+  height: 1px;
+  background-color: ${(props) => props.theme.fontColor.gray};
+  margin-bottom: 6px;
+`;
 export default Profile;

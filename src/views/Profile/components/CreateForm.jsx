@@ -247,10 +247,9 @@ const CreateForm = ({open, hide}) => {
                 setIsLoading(false);
                 swal.fire({
                   title: "NFT Minted!",
-                  text: "See the new NFT in your Library",
-                  confirmButtonText: "Library",
-                }).then(res => res.isConfirmed && history.push('/library'))
-                //CHANGE TO NAVLINK INSTEAD OF FORCED REDIRECT
+                  text: "It can take 2-3 minutes for the new NFT to appear on your profile.",
+                  timer: 10000,
+                }).then(() => hide())
               }
             ).catch(err => {
               swal.fire({

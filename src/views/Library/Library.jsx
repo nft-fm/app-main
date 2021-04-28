@@ -14,37 +14,6 @@ import ProfilePic from "./components/ProfilePic";
 
 const Profile = () => {
   const { account, connect, user, setUser } = useAccountConsumer();
-  const [edit, setEdit] = useState(false);
-  const [username, setUsername] = useState("");
-  const [profilePic, setProfilePic] = useState("");
-  const [shake, setShake] = useState(false);
-
-
-  useEffect(() => {
-    if (user?.profilePic) {
-      setProfilePic(user.profilePic);
-    }
-  }, [user])
-
-  const saveDetails = (e) => {
-    e.preventDefault();
-    setEdit(false);
-    setUser({ ...user, username: username });
-    axios
-      .post("/api/user/update-account", {
-        address: account,
-        username: username,
-        profilePic: profilePic
-        // email: email,
-      })
-      .then((res) => setUser(res.data));
-  };
-
-  if (shake) {
-    setTimeout(() => {
-      setShake(!shake);
-    }, 2000);
-  }
 
   return (
     <BaseView>
@@ -58,48 +27,6 @@ const Profile = () => {
           </GetConnected>
         </IsConnected>
       )}
-      {/* <Landing>
-        <Banner />
-        <ProfileHeading>
-          <Side />
-          <ProfileHolder>
-            <Cog
-              src={cog}
-              alt="edit icon"
-              onClick={account ? () => setEdit(!edit) : null}
-            />
-            <ProfilePic profilePic={profilePic && profilePic !== "" ? profilePic : default_pic}
-              setProfilePic={setProfilePic} edit={edit} setEdit={setEdit} />
-            <ProfileInfoHolder>
-              {edit ? (
-                <form onSubmit={(e) => saveDetails(e)}>
-                  <StyledInput
-                    type="text"
-                    placeholder="Enter Username"
-                    defaultValue={user?.username}
-                    onChange={(e) => setUsername(e.target.value)}
-                  />
-                </form>
-              ) : (
-                <Username>
-                  {user && user.username != "" ? user.username : "No username"}
-                </Username>
-              )}
-              <Divider />
-
-              <AddressSpan>
-                {user
-                  ? user.address.substring(0, 10) +
-                  "..." +
-                  user.address.substring(user.address.length - 4)
-                  : " "}
-              </AddressSpan>
-            </ProfileInfoHolder>
-          </ProfileHolder>
-          <Side>
-          </Side>
-        </ProfileHeading>
-      </Landing> */}
       <Library user={user} />
     </BaseView>
   );

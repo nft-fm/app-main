@@ -40,7 +40,7 @@ app.use(function (req, res, next) {
 dotenv.config();
 connectDB();
 
-listenForMint();
+// listenForMint();
 
 app.use(cookieParser())
 app.use(sessionMiddleware)

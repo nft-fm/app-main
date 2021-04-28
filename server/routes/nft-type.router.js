@@ -120,6 +120,7 @@ router.post('/finalize', async (req, res) => {
         saleAddress: NFTSale,
         databaseID: newData._id
       })
+      listenForMint();
     } else {
       console.log("no nft");
       res.status(500).json('error')

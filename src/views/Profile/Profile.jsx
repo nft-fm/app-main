@@ -8,11 +8,11 @@ import { NavLink } from "react-router-dom";
 import BaseView from "../BaseView";
 import { useAccountConsumer } from "../../contexts/Account";
 
-import CreateForm from "./Components/CreateForm";
+import CreateForm from "./components/CreateForm";
 import IconMetamask from "../../assets/img/icons/metamask_icon.png";
 import cog from "../../assets/img/icons/cog.svg";
-import ProfilePic from "./Components/ProfilePic";
-import ArtistNfts from "./Components/ArtistNfts";
+import ProfilePic from "./components/ProfilePic";
+import ArtistNfts from "./components/ArtistNfts";
 import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
 import Error404 from "../404/404";
 

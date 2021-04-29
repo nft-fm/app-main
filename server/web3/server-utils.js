@@ -4,6 +4,7 @@ const NFTSaleABI = require('./abi/NFTSale.abi');
 const NFTTokenABI = require('./abi/NFTToken.abi');
 const NFTType = require('../schemas/NftType.schema')
 
+/*
 const sign = (address, amount, price, startTime, saleAddress) => {
 	console.log("signing", address, amount, price, startTime, saleAddress)
 	let data = utils.defaultAbiCoder.encode(
@@ -17,6 +18,20 @@ const sign = (address, amount, price, startTime, saleAddress) => {
 	const { r, s, v } = signer.signDigest(hash);
 	return { r, s, v };
 };
+*/
+
+const sign = (types, values) => {
+	console.log("signing", ...values)
+	let data = utils.defaultAbiCoder.encode(types, values)
+	console.log('abi encoded:')
+	console.log(data)
+
+	const hash = utils.keccak256(utils.hexlify(data));
+	console.log("key", process.env.OWNER_KEY);
+	const signer = new utils.SigningKey(process.env.OWNER_KEY);
+	const { r, s, v } = signer.signDigest(hash);
+	return { r, s, v };
+}
 
 const getSetSale = async (nftId, callback) => {
 	let provider = new providers.WebSocketProvider(process.env.WSS_PROVIDER_URL);

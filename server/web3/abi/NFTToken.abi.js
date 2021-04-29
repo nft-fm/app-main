@@ -1,4 +1,4 @@
-module.exports = [
+[
   {
     "inputs": [
       {
@@ -67,6 +67,12 @@ module.exports = [
         "internalType": "address",
         "name": "saleAddress",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
       },
       {
         "indexed": false,
@@ -460,6 +466,11 @@ module.exports = [
         "internalType": "address",
         "name": "saleAddress",
         "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
       },
       {
         "internalType": "string",

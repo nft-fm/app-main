@@ -9,6 +9,7 @@ import BaseView from "../BaseView";
 import { useAccountConsumer } from "../../contexts/Account";
 
 import CreateForm from "./Components/CreateForm";
+import AuctionForm from "./Components/AuctionForm";
 import IconMetamask from "../../assets/img/icons/metamask_icon.png";
 
 const Create = () => {
@@ -37,6 +38,9 @@ const Create = () => {
     )}
     <CreateHolder>
      <CreateForm />
+    </CreateHolder>
+    <CreateHolder>
+     <AuctionForm />
     </CreateHolder>
     </BaseView>
   );

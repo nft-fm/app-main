@@ -70,6 +70,12 @@ export default [
       },
       {
         "indexed": false,
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      },
+      {
+        "indexed": false,
         "internalType": "string",
         "name": "databaseID",
         "type": "string"
@@ -460,6 +466,11 @@ export default [
         "internalType": "address",
         "name": "saleAddress",
         "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
       },
       {
         "internalType": "string",

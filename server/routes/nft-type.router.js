@@ -391,39 +391,31 @@ router.post('/handleImage', async (req, res) => {
 
 router.post('/getSong', async (req, res) => {
   const AWS = require('aws-sdk')
-
-  const s3 = new AWS.S3()
   // AWS.config.update({accessKeyId: 'id-omitted', secretAccessKey: 'key-omitted'})
 
   // Tried with and without this. Since s3 is not region-specific, I don't
   // think it should be necessary.
   // AWS.config.update({region: 'us-west-2'})
 
-  const params = { Bucket: "nftfm-music", Key: req.body.key, Expires: 60 * 5 };
+  //from react audio player version
+  //const params = { Bucket: "nftfm-music", Key: req.body.key, Expires: 60 * 5 };
+  //const url = s3.getSignedUrl('getObject', params)
+  //res.status(200).send(url);
 
-  const url = s3.getSignedUrl('getObject', params)
+   const path = require('path');
+   const s3 = new AWS.S3();
 
-  console.log(url)
-  res.status(200).send(url);
-  // console.log(req.body);
-  // var AWS = require('aws-sdk');
-  // AWS.config.region = 'us-west-2';
-  // const path = require('path');
-
-  // // AWS.config.loadFromPath(path.join(__dirname, '../aws_config.json'));
-  // var s3 = new AWS.S3();
-
-  // s3.getObject(
-  //   { Bucket: "nftfm-music", Key: req.body.key },
-  //   function (error, data) {
-  //     if (error != null) {
-  //       console.log("Failed to retrieve an object: " + error);
-  //     } else {
-  //       console.log("Loaded " + data.ContentLength + " bytes");
-  //       res.status(200).send(data);           // successful response
-  //     }
-  //   }
-  // );
+   s3.getObject(
+     { Bucket: "nftfm-music", Key: req.body.key },
+     function (error, data) {
+       if (error != null) {
+         console.log("Failed to retrieve an object: " + error);
+       } else {
+         console.log("Loaded " + data.ContentLength + " bytes");
+         res.status(200).send(data);           // successful response
+       }
+     }
+   );
 })
 
 router.post('/getSongList', async (req, res) => {

@@ -8,6 +8,7 @@ import loading from '../../assets/img/loading.gif';
 import PlayIcon from '../../assets/img/icons/listen_play.svg';
 import PauseIcon from '../../assets/img/icons/listen_pause.svg'
 import SkipForward from '../../assets/img/icons/listen_skip_forward.svg'
+import SkipBackward from '../../assets/img/icons/listen_skip_backward.svg'
 import xIcon from '../../assets/img/icons/x.svg';
 
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
@@ -15,8 +16,13 @@ const AudioCtx = window.AudioContext || window.webkitAudioContext;
 const MusicPlayer = (props) => {
   const { nft, setNextNft, setPrevNft, exitPlayer } = props;
   const [url, setUrl] = useState();
+  const [buffer, setBuffer] = useState();
+  const [bufferSrc, setBufferSrc] = useState();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [startTime, setStartTime] = useState(0);
+  const [min, setMin] = useState(0);
+  const [sec, setSec] = useState(0);
   window.AudioContext = window.AudioContext || window.webkitAudioContext;
   const audioContextRef = useRef();
 
@@ -33,13 +39,17 @@ const MusicPlayer = (props) => {
      axios.post("api/nft-type/getSong", { key: nft.address + "/" + nft.audioUrl.split('/').slice(-1)[0] })
          .then((_songFile) => {
             console.log(_songFile);
-             const abSong = toArrayBuffer(_songFile.data.Body.data);
-           const bufferSrc = audioContextRef.current.createBufferSource();
-           audioContextRef.current.decodeAudioData(abSong, (buffer) => {
-                 bufferSrc.buffer = buffer;
-                 bufferSrc.connect(audioContextRef.current.destination);
+           const abSong = toArrayBuffer(_songFile.data.Body.data);
+           const _bufferSrc = audioContextRef.current.createBufferSource();
+           audioContextRef.current.decodeAudioData(abSong, (_buffer) => {
+                 _bufferSrc.buffer = _buffer;
+                 _bufferSrc.connect(audioContextRef.current.destination);
                 // source.loop = true;
-                 bufferSrc.start(0);
+                 _bufferSrc.start(_bufferSrc.context.currentTime);
+                 setBuffer(_buffer);
+                 setStartTime(_bufferSrc.context.currentTime);
+                 setBufferSrc(_bufferSrc);
+                 console.log("here", _bufferSrc)
              }, (e) => { console.log("Error: ", e.err); })
              setIsPlaying(true);
              setIsLoading(false);
@@ -57,6 +67,31 @@ const MusicPlayer = (props) => {
        if ( audioContextRef.current.suspend) {
          audioContextRef.current.suspend();
        }
+   }
+
+   const skipTime = (howMuch, forward) => {
+     const currentTime = bufferSrc.context.currentTime;
+     console.log("___SKIP_TIME___")
+     console.log("current time", currentTime);
+     console.log("start time", startTime);
+     console.log("how much", howMuch);
+     console.log("is forward", forward)
+     howMuch = forward ? howMuch :  -howMuch;
+     let time = currentTime - startTime + howMuch;
+     time = time < 0 ? 0 : time;
+     console.log("time to start new one", time);
+
+     bufferSrc.stop(currentTime);
+     bufferSrc.disconnect();
+
+     let newBufferSrc = audioContextRef.current.createBufferSource();
+     newBufferSrc.buffer = buffer;
+     newBufferSrc.connect(audioContextRef.current.destination);
+     newBufferSrc.start(currentTime, time);
+     setBufferSrc(newBufferSrc);
+
+
+     setStartTime(startTime - howMuch);
    }
 
   useEffect(() => {
@@ -93,23 +128,22 @@ const MusicPlayer = (props) => {
          <Image src={nft.imageUrl} alt="image" />
          {TrackInfo}
          <AudioControlSection>
-             <div onClick={() => console.log("Foo")} >
-               FOO
-             </div>
+           <img src={SkipBackward} onClick={() => skipTime(10, false)} />
              {!isPlaying ?
                  <img src={PlayIcon} onClick={() => playSong()} />
                  :
                  <img src={PauseIcon} onClick={() => stopSong()} />
              }
-           <div onClick={() => console.log("Foo")} >
-             BAA
-           </div>
+           <img src={SkipForward} onClick={() => skipTime(10, true)} />
+
          </AudioControlSection>
      </Wrapper>
   )
 }
 
 const AudioControlSection = styled.div`
+  width: 100px;
+  height: 100px;
   background-color: orangered;
   
   display: flex;

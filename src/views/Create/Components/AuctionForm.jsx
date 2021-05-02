@@ -47,7 +47,21 @@ const AuctionForm = () => {
   const [curr, setCurr] = useState("ETH");
   const [isAudioUploaded, setIsAudioUploaded] = useState(false);
   const [isImageUploaded, setIsImageUploaded] = useState(false);
+  const [dateMin, setDateMin] = useState('1899-01-01')
   const history = useHistory();
+  console.log("nftData", nftData)
+
+  let today = new Date();
+  let dd = today.getDate();
+  let mm = today.getMonth() + 1;
+  let yyyy = today.getFullYear();
+  if (dd<10) {
+    dd='0'+dd
+  }
+  if(mm<10) {
+    mm='0'+mm
+  }
+  today = yyyy+'-'+mm+'-'+dd;
 
   useEffect(() => {
     user && user.username && setNftData({ ...nftData, artist: user.username });
@@ -55,6 +69,7 @@ const AuctionForm = () => {
 
   useEffect(() => {
     setNftData({ ...nftData, address: account });
+    setDateMin(today)
     axios
       .post("/api/nft-type/get-NFT", { account: account })
       .then((res) => setNftData(res.data));
@@ -332,6 +347,13 @@ const AuctionForm = () => {
   }, [curr]);
 
   const updateState = (e) => {
+    if (e.target.name === "endTime") {
+      console.log(nftData.startTime)
+      console.log(e.target.value)
+      let hours = e.target.value.substring((e.target.value.lastIndexOf(":")-2), (e.target.value.lastIndexOf(":")))
+      let minutes = e.target.value.substring(e.target.value.lastIndexOf(":")+1)
+      console.log('hours', hours, 'minutes', minutes)
+    }
     if (e.target.name === "numMinted" && Number(e.target.value) > 10000) {
       return;
     }
@@ -467,24 +489,7 @@ const AuctionForm = () => {
               value={nftData.writer}
               required
             />
-            <input
-              style={{padding: "20px"}} // idk how to make this display properly, so I just added padding
-              type="date"
-              placeholder="startTime"
-              name="startTime"
-              onChange={(e) => updateState(e)}
-              value={nftData.startTime}
-              required
-            />
-            <input
-              style={{padding: "20px"}} // idk how to make this display properly, so I just added padding
-              type="date"
-              placeholder="endTime"
-              name="endTime"
-              onChange={(e) => updateState(e)}
-              value={nftData.endTime}
-              required
-            />
+           
             <StyledInput
               type="text"
               placeholder="bidIncrementPercent"
@@ -553,6 +558,28 @@ const AuctionForm = () => {
           </BottomInput>
         </Inputs>
       </Main>
+      <DateContainer>
+      <StyledDateInput
+              // style={{padding: "20px"}} // idk how to make this display properly, so I just added padding
+              type="datetime-local"
+              placeholder="startTime"
+              name="startTime"
+              onChange={(e) => updateState(e)}
+              value={nftData.startTime}
+              min={dateMin}
+              required
+            />
+            <StyledDateInput
+              // style={{padding: "20px"}} // idk how to make this display properly, so I just added padding
+              type="datetime-local"
+              placeholder="endTime"
+              name="endTime"
+              onChange={(e) => updateState(e)}
+              value={nftData.endTime}
+              min={nftData.startTime}
+              required
+            />
+      </DateContainer>
       {isLoading ? (
         <SubmitButton type="button" 
         style={{ filter: "saturate(.2)", cursor: "not-allowed" }}>
@@ -573,6 +600,33 @@ const AuctionForm = () => {
     </FormContainer>
   );
 };
+
+const StyledDateInput = styled.input`
+height: 100%;
+width: 48%;
+border-radius: ${props => props.theme.borderRadius}px;
+background-color: ${props => props.theme.color.box};
+font-family: "Compita";
+font-size: ${props => props.theme.fontSizes.sm};
+/* color: white; */
+border: 1px solid ${props => props.theme.color.lightgray};
+outline: none;
+&::-webkit-calendar-picker-indicator {
+    filter: invert(.4);
+}
+&::-webkit-datetime-edit {
+color: ${props => props.theme.color.gray};
+}
+`
+
+const DateContainer = styled.div`
+height: 60px;
+width: 100%;
+display: flex;
+justify-content: space-between;
+margin-top: 20px;
+`
+
 const SubText = styled.div`
   position: absolute;
   bottom: -10px;

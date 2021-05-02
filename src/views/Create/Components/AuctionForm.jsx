@@ -347,13 +347,6 @@ const AuctionForm = () => {
   }, [curr]);
 
   const updateState = (e) => {
-    if (e.target.name === "endTime") {
-      console.log(nftData.startTime)
-      console.log(e.target.value)
-      let hours = e.target.value.substring((e.target.value.lastIndexOf(":")-2), (e.target.value.lastIndexOf(":")))
-      let minutes = e.target.value.substring(e.target.value.lastIndexOf(":")+1)
-      console.log('hours', hours, 'minutes', minutes)
-    }
     if (e.target.name === "numMinted" && Number(e.target.value) > 10000) {
       return;
     }

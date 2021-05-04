@@ -120,6 +120,7 @@ const MusicPlayer = (props) => {
 
     if (isPlaying && counter < dur) {
       intervalId = setInterval(() => {
+        console.log(bufferSrc.context.currentTime);
         const {computedSecond, computedMinute} = timeStr(counter);
         setSecond(computedSecond);
         setMinute(computedMinute);

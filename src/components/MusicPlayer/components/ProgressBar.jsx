@@ -20,6 +20,7 @@ const MusicPlayer = (props) => {
 
     props.skipTime(parseInt(move.toFixed(0)), position > props.counter);
   }
+
   useEffect(() => {
     setFilled(props.filled)
   }, [props])

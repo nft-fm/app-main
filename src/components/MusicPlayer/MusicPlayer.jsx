@@ -73,12 +73,11 @@ const MusicPlayer = (props) => {
      }
   }
 
-  const skipTime = (howMuch, forward) => {
+  const skipTo = (time) => {
    const currentTime = bufferSrc.context.currentTime;
-   howMuch = forward ? howMuch :  -howMuch;
-   let time = currentTime - startTime + howMuch;
    time = time < 0 ? 0 : time;
-   bufferSrc.stop(currentTime);
+   time = time > dur ? dur : time;
+   bufferSrc.stop();
    bufferSrc.disconnect();
 
    let newBufferSrc = audioContextRef.current.createBufferSource();
@@ -86,16 +85,23 @@ const MusicPlayer = (props) => {
    newBufferSrc.connect(audioContextRef.current.destination);
    newBufferSrc.start(currentTime, time);
 
-   const {computedSecond, computedMinute} = timeStr(counter + howMuch >= 0 ? counter + howMuch : 0);
+   const {computedSecond, computedMinute} = timeStr(time);
    setMinute(computedMinute);
    setSecond(computedSecond);
-   setFilled((counter + howMuch >= 0 ? counter + howMuch : 0) * 100 / dur)
-   setCounter(counter + howMuch >= 0 ? counter + howMuch : 0);
+   setFilled(time * 100 / dur)
+   setCounter(time);
    setBufferSrc(newBufferSrc);
-   setStartTime(startTime - howMuch >= 0 ? startTime - howMuch : 0);
+   setStartTime(currentTime - time);
+  }
+
+  const skipTime = (howMuch, forward) => {
+    howMuch = forward ? howMuch : -howMuch;
+    const currentTime = bufferSrc.context.currentTime;
+    skipTo(currentTime - startTime + howMuch);
   }
 
   const timeStr = (time) => {
+    time = Math.floor(time);
     const secondCounter = time % 60;
     const minuteCounter = Math.floor(time / 60);
 
@@ -118,22 +124,27 @@ const MusicPlayer = (props) => {
   useEffect(() => {
     let intervalId;
 
-    if (isPlaying && counter < dur) {
+    if (isPlaying) {
       intervalId = setInterval(() => {
-        const {computedSecond, computedMinute} = timeStr(counter);
+        let time = bufferSrc.context.currentTime - startTime;
+        if (time >= dur) {
+          time = dur;
+          stopSong();
+          clearInterval(intervalId);
+        }
+        const {computedSecond, computedMinute} = timeStr(time);
         setSecond(computedSecond);
         setMinute(computedMinute);
-        setFilled((counter + 1) * 100 / dur)
-        setCounter(counter => counter + 1);
-        if (counter >= dur) clearInterval(intervalId);
-      }, 1000)
+        setFilled(time * 100 / dur)
+        setCounter(time);
+      }, 1000 / 30)
     }
 
     return () => {if (intervalId) clearInterval(intervalId)};
   }, [isPlaying, counter])
 
   const Duration = () => {
-    const {computedSecond, computedMinute} = timeStr(parseInt(dur.toFixed(0)))
+    const {computedSecond, computedMinute} = timeStr(dur)
     return <Counter>{computedMinute}:{computedSecond}</Counter>
   }
 
@@ -172,7 +183,7 @@ const MusicPlayer = (props) => {
          </AudioControlSection>
          <AudioProgressionSection>
            <Counter>{minute}:{second}</Counter>
-           <ProgressBar filled={filled} skipTime={skipTime} dur={dur} counter={counter}/>
+           <ProgressBar filled={filled} skipTo={skipTo} dur={dur}/>
            {Duration()}
          </AudioProgressionSection>
      </Wrapper>

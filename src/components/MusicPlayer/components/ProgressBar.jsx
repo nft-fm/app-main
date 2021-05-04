@@ -14,11 +14,8 @@ const MusicPlayer = (props) => {
 
   const changePosition = (e) => {
     let bounds =  e.target.getBoundingClientRect();
-    let percentPosition =  ((e.clientX - bounds.left) * 100) / bounds.width;
-    let position = percentPosition / 100 * props.dur;
-    let move = position > props.counter ? position - props.counter : position + props.counter;
-
-    props.skipTime(parseInt(move.toFixed(0)), position > props.counter);
+    let position =  (e.clientX - bounds.left) / bounds.width;
+    props.skipTo(position * props.dur);
   }
   useEffect(() => {
     setFilled(props.filled)

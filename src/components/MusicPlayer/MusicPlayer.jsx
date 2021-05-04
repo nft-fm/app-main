@@ -10,12 +10,12 @@ import PauseIcon from '../../assets/img/icons/listen_pause.svg'
 import SkipForward from '../../assets/img/icons/listen_skip_forward.svg'
 import SkipBackward from '../../assets/img/icons/listen_skip_backward.svg'
 import xIcon from '../../assets/img/icons/x.svg';
+import ProgressBar from "./components/ProgressBar";
 
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
 
 const MusicPlayer = (props) => {
   const { nft, setNextNft, setPrevNft, exitPlayer } = props;
-  const [url, setUrl] = useState();
   const [buffer, setBuffer] = useState();
   const [bufferSrc, setBufferSrc] = useState();
   const [isPlaying, setIsPlaying] = useState(false);
@@ -60,35 +60,40 @@ const MusicPlayer = (props) => {
          })
   }
 
-   const playSong = () => {
-     if (audioContextRef.current.state === 'suspended') audioContextRef.current.resume();
-     else audioContextRef.current.start(0);
-     setIsPlaying(true);
-   }
+  const playSong = () => {
+   if (audioContextRef.current.state === 'suspended') audioContextRef.current.resume();
+   else audioContextRef.current.start(0);
+   setIsPlaying(true);
+  }
 
-   const stopSong = () => {
-       setIsPlaying(false);
-       if ( audioContextRef.current.suspend) {
-         audioContextRef.current.suspend();
-       }
-   }
+  const stopSong = () => {
+     setIsPlaying(false);
+     if ( audioContextRef.current.suspend) {
+       audioContextRef.current.suspend();
+     }
+  }
 
-   const skipTime = (howMuch, forward) => {
-     const currentTime = bufferSrc.context.currentTime;
-     howMuch = forward ? howMuch :  -howMuch;
-     let time = currentTime - startTime + howMuch;
-     time = time < 0 ? 0 : time;
-     bufferSrc.stop(currentTime);
-     bufferSrc.disconnect();
+  const skipTime = (howMuch, forward) => {
+   const currentTime = bufferSrc.context.currentTime;
+   howMuch = forward ? howMuch :  -howMuch;
+   let time = currentTime - startTime + howMuch;
+   time = time < 0 ? 0 : time;
+   bufferSrc.stop(currentTime);
+   bufferSrc.disconnect();
 
-     let newBufferSrc = audioContextRef.current.createBufferSource();
-     newBufferSrc.buffer = buffer;
-     newBufferSrc.connect(audioContextRef.current.destination);
-     newBufferSrc.start(currentTime, time);
-     setCounter(counter + howMuch);
-     setBufferSrc(newBufferSrc);
-     setStartTime(startTime - howMuch);
-   }
+   let newBufferSrc = audioContextRef.current.createBufferSource();
+   newBufferSrc.buffer = buffer;
+   newBufferSrc.connect(audioContextRef.current.destination);
+   newBufferSrc.start(currentTime, time);
+
+   const {computedSecond, computedMinute} = timeStr(counter + howMuch >= 0 ? counter + howMuch : 0);
+   setMinute(computedMinute);
+   setSecond(computedSecond);
+   setFilled((counter + howMuch >= 0 ? counter + howMuch : 0) * 100 / dur)
+   setCounter(counter + howMuch >= 0 ? counter + howMuch : 0);
+   setBufferSrc(newBufferSrc);
+   setStartTime(startTime - howMuch >= 0 ? startTime - howMuch : 0);
+  }
 
   const timeStr = (time) => {
     const secondCounter = time % 60;
@@ -98,6 +103,7 @@ const MusicPlayer = (props) => {
     const computedMinute = String(minuteCounter).length === 1 ? `0${minuteCounter}`: minuteCounter;
     return ({computedMinute, computedSecond})
   }
+
   useEffect(() => {
     const audioCtx = new AudioContext();
 
@@ -153,7 +159,6 @@ const MusicPlayer = (props) => {
   return (
      <Wrapper>
           <TrackInfoWrapper>
-            <Image src={nft.imageUrl} alt="image" />
             {TrackInfo()}
           </TrackInfoWrapper>
          <AudioControlSection>
@@ -167,43 +172,12 @@ const MusicPlayer = (props) => {
          </AudioControlSection>
          <AudioProgressionSection>
            <Counter>{minute}:{second}</Counter>
-           <ProgressBar>
-             <Toogle width={filled}/>
-             <FillBar width={filled}/>
-           </ProgressBar>
+           <ProgressBar filled={filled} skipTime={skipTime} dur={dur} counter={counter}/>
            {Duration()}
          </AudioProgressionSection>
      </Wrapper>
   )
 }
-
-const Toogle = styled.div`
-  position: absolute;
-  width: 25px;
-  height: 25px;
-  background-color: ${props => props.theme.color.blue};
-  border-radius: 50px;
-  top:-2.5px;
-  left: calc(${props => props.width + "%"} - 5px);
-`;
-
-const FillBar = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  border-radius: 50px;
-  background-color: ${props => props.theme.color.blue};
-  width: ${props => props.width + "%"}
-`;
-
-const ProgressBar = styled.div`
-  position: relative;
-  height: 20px;
-  width: 500px;
-  border-radius: 50px;
-  background-color: ${props => props.theme.color.lightgray};
-`;
 
 const Counter = styled.div`
   width: 60px;

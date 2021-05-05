@@ -6,19 +6,17 @@ const MusicPlayer = (props) => {
   const [isDragging, setIsDragging] = useState(false);
 
   const startToogle = (e) => {
+    console.log("startToogle");
     e.stopPropagation()
     e.preventDefault()
-    console.log("moveToogle");
     setIsDragging(true);
   }
 
   const changePosition = (e) => {
+    console.log("changing position");
     let bounds =  e.target.getBoundingClientRect();
-    let percentPosition =  ((e.clientX - bounds.left) * 100) / bounds.width;
-    let position = percentPosition / 100 * props.dur;
-    let move = position > props.counter ? position - props.counter : position + props.counter;
-
-    props.skipTime(parseInt(move.toFixed(0)), position > props.counter);
+    let position =  (e.clientX - bounds.left) / bounds.width;
+    props.skipTo(position * props.dur);
   }
 
   useEffect(() => {
@@ -27,7 +25,7 @@ const MusicPlayer = (props) => {
   return (
            <ProgressBar>
              <InvisibleBar onClick={(e) => changePosition(e)}/>
-             <Toogle width={filled} onMouseDown={(e) => startToogle(e)}/>
+             <Toogle width={filled} onClick={(e) => startToogle(e)}/>
              <FillBar width={filled}/>
            </ProgressBar>
   )
@@ -42,8 +40,10 @@ const InvisibleBar = styled.div`
   left: 0;
   border-radius: 50px;
 `;
+
 const Toogle = styled.div`
   position: absolute;
+  z-index: 101;
   width: 25px;
   height: 25px;
   background-color: ${props => props.theme.color.blue};

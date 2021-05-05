@@ -15,7 +15,6 @@ const ProfilePic = (props) => {
   const [loading, setLoading] = useState(false)
   const hiddenImageInput = useRef(null);
 
-  console.log("PROFILE PIC", profilePic);
   const handleImage = () => {
     hiddenImageInput.current.click();
   };
@@ -32,6 +31,7 @@ const ProfilePic = (props) => {
       profilePic: picUrl
     });
   };
+
   useEffect(() => {
     if (imageFile) {
       setLoading(true)
@@ -86,7 +86,6 @@ const ProfilePic = (props) => {
           defaultValue={imageFile !== "" ? imageFile : null}
         />
       }
-
     </ProfilePicHolder>
   );
 };

@@ -75,7 +75,7 @@ const Listen = () => {
               <LaunchFeatureList>
                 <LaunchFeatureRow>
                   <LaunchFeatureText>
-                    NFT auctions*
+                    NFT auctions
                   </LaunchFeatureText>
                   <FillerLine />
                   <Checkmark src={grayCheckMark} />
@@ -96,7 +96,7 @@ const Listen = () => {
                 </LaunchFeatureRow>
                 <LaunchFeatureRow>
                   <LaunchFeatureText>
-                    Governance token
+                    Full Album NFTs
                   </LaunchFeatureText>
                   <FillerLine />
                   <Checkmark src={grayCheckMark} />

@@ -322,7 +322,6 @@ router.post("/uploadNft/:address", async (req, res) => {
 router.post('/uploadProfilePicS3', async (req, res) => {
   var AWS = require('aws-sdk');
   AWS.config.region = 'us-west-2';
-  const path = require('path');
   const multerS3 = require("multer-s3");
   var s3Client = new AWS.S3();
 

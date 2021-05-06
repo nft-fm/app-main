@@ -1,31 +1,84 @@
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 
+
 const MusicPlayer = (props) => {
   const [filled, setFilled] = useState(0);
+  const [bounds, setBounds] = useState();
   const [isDragging, setIsDragging] = useState(false);
+  const [startDragging, setStartDraggging] = useState(0);
+  const invisibleBar = useRef(null);
+  const toogle = useRef(null);
 
   const startToogle = (e) => {
-    console.log("startToogle");
     e.stopPropagation()
     e.preventDefault()
     setIsDragging(true);
+    setStartDraggging(e.clientX);
+  }
+
+  const handleToogleMove = (e) => {
+    if (!bounds) setBounds(invisibleBar.current.getBoundingClientRect());
+    if (isDragging && bounds) {
+      let position =  (e.clientX - bounds.left) / bounds.width;
+      setFilled(position * 100);
+    }
+  }
+
+  const stopToogle = (e) => {
+    if (!bounds) setBounds(invisibleBar.current.getBoundingClientRect());
+    if (isDragging) {
+      let position =  (e.clientX - bounds.left) / bounds.width;
+      props.skipTo(position * props.dur)
+       setIsDragging(false);
+    }
+
   }
 
   const changePosition = (e) => {
     console.log("changing position");
-    let bounds =  e.target.getBoundingClientRect();
     let position =  (e.clientX - bounds.left) / bounds.width;
     props.skipTo(position * props.dur);
   }
 
+  const checkForToogle = (e) => {
+    console.log("clientx", e.clientX);
+    console.log("x", toogle.current.getBoundingClientRect())
+    if (!isDragging) {
+      const toogleBounds = toogle.current.getBoundingClientRect();
+
+      if (e.clientX >= toogleBounds.left &&
+          e.clientX <= toogleBounds.right)
+        startToogle(e);
+    }
+  
+  }
+
+  const checkForDrag = (e) => {
+    if (isDragging) {
+      console.log("checking for drag")
+      handleToogleMove(e);
+    }
+  }
+
   useEffect(() => {
-    setFilled(props.filled)
+    if (!isDragging)
+      setFilled(props.filled)
   }, [props])
+
+  useEffect(() => {
+    if (!bounds && invisibleBar) setBounds(invisibleBar.current.getBoundingClientRect());
+  }, [])
   return (
            <ProgressBar>
-             <InvisibleBar onClick={(e) => changePosition(e)}/>
-             <Toogle width={filled} onClick={(e) => startToogle(e)}/>
+            <InvisibleBar ref={invisibleBar}
+              onClick={(e) => {changePosition(e)}}
+              onMouseDown={(e) => {checkForToogle(e)}}
+              onMouseMove={(e) => {checkForDrag(e)}}
+              onMouseUp={(e) => {if (isDragging) stopToogle(e)}}
+              onMouseLeave={(e) => {if (isDragging) stopToogle(e)}}
+            />
+            <Toogle width={filled} ref={toogle} />
              <FillBar width={filled}/>
            </ProgressBar>
   )
@@ -43,7 +96,6 @@ const InvisibleBar = styled.div`
 
 const Toogle = styled.div`
   position: absolute;
-  z-index: 101;
   width: 25px;
   height: 25px;
   background-color: ${props => props.theme.color.blue};

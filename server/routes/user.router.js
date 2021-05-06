@@ -27,7 +27,7 @@ router.post('/update-account', async (req, res) => {
   try {
 
     let user = await User.findOneAndUpdate({ address: req.body.address },
-      { username: req.body.username, 
+      { username: req.body.username, suburl: req.body.username.replace(/ /g, '').toLowerCase()
         // email: req.body.email 
       }, {new: true});
     res.send(user);
@@ -359,6 +359,19 @@ router.post('/uploadProfilePicS3', async (req, res) => {
           return res.status(200).send(req.file)
         })
   })
+})
+
+
+router.post('/get-public-account', async (req, res) => {
+  try {
+    console.log('/get public account hit', req.body)
+    const getUser = await User.findOne({ suburl: req.body.suburl})
+    const getNfts = await NftType.find({address: getUser.address, isDraft: false})
+    if (getUser) res.status(200).send([getUser, getNfts])
+    else return res.status(500).send('No User Found')
+  } catch (err) {
+    res.status(500).send(err)
+  }
 })
 
 module.exports = router

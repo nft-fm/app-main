@@ -25,7 +25,7 @@ export const FAQ = () => {
         answer="Once a sale has been made the money is immediately deposited in your wallet!"
       />
       <Question
-        question="Can an NFT Platform be Carbon Neutral?"
+        question="Can a NFT Platform be Carbon Neutral?"
         answer="We use the industry leading cryptoart-footprint API to calculate the global emissions caused by all transactions on our platform. At the end of each month, we purchase Carbon Credits equivilient to the estimated CO2 output. We publish these documents on our Medium each month for full transparency."
       />
     </div>

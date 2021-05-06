@@ -15,7 +15,7 @@ export const Nav = () => {
       <StyledLink exact tab="discover" activeClassName="active" to="/discover">
         Discover
       </StyledLink>
-      <StyledLink exact tab="profile" activeClassName="active" to="/library">
+      <StyledLink exact tab="library" activeClassName="active" to="/library">
         Library
       </StyledLink>
       {user && user.isArtist && (

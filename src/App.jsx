@@ -14,6 +14,7 @@ import Library from "./views/Library";
 import Register from "./views/Register";
 import Discover from "./views/Discover";
 import Profile from "./views/Profile";
+import Artist from "./views/Artist";
 import isMobile from "./utils/isMobile";
 import theme from "./theme";
 import Error404 from "./views/404";
@@ -47,6 +48,9 @@ const App = () => {
             </Route>
             <Route path="/profile">
               <Profile />
+            </Route>
+            <Route path="/artist">
+              <Artist />
             </Route>
             <Route path="/discover">
               <Discover />

@@ -59,7 +59,6 @@ const Profile = () => {
       .then((res) => setUser(res.data));
   };
 
-  // if (isPublicPage) return <PublicProfile suburl={isPublicPage} />;
   if (!user || (user && !user.isArtist)) return <Error404 />; //this probably needs some work
   return (
     <BaseView>

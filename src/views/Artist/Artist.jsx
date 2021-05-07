@@ -26,6 +26,7 @@ const Artist = ( ) => {
   const [open, setOpen] = useState(false);
   const [userInfo, setUserInfo] = useState();
   const [userNfts, setUserNfts] = useState();
+  
   useEffect(() => {
     axios
       .post("/api/user/get-public-account", { suburl: window.location.pathname.substring(
@@ -37,8 +38,6 @@ const Artist = ( ) => {
       })
       .catch(() => window.location = "/")
   }, []);
-  console.log("userInfo", userInfo);
-  console.log("userNfts", userNfts);
 
   //   if (!userInfo) return <Error404 />; //this probably needs some work
   return (

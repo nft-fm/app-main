@@ -15,7 +15,7 @@ const AccountButton = (props) => {
   const { account, connect } = useWallet();
   const [onPresentInstallMetamask] = useModal(<InstallMetamaskModal />);
   const [onPresentChangeChain] = useModal(<ChangeChainModal />)
-
+  const { getUser } = useAccountConsumer();
 
   const handleUnlockClick = () => {
     if (!window.ethereum) {

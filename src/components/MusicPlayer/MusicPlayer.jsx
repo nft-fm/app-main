@@ -5,12 +5,14 @@ import axios from "axios";
 import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import loading from '../../assets/img/loading.gif';
-import PlayIcon from '../../assets/img/icons/listen_play.svg';
-import PauseIcon from '../../assets/img/icons/listen_pause.svg'
-import SkipForward from '../../assets/img/icons/listen_skip_forward.svg'
-import SkipBackward from '../../assets/img/icons/listen_skip_backward.svg'
+import { ReactComponent as PlayIcon } from '../../assets/img/icons/listen_play.svg';
+import { ReactComponent as PauseIcon } from '../../assets/img/icons/listen_pause.svg'
+import { ReactComponent as SkipForward } from '../../assets/img/icons/listen_skip_forward.svg'
+import { ReactComponent as SkipBackward } from '../../assets/img/icons/listen_skip_backward.svg'
+import { ReactComponent as Next } from '../../assets/img/icons/listen_skip.svg'
 import xIcon from '../../assets/img/icons/x.svg';
 import ProgressBar from "./components/ProgressBar";
+import AudioControl from "./components/AudioControl";
 
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
 
@@ -40,6 +42,11 @@ const MusicPlayer = (props) => {
   }
 
   const getSong = async () => {
+     if (bufferSrc) {
+      setIsLoading(true);
+      bufferSrc.stop();
+      bufferSrc.disconnect();
+     }
      axios.post("api/nft-type/getSong", { key: nft.address + "/" + nft.audioUrl.split('/').slice(-1)[0] })
          .then((_songFile) => {
             console.log(_songFile);
@@ -169,30 +176,25 @@ const MusicPlayer = (props) => {
 
   return (
      <Wrapper>
-          <TrackInfoWrapper>
-            {TrackInfo()}
-          </TrackInfoWrapper>
-         <AudioControlSection>
-           <img src={SkipBackward} onClick={() => skipTime(10, false)} />
-             {!isPlaying ?
-                 <img src={PlayIcon} onClick={() => playSong()} />
-                 :
-                 <img src={PauseIcon} onClick={() => stopSong()} />
-             }
-           <img src={SkipForward} onClick={() => skipTime(10, true)} />
-         </AudioControlSection>
-         <AudioProgressionSection>
-           <Counter>{minute}:{second}</Counter>
-           <ProgressBar filled={filled} skipTo={skipTo} dur={dur}/>
-           {Duration()}
-         </AudioProgressionSection>
-     </Wrapper>
+       <AudioControl skipTime={skipTime}
+                     playSong={playSong}
+                     stopSong={stopSong}
+                     isPlaying={isPlaying}/>
+        <AudioProgressionSection>
+          <Counter>{minute}:{second}</Counter>
+          <ProgressBar filled={filled} skipTo={skipTo} dur={dur}/>
+          {Duration()}
+        </AudioProgressionSection>
+        <TrackInfoWrapper>
+          {TrackInfo()}
+        </TrackInfoWrapper>
+    </Wrapper>
   )
 }
 
 const Counter = styled.div`
   width: 60px;
-
+  color: ${props => props.theme.color.lightgray};
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -248,8 +250,12 @@ const TitleAndArtistSection = styled.div`
 `;
 
 const Image = styled.img`
-  max-width: 50px;
-  height: 50px;
+  width: 41px;
+  height: 41px;
+  border-radius: 5px;
+  & path {
+    stroke: ${props => props.theme.color.lightgray};
+  }
 `;
 
 const TrackInfoWrapper = styled.div`
@@ -265,10 +271,10 @@ const TrackInfoWrapper = styled.div`
 const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   width: 100vw;
-  background-color: #262626;
-  border-top: 1px solid #232323;
+  height: 60px;
+  background-color: ${props => props.theme.color.darkBlack};
 `;
 export default MusicPlayer;

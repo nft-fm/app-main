@@ -19,6 +19,7 @@ const theme = {
     boxBorder: "#262626",
     white,
     black,
+    darkBlack: "#181818"
     // primary: {
     //   light: red[200],
     //   main: red[500],

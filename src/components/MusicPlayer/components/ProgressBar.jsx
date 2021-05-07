@@ -88,20 +88,20 @@ const InvisibleBar = styled.div`
   position: absolute;
   z-index: 100;
   width: 100%;
-  height: 100%;
-  top: 0;
+  height: calc(100% + 12px);
+  top: -6px;
   left: 0;
   border-radius: 50px;
 `;
 
 const Toogle = styled.div`
   position: absolute;
-  width: 25px;
-  height: 25px;
-  background-color: ${props => props.theme.color.blue};
-  border-radius: 50px;
-  top:-2.5px;
-  left: calc(${props => props.width + "%"} - 10px);
+  width: 6px;
+  height: 24px;
+  background-color: ${props => props.theme.color.lightgray};
+  border-radius: 5px;
+  top: -11px;
+  left: calc(${props => props.width + "%"} - 2px);
 `;
 
 
@@ -111,16 +111,16 @@ const FillBar = styled.div`
   left: 0;
   height: 100%;
   border-radius: 50px;
-  background-color: ${props => props.theme.color.blue};
+  background-color: ${props => props.theme.color.lightgray};
   width: ${props => props.width + "%"}
 `;
 
 const ProgressBar = styled.div`
   position: relative;
-  height: 20px;
-  width: 500px;
+  height: 2px;
+  width: 760px;
   border-radius: 50px;
-  background-color: ${props => props.theme.color.lightgray};
+  background-color: ${props => props.theme.color.blue};
 `;
 
 export default MusicPlayer;

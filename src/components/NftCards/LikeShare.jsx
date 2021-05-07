@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import CreatedNftModal from "../NftModals/CreatedNftModal";
 import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
-import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";import { useAccountConsumer } from "../../contexts/Account";
+import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
+import { useAccountConsumer } from "../../contexts/Account";
 import axios from "axios";
 import Swal from "sweetalert2";
 

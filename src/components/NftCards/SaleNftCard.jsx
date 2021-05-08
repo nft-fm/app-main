@@ -12,6 +12,7 @@ import LikeShare from "./LikeShare";
 import { NavLink } from "react-router-dom";
 
 const NftCard = (props) => {
+  console.log('props NftCard', props)
   const { usdPerEth, user, account } = useAccountConsumer();
   const [nft, setNft] = useState({
     address: "",

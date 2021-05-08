@@ -11,8 +11,9 @@ const ArtistNfts = ({ nfts }) => {
   const { setNftsCallback } = usePlaylistConsumer();
   const [formattedNft, setFormattedNft] = useState();
   const formatNfts = (nftsData) => {
-    
     const formattedNfts = nftsData.map((nft, index) => (
+      // <NftCard nft={nft} key={index} index={index} />
+
       <NftCard nft={nft} key={index} index={index} />
     ));
     for (let i = 0; i < 5; i++) {
@@ -32,20 +33,11 @@ const ArtistNfts = ({ nfts }) => {
   useEffect(() => {
     // getArtistNfts();
     if (nfts) {
-    formatNfts(nfts)
-
+      formatNfts(nfts);
     }
   }, [nfts]);
 
-  return (
-    // <CreatedNftHolder>
-    //   <NftContainer>
-    //     <NftContainerTitle>CREATED NFTs</NftContainerTitle>
-    //     <NftContainerOutline />
-        <NftScroll> {formattedNft} </NftScroll>
-    //   </NftContainer>
-    // </CreatedNftHolder>
-  );
+  return <NftScroll> {formattedNft} </NftScroll>;
 };
 
 const FillerCard = styled.div`

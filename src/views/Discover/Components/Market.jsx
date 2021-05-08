@@ -2,63 +2,57 @@ import React, { useCallback, useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import axios from "axios";
 import NftCard from "../../../components/NftCards/SaleNftCard";
-import {useAccountConsumer} from "../../../contexts/Account";
+import { useAccountConsumer } from "../../../contexts/Account";
 
 const Listen = () => {
   const { user, account, justLiked, setJustLiked } = useAccountConsumer();
-  const [allNfts, setAllNfts] = useState([])
+  const [allNfts, setAllNfts] = useState([]);
 
   const formatNfts = (nftsData) => {
-    return nftsData.map((nft) => {
-      return (
-        <NftCard nft={nft} />
-      )
-    });
-  }
+    return nftsData.map((nft) => <NftCard nft={nft} />);
+  };
 
   const getAll = () => {
-    axios.post("/api/nft-type/all", {address: account}).then((res) => {
+    axios.post("/api/nft-type/all", { address: account }).then((res) => {
       const formattedNfts = formatNfts(res.data);
       for (let i = 0; i < 5; i++) {
-        formattedNfts.push(<FillerCard />)
+        formattedNfts.push(<FillerCard />);
       }
       setAllNfts(formattedNfts);
-    })
-  }
+    });
+  };
 
   useEffect(() => {
     getAll();
-  }, [user])
+  }, [user]);
   return (
-      <LaunchContainer>
-        <ContainerTitle>
-          MARKET
-        </ContainerTitle>
-        <ContainerOutline />
-        <NftScroll> {allNfts} </NftScroll>
-      </LaunchContainer>
+    <LaunchContainer>
+      <ContainerTitle>MARKET</ContainerTitle>
+      <ContainerOutline />
+      <NftScroll> {allNfts} </NftScroll>
+    </LaunchContainer>
   );
 };
 
 const FillerCard = styled.div`
-width: 226px;
-height: 0px;
-`
+  width: 226px;
+  height: 0px;
+`;
 
 const NftScroll = styled.div`
-display: flex;
-flex-direction: row;
-flex-wrap: wrap;
-width: 100%;
-justify-content: space-between;
-@media only screen and (max-width: 776px) {
-  flex-direction: column;
-  align-items: center;
-}
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: space-between;
+  @media only screen and (max-width: 776px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const LaunchContainer = styled.div`
-  position:relative;
+  position: relative;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -73,16 +67,16 @@ const ContainerTitle = styled.span`
   top: -4px;
   padding: 0 12px;
   font: "Compita";
-  background-color: ${props => props.theme.bgColor};
-  font-size: ${props => props.theme.fontSizes.xs};
-  color: ${props => props.theme.color.gray};
+  background-color: ${(props) => props.theme.bgColor};
+  font-size: ${(props) => props.theme.fontSizes.xs};
+  color: ${(props) => props.theme.color.gray};
   display: flex;
   flex-direction: row;
   display: flex;
   align-items: center;
-@media only screen and (max-width: 776px) {
-  left: auto;
-}
+  @media only screen and (max-width: 776px) {
+    left: auto;
+  }
 `;
 
 const ContainerOutline = styled.div`
@@ -93,11 +87,10 @@ const ContainerOutline = styled.div`
   width: 80%;
   /* display: flex;
   flex-direction: row; */
-@media only screen and (max-width: 776px) {
-  border-radius: 0;
-  width: 100%;
-}
+  @media only screen and (max-width: 776px) {
+    border-radius: 0;
+    width: 100%;
+  }
 `;
-
 
 export default Listen;

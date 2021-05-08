@@ -7,30 +7,30 @@ const NftType = require('../schemas/NftType.schema')
 const multer = require('multer');
 const User = require('../schemas/User.schema');
 const { NFTSale } = require('../web3/constants');
-const { sign, getSetSale } = require('../web3/server-utils');
+const { sign, getSetSale, findLikes } = require('../web3/server-utils');
 const { listenForMint } = require("../web3/mint-listener");
 
-const findLikes = (nfts, account) => {
-  for (let i = 0; i < nfts.length; i++) {
-    const likes = nfts[i]._doc.likes;
-    if (likes && likes.find(like => like.toString() === account)) {
-      nfts[i] = { ...nfts[i]._doc, likes: [], likeCount: nfts[i]._doc.likes.length, liked: true }
-    }
-    else {
-      nfts[i] = { ...nfts[i]._doc, likes: [], likeCount: nfts[i]._doc.likes.length || 0, liked: false };
-    }
-    // const extraInfo = await getSetSale(nfts[i].nftId)
-    // console.log("EXTRA INFO", extraInfo)
-    // nfts[i] = {
-    //   ...nfts[i],
-    //   price: extraInfo.price,
-    //   quantity: extraInfo.quantity,
-    //   sold: extraInfo.sold
-    // }
-  }
-  // console.log("NFTS", nfts);
-  return nfts;
-}
+// const findLikes = (nfts, account) => {
+//   for (let i = 0; i < nfts.length; i++) {
+//     const likes = nfts[i]._doc.likes;
+//     if (likes && likes.find(like => like.toString() === account)) {
+//       nfts[i] = { ...nfts[i]._doc, likes: [], likeCount: nfts[i]._doc.likes.length, liked: true }
+//     }
+//     else {
+//       nfts[i] = { ...nfts[i]._doc, likes: [], likeCount: nfts[i]._doc.likes.length || 0, liked: false };
+//     }
+//     // const extraInfo = await getSetSale(nfts[i].nftId)
+//     // console.log("EXTRA INFO", extraInfo)
+//     // nfts[i] = {
+//     //   ...nfts[i],
+//     //   price: extraInfo.price,
+//     //   quantity: extraInfo.quantity,
+//     //   sold: extraInfo.sold
+//     // }
+//   }
+//   // console.log("NFTS", nfts);
+//   return nfts;
+// }
 
 const findRemainingInfo = async (nft) => {
   const extraInfo = await getSetSale(nft.nftId)

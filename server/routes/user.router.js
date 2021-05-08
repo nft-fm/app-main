@@ -5,6 +5,7 @@ const multer = require('multer');
 const User = require('../schemas/User.schema')
 const Suggestion = require("../schemas/Suggestion.schema");
 const NftType = require('../schemas/NftType.schema');
+const { sign, getSetSale, findLikes } = require('../web3/server-utils');
 
 router.post('/get-account', async (req, res) => {
   try {
@@ -367,7 +368,7 @@ router.post('/get-public-account', async (req, res) => {
     console.log('/get public account hit', req.body)
     const getUser = await User.findOne({ suburl: req.body.suburl})
     const getNfts = await NftType.find({address: getUser.address, isDraft: false})
-    if (getUser) res.status(200).send([getUser, getNfts])
+    if (getUser) res.status(200).send([getUser, findLikes(getNfts)])
     else return res.status(500).send('No User Found')
   } catch (err) {
     res.status(500).send(err)

@@ -241,7 +241,15 @@ const TrackName = styled.span`
   margin-bottom: 12px;
 `;
 
-const Artist = styled(NavLink)`
+// const Artist = styled(NavLink)`
+//   font-size: ${(props) => props.theme.fontSizes.xxs}px;
+//   text-align: center;
+//   color: ${(props) => props.theme.gray};
+//   margin-bottom: 12px;
+//   text-decoration: none;
+//   /* cursor: pointer; */
+// `;
+const Artist = styled.span`
   font-size: ${(props) => props.theme.fontSizes.xxs}px;
   text-align: center;
   color: ${(props) => props.theme.gray};

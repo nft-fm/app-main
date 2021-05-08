@@ -11,7 +11,7 @@ import { useAccountConsumer } from "../../contexts/Account";
 import CreateForm from "../Profile/components/CreateForm";
 import IconMetamask from "../../assets/img/icons/metamask_icon.png";
 import cog from "../../assets/img/icons/cog.svg";
-import ProfilePic from "../Profile/components/ProfilePic";
+import PublicProfilePic from "./Components/PublicProfilePic";
 import PublicArtistNfts from "./Components/PublicArtistNfts";
 import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
 
@@ -26,7 +26,12 @@ const Artist = ( ) => {
   const [open, setOpen] = useState(false);
   const [userInfo, setUserInfo] = useState();
   const [userNfts, setUserNfts] = useState();
-  
+  console.log('userInfo', userInfo)
+  useEffect(() => {
+    if (userInfo?.profilePic) {
+      setProfilePic(userInfo.profilePic);
+    }
+  }, [userInfo]);
   useEffect(() => {
     axios
       .post("/api/user/get-public-account", { suburl: window.location.pathname.substring(
@@ -47,7 +52,7 @@ const Artist = ( ) => {
         <ProfileHeading>
           <Side />
           <ProfileHolder>
-            <ProfilePic
+            <PublicProfilePic
               profilePic={
                 profilePic && profilePic !== "" ? profilePic : default_pic
               }

@@ -6,7 +6,6 @@ import useModal from "../../../hooks/useModal";
 import isMobile from "../../../utils/isMobile";
 import axios from "axios";
 import InstallMetamaskModal from "../../InstallMetamaskModal";
-import { useAccountConsumer } from "../../../contexts/Account";
 import ChangeChainModal from "../../ChangeChainModal";
 
 
@@ -15,7 +14,6 @@ const AccountButton = (props) => {
   const { account, connect } = useWallet();
   const [onPresentInstallMetamask] = useModal(<InstallMetamaskModal />);
   const [onPresentChangeChain] = useModal(<ChangeChainModal />)
-  const { getUser } = useAccountConsumer();
 
   const handleUnlockClick = () => {
     if (!window.ethereum) {

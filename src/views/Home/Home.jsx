@@ -49,21 +49,21 @@ const Listen = () => {
                 </LaunchFeatureRow>
                 <LaunchFeatureRow>
                   <LaunchFeatureText>
-                    Smart contracts developed
+                    Smart Contracts Developed
                   </LaunchFeatureText>
                   <FillerLine />
                   <Checkmark src={greenCheckMark} />
                 </LaunchFeatureRow>
                 <LaunchFeatureRow>
                   <LaunchFeatureText>
-                    Opensea integration completed
+                    Opensea Integration Completed
                   </LaunchFeatureText>
                   <FillerLine />
                   <Checkmark src={greenCheckMark} />
                 </LaunchFeatureRow>
                 <LaunchFeatureRow>
                   <LaunchFeatureText>
-                    Smart contracts audited
+                    Smart Contracts Audited
                   </LaunchFeatureText>
                   <FillerLine />
                   <Checkmark src={greenCheckMark} />
@@ -75,28 +75,28 @@ const Listen = () => {
               <LaunchFeatureList>
                 <LaunchFeatureRow>
                   <LaunchFeatureText>
-                    NFT auctions
-                  </LaunchFeatureText>
-                  <FillerLine />
-                  <Checkmark src={grayCheckMark} />
-                </LaunchFeatureRow>
-                <LaunchFeatureRow>
-                  <LaunchFeatureText>
-                    Public profiles
-                  </LaunchFeatureText>
-                  <FillerLine />
-                  <Checkmark src={grayCheckMark} />
-                </LaunchFeatureRow>
-                <LaunchFeatureRow>
-                  <LaunchFeatureText>
-                    On-platform resale
-                  </LaunchFeatureText>
-                  <FillerLine />
-                  <Checkmark src={grayCheckMark} />
-                </LaunchFeatureRow>
-                <LaunchFeatureRow>
-                  <LaunchFeatureText>
                     Full Album NFTs
+                  </LaunchFeatureText>
+                  <FillerLine />
+                  <Checkmark src={grayCheckMark} />
+                </LaunchFeatureRow>
+                <LaunchFeatureRow>
+                  <LaunchFeatureText>
+                    Public Profiles
+                  </LaunchFeatureText>
+                  <FillerLine />
+                  <Checkmark src={grayCheckMark} />
+                </LaunchFeatureRow>
+                <LaunchFeatureRow>
+                  <LaunchFeatureText>
+                    On-Platform Resale
+                  </LaunchFeatureText>
+                  <FillerLine />
+                  <Checkmark src={grayCheckMark} />
+                </LaunchFeatureRow>
+                <LaunchFeatureRow>
+                  <LaunchFeatureText>
+                    Credit Card Support
                   </LaunchFeatureText>
                   <FillerLine />
                   <Checkmark src={grayCheckMark} />

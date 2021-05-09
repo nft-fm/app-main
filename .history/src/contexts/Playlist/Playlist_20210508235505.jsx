@@ -46,11 +46,10 @@ export const PlaylistProvider = ({ children }) => {
   }
 
   const setNextNft = () => {
-    if (index && !nfts[index].buffer) {
+    if (!nfts[index].buffer) {
       let _nfts = [...nfts];
       _nfts[index] = {..._nfts[index],
-                      buffer: currentBuffer};
-      setNfts(_nfts);
+        buffer: currentBuffer};
     }
     if (!index || index < 0) setIndex(0);
     const newIndex = index == nfts.length - 1 ? 0 : index + 1;
@@ -60,12 +59,6 @@ export const PlaylistProvider = ({ children }) => {
   }
 
   const setPrevNft = () => {
-    if (index && !nfts[index].buffer) {
-      let _nfts = [...nfts];
-      _nfts[index] = {..._nfts[index],
-                      buffer: currentBuffer};
-      setNfts(_nfts);
-    }
     if (!index || index < 0) setIndex(0);
     const newIndex = index == 0 ? nfts.length - 1 : index - 1;
     setSelectedNft(nfts[newIndex]);

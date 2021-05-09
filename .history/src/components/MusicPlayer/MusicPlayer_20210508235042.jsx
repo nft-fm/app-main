@@ -62,7 +62,7 @@ const MusicPlayer = (props) => {
     _gainNode.connect(audioContextRef.current.destination);
     const abSong = toArrayBuffer(songFile.data.Body.data);
     const _bufferSrc = audioContextRef.current.createBufferSource();
-    audioContextRef.current.decodeAudioData(abSong, async (_buffer) => {
+    await audioContextRef.current.decodeAudioData(abSong, async (_buffer) => {
       _bufferSrc.buffer = _buffer;
       _bufferSrc.connect(_gainNode);
       setStartTime(_bufferSrc.context.currentTime);
@@ -73,8 +73,7 @@ const MusicPlayer = (props) => {
       setIsPlaying(true);
       setIsLoading(false);
       setGainNode(_gainNode);
-      props.fetchPrevNext();
-      props.setCurrentBuffer(songFile);
+      await props.fetchPrevNext();
     });
   }
 

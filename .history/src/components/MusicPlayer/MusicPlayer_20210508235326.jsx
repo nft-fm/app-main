@@ -73,8 +73,8 @@ const MusicPlayer = (props) => {
       setIsPlaying(true);
       setIsLoading(false);
       setGainNode(_gainNode);
-      props.fetchPrevNext();
-      props.setCurrentBuffer(songFile);
+      props.fetchPrevNext(songFile);
+      props.setCurrentBuffer(songFile)
     });
   }
 

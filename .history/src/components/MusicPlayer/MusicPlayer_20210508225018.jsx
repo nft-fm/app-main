@@ -13,7 +13,7 @@ import VolumeControl from "./components/VolumeControl";
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
 
 const MusicPlayer = (props) => {
-  const { nft, nfts, setNftsCallback, setNextNft, setPrevNft, exitPlayer } = props;
+  const { nft, setNextNft, setPrevNft, exitPlayer } = props;
   const [buffer, setBuffer] = useState();
   const [bufferSrc, setBufferSrc] = useState();
   const [isPlaying, setIsPlaying] = useState(false);
@@ -46,13 +46,14 @@ const MusicPlayer = (props) => {
       bufferSrc.disconnect();
      }
      axios.post("api/nft-type/getSong", { key: nft.address + "/" + nft.audioUrl.split('/').slice(-1)[0] })
-         .then((songFile) => {
-            startSong(songFile);
-            
+         .then((_songFile) => {
+            startSong(_songFile);
+            props.fetchNextBuffer();
+            props.fetchPrevBuffer();
           }, (e) => { console.log("Error: ", e.err); })
   }
 
-  const startSong = async (songFile) => {
+  const startSong = (_songFile) => {
     if (bufferSrc) {
       bufferSrc.stop();
       bufferSrc.disconnect();
@@ -60,9 +61,9 @@ const MusicPlayer = (props) => {
     const _gainNode = audioContextRef.current.createGain();
     _gainNode.gain.value = 0.7; // setting it to 70%
     _gainNode.connect(audioContextRef.current.destination);
-    const abSong = toArrayBuffer(songFile.data.Body.data);
+    const abSong = toArrayBuffer(_songFile.data.Body.data);
     const _bufferSrc = audioContextRef.current.createBufferSource();
-    audioContextRef.current.decodeAudioData(abSong, async (_buffer) => {
+    audioContextRef.current.decodeAudioData(abSong, (_buffer) => {
       _bufferSrc.buffer = _buffer;
       _bufferSrc.connect(_gainNode);
       setStartTime(_bufferSrc.context.currentTime);
@@ -73,8 +74,6 @@ const MusicPlayer = (props) => {
       setIsPlaying(true);
       setIsLoading(false);
       setGainNode(_gainNode);
-      props.fetchPrevNext();
-      props.setCurrentBuffer(songFile);
     });
   }
 
@@ -147,6 +146,8 @@ const MusicPlayer = (props) => {
     } 
     else {
       startSong(nft.buffer);
+      props.fetchNextBuffer();
+      props.fetchPrevBuffer();
     }
   }, [nft]);
 

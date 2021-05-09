@@ -16,60 +16,54 @@ export const PlaylistProvider = ({ children }) => {
   const [selectedNft, setSelectedNft] = useState();
   const [isOpen, setIsOpen] = useState(false);
   const [currentBuffer, setCurrentBuffer] = useState();
+  const [nextBuffer, setNextBuffer] = useState();
+  const [prevBuffer, setPrevBuffer] = useState();
   const [status, setStatus] = useState();
-  const [index, setIndex] = useState(0);
 
   const animTime = 0.45;
 
-  console.log("NFTS", nfts);
-  const fetchPrevNext = async () => {
-    if (!index || index < 0) setIndex(0)
-    const prevIndex = index == 0 ? nfts.length - 1 : index - 1;
-    const nextIndex = index == nfts.length - 1 ? 0 : index + 1;
+  const fetchPrevBuffer = () => {
+    let index = nfts.indexOf(selectedNft);
+    if (!index) index = 0
+    const newIndex = index == 0 ? nfts.length - 1 : index - 1;
+    const nft = nfts[newIndex];
+    if (!nft.buffer) {
+      axios.post("api/nft-type/getSong", { key: nft.address + "/" + nft.audioUrl.split('/').slice(-1)[0] })
+      .then((songFile) => {
+         let _nfts = [...nfts];
+         _nfts[newIndex] = {..._nfts[newIndex],
+                           buffer: songFile}
+       }, (e) => { console.log("Error: ", e.err); })
+    }
+  }
 
-    let _nfts = [...nfts];
-    let next_nft = _nfts[nextIndex];
-    let prev_nft = _nfts[prevIndex];
-    if (!next_nft.buffer) {
-      console.log("fetching next")
-      const next_song = await axios.post("api/nft-type/getSong", { key: next_nft.address + "/" + next_nft.audioUrl.split('/').slice(-1)[0] })
-      _nfts[nextIndex] = {..._nfts[nextIndex],
-                          buffer: next_song};
+  const fetchNextBuffer = () => {
+    let index = nfts.indexOf(selectedNft);
+    if (!index) index = 0
+    const newIndex = index == nfts.length - 1 ? 0 : index + 1;
+    const nft = nfts[newIndex];
+    if (!nft.buffer) {
+      axios.post("api/nft-type/getSong", { key: nft.address + "/" + nft.audioUrl.split('/').slice(-1)[0] })
+      .then((songFile) => {
+       let _nfts = [...nfts];
+       _nfts[newIndex] = {..._nfts[newIndex],
+                         buffer: songFile}
+       }, (e) => { console.log("Error: ", e.err); })
     }
-    if (!prev_nft.buffer) {
-      console.log("fetching prev")
-      const prev_song = await axios.post("api/nft-type/getSong", { key: prev_nft.address + "/" + prev_nft.audioUrl.split('/').slice(-1)[0] })
-      _nfts[prevIndex] = {..._nfts[prevIndex],
-                          buffer: prev_song};
-    }
-    setNfts(_nfts);
   }
 
   const setNextNft = () => {
-    if (index && !nfts[index].buffer) {
-      let _nfts = [...nfts];
-      _nfts[index] = {..._nfts[index],
-                      buffer: currentBuffer};
-      setNfts(_nfts);
-    }
-    if (!index || index < 0) setIndex(0);
+    let index = nfts.indexOf(selectedNft);
+    if (!index) index = 0
     const newIndex = index == nfts.length - 1 ? 0 : index + 1;
-    console.log("nEW INDEX", newIndex)
     setSelectedNft(nfts[newIndex]);
-    setIndex(newIndex);
   }
 
   const setPrevNft = () => {
-    if (index && !nfts[index].buffer) {
-      let _nfts = [...nfts];
-      _nfts[index] = {..._nfts[index],
-                      buffer: currentBuffer};
-      setNfts(_nfts);
-    }
-    if (!index || index < 0) setIndex(0);
+    let index = nfts.indexOf(selectedNft);
+    if (!index) index = 0
     const newIndex = index == 0 ? nfts.length - 1 : index - 1;
     setSelectedNft(nfts[newIndex]);
-    setIndex(newIndex);
   }
 
   const setNftsCallback = (_nfts) => {
@@ -77,13 +71,12 @@ export const PlaylistProvider = ({ children }) => {
   }
 
   const setNftCallback = (_nft) => {
+    setNextBuffer();
+    setPrevBuffer();
+    setStatus();
     setSelectedNft(_nft);
-    
-    if (_nft) {
-      setIndex(nfts.indexOf(_nft));
+    if (_nft)
       setIsOpen(true);
-    }
-     
   }
 
   const exitPlayer = () => {
@@ -110,14 +103,16 @@ export const PlaylistProvider = ({ children }) => {
         <Wrapper animTime={animTime} isOpen={isOpen}>
           <MusicPlayer
             nft={selectedNft}
-            setSelectedNft={setSelectedNft}
-            nfts={nfts}
-            setCurrentBuffer={setCurrentBuffer}
-            setNftsCallback={setNftsCallback}
             setNextNft={setNextNft}
             setPrevNft={setPrevNft}
             exitPlayer={exitPlayer}
-            fetchPrevNext={fetchPrevNext}
+            setCurrentBuffer={setCurrentBuffer}
+            prevBuffer={prevBuffer}
+            setPrevBuffer={setPrevBuffer}
+            nextBuffer={nextBuffer}
+            setNextBuffer={setNextBuffer}
+            fetchNextBuffer={fetchNextBuffer}
+            fetchPrevBuffer={fetchPrevBuffer}
             setStatus={setStatus}
             status={status}/>
         </Wrapper>

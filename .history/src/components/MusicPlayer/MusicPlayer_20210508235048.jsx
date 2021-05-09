@@ -74,7 +74,6 @@ const MusicPlayer = (props) => {
       setIsLoading(false);
       setGainNode(_gainNode);
       props.fetchPrevNext();
-      props.setCurrentBuffer(songFile);
     });
   }
 

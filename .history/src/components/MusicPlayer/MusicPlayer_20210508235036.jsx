@@ -46,8 +46,8 @@ const MusicPlayer = (props) => {
       bufferSrc.disconnect();
      }
      axios.post("api/nft-type/getSong", { key: nft.address + "/" + nft.audioUrl.split('/').slice(-1)[0] })
-         .then((songFile) => {
-            startSong(songFile);
+         .then(async (songFile) => {
+            await startSong(songFile);
             
           }, (e) => { console.log("Error: ", e.err); })
   }
@@ -62,7 +62,7 @@ const MusicPlayer = (props) => {
     _gainNode.connect(audioContextRef.current.destination);
     const abSong = toArrayBuffer(songFile.data.Body.data);
     const _bufferSrc = audioContextRef.current.createBufferSource();
-    audioContextRef.current.decodeAudioData(abSong, async (_buffer) => {
+    await audioContextRef.current.decodeAudioData(abSong, async (_buffer) => {
       _bufferSrc.buffer = _buffer;
       _bufferSrc.connect(_gainNode);
       setStartTime(_bufferSrc.context.currentTime);
@@ -73,8 +73,7 @@ const MusicPlayer = (props) => {
       setIsPlaying(true);
       setIsLoading(false);
       setGainNode(_gainNode);
-      props.fetchPrevNext();
-      props.setCurrentBuffer(songFile);
+      await props.fetchPrevNext();
     });
   }
 

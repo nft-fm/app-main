@@ -73,10 +73,8 @@ router.post('/get-NFT', async (req, res) => {
       isDraft: true,
     });
     if (!nft) {
-      console.log("CREATED DRAFT")
       const newNft = await new NftType({
         address: req.body.account,
-        dur: 0,
         isDraft: true,
       });
       await newNft.save();

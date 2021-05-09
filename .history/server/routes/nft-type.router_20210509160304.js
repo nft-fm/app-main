@@ -73,10 +73,8 @@ router.post('/get-NFT', async (req, res) => {
       isDraft: true,
     });
     if (!nft) {
-      console.log("CREATED DRAFT")
       const newNft = await new NftType({
         address: req.body.account,
-        dur: 0,
         isDraft: true,
       });
       await newNft.save();
@@ -105,7 +103,6 @@ router.post('/get-user-nfts', async (req, res) => {
 router.post('/finalize', async (req, res) => {
   try {
     let newData = req.body;
-    console.log("newdata", newData);
     newData.isDraft = false;
 
     let updateNFT = await NftType.findByIdAndUpdate(newData._id, newData)
@@ -120,7 +117,6 @@ router.post('/finalize', async (req, res) => {
         price: price,
         address: newData.address,
         startTime: startTime,
-        dur: newData.dur,
         saleAddress: NFTSale,
         databaseID: newData._id
       })

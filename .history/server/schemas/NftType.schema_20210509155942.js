@@ -26,7 +26,7 @@ const NftTypeSchema = new Schema({
     type: String,
     default: "",
   },
-  startTime: {
+  startDemo: {
     type: Number,
     default: 0
   },

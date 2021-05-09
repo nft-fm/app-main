@@ -195,7 +195,7 @@ const CreateForm = ({open, hide}) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("DUR", nftData.dur);
+    console.log("")
     if (!isComplete()) {
       return;
     }

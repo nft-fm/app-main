@@ -60,8 +60,7 @@ const CreateForm = ({open, hide}) => {
         reader.onload = function (event) {
           // Create an instance of AudioContext
           let audioContext = new (window.AudioContext || window.webkitAudioContext)();
-          
-          console.log(event.target.result);
+
           // Asynchronously decode audio file data contained in an ArrayBuffer.
           audioContext.decodeAudioData(event.target.result, function(buffer) {
               // Obtain the duration in seconds of the audio file (with milliseconds as well, a float value)
@@ -71,7 +70,7 @@ const CreateForm = ({open, hide}) => {
           });
         };
 
-        reader.readAsArrayBuffer(file);
+        reader.readAsDataURL(file);
   }
   useEffect(() => {
     user && user.username && setNftData({ ...nftData, artist: user.username });
@@ -195,7 +194,6 @@ const CreateForm = ({open, hide}) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("DUR", nftData.dur);
     if (!isComplete()) {
       return;
     }

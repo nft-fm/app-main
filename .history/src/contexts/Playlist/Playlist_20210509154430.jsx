@@ -30,13 +30,13 @@ export const PlaylistProvider = ({ children }) => {
     let _nfts = [...nfts];
     let next_nft = _nfts[nextIndex];
     let prev_nft = _nfts[prevIndex];
-    if (next_nft && !next_nft.buffer) {
+    if (!next_nft.buffer) {
       console.log("fetching next")
       const next_song = await axios.post("api/nft-type/getSong", { key: next_nft.address + "/" + next_nft.audioUrl.split('/').slice(-1)[0] })
       _nfts[nextIndex] = {..._nfts[nextIndex],
                           buffer: next_song};
     }
-    if (prev_nft && !prev_nft.buffer) {
+    if (prev!prev_nft.buffer) {
       console.log("fetching prev")
       const prev_song = await axios.post("api/nft-type/getSong", { key: prev_nft.address + "/" + prev_nft.audioUrl.split('/').slice(-1)[0] })
       _nfts[prevIndex] = {..._nfts[prevIndex],

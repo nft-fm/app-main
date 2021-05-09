@@ -73,10 +73,8 @@ router.post('/get-NFT', async (req, res) => {
       isDraft: true,
     });
     if (!nft) {
-      console.log("CREATED DRAFT")
       const newNft = await new NftType({
         address: req.body.account,
-        dur: 0,
         isDraft: true,
       });
       await newNft.save();
@@ -105,7 +103,6 @@ router.post('/get-user-nfts', async (req, res) => {
 router.post('/finalize', async (req, res) => {
   try {
     let newData = req.body;
-    console.log("newdata", newData);
     newData.isDraft = false;
 
     let updateNFT = await NftType.findByIdAndUpdate(newData._id, newData)
@@ -120,7 +117,6 @@ router.post('/finalize', async (req, res) => {
         price: price,
         address: newData.address,
         startTime: startTime,
-        dur: newData.dur,
         saleAddress: NFTSale,
         databaseID: newData._id
       })
@@ -249,8 +245,10 @@ router.post('/all', async (req, res) => {
 router.post('/uploadAudioS3', async (req, res) => {
   var AWS = require('aws-sdk');
   AWS.config.region = 'us-west-2';
+  const path = require('path');
   const multerS3 = require("multer-s3");
 
+  // AWS.config.loadFromPath(path.join(__dirname, '../aws_config.json'));
   var s3Client = new AWS.S3();
 
   const fileFilter = (req, file, cb) => {
@@ -404,8 +402,10 @@ router.post('/getSong', async (req, res) => {
   console.log("partial", partialBytes)
 
   s3.getObject(
-    { Bucket: "nftfm-music", Key: req.body.key, Range: "bytes=0-100000" },
+    { Bucket: "nftfm-music", Key: req.body.key, Range: "bytes=0-" + partialBytes },
     function (error, data) {
+      const end = Date.now();
+      console.log(end - start);
       if (error != null) {
         console.log("Failed to retrieve an object: " + error);
       } else {
@@ -416,7 +416,7 @@ router.post('/getSong', async (req, res) => {
   );
 })
 
-router.post('/get--Song', async (req, res) => {
+router.post('/getSong', async (req, res) => {
   const start = Date.now();
   const AWS = require('aws-sdk')
   // AWS.config.update({accessKeyId: 'id-omitted', secretAccessKey: 'key-omitted'})

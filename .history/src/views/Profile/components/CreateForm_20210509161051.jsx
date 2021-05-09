@@ -52,26 +52,26 @@ const CreateForm = ({open, hide}) => {
   const getFileDur = () => {
         // Obtain the uploaded file, you can change the logic if you are working with multiupload
         let file = audioFile;
-        console.log(file);
+
         // Create instance of FileReader
         let reader = new FileReader();
     
         // When the file has been succesfully read
         reader.onload = function (event) {
-          // Create an instance of AudioContext
-          let audioContext = new (window.AudioContext || window.webkitAudioContext)();
-          
-          console.log(event.target.result);
-          // Asynchronously decode audio file data contained in an ArrayBuffer.
-          audioContext.decodeAudioData(event.target.result, function(buffer) {
-              // Obtain the duration in seconds of the audio file (with milliseconds as well, a float value)
-              let duration = buffer.duration;
-              setNftData({...nftData, dur: duration});
-              console.log("The duration of the song is of: " + duration + " seconds");
-          });
-        };
+        // Create an instance of AudioContext
+        let audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
-        reader.readAsArrayBuffer(file);
+        // Asynchronously decode audio file data contained in an ArrayBuffer.
+        audioContext.decodeAudioData(event.target.result, function(buffer) {
+            // Obtain the duration in seconds of the audio file (with milliseconds as well, a float value)
+            let duration = buffer.duration;
+            setNftData({...nftData, dur: duration});
+            console.log("The duration of the song is of: " + duration + " seconds");
+            // Alternatively, just display the integer value with
+            // parseInt(duration)
+            // 12 seconds
+        });
+};
   }
   useEffect(() => {
     user && user.username && setNftData({ ...nftData, artist: user.username });
@@ -89,7 +89,7 @@ const CreateForm = ({open, hide}) => {
       const audioFormData = new FormData();
       audioFormData.append("artist", account);
       audioFormData.append("audioFile", audioFile);
-      getFileDur();
+
       axios
         .post("api/nft-type/uploadAudioS3", audioFormData, {
           headers: {
@@ -195,7 +195,6 @@ const CreateForm = ({open, hide}) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("DUR", nftData.dur);
     if (!isComplete()) {
       return;
     }

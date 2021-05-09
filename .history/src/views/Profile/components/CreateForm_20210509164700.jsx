@@ -71,7 +71,7 @@ const CreateForm = ({open, hide}) => {
           });
         };
 
-        reader.readAsArrayBuffer(file);
+        reader.readAsDataURL(file);
   }
   useEffect(() => {
     user && user.username && setNftData({ ...nftData, artist: user.username });
@@ -195,7 +195,6 @@ const CreateForm = ({open, hide}) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("DUR", nftData.dur);
     if (!isComplete()) {
       return;
     }

@@ -26,14 +26,6 @@ const NftTypeSchema = new Schema({
     type: String,
     default: "",
   },
-  startTime: {
-    type: Number,
-    default: 0
-  },
-  dur: {
-    type: Number,
-    required: true
-  },
   address: {
     type: String,
     required: true,

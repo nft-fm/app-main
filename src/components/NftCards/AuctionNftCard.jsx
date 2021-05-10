@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
-import BuyNftModal from "../NftModals";
+import AuctionNftModal from "../NftModals";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
@@ -63,7 +63,7 @@ const NftCard = (props) => {
         hide={() => setIsShareOpen(!isShareOpen)}
         nft={nft}
       />
-      <BuyNftModal
+      <AuctionNftModal
         open={isOpen}
         hide={hide}
         nft={nft}
@@ -106,7 +106,8 @@ const NftCard = (props) => {
       <TrackName onClick={() => setIsOpen(!isOpen)}>{nft.title}</TrackName>
       <Artist to={`/artist/${nft.artist.replace(/ /g, '').toLowerCase()}`}>{nft.artist}</Artist>
       <CostFields>
-        <CostEth>
+        Highest Bid:
+        {/* <CostEth>
           {nft.price !== "..." ? parseFloat(nft.price).toLocaleString(undefined, {
             minimumFractionDigits: 0,
             maximumFractionDigits: 6,
@@ -121,7 +122,7 @@ const NftCard = (props) => {
             })
             : "..."}
           <Usd />
-        </CostUsd>
+        </CostUsd> */}
       </CostFields>
     </Container>
   );

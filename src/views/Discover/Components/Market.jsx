@@ -3,13 +3,15 @@ import styled, { keyframes } from "styled-components";
 import axios from "axios";
 import NftCard from "../../../components/NftCards/SaleNftCard";
 import { useAccountConsumer } from "../../../contexts/Account";
+import AuctionCard from "../../../components/NftCards/AuctionNftCard"
 
 const Listen = () => {
   const { user, account, justLiked, setJustLiked } = useAccountConsumer();
   const [allNfts, setAllNfts] = useState([]);
 
   const formatNfts = (nftsData) => {
-    return nftsData.map((nft) => <NftCard nft={nft} />);
+    // return nftsData.map((nft) => <NftCard nft={nft} />);
+    return nftsData.map((nft) => <AuctionCard nft={nft} />);
   };
 
   const getAll = () => {

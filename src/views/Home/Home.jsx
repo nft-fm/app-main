@@ -49,7 +49,7 @@ const Listen = () => {
                 </LaunchFeatureRow>
                 <LaunchFeatureRow>
                   <LaunchFeatureText>
-                    Smart Contracts Developed
+                  Artist Outreach
                   </LaunchFeatureText>
                   <FillerLine />
                   <Checkmark src={greenCheckMark} />
@@ -82,7 +82,7 @@ const Listen = () => {
                 </LaunchFeatureRow>
                 <LaunchFeatureRow>
                   <LaunchFeatureText>
-                    Public Profiles
+                    Public User Profiles
                   </LaunchFeatureText>
                   <FillerLine />
                   <Checkmark src={grayCheckMark} />

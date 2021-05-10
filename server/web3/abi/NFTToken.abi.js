@@ -1,4 +1,4 @@
-[
+module.exports = [
   {
     "inputs": [
       {
@@ -47,7 +47,7 @@
       {
         "indexed": false,
         "internalType": "uint32",
-        "name": "amount",
+        "name": "quantity",
         "type": "uint32"
       },
       {
@@ -290,7 +290,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "amount",
+        "name": "quantity",
         "type": "uint256"
       }
     ],
@@ -308,7 +308,7 @@
       },
       {
         "internalType": "uint256[]",
-        "name": "amounts",
+        "name": "quantitys",
         "type": "uint256[]"
       }
     ],
@@ -436,7 +436,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "amount",
+        "name": "quantity",
         "type": "uint256"
       }
     ],
@@ -449,7 +449,7 @@
     "inputs": [
       {
         "internalType": "uint32",
-        "name": "amount",
+        "name": "quantity",
         "type": "uint32"
       },
       {

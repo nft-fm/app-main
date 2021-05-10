@@ -47,7 +47,7 @@ export default [
       {
         "indexed": false,
         "internalType": "uint32",
-        "name": "amount",
+        "name": "quantity",
         "type": "uint32"
       },
       {
@@ -290,7 +290,7 @@ export default [
       },
       {
         "internalType": "uint256",
-        "name": "amount",
+        "name": "quantity",
         "type": "uint256"
       }
     ],
@@ -308,7 +308,7 @@ export default [
       },
       {
         "internalType": "uint256[]",
-        "name": "amounts",
+        "name": "quantitys",
         "type": "uint256[]"
       }
     ],
@@ -436,7 +436,7 @@ export default [
       },
       {
         "internalType": "uint256",
-        "name": "amount",
+        "name": "quantity",
         "type": "uint256"
       }
     ],
@@ -449,7 +449,7 @@ export default [
     "inputs": [
       {
         "internalType": "uint32",
-        "name": "amount",
+        "name": "quantity",
         "type": "uint32"
       },
       {

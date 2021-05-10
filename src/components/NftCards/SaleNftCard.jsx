@@ -9,8 +9,10 @@ import loading from "../../assets/img/loading.gif";
 import axios from "axios";
 import ShareModal from "../SMShareModal/SMShareModal";
 import LikeShare from "./LikeShare";
+import { NavLink } from "react-router-dom";
 
 const NftCard = (props) => {
+  console.log('props NftCard', props)
   const { usdPerEth, user, account } = useAccountConsumer();
   const [nft, setNft] = useState({
     address: "",
@@ -102,7 +104,7 @@ const NftCard = (props) => {
         onLoad={() => setImageLoaded(true)}
       />
       <TrackName onClick={() => setIsOpen(!isOpen)}>{nft.title}</TrackName>
-      <Artist>{nft.artist}</Artist>
+      <Artist to={`/artist/${nft.artist.replace(/ /g, '').toLowerCase()}`}>{nft.artist}</Artist>
       <CostFields>
         <CostEth>
           {nft.price !== "..." ? parseFloat(nft.price).toLocaleString(undefined, {
@@ -239,11 +241,21 @@ const TrackName = styled.span`
   margin-bottom: 12px;
 `;
 
+// const Artist = styled(NavLink)`
+//   font-size: ${(props) => props.theme.fontSizes.xxs}px;
+//   text-align: center;
+//   color: ${(props) => props.theme.gray};
+//   margin-bottom: 12px;
+//   text-decoration: none;
+//   /* cursor: pointer; */
+// `;
 const Artist = styled.span`
   font-size: ${(props) => props.theme.fontSizes.xxs}px;
   text-align: center;
   color: ${(props) => props.theme.gray};
   margin-bottom: 12px;
+  text-decoration: none;
+  /* cursor: pointer; */
 `;
 
 export default NftCard;

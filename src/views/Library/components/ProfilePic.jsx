@@ -10,11 +10,12 @@ import Loading from '../../../assets/img/loading.gif';
 const ProfilePic = (props) => {
   const { account, user, setUser } = useAccountConsumer();
   const { profilePic, setProfilePic, edit } = props;
-  const [ imageFile, setImageFile ] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(false);
   const [loading, setLoading] = useState(false)
   const hiddenImageInput = useRef(null);
 
+  console.log("PROFILE PIC", profilePic);
   const handleImage = () => {
     hiddenImageInput.current.click();
   };
@@ -42,6 +43,8 @@ const ProfilePic = (props) => {
         .post("/api/user/uploadProfilePicS3", imageFormData)
         .then((res) => {
           setLoading(false);
+          console.log("RES", res.data);
+          setProfilePic(res.data.location)
           setImageFile(null);
           props.setEdit(false);
         })
@@ -60,20 +63,20 @@ const ProfilePic = (props) => {
     }
   }, [imageFile])
   return (
-      <ProfilePicHolder>
-        {loading && edit &&
+    <ProfilePicHolder imageUrl={profilePic}>
+      {loading && edit &&
         <EditProfilePic>
-          <img src={Loading}/>
+          <img src={Loading} />
         </EditProfilePic>
-        }
-        {!loading && edit &&
+      }
+      {!loading && edit &&
         <EditProfilePic onClick={handleImage}>
           <div>Change</div>
           <div>Picture</div>
           <img src={upload_icon} alt="upload-file-icon" />
         </EditProfilePic>
-        }
-        {edit &&
+      }
+      {edit &&
         <input
           type="file"
           accept=".jpg,.jpeg,.png,.gif"
@@ -82,9 +85,9 @@ const ProfilePic = (props) => {
           style={{ display: "none" }}
           defaultValue={imageFile !== "" ? imageFile : null}
         />
-        }
-        <Pic src={profilePic} alt="default-profile-pic" />
-      </ProfilePicHolder>
+      }
+
+    </ProfilePicHolder>
   );
 };
 
@@ -117,7 +120,11 @@ const EditProfilePic = styled.div`
 
 const ProfilePicHolder = styled.div`
   position: relative;
+  background-image: url('${(props) => props.imageUrl}');
   background-color: ${(props) => props.theme.color.lightgray};
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
   border-width: 4px;
   border-color: ${(props) => props.theme.color.lightgray};
   border-style: solid;
@@ -127,7 +134,7 @@ const ProfilePicHolder = styled.div`
   overflow: hidden;
 `;
 
-const Pic = styled.img`
+const Pic = styled.div`
   width: 100%;
 `;
 

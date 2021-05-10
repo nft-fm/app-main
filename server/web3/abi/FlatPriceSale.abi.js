@@ -33,7 +33,7 @@ module.exports = [
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount",
+        "name": "quantity",
         "type": "uint256"
       },
       {
@@ -87,7 +87,7 @@ module.exports = [
       },
       {
         "internalType": "uint32",
-        "name": "amount",
+        "name": "quantity",
         "type": "uint32"
       }
     ],
@@ -284,6 +284,55 @@ module.exports = [
     "inputs": [
       {
         "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "sets",
+    "outputs": [
+      {
+        "internalType": "address payable",
+        "name": "artist",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "startTime",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint32",
+        "name": "quantity",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint32",
+        "name": "sold",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint32",
+        "name": "feePercent",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "price",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "isPaused",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
         "name": "nftID",
         "type": "uint256"
       },
@@ -294,7 +343,7 @@ module.exports = [
       },
       {
         "internalType": "uint32",
-        "name": "amount",
+        "name": "quantity",
         "type": "uint32"
       },
       {

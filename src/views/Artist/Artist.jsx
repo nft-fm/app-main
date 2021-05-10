@@ -8,91 +8,51 @@ import { NavLink } from "react-router-dom";
 import BaseView from "../BaseView";
 import { useAccountConsumer } from "../../contexts/Account";
 
-import CreateForm from "./components/CreateForm";
+import CreateForm from "../Profile/components/CreateForm";
 import IconMetamask from "../../assets/img/icons/metamask_icon.png";
 import cog from "../../assets/img/icons/cog.svg";
-import ProfilePic from "./components/ProfilePic";
-import ArtistNfts from "./components/ArtistNfts";
+import PublicProfilePic from "./Components/PublicProfilePic";
+import PublicArtistNfts from "./Components/PublicArtistNfts";
 import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
-import Error404 from "../404/404";
-// import PublicProfile from "../Artist/PublicProfile/ProfilePublic";
 
 import { ReactComponent as plus_icon } from "../../assets/img/icons/plus_icon.svg";
-const Profile = () => {
+import Error404 from "../404/404";
+
+const Artist = ( ) => {
   const { account, connect, user, setUser, usdPerEth } = useAccountConsumer();
   const [edit, setEdit] = useState(false);
   const [username, setUsername] = useState("");
   const [profilePic, setProfilePic] = useState("");
   const [open, setOpen] = useState(false);
-  // const [isPublicPage, setIsPublicPage] = useState(() => {
-  //   if (
-  //     window.location.pathname != "/profile" &&
-  //     window.location.pathname != "/profile/"
-  //   ) {
-  //      return window.location.pathname.substring(
-  //         window.location.pathname.lastIndexOf("/") + 1
-  //       )
-      
-  //   } else {
-  //     return null
-  //   }
-  // });
-
-
+  const [userInfo, setUserInfo] = useState();
+  const [userNfts, setUserNfts] = useState();
+  console.log('userInfo', userInfo)
   useEffect(() => {
-    if (user?.profilePic) {
-      setProfilePic(user.profilePic);
+    if (userInfo?.profilePic) {
+      setProfilePic(userInfo.profilePic);
     }
-  }, [user]);
-
-  const saveDetails = (e) => {
-    e.preventDefault();
-    setEdit(false);
-    setUser({ ...user, username: username });
+  }, [userInfo]);
+  useEffect(() => {
     axios
-      .post("/api/user/update-account", {
-        address: account,
-        username: username,
-        profilePic: profilePic,
-        // email: email,
+      .post("/api/user/get-public-account", { suburl: window.location.pathname.substring(
+                window.location.pathname.lastIndexOf("/") + 1
+              ) })
+      .then((res) => {
+        setUserInfo(res.data[0]);
+        setUserNfts(res.data[1]);
       })
-      .then((res) => setUser(res.data));
-  };
+      .catch(() => window.location = "/")
+  }, []);
 
-  if (!user || (user && !user.isArtist)) return <Error404 />; //this probably needs some work
+  //   if (!userInfo) return <Error404 />; //this probably needs some work
   return (
     <BaseView>
-      {!account && (
-        <IsConnected>
-          <GetConnected>
-            <ConnectButton onClick={() => connect("injected")}>
-              <MetaMask src={IconMetamask} />
-              <ButtonText>Connect Wallet</ButtonText>
-            </ConnectButton>
-          </GetConnected>
-        </IsConnected>
-      )}
-      {/* {user && !user?.username && (
-      <IsConnected>
-        <GetConnectedNav>
-          <span>Head to the Library page and set a username. Then you can start making NFT's!</span>
-          <ConnectNavLink to="/library">
-            <ButtonTextNav>Library</ButtonTextNav>
-          </ConnectNavLink>
-        </GetConnectedNav>
-      </IsConnected>
-    )} */}
       <Landing>
         <Banner />
         <ProfileHeading>
           <Side />
           <ProfileHolder>
-            <Cog
-              src={cog}
-              alt="edit icon"
-              onClick={account ? () => setEdit(!edit) : null}
-            />
-            <ProfilePic
+            <PublicProfilePic
               profilePic={
                 profilePic && profilePic !== "" ? profilePic : default_pic
               }
@@ -101,57 +61,26 @@ const Profile = () => {
               setEdit={setEdit}
             />
             <ProfileInfoHolder>
-              {edit ? (
-                <form onSubmit={(e) => saveDetails(e)}>
-                  <StyledInput
-                    type="text"
-                    placeholder="Enter Username"
-                    defaultValue={user?.username}
-                    onChange={(e) => setUsername(e.target.value)}
-                  />
-                </form>
-              ) : (
-                <Username>
-                  {user && user.username != "" ? user.username : "No username"}
-                </Username>
-              )}
+              <Username>{userInfo?.username}</Username>
               <Divider />
 
               <AddressSpan>
-                {user
-                  ? user.address.substring(0, 10) +
-                    "..." +
-                    user.address.substring(user.address.length - 4)
-                  : " "}
-                {/* {user && (
-                <CopyButton
-                  onClick={() => {
-                    navigator.clipboard.writeText(user.address);
-                  }}
-                />
-              )} */}
+                {userInfo?.address.substring(0, 10) +
+                  "..." +
+                  userInfo?.address.substring(userInfo.address.length - 4)}
               </AddressSpan>
             </ProfileInfoHolder>
           </ProfileHolder>
           <Side>
-            {/* <SideSpan>
-            12 <BlueSpan>/NFTs</BlueSpan>
-          </SideSpan>
-          <SideSpan>
-            8 <BlueSpan>Traded</BlueSpan>
-          </SideSpan> */}
           </Side>
         </ProfileHeading>
       </Landing>
 
       <CreatedNftHolder>
         <NftContainer>
-          <NftContainerTitle>YOUR MUSIC</NftContainerTitle>
-          <NftContainerRight onClick={() => setOpen(!open)}>
-            <PlusIcon />
-          </NftContainerRight>
+          <NftContainerTitle>AVAILABLE MUSIC</NftContainerTitle>
           <NftContainerOutline />
-          <ArtistNfts user={user} />
+          <PublicArtistNfts nfts={userNfts} />
         </NftContainer>
       </CreatedNftHolder>
       <CreateForm open={open} hide={() => setOpen(false)} />
@@ -497,4 +426,4 @@ const Divider = styled.div`
   background-color: ${(props) => props.theme.fontColor.gray};
   margin-bottom: 6px;
 `;
-export default Profile;
+export default Artist;

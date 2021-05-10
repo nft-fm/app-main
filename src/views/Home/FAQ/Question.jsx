@@ -99,6 +99,7 @@ const FaqQuestion = styled.div`
   text-align: left;
   @media only screen and (max-width: 776px) {
     width: 100%;
+  }
 `;
 
 const FaqCard = styled.div`

@@ -10,7 +10,7 @@ import grayCheckMark from "../../assets/img/gray_check.png";
 import Landing from "./Landing";
 import demoImage from "../../assets/img/metamask_fox.svg";
 import { FAQ } from "./FAQ/FAQ"
-import recordPlayer from "../../assets/img/record_player.png";
+import record from "../../assets/img/record_player_disk.png";
 
 const Listen = () => {
   const { path } = useRouteMatch();
@@ -29,7 +29,7 @@ const Listen = () => {
               We are a music distribution platform dedicated to artists and fans alike. We aim to add legitimacy to both the Music and the Crypto industry by providing fans a way to directly support the artists they love. On NFT FM, artists have full control over how they distribute their music. Over 90% of all purchases go directly to the Musicians.
             </StyledParagraph>
           </DescriptionColumn>
-          <DemoImage src={recordPlayer} />
+          <DemoImage src={record} />
         </DescriptionBoxContainer>
         <LaunchContainer>
           <ContainerTitle>
@@ -49,21 +49,21 @@ const Listen = () => {
                 </LaunchFeatureRow>
                 <LaunchFeatureRow>
                   <LaunchFeatureText>
-                    Smart contracts developed
+                  Artist Outreach
                   </LaunchFeatureText>
                   <FillerLine />
                   <Checkmark src={greenCheckMark} />
                 </LaunchFeatureRow>
                 <LaunchFeatureRow>
                   <LaunchFeatureText>
-                    Opensea integration completed
+                    Opensea Integration Completed
                   </LaunchFeatureText>
                   <FillerLine />
                   <Checkmark src={greenCheckMark} />
                 </LaunchFeatureRow>
                 <LaunchFeatureRow>
                   <LaunchFeatureText>
-                    Smart contracts audited
+                    Smart Contracts Audited
                   </LaunchFeatureText>
                   <FillerLine />
                   <Checkmark src={greenCheckMark} />
@@ -75,28 +75,28 @@ const Listen = () => {
               <LaunchFeatureList>
                 <LaunchFeatureRow>
                   <LaunchFeatureText>
-                    NFT auctions*
+                    Full Album NFTs
                   </LaunchFeatureText>
                   <FillerLine />
                   <Checkmark src={grayCheckMark} />
                 </LaunchFeatureRow>
                 <LaunchFeatureRow>
                   <LaunchFeatureText>
-                    Public profiles
+                    Public User Profiles
                   </LaunchFeatureText>
                   <FillerLine />
                   <Checkmark src={grayCheckMark} />
                 </LaunchFeatureRow>
                 <LaunchFeatureRow>
                   <LaunchFeatureText>
-                    On-platform resale
+                    On-Platform Resale
                   </LaunchFeatureText>
                   <FillerLine />
                   <Checkmark src={grayCheckMark} />
                 </LaunchFeatureRow>
                 <LaunchFeatureRow>
                   <LaunchFeatureText>
-                    Governance token
+                    Credit Card Support
                   </LaunchFeatureText>
                   <FillerLine />
                   <Checkmark src={grayCheckMark} />
@@ -125,7 +125,6 @@ flex: 1;
 
 const DemoImage = styled.img`
   height: 213px;
-  border: 2px solid black;
   width: auto;
   margin: auto 0 auto 20%;
   @media only screen and (max-width: 776px) {

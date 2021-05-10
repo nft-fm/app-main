@@ -1,14 +1,9 @@
-module.exports = [
+export default [
   {
     "inputs": [
       {
         "internalType": "address",
         "name": "nftToken",
-        "type": "address"
-      },
-      {
-        "internalType": "address payable",
-        "name": "_authAddress",
         "type": "address"
       }
     ],
@@ -17,11 +12,35 @@ module.exports = [
   },
   {
     "anonymous": false,
+    "inputs": [],
+    "name": "Bid",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
     "inputs": [
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "saleId",
+        "name": "lotID",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "creator",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "startTime",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "endTime",
         "type": "uint256"
       },
       {
@@ -33,17 +52,17 @@ module.exports = [
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount",
+        "name": "startPrice",
         "type": "uint256"
       },
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "bidIncrementPercent",
+        "type": "uint256"
       }
     ],
-    "name": "Buy",
+    "name": "NewLot",
     "type": "event"
   },
   {
@@ -66,13 +85,32 @@ module.exports = [
     "type": "event"
   },
   {
-    "inputs": [],
-    "name": "authAddress",
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "lotID",
+        "type": "uint256"
+      }
+    ],
+    "name": "bid",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "lotID",
+        "type": "uint256"
+      }
+    ],
+    "name": "getCurrentMinBid",
     "outputs": [
       {
-        "internalType": "address payable",
+        "internalType": "uint256",
         "name": "",
-        "type": "address"
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -82,18 +120,49 @@ module.exports = [
     "inputs": [
       {
         "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "lots",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "startTime",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "endTime",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
         "name": "nftID",
         "type": "uint256"
       },
       {
-        "internalType": "uint32",
-        "name": "amount",
-        "type": "uint32"
+        "internalType": "uint256",
+        "name": "bidIncrementPercent",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address payable",
+        "name": "currentBidder",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "currentBid",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "firstBid",
+        "type": "bool"
       }
     ],
-    "name": "buyNFT",
-    "outputs": [],
-    "stateMutability": "payable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -204,11 +273,11 @@ module.exports = [
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "nftID",
+        "name": "lotID",
         "type": "uint256"
       }
     ],
-    "name": "pauseSale",
+    "name": "payout",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -216,66 +285,6 @@ module.exports = [
   {
     "inputs": [],
     "name": "renounceOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint32",
-        "name": "",
-        "type": "uint32"
-      }
-    ],
-    "name": "sales",
-    "outputs": [
-      {
-        "internalType": "uint32",
-        "name": "saleId",
-        "type": "uint32"
-      },
-      {
-        "internalType": "uint256",
-        "name": "timestamp",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "buyer",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address payable",
-        "name": "_address",
-        "type": "address"
-      }
-    ],
-    "name": "setAuthAddress",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "nftID",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "price",
-        "type": "uint256"
-      }
-    ],
-    "name": "setSetPrice",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -294,7 +303,7 @@ module.exports = [
       },
       {
         "internalType": "uint32",
-        "name": "amount",
+        "name": "quantity",
         "type": "uint32"
       },
       {
@@ -339,12 +348,12 @@ module.exports = [
   },
   {
     "inputs": [],
-    "name": "totalSales",
+    "name": "totalLots",
     "outputs": [
       {
-        "internalType": "uint32",
+        "internalType": "uint256",
         "name": "",
-        "type": "uint32"
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -359,19 +368,6 @@ module.exports = [
       }
     ],
     "name": "transferOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "nftID",
-        "type": "uint256"
-      }
-    ],
-    "name": "unpauseSale",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

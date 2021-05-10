@@ -1,19 +1,20 @@
 // SPDX-License-Identifier: MIT
 
-import "./Context.sol";
-import "./SafeMath.sol";
-import "./Ownable.sol";
-import "./IERC20.sol";
-import "./IERC1155.sol";
-import "./ReentrancyGuard.sol";
-import "./ERC1155Holder.sol";
+import "./lib/Context.sol";
+import "./lib/SafeMath.sol";
+import "./lib/Ownable.sol";
+import "./lib/IERC20.sol";
+import "./lib/IERC1155.sol";
+import "./lib/ReentrancyGuard.sol";
+import "./lib/ERC1155Holder.sol";
+import "./INFTSale.sol";
 
 pragma solidity 0.8.4;
 
-contract NFTSale is Context, Ownable, ReentrancyGuard, ERC1155Holder {
+contract FlatPriceSale is Context, Ownable, ReentrancyGuard, ERC1155Holder, INFTSale {
     using SafeMath for uint256;
 
-    constructor(address nftToken, address _authAddress) {
+    constructor(address nftToken, address payable _authAddress) {
         NFT_TOKEN = IERC1155(nftToken);
         nftAddress = nftToken;
         authAddress = _authAddress;
@@ -26,15 +27,7 @@ contract NFTSale is Context, Ownable, ReentrancyGuard, ERC1155Holder {
         address indexed account
     );
 
-    event List(
-        uint256 indexed saleId,
-        uint32 quantity,
-        uint256 price,
-        uint256 startTime,
-        address indexed account
-    );
-
-    address public authAddress;
+    address payable public authAddress;
     address public nftAddress;
     IERC1155 private NFT_TOKEN;
 
@@ -52,6 +45,7 @@ contract NFTSale is Context, Ownable, ReentrancyGuard, ERC1155Holder {
         uint256 startTime;
         uint32 quantity;
         uint32 sold;
+        uint32 feePercent;
         uint256 price;
         bool isPaused;
     }
@@ -63,8 +57,9 @@ contract NFTSale is Context, Ownable, ReentrancyGuard, ERC1155Holder {
         address payable artist,
         uint32 quantity,
         uint256 price,
-        uint256 startTime
-    ) public nonReentrant {
+        uint256 startTime,
+        bytes calldata data
+    ) override public nonReentrant {
         require(
             _msgSender() == nftAddress,
             "Can only stake via NFT_FM contract."
@@ -73,17 +68,18 @@ contract NFTSale is Context, Ownable, ReentrancyGuard, ERC1155Holder {
             sets[nftID].artist == address(0),
             "Sale already exists for that NFT."
         );
-        sets[nftID] = NFTSet(artist, startTime, quantity, 0, price, false);
-        emit List(nftID, quantity, price, startTime, artist);
+        uint32 feePercent;
+        (feePercent) = abi.decode(data, (uint32));
+        sets[nftID] = NFTSet(artist, startTime, quantity, 0, feePercent, price, false);
     }
 
     function buyNFT(uint256 nftID, uint32 quantity) public payable nonReentrant {
         NFTSet memory set = sets[nftID];
         require(set.artist != address(0), "Sale does not exist.");
-        require(quantity >= 0, "Must select an quantity of tokens");
+        require(quantity > 0, "Must select an quantity of tokens");
         require(block.timestamp > set.startTime, "Sale has not started yet.");
         require(!set.isPaused, "Sale is paused.");
-        require(set.sold + quantity >= quantity, "Addition overflow");
+        require(set.sold + quantity > quantity, "Addition overflow");
         require(set.sold + quantity <= set.quantity, "Insufficient stock.");
 
         totalSales++;
@@ -94,10 +90,12 @@ contract NFTSale is Context, Ownable, ReentrancyGuard, ERC1155Holder {
         );
         emit Buy(totalSales, nftID, quantity, _msgSender());
 
-        uint256 cost = set.price.mul(quantity);
-        require(cost == msg.value, "Exact change required.");
+        uint256 cost = set.price.mul(quantity).mul(1e18);
+        uint256 fee = cost.mul(set.feePercent).div(100);
+        require(cost + fee == msg.value, "Exact change required.");
         sets[nftID].sold = set.sold + quantity;
         sets[nftID].artist.transfer(cost);
+        authAddress.transfer(fee);
         NFT_TOKEN.safeTransferFrom(
             address(this),
             _msgSender(),
@@ -107,7 +105,7 @@ contract NFTSale is Context, Ownable, ReentrancyGuard, ERC1155Holder {
         );
     }
 
-    function setAuthAddress(address _address) public onlyOwner {
+    function setAuthAddress(address payable _address) public onlyOwner {
         authAddress = _address;
     }
 

@@ -8,6 +8,10 @@ const UserSchema = new Schema({
     required: true,
     unique: true
   },
+  suburl: {
+    type: String,
+    default: "",
+  },
   username: {
     type: String,
     default: "",

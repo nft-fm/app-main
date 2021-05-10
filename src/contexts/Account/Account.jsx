@@ -39,7 +39,6 @@ export const AccountProvider = ({ children }) => {
   const [currChainId, setCurrChainId] = useState(false);
   const [usdPerEth, setUsdPerEth] = useState(0);
   const [oneSecToLoadMetaMask, setOneSecToLoadMetaMask] = useState(false);
-
   const fetchUsdPerEth = async () => {
     console.log("fetchinafioe");
     await axios
@@ -50,8 +49,9 @@ export const AccountProvider = ({ children }) => {
   };
 
   const getUser = async () => {
-    await axios.post(`api/user/get-account`,
+    await axios.post(`/api/user/get-account`,
       { address: account }).then(res => {
+        console.log('res abcdefg', res)
         setUser(res.data);
       }).catch(err => {
         console.log(err);
@@ -109,8 +109,8 @@ export const AccountProvider = ({ children }) => {
         currChainId, setCurrChainId,
         usdPerEth
       }}>
-      {oneSecToLoadMetaMask && !currChainId && <NoChainModal />}
-      {currChainId && currChainId != 4 && <WrongChainModal />}
+      {/* {oneSecToLoadMetaMask && !currChainId && <NoChainModal />}
+      {currChainId && currChainId != 4 && <WrongChainModal />} */}
       {children}
     </AccountContext.Provider>
   );

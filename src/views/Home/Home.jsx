@@ -82,7 +82,7 @@ const Listen = () => {
                 </LaunchFeatureRow>
                 <LaunchFeatureRow>
                   <LaunchFeatureText>
-                    Public User Profiles
+                    Auctions Integrated
                   </LaunchFeatureText>
                   <FillerLine />
                   <Checkmark src={grayCheckMark} />

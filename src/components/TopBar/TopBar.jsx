@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import Container from "../Container";
-import { Col } from "../Grid";
 import Logo from "../Logo";
 import AccountButton from "./components/AccountButton";
 import { Nav } from "./components/Nav";

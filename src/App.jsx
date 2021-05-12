@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
   Switch,
-  Redirect,
 } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import { UseWalletProvider } from "use-wallet";
@@ -11,7 +10,6 @@ import styled from "styled-components";
 import ModalsProvider from "./contexts/Modals";
 import Listen from "./views/Home";
 import Library from "./views/Library";
-import Register from "./views/Register";
 import Discover from "./views/Discover";
 import Profile from "./views/Profile";
 import Artist from "./views/Artist";
@@ -39,9 +37,6 @@ const App = () => {
           <Switch>
             <Route path="/" exact>
               <Listen />
-            </Route>
-            <Route path="/register" exact>
-              <Register />
             </Route>
             <Route path="/library" exact>
               <Library />

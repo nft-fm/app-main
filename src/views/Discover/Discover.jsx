@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Route, Switch, useRouteMatch } from "react-router-dom";
-import BaseView from "../BaseView";
+import React, { useEffect, useState } from "react";
+import { Switch } from "react-router-dom";
+import BaseView from "../../components/Page/BaseView";
 import Market from "./Components/Market";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import NftModalHook from "../../components/NftModalHook";
 
 const Listen = () => {
@@ -10,12 +10,6 @@ const Listen = () => {
   const [isOpen, setIsOpen] = useState(true);
 
   useEffect(() => {
-    console.log(
-      "win",
-      window.location.pathname,
-      window.location.pathname.length,
-      window.location.pathname.slice(10)
-    );
     if (window.location.pathname.length > 10) {
       setId(window.location.pathname.slice(10));
     }

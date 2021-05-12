@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect, useState }  from "react";
+import React from "react";
 import styled from "styled-components";
 import { Footer } from "../Footer/Footer";
-import { Col } from "../Grid";
 import TopBar from "../TopBar";
 import { Nav } from "../TopBar/components/Nav";
 

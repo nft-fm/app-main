@@ -1,4 +1,4 @@
-import { black, white, green, grey, blue, red, yellow } from './colors'
+import { black, white } from "./colors";
 
 const theme = {
   borderRadius: 4,
@@ -28,12 +28,12 @@ const theme = {
     // },
   },
   fontSizes: {
-    xxs: '0.625rem', // 10px
-    xs: '1rem',     // 16px
-    sm: '1.3125rem', //21 px
-    md: '1.75rem',// 28px
-    lg: '2.125rem', //36p
-    xl: '3.125rem' //50px
+    xxs: "0.625rem", // 10px
+    xs: "1rem", // 16px
+    sm: "1.3125rem", //21 px
+    md: "1.75rem", // 28px
+    lg: "2.125rem", //36p
+    xl: "3.125rem", //50px
   },
   siteWidth: 1440,
   homeWidth: 1200,
@@ -47,7 +47,7 @@ const theme = {
     7: 64,
     8: 96,
   },
-  topBarSize: 60
-}
+  topBarSize: 60,
+};
 
-export default theme
+export default theme;

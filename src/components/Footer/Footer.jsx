@@ -4,7 +4,6 @@ import styled from "styled-components";
 // import medium from "../../../assets/img/socials/social_medium.png";
 // import telegram from "../../../assets/img/socials/social_telegram.png";
 // import twitter from "../../../assets/img/socials/social_twitter.png";
-import { Col, Row } from "../Grid";
 import logo from "../../assets/img/logos/logo_nav.png"
 
 export const Footer = () => (

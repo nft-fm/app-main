@@ -1,8 +1,4 @@
-import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
-import { useWallet } from 'use-wallet'
-import axios from "axios";
-import isMobile from "../../utils/isMobile";
-import Swal from 'sweetalert2';
+import React, { createContext, useContext, useEffect, useState } from 'react'
 import { useAccountConsumer } from "../Account";
 import styled from "styled-components";
 import MusicPlayer from "../../components/MusicPlayer"
@@ -10,7 +6,7 @@ import MusicPlayer from "../../components/MusicPlayer"
 const PlaylistContext = createContext();
 
 export const PlaylistProvider = ({ children }) => {
-  const { account, user } = useAccountConsumer();
+  const { user } = useAccountConsumer();
 
   const [nfts, setNfts] = useState([]);
   const [selectedNft, setSelectedNft] = useState();

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import EmptySpace from "./EmptySpace";
 import LoadingNftCard from "./LoadingNftCard";
 
@@ -9,12 +9,10 @@ const LoadingFeatured = () => {
     <LoadingNftCard />,
     <LoadingNftCard />,
     <LoadingNftCard />,
-    <EmptySpace />
-  ]
+    <EmptySpace />,
+  ];
 
-  return (
-    LoadingFeatured
-  );
+  return LoadingFeatured;
 };
 
 export default LoadingFeatured;

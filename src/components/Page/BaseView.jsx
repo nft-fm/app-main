@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Page from "../components/Page";
-import isMobile from "../utils/isMobile";
+import Page from "./Page";
 
 export const BaseView = (props) => {
   return (

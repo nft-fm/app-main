@@ -7,9 +7,10 @@ import axios from "axios";
 import logo from "../../assets/img/logos/logo.png";
 import greenCheckMark from "../../assets/img/green_check.png";
 import grayCheckMark from "../../assets/img/gray_check.png";
-import Landing from "./Landing";
+import Landing from "./Components/Landing";
+import Roadmap from "./Components/Roadmap"
 import demoImage from "../../assets/img/metamask_fox.svg";
-import { FAQ } from "./FAQ/FAQ"
+import { FAQ } from "./Components/FAQ/FAQ"
 import record from "../../assets/img/record_player_disk.png";
 
 const Listen = () => {
@@ -31,7 +32,8 @@ const Listen = () => {
           </DescriptionColumn>
           <DemoImage src={record} />
         </DescriptionBoxContainer>
-        <LaunchContainer>
+        <Roadmap />
+        {/* <LaunchContainer>
           <ContainerTitle>
             ROADMAP
           </ContainerTitle>
@@ -104,7 +106,7 @@ const Listen = () => {
               </LaunchFeatureList>
             </LaunchFeaturesBox>
           </LaunchFeaturesContainer>
-        </LaunchContainer>
+        </LaunchContainer> */}
         <LaunchContainer>
           <ContainerTitle faq>
             <b className="first">F</b>requently<b>A</b>sked<b>Q</b>uestions

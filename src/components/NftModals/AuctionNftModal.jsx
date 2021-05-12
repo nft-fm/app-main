@@ -404,7 +404,7 @@ const Container = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
-  width: 340px;
+  width: 680px;
   position: fixed;
   left: 50%;
   top: 50%;

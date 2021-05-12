@@ -1,18 +1,18 @@
-import React, { useCallback, useEffect, useState, useRef } from "react";
-import styled, { keyframes } from "styled-components";
+import React, { useEffect, useState, useRef } from "react";
+import styled from "styled-components";
 import swal from "sweetalert2";
 import { useAccountConsumer } from "../../../contexts/Account";
 
 import upload_icon from "../../../assets/img/profile_page_assets/upload_icon.svg";
 import axios from "axios";
-import Loading from '../../../assets/img/loading.gif';
+import Loading from "../../../assets/img/loading.gif";
 
 const ProfilePic = (props) => {
   const { account, user, setUser } = useAccountConsumer();
   const { profilePic, setProfilePic, edit } = props;
   const [imageFile, setImageFile] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(false);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const hiddenImageInput = useRef(null);
 
   console.log("PROFILE PIC", profilePic);
@@ -22,19 +22,20 @@ const ProfilePic = (props) => {
 
   const handleImageChange = (e) => {
     setImageFile(e.target.files[0]);
-    const picUrl = "https://nftfm-profilepic.s3-us-west-1.amazonaws.com/" +
+    const picUrl =
+      "https://nftfm-profilepic.s3-us-west-1.amazonaws.com/" +
       account +
       "/" +
       e.target.files[0].name;
     setProfilePic(picUrl);
     setUser({
       ...user,
-      profilePic: picUrl
+      profilePic: picUrl,
     });
   };
   useEffect(() => {
     if (imageFile) {
-      setLoading(true)
+      setLoading(true);
       const imageFormData = new FormData();
       imageFormData.append("user", account);
       imageFormData.append("imageFile", imageFile);
@@ -44,7 +45,7 @@ const ProfilePic = (props) => {
         .then((res) => {
           setLoading(false);
           console.log("RES", res.data);
-          setProfilePic(res.data.location)
+          setProfilePic(res.data.location);
           setImageFile(null);
           props.setEdit(false);
         })
@@ -58,25 +59,25 @@ const ProfilePic = (props) => {
             background: `#000`,
             boxShadow: `24px 24px 48px -24px #131313`,
             text: "Couldn't upload image, please try again.",
-          })
+          });
         });
     }
-  }, [imageFile])
+  }, [imageFile]);
   return (
     <ProfilePicHolder imageUrl={profilePic}>
-      {loading && edit &&
+      {loading && edit && (
         <EditProfilePic>
           <img src={Loading} />
         </EditProfilePic>
-      }
-      {!loading && edit &&
+      )}
+      {!loading && edit && (
         <EditProfilePic onClick={handleImage}>
           <div>Change</div>
           <div>Picture</div>
           <img src={upload_icon} alt="upload-file-icon" />
         </EditProfilePic>
-      }
-      {edit &&
+      )}
+      {edit && (
         <input
           type="file"
           accept=".jpg,.jpeg,.png,.gif"
@@ -85,12 +86,10 @@ const ProfilePic = (props) => {
           style={{ display: "none" }}
           defaultValue={imageFile !== "" ? imageFile : null}
         />
-      }
-
+      )}
     </ProfilePicHolder>
   );
 };
-
 
 const EditProfilePic = styled.div`
   position: absolute;
@@ -109,7 +108,7 @@ const EditProfilePic = styled.div`
   img {
     width: 20px;
   }
-  
+
   :hover {
     font-size: calc(${(props) => props.theme.fontSizes.xs} + 1px);
     img {
@@ -120,7 +119,7 @@ const EditProfilePic = styled.div`
 
 const ProfilePicHolder = styled.div`
   position: relative;
-  background-image: url('${(props) => props.imageUrl}');
+  background-image: url("${(props) => props.imageUrl}");
   background-color: ${(props) => props.theme.color.lightgray};
   background-repeat: no-repeat;
   background-size: cover;

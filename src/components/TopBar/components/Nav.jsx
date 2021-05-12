@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 import { useAccountConsumer } from "../../../contexts/Account";
 

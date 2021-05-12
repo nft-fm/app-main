@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Loading from '../../assets/img/loading.gif';
-import Modal, { ModalProps } from '../Modal';
+import Modal from '../Modal';
 import ModalTitle from '../ModalTitle';
 import CloseModal from '../Modal/CloseModal';
-import Modalmd from "../Modal/Modalmd";
-import Modallg from "../Modal/Modallg";
 import Modalsm from "../Modal/Modalsm";
 import {useAccountConsumer} from "../../contexts/Account";
 

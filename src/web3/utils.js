@@ -1,6 +1,4 @@
-import { Contract, utils, providers, constants, BigNumber, getDefaultProvider } from "ethers";
-import WalletConnectProvider from "@walletconnect/web3-provider";
-import isMobile from "../utils/isMobile";
+import { Contract, utils, providers } from "ethers";
 import { NFTToken, FlatPriceSale, Auction } from "./constants"
 import NFTTokenABI from "./abi/NFTToken.abi.js";
 import FlatPriceSaleABI from "./abi/FlatPriceSale.abi.js";

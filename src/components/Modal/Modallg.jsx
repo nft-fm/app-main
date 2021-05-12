@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import CardContent from '../CardContent'
 import Container from '../Container'
 
 const Modallg = ({ children }) => {

@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
-import styled, { keyframes } from "styled-components";
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
 import axios from "axios";
 import NftCard from "../../../components/NftCards/SaleNftCard";
 import { useAccountConsumer } from "../../../contexts/Account";
 
 const Listen = () => {
-  const { user, account, justLiked, setJustLiked } = useAccountConsumer();
+  const { user, account } = useAccountConsumer();
   const [allNfts, setAllNfts] = useState([]);
 
   const formatNfts = (nftsData) => {

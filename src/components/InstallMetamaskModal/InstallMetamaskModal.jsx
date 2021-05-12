@@ -3,17 +3,13 @@ import styled from 'styled-components';
 import { useWallet } from 'use-wallet';
 import metamaskLogo from '../../assets/img/metamask_fox.svg';
 import Button from '../Button';
-import Modal, { ModalProps } from '../Modal';
-import ModalActions from '../ModalActions';
-import ModalContent from '../ModalContent';
+import Modal from '../Modal';
 import ModalTitle from '../ModalTitle';
 import CloseModal from '../Modal/CloseModal';
-import Modalmd from "../Modal/Modalmd";
-import Modallg from "../Modal/Modallg";
 import Modalsm from "../Modal/Modalsm";
 
 const InstallMetamaskModal = ({ onDismiss }) => {
-  const { account, connect } = useWallet()
+  const { account } = useWallet()
 
   useEffect(() => {
     if (account) {

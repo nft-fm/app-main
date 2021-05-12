@@ -152,6 +152,7 @@ router.post('/auction-finalize', async (req, res) => {
         ['string', 'address', 'uint256', 'uint256', 'uint256', 'address', 'bytes'],
         ['NFTFM_mintAndStake', newData.address, 1, price, BigNumber.from(newData.startTime), Auction, encodedArgs]
       );
+      listenForMint();
       res.status(200).send({
         ...signature,
         amount: 1,
@@ -162,7 +163,6 @@ router.post('/auction-finalize', async (req, res) => {
         databaseID: newData._id,
         encodedArgs: encodedArgs
       })
-      listenForMint();
     } else {
       console.log("no nft");
       res.status(500).json('error')

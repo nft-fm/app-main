@@ -14,14 +14,16 @@ import Discover from "./views/Discover";
 import Profile from "./views/Profile";
 import Artist from "./views/Artist";
 import Community from "./views/Community"
-import isMobile from "./utils/isMobile";
-import theme from "./theme";
 import Error404 from "./views/404";
+import TermsOfService from "./views/FooterLinks/TermsOfService"
+import PrivacyPolicy from "./views/FooterLinks/PrivacyPolicy"
 import { AccountProvider } from "./contexts/Account";
 import { PlaylistProvider } from "./contexts/Playlist/Playlist";
 import preloadImage from "./utils/preloadImg";
 import recordPlayer from "./assets/img/record_player.png";
 import recordPlayerSpin from "./assets/img/record_player_spin.png";
+import isMobile from "./utils/isMobile";
+import theme from "./theme";
 
 if (window.location.hostname !== "localhost") console.log = function () {};
 
@@ -53,6 +55,12 @@ const App = () => {
             </Route>
             <Route path="/community">
               <Community />
+            </Route>
+            <Route path="/termsofservice">
+              <TermsOfService />
+            </Route>
+            <Route path="/privacypolicy">
+              <PrivacyPolicy />
             </Route>
             <Route path="/*">
               <Error404 />

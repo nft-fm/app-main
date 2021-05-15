@@ -4,11 +4,15 @@ import BuyNftModal from "../NftModals";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
+import { ReactComponent as PlayIcon } from '../../assets/img/icons/listen_play.svg';
 import { useAccountConsumer } from "../../contexts/Account";
+import { usePlaylistConsumer } from "../../contexts/Playlist";
 import loading from "../../assets/img/loading.gif";
 import axios from "axios";
 import ShareModal from "../SMShareModal/SMShareModal";
 import LikeShare from "./LikeShare";
+
+
 
 const NftCard = (props) => {
   const { usdPerEth, user, account } = useAccountConsumer();
@@ -26,8 +30,10 @@ const NftCard = (props) => {
     price: "...",
     quantity: "--",
     sold: "--",
+    partialSongFile: undefined
   })
 
+  const { setNftCallback } = usePlaylistConsumer();
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
@@ -49,7 +55,7 @@ const NftCard = (props) => {
     setLiked(props.nft.liked);
     axios.post("/api/nft-type/full-nft-info", { nft: props.nft, account: account })
       .then((res) => {
-        setNft(res.data)
+        setNft(res.data);
       })
       .catch(err => console.log(err));
   }, [props.nft, user]);
@@ -121,9 +127,27 @@ const NftCard = (props) => {
           <Usd />
         </CostUsd>
       </CostFields>
+      <PlayButton src={PlayIcon} onClick={() => setNftCallback(nft)} />
     </Container>
   );
 };
+
+
+const PlayButton = styled(PlayIcon)`
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  & path {
+    transition: all 0.2s ease-in-out;
+    fill: ${(props) => props.theme.color.gray};
+  }
+  &:hover {
+    & path {
+      fill: #20a4fc;
+    }
+  }
+`;
 
 const Usd = styled(IconUsd)`
   width: 18px;

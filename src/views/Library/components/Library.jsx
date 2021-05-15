@@ -9,7 +9,7 @@ import { usePlaylistConsumer } from "../../../contexts/Playlist";
 const Library = ({ user }) => {
   const [nfts, setNfts] = useState([]);
   const [selectedNft, setSelectedNft] = useState();
-  const { setNftsCallback } = usePlaylistConsumer();
+  const { setNftsCallback, setIsPreview } = usePlaylistConsumer();
   const [isViewingLibrary, setIsViewingLibrary] = useState(true)
   // const [isViewingLibrary, setIsViewingLibrary] = useState(true) //to default to library 
   const formatNfts = (nftsData) => {
@@ -42,6 +42,7 @@ const Library = ({ user }) => {
       .then((res) => {
         setNfts(formatNfts(res.data));
         setNftsCallback(res.data);
+        setIsPreview(false);
       });
   };
 
@@ -52,6 +53,7 @@ const Library = ({ user }) => {
       .then((res) => {
         setNfts(formatNfts(res.data));
         setNftsCallback(res.data);
+        setIsPreview(false);
       });
     // axios
     //   .post("api/nft-type/featured")

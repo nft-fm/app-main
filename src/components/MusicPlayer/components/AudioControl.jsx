@@ -10,7 +10,7 @@ import { ReactComponent as NextIcon } from '../../../assets/img/icons/listen_ski
 const AudioControl = (props) => {
   return (
         <AudioControlSection>
-          <Prev src={NextIcon} onClick={() => {props.setPrev()}} />
+          {/*<Prev src={NextIcon} onClick={() => {props.setPrev()}} />*/}
           <SkipBackward onClick={() => {if (!props.isLoading)props.skipTime(10, false)}} />
             {!props.isPlaying ?
                 <Play onClick={() => {if (!props.isLoading) props.playSong()}} />
@@ -18,7 +18,7 @@ const AudioControl = (props) => {
                 <Pause onClick={() => {if (!props.isLoading) props.stopSong()}} />
             }
           <SkipForward onClick={() =>  {if (!props.isLoading) props.skipTime(10, true)}} />
-          <Next onClick={() => props.setNext()} />
+          {/*<Next onClick={() => props.setNext()} />*/}
         </AudioControlSection>
   )
 }
@@ -71,46 +71,6 @@ const Play = styled(PlayIcon)`
     fill: ${props => props.theme.color.lightgray};
   }
 `;
-
-/*const Next = styled(NextIcon)`
-  width: 20px;
-  height: 20px;
-  & path {
-    fill: ${props => props.theme.color.lightgray};
-  }
-`;
-
-const SkipBackward = styled(SkipBackwardIcon)`
-  width: 20px;
-  height: 20px;
-  & path {
-    fill: ${props => props.theme.color.lightgray};
-  }
-`;
-
-const SkipForward = styled(SkipForwardIcon)`
-  width: 20px;
-  height: 20px;
-  & path {
-    fill: ${props => props.theme.color.lightgray};
-  }
-`;
-
-const Pause = styled(PauseIcon)`
-  width: 20px;
-  height: 20px;
-  & path {
-    fill: ${props => props.theme.color.lightgray};
-  }
-`;
-
-const Play = styled(PlayIcon)`
-  width: 20px;
-  height: 20px;
-  & path {
-    fill: ${props => props.theme.color.lightgray};
-  }
-`;*/
 
 const Icon = styled.img`
   width: 24px;

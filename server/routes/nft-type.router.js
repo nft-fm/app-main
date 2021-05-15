@@ -391,6 +391,33 @@ router.post('/handleImage', async (req, res) => {
   }
 })
 
+router.post('/getNSecondsOfSong', async (req, res) => {
+  if (req.body.nft) {
+    const nft = req.body.nft;
+    const AWS = require('aws-sdk')
+    const s3 = new AWS.S3();
+    const songFullSize = await s3.headObject({ Key: req.body.key, Bucket: "nftfm-music" })
+    .promise()
+    .then(res => res.ContentLength);
+    
+    const startTime = req.bo
+    const nSec = req.body.nSec || 15; 
+    const partialBytes = songFullSize * nSec / req.body.songDur; 
+
+    s3.getObject(
+      { Bucket: "nftfm-music", Key: req.body.key, Range: "bytes=0-" + partialBytes },
+      function (error, data) {
+        if (error != null) {
+          console.log("Failed to retrieve an object: " + error);
+        } else {
+          console.log("LOADED " + data.ContentLength + " bytes");
+          res.status(200).send(data);
+        }
+      }
+    );
+  }
+})
+
 router.post('/getPartialSong', async (req, res) => {
   const AWS = require('aws-sdk')
   const s3 = new AWS.S3();
@@ -399,7 +426,9 @@ router.post('/getPartialSong', async (req, res) => {
   .then(res => res.ContentLength);
 
   console.log("SongFullSize", songFullSize);
-  const partialBytes = (songFullSize / 10).toFixed(0);
+  
+  let partialBytes = req.body.howManySec ? req.body.howManySec :  (songFullSize / 15).toFixed(0);
+
   console.log("partial", partialBytes)
 
   s3.getObject(
@@ -437,6 +466,8 @@ router.post('/getSong', async (req, res) => {
        console.log(end - start);
        if (error != null) {
          console.log("Failed to retrieve an object: " + error);
+         res.status(500).send('Couldnt retrieve nSec of music');
+         return;
        } else {
          console.log("Loaded " + data.ContentLength + " bytes");
          res.status(200).send(data);           // successful response

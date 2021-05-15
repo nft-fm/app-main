@@ -11,13 +11,13 @@ const AudioControl = (props) => {
   return (
         <AudioControlSection>
           <Prev src={NextIcon} onClick={() => {props.setPrev()}} />
-          <SkipBackward onClick={() => props.skipTime(10, false)} />
+          <SkipBackward onClick={() => {if (!props.isLoading)props.skipTime(10, false)}} />
             {!props.isPlaying ?
-                <Play onClick={() => props.playSong()} />
+                <Play onClick={() => {if (!props.isLoading) props.playSong()}} />
                 :
-                <Pause onClick={() => props.stopSong()} />
+                <Pause onClick={() => {if (!props.isLoading) props.stopSong()}} />
             }
-          <SkipForward onClick={() => props.skipTime(10, true)} />
+          <SkipForward onClick={() =>  {if (!props.isLoading) props.skipTime(10, true)}} />
           <Next onClick={() => props.setNext()} />
         </AudioControlSection>
   )

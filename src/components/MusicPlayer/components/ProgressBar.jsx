@@ -67,21 +67,32 @@ const AudioProgressBar = (props) => {
   }, [props])
 
   useEffect(() => {
-    if (!bounds && invisibleBar) setBounds(invisibleBar.current.getBoundingClientRect());
-  }, [])
-  return (
-           <ProgressBar>
-            <InvisibleBar ref={invisibleBar}
-              onClick={(e) => {changePosition(e)}}
-              onMouseDown={(e) => {checkForToogle(e)}}
-              onMouseMove={(e) => {checkForDrag(e)}}
-              onMouseUp={(e) => {if (isDragging) stopToogle(e)}}
-              onMouseLeave={(e) => {if (isDragging) stopToogle(e)}}
-            />
-            <Toogle width={filled} ref={toogle} />
-            <FillBar width={filled}/>
-           </ProgressBar>
-  )
+    if (!props.isLoading && !bounds && invisibleBar) setBounds(invisibleBar.current.getBoundingClientRect());
+  }, [props.isLoading])
+
+  if (props.isLoading) {
+    return (
+      <ProgressBar>
+         <Toogle width={filled} ref={toogle} />
+         <FillBar width={filled}/>
+      </ProgressBar>
+    )
+  }
+  else {
+    return (
+      <ProgressBar>
+       <InvisibleBar ref={invisibleBar}
+         onClick={(e) => {changePosition(e)}}
+         onMouseDown={(e) => {checkForToogle(e)}}
+         onMouseMove={(e) => {checkForDrag(e)}}
+         onMouseUp={(e) => {if (isDragging) stopToogle(e)}}
+         onMouseLeave={(e) => {if (isDragging) stopToogle(e)}}
+       />
+       <Toogle width={filled} ref={toogle} />
+       <FillBar width={filled}/>
+      </ProgressBar>
+    )
+  }
 }
 
 const InvisibleBar = styled.div`

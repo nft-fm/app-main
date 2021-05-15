@@ -392,7 +392,6 @@ router.post('/handleImage', async (req, res) => {
 })
 
 router.post('/getPartialSong', async (req, res) => {
-  const start = Date.now();
   const AWS = require('aws-sdk')
   const s3 = new AWS.S3();
   const songFullSize = await s3.headObject({ Key: req.body.key, Bucket: "nftfm-music" })
@@ -400,7 +399,7 @@ router.post('/getPartialSong', async (req, res) => {
   .then(res => res.ContentLength);
 
   console.log("SongFullSize", songFullSize);
-  const partialBytes = (songFullSize / 4).toFixed(0);
+  const partialBytes = (songFullSize / 10).toFixed(0);
   console.log("partial", partialBytes)
 
   s3.getObject(
@@ -409,7 +408,7 @@ router.post('/getPartialSong', async (req, res) => {
       if (error != null) {
         console.log("Failed to retrieve an object: " + error);
       } else {
-        console.log("Loaded " + data.ContentLength + " bytes");
+        console.log("LOADED " + data.ContentLength + " bytes");
         res.status(200).send(data);
       }
     }

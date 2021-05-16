@@ -2,8 +2,6 @@ import React, { useCallback, useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import axios from "axios";
 
-import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
-import 'react-h5-audio-player/lib/styles.css';
 import loading from '../../assets/img/loading.gif';
 import ProgressBar from "./components/ProgressBar";
 import TrackInfo from "./components/TrackInfo";
@@ -87,8 +85,6 @@ const MusicPlayer = (props) => {
       volumeRef.current = _gainNode;
       bufferSrcRef.current = _bufferSrc;
       partialBufferSrc.current = _bufferSrc;
-    
-      playSong();
   
       setStartTime(_bufferSrc.context.currentTime);
       props.setCurrentBuffer(songFile);
@@ -117,6 +113,7 @@ const MusicPlayer = (props) => {
 
   const startPartialSong = async (songFile) => {
     const _bufferSrc = await startNewContext(songFile);
+    playSong();
     /*Prepare callback for when buffer finishes and checks if full song is loaded
     If not, the old buffer will be paused*/
     _bufferSrc.onended = (e) => {
@@ -210,7 +207,8 @@ const MusicPlayer = (props) => {
 
   const startSong = async (songFile) => {
       const _bufferSrc = await startNewContext(songFile);
-      
+      playSong();
+
       setSongFullyLoaded(true);
       setDur(_bufferSrc.buffer.duration);
 

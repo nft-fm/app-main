@@ -8,10 +8,12 @@ import loading from "../../../assets/img/loading.gif";
 import Swal from "sweetalert2";
 
 import { useRef } from "react";
+import { usePlaylistConsumer } from "../../../contexts/Playlist";
 
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
 
 const PlaySongSnnipet = (props) => {
+  const { setNftCallback } = usePlaylistConsumer();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -49,7 +51,7 @@ const PlaySongSnnipet = (props) => {
   }
 
   const playSong = () => {
-    console.log("props", props.partialSong);
+    setNftCallback(false);
     if (!props.partialSong && !bufferSrcRef.current) setIsLoading(true);
     else if(!bufferSrcRef.current) startSong(props.partialSong);
     else if (audioContextRef.current.state === 'suspended' && audioContextRef.current) audioContextRef.current.resume();

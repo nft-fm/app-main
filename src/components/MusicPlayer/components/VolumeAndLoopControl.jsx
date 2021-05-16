@@ -2,8 +2,9 @@ import React, { useCallback, useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 
 import { ReactComponent as VolumeIcon } from '../../../assets/img/icons/listen_volume.svg';
+import { ReactComponent as LoopIcon } from '../../../assets/img/icons/listen_loop.svg';
 
-const VolumeControl = (props) => {
+const VolumeAndLoopControl = (props) => {
   const [open, setOpen] = useState(false);
 
   const [filled, setFilled] = useState(0);
@@ -70,22 +71,26 @@ const VolumeControl = (props) => {
     if (!bounds && invisibleBar) setBounds(invisibleBar.current.getBoundingClientRect());
   }, [])
   return (
-        <VolumeControlSection>
-          <SelectVolume open={open}>
-            <ProgressBar>
-              <InvisibleBar ref={invisibleBar}
-                onClick={(e) => {changePosition(e)}}
-                onMouseDown={(e) => {checkForToogle(e)}}
-                onMouseMove={(e) => {checkForDrag(e)}}
-                onMouseUp={(e) => {if (isDragging) stopToogle(e)}}
-                onMouseLeave={(e) => {if (isDragging) stopToogle(e)}}
-              />
-              <Toogle top={filled} ref={toogle} />
-              <FillBar filled={filled}/>
-            </ProgressBar>
-          </SelectVolume>
-          <Volume onClick={() => setOpen(!open)}/>
-        </VolumeControlSection>
+        <VolumeAndLoop>
+           <Loop isLoop={props.isLoop} onClick={() => {props.setLoop(!props.isLoop)}} />
+          <VolumeControlSection>
+                    <SelectVolume open={open}>
+                      <ProgressBar>
+                        <InvisibleBar ref={invisibleBar}
+                          onClick={(e) => {changePosition(e)}}
+                          onMouseDown={(e) => {checkForToogle(e)}}
+                          onMouseMove={(e) => {checkForDrag(e)}}
+                          onMouseUp={(e) => {if (isDragging) stopToogle(e)}}
+                          onMouseLeave={(e) => {if (isDragging) stopToogle(e)}}
+                        />
+                        <Toogle top={filled} ref={toogle} />
+                        <FillBar filled={filled}/>
+                      </ProgressBar>
+                    </SelectVolume>
+                    <Volume onClick={() => setOpen(!open)}/>
+            </VolumeControlSection>
+        </VolumeAndLoop>
+        
   )
 }
 
@@ -143,6 +148,14 @@ const SelectVolume = styled.div`
   justify-content: center;
 `;
 
+const Loop = styled(VolumeIcon)`
+  width: 20px;
+  cursor: pointer;
+  & path {
+    fill: ${props => props.isLoop ?  props.theme.color.blue : props.theme.color.lightgray};
+  }
+`;
+
 const Volume = styled(VolumeIcon)`
   width: 20px;
   cursor: pointer;
@@ -157,4 +170,13 @@ const VolumeControlSection = styled.div`
   justify-content: center;
 `;
 
-export default VolumeControl;
+const VolumeAndLoop = styled.div`
+  position: relative;
+  width: 40px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+export default VolumeAndLoopControl;

@@ -8,7 +8,7 @@ import loading from '../../assets/img/loading.gif';
 import ProgressBar from "./components/ProgressBar";
 import TrackInfo from "./components/TrackInfo";
 import AudioControl from "./components/AudioControl";
-import VolumeControl from "./components/VolumeControl";
+import VolumeAndLoopControl from "./components/VolumeAndLoopControl";
 import Swal from "sweetalert2";
 
 const MusicPlayer = (props) => {
@@ -24,6 +24,7 @@ const MusicPlayer = (props) => {
   const [counter, setCounter] = useState(0);
   const [filled, setFilled] = useState(0);
   const [songFullyLoaded, setSongFullyLoaded] = useState(false);
+  const [isLoop, setIsLoop] = useState(false);
 
   window.AudioContext = window.AudioContext || window.webkitAudioContext;
   /* Why so many refs you wonder? 
@@ -303,6 +304,9 @@ const MusicPlayer = (props) => {
       newBufferSrc.buffer = originalBuffer.buffer;
       newBufferSrc.connect(volumeRef.current);
       newBufferSrc.start(currentTime, time);
+      if (audioContextRef.current.state === 'suspended' && audioContextRef.current) {
+        audioContextRef.current.resume();
+      }
 
       const {computedSecond, computedMinute} = timeStr(time);
       setMinute(computedMinute);
@@ -359,6 +363,10 @@ const MusicPlayer = (props) => {
 
           /*If song reached end of loaded buffer*/
           if (!songFullyLoaded) setIsLoading(true);
+          else if (isLoop) {
+            skipTo(0);
+            playSong();
+          }
           else {
             clearInterval(intervalId);
             /*Go to next song*/
@@ -408,7 +416,9 @@ const MusicPlayer = (props) => {
         </AudioProgressionSection>
         {isLoading ? 
             <Loading src={loading} /> :
-            <VolumeControl filled={volume * 100}
+            <VolumeAndLoopControl filled={volume * 100}
+            setLoop={setIsLoop}
+            isLoop={isLoop}
             changeVol={changeVol}/>}
        
         <TrackInfoWrapper>

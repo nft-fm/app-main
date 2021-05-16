@@ -96,12 +96,23 @@ const MusicPlayer = (props) => {
     return _bufferSrc;
   }
 
-  const startPreviewSong = async (songFile) => {
-    await startNewContext(songFile);
+  /*const startPreviewSong = async () => {
+    console.log("starting preview song")
     setDur(15);
-    setSongFullyLoaded(true);
-    setIsLoading(false);
-  }
+    if (nft.partialSong) {
+      console.log("has partial song", nft.partialSong)
+      const abSong = toArrayBuffer(nft.partialSong);
+      const _bufferSrc = audioContextRef.current.createBufferSource();
+      audioContextRef.current.decodeAudioData(abSong, async (_buffer) => {
+        _bufferSrc.buffer = _buffer;
+        fullBufferSrc.current = _bufferSrc;
+  
+        await startNewContext(_bufferSrc);
+        setSongFullyLoaded(true);
+        setIsLoading(false);
+      })
+    }
+  }*/
 
   const startPartialSong = async (songFile) => {
     const _bufferSrc = await startNewContext(songFile);
@@ -254,7 +265,6 @@ const MusicPlayer = (props) => {
   }
 
   const skipTo = (time) => {
-   const _bufferSrcRef = bufferSrcRef.current;
    const originalBuffer = bufferSrcRef.current;
    const currentTime = originalBuffer.context.currentTime;
    time = time < 0 ? 0 : time;
@@ -326,16 +336,6 @@ const MusicPlayer = (props) => {
     return ({computedMinute, computedSecond})
   }
 
-
-  useEffect(() => {
-    const audioCtx = new AudioContext();
-    /* Store context and start suspended */
-    audioContextRef.current = audioCtx;
-
-    /* When song ends by another one starting, we clean the audioCtx */
-    return async () => { await audioCtx.close() };
-  }, []);
-
   useEffect(() => {
     setCounter(0);
     if (!nft.buffer) {
@@ -377,6 +377,15 @@ const MusicPlayer = (props) => {
 
     return () => {if (intervalId) clearInterval(intervalId)};
   }, [isPlaying, counter])
+
+  useEffect(() => {
+    const audioCtx = new AudioContext();
+    /* Store context and start suspended */
+    audioContextRef.current = audioCtx;
+
+    /* When song ends by another one starting, we clean the audioCtx */
+    return async () => { await audioCtx.close() };
+  }, []);
 
   const Duration = () => {
     const {computedSecond, computedMinute} = timeStr(dur)

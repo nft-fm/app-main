@@ -393,19 +393,23 @@ router.post('/handleImage', async (req, res) => {
 
 router.post('/getNSecondsOfSong', async (req, res) => {
   if (req.body.nft) {
-    const nft = req.body.nft;
     const AWS = require('aws-sdk')
     const s3 = new AWS.S3();
     const songFullSize = await s3.headObject({ Key: req.body.key, Bucket: "nftfm-music" })
-    .promise()
-    .then(res => res.ContentLength);
+                                .promise()
+                                .then(res => res.ContentLength)
+                                .catch(err => {
+                                  console.log(err);
+                                  res.status(500).send('Couldnt retrieve nSec of music');
+                                })
     
-    const startTime = req.bo
+    const startTime = 0;
     const nSec = req.body.nSec || 15; 
-    const partialBytes = songFullSize * nSec / req.body.songDur; 
-
+    const partialBytes = songFullSize * nSec / req.body.nft.dur; 
+    console.log("partial bytes", partialBytes.toFixed(0))
+    console.log(req.body.nft)
     s3.getObject(
-      { Bucket: "nftfm-music", Key: req.body.key, Range: "bytes=0-" + partialBytes },
+      { Bucket: "nftfm-music", Key: req.body.key, Range: "bytes=0-" + partialBytes.toFixed(0) },
       function (error, data) {
         if (error != null) {
           console.log("Failed to retrieve an object: " + error);
@@ -429,13 +433,12 @@ router.post('/getPartialSong', async (req, res) => {
   
   let partialBytes = req.body.howManySec ? req.body.howManySec :  (songFullSize / 15).toFixed(0);
 
-  console.log("partial", partialBytes)
-
   s3.getObject(
     { Bucket: "nftfm-music", Key: req.body.key, Range: "bytes=0-" + partialBytes },
     function (error, data) {
       if (error != null) {
         console.log("Failed to retrieve an object: " + error);
+        res.status(500).send('Couldnt retrieve nSec of music');
       } else {
         console.log("LOADED " + data.ContentLength + " bytes");
         res.status(200).send(data);
@@ -466,7 +469,7 @@ router.post('/getSong', async (req, res) => {
        console.log(end - start);
        if (error != null) {
          console.log("Failed to retrieve an object: " + error);
-         res.status(500).send('Couldnt retrieve nSec of music');
+         res.status(500).send('Couldnt retrieve song of music');
          return;
        } else {
          console.log("Loaded " + data.ContentLength + " bytes");

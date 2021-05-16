@@ -81,6 +81,7 @@ export const PlaylistProvider = ({ children }) => {
       setSelectedNft(false);
       const timer = setTimeout(() => {
         setSelectedNft(_nft);
+        setIndex(nfts.indexOf(_nft));
         clearTimeout(timer);
       }, 10)
     }
@@ -91,14 +92,6 @@ export const PlaylistProvider = ({ children }) => {
     }
   }
 
-  const getNSeconds = (nft, sec) => {
-    axios.post("/api/nft-type/getNSecondsOfSong", {key: nft.address + "/" + nft.audioUrl.split('/').slice(-1)[0],
-                                                   nft: nft })
-        .then((res) => {
-          const songFile = res.data.Body.data;
-          
-        })
-  }
   const exitPlayer = () => {
     setIsOpen(false);
     const timer = setTimeout(() => {
@@ -106,10 +99,6 @@ export const PlaylistProvider = ({ children }) => {
       clearTimeout(timer);
     }, animTime * 1000)
   }
-
-  useEffect(() => {
-    
-  }, [nfts]);
 
   useEffect(() => {
     setNfts([]);
@@ -121,7 +110,7 @@ export const PlaylistProvider = ({ children }) => {
       value={{
         setPrevNft, setNextNft,
         setNftsCallback, setNftCallback,
-        setIsPreview
+        setIsPreview, isOpen
       }}>
       {children}
       {selectedNft &&

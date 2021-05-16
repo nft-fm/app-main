@@ -11,8 +11,8 @@ import loading from "../../assets/img/loading.gif";
 import axios from "axios";
 import ShareModal from "../SMShareModal/SMShareModal";
 import LikeShare from "./LikeShare";
-
-
+import { useRef } from "react";
+import PlaySongSnnipet from "../NftModals/Components/PlaySongSnnipet";
 
 const NftCard = (props) => {
   const { usdPerEth, user, account } = useAccountConsumer();
@@ -29,20 +29,33 @@ const NftCard = (props) => {
     writer: "",
     price: "...",
     quantity: "--",
-    sold: "--",
-    partialSongFile: undefined
+    sold: "--"
   })
 
-  const { setNftCallback } = usePlaylistConsumer();
+  const { isOpen } = usePlaylistConsumer();
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
-  const show = () => setIsOpen(true);
+  const [partialSong, setPartialSong] = useState(false);
+
+  const show = () => setIsModalOpen(true);
   const hide = (e) => {
-    setIsOpen(false);
+    setIsModalOpen(false);
   };
+
+  const getNSeconds = async (completeNft) => {
+    await axios.post("/api/nft-type/getNSecondsOfSong",
+    {key: completeNft.address + "/" + completeNft.audioUrl.split('/').slice(-1)[0],
+    nft: completeNft })
+    .then((res) => {
+      console.log("got snnipet")
+      const songFile = res.data.Body.data;
+      
+      setPartialSong(songFile);
+    })
+  }
 
   useEffect(() => {
     setNft({
@@ -56,10 +69,17 @@ const NftCard = (props) => {
     axios.post("/api/nft-type/full-nft-info", { nft: props.nft, account: account })
       .then((res) => {
         setNft(res.data);
+        if (!isOpen)
+          getNSeconds(res.data);
       })
       .catch(err => console.log(err));
   }, [props.nft, user]);
 
+  useEffect(() => {
+    if (isOpen && isModalOpen && !partialSong) {
+      getNSeconds(props.nft);
+    }
+  }, [isModalOpen])
   return (
     <Container>
       <ShareModal
@@ -68,9 +88,10 @@ const NftCard = (props) => {
         nft={nft}
       />
       <BuyNftModal
-        open={isOpen}
+        open={isModalOpen}
         hide={hide}
         nft={nft}
+        partialSong={partialSong}
         liked={liked}
         setLiked={setLiked}
         likeCount={likeCount}
@@ -91,7 +112,7 @@ const NftCard = (props) => {
             {nft.sold}
             <span style={{ margin: "0 1px" }}>/</span>
             {nft.quantity}
-            <Cart onClick={() => setIsOpen(!isOpen)} />
+            <Cart onClick={() => setIsModalOpen(!isModalOpen)} />
           </IconArea>
         </Side>
       </CardTop>
@@ -104,10 +125,10 @@ const NftCard = (props) => {
         src={nft.imageUrl}
         style={imageLoaded ? {} : { display: 'none' }}
         alt="image"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => setIsModalOpen(!isModalOpen)}
         onLoad={() => setImageLoaded(true)}
       />
-      <TrackName onClick={() => setIsOpen(!isOpen)}>{nft.title}</TrackName>
+      <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>{nft.title}</TrackName>
       <Artist>{nft.artist}</Artist>
       <CostFields>
         <CostEth>
@@ -127,15 +148,15 @@ const NftCard = (props) => {
           <Usd />
         </CostUsd>
       </CostFields>
-      <PlayButton src={PlayIcon} onClick={() => setNftCallback(nft)} />
+      <PlayButton src={PlayIcon} onClick={() => {setIsModalOpen(true)}} />
     </Container>
   );
 };
 
 
 const PlayButton = styled(PlayIcon)`
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   & path {

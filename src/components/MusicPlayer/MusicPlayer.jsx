@@ -63,6 +63,7 @@ const MusicPlayer = (props) => {
   }
 
   const startNewContext = async (songFile, startTime) => {
+    console.log("START NEW CONTEXT")
     if (bufferSrcRef.current) {
       bufferSrcRef.current.stop();
       bufferSrcRef.current.disconnect();
@@ -113,7 +114,11 @@ const MusicPlayer = (props) => {
 
   const startPartialSong = async (songFile) => {
     const _bufferSrc = await startNewContext(songFile);
-    playSong();
+    setDur(nft.dur ? nft.dur : 80000);
+    setIsLoading(false);
+    setIsPlaying(true);
+    if (audioContextRef.current.state === 'suspended' && audioContextRef.current) audioContextRef.current.resume();
+    console.log("STARTED PARTIAL SONG")
     /*Prepare callback for when buffer finishes and checks if full song is loaded
     If not, the old buffer will be paused*/
     _bufferSrc.onended = (e) => {
@@ -130,9 +135,6 @@ const MusicPlayer = (props) => {
 
     bufferSrcRef.current = _bufferSrc;
     partialBufferSrc.current = _bufferSrc;
-    
-    setDur(nft.dur ? nft.dur : 80000);
-    setIsLoading(false);
 
     /*As It starts playing, fetch full song*/
     await axios.post("api/nft-type/getSong", { key: nft.address + "/" + nft.audioUrl.split('/').slice(-1)[0] })
@@ -148,7 +150,7 @@ const MusicPlayer = (props) => {
           })
           console.log("Error: ", e.err);
         })
-    props.fetchPrevNext();
+    /*props.fetchPrevNext();*/
   }
 
   const startRemainingSong = (data) => {
@@ -200,7 +202,7 @@ const MusicPlayer = (props) => {
         setDur(_bufferSrc.buffer.duration);
         setIsLoading(false);
       }
-      props.fetchPrevNext();
+      /*props.fetchPrevNext();*/
       props.setCurrentBuffer(songFile);
     })
   }
@@ -214,12 +216,12 @@ const MusicPlayer = (props) => {
 
       fullBufferSrc.current = _bufferSrc;
       partialBufferSrc.current = false;
-      props.fetchPrevNext();
+      /*props.fetchPrevNext();*/
   }
 
   const playSong = () => {
    if (audioContextRef.current.state === 'suspended' && audioContextRef.current) audioContextRef.current.resume();
-   else if (audioContextRef.current && audioContextRef.current.start) audioContextRef.current.start(0);
+   else if (bufferSrcRef.current && bufferSrcRef.current.start) audioContextRef.current.start(0);
    setIsPlaying(true);
   }
 

@@ -473,8 +473,8 @@ router.post('/getPartialSong', async (req, res) => {
 
   console.log("SongFullSize", songFullSize);
   
-  let partialBytes = req.body.howManySec ? req.body.howManySec :  (songFullSize / 15).toFixed(0);
-
+  let partialBytes = req.body.howManySec ? req.body.howManySec :  (songFullSize / 20).toFixed(0);
+  console.log("partial bytes", partialBytes);
   s3.getObject(
     { Bucket: "nftfm-music", Key: req.body.key, Range: "bytes=0-" + partialBytes },
     function (error, data) {

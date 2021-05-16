@@ -6,31 +6,31 @@ const router = express.Router()
 const NftType = require('../schemas/NftType.schema')
 const multer = require('multer');
 const User = require('../schemas/User.schema');
-const { NFTSale } = require('../web3/constants');
-const { sign, getSetSale } = require('../web3/server-utils');
+const { FlatPriceSale, Auction } = require('../web3/constants');
+const { sign, getSetSale, findLikes } = require('../web3/server-utils');
 const { listenForMint } = require("../web3/mint-listener");
 
-const findLikes = (nfts, account) => {
-  for (let i = 0; i < nfts.length; i++) {
-    const likes = nfts[i]._doc.likes;
-    if (likes && likes.find(like => like.toString() === account)) {
-      nfts[i] = { ...nfts[i]._doc, likes: [], likeCount: nfts[i]._doc.likes.length, liked: true }
-    }
-    else {
-      nfts[i] = { ...nfts[i]._doc, likes: [], likeCount: nfts[i]._doc.likes.length || 0, liked: false };
-    }
-    // const extraInfo = await getSetSale(nfts[i].nftId)
-    // console.log("EXTRA INFO", extraInfo)
-    // nfts[i] = {
-    //   ...nfts[i],
-    //   price: extraInfo.price,
-    //   quantity: extraInfo.quantity,
-    //   sold: extraInfo.sold
-    // }
-  }
-  // console.log("NFTS", nfts);
-  return nfts;
-}
+// const findLikes = (nfts, account) => {
+//   for (let i = 0; i < nfts.length; i++) {
+//     const likes = nfts[i]._doc.likes;
+//     if (likes && likes.find(like => like.toString() === account)) {
+//       nfts[i] = { ...nfts[i]._doc, likes: [], likeCount: nfts[i]._doc.likes.length, liked: true }
+//     }
+//     else {
+//       nfts[i] = { ...nfts[i]._doc, likes: [], likeCount: nfts[i]._doc.likes.length || 0, liked: false };
+//     }
+//     // const extraInfo = await getSetSale(nfts[i].nftId)
+//     // console.log("EXTRA INFO", extraInfo)
+//     // nfts[i] = {
+//     //   ...nfts[i],
+//     //   price: extraInfo.price,
+//     //   quantity: extraInfo.quantity,
+//     //   sold: extraInfo.sold
+//     // }
+//   }
+//   // console.log("NFTS", nfts);
+//   return nfts;
+// }
 
 const findRemainingInfo = async (nft) => {
   const extraInfo = await getSetSale(nft.nftId)
@@ -113,7 +113,11 @@ router.post('/finalize', async (req, res) => {
       const startTime = 0;
       // const price = BigNumber.from(newData.price.mul(constants.WeiPerEther));
       const price = utils.parseUnits(newData.price);
-      const signature = sign(newData.address, newData.numMinted, price, startTime, NFTSale);
+      const encodedFee = utils.defaultAbiCoder.encode(["uint32"], [3]) // fee is hardcoded to 3% atm
+      const signature = sign(
+        ['string', 'address', 'uint256', 'uint256', 'uint256', 'address', 'bytes'],
+        ['NFTFM_mintAndStake', newData.address, newData.numMinted, price, startTime, FlatPriceSale, encodedFee]
+      );
       res.status(200).send({
         ...signature,
         amount: newData.numMinted,
@@ -121,10 +125,48 @@ router.post('/finalize', async (req, res) => {
         address: newData.address,
         startTime: startTime,
         dur: newData.dur,
-        saleAddress: NFTSale,
-        databaseID: newData._id
+        saleAddress: FlatPriceSale,
+        databaseID: newData._id,
+        encodedFee: encodedFee
       })
+    } else {
+      console.log("no nft");
+      res.status(500).json('error')
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("server error")
+  }
+})
+
+router.post('/auction-finalize', async (req, res) => {
+  try {
+    let newData = req.body;
+    newData.isDraft = false;
+
+    console.log('newData', newData)
+    let updateNFT = await NftType.findByIdAndUpdate(newData._id, newData)
+    if (updateNFT) {
+      const price = utils.parseUnits(newData.price);
+      const encodedArgs = utils.defaultAbiCoder.encode(
+        ["uint256", "uint256"],
+        [newData.endTime, newData.bidIncrementPercent]
+      ) // fee is hardcoded to 3% atm
+      const signature = sign(
+        ['string', 'address', 'uint256', 'uint256', 'uint256', 'address', 'bytes'],
+        ['NFTFM_mintAndStake', newData.address, 1, price, BigNumber.from(newData.startTime), Auction, encodedArgs]
+      );
       listenForMint();
+      res.status(200).send({
+        ...signature,
+        amount: 1,
+        price: price,
+        address: newData.address,
+        startTime: newData.startTime,
+        saleAddress: Auction,
+        databaseID: newData._id,
+        encodedArgs: encodedArgs
+      })
     } else {
       console.log("no nft");
       res.status(500).json('error')

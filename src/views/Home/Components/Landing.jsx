@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import axios from "axios";
-import NftCard from "../../components/NftCards/SaleNftCard";
-import logo from "../../assets/img/logos/logo.png";
-import { ReactComponent as IconDiscord } from "../../assets/img/icons/social_discord.svg";
-import { ReactComponent as IconMedium } from "../../assets/img/icons/social_medium.svg";
-import { ReactComponent as IconTelegram } from "../../assets/img/icons/social_telegram.svg";
-import { ReactComponent as IconTwitter } from "../../assets/img/icons/social_twitter.svg";
-import { useAccountConsumer } from "../../contexts/Account";
-import LoadingFeatured from "../../components/NftCards/LoadingFeatured";
+import NftCard from "../../../components/NftCards/SaleNftCard";
+import logo from "../../../assets/img/logos/logo.png";
+import { ReactComponent as IconDiscord } from "../../../assets/img/icons/social_discord.svg";
+import { ReactComponent as IconMedium } from "../../../assets/img/icons/social_medium.svg";
+import { ReactComponent as IconTelegram } from "../../../assets/img/icons/social_telegram.svg";
+import { ReactComponent as IconTwitter } from "../../../assets/img/icons/social_twitter.svg";
+import { useAccountConsumer } from "../../../contexts/Account";
+import LoadingFeatured from "../../../components/NftCards/LoadingFeatured";
 
 const Listen = () => {
   const { user, account } = useAccountConsumer();

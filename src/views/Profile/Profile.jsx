@@ -1,13 +1,8 @@
-import React, { useCallback, useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useWallet } from "use-wallet";
 import axios from "axios";
-import swal from "sweetalert2";
-
-import { NavLink } from "react-router-dom";
-import BaseView from "../BaseView";
+import BaseView from "../../components/Page/BaseView";
 import { useAccountConsumer } from "../../contexts/Account";
-
 import CreateForm from "./components/CreateForm";
 import IconMetamask from "../../assets/img/icons/metamask_icon.png";
 import cog from "../../assets/img/icons/cog.svg";
@@ -18,7 +13,7 @@ import Error404 from "../404/404";
 
 import { ReactComponent as plus_icon } from "../../assets/img/icons/plus_icon.svg";
 const Profile = () => {
-  const { account, connect, user, setUser, usdPerEth } = useAccountConsumer();
+  const { account, connect, user, setUser } = useAccountConsumer();
   const [edit, setEdit] = useState(false);
   const [username, setUsername] = useState("");
   const [profilePic, setProfilePic] = useState("");
@@ -44,9 +39,7 @@ const Profile = () => {
       .then((res) => setUser(res.data));
   };
 
-  //this probably needs some work
-  if (!user || (user && !user.isArtist)) return <Error404 />;
-
+  if (!user || (user && !user.isArtist)) return <Error404 />; //this probably needs some work
   return (
     <BaseView>
       {!account && (
@@ -135,14 +128,13 @@ const Profile = () => {
         <NftContainer>
           <NftContainerTitle>YOUR MUSIC</NftContainerTitle>
           <NftContainerRight onClick={() => setOpen(!open)}>
-             
             <PlusIcon />
           </NftContainerRight>
           <NftContainerOutline />
-          <ArtistNfts user={user}/>
+          <ArtistNfts user={user} />
         </NftContainer>
       </CreatedNftHolder>
-      <CreateForm open={open} hide={() => setOpen(false)}/>
+      <CreateForm open={open} hide={() => setOpen(false)} />
     </BaseView>
   );
 };
@@ -167,20 +159,6 @@ const CreatedNftHolder = styled.div`
   color: white;
   font-size: ${(props) => props.theme.fontSizes.xs};
   padding-right: 4px;
-`;
-
-const NftScroll = styled.div`
-  justify-content: center;
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  justify-content: space-between;
-  flex-wrap: wrap;
-
-  @media only screen and (max-width: 776px) {
-    flex-direction: column;
-    align-items: center;
-  }
 `;
 
 const NftContainer = styled.div`
@@ -263,64 +241,6 @@ const NftContainerOutline = styled.div`
 
   @media only screen and (max-width: 776px) {
     width: 100%;
-  }
-`;
-// const CreateHolder = styled.div`
-// display: flex;
-// justify-content: center;
-// align-items: center;
-// height: calc(100vh - 250px);
-// min-height: 500px;
-
-// @media only screen and (max-width: 776px) {
-//   height: auto;
-//   min-height: auto;
-//    }
-// `
-
-const ButtonTextNav = styled.span`
-  font-family: "Compita";
-  font-size: ${(props) => props.theme.fontSizes.sm};
-  font-weight: 600;
-  color: white;
-  padding: 5px;
-`;
-const GetConnectedNav = styled.div`
-  width: 400px;
-  height: 200px;
-  color: white;
-  border: 1px solid ${(props) => props.theme.color.boxBorder};
-  background-color: ${(props) => props.theme.color.box};
-  border-radius: ${(props) => props.theme.borderRadius}px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 300px;
-  font-size: ${(props) => props.theme.fontSizes.md};
-  text-align: center;
-  padding: 20px;
-`;
-
-const ConnectNavLink = styled(NavLink)`
-  text-decoration: none;
-  width: 140px;
-  /* height: 64px; */
-  cursor: pointer;
-  transition: all 0.1s ease-in-out;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
-  border: 1px solid ${(props) => props.theme.color.boxBorder};
-  border-radius: 2px;
-  background-color: ${(props) => props.theme.color.box};
-  /* margin-bottom: 20px; */
-  &:hover {
-    background-color: ${(props) => props.theme.color.boxBorder};
-    border: 1px solid #383838;
   }
 `;
 

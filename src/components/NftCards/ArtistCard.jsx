@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import CreatedNftModal from "../NftModals/CreatedNftModal";
 import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
@@ -32,7 +32,7 @@ const NftCard = (props) => {
   const [liked, setLiked] = useState(props.nft.liked);
   const [likeCount, setLikeCount] = useState(props.nft.likeCount);
   const [isShareOpen, setIsShareOpen] = useState(false);
-  const show = () => setIsOpen(true);
+  // const show = () => setIsOpen(true);
   const hide = (e) => {
     setIsOpen(false);
   };

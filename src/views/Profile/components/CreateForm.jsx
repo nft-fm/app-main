@@ -15,7 +15,7 @@ import { ReactComponent as arrow } from "../../../assets/img/icons/arrow_cropped
 
 import x from "../../../assets/img/icons/x.svg";
 import ImagePreview from "./ImagePreview";
-import { NavLink, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import { useAccountConsumer } from "../../../contexts/Account";
 import { mintNFT } from "../../../web3/utils";
@@ -37,7 +37,7 @@ const initialNftState = {
 };
 
 const CreateForm = ({open, hide}) => {
-  const { account, user, setUser, usdPerEth } = useAccountConsumer();
+  const { account, user, usdPerEth } = useAccountConsumer();
   const [isLoading, setIsLoading] = useState(false);
   const [nftData, setNftData] = useState(initialNftState);
   const [audioFile, setAudioFile] = useState(null);
@@ -47,7 +47,6 @@ const CreateForm = ({open, hide}) => {
   const [curr, setCurr] = useState("ETH");
   const [isAudioUploaded, setIsAudioUploaded] = useState(false);
   const [isImageUploaded, setIsImageUploaded] = useState(false);
-  const history = useHistory();
 
   const getFileDur = () => {
         // Obtain the uploaded file, you can change the logic if you are working with multiupload
@@ -362,14 +361,14 @@ const CreateForm = ({open, hide}) => {
     setNftData({ ...nftData, [e.target.name]: e.target.value });
   };
 
-  const stopProp = (e) => {
-    e.stopPropagation();
-  };
-  const hideCreate = (e) => {
-    setNftData(initialNftState);
-    setImageFile(null);
-    setAudioFile(null);
-  };
+  // const stopProp = (e) => {
+  //   e.stopPropagation();
+  // };
+  // const hideCreate = (e) => {
+  //   setNftData(initialNftState);
+  //   setImageFile(null);
+  //   setAudioFile(null);
+  // };
 
   if (!open) return false;
   return (
@@ -639,80 +638,80 @@ const EthIcon = styled(eth_icon)`
   }
 `;
 
-const UsdIcon = styled(usd_icon)`
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-  position: absolute;
-  right: -35px;
-  transition: all 0.2s;
-  & path {
-    fill: ${(props) => props.theme.color.gray};
-    ${({ active }) =>
-      active &&
-      `
-      fill: #68c12f;
-`}
-  }
+// const UsdIcon = styled(usd_icon)`
+//   width: 20px;
+//   height: 20px;
+//   cursor: pointer;
+//   position: absolute;
+//   right: -35px;
+//   transition: all 0.2s;
+//   & path {
+//     fill: ${(props) => props.theme.color.gray};
+//     ${({ active }) =>
+//       active &&
+//       `
+//       fill: #68c12f;
+// `}
+//   }
 
-  &:hover {
-    & path {
-      filter: contrast(0.5);
-    }
-  }
-`;
+//   &:hover {
+//     & path {
+//       filter: contrast(0.5);
+//     }
+//   }
+// `;
 
-const Spinner = styled.div`
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  bottom: 15px;
-  right: 5px;
+// const Spinner = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   position: absolute;
+//   bottom: 15px;
+//   right: 5px;
 
-  @media only screen and (max-width: 776px) {
-    bottom: 5px;
-  }
-`;
+//   @media only screen and (max-width: 776px) {
+//     bottom: 5px;
+//   }
+// `;
 
-const ArrowUp = styled(arrow)`
-  -webkit-transform: rotate(180deg);
-  -moz-transform: rotate(180deg);
-  -ms-transform: rotate(180deg);
-  -o-transform: rotate(180deg);
-  transform: rotate(180deg);
-  /* margin-bottom: -5px; */
-  width: 10px;
-  height: 10px;
-  cursor: pointer;
-  /* border: 1px solid red; */
-  /* transition: all 0.2s linear; */
-  & path {
-    fill: ${(props) => props.theme.color.blue};
-  }
+// const ArrowUp = styled(arrow)`
+//   -webkit-transform: rotate(180deg);
+//   -moz-transform: rotate(180deg);
+//   -ms-transform: rotate(180deg);
+//   -o-transform: rotate(180deg);
+//   transform: rotate(180deg);
+//   /* margin-bottom: -5px; */
+//   width: 10px;
+//   height: 10px;
+//   cursor: pointer;
+//   /* border: 1px solid red; */
+//   /* transition: all 0.2s linear; */
+//   & path {
+//     fill: ${(props) => props.theme.color.blue};
+//   }
 
-  &:hover {
-    & path {
-      filter: contrast(2);
-    }
-  }
-`;
-const ArrowDown = styled(arrow)`
-  /* margin-top: -5px; */
-  width: 10px;
-  height: 10px;
-  cursor: pointer;
-  /* border: 1px solid red; */
-  /* transition: all 0.2s linear; */
-  & path {
-    fill: ${(props) => props.theme.color.blue};
-  }
+//   &:hover {
+//     & path {
+//       filter: contrast(2);
+//     }
+//   }
+// `;
+// const ArrowDown = styled(arrow)`
+//   /* margin-top: -5px; */
+//   width: 10px;
+//   height: 10px;
+//   cursor: pointer;
+//   /* border: 1px solid red; */
+//   /* transition: all 0.2s linear; */
+//   & path {
+//     fill: ${(props) => props.theme.color.blue};
+//   }
 
-  &:hover {
-    & path {
-      filter: contrast(2);
-    }
-  }
-`;
+//   &:hover {
+//     & path {
+//       filter: contrast(2);
+//     }
+//   }
+// `;
 const StyledInput = styled.input`
   color: white;
   background-color: ${(props) => props.theme.color.box};

@@ -7,7 +7,7 @@ export default [
         "type": "address"
       },
       {
-        "internalType": "address",
+        "internalType": "address payable",
         "name": "_authAddress",
         "type": "address"
       }
@@ -51,43 +51,6 @@ export default [
     "inputs": [
       {
         "indexed": true,
-        "internalType": "uint256",
-        "name": "saleId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint32",
-        "name": "quantity",
-        "type": "uint32"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "price",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "startTime",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "List",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
         "internalType": "address",
         "name": "previousOwner",
         "type": "address"
@@ -107,7 +70,7 @@ export default [
     "name": "authAddress",
     "outputs": [
       {
-        "internalType": "address",
+        "internalType": "address payable",
         "name": "",
         "type": "address"
       }
@@ -289,7 +252,7 @@ export default [
   {
     "inputs": [
       {
-        "internalType": "address",
+        "internalType": "address payable",
         "name": "_address",
         "type": "address"
       }
@@ -348,6 +311,11 @@ export default [
         "type": "uint32"
       },
       {
+        "internalType": "uint32",
+        "name": "feePercent",
+        "type": "uint32"
+      },
+      {
         "internalType": "uint256",
         "name": "price",
         "type": "uint256"
@@ -387,6 +355,11 @@ export default [
         "internalType": "uint256",
         "name": "startTime",
         "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
       }
     ],
     "name": "stake",

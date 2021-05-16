@@ -1,11 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 const Modal = ({ children }) => {
-  const stopProp = (e) => {
-    e.stopPropagation();
-  };
-
   return (
     <OpaqueFilter>
       <Container>

@@ -49,15 +49,15 @@ export const MyNftsProvider = ({ children }) => {
     }
   }
 
-  const getUser = async (nfts) => {
-    await axios.post(`api/user/get-account`,
-      { address: account }).then(res => {
-        getActiveNft(res.data, nfts);
-        setUser(res.data);
-      }).catch(err => {
-        console.log(err);
-      })
-  }
+  // const getUser = async (nfts) => {
+  //   await axios.post(`api/user/get-account`,
+  //     { address: account }).then(res => {
+  //       getActiveNft(res.data, nfts);
+  //       setUser(res.data);
+  //     }).catch(err => {
+  //       console.log(err);
+  //     })
+  // }
 
   const fetchNfts = async (nftIds) => {
     let nfts = [];
@@ -69,7 +69,7 @@ export const MyNftsProvider = ({ children }) => {
       })
       nfts.push(nftData);
     }
-    getUser(nfts);
+    // getUser(nfts);
     setMyNfts(nfts);
   }
 

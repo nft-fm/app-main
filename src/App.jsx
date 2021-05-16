@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
   Switch,
-  Redirect,
 } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import { UseWalletProvider } from "use-wallet";
@@ -11,17 +10,20 @@ import styled from "styled-components";
 import ModalsProvider from "./contexts/Modals";
 import Listen from "./views/Home";
 import Library from "./views/Library";
-import Register from "./views/Register";
 import Discover from "./views/Discover";
 import Profile from "./views/Profile";
-import isMobile from "./utils/isMobile";
-import theme from "./theme";
+import Artist from "./views/Artist";
+import Community from "./views/Community"
 import Error404 from "./views/404";
+import TermsOfService from "./views/FooterLinks/TermsOfService"
+import PrivacyPolicy from "./views/FooterLinks/PrivacyPolicy"
 import { AccountProvider } from "./contexts/Account";
 import { PlaylistProvider } from "./contexts/Playlist/Playlist";
 import preloadImage from "./utils/preloadImg";
 import recordPlayer from "./assets/img/record_player.png";
 import recordPlayerSpin from "./assets/img/record_player_spin.png";
+import isMobile from "./utils/isMobile";
+import theme from "./theme";
 
 if (window.location.hostname !== "localhost") console.log = function () {};
 
@@ -39,17 +41,26 @@ const App = () => {
             <Route path="/" exact>
               <Listen />
             </Route>
-            <Route path="/register" exact>
-              <Register />
-            </Route>
             <Route path="/library" exact>
               <Library />
             </Route>
             <Route path="/profile">
               <Profile />
             </Route>
+            <Route path="/artist">
+              <Artist />
+            </Route>
             <Route path="/discover">
               <Discover />
+            </Route>
+            <Route path="/community">
+              <Community />
+            </Route>
+            <Route path="/termsofservice">
+              <TermsOfService />
+            </Route>
+            <Route path="/privacypolicy">
+              <PrivacyPolicy />
             </Route>
             <Route path="/*">
               <Error404 />

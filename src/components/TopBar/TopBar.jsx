@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import Container from "../Container";
-import { Col } from "../Grid";
 import Logo from "../Logo";
 import AccountButton from "./components/AccountButton";
 import { Nav } from "./components/Nav";
 
 const TopBar = () => {
-
   return (
     <StyledTopBar id="top">
       <Container size="lg">
@@ -29,22 +27,21 @@ const TopBar = () => {
 };
 
 const NavContainer = styled.div`
-display: flex;
-align-items: center;
-justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   @media only screen and (max-width: 776px) {
     display: none;
   }
-`
-
+`;
 
 const NavRight = styled.div`
-display: flex;
-z-index: 20;
-`
+  display: flex;
+  z-index: 20;
+`;
 
 const StyledTopBar = styled.div`
-  background-color:#121212;
+  background-color: #121212;
   border-bottom: 1px solid #232323;
   width: 100%;
   z-index: 50;
@@ -52,8 +49,8 @@ const StyledTopBar = styled.div`
 `;
 
 const StyledTopBarInner = styled.div`
-z-index: 20;
-  background-color: rgba(0,0,0,0.2);
+  z-index: 20;
+  background-color: rgba(0, 0, 0, 0.2);
   align-items: center;
   display: flex;
   height: ${(props) => props.theme.topBarSize}px;

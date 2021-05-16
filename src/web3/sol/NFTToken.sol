@@ -1,19 +1,19 @@
 // SPDX-License-Identifier: MIT
 
-import "./ReentrancyGuard.sol";
-import "./Context.sol";
-import "./Ownable.sol";
-import "./SafeMath.sol";
-import "./Address.sol";
-import "./IERC1155.sol";
-import "./ERC1155.sol";
-import "./NFTSale.sol";
+import "./lib/ReentrancyGuard.sol";
+import "./lib/Context.sol";
+import "./lib/Ownable.sol";
+import "./lib/SafeMath.sol";
+import "./lib/Address.sol";
+import "./lib/IERC1155.sol";
+import "./lib/ERC1155.sol";
+import "./FlatPriceSale.sol";
 
 pragma solidity 0.8.4;
 
 contract NFT_FM is ERC1155, Ownable, ReentrancyGuard {
     constructor(address _authAddress)
-        ERC1155("https://nftfm.io/api/card/{id}")
+        ERC1155("https://nftfm.io/api/nft/{id}")
     {
         authAddress = _authAddress;
         onlyMintersCanMint = true;
@@ -29,10 +29,11 @@ contract NFT_FM is ERC1155, Ownable, ReentrancyGuard {
 
     event MintAndStake(
         uint256 indexed nftID,
-        uint32 amount,
+        uint32 quantity,
         uint256 price,
         uint256 startTime,
         address saleAddress,
+        bytes data,
         string databaseID
     );
 
@@ -57,10 +58,11 @@ contract NFT_FM is ERC1155, Ownable, ReentrancyGuard {
     }
 
     function mintAndStake(
-        uint32 amount,
+        uint32 quantity,
         uint256 price,
         uint256 startTime,
         address saleAddress,
+        bytes calldata data,
         string calldata databaseID,
         uint8 v,
         bytes32 r,
@@ -69,38 +71,40 @@ contract NFT_FM is ERC1155, Ownable, ReentrancyGuard {
         if (onlyMintersCanMint)
             require(isMinter[_msgSender()] == true, "Caller is not a minter");
         require(isSaleContract[saleAddress], "Unrecognized sale contract.");
-        bytes32 hash =
+        address signer = ecrecover(
             keccak256(
                 abi.encode(
-                    // "NFTFM_mintAndStake",
+                    "NFTFM_mintAndStake",
                     _msgSender(),
-                    amount,
+                    quantity,
                     price,
                     startTime,
-                    saleAddress
+                    saleAddress,
+                    data
                 )
-            );
-        address signer = ecrecover(hash, v, r, s);
+            ),
+            v, r, s
+        );
         require(signer == authAddress, "Invalid signature");
         nftID++;
         owners[nftID] = _msgSender();
         artists[_msgSender()].push(nftID);
-        _mint(saleAddress, nftID, amount, "initial mint");
-        NFTSale saleContract = NFTSale(saleAddress);
-        saleContract.stake(
+        _mint(saleAddress, nftID, quantity, "initial mint");
+        INFTSale(saleAddress).stake(
             nftID,
             payable(_msgSender()),
-            amount,
+            quantity,
             price,
-            startTime
+            startTime,
+            data
         );
-        // TODO Event may get lost if staking fails?
         emit MintAndStake(
             nftID,
-            amount,
+            quantity,
             price,
             startTime,
             saleAddress,
+            data,
             databaseID
         );
     }
@@ -108,24 +112,24 @@ contract NFT_FM is ERC1155, Ownable, ReentrancyGuard {
     function mint(
         address to,
         uint256 id,
-        uint256 amount
+        uint256 quantity
     ) public nonReentrant {
         if (onlyMintersCanMint)
             require(isMinter[_msgSender()] == true, "Caller is not a minter");
         require(owners[id] == _msgSender(), "Caller does not own id");
-        _mint(to, id, amount, "the more the merrier!");
+        _mint(to, id, quantity, "the more the merrier!");
         // TODO should additional minting also be sent to a sales contract?
     }
 
-    function burn(uint256 id, uint256 amount) public nonReentrant {
-        _burn(_msgSender(), id, amount);
+    function burn(uint256 id, uint256 quantity) public nonReentrant {
+        _burn(_msgSender(), id, quantity);
     }
 
-    function burnBatch(uint256[] memory ids, uint256[] memory amounts)
+    function burnBatch(uint256[] memory ids, uint256[] memory quantitys)
         public
         nonReentrant
     {
-        _burnBatch(_msgSender(), ids, amounts);
+        _burnBatch(_msgSender(), ids, quantitys);
     }
 
     function getArtistsNFTs(address _owner)

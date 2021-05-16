@@ -1,11 +1,10 @@
-/* LIVE */
-// export const NFTAddress = "0x923b5D21F3F040204ba8Ea7A08166D4aa7922C5C";
-
-/* TEST */
-const NFTToken = "0x66B9f92D1167EeFd6f49dFeA83BCCFBDDa721409";
-const NFTSale = "0x27ecA21f25DcB8ccC1F2F11270C6ab525f7c24fe";
+NFTToken = "0xcbBf98aD5C7A06bDcf7CB2ddDFC6441d29e04b9E";
+Trade = "0xEacFf08eA27d3Bb377C9e06de62006C494DC4F51";
+FlatPriceSale = "0xfC9A40E3955C1747f49B2E5958cE7E7F3Ef47bbc";
+Auction = "0x73A1DcCBF0456579acE5F29cd13A13dC83c871bD";
 
 module.exports = {
-	NFTToken,
-	NFTSale,
+NFTToken,
+FlatPriceSale,
+Auction,
 }

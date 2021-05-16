@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import BuyNftModal from "../NftModals";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
@@ -11,10 +11,9 @@ import loading from "../../assets/img/loading.gif";
 import axios from "axios";
 import ShareModal from "../SMShareModal/SMShareModal";
 import LikeShare from "./LikeShare";
-import { useRef } from "react";
-import PlaySongSnnipet from "../NftModals/Components/PlaySongSnnipet";
 
 const NftCard = (props) => {
+  console.log('props NftCard', props)
   const { usdPerEth, user, account } = useAccountConsumer();
   const [nft, setNft] = useState({
     address: "",
@@ -128,8 +127,9 @@ const NftCard = (props) => {
         onClick={() => setIsModalOpen(!isModalOpen)}
         onLoad={() => setImageLoaded(true)}
       />
+
       <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>{nft.title}</TrackName>
-      <Artist>{nft.artist}</Artist>
+      <Artist to={`/artist/${nft.artist.replace(/ /g, '').toLowerCase()}`}>{nft.artist}</Artist>
       <CostFields>
         <CostEth>
           {nft.price !== "..." ? parseFloat(nft.price).toLocaleString(undefined, {
@@ -284,11 +284,21 @@ const TrackName = styled.span`
   margin-bottom: 12px;
 `;
 
+// const Artist = styled(NavLink)`
+//   font-size: ${(props) => props.theme.fontSizes.xxs}px;
+//   text-align: center;
+//   color: ${(props) => props.theme.gray};
+//   margin-bottom: 12px;
+//   text-decoration: none;
+//   /* cursor: pointer; */
+// `;
 const Artist = styled.span`
   font-size: ${(props) => props.theme.fontSizes.xxs}px;
   text-align: center;
   color: ${(props) => props.theme.gray};
   margin-bottom: 12px;
+  text-decoration: none;
+  /* cursor: pointer; */
 `;
 
 export default NftCard;

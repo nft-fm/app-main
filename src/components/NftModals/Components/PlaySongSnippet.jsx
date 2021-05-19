@@ -12,7 +12,7 @@ import { usePlaylistConsumer } from "../../../contexts/Playlist";
 
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
 
-const PlaySongSnnipet = (props) => {
+const PlaySongSnippet = (props) => {
   const { setNftCallback } = usePlaylistConsumer();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -128,4 +128,4 @@ const PlayButton = styled(PlayIcon)`
   }
 `;
 
-export default PlaySongSnnipet;
+export default PlaySongSnippet;

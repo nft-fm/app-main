@@ -14,7 +14,7 @@ import Swal from "sweetalert2";
 import { usePlaylistConsumer } from "../../contexts/Playlist";
 import { buyNFT } from "../../web3/utils";
 import swal from "sweetalert2";
-import PlaySongSnnipet from "./Components/PlaySongSnnipet";
+import PlaySongSnippet from "./Components/PlaySongSnippet";
 
 const BuyNftModal = ({
   open,
@@ -162,7 +162,7 @@ const BuyNftModal = ({
             </Side>
           </CardTop>
           <Image src={nft.imageUrl} alt="image" />
-          {!isBought && <PlaySongSnnipet partialSong={partialSong}/>}
+          {!isBought && <PlaySongSnippet partialSong={partialSong}/>}
           <InfoContainer>
             <TrackName>{nft.title}</TrackName>
             <Artist>{nft.artist}</Artist>

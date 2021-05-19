@@ -148,7 +148,7 @@ const NftCard = (props) => {
           <Usd />
         </CostUsd>
       </CostFields>
-      <PlayButton src={PlayIcon} onClick={() => {setIsModalOpen(true)}} />
+      {/* <PlayButton src={PlayIcon} onClick={() => {setIsModalOpen(true)}} /> */}
     </Container>
   );
 };

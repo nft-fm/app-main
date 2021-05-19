@@ -26,6 +26,10 @@ const NftTypeSchema = new Schema({
     type: String,
     default: "",
   },
+  price: {
+    type: Number,
+    default: 0
+  },
   startTime: {
     type: Number,
     default: 0

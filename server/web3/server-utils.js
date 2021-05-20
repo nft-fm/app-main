@@ -6,7 +6,7 @@ const {
   BigNumber,
   getDefaultProvider,
 } = require("ethers");
-var difUtils = require('ethers').utils;
+var difUtils = require("ethers").utils;
 const { NFTToken, FlatPriceSale } = require("./constants");
 const FlatPriceSaleABI = require("./abi/FlatPriceSale.abi");
 const NFTTokenABI = require("./abi/NFTToken.abi");
@@ -90,21 +90,15 @@ const getUserNfts = async (account) => {
   let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
   const contract = new Contract(NFTToken, NFTTokenABI, walletWithProvider);
   let userNfts = await contract.getFullBalance(account);
-  // console.log('userNfts', userNfts)
-  let arr1 = [];
-  let arr2 = [];
-  let map1 = userNfts[0].map((nft) => {
-    console.log("nft", nft);
-	// var wei = difUtils.bigNumberify("1000000000000000000000");
-    // arr1.push(utils.BigNumber.from(nft));
-    arr1.push(utils.formatEther(nft)*10e17);
+  let nftIds = [];
+  let numNfts = [];
+  userNfts[0].map((nft) => {
+    nftIds.push(utils.formatEther(nft) * 10e17);
   });
-  let map2 = userNfts[1].map((nft) => {
-    // arr2.push(utils.BigNumber.from(nft));
-    arr2.push(utils.formatEther(nft)*10e17);
+  userNfts[1].map((nft) => {
+    numNfts.push(utils.formatEther(nft) * 10e17);
   });
-  console.log("mapped", arr1, arr2);
-  return map1, map2;
+  return { nftIds, numNfts };
 };
 
 module.exports = {

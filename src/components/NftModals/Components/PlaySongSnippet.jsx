@@ -5,17 +5,17 @@ import axios from "axios";
 import { ReactComponent as PlayIcon } from '../../../assets/img/icons/listen_play.svg';
 import { ReactComponent as PauseIcon } from '../../../assets/img/icons/listen_pause.svg';
 import loading from "../../../assets/img/loading.gif";
-import Swal from "sweetalert2";
 
 import { useRef } from "react";
 import { usePlaylistConsumer } from "../../../contexts/Playlist";
 
-const AudioCtx = window.AudioContext || window.webkitAudioContext;
+window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
 const PlaySongSnippet = (props) => {
   const { setNftCallback } = usePlaylistConsumer();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
 
   window.AudioContext = window.AudioContext || window.webkitAudioContext;
   const audioContextRef = useRef();
@@ -28,6 +28,29 @@ const PlaySongSnippet = (props) => {
       view[i] = buf[i];
     }
     return ab;
+  }
+
+  const prepareForReplay = (bufferSrc, gain) => {
+    console.log("preparing for replay");
+    bufferSrc.disconnect();
+    if (audioContextRef.current.state !== "suspended") {
+      console.log("not suspended");
+      /*Prepare song for possible replay (get It, set to zero and then pause)*/
+      const zeroedBufferSrc = audioContextRef.current.createBufferSource();
+      zeroedBufferSrc.buffer = bufferSrc.buffer;
+
+      zeroedBufferSrc.connect(gain);
+      zeroedBufferSrc.start(0, 0);
+
+      zeroedBufferSrc.onended = (e) => {
+        console.log("ended");
+        prepareForReplay(zeroedBufferSrc, gain);
+      }
+
+      bufferSrcRef.current = zeroedBufferSrc;
+    }
+    
+    stopSong();
   }
 
   const startSong = (songFile) => {
@@ -43,6 +66,10 @@ const PlaySongSnippet = (props) => {
       _bufferSrc.connect(_gainNode);
       _bufferSrc.start(0);
 
+      _bufferSrc.onended = (e) => {
+        console.log("song ended")
+        prepareForReplay(_bufferSrc, _gainNode);
+      }
 
       bufferSrcRef.current = _bufferSrc;
       playSong();
@@ -67,7 +94,6 @@ const PlaySongSnippet = (props) => {
    }
   
   useEffect(() => {
-    console.log("props partial song changed")
     if (props.partialSong && isLoading) {
       startSong(props.partialSong);
     }

@@ -49,7 +49,6 @@ const BuyNftModal = ({
         axios
           .post("/api/nft-type/purchase", { id: id, address: account })
           .then((res) => {
-            console.log("purchase res", res);
             setTimeout(function () {
               setIsLoading(false);
               setIsBought(true);

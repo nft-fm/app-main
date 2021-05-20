@@ -13,7 +13,6 @@ import ShareModal from "../SMShareModal/SMShareModal";
 import LikeShare from "./LikeShare";
 
 const NftCard = (props) => {
-  console.log('props NftCard', props)
   const { usdPerEth, user, account } = useAccountConsumer();
   const [nft, setNft] = useState({
     address: "",

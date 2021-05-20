@@ -41,7 +41,7 @@ const BuyNftModal = ({
   const purchase = async (id) => {
     setIsLoading(true);
     await buyNFT(
-      { nftID: id, amount: 1, saleId: nft.nftId, price: nft.price },
+      { nftID: id, amount: 1, saleId: nft.nftId, price: String(nft.price)  },
       () => {
         console.log("pending");
       },
@@ -67,6 +67,7 @@ const BuyNftModal = ({
           });
       }
     ).catch((err) => {
+      console.log(err)
       swal.fire({
         icon: "error",
         title: "Couldn't complete sale!",
@@ -153,9 +154,9 @@ const BuyNftModal = ({
             </Side>
             <Side>
               <IconArea>
-                {nft.sold}
+                {nft.numSold}
                 <span style={{ margin: "0 1px" }}>/</span>
-                {nft.quantity}
+                {nft.numMinted}
                 <Cart />
               </IconArea>
             </Side>
@@ -204,7 +205,7 @@ const BuyNftModal = ({
               <MetaMask src={IconMetamask} />
               <ButtonText>Connect Wallet</ButtonText>
             </BuyButton>
-          ) : nft.sold !== nft.quantity ? (
+          ) : nft.numSold !== nft.numMinted ? (
             !isLoading ? (
               isBought ? (
                 <BuyButton

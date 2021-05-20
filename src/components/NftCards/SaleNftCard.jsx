@@ -4,7 +4,7 @@ import BuyNftModal from "../NftModals";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
-import { ReactComponent as PlayIcon } from '../../assets/img/icons/listen_play.svg';
+import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import { usePlaylistConsumer } from "../../contexts/Playlist";
 import loading from "../../assets/img/loading.gif";
@@ -27,8 +27,8 @@ const NftCard = (props) => {
     writer: "",
     price: "...",
     quantity: "--",
-    sold: "--"
-  })
+    sold: "--",
+  });
 
   const { isOpen } = usePlaylistConsumer();
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -44,40 +44,35 @@ const NftCard = (props) => {
   };
 
   const getNSeconds = async (completeNft) => {
-    await axios.post("/api/nft-type/getNSecondsOfSong",
-    {key: completeNft.address + "/" + completeNft.audioUrl.split('/').slice(-1)[0],
-    nft: completeNft })
-    .then((res) => {
-      console.log("got snnipet")
-      const songFile = res.data.Body.data;
-      
-      setPartialSong(songFile);
-    })
-  }
+    await axios
+      .post("/api/nft-type/getNSecondsOfSong", {
+        key:
+          completeNft.address +
+          "/" +
+          completeNft.audioUrl.split("/").slice(-1)[0],
+        nft: completeNft,
+      })
+      .then((res) => {
+        console.log("got snnipet");
+        const songFile = res.data.Body.data;
+
+        setPartialSong(songFile);
+      });
+  };
 
   useEffect(() => {
     setNft({
       ...props.nft,
-      price: nft.price === "..." ? "..." : nft.price,
-      quantity: nft.quantity === "--" ? "--" : nft.quantity,
-      sold: nft.sold === "--" ? "--" : nft.sold,
     });
     setLikeCount(props.nft.likeCount);
     setLiked(props.nft.liked);
-    axios.post("/api/nft-type/full-nft-info", { nft: props.nft, account: account })
-      .then((res) => {
-        setNft(res.data);
-        if (!isOpen)
-          getNSeconds(res.data);
-      })
-      .catch(err => console.log(err));
   }, [props.nft, user]);
 
   useEffect(() => {
     if (isOpen && isModalOpen && !partialSong) {
       getNSeconds(props.nft);
     }
-  }, [isModalOpen])
+  }, [isModalOpen]);
   return (
     <Container>
       <ShareModal
@@ -107,42 +102,44 @@ const NftCard = (props) => {
         />
         <Side>
           <IconArea>
-            {nft.sold}
+            {nft.numSold}
             <span style={{ margin: "0 1px" }}>/</span>
-            {nft.quantity}
+            {nft.numMinted}
             <Cart onClick={() => setIsModalOpen(!isModalOpen)} />
           </IconArea>
         </Side>
       </CardTop>
-      {
-        imageLoaded ? null :
-          <Image src={loading} alt="image" />
-
-      }
+      {imageLoaded ? null : <Image src={loading} alt="image" />}
       <Image
         src={nft.imageUrl}
-        style={imageLoaded ? {} : { display: 'none' }}
+        style={imageLoaded ? {} : { display: "none" }}
         alt="image"
         onClick={() => setIsModalOpen(!isModalOpen)}
         onLoad={() => setImageLoaded(true)}
       />
 
-      <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>{nft.title}</TrackName>
-      <Artist to={`/artist/${nft.artist.replace(/ /g, '').toLowerCase()}`}>{nft.artist}</Artist>
+      <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>
+        {nft.title}
+      </TrackName>
+      <Artist to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}>
+        {nft.artist}
+      </Artist>
       <CostFields>
         <CostEth>
-          {nft.price !== "..." ? parseFloat(nft.price).toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 6,
-          }) : nft.price}
-          < Eth />
+          {nft.price !== "..."
+            ? parseFloat(nft.price).toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 6,
+              })
+            : nft.price}
+          <Eth />
         </CostEth>
         <CostUsd>
           {usdPerEth
             ? parseFloat(usdPerEth * nft.price).toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })
             : "..."}
           <Usd />
         </CostUsd>
@@ -151,7 +148,6 @@ const NftCard = (props) => {
     </Container>
   );
 };
-
 
 const PlayButton = styled(PlayIcon)`
   width: 30px;

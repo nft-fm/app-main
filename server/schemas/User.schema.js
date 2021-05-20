@@ -44,7 +44,7 @@ const UserSchema = new Schema({
   sold: {
     type: Number
   },
-  x_nfts: [{
+  nfts: [{
     nft: {
       type: String
     },

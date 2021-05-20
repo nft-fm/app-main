@@ -64,8 +64,18 @@ const findLikes = (nfts, account) => {
 	return nfts;
   }
 
+const getUserNfts = async (account) => {
+	let provider = new providers.WebSocketProvider(process.env.WSS_PROVIDER_URL);
+	let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
+	const contract = new Contract(NFTToken, NFTTokenABI, walletWithProvider);
+	let userNfts = await contract.getFullBalance(account)
+	console.log('userNfts', userNfts)
+	return userNfts;
+}
+
 module.exports = {
 	sign,
 	getSetSale,
 	findLikes,
+	getUserNfts,
 }

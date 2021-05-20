@@ -30,6 +30,14 @@ const NftTypeSchema = new Schema({
     type: Number,
     default: 0
   },
+  numMinted: {
+    type: Number,
+    default: 0
+  },
+  numSold: {
+    type: Number,
+    default: 0
+  },
   startTime: {
     type: Number,
     default: 0

@@ -27,7 +27,7 @@ const NftCard = (props) => {
     price: "...",
     quantity: "--",
     sold: "--",
-  })
+  });
   const [isOpen, setIsOpen] = useState(false);
   const [liked, setLiked] = useState(props.nft.liked);
   const [likeCount, setLikeCount] = useState(props.nft.likeCount);
@@ -40,17 +40,9 @@ const NftCard = (props) => {
   useEffect(() => {
     setNft({
       ...props.nft,
-      price: nft.price === "..." ? "..." : nft.price,
-      quantity: nft.quantity === "--" ? "--" : nft.quantity,
-      sold: nft.sold === "--" ? "--" : nft.sold,
     });
     setLikeCount(props.nft.likeCount);
     setLiked(props.nft.liked);
-    axios.post("/api/nft-type/full-nft-info", { nft: props.nft, account: account })
-      .then((res) => {
-        setNft(res.data)
-      })
-      .catch(err => console.log(err));
   }, [props.nft, user]);
   return (
     <Container>
@@ -80,9 +72,9 @@ const NftCard = (props) => {
         />
         <Side>
           <IconArea>
-            {nft.sold}
+            {nft.numSold}
             <span style={{ margin: "0 1px" }}>/</span>
-            {nft.quantity}
+            {nft.numMinted}
             <Cart />
           </IconArea>
         </Side>
@@ -105,9 +97,9 @@ const NftCard = (props) => {
         <CostUsd>
           {usdPerEth && nft.price !== "..."
             ? (usdPerEth * nft.price).toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })
             : "..."}
           <Usd />
         </CostUsd>

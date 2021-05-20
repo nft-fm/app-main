@@ -5,7 +5,7 @@ const multer = require('multer');
 const User = require('../schemas/User.schema')
 const Suggestion = require("../schemas/Suggestion.schema");
 const NftType = require('../schemas/NftType.schema');
-const { findLikes } = require('../web3/server-utils');
+const { findLikes, getUserNfts  } = require('../web3/server-utils');
 
 router.post('/get-account', async (req, res) => {
   try {
@@ -17,6 +17,8 @@ router.post('/get-account', async (req, res) => {
       })
       await user.save();
     }
+    let nfts = await getUserNfts(user.address)
+    console.log('THIS RIGHT HERE', nfts)
     res.send(user);
   } catch (error) {
     console.log(error);

@@ -92,7 +92,7 @@ router.post('/get-NFT', async (req, res) => {
 
 router.post('/get-user-nfts', async (req, res) => {
   try {
-    let ids = req.body.x_nfts;
+    let ids = req.body.nfts;
     let nfts = await NftType.find({ '_id': { $in: ids } });
 
     res.status(200).send(findLikes(nfts, req.body.address));
@@ -550,7 +550,7 @@ router.post("/purchase", async (req, res) => {
       res.status(500).send('No NFT found')
       return
     }
-    if (nft.x_numSold >= nft.numMinted) {
+    if (nft.numSold >= nft.numMinted) {
       res.status(500).send('Out of Stock')
       return
     }
@@ -561,9 +561,9 @@ router.post("/purchase", async (req, res) => {
     }
     console.log("mid", user, nft);
 
-    user.x_nfts = [...user.x_nfts, { _id: nft._id }];
+    user.nfts = [...user.nfts, { _id: nft._id }];
     await user.save();
-    nft.x_numSold++;
+    nft.numSold++;
     await nft.save();
     console.log("end?", user, nft);
     res.status(200).send("Success!")

@@ -96,24 +96,27 @@ router.post("/get-NFT", async (req, res) => {
 
 router.post("/get-user-nfts", async (req, res) => {
   try {
-    console.log("req.body", req.body);
     let ids = [];
+    //if user owns > 1 copy of the same nft, this whole chain of logic will get the same nft as many times as they own it
     for (nft of req.body.nfts) {
-      ids.push(nft.nft);
+      console.log("nft", nft);
+      if (nft.quantity > 1) {
+        for (let i = 0; i < nft.quantity; i++) {
+          ids.push(nft.nft);
+        }
+      } else {
+        ids.push(nft.nft);
+      }
     }
-    console.log("ids", ids);
-    const getNfts = await NftType.find({
-      _id: { $in: ids },
-    });
-    // let nfts = [];
-    // for (id of ids) {
-    //   console.log("id", id, typeof(id));
-    //   const getNft = await NftType.findById(id)
-    //   console.log('getNft', getNft)
-    //   // nfts.push();
-    // }
-    console.log("getNfts", getNfts);
-    res.status(200).send(findLikes(getNfts, req.body.address));
+    const gottenNfts = [];
+    for (id of ids) {
+      const getNft = await NftType.findOne({
+        _id: id,
+      });
+      gottenNfts.push(getNft);
+    }
+
+    res.status(200).send(findLikes(gottenNfts, req.body.address));
   } catch (error) {
     console.log(error);
     res.status(500).send("server error");

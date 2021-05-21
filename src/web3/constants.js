@@ -1,4 +1,4 @@
-export const NFTToken = "0xCbe0dcE76A63A9ecb51D83A184d58dA3145d433c";
-export const Trade = "0xAA2476C6BFeE585F5BfBC5943A88b301eF9F5815";
-export const FlatPriceSale = "0x570208CF1b1c2AeFB45a0b87611aEF3BFDC9e94D";
-export const Auction = "0x9DD3668b233BB07021D2B2B47E906652C5abBd72";
+export const NFTToken = "0x4a558741C1dd9870A495BcAA00ec8dFB32f9C766";
+export const Trade = "0x2f6E782eAc3A5dB9d91eBc898F287EF49b44dE1F";
+export const FlatPriceSale = "0x05b1a028c680b4bDA364175d673c2f63bdaAc901";
+export const Auction = "0x3940F66e503dD6CaF2d9FaAB39064c10415DB546";

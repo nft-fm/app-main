@@ -99,12 +99,11 @@ router.post("/get-user-nfts", async (req, res) => {
     console.log("req.body", req.body);
     let ids = [];
     for (nft of req.body.nfts) {
-      ids.push(ObjectId(nft._id));
+      ids.push(nft.nft);
     }
+    console.log("ids", ids);
     const getNfts = await NftType.find({
-      _id: {
-        $in: ids,
-      },
+      _id: { $in: ids },
     });
     // let nfts = [];
     // for (id of ids) {
@@ -114,7 +113,7 @@ router.post("/get-user-nfts", async (req, res) => {
     //   // nfts.push();
     // }
     console.log("getNfts", getNfts);
-    res.status(200).send(findLikes(nfts, req.body.address));
+    res.status(200).send(findLikes(getNfts, req.body.address));
   } catch (error) {
     console.log(error);
     res.status(500).send("server error");

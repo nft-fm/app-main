@@ -434,6 +434,7 @@ router.post('/handleImage', async (req, res) => {
 })
 
 router.post('/getNSecondsOfSong', async (req, res) => {
+  console.log("GETTIN NSECONDS");
   if (req.body.nft) {
     const AWS = require('aws-sdk')
     const s3 = new AWS.S3();

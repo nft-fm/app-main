@@ -26,7 +26,7 @@ router.post("/get-account", async (req, res) => {
       user.nfts = [];
       for (nft of nfts) {
         if (nft.quantity > 0) {
-          let usersNft = await NftType.find({ nftId: nft.id });
+          let usersNft = await NftType.findOne({ nftId: nft.id });
           user.nfts.push({ nft: usersNft._id, quantity: nft.quantity });
         }
       }

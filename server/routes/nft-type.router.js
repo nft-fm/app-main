@@ -1,15 +1,15 @@
 const { BigNumber, constants, utils } = require("ethers");
-const { AnalyticsExportDestination } = require('@aws-sdk/client-s3');
-const express = require('express')
-const { flushSync } = require('react-dom')
-const router = express.Router()
-const NftType = require('../schemas/NftType.schema')
-const multer = require('multer');
-const User = require('../schemas/User.schema');
-const { FlatPriceSale, Auction } = require('../web3/constants');
-const { sign, getSetSale, findLikes } = require('../web3/server-utils');
+const { AnalyticsExportDestination } = require("@aws-sdk/client-s3");
+const express = require("express");
+const { flushSync } = require("react-dom");
+const router = express.Router();
+const NftType = require("../schemas/NftType.schema");
+const multer = require("multer");
+const User = require("../schemas/User.schema");
+const { FlatPriceSale, Auction } = require("../web3/constants");
+const { sign, getSetSale, findLikes } = require("../web3/server-utils");
 const { listenForMint } = require("../web3/mint-listener");
-
+const { ObjectId } = require("mongodb");
 // const findLikes = (nfts, account) => {
 //   for (let i = 0; i < nfts.length; i++) {
 //     const likes = nfts[i]._doc.likes;
@@ -33,47 +33,51 @@ const { listenForMint } = require("../web3/mint-listener");
 // }
 
 const findRemainingInfo = async (nft) => {
-  const extraInfo = await getSetSale(nft.nftId)
+  const extraInfo = await getSetSale(nft.nftId);
   // console.log("remaining info", extraInfo, nft);
   let newNft = {
     ...nft,
     price: utils.formatEther(extraInfo.price),
     quantity: extraInfo.quantity,
-    sold: extraInfo.sold
-  }
+    sold: extraInfo.sold,
+  };
   // console.log("3", newNft);
 
   return newNft;
-}
+};
 
-router.post('/full-nft-info', async (req, res) => {
+router.post("/full-nft-info", async (req, res) => {
   try {
-    const fullInfo = await findRemainingInfo(req.body.nft).catch(err => console.log(err));
+    const fullInfo = await findRemainingInfo(req.body.nft).catch((err) =>
+      console.log(err)
+    );
     res.send(fullInfo);
   } catch (err) {
     res.status(500).send(err);
   }
 });
 
-
-router.post('/artist-nfts', async (req, res) => {
+router.post("/artist-nfts", async (req, res) => {
   try {
-    let nfts = await NftType.find({ address: req.body.address, isDraft: false })
+    let nfts = await NftType.find({
+      address: req.body.address,
+      isDraft: false,
+    });
 
     res.send(findLikes(nfts, req.body.address));
   } catch (err) {
     res.status(500).send(err);
   }
-})
+});
 
-router.post('/get-NFT', async (req, res) => {
+router.post("/get-NFT", async (req, res) => {
   try {
     let nft = await NftType.findOne({
       address: req.body.account,
       isDraft: true,
     });
     if (!nft) {
-      console.log("CREATED DRAFT")
+      console.log("CREATED DRAFT");
       const newNft = await new NftType({
         address: req.body.account,
         dur: 0,
@@ -88,35 +92,68 @@ router.post('/get-NFT', async (req, res) => {
     console.log("fetchNFT error", error);
     res.status(500).send("no users found");
   }
-})
+});
 
-router.post('/get-user-nfts', async (req, res) => {
+router.post("/get-user-nfts", async (req, res) => {
   try {
-    let ids = req.body.nfts;
-    let nfts = await NftType.find({ '_id': { $in: ids } });
+    let ids = [];
+    //if user owns > 1 copy of the same nft, this whole chain of logic will get the same nft as many times as they own it
+    for (nft of req.body.nfts) {
+      console.log("nft", nft);
+      if (nft.quantity > 1) {
+        for (let i = 0; i < nft.quantity; i++) {
+          ids.push(nft.nft);
+        }
+      } else {
+        ids.push(nft.nft);
+      }
+    }
+    const gottenNfts = [];
+    for (id of ids) {
+      const getNft = await NftType.findOne({
+        _id: id,
+      });
+      gottenNfts.push(getNft);
+    }
 
-    res.status(200).send(findLikes(nfts, req.body.address));
+    res.status(200).send(findLikes(gottenNfts, req.body.address));
   } catch (error) {
     console.log(error);
-    res.status(500).send("server error")
+    res.status(500).send("server error");
   }
-})
+});
 
-router.post('/finalize', async (req, res) => {
+router.post("/finalize", async (req, res) => {
   try {
     let newData = req.body;
     console.log("newdata", newData);
     newData.isDraft = false;
 
-    let updateNFT = await NftType.findByIdAndUpdate(newData._id, newData)
+    let updateNFT = await NftType.findByIdAndUpdate(newData._id, newData);
     if (updateNFT) {
       const startTime = 0;
       // const price = BigNumber.from(newData.price.mul(constants.WeiPerEther));
       const price = utils.parseUnits(newData.price);
-      const encodedFee = utils.defaultAbiCoder.encode(["uint32"], [3]) // fee is hardcoded to 3% atm
+      const encodedFee = utils.defaultAbiCoder.encode(["uint32"], [3]); // fee is hardcoded to 3% atm
       const signature = sign(
-        ['string', 'address', 'uint256', 'uint256', 'uint256', 'address', 'bytes'],
-        ['NFTFM_mintAndStake', newData.address, newData.numMinted, price, startTime, FlatPriceSale, encodedFee]
+        [
+          "string",
+          "address",
+          "uint256",
+          "uint256",
+          "uint256",
+          "address",
+          "bytes",
+        ],
+        [
+          "NFTFM_mintAndStake",
+          newData.address,
+          newData.numMinted,
+          price,
+          startTime,
+          FlatPriceSale,
+          encodedFee,
+        ]
       );
       res.status(200).send({
         ...signature,
@@ -127,34 +164,50 @@ router.post('/finalize', async (req, res) => {
         dur: newData.dur,
         saleAddress: FlatPriceSale,
         databaseID: newData._id,
-        encodedFee: encodedFee
-      })
+        encodedFee: encodedFee,
+      });
     } else {
       console.log("no nft");
-      res.status(500).json('error')
+      res.status(500).json("error");
     }
   } catch (error) {
     console.log(error);
-    res.status(500).send("server error")
+    res.status(500).send("server error");
   }
-})
+});
 
-router.post('/auction-finalize', async (req, res) => {
+router.post("/auction-finalize", async (req, res) => {
   try {
     let newData = req.body;
     newData.isDraft = false;
 
-    console.log('newData', newData)
-    let updateNFT = await NftType.findByIdAndUpdate(newData._id, newData)
+    console.log("newData", newData);
+    let updateNFT = await NftType.findByIdAndUpdate(newData._id, newData);
     if (updateNFT) {
       const price = utils.parseUnits(newData.price);
       const encodedArgs = utils.defaultAbiCoder.encode(
         ["uint256", "uint256"],
         [newData.endTime, newData.bidIncrementPercent]
-      ) // fee is hardcoded to 3% atm
+      ); // fee is hardcoded to 3% atm
       const signature = sign(
-        ['string', 'address', 'uint256', 'uint256', 'uint256', 'address', 'bytes'],
-        ['NFTFM_mintAndStake', newData.address, 1, price, BigNumber.from(newData.startTime), Auction, encodedArgs]
+        [
+          "string",
+          "address",
+          "uint256",
+          "uint256",
+          "uint256",
+          "address",
+          "bytes",
+        ],
+        [
+          "NFTFM_mintAndStake",
+          newData.address,
+          1,
+          price,
+          BigNumber.from(newData.startTime),
+          Auction,
+          encodedArgs,
+        ]
       );
       listenForMint();
       res.status(200).send({
@@ -165,19 +218,19 @@ router.post('/auction-finalize', async (req, res) => {
         startTime: newData.startTime,
         saleAddress: Auction,
         databaseID: newData._id,
-        encodedArgs: encodedArgs
-      })
+        encodedArgs: encodedArgs,
+      });
     } else {
       console.log("no nft");
-      res.status(500).json('error')
+      res.status(500).json("error");
     }
   } catch (error) {
     console.log(error);
-    res.status(500).send("server error")
+    res.status(500).send("server error");
   }
-})
+});
 
-router.post('/get-one', async (req, res) => {
+router.post("/get-one", async (req, res) => {
   try {
     let { id, address } = req.body;
     let nftType = await NftType.findById(id);
@@ -186,7 +239,7 @@ router.post('/get-one', async (req, res) => {
     //for some reason this isn't pulling the likeCount
     nftType = JSON.parse(JSON.stringify(findLikes(nftType, address)));
 
-    const extraInfo = await getSetSale(nftType.nftId)
+    const extraInfo = await getSetSale(nftType.nftId);
     console.log("nftType", nftType);
     nftType = {
       ...nftType,
@@ -194,33 +247,31 @@ router.post('/get-one', async (req, res) => {
       quantity: extraInfo.quantity,
       sold: extraInfo.sold,
       likeCount: nftType.likeCount ? nftType.likeCount : nftType.likes.length,
-    }
+    };
     res.send(nftType);
   } catch (error) {
     console.log(error);
-    res.status(500).send("server error")
+    res.status(500).send("server error");
   }
-})
+});
 
-router.post('/featured', async (req, res) => {
+router.post("/featured", async (req, res) => {
   try {
     let nftTypes = await NftType.find({
       isFeatured: true,
       isDraft: false,
       isMinted: true,
-    })
-      .limit(5)
+    }).limit(5);
 
     res.send(findLikes(nftTypes, req.body.address));
   } catch (error) {
     console.log(error);
-    res.status(500).send("server error")
+    res.status(500).send("server error");
   }
-})
-
+});
 
 //flesh out pagination
-router.post('/get-many', async (req, res) => {
+router.post("/get-many", async (req, res) => {
   // try {
   //   console.log(
   //     "get suggestions!\naddress: ",
@@ -237,7 +288,6 @@ router.post('/get-many', async (req, res) => {
   //     .sort(sort)
   //     .skip(req.body.page * 5)
   //     .limit(5);
-
   //   let suggestions = [];
   //   for (let suggestion of initialSuggestions) {
   //     let user = await User.findOne({ _id: suggestion.userId });
@@ -271,10 +321,9 @@ router.post('/get-many', async (req, res) => {
   //   totalPages = Math.ceil(totalPages);
   //   // console.log("done: ", suggestions)
   //   res.send({ suggestions, totalPages });
-})
+});
 
-
-router.post('/all', async (req, res) => {
+router.post("/all", async (req, res) => {
   try {
     let nftTypes = await NftType.find({
       isDraft: false,
@@ -283,14 +332,13 @@ router.post('/all', async (req, res) => {
     res.send(findLikes(nftTypes, req.body.address));
   } catch (error) {
     console.log(error);
-    res.status(500).send("server error")
+    res.status(500).send("server error");
   }
-})
+});
 
-
-router.post('/uploadAudioS3', async (req, res) => {
-  var AWS = require('aws-sdk');
-  AWS.config.region = 'us-west-2';
+router.post("/uploadAudioS3", async (req, res) => {
+  var AWS = require("aws-sdk");
+  AWS.config.region = "us-west-2";
   const multerS3 = require("multer-s3");
 
   var s3Client = new AWS.S3();
@@ -315,55 +363,55 @@ router.post('/uploadAudioS3', async (req, res) => {
       key: function (req, file, cb) {
         cb(null, req.body.artist + "/" + file.originalname);
       },
-    })
-  })
+    }),
+  });
   const singleUpload = upload.single("audioFile");
   singleUpload(req, res, function (err) {
     console.log("singleUpload: ", req.body);
     if (err instanceof multer.MulterError) {
-      console.log('singleUpload multer', err)
-      return res.status(500).json(err)
+      console.log("singleUpload multer", err);
+      return res.status(500).json(err);
     } else if (err) {
-      console.log('singleUpload', err)
-      return res.status(500).json(err)
+      console.log("singleUpload", err);
+      return res.status(500).json(err);
     }
-    return res.status(200).send("success")
-  })
-})
+    return res.status(200).send("success");
+  });
+});
 
 //send audio file to private bucket
-router.post('/handleAudio', async (req, res) => {
+router.post("/handleAudio", async (req, res) => {
   try {
-    console.log('/handleAudio hit')
+    console.log("/handleAudio hit");
     let storage = multer.diskStorage({
       destination: function (req, file, cb) {
-        cb(null, 'public')
+        cb(null, "public");
       },
       filename: function (req, file, cb) {
-        cb(null, file.originalname)
-      }
-    })
-    let upload = multer({ storage: storage }).single('audioFile')
+        cb(null, file.originalname);
+      },
+    });
+    let upload = multer({ storage: storage }).single("audioFile");
     upload(req, res, function (err) {
       if (err instanceof multer.MulterError) {
-        console.log('handleAudio multer', err)
-        return res.status(500).json(err)
+        console.log("handleAudio multer", err);
+        return res.status(500).json(err);
       } else if (err) {
-        console.log('handleAudio', err)
-        return res.status(500).json(err)
+        console.log("handleAudio", err);
+        return res.status(500).json(err);
       }
-      return res.status(200).send(req.file)
-    })
+      return res.status(200).send(req.file);
+    });
   } catch (err) {
     console.log(err);
-    res.status(500).send("server error")
+    res.status(500).send("server error");
   }
-})
+});
 
-router.post('/uploadImageS3', async (req, res) => {
-  var AWS = require('aws-sdk');
-  AWS.config.region = 'us-west-2';
-  const path = require('path');
+router.post("/uploadImageS3", async (req, res) => {
+  var AWS = require("aws-sdk");
+  AWS.config.region = "us-west-2";
+  const path = require("path");
   const multerS3 = require("multer-s3");
   var s3Client = new AWS.S3();
 
@@ -387,112 +435,129 @@ router.post('/uploadImageS3', async (req, res) => {
       key: function (req, file, cb) {
         cb(null, req.body.artist + "/" + file.originalname);
       },
-    })
-  })
+    }),
+  });
   const singleUpload = upload.single("imageFile");
   singleUpload(req, res, function (err) {
     console.log("uploadImageS3: ", req.body);
     if (err instanceof multer.MulterError) {
-      console.log('uploadImageS3 multer', err)
-      return res.status(500).json(err)
+      console.log("uploadImageS3 multer", err);
+      return res.status(500).json(err);
     } else if (err) {
-      console.log('uploadImageS3', err)
-      return res.status(500).json(err)
+      console.log("uploadImageS3", err);
+      return res.status(500).json(err);
     }
-    return res.status(200).send(req.file)
-  })
-})
+    return res.status(200).send(req.file);
+  });
+});
 
 //send image file to public folder
-router.post('/handleImage', async (req, res) => {
+router.post("/handleImage", async (req, res) => {
   try {
     let storage = multer.diskStorage({
       destination: function (req, file, cb) {
-        cb(null, 'public')
+        cb(null, "public");
       },
       filename: function (req, file, cb) {
-        cb(null, file.originalname)
-      }
-    })
-    let upload = multer({ storage: storage }).single('imageFile')
+        cb(null, file.originalname);
+      },
+    });
+    let upload = multer({ storage: storage }).single("imageFile");
 
     upload(req, res, function (err) {
       if (err instanceof multer.MulterError) {
-        console.log('handleImage multer', err)
-        return res.status(500).json(err)
+        console.log("handleImage multer", err);
+        return res.status(500).json(err);
       } else if (err) {
-        console.log('handleImage', err)
-        return res.status(500).json(err)
+        console.log("handleImage", err);
+        return res.status(500).json(err);
       }
       // uploadToS3Bucket("nftfm-image", req, res);
-      return res.status(200).send(req.file)
-    })
+      return res.status(200).send(req.file);
+    });
   } catch (err) {
     console.log(error);
-    res.status(500).send("server error")
+    res.status(500).send("server error");
   }
-})
+});
 
-router.post('/getNSecondsOfSong', async (req, res) => {
-  console.log("GETTIN NSECONDS");
+
+router.post("/getNSecondsOfSong", async (req, res) => {
+  const _start = new Date();
+
   if (req.body.nft) {
-    const AWS = require('aws-sdk')
+    const AWS = require("aws-sdk");
     const s3 = new AWS.S3();
-    const songFullSize = await s3.headObject({ Key: req.body.key, Bucket: "nftfm-music" })
-                                .promise()
-                                .then(res => res.ContentLength)
-                                .catch(err => {
-                                  console.log(err);
-                                  res.status(500).send('Couldnt retrieve nSec of music');
-                                })
-    
+    const songFullSize = await s3
+      .headObject({ Key: req.body.key, Bucket: "nftfm-music" })
+      .promise()
+      .then((res) => res.ContentLength)
+      .catch((err) => {
+        console.log(err);
+        res.status(500).send("Couldnt retrieve nSec of music");
+      });
+
     const startTime = 0;
-    const nSec = req.body.nSec || 15; 
-    const partialBytes = songFullSize * nSec / req.body.nft.dur; 
-    console.log("partial bytes", partialBytes.toFixed(0))
-    console.log(req.body.nft)
+    const nSec = req.body.nSec || 15;
+    const partialBytes = (songFullSize * nSec) / req.body.nft.dur;
+    console.log("partial bytes", partialBytes.toFixed(0));
+    console.log(req.body.nft);
     s3.getObject(
-      { Bucket: "nftfm-music", Key: req.body.key, Range: "bytes=0-" + partialBytes.toFixed(0) },
+      {
+        Bucket: "nftfm-music",
+        Key: req.body.key,
+        Range: "bytes=0-" + partialBytes.toFixed(0),
+      },
       function (error, data) {
         if (error != null) {
           console.log("Failed to retrieve an object: " + error);
         } else {
+          const _end = new Date();
+
+          console.log('Operation took ' + (_end.getTime() - _start.getTime()) + ' msec');
           console.log("LOADED " + data.ContentLength + " bytes");
           res.status(200).send(data);
         }
       }
     );
   }
-})
+});
 
-router.post('/getPartialSong', async (req, res) => {
-  const AWS = require('aws-sdk')
+router.post("/getPartialSong", async (req, res) => {
+  const AWS = require("aws-sdk");
   const s3 = new AWS.S3();
-  const songFullSize = await s3.headObject({ Key: req.body.key, Bucket: "nftfm-music" })
-  .promise()
-  .then(res => res.ContentLength);
+  const songFullSize = await s3
+    .headObject({ Key: req.body.key, Bucket: "nftfm-music" })
+    .promise()
+    .then((res) => res.ContentLength);
 
   console.log("SongFullSize", songFullSize);
-  
-  let partialBytes = req.body.howManySec ? req.body.howManySec :  (songFullSize / 20).toFixed(0);
+
+  let partialBytes = req.body.howManySec
+    ? req.body.howManySec
+    : (songFullSize / 20).toFixed(0);
   console.log("partial bytes", partialBytes);
   s3.getObject(
-    { Bucket: "nftfm-music", Key: req.body.key, Range: "bytes=0-" + partialBytes },
+    {
+      Bucket: "nftfm-music",
+      Key: req.body.key,
+      Range: "bytes=0-" + partialBytes,
+    },
     function (error, data) {
       if (error != null) {
         console.log("Failed to retrieve an object: " + error);
-        res.status(500).send('Couldnt retrieve nSec of music');
+        res.status(500).send("Couldnt retrieve nSec of music");
       } else {
         console.log("LOADED " + data.ContentLength + " bytes");
         res.status(200).send(data);
       }
     }
   );
-})
+});
 
-router.post('/getSong', async (req, res) => {
+router.post("/getSong", async (req, res) => {
   const start = Date.now();
-  const AWS = require('aws-sdk')
+  const AWS = require("aws-sdk");
   // AWS.config.update({accessKeyId: 'id-omitted', secretAccessKey: 'key-omitted'})
 
   // Tried with and without this. Since s3 is not region-specific, I don't
@@ -503,62 +568,62 @@ router.post('/getSong', async (req, res) => {
   //const params = { Bucket: "nftfm-music", Key: req.body.key, Expires: 60 * 5 };
   //const url = s3.getSignedUrl('getObject', params)
   //res.status(200).send(url);
-   const s3 = new AWS.S3();
+  const s3 = new AWS.S3();
 
-   s3.getObject(
-     { Bucket: "nftfm-music", Key: req.body.key },
-     function (error, data) {
-       const end = Date.now();
-       console.log(end - start);
-       if (error != null) {
-         console.log("Failed to retrieve an object: " + error);
-         res.status(500).send('Couldnt retrieve song of music');
-         return;
-       } else {
-         console.log("Loaded " + data.ContentLength + " bytes");
-         res.status(200).send(data);           // successful response
-       }
-     }
-   );
-})
+  s3.getObject(
+    { Bucket: "nftfm-music", Key: req.body.key },
+    function (error, data) {
+      const end = Date.now();
+      console.log(end - start);
+      if (error != null) {
+        console.log("Failed to retrieve an object: " + error);
+        res.status(500).send("Couldnt retrieve song of music");
+        return;
+      } else {
+        console.log("Loaded " + data.ContentLength + " bytes");
+        res.status(200).send(data); // successful response
+      }
+    }
+  );
+});
 
-router.post('/getSongList', async (req, res) => {
+router.post("/getSongList", async (req, res) => {
   const account = req.body.account;
   console.log("account: ", account);
   const params = {
-    Bucket: 'nftfm-music',
-    Prefix: account
-  }
-  var AWS = require('aws-sdk');
-  AWS.config.region = 'us-west-2';
-  const path = require('path');
+    Bucket: "nftfm-music",
+    Prefix: account,
+  };
+  var AWS = require("aws-sdk");
+  AWS.config.region = "us-west-2";
+  const path = require("path");
 
   // AWS.config.loadFromPath(path.join(__dirname, '../aws_config.json'));
   var s3 = new AWS.S3();
   s3.listObjectsV2(params, function (err, data) {
     console.log(data);
-    if (err) console.log(err, err.stack); // an error occurred
-    else
-      res.status(200).send(data);           // successful response
+    if (err) console.log(err, err.stack);
+    // an error occurred
+    else res.status(200).send(data); // successful response
   });
-})
+});
 
 //this will change dramatically with the introduction of smart contracts
 router.post("/purchase", async (req, res) => {
   try {
-    let nft = await NftType.findOne({ _id: req.body.id })
+    let nft = await NftType.findOne({ _id: req.body.id });
     if (!nft) {
-      res.status(500).send('No NFT found')
-      return
+      res.status(500).send("No NFT found");
+      return;
     }
     if (nft.numSold >= nft.numMinted) {
-      res.status(500).send('Out of Stock')
-      return
+      res.status(500).send("Out of Stock");
+      return;
     }
-    let user = await User.findOne({ address: req.body.address })
+    let user = await User.findOne({ address: req.body.address });
     if (!user) {
-      res.status(500).send('No user found')
-      return
+      res.status(500).send("No user found");
+      return;
     }
     console.log("mid", user, nft);
 
@@ -567,11 +632,11 @@ router.post("/purchase", async (req, res) => {
     nft.numSold++;
     await nft.save();
     console.log("end?", user, nft);
-    res.status(200).send("Success!")
+    res.status(200).send("Success!");
   } catch (err) {
     console.log("err", err);
-    res.status(500).send(err)
+    res.status(500).send(err);
   }
-})
+});
 
-module.exports = router
+module.exports = router;

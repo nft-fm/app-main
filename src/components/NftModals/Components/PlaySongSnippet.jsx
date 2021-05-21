@@ -15,7 +15,6 @@ const PlaySongSnippet = (props) => {
   const { setNftCallback } = usePlaylistConsumer();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isFinished, setIsFinished] = useState(false);
 
   window.AudioContext = window.AudioContext || window.webkitAudioContext;
   const audioContextRef = useRef();

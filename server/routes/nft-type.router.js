@@ -258,7 +258,7 @@ router.post("/get-one", async (req, res) => {
 router.post("/featured", async (req, res) => {
   try {
     let nftTypes = await NftType.find({
-      isFeatured: true,
+      // isFeatured: true,
       isDraft: false,
       isMinted: true,
     }).limit(5);
@@ -627,7 +627,7 @@ router.post("/purchase", async (req, res) => {
     }
     console.log("mid", user, nft);
 
-    user.nfts = [...user.nfts, { _id: nft._id }];
+    user.nfts.push({ nft: nft._id, quantity: 1 });
     await user.save();
     nft.numSold++;
     await nft.save();

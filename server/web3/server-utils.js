@@ -90,15 +90,21 @@ const getUserNfts = async (account) => {
   let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
   const contract = new Contract(NFTToken, NFTTokenABI, walletWithProvider);
   let userNfts = await contract.getFullBalance(account);
-  let nftIds = [];
-  let numNfts = [];
-  userNfts[0].map((nft) => {
-    nftIds.push(utils.formatEther(nft) * 10e17);
-  });
-  userNfts[1].map((nft) => {
-    numNfts.push(utils.formatEther(nft) * 10e17);
-  });
-  return { nftIds, numNfts };
+  // let nftIds = [];
+  // let numNfts = [];
+  // userNfts[0].map((nft) => {
+  //   nftIds.push(utils.formatEther(nft) * 10e17);
+  // });
+  // userNfts[1].map((nft) => {
+  //   numNfts.push(utils.formatEther(nft) * 10e17);
+  // });
+
+  let nftIdsAndQuantities = []
+  for (let i = 0; i < userNfts[0].length; i++) {
+    nftIdsAndQuantities.push({id: utils.formatEther(userNfts[0][i]) * 10e17, quantity: utils.formatEther(userNfts[1][i]) * 10e17})
+  }
+  return nftIdsAndQuantities;
+  // return { nftIds, numNfts };
 };
 
 module.exports = {

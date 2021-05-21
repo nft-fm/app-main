@@ -10,92 +10,60 @@ const Library = ({ user }) => {
   const [nfts, setNfts] = useState([]);
   const [selectedNft, setSelectedNft] = useState();
   const { setNftsCallback, setIsPreview } = usePlaylistConsumer();
-  const [isViewingLibrary, setIsViewingLibrary] = useState(true)
-  // const [isViewingLibrary, setIsViewingLibrary] = useState(true) //to default to library 
+  // const [isViewingLibrary, setIsViewingLibrary] = useState(true) //to default to library
   const formatNfts = (nftsData) => {
     const formattedNfts = nftsData.map((nft, index) => {
-      return isViewingLibrary ? (
+      return (
         <LibraryCard
           nft={nft}
           key={index}
           index={index}
           selectNft={setSelectedNft}
         />
-      ) : (
-        <ArtistCard
-          nft={nft}
-          key={index}
-          index={index}
-        />
-      );
+      )
     });
     for (let i = 0; i < 5; i++) {
-      formattedNfts.push(<FillerCard />)
+      formattedNfts.push(<FillerCard />);
     }
     return formattedNfts;
-  }
-
-  const getArtistNfts = async () => {
-    setNfts([]);
-    axios
-      .post("api/nft-type/artist-nfts", user)
-      .then((res) => {
-        setNfts(formatNfts(res.data));
-        setNftsCallback(res.data);
-        setIsPreview(false);
-      });
   };
 
   const getUserNfts = async () => {
     setNfts([]);
-    axios
-      .post("api/nft-type/get-user-nfts", user)
-      .then((res) => {
-        setNfts(formatNfts(res.data));
-        setNftsCallback(res.data);
-        setIsPreview(false);
-      });
-    // axios
-    //   .post("api/nft-type/featured")
-    //   .then((res) => {
-    //     setNfts(res.data);
-    //     setNftsCallback(res.data)
-    //   });
+    axios.post("api/nft-type/get-user-nfts", user).then((res) => {
+      console.log('this', res.data)
+      setNfts(formatNfts(res.data));
+      setNftsCallback(res.data);
+      setIsPreview(false);
+    });
   };
 
   useEffect(() => {
-    isViewingLibrary ? getUserNfts() : getArtistNfts();
-  }, [user, isViewingLibrary]);
+    getUserNfts()
+  }, [user]);
 
   return (
     <Landing>
       <LaunchContainer>
-          <StyledTitle>
-            LIBRARY
-        </StyledTitle>
-        {/* <ContainerTitleLeft>{isCreating ? "MY NFTS" : "MY LIBRARY"}</ContainerTitleLeft> */}
-        {/* <ContainerTitleLeft onClick={() => setIsViewingLibrary(true)} active={isViewingLibrary}>YOUR LIBRARY</ContainerTitleLeft> */}
-        {/* <ContainerTitleRight onClick={() => setIsViewingLibrary(false)} active={isViewingLibrary}>CREATED</ContainerTitleRight> */}
-        <ContainerOutline />
+        <StyledTitle>LIBRARY</StyledTitle> <ContainerOutline />
         <NftScroll> {nfts} </NftScroll>
       </LaunchContainer>
     </Landing>
   );
 };
 
-
 const StyledTitle = styled.div`
   font-family: "Compita";
-  font-size: ${props => props.theme.fontSizes.md};
+  font-size: ${(props) => props.theme.fontSizes.md};
   margin: 60px 0 40px 0;
   font-weight: 600;
   /* letter-spacing: 3px; */
   color: white;
 `;
 const FillerCard = styled.div`
-width: 226px;
-height: 0px;
-`
+  width: 226px;
+  height: 0px;
+`;
 
 const Landing = styled.div`
   display: flex;
@@ -119,11 +87,10 @@ const NftScroll = styled.div`
   justify-content: space-between;
   flex-wrap: wrap;
 
-@media only screen and (max-width: 776px) {
-  flex-direction: column;
-  align-items: center;
-   }
-
+  @media only screen and (max-width: 776px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const LaunchContainer = styled.div`
@@ -154,7 +121,9 @@ const ContainerTitleLeft = styled.span`
   border: 4px solid #383838;
   border-radius: 20px;
   transition: 0.2s;
-  ${({ active }) => active && `
+  ${({ active }) =>
+    active &&
+    `
   color: white;
   `}
   &:hover {
@@ -181,7 +150,9 @@ const ContainerTitleRight = styled.span`
   border: 4px solid #383838;
   border-radius: 20px;
   transition: 0.2s;
-  ${({ active }) => !active && `
+  ${({ active }) =>
+    !active &&
+    `
   color:  white;
   `}
   &:hover {
@@ -198,8 +169,8 @@ const ContainerOutline = styled.div`
   display: flex;
   flex-direction: row;
 
-@media only screen and (max-width: 776px) {
-  width: 100%;
-   }
+  @media only screen and (max-width: 776px) {
+    width: 100%;
+  }
 `;
 export default Library;

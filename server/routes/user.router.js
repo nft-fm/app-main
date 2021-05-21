@@ -1,38 +1,51 @@
-const express = require('express')
-const router = express.Router()
-const BigNumber = require('bignumber.js')
-const multer = require('multer');
-const User = require('../schemas/User.schema')
+const express = require("express");
+const router = express.Router();
+const BigNumber = require("bignumber.js");
+const multer = require("multer");
+const User = require("../schemas/User.schema");
 const Suggestion = require("../schemas/Suggestion.schema");
-const NftType = require('../schemas/NftType.schema');
-const { findLikes, getUserNfts  } = require('../web3/server-utils');
+const NftType = require("../schemas/NftType.schema");
+const { findLikes, getUserNfts } = require("../web3/server-utils");
 
-router.post('/get-account', async (req, res) => {
+router.post("/get-account", async (req, res) => {
   try {
-    console.log("get-account hit", req.body)
+    console.log("get-account hit", req.body);
     let user = await User.findOne({ address: req.body.address });
     if (!user) {
       user = new User({
         address: req.body.address,
-      })
+      });
       await user.save();
     }
-    let nfts = await getUserNfts(user.address)
-    console.log('THIS RIGHT HERE', nfts)
+    let nfts = await getUserNfts(user.address);
+    let usersNfts = await NftType.find({ nftId: { $in: nfts.nftIds } });
+    if (nfts) {
+      console.log(usersNfts);
+      user.nfts = [];
+      for (let i = 0; i < usersNfts.length; i++) {
+        user.nfts.push(usersNfts[i]._id);
+      }
+      user.save();
+    }
+    
     res.send(user);
   } catch (error) {
     console.log(error);
-    res.status(500).send("server error")
+    res.status(500).send("server error");
   }
-})
+});
 
-router.post('/update-account', async (req, res) => {
+router.post("/update-account", async (req, res) => {
   try {
-
-    let user = await User.findOneAndUpdate({ address: req.body.address },
-      { username: req.body.username, suburl: req.body.username.replace(/ /g, '').toLowerCase()
-        // email: req.body.email 
-      }, {new: true});
+    let user = await User.findOneAndUpdate(
+      { address: req.body.address },
+      {
+        username: req.body.username,
+        suburl: req.body.username.replace(/ /g, "").toLowerCase(),
+        // email: req.body.email
+      },
+      { new: true }
+    );
     res.send(user);
     // const pictureColor = req.body.pictureColor ? req.body.pictureColor : "#002450";
     // let s = { address: req.body.address, nickname: req.body.nickname, picture: req.body.picture, pictureColor }
@@ -46,33 +59,40 @@ router.post('/update-account', async (req, res) => {
     // res.send(user);
   } catch (error) {
     console.log(error);
-    res.sendStatus(500)
+    res.sendStatus(500);
   }
-})
+});
 
-router.post('/like-nft', async (req, res) => {
+router.post("/like-nft", async (req, res) => {
   try {
-    let nft = await NftType.findOne({_id: req.body.nft});
+    let nft = await NftType.findOne({ _id: req.body.nft });
     let likeCount = 0;
 
     let hasLiked = nft.likes.indexOf(req.body.address);
     if (hasLiked < 0) {
       nft.likes = [...nft.likes, req.body.address];
-    }
-    else {
+    } else {
       let likes = nft.likes;
       likes.splice(hasLiked, 1);
       nft.likes = likes;
     }
-    await NftType.updateOne({_id: req.body.nft}, {likes: nft.likes})
-      .then(() => {
-        res.send({nft: {...nft._doc, liked: hasLiked < 0, likes: [], likeCount: likeCount }});
-      })
+    await NftType.updateOne({ _id: req.body.nft }, { likes: nft.likes }).then(
+      () => {
+        res.send({
+          nft: {
+            ...nft._doc,
+            liked: hasLiked < 0,
+            likes: [],
+            likeCount: likeCount,
+          },
+        });
+      }
+    );
   } catch (error) {
     console.log(error);
-    res.sendStatus(500)
+    res.sendStatus(500);
   }
-})
+});
 
 //create iam user
 //check if folder for user exists, if not create one
@@ -80,46 +100,42 @@ router.post('/like-nft', async (req, res) => {
 router.post("/getNftFolder/:address", async (req, res) => {
   console.log(req.body);
   const address = req.params.address;
-  var AWS = require('aws-sdk');
-  AWS.config.region = 'us-west-2';
+  var AWS = require("aws-sdk");
+  AWS.config.region = "us-west-2";
   var s3Client = new AWS.S3();
   var checkForFolderParams = {
-    Bucket: 'nft-fm'
+    Bucket: "nft-fm",
   };
   var createFolderParams = {
-    Bucket: 'nft-fm',
+    Bucket: "nft-fm",
     Key: req.params.address,
-    ACL: 'public-read',
-    Body: 'body does not matter'
+    ACL: "public-read",
+    Body: "body does not matter",
   };
   const checkForFolder = () => {
     s3Client.listObjectsV2(checkForFolderParams, (err, found) => {
-      if (err)
-        console.log(err);
+      if (err) console.log(err);
       else {
-        const folderExists = found.Contents.find(folder => {
+        const folderExists = found.Contents.find((folder) => {
           return folder.Key == address;
-        })
-        if (folderExists)
-          return true
-        else
-          return false;
+        });
+        if (folderExists) return true;
+        else return false;
       }
-    })
-  }
+    });
+  };
 
   if (!checkForFolder())
     s3Client.upload(createFolderParams, function (err, data) {
       if (err) {
-        res.status(400).send("error creating folder: ", err)
+        res.status(400).send("error creating folder: ", err);
         console.log("Error creating the folder: ", err);
       } else {
         console.log("Successfully created a folder on S3");
-        res.status(200).send("created folder!")
+        res.status(200).send("created folder!");
       }
     });
-  else
-    res.status(200).send("user folder already exists!")
+  else res.status(200).send("user folder already exists!");
   // });
   // var fs = require('fs');
   // var path = require('path');
@@ -127,10 +143,9 @@ router.post("/getNftFolder/:address", async (req, res) => {
   // console.log("Server whoo-hoo")
   // // Load the AWS SDK for Node.js
   // var AWS = require('aws-sdk');
-  // // Set the region 
+  // // Set the region
   // AWS.config.loadFromPath(jsonPath);
   // AWS.config.update({ region: 'us-west-2' });
-
 
   // // // Create the IAM service object
   // var iam = new AWS.IAM({ apiVersion: '2010-05-08' });
@@ -174,7 +189,7 @@ router.post("/uploadNft/:address", async (req, res) => {
   // Upload file to specified bucket.
   const run = async () => {
     // Add the required 'Key' parameter using the 'path' module.
-    uploadParams.Key = address + '/' + path.basename(file);
+    uploadParams.Key = address + "/" + path.basename(file);
     console.log("uploadParams: ", uploadParams);
     try {
       const data = await s3.send(new PutObjectCommand(uploadParams));
@@ -182,13 +197,13 @@ router.post("/uploadNft/:address", async (req, res) => {
     } catch (err) {
       console.log("Error", err);
     }
-  }
+  };
   run();
-})
+});
 
-router.post('/uploadProfilePicS3', async (req, res) => {
-  var AWS = require('aws-sdk');
-  AWS.config.region = 'us-west-2';
+router.post("/uploadProfilePicS3", async (req, res) => {
+  var AWS = require("aws-sdk");
+  AWS.config.region = "us-west-2";
   const multerS3 = require("multer-s3");
   var s3Client = new AWS.S3();
 
@@ -208,36 +223,40 @@ router.post('/uploadProfilePicS3', async (req, res) => {
       key: function (req, file, cb) {
         cb(null, req.body.user + "/" + file.originalname);
       },
-    })
-  })
+    }),
+  });
   const singleUpload = upload.single("imageFile");
   singleUpload(req, res, function (err) {
     console.log("uploadImageS3: ", req.body);
     if (err instanceof multer.MulterError) {
-      console.log('uploadImageS3 multer', err)
-      return res.status(500).json(err)
+      console.log("uploadImageS3 multer", err);
+      return res.status(500).json(err);
     } else if (err) {
-      console.log('uploadImageS3', err)
-      return res.status(500).json(err)
+      console.log("uploadImageS3", err);
+      return res.status(500).json(err);
     }
-    User.findOneAndUpdate({address: req.body.user}, {profilePic: req.file.location})
-        .then(() => {
-          return res.status(200).send(req.file)
-        })
-  })
-})
+    User.findOneAndUpdate(
+      { address: req.body.user },
+      { profilePic: req.file.location }
+    ).then(() => {
+      return res.status(200).send(req.file);
+    });
+  });
+});
 
-
-router.post('/get-public-account', async (req, res) => {
+router.post("/get-public-account", async (req, res) => {
   try {
-    console.log('/get public account hit', req.body)
-    const getUser = await User.findOne({ suburl: req.body.suburl})
-    const getNfts = await NftType.find({address: getUser.address, isDraft: false})
-    if (getUser) res.status(200).send([getUser, findLikes(getNfts)])
-    else return res.status(500).send('No User Found')
+    console.log("/get public account hit", req.body);
+    const getUser = await User.findOne({ suburl: req.body.suburl });
+    const getNfts = await NftType.find({
+      address: getUser.address,
+      isDraft: false,
+    });
+    if (getUser) res.status(200).send([getUser, findLikes(getNfts)]);
+    else return res.status(500).send("No User Found");
   } catch (err) {
-    res.status(500).send(err)
+    res.status(500).send(err);
   }
-})
+});
 
-module.exports = router
+module.exports = router;

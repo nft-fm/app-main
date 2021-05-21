@@ -621,7 +621,7 @@ router.post("/purchase", async (req, res) => {
     }
     console.log("mid", user, nft);
 
-    user.nfts = [...user.nfts, { _id: nft._id }];
+    user.nfts.push({ nft: nft._id, quantity: 1 });
     await user.save();
     nft.numSold++;
     await nft.save();

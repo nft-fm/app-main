@@ -48,6 +48,9 @@ const UserSchema = new Schema({
     nft: {
       type: String
     },
+    quantity: {
+      type: Number
+    },
   },
   ],
 })

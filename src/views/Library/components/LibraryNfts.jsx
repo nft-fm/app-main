@@ -7,11 +7,15 @@ import loading from "../../../assets/img/loading.gif";
 
 import { usePlaylistConsumer } from "../../../contexts/Playlist";
 import { resolveContent } from "nodemailer/lib/shared";
+import { useAccountConsumer } from "../../../contexts/Account";
 
 const Library = ({ user }) => {
-  const [nfts, setNfts] = useState([]);
+  const {account} = useAccountConsumer();
+  const [nfts, setNfts] = useState();
   const [selectedNft, setSelectedNft] = useState();
   const { setNftsCallback, setIsPreview } = usePlaylistConsumer();
+  const [noNfts, setNoNfts] = useState(false);
+
   // const [isViewingLibrary, setIsViewingLibrary] = useState(true) //to default to library
   const formatNfts = (nftsData) => {
     const formattedNfts = nftsData.map((nft, index) => {
@@ -30,14 +34,13 @@ const Library = ({ user }) => {
     return formattedNfts;
   };
 
-  const [noNfts, setNoNfts] = useState(false);
-
   const getUserNfts = async () => {
-    setNfts([]);
+    console.log("gonna get them")
     axios.post("api/nft-type/get-user-nfts", user).then((res) => {
       console.log(res);
       if (res.data === "no nfts!") {
         setNoNfts(true);
+        setNfts([]);
       } else {
         console.log("this", res.data);
         setNfts(formatNfts(res.data));
@@ -48,18 +51,19 @@ const Library = ({ user }) => {
   };
 
   useEffect(() => {
-    getUserNfts();
+    if (user) {
+      getUserNfts();
+    }
   }, [user]);
 
   return (
     <Landing>
       <LaunchContainer>
         <StyledTitle>LIBRARY</StyledTitle> <ContainerOutline />
-        {nfts && nfts[0] ? (
+        {nfts && !noNfts ?
           <NftScroll> {nfts} </NftScroll>
-        ) : (
-          <img style={{ width: "40px" }} src={!noNfts ? loading : null} />
-        )}
+          : noNfts && account ?  <StyledTitle>It seems like you don't have any NFTs yet</StyledTitle>
+          : account ? <img style={{ width: "40px" }} src={loading} /> : <p></p>}
       </LaunchContainer>
     </Landing>
   );

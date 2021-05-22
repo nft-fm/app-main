@@ -414,8 +414,7 @@ const MusicPlayer = (props) => {
         </AudioProgressionSection>
         {isLoading ? 
         <LoadingContainer>
-
-          <Loading src={loading} />
+        <Loading src={loading} />
         </LoadingContainer>
              :
             <VolumeAndLoopControl filled={volume * 100}
@@ -427,7 +426,6 @@ const MusicPlayer = (props) => {
         {nft && <TrackInfo nft={nft}/>}
         </TrackInfoWrapper>
       <Exit onClick={props.exitPlayer}/>
-
     </Wrapper>
   )
 }
@@ -464,6 +462,10 @@ const AudioProgressionSection = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
+  flex: 1;
+  @media only screen and (max-width: 776px) {
+    display: none;
+  }
 `;
 
 const Loading = styled.img`
@@ -481,6 +483,9 @@ const TrackInfoWrapper = styled.div`
     display: flex;
     flex-direction: Row;
     color: white;
+    @media only screen and (max-width: 776px) {
+      margin-right: calc(-20% - 20px);
+  }
 `;
 
 

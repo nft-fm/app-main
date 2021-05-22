@@ -40,39 +40,53 @@ const BuyNftModal = ({
 
   const purchase = async (id) => {
     setIsLoading(true);
-    await buyNFT(
-      { nftID: id, amount: 1, saleId: nft.nftId, price: String(nft.price)  },
-      () => {
-        console.log("pending");
-      },
-      () => {
-        axios
-          .post("/api/nft-type/purchase", { id: id, address: account })
-          .then((res) => {
-            setTimeout(function () {
-              setIsLoading(false);
-              setIsBought(true);
-              getUser();
-            }, 1000);
-          })
-          .catch((err) => {
-            console.error(err.status, err.message, err.error);
-            Swal.fire(
-              `Error: ${err.response ? err.response.status : 404}`,
-              `${err.response ? err.response.data : "server error"}`,
-              "error"
-            );
-            setIsLoading(false);
-            console.log(err);
+    await getEthBalance(async (balance) => {
+      if (parseFloat(balance) >= nft.price) {
+        await buyNFT(
+          { nftID: id, amount: 1, saleId: nft.nftId, price: String(nft.price) },
+          () => {
+            console.log("pending");
+          },
+          () => {
+            axios
+              .post("/api/nft-type/purchase", { id: id, address: account })
+              .then((res) => {
+                setTimeout(function () {
+                  setIsLoading(false);
+                  setIsBought(true);
+                  getUser();
+                }, 1000);
+              })
+              .catch((err) => {
+                console.error(err.status, err.message, err.error);
+                Swal.fire(
+                  `Error: ${err.response ? err.response.status : 404}`,
+                  `${err.response ? err.response.data : "server error"}`,
+                  "error"
+                );
+                setIsLoading(false);
+                console.log(err);
+              });
+          }
+        ).catch((err) => {
+          console.log(err);
+          swal.fire({
+            icon: "error",
+            title: "Couldn't complete sale!",
+            text: "Please try again",
           });
+        });
+      } else {
+        setIsLoading(false);
+        swal.fire({
+          title: `Not Enough ETH`,
+          text: `in wallet address: ...${account.substring(
+            account.length - 4
+          )}`,
+          icon: "error",
+        });
+        return;
       }
-    ).catch((err) => {
-      console.log(err)
-      swal.fire({
-        icon: "error",
-        title: "Couldn't complete sale!",
-        text: "Please try again",
-      });
     });
   };
 
@@ -113,13 +127,12 @@ const BuyNftModal = ({
 
   const connectWallet = async () => {
     const newChainId = await window.ethereum.request({ method: "eth_chainId" });
-    if ((Number(newChainId) === 4)) {
+    if (Number(newChainId) === 4) {
       connect("injected");
     } else {
       swal.fire({
         title: "Wrong Chain",
-        text:
-          "You are on the wrong chain. Open MetaMask and select Rinkeby Test Network before connecting.",
+        text: "You are on the wrong chain. Open MetaMask and select Rinkeby Test Network before connecting.",
         icon: "warning",
       });
     }
@@ -131,7 +144,6 @@ const BuyNftModal = ({
       <Container onClick={(e) => stopProp(e)}>
         <StyledModal>
           <X onClick={(e) => hide(e)} />
-          <button onClick={() => getEthBalance()}>HERE</button>
           <CardTitle>
             <Logo src={logo} />
             Buy NFT
@@ -161,7 +173,7 @@ const BuyNftModal = ({
             </Side>
           </CardTop>
           <Image src={nft.imageUrl} alt="image" />
-          {!isBought && <PlaySongSnippet partialSong={partialSong}/>}
+          {!isBought && <PlaySongSnippet partialSong={partialSong} />}
           <InfoContainer>
             <TrackName>{nft.title}</TrackName>
             <Artist>{nft.artist}</Artist>

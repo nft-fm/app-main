@@ -12,7 +12,6 @@ const Listen = () => {
   return (
     <Switch>
       <BaseView>
-      <button onClick={() => getEthBalance()}>HERE</button>
         <Landing />
         <Divider />
         <DescriptionBoxContainer>

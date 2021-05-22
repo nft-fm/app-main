@@ -1,17 +1,20 @@
-import { Contract, utils, providers } from "ethers";
+import { Contract, utils, providers, BigNumber } from "ethers";
 import { NFTToken, FlatPriceSale, VinylAddress
 	// Auction
  } from "./constants"
 import NFTTokenABI from "./abi/NFTToken.abi.js";
 import FlatPriceSaleABI from "./abi/FlatPriceSale.abi.js";
 import VinylABI from "./abi/Vinyl.abi";
+// import BigNumber from "bignumber.js";
 
 
-export const getEthBalance = async (account) => {
+export const getEthBalance = async (callback) => {
 	let provider;
+	let walletAddress = window.ethereum.selectedAddress;
 	provider = new providers.Web3Provider(window.ethereum);
-	let balance = await provider.getBalance(account)
-	return balance
+	let balance = await provider.getBalance(walletAddress)
+	console.log('balance', utils.formatEther(balance._hex))
+	return callback(utils.formatEther(balance._hex))
 }
 
 

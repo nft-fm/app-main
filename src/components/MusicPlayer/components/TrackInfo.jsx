@@ -41,10 +41,10 @@ const Image = styled.img`
 const TrackInfoWrapper = styled.div`
     align-items: center;
     justify-content: center;
-    margin-left: 14px;
     display: flex;
     flex-direction: Row;
     color: white;
+    /* margin-bottom: 2px; */
 `;
 
 export default TrackInfo;

@@ -12,7 +12,7 @@ import IconMetamask from "../../assets/img/icons/metamask_icon.png";
 import loading from "../../assets/img/loading.gif";
 import Swal from "sweetalert2";
 import { usePlaylistConsumer } from "../../contexts/Playlist";
-import { buyNFT } from "../../web3/utils";
+import { buyNFT, getEthBalance } from "../../web3/utils";
 import swal from "sweetalert2";
 import PlaySongSnippet from "./Components/PlaySongSnippet";
 
@@ -131,6 +131,7 @@ const BuyNftModal = ({
       <Container onClick={(e) => stopProp(e)}>
         <StyledModal>
           <X onClick={(e) => hide(e)} />
+          <button onClick={() => getEthBalance()}>HERE</button>
           <CardTitle>
             <Logo src={logo} />
             Buy NFT

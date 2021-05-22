@@ -6,11 +6,13 @@ import Landing from "./Components/Landing";
 import Roadmap from "./Components/Roadmap";
 import { FAQ } from "./Components/FAQ/FAQ";
 import record from "../../assets/img/record_player_disk.png";
+import { getEthBalance } from "../../web3/utils";
 
 const Listen = () => {
   return (
     <Switch>
       <BaseView>
+      <button onClick={() => getEthBalance()}>HERE</button>
         <Landing />
         <Divider />
         <DescriptionBoxContainer>

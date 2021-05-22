@@ -16,7 +16,6 @@ export const Nav = () => {
     getVinylBalance((res) => Number(res.vinyl[0]) > 0 && setHasVinyl(res.vinyl[0]));
   }, [account]);
 
-  console.log("account, vinyl", account, hasVinyl);
 
   return (
     <StyledNav>

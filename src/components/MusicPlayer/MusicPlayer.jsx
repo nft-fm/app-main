@@ -488,10 +488,12 @@ const TrackInfoWrapper = styled.div`
 const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  width: 100vw;
-  height: 60px;
+  width: calc(100vw - 40px);
+  padding: 0 20px;
+  border-top: 1px solid ${props => props.theme.color.boxBorder};
+  height: 59px;
   background-color: ${props => props.theme.color.darkBlack};
 `;
 export default MusicPlayer;

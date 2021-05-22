@@ -93,6 +93,7 @@ const AudioControlSection = styled.div`
   align-items: flex-start;
   align-items: center;
   height: 100%;
+  margin-left: 10px;
 `;
 
 export default AudioControl;

@@ -6,7 +6,7 @@ const router = express.Router();
 const NftType = require("../schemas/NftType.schema");
 const multer = require("multer");
 const User = require("../schemas/User.schema");
-const { FlatPriceSale, Auction } = require("../web3/constants");
+const { MAIN_FlatPriceSale, TEST_FlatPriceSale } = require("../web3/constants");
 const { sign, getSetSale, findLikes } = require("../web3/server-utils");
 const { listenForMint } = require("../web3/mint-listener");
 const { ObjectId } = require("mongodb");
@@ -143,7 +143,7 @@ router.post("/finalize", async (req, res) => {
     let newData = req.body;
     console.log("newdata", newData);
     newData.isDraft = false;
-  
+    const FlatPriceSale = process.env.REACT_APP_IS_MAINNET ? MAIN_FlatPriceSale : TEST_FlatPriceSale;
     console.log("im here");
     let updateNFT = await NftType.findByIdAndUpdate(newData._id, newData);
     if (updateNFT) {
@@ -193,59 +193,59 @@ router.post("/finalize", async (req, res) => {
   }
 });
 
-router.post("/auction-finalize", async (req, res) => {
-  try {
-    let newData = req.body;
-    newData.isDraft = false;
+// router.post("/auction-finalize", async (req, res) => {
+//   try {
+//     let newData = req.body;
+//     newData.isDraft = false;
 
-    console.log("newData", newData);
-    let updateNFT = await NftType.findByIdAndUpdate(newData._id, newData);
-    if (updateNFT) {
-      const price = utils.parseUnits(newData.price);
-      const encodedArgs = utils.defaultAbiCoder.encode(
-        ["uint256", "uint256"],
-        [newData.endTime, newData.bidIncrementPercent]
-      ); // fee is hardcoded to 3% atm
-      const signature = sign(
-        [
-          "string",
-          "address",
-          "uint256",
-          "uint256",
-          "uint256",
-          "address",
-          "bytes",
-        ],
-        [
-          "NFTFM_mintAndStake",
-          newData.address,
-          1,
-          price,
-          BigNumber.from(newData.startTime),
-          Auction,
-          encodedArgs,
-        ]
-      );
-      listenForMint();
-      res.status(200).send({
-        ...signature,
-        amount: 1,
-        price: price,
-        address: newData.address,
-        startTime: newData.startTime,
-        saleAddress: Auction,
-        databaseID: newData._id,
-        encodedArgs: encodedArgs,
-      });
-    } else {
-      console.log("no nft");
-      res.status(500).json("error");
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("server error");
-  }
-});
+//     console.log("newData", newData);
+//     let updateNFT = await NftType.findByIdAndUpdate(newData._id, newData);
+//     if (updateNFT) {
+//       const price = utils.parseUnits(newData.price);
+//       const encodedArgs = utils.defaultAbiCoder.encode(
+//         ["uint256", "uint256"],
+//         [newData.endTime, newData.bidIncrementPercent]
+//       ); // fee is hardcoded to 3% atm
+//       const signature = sign(
+//         [
+//           "string",
+//           "address",
+//           "uint256",
+//           "uint256",
+//           "uint256",
+//           "address",
+//           "bytes",
+//         ],
+//         [
+//           "NFTFM_mintAndStake",
+//           newData.address,
+//           1,
+//           price,
+//           BigNumber.from(newData.startTime),
+//           Auction,
+//           encodedArgs,
+//         ]
+//       );
+//       listenForMint();
+//       res.status(200).send({
+//         ...signature,
+//         amount: 1,
+//         price: price,
+//         address: newData.address,
+//         startTime: newData.startTime,
+//         saleAddress: Auction,
+//         databaseID: newData._id,
+//         encodedArgs: encodedArgs,
+//       });
+//     } else {
+//       console.log("no nft");
+//       res.status(500).json("error");
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send("server error");
+//   }
+// });
 
 router.post("/get-one", async (req, res) => {
   try {

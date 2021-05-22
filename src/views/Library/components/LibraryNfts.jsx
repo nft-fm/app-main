@@ -3,6 +3,7 @@ import styled, { keyframes } from "styled-components";
 import axios from "axios";
 import LibraryCard from "../../../components/NftCards/LibraryCard";
 import ArtistCard from "../../../components/NftCards/ArtistCard";
+import loading from "../../../assets/img/loading.gif";
 
 import { usePlaylistConsumer } from "../../../contexts/Playlist";
 
@@ -46,7 +47,9 @@ const Library = ({ user }) => {
     <Landing>
       <LaunchContainer>
         <StyledTitle>LIBRARY</StyledTitle> <ContainerOutline />
-        <NftScroll> {nfts} </NftScroll>
+        {nfts && nfts[0] ? 
+        <NftScroll> {nfts} </NftScroll> : 
+        <img src={loading} />} 
       </LaunchContainer>
     </Landing>
   );
@@ -100,6 +103,10 @@ const LaunchContainer = styled.div`
   flex-direction: column;
   align-items: center;
   margin-bottom: 40px;
+
+  img {
+    width: 40px;
+  }
 `;
 
 const ContainerTitleLeft = styled.span`

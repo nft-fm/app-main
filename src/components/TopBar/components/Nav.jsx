@@ -13,9 +13,12 @@ export const Nav = () => {
   const [hasVinyl, setHasVinyl] = useState(false);
 
   useEffect(() => {
-    getVinylBalance((res) => Number(res.vinyl[0]) > 0 && setHasVinyl(res.vinyl[0]));
+    if (account) {
+      getVinylBalance(
+        (res) => Number(res.vinyl[0]) > 0 && setHasVinyl(res.vinyl[0])
+      );
+    }
   }, [account]);
-
 
   return (
     <StyledNav>

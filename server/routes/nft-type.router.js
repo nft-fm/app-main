@@ -272,13 +272,31 @@ router.post("/get-one", async (req, res) => {
   }
 });
 
+router.post("/getSnnipet", async (req, res) => {
+  try {
+    console.log("getting snnipet")
+    let nftType = await NftType.findOne({
+      // isFeatured: true,
+      nftId: req.body.nftId,
+      isDraft: false,
+      isMinted: true,
+    }, {snnipet: 1});
+
+    console.log("got it", nftType)
+    res.send(nftType);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("server error");
+  }
+})
+
 router.post("/featured", async (req, res) => {
   try {
     let nftTypes = await NftType.find({
       // isFeatured: true,
       isDraft: false,
       isMinted: true,
-    }).limit(5);
+    }, {snnipet: 0}).limit(5);
 
     res.send(findLikes(nftTypes, req.body.address));
   } catch (error) {

@@ -123,12 +123,22 @@ router.post("/get-user-nfts", async (req, res) => {
   }
 });
 
+const toArrayBuffer = (buf) => {
+  let ab = new ArrayBuffer(buf.length);
+  let view = new Uint8Array(ab);
+  for (let i = 0; i < buf.length; i++) {
+    view[i] = buf[i];
+  }
+  return ab;
+}
+
 router.post("/finalize", async (req, res) => {
   try {
     let newData = req.body;
     console.log("newdata", newData);
     newData.isDraft = false;
-
+  
+    console.log("im here");
     let updateNFT = await NftType.findByIdAndUpdate(newData._id, newData);
     if (updateNFT) {
       const startTime = 0;
@@ -343,6 +353,7 @@ router.post("/uploadAudioS3", async (req, res) => {
 
   var s3Client = new AWS.S3();
 
+  console.log("HERE");
   const fileFilter = (req, file, cb) => {
     if (file.mimetype === "audio/mpeg") {
       cb(null, true);
@@ -372,10 +383,28 @@ router.post("/uploadAudioS3", async (req, res) => {
       console.log("singleUpload multer", err);
       return res.status(500).json(err);
     } else if (err) {
-      console.log("singleUpload", err);
+      console.log("singleUpload error", err);
       return res.status(500).json(err);
     }
-    return res.status(200).send("success");
+    console.log("file", req.file);
+    console.log("dur", req.body.dur);
+    const partialBytes = (req.file.size * 15) / req.body.dur;
+    console.log("partial bytes", partialBytes.toFixed(0));
+    const AWS = require("aws-sdk");
+    const s3 = new AWS.S3();
+    s3.getObject(
+      {
+        Bucket: "nftfm-music",
+        Key: req.file.key,
+        Range: "bytes=0-" + partialBytes.toFixed(0),
+      },
+      async (error, data) => {
+        if (error != null) {
+          console.log("Failed to retrieve an object: " + error);
+        } else {
+        return res.status(200).send(data);
+      }
+    });
   });
 });
 

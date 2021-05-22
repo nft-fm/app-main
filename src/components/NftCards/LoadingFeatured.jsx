@@ -9,16 +9,16 @@ const LoadingFeatured = () => {
   const LoadingFeatured = [
     <LoadingNftCard
     name="Lowkey"
-    arstist="Sol Rising"
+    artist="Sol Rising"
     img={sol}
     />,
     <LoadingNftCard 
-      name="Sex Kazoo 2"
+      name="Sex Kazoo"
       artist="The Polish Ambassador"
       img={sex}
     />,
     <LoadingNftCard 
-      name="TOUCH IDv2"
+      name="TOUCH ID"
       artist="Oshi"
       img={touch}
     />,
@@ -27,6 +27,7 @@ const LoadingFeatured = () => {
       artist="Oshi"
       img={here}
     />,
+
     <EmptySpace />,
   ];
 

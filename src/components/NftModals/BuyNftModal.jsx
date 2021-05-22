@@ -16,6 +16,7 @@ import { buyNFT, getEthBalance } from "../../web3/utils";
 import swal from "sweetalert2";
 import PlaySongSnippet from "./Components/PlaySongSnippet";
 
+
 const BuyNftModal = ({
   open,
   children,

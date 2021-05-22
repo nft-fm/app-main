@@ -1,6 +1,6 @@
 import React from "react";
 import EmptySpace from "./EmptySpace";
-import LoadingNftCard from "./LoadingNftCardPreFilled";
+import LoadingNftCard from "./LoadingNftCard";
 import sol from "../../assets/img/nftcovers/sol_rising.gif";
 import sex from "../../assets/img/nftcovers/sex_kazoo_updated.gif";
 import touch from "../../assets/img/nftcovers/touch_id_glitch.gif";

@@ -11,6 +11,9 @@ import { useAccountConsumer } from "../../contexts/Account";
 
 const NftCard = (props) => {
   const { usdPerEth, user, account } = useAccountConsumer();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isShareOpen, setIsShareOpen] = useState(false);
+
   return (
     <Container>
       <CardTop>
@@ -28,7 +31,7 @@ const NftCard = (props) => {
           <IconArea>
             ...
             <span style={{ margin: "0 1px" }}>/</span>
-            0
+            20
             <Cart />
           </IconArea>
         </Side>

@@ -4,12 +4,9 @@ const TEST_FlatPriceSale = "0x6b74AFa03BCe7EA12229708588f1701f97560784";
 const MAIN_NFTToken = "0x88d3e00ce938f1A591336131B859465b50D608B7";
 const MAIN_FlatPriceSale = "0xb46700fBE3C2ed36851A4ccFeAD109ceff32D40f";
 
-const isMain = process.env.REACT_APP_IS_MAINNET;
-
-const NFTToken = isMain ? MAIN_NFTToken : TEST_NFTToken;
-const FlatPriceSale = isMain ? MAIN_FlatPriceSale : TEST_FlatPriceSale;
-
 module.exports = {
-NFTToken,
-FlatPriceSale,
+TEST_NFTToken,
+TEST_FlatPriceSale,
+MAIN_NFTToken,
+MAIN_FlatPriceSale,
 }

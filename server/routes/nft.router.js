@@ -21,7 +21,7 @@ router.get('/:id', async (req, res) => {
       ]
       const data = {
         name: nft.artist + " - " + nft.title,
-        description: "An audio NFT from nftfm.io!",
+        description: `This is an NFT from ${nft.artist}. The owner of this NFT can listen to this exclusive full length song at nftfm.io`,
         image: nft.imageUrl,
         attributes
       };

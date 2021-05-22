@@ -1,11 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 import { useAccountConsumer } from "../../../contexts/Account";
+import { useWallet } from "use-wallet";
+import { getVinylBalance } from "../../../web3/utils";
 
 export const Nav = () => {
   const { user } = useAccountConsumer();
+
+  const { account, connect } = useWallet();
+  const [hasVinyl, setHasVinyl] = useState(false);
+
+  useEffect(() => {
+    getVinylBalance((res) => Number(res.vinyl[0]) > 0 && setHasVinyl(res.vinyl[0]));
+  }, [account]);
+
+  console.log("account, vinyl", account, hasVinyl);
+
   return (
     <StyledNav>
       <StyledLink exact tab="home" activeClassName="active" to="/">
@@ -17,6 +29,16 @@ export const Nav = () => {
       <StyledLink exact tab="library" activeClassName="active" to="/library">
         Library
       </StyledLink>
+      {hasVinyl && (
+        <StyledLink
+          exact
+          tab="community"
+          activeClassName="active"
+          to="/community"
+        >
+          Community
+        </StyledLink>
+      )}
       {user?.isArtist && (
         <StyledLink exact tab="profile" activeClassName="active" to="/profile">
           Profile

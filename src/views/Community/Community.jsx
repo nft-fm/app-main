@@ -6,10 +6,9 @@ import swal from "sweetalert2";
 import { useWallet } from "use-wallet";
 import useModal from "../../hooks/useModal";
 import isMobile from "../../utils/isMobile";
-import { require } from "../../web3/utils";
+import { require, getVinylBalance } from "../../web3/utils";
 import { BaseView } from "../../components/Page/BaseView";
 import RulesModal from "./RulesModal";
-// import { StockVoting } from "./StockVoting";
 import Suggestion from "./Suggestion";
 
 const Community = () => {
@@ -21,6 +20,7 @@ const Community = () => {
   const [userAlreadySuggested, setUserAlreadySuggested] = useState(false);
   const [presentRulesModal] = useModal(<RulesModal />);
   const { account, connect } = useWallet();
+  const [hasVinyl, setHasVinyl] = useState(false);
 
   const fetchSuggestions = useCallback(() => {
     axios
@@ -43,6 +43,7 @@ const Community = () => {
   useEffect(() => {
     if (account) {
       fetchSuggestions();
+      getVinylBalance((res) => Number(res.vinyl[0]) > 0 && setHasVinyl(true));
     }
   }, [page, sort, account, fetchSuggestions]);
 
@@ -92,12 +93,37 @@ const Community = () => {
     setPage(0);
   };
 
-  if (!account) {
+  const getConnectedFam = async () => {
+    connect("injected");
+    await getVinylBalance(
+      (res) => Number(res.vinyl[0]) > 0 && setHasVinyl(true)
+    );
+  };
+
+  if (account && !hasVinyl) {
     return (
       <BaseView>
         <ApproveContainer>
-          <ApproveButton onClick={() => connect("injected")}>
-            Connect Wallet
+          <ApproveText>
+            No $VINYL detected in your account ending in:{" "}
+            {account.substring(account.length - 4)}
+          </ApproveText>
+          {/* <ApproveButton onClick={() => getConnectedFam()}>
+            I own $VINYL, Connect Me!
+          </ApproveButton> */}
+        </ApproveContainer>
+      </BaseView>
+    );
+  }
+  if (!account || !hasVinyl) {
+    return (
+      <BaseView>
+        <ApproveContainer>
+          <ApproveText>
+            NFT FM Community is only available to $VINYL Holders.
+          </ApproveText>
+          <ApproveButton onClick={() => getConnectedFam()}>
+            I own $VINYL, Connect Me!
           </ApproveButton>
         </ApproveContainer>
       </BaseView>
@@ -106,8 +132,6 @@ const Community = () => {
   return (
     <BaseView>
       <Container>
-        {/* <StockVoting /> */}
-
         <GovContainer>
           <ComicTitle>
             Community
@@ -146,7 +170,7 @@ const Community = () => {
               <InputWrapper>
                 <Input
                   maxlength="200"
-                  placeholder="What would you like to see on StockSwap?"
+                  placeholder="What would you like to see on NFT FM?"
                   value={newSuggestion}
                   onChange={(e) => handleChange(e)}
                 />
@@ -200,8 +224,8 @@ const Community = () => {
           )}
           <Pagination>
             <ReactPaginate
-              previousLabel={"◄"}
-              nextLabel={"►"}
+              previousLabel={"←"}
+              nextLabel={"→"}
               breakLabel={"..."}
               pageCount={totalPages}
               marginPagesDisplayed={1}
@@ -219,16 +243,22 @@ const Community = () => {
   );
 };
 
+const ApproveText = styled.span`
+  margin-bottom: 10px;
+  font-size: ${(props) => props.theme.fontSizes.md};
+  text-align: center;
+`;
+
 const ApproveButton = styled.button`
   width: 100%;
   padding: 10px 0;
   /* border: 2px solid white; */
   border: none;
-  border-radius: 8px;
+  border-radius: ${(props) => props.theme.borderRadius}px;
   font-size: 16px;
   transition: all 0.2s linear;
   &:hover {
-    background-color: #444;
+    background-color: ${(props) => props.theme.color.blue};
     color: white;
     cursor: pointer;
   }
@@ -236,14 +266,15 @@ const ApproveButton = styled.button`
 
 const ApproveContainer = styled.div`
   max-width: 80vw;
-  border: 2px solid rgba(256, 256, 256, 0.5);
-  border-radius: 2px;
-  background-color: rgba(256, 256, 256, 0.2);
+  border: 2px solid ${(props) => props.theme.color.boxBorder};
+  border-radius: ${(props) => props.theme.borderRadius}px;
+  background-color: ${(props) => props.theme.color.box};
   color: white;
-  width: 400px;
+  width: 600px;
   padding: 10px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: center;
   justify-content: space-between;
   margin: auto;
 `;
@@ -264,7 +295,7 @@ const InputWrapper = styled.div`
   position: relative;
   @media only screen and (max-width: 991px) {
     /* height: 100px; */
-    width: 100%;
+    /* width: 100%; */
     margin-right: 0px;
     margin-bottom: 10px;
   }
@@ -287,17 +318,28 @@ const Button = styled.button`
   }
 `;
 
-const ComicTitle = styled.div`
-  position: absolute;
-  padding: 5px 10px;
-  font-weight: normal;
-  font-size: 30px;
-  letter-spacing: 1px;
-  border-bottom: 2px solid white;
-  font-weight: normal;
-  top: 10px;
-  z-index: 50;
-`;
+const ComicTitle = !isMobile()
+  ? styled.div`
+      position: absolute;
+      padding: 5px 10px;
+      font-weight: normal;
+      font-size: 30px;
+      letter-spacing: 1px;
+      border-bottom: 2px solid white;
+      font-weight: normal;
+      top: 10px;
+      z-index: 50;
+    `
+  : styled.div`
+      padding: 5px 10px;
+      font-weight: normal;
+      font-size: 30px;
+      letter-spacing: 1px;
+      border-bottom: 2px solid white;
+      font-weight: normal;
+      margin-bottom: 10px;
+      z-index: 50;
+    `;
 
 const GovContainer = styled.div`
   display: flex;
@@ -334,8 +376,8 @@ const SuggestionContainer = styled.div`
   margin-bottom: 20px;
   position: relative;
   @media only screen and (max-width: 991px) {
-    margin-top: 90px;
-    margin-bottom: -2px;
+    /* margin-top: 90px;
+    margin-bottom: -2px; */
   }
 `;
 
@@ -348,6 +390,7 @@ const Pagination = styled.div`
 
 const Option = !isMobile()
   ? styled.div`
+      font-family: "Compita";
       font-size: 16px;
       font-stretch: normal;
       font-style: normal;
@@ -362,6 +405,7 @@ const Option = !isMobile()
       }
     `
   : styled.div`
+      font-family: "Compita";
       font-size: 16px;
       font-stretch: normal;
       font-style: normal;
@@ -376,7 +420,7 @@ const Option = !isMobile()
     `;
 
 const CharLimit = styled.div`
-  font-family: "Nunito";
+  font-family: "Compita";
   font-size: 14px;
   font-stretch: normal;
   font-style: normal;
@@ -407,6 +451,10 @@ const Input = styled.textarea`
   ::placeholder {
     color: rgba(256, 256, 256, 0.4);
   }
+  @media only screen and (max-width: 991px) {
+    width: calc(100% - 40px);
+    /* flex-wrap: wrap; */
+  }
 `;
 
 const Form = styled.form`
@@ -417,7 +465,8 @@ const Form = styled.form`
   width: calc(100% - 40px);
   position: relative;
   @media only screen and (max-width: 991px) {
-    flex-wrap: wrap;
+    flex-direction: column;
+    /* flex-wrap: wrap; */
   }
 `;
 
@@ -451,8 +500,11 @@ const Sorting = styled.div`
 `;
 
 const Container = styled.div`
-  width: 1000px;
-  margin: auto;
+  /* width: 1000px; */
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10vh;
   max-width: 100vw;
   display: flex;
   flex-direction: column;

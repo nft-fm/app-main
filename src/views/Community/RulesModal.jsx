@@ -7,7 +7,7 @@ import ModalTitle from "../../components/ModalTitle";
 const BetRulesModal = () => {
   return (
     <Modalmd>
-      <Container>
+      <Container onKeyDown={() => console.log('booj')}>
         <Image src={logo} alt="logo" />
         <Space />
         <ModalTitle text="Help suggest what we should do next!" />

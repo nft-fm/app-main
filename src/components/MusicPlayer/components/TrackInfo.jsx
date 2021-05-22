@@ -32,12 +32,10 @@ const TitleAndArtistSection = styled.div`
 `;
 
 const Image = styled.img`
-  width: 41px;
-  height: 41px;
-  border-radius: 5px;
-  & path {
-    stroke: ${props => props.theme.color.lightgray};
-  }
+    width: 52px;
+    height: 52px;
+    border-radius: 3px;
+    object-fit: cover;
 `;
 
 const TrackInfoWrapper = styled.div`

@@ -21,7 +21,7 @@ const ChangeChainModal = ({ onDismiss }) => {
         <CloseModal onDismiss={onDismiss} />
         <Content>
           <ModalTitle>Change Network</ModalTitle>
-          <b>To be able to access our pages you need to be on Rinkeby Testnet</b>
+          <b>To be able to access our pages you need to be on Ethereum Mainnet</b>
           <b>Please Switch Networks</b>
           <LoadIcon src={Loading}/>
         </Content>

@@ -15,6 +15,7 @@ import Profile from "./views/Profile";
 import Artist from "./views/Artist";
 import Community from "./views/Community"
 import Error404 from "./views/404";
+import TokenSale from "./views/TokenSale";
 import TermsOfService from "./views/FooterLinks/TermsOfService"
 import PrivacyPolicy from "./views/FooterLinks/PrivacyPolicy"
 import { AccountProvider } from "./contexts/Account";
@@ -49,6 +50,9 @@ const App = () => {
             </Route>
             <Route path="/artist">
               <Artist />
+            </Route>
+            <Route path="/privatesale">
+              <TokenSale />
             </Route>
             {/* <Route path="/discover">
               <Discover />

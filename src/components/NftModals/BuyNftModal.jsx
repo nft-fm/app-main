@@ -176,6 +176,7 @@ const BuyNftModal = ({
           </CardTop>
           <Image src={nft.imageUrl} alt="image" />
           {!isBought && <PlaySongSnippet partialSong={partialSong} />}
+          <SnippetText>15 Sec Preview</SnippetText>
           <InfoContainer>
             <TrackName>{nft.title}</TrackName>
             <Artist>{nft.artist}</Artist>
@@ -257,6 +258,13 @@ const BuyNftModal = ({
     </OpaqueFilter>
   );
 };
+
+const SnippetText = styled.span`
+/* position: absolute; */
+font-size: ${props => props.theme.fontSizes.xxs};
+margin-top: -5px;
+margin-bottom: 10px
+`
 
 const Loading = styled.img`
   width: 40px;

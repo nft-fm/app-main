@@ -144,7 +144,9 @@ router.post("/finalize", async (req, res) => {
       const startTime = 0;
       // const price = BigNumber.from(newData.price.mul(constants.WeiPerEther));
       const price = utils.parseUnits(newData.price);
+      console.log("shit");
       const encodedFee = utils.defaultAbiCoder.encode(["uint32"], [3]); // fee is hardcoded to 3% atm
+      console.log("hit");
       const signature = sign(
         [
           "string",
@@ -165,6 +167,7 @@ router.post("/finalize", async (req, res) => {
           encodedFee,
         ]
       );
+      console.log("it");
       res.status(200).send({
         ...signature,
         amount: newData.numMinted,

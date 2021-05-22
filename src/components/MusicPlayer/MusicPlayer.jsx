@@ -451,6 +451,7 @@ const Counter = styled.div`
 `;
 
 const AudioProgressionSection = styled.div`
+  width: calc(50vw);
   display: flex;
   flex-direction: row;
   align-items: center;

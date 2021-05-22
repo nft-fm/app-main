@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Page from "./Page";
 
 export const BaseView = (props) => {
+
   return (
     <StyledCanvas>
       <Page>{props.children}</Page>

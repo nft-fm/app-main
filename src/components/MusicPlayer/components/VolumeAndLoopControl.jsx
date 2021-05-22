@@ -108,7 +108,7 @@ const Toogle = styled.div`
   position: absolute;
   width: 25px;
   height: 7px;
-  background-color: ${props => props.theme.color.lightgray};
+  background-color: ${props => props.theme.color.blue};
   border-radius: 5px;
   left: -7px;
   bottom: calc(${props => props.top + "%"} - 4px);

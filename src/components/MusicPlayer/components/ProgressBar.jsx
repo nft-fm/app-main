@@ -129,7 +129,7 @@ const FillBar = styled.div`
 const ProgressBar = styled.div`
   position: relative;
   height: 2px;
-  width: 760px;
+  width: 100%;
   border-radius: 50px;
   background-color: ${props => props.theme.color.lightgray};
 `;

@@ -7,8 +7,8 @@ import styled from "styled-components";
 import logo from "../../assets/img/logos/logo_nav.png";
 import { NavLink } from "react-router-dom";
 
-export const Footer = () => (
-  <StyledFooter>
+export const Footer = ({ isOpen }) => (
+  <StyledFooter isOpen={isOpen}>
     <Column>
       {/* <Row> */}
 

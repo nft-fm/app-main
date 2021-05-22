@@ -88,9 +88,11 @@ const Icon = styled.img`
 `;
 
 const AudioControlSection = styled.div`
+  width: 10vw;
+  min-width: 140px;
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;
   align-items: center;
   height: 100%;
 `;

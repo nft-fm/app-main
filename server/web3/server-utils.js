@@ -7,7 +7,7 @@ const {
   getDefaultProvider,
 } = require("ethers");
 var difUtils = require("ethers").utils;
-const { NFTToken, FlatPriceSale } = require("./constants");
+const { TEST_NFTToken, MAIN_NFTToken, TEST_FlatPriceSale, MAIN_FlatPriceSale } = require("./constants");
 const FlatPriceSaleABI = require("./abi/FlatPriceSale.abi");
 const NFTTokenABI = require("./abi/NFTToken.abi");
 const NFTType = require("../schemas/NftType.schema");
@@ -44,6 +44,7 @@ const sign = (types, values) => {
 const getSetSale = async (nftId, callback) => {
   let provider = new providers.WebSocketProvider(process.env.WSS_PROVIDER_URL);
   let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
+  const FlatPriceSale = process.env.REACT_APP_IS_MAINNET ? MAIN_FlatPriceSale : TEST_FlatPriceSale;
   const contract = new Contract(
     FlatPriceSale,
     FlatPriceSaleABI,
@@ -88,6 +89,7 @@ const findLikes = (nfts, account) => {
 const getUserNfts = async (account) => {
   let provider = new providers.WebSocketProvider(process.env.WSS_PROVIDER_URL);
   let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
+	const NFTToken = process.env.REACT_APP_IS_MAINNET ? MAIN_NFTToken : TEST_NFTToken;
   const contract = new Contract(NFTToken, NFTTokenABI, walletWithProvider);
 
   let userBalance = [];

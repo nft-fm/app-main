@@ -77,7 +77,7 @@ const Providers = ({ children }) => {
     <ThemeProvider theme={theme}>
       {/* change the ChainId below here for the preffered network when testing, 1 main 3 ropsten 42 kovan */}
       <UseWalletProvider
-        chainId={4}
+        chainId={ process.env.REACT_APP_IS_MAINNET ? 1 : 4}
         connectors={{
           walletconnect: { rpcUrl: "https://mainnet.eth.aragon.network/" },
         }}

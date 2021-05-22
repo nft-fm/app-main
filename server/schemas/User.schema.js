@@ -26,7 +26,7 @@ const UserSchema = new Schema({
   },
   isArtist: {
     type: Boolean,
-    default: true,
+    default: false,
   },
   profilePic: {
     type: String,

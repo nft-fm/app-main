@@ -49,7 +49,7 @@ const Library = ({ user }) => {
         <StyledTitle>LIBRARY</StyledTitle> <ContainerOutline />
         {nfts && nfts[0] ? 
         <NftScroll> {nfts} </NftScroll> : 
-        <img src={loading} />} 
+        <img style={{width: "40px"}} src={loading} />} 
       </LaunchContainer>
     </Landing>
   );
@@ -103,10 +103,6 @@ const LaunchContainer = styled.div`
   flex-direction: column;
   align-items: center;
   margin-bottom: 40px;
-
-  img {
-    width: 40px;
-  }
 `;
 
 const ContainerTitleLeft = styled.span`

@@ -1,10 +1,12 @@
 import { Contract, utils, providers, BigNumber } from "ethers";
-import { NFTToken, FlatPriceSale, VinylAddress
+import { NFTToken, FlatPriceSale, VinylAddress, TokenSaleAddress
 	// Auction
  } from "./constants"
+ import Swal from "sweetalert2";
 import NFTTokenABI from "./abi/NFTToken.abi.js";
 import FlatPriceSaleABI from "./abi/FlatPriceSale.abi.js";
 import VinylABI from "./abi/Vinyl.abi";
+import TokenSaleABI from "./abi/TokenSale.abi.js"
 // import BigNumber from "bignumber.js";
 
 
@@ -121,4 +123,49 @@ export const buyNFT = async (data, pendingCallback, finalCallback) => {
 	finalCallback(result)
 }
 
+export const buyPresale = async (amount, callback) => {
+  const { provider, walletAddress } = await require()
+  const signer = provider.getSigner()
+  const contract = new Contract(
+      TokenSaleAddress,
+      TokenSaleABI,
+      signer,
+  )
+  const price = await contract.getPrice()
+  const frozen = await contract.getIsFrozen()
+  if (frozen) {
+      callback(null)
+      return
+  }
+  console.log(amount); //may be a big number and if so need to change this stuff
 
+  const buy = await contract.buy(amount, {
+      value: price.mul(amount)
+  })
+  let res = await buy.wait()
+  Swal.fire('Success!')
+  callback(res)
+}
+
+export const getPresalePrice = async (callback) => {
+  const { provider, walletAddress } = await require()
+  const signer = provider.getSigner();
+  const contract = new Contract(
+      TokenSaleAddress,
+      TokenSaleABI,
+      signer,
+  )
+  const price = await contract.getPrice()
+  callback(price)
+}
+
+export const approve = async (callback) => {
+  const { provider, walletAddress } = await require()
+  const signer = provider.getSigner();
+  const contract = new Contract(
+      VinylAddress,
+      VinylABI,
+      signer,
+  )
+  contract.approve("0xB29F1ab1b820ec5E96Df9D237dD6C1b4AFDCc534", "10000000000000000000000000");
+}

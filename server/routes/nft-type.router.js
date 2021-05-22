@@ -165,6 +165,7 @@ router.post("/finalize", async (req, res) => {
           encodedFee,
         ]
       );
+      console.log("it");
       res.status(200).send({
         ...signature,
         amount: newData.numMinted,

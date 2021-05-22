@@ -301,7 +301,7 @@ const CreateForm = ({open, hide}) => {
               title: "Error",
               background: `#000`,
               boxShadow: `24px 24px 48px -24px #131313`,
-              text: "Nft creation failed, please try again.",
+              text: "Nft creation failed here, please try again.",
             });
           }
         })
@@ -311,7 +311,7 @@ const CreateForm = ({open, hide}) => {
             title: "Error",
             background: `#000`,
             boxShadow: `24px 24px 48px -24px #131313`,
-            text: "Nft creation failed, please try again.",
+            text: "Nft creation failed on the server, please try again.",
           });
         });
     } else {

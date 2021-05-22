@@ -35,7 +35,8 @@ const SMShareModal = ({
   const stopProp = (e) => {
     e.stopPropagation();
   };
-  const url = `https://www.nftfm.io/${nft.nftId}`;
+  const trackNameforUrl = nft.title.split(' ').join('_')
+  const url = `https://www.nftfm.io/${trackNameforUrl}`;
   const message = `Check out this amazing NFT of ${nft.artist}'s song, ${nft.title}!\nAvailable only at: `;
 
   const newShare = () => {

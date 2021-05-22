@@ -1,5 +1,7 @@
 import { Contract, utils, providers } from "ethers";
-import { NFTToken, FlatPriceSale, Auction } from "./constants"
+import { NFTToken, FlatPriceSale, 
+	// Auction
+ } from "./constants"
 import NFTTokenABI from "./abi/NFTToken.abi.js";
 import FlatPriceSaleABI from "./abi/FlatPriceSale.abi.js";
 
@@ -67,19 +69,19 @@ export const mintNFT = async (data, pendingCallback, finalCallback) => {
 	finalCallback(result)
 }
 
-export const auctionNFT = async (data, pendingCallback, finalCallback) => {
-	const { provider, walletAddress } = await require()
-	const signer = provider.getSigner();
-	let contract = new Contract(NFTToken, NFTTokenABI, signer);
+// export const auctionNFT = async (data, pendingCallback, finalCallback) => {
+// 	const { provider, walletAddress } = await require()
+// 	const signer = provider.getSigner();
+// 	let contract = new Contract(NFTToken, NFTTokenABI, signer);
 
-	let result = await contract.mintAndStake(data.amount, data.price, data.startTime, Auction, data.encodedArgs, data.databaseID, parseInt(data.v), data.r, data.s)
-		.then(res => {
-			pendingCallback();
-			return res.wait();
-		})
+// 	let result = await contract.mintAndStake(data.amount, data.price, data.startTime, Auction, data.encodedArgs, data.databaseID, parseInt(data.v), data.r, data.s)
+// 		.then(res => {
+// 			pendingCallback();
+// 			return res.wait();
+// 		})
 
-	finalCallback(result)
-}
+// 	finalCallback(result)
+// }
 
 export const buyNFT = async (data, pendingCallback, finalCallback) => {
 	const { provider } = await require()

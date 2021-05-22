@@ -149,15 +149,6 @@ const NftCard = (props) => {
         onClick={() => setIsModalOpen(!isModalOpen)}
         onLoad={() => setImageLoaded(true)}
       />
-      {!imageLoaded && images[props.nft.nftId] &&
-      <Image
-        src={images[props.nft.nftId]}
-        style={imageLoaded ? {} : { display: "none" }}
-        alt="image"
-        onClick={() => setIsModalOpen(!isModalOpen)}
-        onLoad={() => setImageLoaded(true)}
-      />
-      }
 
       <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>
         {nft.title}

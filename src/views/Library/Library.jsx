@@ -11,13 +11,13 @@ const Profile = () => {
 
   const connectWallet = async () => {
     const newChainId = await window.ethereum.request({ method: "eth_chainId" });
-    if ((Number(newChainId) === 4)) {
+    if ((Number(newChainId) === process.env.REACT_APP_IS_MAINNET ? 1 : 4)) {
       connect("injected");
     } else {
       swal.fire({
         title: "Wrong Chain",
         text:
-          "You are on the wrong chain. Open MetaMask and select Rinkeby Test Network before connecting.",
+          "You are on the wrong chain. Please connect to Ethereum Mainnet.",
         icon: "warning",
       });
     }

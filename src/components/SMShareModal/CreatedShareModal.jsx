@@ -28,7 +28,7 @@ const SMShareModal = ({ open, children, hide, onClose, nft, updateShareCount }) 
   const stopProp = (e) => {
     e.stopPropagation();
   };
-  const url = `https://www.nftfm.io/discover/${nft._id}`;
+  const url = `https://www.nftfm.io/`;
   const message = `Check out my new NFT, ${nft.title}, available now on NFT FM!`
 
   const newShare = () => {

@@ -5,17 +5,19 @@ import styled from "styled-components";
 import swal from "sweetalert2";
 import { useWallet } from "use-wallet";
 import isMobile from "../../utils/isMobile";
-import { require } from "../../web3/utils";
+import { require, getVinylBalance } from "../../web3/utils";
 
 const Community = ({ fetchSuggestions, suggestions }) => {
   const [exploitPrevent, setExploitPrevent] = useState(false);
-  const [votes, setVotes] = useState(0);
+  const [votes, setVotes] = useState(1);
   const { account } = useWallet();
-
+  console.log('votes', votes)
   useEffect(() => {
-    // getBdtVotes((res) => setBdtVotes(res))
-    setVotes(1);
+    getVinylBalance((res) => Number(res.vinyl[0]) > 0 && setVotes(Number(res.vinyl[0])))
+    // setVotes(1);
   }, [account]);
+
+  console.log('votes', votes)
 
   const newStyledSuggestions = suggestions.map((suggestion, index) => {
     let votesColor = "white";
@@ -32,14 +34,6 @@ const Community = ({ fetchSuggestions, suggestions }) => {
         swal.fire({
           title: `Error`,
           text: `Wait to vote sdfjil.`,
-          icon: "error",
-        });
-        return;
-      }
-      if (1 <= 0) {
-        swal.fire({
-          title: `Error`,
-          text: `You must have BDT or ETH-BDT-LP staked in order to participate in governance. Please stake BDT on the stake page.`,
           icon: "error",
         });
         return;
@@ -98,9 +92,7 @@ const Community = ({ fetchSuggestions, suggestions }) => {
           <SingleTop>
             <SuggestionVotes>
               <SuggestedUserInfo>
-                {!isMobile()
-                  ? suggestion.address
-                  : suggestion.address.substring(0, 6) +
+                {suggestion.address.substring(0, 6) +
                     "..." +
                     suggestion.address.substring(suggestion.address.length - 4)}
               </SuggestedUserInfo>
@@ -126,6 +118,8 @@ const Community = ({ fetchSuggestions, suggestions }) => {
 const SuggestedUserInfo = styled.div`
   display: flex;
   align-items: center;
+  color: ${props => props.theme.color.lightgray};
+  font-family: "Compita";
 `;
 
 const SingleTop = styled.div`
@@ -136,7 +130,7 @@ const SingleTop = styled.div`
 `;
 
 const ColorVotes = styled.div`
-  font-family: "PlatNomor";
+font-family: "Compita";
   font-size: 14px;
   letter-spacing: 0.5px;
   font-stretch: normal;
@@ -148,7 +142,7 @@ const ColorVotes = styled.div`
 `;
 
 const SuggestionVotes = styled.div`
-  font-family: "PlatNomor";
+font-family: "Compita";
   font-size: 14px;
   letter-spacing: 0.5px;
   font-stretch: normal;
@@ -160,7 +154,7 @@ const SuggestionVotes = styled.div`
 `;
 
 const SuggestionText = styled.div`
-  font-family: "Nunito";
+font-family: "Compita";
   font-size: 16px;
   font-stretch: normal;
   text-align: left;
@@ -219,7 +213,7 @@ const SingleSuggestion = styled.div`
   display: flex;
   flex-direction: row;
   margin-bottom: 20px;
-  font-family: "Nunito";
+  font-family: "Compita";
   font-size: 16px;
   border: 2px solid rgba(256, 256, 256, 0.5);
   border-radius: 2px;

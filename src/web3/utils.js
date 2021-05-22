@@ -1,9 +1,10 @@
 import { Contract, utils, providers } from "ethers";
-import { NFTToken, FlatPriceSale, 
+import { NFTToken, FlatPriceSale, VinylAddress
 	// Auction
  } from "./constants"
 import NFTTokenABI from "./abi/NFTToken.abi.js";
 import FlatPriceSaleABI from "./abi/FlatPriceSale.abi.js";
+import VinylABI from "./abi/Vinyl.abi";
 
 
 export const require = async (statement, error) => {
@@ -82,6 +83,16 @@ export const mintNFT = async (data, pendingCallback, finalCallback) => {
 
 // 	finalCallback(result)
 // }
+export const getVinylBalance = async (callback) => {
+	const { provider, walletAddress } = await require();
+	const signer = provider.getSigner();
+	const vinylContract = new Contract(VinylAddress, VinylABI, signer);
+	const vinylBalance = vinylContract.balanceOf(walletAddress).then(r => (utils.formatEther(r)))
+  
+	Promise.all([vinylBalance]).then((res) => {
+	  callback({ vinyl: res });
+	});
+  };
 
 export const buyNFT = async (data, pendingCallback, finalCallback) => {
 	const { provider } = await require()

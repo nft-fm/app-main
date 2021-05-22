@@ -20,7 +20,7 @@ router.get('/:id', async (req, res) => {
         },
       ]
       const data = {
-        name: nft.title,
+        name: nft.artist + " - " + nft.title,
         description: "An audio NFT from nftfm.io!",
         image: nft.imageUrl,
         attributes

@@ -6,7 +6,8 @@ const User = require('../schemas/User.schema')
 const Suggestion = require("../schemas/Suggestion.schema");
 const NftType = require('../schemas/NftType.schema');
 const Web3 = require('web3');
-const web3 = new Web3(new Web3.providers.HttpProvider(process.env.PROVIDER_URL))
+// dispatch a different one for testnet?
+const web3 = new Web3(new Web3.providers.HttpProvider(process.env.MAIN_PROVIDER_URL))
 
 router.post('/suggestion', async (req, res) => {
   try {

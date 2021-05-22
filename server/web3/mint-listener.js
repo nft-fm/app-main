@@ -7,9 +7,10 @@ const NftType = require("../schemas/NftType.schema");
 
 const listenForMint = async () => {
 	console.log("ACTIVATE LISTEN FOR MINT")
-	let provider = new providers.WebSocketProvider(process.env.WSS_PROVIDER_URL);
-	let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
 	const NFTToken = process.env.REACT_APP_IS_MAINNET ? MAIN_NFTToken : TEST_NFTToken;
+	const PROVIDER_URL = process.env.REACT_APP_IS_MAINNET ? process.env.MAIN_PROVIDER_URL : RINKEBY_PROVIDER_URL;
+	let provider = new providers.WebSocketProvider(PROVIDER_URL);
+	let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
 	const contract = new Contract(NFTToken, NFTTokenABI, walletWithProvider);
 
 	contract.on("MintAndStake", async (data) => {

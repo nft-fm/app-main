@@ -42,9 +42,10 @@ const sign = (types, values) => {
 };
 
 const getSetSale = async (nftId, callback) => {
-  let provider = new providers.WebSocketProvider(process.env.WSS_PROVIDER_URL);
-  let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
+  const PROVIDER_URL = process.env.REACT_APP_IS_MAINNET ? process.env.MAIN_PROVIDER_URL : RINKEBY_PROVIDER_URL;
   const FlatPriceSale = process.env.REACT_APP_IS_MAINNET ? MAIN_FlatPriceSale : TEST_FlatPriceSale;
+  let provider = new providers.WebSocketProvider(PROVIDER_URL);
+  let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
   const contract = new Contract(
     FlatPriceSale,
     FlatPriceSaleABI,
@@ -87,9 +88,10 @@ const findLikes = (nfts, account) => {
 };
 
 const getUserNfts = async (account) => {
-  let provider = new providers.WebSocketProvider(process.env.WSS_PROVIDER_URL);
-  let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
+  const PROVIDER_URL = process.env.REACT_APP_IS_MAINNET ? process.env.MAIN_PROVIDER_URL : RINKEBY_PROVIDER_URL;
 	const NFTToken = process.env.REACT_APP_IS_MAINNET ? MAIN_NFTToken : TEST_NFTToken;
+  let provider = new providers.WebSocketProvider(PROVIDER_URL);
+  let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
   const contract = new Contract(NFTToken, NFTTokenABI, walletWithProvider);
 
   let userBalance = [];

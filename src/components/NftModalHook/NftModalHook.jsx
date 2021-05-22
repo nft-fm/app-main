@@ -431,6 +431,7 @@ const NftModalHook = ({
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+    color: ${props => props.theme.color.gray};
   `;
   
   const StyledModal = styled.div`

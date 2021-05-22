@@ -29,7 +29,7 @@ const SMShareModal = ({ open, children, hide, onClose, nft, updateShareCount }) 
     e.stopPropagation();
   };
   const url = `https://www.nftfm.io/`;
-  const message = `Check out my new NFT, ${nft.title}, available now on NFT FM!`
+  const message = `Check out my new NFT, ${nft.title}, available now on NFT FM!\nAvailable only at: `
 
   const newShare = () => {
     axios.post('/api/nft-type/newShare', nft);

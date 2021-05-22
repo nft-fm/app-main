@@ -10,30 +10,26 @@ import { ReactComponent as IconTwitter } from "../../../assets/img/icons/social_
 import { useAccountConsumer } from "../../../contexts/Account";
 import LoadingFeatured from "../../../components/NftCards/LoadingFeatured";
 import NftModalHook from "../../../components/NftModalHook";
-
+import ShareModal from "../../../components/SMShareModal/SMShareModal";
+import solPreload from "../../../components/NftCards/Lowkey.json";
+import sexPreload from "../../../components/NftCards/SexKazoo2.json";
+import touchPreload from "../../../components/NftCards/TOUCHIDv2.json";
+import herePreload from "../../../components/NftCards/hereforareason.json";
+const preloads = {
+  1: sexPreload,
+  2: touchPreload,
+  3: herePreload,
+  4: solPreload,
+};
 const Listen = () => {
   const { user, account } = useAccountConsumer();
   const [nfts, setNfts] = useState(<LoadingFeatured />);
+  const [hasNfts, setHasNfts] = useState(false);
 
   const [nftFromUrl, setNftFromUrl] = useState(null);
   const [isUrlModalOpen, setIsUrlModalOpen] = useState(false);
-  useEffect(() => {
-    if (window.location.pathname.length > 1) {
-      axios
-        .post("/api/nft-type/get-by-nftId", {
-          nftId: window.location.pathname.slice(1),
-          address: account,
-        })
-        .then((res) => {
-          console.log("res", res);
-          setNftFromUrl(res.data);
-          setIsUrlModalOpen(true);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, []);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [rawNftData, setRawNftData] = useState(null);
 
   const formatNfts = (nftsData) => {
     return nftsData.map((nft) => {
@@ -43,10 +39,13 @@ const Listen = () => {
 
   const getFeatured = () => {
     axios.post("/api/nft-type/featured", { address: account }).then((res) => {
+      setRawNftData(res.data);
       const formattedNfts = formatNfts(res.data);
       setTimeout(function () {
         formattedNfts.push(<FillerCard />);
         setNfts(formattedNfts);
+        setHasNfts(true);
+        setIsLoaded(true);
       }, 300);
     });
   };
@@ -59,29 +58,56 @@ const Listen = () => {
     getFeatured();
   }, [user]);
 
+  const [partialSong, setPartialSong] = useState(false);
+  const getFromPreload = (nftId) => {
+    const preload = preloads[nftId];
+    setPartialSong(preload);
+  };
+  useEffect(() => {
+    if (window.location.pathname.length > 1 && isLoaded) {
+      for (let i = 0; i < rawNftData.length; i++) {
+        console.log(rawNftData[i].nftId);
+        if (Number(window.location.pathname.slice(1)) === rawNftData[i].nftId) {
+          setNftFromUrl(rawNftData[i]);
+          setIsUrlModalOpen(true);
+          getFromPreload(rawNftData[i].nftId);
+        }
+      }
+    }
+  }, [isLoaded]);
+
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
+  const [isShareOpen, setIsShareOpen] = useState(false);
+  const [shareCount, setShareCount] = useState({count: 0 })
 
-  // useEffect(() => {
-  //   // setShareCount({ count: nftFromUrl.shareCount });
-  //   if (nftFromUrl) {
-  //   setLikeCount(nftFromUrl.likeCount);
-  //   setLiked(nftFromUrl.liked);
-
-  //   }
-  //   // getSnnipet(props.nft);
-  // }, [nftFromUrl]);
+  useEffect(() => {
+    if (nftFromUrl) {
+    setShareCount({ count: nftFromUrl.shareCount });
+      setLikeCount(nftFromUrl.likeCount);
+      setLiked(nftFromUrl.liked);
+    }
+    // getSnnipet(props.nft);
+  }, [nftFromUrl]);
   return (
     <Landing>
+      <ShareModal
+        open={isShareOpen}
+        hide={() => setIsShareOpen(!isShareOpen)}
+        updateShareCount={() => setShareCount({ count: shareCount.count + 1 })}
+        nft={nftFromUrl}
+      />
       {nftFromUrl && (
         <NftModalHook
           nft={nftFromUrl}
           open={isUrlModalOpen}
           hide={() => hide()}
-          // liked={liked}
-          // setLiked={setLiked}
-          // likeCount={likeCount}
-          // setLikeCount={setLikeCount}
+          partialSong={partialSong}
+          liked={liked}
+          setLiked={setLiked}
+          likeCount={likeCount}
+          setLikeCount={setLikeCount}
+          setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
         />
       )}
       <LandingTitle>

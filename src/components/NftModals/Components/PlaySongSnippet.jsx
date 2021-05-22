@@ -58,14 +58,12 @@ const PlaySongSnippet = (props) => {
     const abSong = toArrayBuffer(songFile);
     const _bufferSrc = audioContextRef.current.createBufferSource();
 
-    console.log("abSong", abSong);
     audioContextRef.current.decodeAudioData(abSong, async (_buffer) => {
       _bufferSrc.buffer = _buffer;
       _bufferSrc.connect(_gainNode);
       _bufferSrc.start(0);
 
       _bufferSrc.onended = (e) => {
-        console.log("song ended")
         prepareForReplay(_bufferSrc, _gainNode);
       }
 
@@ -92,7 +90,6 @@ const PlaySongSnippet = (props) => {
    }
   
   useEffect(() => {
-    console.log("partialSong", props.partialSong)
     if (props.partialSong && isLoading) {
       startSong(props.partialSong);
     }

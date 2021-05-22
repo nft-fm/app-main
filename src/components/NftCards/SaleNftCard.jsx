@@ -13,17 +13,29 @@ import ShareModal from "../SMShareModal/SMShareModal";
 import LikeShare from "./LikeShare";
 import { NavLink } from "react-router-dom";
 
+import solPreload from "./Lowkey.json";
+import sexPreload from "./SexKazoo2.json";
+import touchPreload from "./TOUCHIDv2.json";
+import herePreload from "./hereforareason.json";
+
 import sol from "../../assets/img/nftcovers/sol_rising.gif";
 import sex from "../../assets/img/nftcovers/sex_kazoo_updated.gif";
 import touch from "../../assets/img/nftcovers/touch_id_glitch.gif";
 import here from "../../assets/img/nftcovers/here_for_a_reason_glitch.gif";
 
+const preloads = {
+  1: sexPreload,
+  2: touchPreload,
+  3: herePreload,
+  4: solPreload
+}
+
 const images = {
-  4: sol,
   1: sex,
   2: touch,
   3: here,
-};
+  4: sol
+}
 
 const NftCard = (props) => {
   const { usdPerEth, user, account } = useAccountConsumer();
@@ -50,15 +62,8 @@ const NftCard = (props) => {
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const [partialSong, setPartialSong] = useState(false);
-  const [shareCount, setShareCount] = useState({ count: 0 });
-  const [isFromUrl, setIsFromUrl] = useState(false);
-  useEffect(() => {
-    console.log("props", props.openFromUrl);
-    if (props.openFromUrl) {
-      setIsModalOpen(true);
-      setIsFromUrl(true);
-    }
-  }, [props.openFromUrl]);
+  const [shareCount, setShareCount] = useState({count: 0 })
+  const [basicLoaded, setBasicLoaded] = useState(false);
 
   const show = () => setIsModalOpen(true);
   const hide = () => {
@@ -82,30 +87,62 @@ const NftCard = (props) => {
       });
   };
 
-  const getSnnipet = async (completeNft) => {
-    await axios
-      .post("/api/nft-type/getSnnipet", {
-        nftId: completeNft.nftId,
-        account: account,
-      })
-      .then((res) => {
-        console.log("got it", res.data.snnipet);
-        setPartialSong(res.data.snnipet);
-      });
+  const getFromPreload = (nftId) => {
+    const preload = preloads[nftId];
+    if (!preload) {
+      getNSeconds(props.nft);
+    } else {
+      setPartialSong(preload);
+    }
+
+  }
+
+  const saveData = (data, fileName) => {
+    const a = document.createElement("a");
+    document.body.appendChild(a);
+    a.style = "display: none";
+
+    const json = JSON.stringify(data),
+      blob = new Blob([json], {type: "octet/stream"}),
+      url = window.URL.createObjectURL(blob);
+    a.href = url;
+    a.download = fileName;
+    a.click();
+    window.URL.revokeObjectURL(url);
   };
 
-  useEffect(() => {
-    setNft({
-      ...props.nft,
+  /*const getSnnipet = async (completeNft) => {
+    console.log("going to get snnipets");
+    await axios
+    .post("/api/nft-type/getSnnipet", {
+      nftId: completeNft.nftId,
+      account: account
+    })
+    .then((res) => {
+      console.log("got it", res.data.snnipet)
+      const fileName = completeNft.title + ".json";
+
+      saveData(res.data, fileName);
+      setPartialSong(res.data.snnipet);
     });
-    setShareCount({ count: props.nft.shareCount });
-    setLikeCount(props.nft.likeCount);
-    setLiked(props.nft.liked);
-    getSnnipet(props.nft);
+  }*/
+
+  useEffect(() => {
+    if (props.nft) {
+      setNft({
+        ...props.nft,
+      });
+      setShareCount({count: props.nft.shareCount});
+      setLikeCount(props.nft.likeCount);
+      setLiked(props.nft.liked);
+      setBasicLoaded(true);
+      
+    }
   }, [props.nft, user]);
 
   useEffect(() => {
     if (isModalOpen && !partialSong) {
+      getFromPreload(props.nft.nftId)
       //setPartialSong(partialSong);
       //getNSeconds(props.nft);
     }

@@ -313,6 +313,7 @@ const MusicPlayer = (props) => {
       setCounter(time);
       bufferSrcRef.current = newBufferSrc;
       setStartTime(currentTime - time);
+      setIsPlaying(true);
    }
   }
 

@@ -21,7 +21,14 @@ import {
   FacebookIcon,
 } from "react-share";
 
-const SMShareModal = ({ open, children, hide, onClose, nft, updateShareCount }) => {
+const SMShareModal = ({
+  open,
+  children,
+  hide,
+  onClose,
+  nft,
+  updateShareCount,
+}) => {
   const { account, connect, usdPerEth } = useAccountConsumer();
 
   if (!open) return null;
@@ -32,10 +39,10 @@ const SMShareModal = ({ open, children, hide, onClose, nft, updateShareCount }) 
   const message = `Check out this amazing NFT of ${nft.artist}'s song, ${nft.title}!\nAvailable only at: `;
 
   const newShare = () => {
-    axios.post('/api/nft-type/newShare', nft);
-    updateShareCount()
+    axios.post("/api/nft-type/newShare", nft);
+    updateShareCount();
     hide();
-  }
+  };
 
   return (
     <OpaqueFilter onClick={(e) => hide()}>
@@ -46,13 +53,21 @@ const SMShareModal = ({ open, children, hide, onClose, nft, updateShareCount }) 
             Share {nft.title} by {nft.artist}!
           </span>
           <Buttons>
-            <TwitterShareButton title={message} url={url}>
+            <TwitterShareButton
+              title={message}
+              url={url}
+              hashtags={["NFTFM", "NFTs", "NFTCommunity", "NFTart", "nftmusic"]}
+            >
               <ButtonHolder onClick={() => newShare()}>
                 <TwitterIcon size={50} borderRadius={"10px"} />
                 <span>Twitter</span>
               </ButtonHolder>
             </TwitterShareButton>
-            <FacebookShareButton quote={message} url={url}>
+            <FacebookShareButton
+              quote={message}
+              url={url}
+              // hashtags={["NFTFM", "NFTs", "NFTCommunity", "NFTart", "nftmusic"]}
+            >
               <ButtonHolder onClick={() => newShare()}>
                 <FacebookIcon size={50} borderRadius={"10px"} />
                 <span>Facebook</span>

@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import axios from "axios";
-
 import loading from '../../assets/img/loading.gif';
 import ProgressBar from "./components/ProgressBar";
 import TrackInfo from "./components/TrackInfo";
 import AudioControl from "./components/AudioControl";
 import VolumeAndLoopControl from "./components/VolumeAndLoopControl";
 import Swal from "sweetalert2";
+import { ReactComponent as XIcon } from '../../assets/img/icons/x.svg'
 
 const MusicPlayer = (props) => {
   const { nft, setNextNft, setPrevNft } = props;
@@ -26,12 +26,12 @@ const MusicPlayer = (props) => {
 
   window.AudioContext = window.AudioContext || window.webkitAudioContext;
   /* Why so many refs you wonder? 
-    Well, those refs are necessary 'cause we're working with a lot of time sentive information.
+    Well, those refs are necessary 'cause we're working with a lot of time sensitive information.
     When we have a callback the information we can access from the hooks state is the one from the time
-    the function that calls It starts. Since we have many asyncronous opperations happening at the same time,
+    the function that calls It starts. Since we have many asyncronous opperations happening at the same time
     we need to make sure we have the most accurate reference to the information.
-    Besides hooks thats is another way to achive the same goal by updating the state with the currentState
-    this way can be found in the funtion prepareRemainingSong (currently in line 151, with the counter)
+    Thats is another way to achive the same goal by updating the state with the currentState
+    this way can be found in the funtion prepareRemainingSong (currently in line 180 with the counter)
   */
   const audioContextRef = useRef();
   const volumeRef = useRef();
@@ -63,7 +63,6 @@ const MusicPlayer = (props) => {
   }
 
   const startNewContext = async (songFile, startTime) => {
-    console.log("START NEW CONTEXT")
     if (bufferSrcRef.current) {
       bufferSrcRef.current.stop();
       bufferSrcRef.current.disconnect();
@@ -139,7 +138,6 @@ const MusicPlayer = (props) => {
     /*As It starts playing, fetch full song*/
     await axios.post("api/nft-type/getSong", { key: nft.address + "/" + nft.audioUrl.split('/').slice(-1)[0] })
           .then((fullFile) => {
-          console.log("GOT FULL SONG");
           prepareRemainingSong(fullFile, _bufferSrc);
           props.setCurrentBuffer(fullFile);
         }, (e) => {
@@ -154,9 +152,8 @@ const MusicPlayer = (props) => {
   }
 
   const startRemainingSong = (data) => {
-    console.log("CHECKING FOR REMAINING SONG", data);
     if (fullBufferSrc && fullBufferSrc.current) {
-      console.log("NEW SRC STARTS");
+      console.log("STARTING REMAINING SONG")
       let fullBuffer = fullBufferSrc.current;
       fullBuffer.connect(volumeRef.current);
       fullBuffer.start(0, data.currentTarget.buffer.duration);
@@ -170,8 +167,8 @@ const MusicPlayer = (props) => {
   }
 
   const prepareRemainingSong = async (songFile, partial) => {
+    console.log("PREPARE REMAINING SONG")
     const fullTime = partial.buffer.duration;
-    console.log("PREPARING NEW BUFFER")
     const abSong = toArrayBuffer(songFile.data.Body.data);
     const _bufferSrc = audioContextRef.current.createBufferSource();
     audioContextRef.current.decodeAudioData(abSong, async (_buffer) => {
@@ -187,12 +184,17 @@ const MusicPlayer = (props) => {
         _counter=currentState
         return currentState
       })
-      console.log("COUNTER", _counter);
+
+      let _isLoading;
+      setIsLoading(currentState=>{
+        _isLoading=currentState
+        return currentState
+      })
+
       /*Verify If audio already reached end of preloaded buffer
       Else the new buffer will only start by the event set in the partialBuffer*/
-      if (audioContextRef.current.state === 'suspended' ||
-          counter > fullTime) {
-        console.log("STARTING NEW BUFFER AFTER STOPPED")
+      if (_isLoading || _counter > fullTime) {
+        console.log("WILL START REMAINING SONG")
         /*If we got buffer right when the buffer stopped we need to protect It against trying to restart buffer*/
         partialBufferSrc.current.onended = () => {console.log("HAHA")}
         setSongFullyLoaded(true);
@@ -234,7 +236,7 @@ const MusicPlayer = (props) => {
   }
 
   const skipToFullBuffer = async (time) => {
-    console.log("SKIPPING TO FULL BUFFER")
+    console.log("skip to full buffer");
     const currentTime = partialBufferSrc.current.context.currentTime;
     /*Bellow, when we stop the buffer, we start the full buffer,
     because of that is necessary to stop and disconnect also the new one*/
@@ -242,7 +244,6 @@ const MusicPlayer = (props) => {
     partialBufferSrc.current.disconnect();
 
     if (fullBufferSrc && fullBufferSrc.current) {
-      console.log("GONNA SET FULL BUFFER")
       const _bufferSrc = audioContextRef.current.createBufferSource();
       _bufferSrc.buffer = fullBufferSrc.current.buffer;
       setSongFullyLoaded(true);
@@ -271,8 +272,6 @@ const MusicPlayer = (props) => {
    time = time < 0 ? 0 : time;
    time = time > dur ? dur : time;
 
-   console.log("time", time)
-   console.log("duration", bufferSrcRef.current.buffer.duration)
    /*Verify if already has full buffer not loaded yet*/
    if (fullBufferSrc && fullBufferSrc.current && !songFullyLoaded) {
       partialBufferSrc.current.onended = () => {console.log("HAHA")}
@@ -280,7 +279,6 @@ const MusicPlayer = (props) => {
     }
    else if (!fullBufferSrc.current && !songFullyLoaded &&
       time >= bufferSrcRef.current.buffer.duration) {
-      console.log("NOT FULLY LOADED")
       partialBufferSrc.current.stop();
       partialBufferSrc.current.disconnect();
       stopSong();
@@ -315,6 +313,7 @@ const MusicPlayer = (props) => {
       setCounter(time);
       bufferSrcRef.current = newBufferSrc;
       setStartTime(currentTime - time);
+      setIsPlaying(true);
    }
   }
 
@@ -415,7 +414,11 @@ const MusicPlayer = (props) => {
           {Duration()}
         </AudioProgressionSection>
         {isLoading ? 
-            <Loading src={loading} /> :
+        <LoadingContainer>
+
+          <Loading src={loading} />
+        </LoadingContainer>
+             :
             <VolumeAndLoopControl filled={volume * 100}
             setLoop={setIsLoop}
             isLoop={isLoop}
@@ -424,9 +427,28 @@ const MusicPlayer = (props) => {
         <TrackInfoWrapper>
         {nft && <TrackInfo nft={nft}/>}
         </TrackInfoWrapper>
+      <Exit onClick={props.exitPlayer}/>
+
     </Wrapper>
   )
 }
+
+const LoadingContainer = styled.div`
+width: 70px;
+display: flex;
+align-items: center;
+justify-content: center;
+`
+
+const Exit = styled(XIcon)`
+cursor: pointer;
+  width: 36px;
+  height: 36px;
+  margin-left: 24px;
+  & path {
+    fill: ${props => props.theme.color.lightgray} !important;
+  }
+`
 
 const Counter = styled.div`
   width: 60px;
@@ -466,10 +488,12 @@ const TrackInfoWrapper = styled.div`
 const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  width: 100vw;
-  height: 60px;
+  width: calc(100vw - 40px);
+  padding: 0 20px;
+  border-top: 1px solid ${props => props.theme.color.boxBorder};
+  height: 59px;
   background-color: ${props => props.theme.color.darkBlack};
 `;
 export default MusicPlayer;

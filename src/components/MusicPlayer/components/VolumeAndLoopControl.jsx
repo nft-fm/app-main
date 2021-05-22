@@ -106,11 +106,11 @@ const InvisibleBar = styled.div`
 
 const Toogle = styled.div`
   position: absolute;
-  width: 20px;
-  height: 10px;
+  width: 25px;
+  height: 7px;
   background-color: ${props => props.theme.color.lightgray};
   border-radius: 5px;
-  left: -4px;
+  left: -7px;
   bottom: calc(${props => props.top + "%"} - 4px);
 `;
 
@@ -122,7 +122,8 @@ const FillBar = styled.div`
   width: 100%;
   height: ${props => props.filled + "%"};
   border-radius: 50px;
-  background-color: ${props => props.theme.color.lightgray};
+  background-color: ${props => props.theme.color.blue};
+
 `;
 
 const ProgressBar = styled.div`
@@ -130,7 +131,7 @@ const ProgressBar = styled.div`
   height: 90%;
   width: 10px;
   border-radius: 50px;
-  background-color: ${props => props.theme.color.blue};
+  background-color: ${props => props.theme.color.lightgray};
 `;
 
 const SelectVolume = styled.div`
@@ -148,8 +149,8 @@ const SelectVolume = styled.div`
   justify-content: center;
 `;
 
-const Loop = styled(VolumeIcon)`
-  width: 20px;
+const Loop = styled(LoopIcon)`
+  width: 22px;
   cursor: pointer;
   & path {
     fill: ${props => props.isLoop ?  props.theme.color.blue : props.theme.color.lightgray};
@@ -157,7 +158,8 @@ const Loop = styled(VolumeIcon)`
 `;
 
 const Volume = styled(VolumeIcon)`
-  width: 20px;
+  width: 24px;
+  padding-bottom: 4px;
   cursor: pointer;
 `;
 
@@ -172,11 +174,11 @@ const VolumeControlSection = styled.div`
 
 const VolumeAndLoop = styled.div`
   position: relative;
-  width: 40px;
+  width: 70px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
 `;
 
 export default VolumeAndLoopControl;

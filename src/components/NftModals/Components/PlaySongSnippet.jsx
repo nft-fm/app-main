@@ -15,7 +15,6 @@ const PlaySongSnippet = (props) => {
   const { setNftCallback } = usePlaylistConsumer();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isFinished, setIsFinished] = useState(false);
 
   window.AudioContext = window.AudioContext || window.webkitAudioContext;
   const audioContextRef = useRef();
@@ -31,10 +30,8 @@ const PlaySongSnippet = (props) => {
   }
 
   const prepareForReplay = (bufferSrc, gain) => {
-    console.log("preparing for replay");
     bufferSrc.disconnect();
     if (audioContextRef.current.state !== "suspended") {
-      console.log("not suspended");
       /*Prepare song for possible replay (get It, set to zero and then pause)*/
       const zeroedBufferSrc = audioContextRef.current.createBufferSource();
       zeroedBufferSrc.buffer = bufferSrc.buffer;
@@ -61,6 +58,7 @@ const PlaySongSnippet = (props) => {
     const abSong = toArrayBuffer(songFile);
     const _bufferSrc = audioContextRef.current.createBufferSource();
 
+    console.log("abSong", abSong);
     audioContextRef.current.decodeAudioData(abSong, async (_buffer) => {
       _bufferSrc.buffer = _buffer;
       _bufferSrc.connect(_gainNode);
@@ -94,6 +92,7 @@ const PlaySongSnippet = (props) => {
    }
   
   useEffect(() => {
+    console.log("partialSong", props.partialSong)
     if (props.partialSong && isLoading) {
       startSong(props.partialSong);
     }

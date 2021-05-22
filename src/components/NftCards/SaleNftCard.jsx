@@ -72,8 +72,9 @@ const NftCard = (props) => {
   }, [props.nft, user]);
 
   useEffect(() => {
-    if (isOpen && isModalOpen && !partialSong) {
-      getNSeconds(props.nft);
+    if (isModalOpen && !partialSong) {
+      setPartialSong(props.nft.snnipet);
+      //getNSeconds(props.nft);
     }
   }, [isModalOpen]);
 

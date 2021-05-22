@@ -101,7 +101,7 @@ router.post("/get-user-nfts", async (req, res) => {
     //if user owns > 1 copy of the same nft, this whole chain of logic will get the same nft as many times as they own it
     console.log("here fnts", req.body.nfts)
     if (!req.body.nfts || !req.body.nfts.length) {
-      res.status(401).send("no nfts!");
+      res.send("no nfts!");
       return;
     } 
     for (nft of req.body.nfts) {

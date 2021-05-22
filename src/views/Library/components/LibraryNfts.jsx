@@ -6,6 +6,7 @@ import ArtistCard from "../../../components/NftCards/ArtistCard";
 import loading from "../../../assets/img/loading.gif";
 
 import { usePlaylistConsumer } from "../../../contexts/Playlist";
+import { resolveContent } from "nodemailer/lib/shared";
 
 const Library = ({ user }) => {
   const [nfts, setNfts] = useState([]);
@@ -21,7 +22,7 @@ const Library = ({ user }) => {
           index={index}
           selectNft={setSelectedNft}
         />
-      )
+      );
     });
     for (let i = 0; i < 5; i++) {
       formattedNfts.push(<FillerCard />);
@@ -29,27 +30,36 @@ const Library = ({ user }) => {
     return formattedNfts;
   };
 
+  const [noNfts, setNoNfts] = useState(false);
+
   const getUserNfts = async () => {
     setNfts([]);
     axios.post("api/nft-type/get-user-nfts", user).then((res) => {
-      console.log('this', res.data)
-      setNfts(formatNfts(res.data));
-      setNftsCallback(res.data);
-      setIsPreview(false);
+      console.log(res);
+      if (res.data === "no nfts!") {
+        setNoNfts(true);
+      } else {
+        console.log("this", res.data);
+        setNfts(formatNfts(res.data));
+        setNftsCallback(res.data);
+        setIsPreview(false);
+      }
     });
   };
 
   useEffect(() => {
-    getUserNfts()
+    getUserNfts();
   }, [user]);
 
   return (
     <Landing>
       <LaunchContainer>
         <StyledTitle>LIBRARY</StyledTitle> <ContainerOutline />
-        {nfts && nfts[0] ? 
-        <NftScroll> {nfts} </NftScroll> : 
-        <img style={{width: "40px"}} src={loading} />} 
+        {nfts && nfts[0] ? (
+          <NftScroll> {nfts} </NftScroll>
+        ) : (
+          <img style={{ width: "40px" }} src={!noNfts ? loading : null} />
+        )}
       </LaunchContainer>
     </Landing>
   );

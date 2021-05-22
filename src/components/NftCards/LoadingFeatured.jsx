@@ -8,7 +8,6 @@ const LoadingFeatured = () => {
     <LoadingNftCard />,
     <LoadingNftCard />,
     <LoadingNftCard />,
-    // <LoadingNftCard />,
     <EmptySpace />,
   ];
 

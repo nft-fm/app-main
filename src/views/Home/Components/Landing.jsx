@@ -12,13 +12,13 @@ import LoadingFeatured from "../../../components/NftCards/LoadingFeatured";
 
 const Listen = () => {
   const { user, account } = useAccountConsumer();
-  const [nfts, setNfts] = useState(<LoadingFeatured />)
+  const [nfts, setNfts] = useState(<LoadingFeatured />);
 
   const formatNfts = (nftsData) => {
     return nftsData.map((nft) => {
-      return (<NftCard nft={nft} />)
+      return <NftCard nft={nft} />;
     });
-  }
+  };
 
   const getFeatured = () => {
     axios.post("/api/nft-type/featured", { address: account }).then((res) => {
@@ -26,33 +26,36 @@ const Listen = () => {
       setTimeout(function () {
         formattedNfts.push(<FillerCard />);
         setNfts(formattedNfts);
-      }, 300)
-    })
-  }
+      }, 300);
+    });
+  };
 
   useEffect(() => {
     getFeatured();
-  }, [user])
+  }, [user]);
   return (
     <Landing>
       <LandingTitle>
         <Logo src={logo} />
-        <StyledTitle>
-          NFT FM
-        </StyledTitle>
-        <NftFmTagline>
-          Tune in to your favorite artists.
-        </NftFmTagline>
+        <StyledTitle>NFT FM</StyledTitle>
+        <NftFmTagline>Tune in to your favorite artists.</NftFmTagline>
       </LandingTitle>
       <LaunchContainer>
-
         <ContainerTitle>
           PROUD TO
           <ContainerTitleTextContainer>
-            <ContainerTitleText style={{ "color": "#20a4fc" }}>{`LAUNCH`}</ContainerTitleText>
-            <ContainerTitleText style={{ "color": "#fde404" }}>{`ALONGSIDE`}</ContainerTitleText>
-            <ContainerTitleText style={{ "color": "#68c12f" }}>{`AMAZING`}</ContainerTitleText>
-            <ContainerTitleText style={{ "color": "#fa423e" }}>{`ARTISTS`}</ContainerTitleText>
+            <ContainerTitleText
+              style={{ color: "#20a4fc" }}
+            >{`LAUNCH`}</ContainerTitleText>
+            <ContainerTitleText
+              style={{ color: "#fde404" }}
+            >{`ALONGSIDE`}</ContainerTitleText>
+            <ContainerTitleText
+              style={{ color: "#68c12f" }}
+            >{`AMAZING`}</ContainerTitleText>
+            <ContainerTitleText
+              style={{ color: "#fa423e" }}
+            >{`ARTISTS`}</ContainerTitleText>
           </ContainerTitleTextContainer>
         </ContainerTitle>
         <ContainerOutline />
@@ -62,11 +65,10 @@ const Listen = () => {
         <IconContainer
           href="https://t.me/joinchat/q6_q25NWr99kOGUx"
           target="_blank"
-          rel="noopener noreferrer">
+          rel="noopener noreferrer"
+        >
           <Telegram />
-          <IconText>
-            Telegram
-          </IconText>
+          <IconText>Telegram</IconText>
         </IconContainer>
         <IconContainer
           href="https://nft-fm.medium.com/"
@@ -74,117 +76,114 @@ const Listen = () => {
           rel="noopener noreferrer"
         >
           <Medium />
-          <IconText>
-            Medium
-          </IconText>
+          <IconText>Medium</IconText>
         </IconContainer>
         <IconContainer
           href="https://twitter.com/NFTFM_IO"
           target="_blank"
-          rel="noopener noreferrer">
+          rel="noopener noreferrer"
+        >
           <Twitter />
-          <IconText>
-            Twitter
-          </IconText>
+          <IconText>Twitter</IconText>
         </IconContainer>
-        {/* <IconContainer
+        <IconContainer
+          href="https://discord.gg/KsgkXNwY"
           target="_blank"
-          rel="noopener noreferrer">
+          rel="noopener noreferrer"
+        >
           <Discord />
-          <IconText>
-            Discord
-          </IconText>
-        </IconContainer> */}
+          <IconText>Discord</IconText>
+        </IconContainer>
       </SocialsBar>
-    </Landing >
+    </Landing>
   );
 };
 
 const ContainerTitleTextContainer = styled.div`
-@media only screen and (max-width: 776px) {
-  margin-top: 6px;
+  @media only screen and (max-width: 776px) {
+    margin-top: 6px;
   }
-`
+`;
 
 const FillerCard = styled.div`
-width: 226px;
-height: 0px;
-`
+  width: 226px;
+  height: 0px;
+`;
 
 const Discord = styled(IconDiscord)`
-margin-top: 1px;
-width: 19px;
-height: 19px;
-& path {
+  margin-top: 1px;
+  width: 19px;
+  height: 19px;
+  & path {
     transition: all 0.2s ease-in-out;
-     fill: ${props => props.theme.color.white};
-    }
-`
+    fill: ${(props) => props.theme.color.white};
+  }
+`;
 
 const Twitter = styled(IconTwitter)`
-margin-top: 1px;
-width: 17px;
-height: 17px;
-& path {
+  margin-top: 1px;
+  width: 17px;
+  height: 17px;
+  & path {
     transition: all 0.2s ease-in-out;
-     fill: ${props => props.theme.color.white};
-    }
-`
+    fill: ${(props) => props.theme.color.white};
+  }
+`;
 
 const Medium = styled(IconMedium)`
-margin-top: 1px;
+  margin-top: 1px;
 
-width: 21px;
-height: 21px;
-& path {
+  width: 21px;
+  height: 21px;
+  & path {
     transition: all 0.2s ease-in-out;
-     fill: ${props => props.theme.color.white};
-    }
-`
+    fill: ${(props) => props.theme.color.white};
+  }
+`;
 
 const Telegram = styled(IconTelegram)`
-width: 19px;
-height: 19px;
-margin-top: 1px;
-& path {
+  width: 19px;
+  height: 19px;
+  margin-top: 1px;
+  & path {
     transition: all 0.2s ease-in-out;
-     fill: ${props => props.theme.color.white};
-    }
-`
+    fill: ${(props) => props.theme.color.white};
+  }
+`;
 
 const IconText = styled.span`
-margin: 1px 0 0 12px;
-font-weight: 600;
-letter-spacing: 1px;
-`
+  margin: 1px 0 0 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+`;
 
 const ContainerTitleText = styled.span`
-padding-left: 6px;
-`
+  padding-left: 6px;
+`;
 
 const LandingTitle = styled.div`
-display: flex;
-flex-direction: column;
-justify-content: space-between;
-align-items: center;
-margin-bottom: 40px;
-`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+`;
 
 const Landing = styled.div`
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: space-around;
-/* height: calc(100vh - ${props => props.theme.topBarSize}px + 1px); */
-width: 100%;
-padding-top: 40px;
-color: white;
-  font-size: ${props => props.theme.fontSizes.xs};
-`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  /* height: calc(100vh - ${(props) => props.theme.topBarSize}px + 1px); */
+  width: 100%;
+  padding-top: 40px;
+  color: white;
+  font-size: ${(props) => props.theme.fontSizes.xs};
+`;
 
 const IconContainer = styled.a`
-text-decoration: none;
-margin: 0 8px;
+  text-decoration: none;
+  margin: 0 8px;
   align-items: center;
   border: solid #707070;
   height: 28px;
@@ -193,23 +192,22 @@ margin: 0 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: solid 1px ${props => props.theme.color.boxBorder};
+  border: solid 1px ${(props) => props.theme.color.boxBorder};
   border-radius: 18px;
-  background-color: ${props => props.theme.color.box};
+  background-color: ${(props) => props.theme.color.box};
   display: flex;
   flex-direction: row;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   &:hover {
-  background-color: ${props => props.theme.color.boxBorder};
-  border: solid 1px #383838;
+    background-color: ${(props) => props.theme.color.boxBorder};
+    border: solid 1px #383838;
   }
 `;
 
-
 const SocialsBar = styled.div`
   width: 100%;
-  position:relative;
+  position: relative;
   display: flex;
   justify-content: center;
   margin-bottom: 80px;
@@ -226,12 +224,12 @@ const SocialsBar = styled.div`
 `;
 
 const NftScroll = styled.div`
-justify-content: center;
-display: flex;
-flex-flow: row wrap;
-width: 100%;
-justify-content: space-between;
-@media only screen and (max-width: 776px) {
+  justify-content: center;
+  display: flex;
+  flex-flow: row wrap;
+  width: 100%;
+  justify-content: space-between;
+  @media only screen and (max-width: 776px) {
     flex-direction: column;
     width: 100%;
     align-items: center;
@@ -239,14 +237,14 @@ justify-content: space-between;
 `;
 
 const LaunchContainer = styled.div`
-  position:relative;
+  position: relative;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 40px;
-@media only screen and (min-width: 1500px) {
-  width: 976px;
+  @media only screen and (min-width: 1500px) {
+    width: 976px;
   }
 `;
 
@@ -257,9 +255,9 @@ const ContainerTitle = styled.span`
   top: -4px;
   padding: 0 12px;
   font: "Compita";
-  background-color: ${props => props.theme.bgColor};
-  font-size: ${props => props.theme.fontSizes.xs};
-  color: ${props => props.theme.color.gray};
+  background-color: ${(props) => props.theme.bgColor};
+  font-size: ${(props) => props.theme.fontSizes.xs};
+  color: ${(props) => props.theme.color.gray};
   display: flex;
   flex-direction: row;
   display: flex;
@@ -271,7 +269,7 @@ const ContainerTitle = styled.span`
     right: auto;
     margin-top: 20px;
     margin-bottom: 20px;
-    }
+  }
 `;
 const ContainerOutline = styled.div`
   border-radius: 24px 24px 0 0;
@@ -294,7 +292,7 @@ const Logo = styled.img`
 
 const StyledTitle = styled.div`
   font-family: "Compita";
-  font-size: ${props => props.theme.fontSizes.xl};
+  font-size: ${(props) => props.theme.fontSizes.xl};
   margin-bottom: 16px;
   font-weight: 600;
   letter-spacing: 3px;

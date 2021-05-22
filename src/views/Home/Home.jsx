@@ -24,7 +24,7 @@ const Listen = () => {
               alike. We aim to add legitimacy to both the Music and the Crypto
               industry by providing fans a way to directly support the artists
               they love. On NFT FM, artists have full control over how they
-              distribute their music. Over 90% of all purchases go directly to
+              distribute their music. Over 95% of all purchases go directly to
               the Musicians.
             </StyledParagraph>
           </DescriptionColumn>

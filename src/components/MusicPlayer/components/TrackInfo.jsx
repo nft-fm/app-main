@@ -32,21 +32,19 @@ const TitleAndArtistSection = styled.div`
 `;
 
 const Image = styled.img`
-  width: 41px;
-  height: 41px;
-  border-radius: 5px;
-  & path {
-    stroke: ${props => props.theme.color.lightgray};
-  }
+    width: 52px;
+    height: 52px;
+    border-radius: 3px;
+    object-fit: cover;
 `;
 
 const TrackInfoWrapper = styled.div`
     align-items: center;
     justify-content: center;
-    margin-left: 14px;
     display: flex;
     flex-direction: Row;
     color: white;
+    /* margin-bottom: 2px; */
 `;
 
 export default TrackInfo;

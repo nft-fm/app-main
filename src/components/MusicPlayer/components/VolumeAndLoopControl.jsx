@@ -150,7 +150,7 @@ const SelectVolume = styled.div`
 `;
 
 const Loop = styled(LoopIcon)`
-  width: 28px;
+  width: 22px;
   cursor: pointer;
   & path {
     fill: ${props => props.isLoop ?  props.theme.color.blue : props.theme.color.lightgray};
@@ -158,7 +158,7 @@ const Loop = styled(LoopIcon)`
 `;
 
 const Volume = styled(VolumeIcon)`
-  width: 35px;
+  width: 24px;
   padding-bottom: 4px;
   cursor: pointer;
 `;
@@ -178,7 +178,10 @@ const VolumeAndLoop = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
+  @media only screen and (max-width: 776px) {
+    display: none;
+  }
 `;
 
 export default VolumeAndLoopControl;

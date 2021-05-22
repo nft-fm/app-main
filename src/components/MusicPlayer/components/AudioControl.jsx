@@ -24,8 +24,8 @@ const AudioControl = (props) => {
 }
 
 const SkipForward = styled(NextIcon)`
-  width: 31px;
-  height: 31px;
+  width: 18px;
+  height: 18px;
   & path {
     fill: ${props => props.theme.color.lightgray};
   }
@@ -35,8 +35,8 @@ const SkipForward = styled(NextIcon)`
 `;
 
 const SkipBackward = styled(NextIcon)`
-  width: 31px;
-  height: 31px;
+  width: 18px;
+  height: 18px;
   transform: scaleX(-1);
   & path {
     fill: ${props => props.theme.color.lightgray};
@@ -62,8 +62,8 @@ transform: rotate(180deg);
 `;
 
 const Pause = styled(PauseIcon)`
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   margin: 0 4px;
   & path {
     fill: ${props => props.theme.color.lightgray};
@@ -71,8 +71,8 @@ const Pause = styled(PauseIcon)`
 `;
 
 const Play = styled(PlayIcon)`
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   margin: 0 4px;
   & path {
     fill: ${props => props.theme.color.lightgray};
@@ -95,6 +95,7 @@ const AudioControlSection = styled.div`
   align-items: center;
   align-items: center;
   height: 100%;
+  margin-left: 10px;
 `;
 
 export default AudioControl;

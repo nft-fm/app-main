@@ -62,6 +62,7 @@ router.post("/artist-nfts", async (req, res) => {
     let nfts = await NftType.find({
       address: req.body.address,
       isDraft: false,
+      isMinted: true,
     });
 
     res.send(findLikes(nfts, req.body.address));

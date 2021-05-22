@@ -415,7 +415,11 @@ const MusicPlayer = (props) => {
           {Duration()}
         </AudioProgressionSection>
         {isLoading ? 
-            <Loading src={loading} /> :
+        <LoadingContainer>
+
+          <Loading src={loading} />
+        </LoadingContainer>
+             :
             <VolumeAndLoopControl filled={volume * 100}
             setLoop={setIsLoop}
             isLoop={isLoop}
@@ -429,6 +433,13 @@ const MusicPlayer = (props) => {
     </Wrapper>
   )
 }
+
+const LoadingContainer = styled.div`
+width: 70px;
+display: flex;
+align-items: center;
+justify-content: center;
+`
 
 const Exit = styled(XIcon)`
 cursor: pointer;

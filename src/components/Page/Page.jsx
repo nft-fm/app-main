@@ -3,27 +3,36 @@ import styled from "styled-components";
 import { Footer } from "../Footer/Footer";
 import TopBar from "../TopBar";
 import { Nav } from "../TopBar/components/Nav";
+import { usePlaylistConsumer } from "../../contexts/Playlist";
 
-const Page = ({ children }) =>(
-  <StyledPage>
-    <Aesthetics>
-      <Aesthetics1 />
-      <Aesthetics2 />
-      <Aesthetics3 />
-      <Aesthetics4 />
-    </Aesthetics>
-    <TopBar />
-    <NavContainer>
-      <Nav />
-    </NavContainer>
-    <StyledMain>
-      {children}
-      <Push />
-    </StyledMain>
-    <Footer />
-  </StyledPage>
+const Page = ({ children }) => {
+  const { isOpen } = usePlaylistConsumer();
+  return (
+    <StyledPage>
+      <Aesthetics>
+        <Aesthetics1 />
+        <Aesthetics2 />
+        <Aesthetics3 />
+        <Aesthetics4 />
+      </Aesthetics>
+      <TopBar />
+      <NavContainer>
+        <Nav />
+      </NavContainer>
+      <StyledMain>
+        {children}
+        <Push />
+      </StyledMain>
+      <Footer />
+      {isOpen ? <Spacer/> : ''}
+    </StyledPage>
   )
-  
+}
+
+const Spacer = styled.div`
+  height: 60px;
+`
+
 
 const Aesthetics4 = styled.div`
 width: 100%;

@@ -139,6 +139,16 @@ export function usePlaylistConsumer() {
   return context;
 }
 
+const StyledFooter = styled.footer`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 120px;
+  background-color: ${(props) => props.theme.bgColor};
+`;
+
+
 
 const Wrapper = styled.div`
   position: -webkit-sticky; /* Safari */
@@ -146,6 +156,8 @@ const Wrapper = styled.div`
   width: 100vw;
   bottom: 0;
   animation: ${({ isOpen, animTime }) => isOpen ? `onSetNft ${animTime}s forwards` : `onCloseNft ${animTime}s forwards`};
+  
+  bottom: ${(props) => props.isOpen ? '120px': '0px'};
   @keyframes onSetNft {
     0% { bottom: -50px}
     100% {bottom: 0px}

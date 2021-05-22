@@ -65,9 +65,15 @@ const Listen = () => {
   };
   useEffect(() => {
     if (window.location.pathname.length > 1 && isLoaded) {
+      let nftTitle = ""
+      let trackUrl = window.location.pathname.split("/").pop()
+      if (trackUrl === "touch_id") nftTitle = "TOUCH ID"
+      if (trackUrl === "sex_kazoo") nftTitle = "Sex Kazoo"
+      if (trackUrl === "lowkey") nftTitle = "Lowkey"
+      if (trackUrl === "here_for_a_reason") nftTitle = "here for a reason"
       for (let i = 0; i < rawNftData.length; i++) {
         console.log(rawNftData[i].nftId);
-        if (Number(window.location.pathname.slice(1)) === rawNftData[i].nftId) {
+        if (nftTitle === rawNftData[i].title) {
           setNftFromUrl(rawNftData[i]);
           setIsUrlModalOpen(true);
           getFromPreload(rawNftData[i].nftId);

@@ -26,11 +26,11 @@ const MusicPlayer = (props) => {
 
   window.AudioContext = window.AudioContext || window.webkitAudioContext;
   /* Why so many refs you wonder? 
-    Well, those refs are necessary 'cause we're working with a lot of time sentive information.
+    Well, those refs are necessary 'cause we're working with a lot of time sensitive information.
     When we have a callback the information we can access from the hooks state is the one from the time
-    the function that calls It starts. Since we have many asyncronous opperations happening at the same time,
+    the function that calls It starts. Since we have many asyncronous opperations happening at the same time
     we need to make sure we have the most accurate reference to the information.
-    Besides hooks thats is another way to achive the same goal by updating the state with the currentState
+    Thats is another way to achive the same goal by updating the state with the currentState
     this way can be found in the funtion prepareRemainingSong (currently in line 180 with the counter)
   */
   const audioContextRef = useRef();
@@ -153,6 +153,7 @@ const MusicPlayer = (props) => {
 
   const startRemainingSong = (data) => {
     if (fullBufferSrc && fullBufferSrc.current) {
+      console.log("STARTING REMAINING SONG")
       let fullBuffer = fullBufferSrc.current;
       fullBuffer.connect(volumeRef.current);
       fullBuffer.start(0, data.currentTarget.buffer.duration);
@@ -166,6 +167,7 @@ const MusicPlayer = (props) => {
   }
 
   const prepareRemainingSong = async (songFile, partial) => {
+    console.log("PREPARE REMAINING SONG")
     const fullTime = partial.buffer.duration;
     const abSong = toArrayBuffer(songFile.data.Body.data);
     const _bufferSrc = audioContextRef.current.createBufferSource();
@@ -183,10 +185,16 @@ const MusicPlayer = (props) => {
         return currentState
       })
 
+      let _isLoading;
+      setIsLoading(currentState=>{
+        _isLoading=currentState
+        return currentState
+      })
+
       /*Verify If audio already reached end of preloaded buffer
       Else the new buffer will only start by the event set in the partialBuffer*/
-      if (audioContextRef.current.state === 'suspended' ||
-          counter > fullTime) {
+      if (_isLoading || _counter > fullTime) {
+        console.log("WILL START REMAINING SONG")
         /*If we got buffer right when the buffer stopped we need to protect It against trying to restart buffer*/
         partialBufferSrc.current.onended = () => {console.log("HAHA")}
         setSongFullyLoaded(true);
@@ -228,6 +236,7 @@ const MusicPlayer = (props) => {
   }
 
   const skipToFullBuffer = async (time) => {
+    console.log("skip to full buffer");
     const currentTime = partialBufferSrc.current.context.currentTime;
     /*Bellow, when we stop the buffer, we start the full buffer,
     because of that is necessary to stop and disconnect also the new one*/

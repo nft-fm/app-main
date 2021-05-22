@@ -35,7 +35,7 @@ export const Footer = ({ isOpen }) => (
           /> */}
       {/* </Row> */}
       <FooterLinks>
-        <EmailLink href="mailto:info@nftfm.com" target="_blank">Contact Us</EmailLink>
+        <EmailLink href="mailto:info@nftfm.io" target="_blank">Contact Us</EmailLink>
         <FooterLink to="/termsofservice">Terms of Service</FooterLink>
         <FooterLink to="/privacypolicy">Privacy Policy</FooterLink>
       </FooterLinks>

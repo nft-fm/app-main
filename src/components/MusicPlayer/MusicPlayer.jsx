@@ -223,7 +223,6 @@ const MusicPlayer = (props) => {
 
   const playSong = () => {
    if (audioContextRef.current.state === 'suspended' && audioContextRef.current) audioContextRef.current.resume();
-   else if (bufferSrcRef.current && bufferSrcRef.current.start) audioContextRef.current.start(0);
    setIsPlaying(true);
   }
 

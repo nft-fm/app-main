@@ -38,9 +38,10 @@ const NftCard = (props) => {
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const [partialSong, setPartialSong] = useState(false);
+  const [shareCount, setShareCount] = useState({count: 0 })
 
   const show = () => setIsModalOpen(true);
-  const hide = (e) => {
+  const hide = () => {
     setIsModalOpen(false);
   };
 
@@ -65,6 +66,7 @@ const NftCard = (props) => {
     setNft({
       ...props.nft,
     });
+    setShareCount({count: props.nft.shareCount});
     setLikeCount(props.nft.likeCount);
     setLiked(props.nft.liked);
   }, [props.nft, user]);
@@ -75,11 +77,13 @@ const NftCard = (props) => {
       //getNSeconds(props.nft);
     }
   }, [isModalOpen]);
+
   return (
     <Container>
       <ShareModal
         open={isShareOpen}
         hide={() => setIsShareOpen(!isShareOpen)}
+        updateShareCount={() => setShareCount({ count: shareCount.count + 1 })}
         nft={nft}
       />
       <BuyNftModal
@@ -101,6 +105,7 @@ const NftCard = (props) => {
           likeCount={likeCount}
           setLikeCount={setLikeCount}
           setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
+          shareCount={shareCount}
         />
         <Side>
           <IconArea>

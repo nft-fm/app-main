@@ -245,6 +245,9 @@ const LaunchContainer = styled.div`
   flex-direction: column;
   align-items: center;
   margin-bottom: 40px;
+@media only screen and (min-width: 1500px) {
+  width: 976px;
+  }
 `;
 
 const ContainerTitle = styled.span`

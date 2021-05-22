@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 
 const LikeShare = (props) => {
   const { account } = useAccountConsumer();
-  const { nft, liked, setLiked, likeCount, setLikeCount } = props;
+  const { nft, liked, setLiked, likeCount, setLikeCount, shareCount } = props;
   const like = async () => {
     if (account) {
       setLikeCount(liked ? likeCount - 1 : likeCount + 1);
@@ -27,7 +27,7 @@ const LikeShare = (props) => {
   const share = () => {
     props.setIsShareOpen();
   };
-
+  console.log('sharecount', shareCount)
   return (
     <Side>
       <IconArea>
@@ -40,7 +40,7 @@ const LikeShare = (props) => {
       </IconArea>
       <IconArea>
         <Share onClick={() => share()} />
-        {nft.shareCount}
+        {shareCount?.count ? shareCount.count : nft.shareCount}
       </IconArea>
     </Side>
   );

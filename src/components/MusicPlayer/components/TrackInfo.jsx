@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import styled from "styled-components";
+import { ReactComponent as XIcon } from '../../../assets/img/icons/x.svg'
+
 
 const TrackInfo = ({nft}) => {
   return (
@@ -12,6 +14,9 @@ const TrackInfo = ({nft}) => {
     </TrackInfoWrapper>
   )
 }
+
+
+
 const Artist = styled.div`
   color: #5c5c5c;
 `;

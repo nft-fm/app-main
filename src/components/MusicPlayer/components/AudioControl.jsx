@@ -62,9 +62,9 @@ transform: rotate(180deg);
 `;
 
 const Pause = styled(PauseIcon)`
-  width: 18px;
-  height: 18px;
-  margin: 0 13px;
+  width: 36px;
+  height: 36px;
+  margin: 0 4px;
   & path {
     fill: ${props => props.theme.color.lightgray};
   }

@@ -122,7 +122,7 @@ const FillBar = styled.div`
   left: 0;
   height: 100%;
   border-radius: 50px;
-  background-color: ${props => props.theme.color.lightgray};
+  background-color: ${props => props.theme.color.blue};
   width: ${props => props.width + "%"}
 `;
 
@@ -131,7 +131,7 @@ const ProgressBar = styled.div`
   height: 2px;
   width: 760px;
   border-radius: 50px;
-  background-color: ${props => props.theme.color.blue};
+  background-color: ${props => props.theme.color.lightgray};
 `;
 
 export default AudioProgressBar;

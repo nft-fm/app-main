@@ -11,6 +11,7 @@ import loading from "../../assets/img/loading.gif";
 import axios from "axios";
 import ShareModal from "../SMShareModal/SMShareModal";
 import LikeShare from "./LikeShare";
+import { NavLink } from "react-router-dom"
 
 const NftCard = (props) => {
   const { usdPerEth, user, account } = useAccountConsumer();
@@ -287,7 +288,7 @@ const TrackName = styled.span`
 //   text-decoration: none;
 //   /* cursor: pointer; */
 // `;
-const Artist = styled.span`
+const Artist = styled(NavLink)`
   font-size: ${(props) => props.theme.fontSizes.xxs}px;
   text-align: center;
   color: ${(props) => props.theme.gray};

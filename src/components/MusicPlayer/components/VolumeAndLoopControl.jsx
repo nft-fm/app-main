@@ -179,6 +179,9 @@ const VolumeAndLoop = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
+  @media only screen and (max-width: 776px) {
+    display: none;
+  }
 `;
 
 export default VolumeAndLoopControl;

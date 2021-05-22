@@ -1,5 +1,5 @@
-const TEST_NFTToken = "0x7Bc8AdC89C48be0Fad4694a4906D5B3aA2c5a98f";
-const TEST_FlatPriceSale = "0xFD2Ee06b74fD5577Cdb1554CcbA2D363CE0fa236";
+const TEST_NFTToken = "0x2c4EC4e60edf2352546C72Ba6ef1585DBA2AF4f9";
+const TEST_FlatPriceSale = "0x5B9B4a70Bc62eaE25D96FAc206d75E6CEf18B24d";
 
 const MAIN_NFTToken = "";
 const MAIN_FlatPriceSale = "";

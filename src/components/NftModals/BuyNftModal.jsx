@@ -78,9 +78,7 @@ const BuyNftModal = ({
 
   const playSong = () => {
     hide();
-    setTimeout(() => {
-      setNftCallback(nft);
-    }, 500);
+    setNftCallback(nft);
   };
 
   const like = async () => {

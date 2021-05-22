@@ -276,9 +276,9 @@ const CreateForm = ({open, hide}) => {
               },
               () => {
                 console.log("final");
-            setNftData(initialNftState);
-            setImageFile(null);
-            setAudioFile(null);
+                setNftData(initialNftState);
+                setImageFile(null);
+                setAudioFile(null);
                 setIsLoading(false);
                 swal.fire({
                   title: "NFT Minted!",
@@ -287,6 +287,7 @@ const CreateForm = ({open, hide}) => {
                 }).then(() => hide())
               }
             ).catch(err => {
+              setIsLoading(false);
               swal.fire({
                 icon: "error",
                 title: "Couldn't create NFT!",
@@ -322,8 +323,6 @@ const CreateForm = ({open, hide}) => {
         icon: "error",
       });
     }
-
-    setIsLoading(false);
   };
 
   useEffect(() => {

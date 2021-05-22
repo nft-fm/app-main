@@ -30,10 +30,8 @@ const PlaySongSnippet = (props) => {
   }
 
   const prepareForReplay = (bufferSrc, gain) => {
-    console.log("preparing for replay");
     bufferSrc.disconnect();
     if (audioContextRef.current.state !== "suspended") {
-      console.log("not suspended");
       /*Prepare song for possible replay (get It, set to zero and then pause)*/
       const zeroedBufferSrc = audioContextRef.current.createBufferSource();
       zeroedBufferSrc.buffer = bufferSrc.buffer;

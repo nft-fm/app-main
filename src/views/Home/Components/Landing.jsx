@@ -9,10 +9,31 @@ import { ReactComponent as IconTelegram } from "../../../assets/img/icons/social
 import { ReactComponent as IconTwitter } from "../../../assets/img/icons/social_twitter.svg";
 import { useAccountConsumer } from "../../../contexts/Account";
 import LoadingFeatured from "../../../components/NftCards/LoadingFeatured";
+import NftModalHook from "../../../components/NftModalHook";
 
 const Listen = () => {
   const { user, account } = useAccountConsumer();
   const [nfts, setNfts] = useState(<LoadingFeatured />);
+
+  const [nftFromUrl, setNftFromUrl] = useState(null);
+  const [isUrlModalOpen, setIsUrlModalOpen] = useState(false);
+  useEffect(() => {
+    if (window.location.pathname.length > 1) {
+      axios
+        .post("/api/nft-type/get-by-nftId", {
+          nftId: window.location.pathname.slice(1),
+          address: account,
+        })
+        .then((res) => {
+          console.log("res", res);
+          setNftFromUrl(res.data);
+          setIsUrlModalOpen(true);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, []);
 
   const formatNfts = (nftsData) => {
     return nftsData.map((nft) => {
@@ -30,11 +51,39 @@ const Listen = () => {
     });
   };
 
+  const hide = () => {
+    setIsUrlModalOpen(false);
+  };
+
   useEffect(() => {
     getFeatured();
   }, [user]);
+
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
+
+  // useEffect(() => {
+  //   // setShareCount({ count: nftFromUrl.shareCount });
+  //   if (nftFromUrl) {
+  //   setLikeCount(nftFromUrl.likeCount);
+  //   setLiked(nftFromUrl.liked);
+
+  //   }
+  //   // getSnnipet(props.nft);
+  // }, [nftFromUrl]);
   return (
     <Landing>
+      {nftFromUrl && (
+        <NftModalHook
+          nft={nftFromUrl}
+          open={isUrlModalOpen}
+          hide={() => hide()}
+          // liked={liked}
+          // setLiked={setLiked}
+          // likeCount={likeCount}
+          // setLikeCount={setLikeCount}
+        />
+      )}
       <LandingTitle>
         <Logo src={logo} />
         <StyledTitle>NFT FM</StyledTitle>

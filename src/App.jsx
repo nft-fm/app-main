@@ -39,9 +39,6 @@ const App = () => {
       <StyledCanvas>
         <Router>
           <Switch>
-            <Route path="/" exact>
-              <Listen />
-            </Route>
             <Route path="/library" exact>
               <Library />
             </Route>
@@ -65,6 +62,9 @@ const App = () => {
             </Route>
             <Route path="/privacypolicy">
               <PrivacyPolicy />
+            </Route>
+            <Route path="/" >
+              <Listen />
             </Route>
             <Route path="/*">
               <Error404 />

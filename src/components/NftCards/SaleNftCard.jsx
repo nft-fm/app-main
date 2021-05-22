@@ -11,7 +11,7 @@ import loading from "../../assets/img/loading.gif";
 import axios from "axios";
 import ShareModal from "../SMShareModal/SMShareModal";
 import LikeShare from "./LikeShare";
-import { NavLink } from "react-router-dom"
+import { NavLink } from "react-router-dom";
 
 import sol from "../../assets/img/nftcovers/sol_rising.gif";
 import sex from "../../assets/img/nftcovers/sex_kazoo_updated.gif";
@@ -22,8 +22,8 @@ const images = {
   4: sol,
   1: sex,
   2: touch,
-  3: here
-}
+  3: here,
+};
 
 const NftCard = (props) => {
   const { usdPerEth, user, account } = useAccountConsumer();
@@ -50,7 +50,15 @@ const NftCard = (props) => {
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const [partialSong, setPartialSong] = useState(false);
-  const [shareCount, setShareCount] = useState({count: 0 })
+  const [shareCount, setShareCount] = useState({ count: 0 });
+  const [isFromUrl, setIsFromUrl] = useState(false);
+  useEffect(() => {
+    console.log("props", props.openFromUrl);
+    if (props.openFromUrl) {
+      setIsModalOpen(true);
+      setIsFromUrl(true);
+    }
+  }, [props.openFromUrl]);
 
   const show = () => setIsModalOpen(true);
   const hide = () => {
@@ -76,21 +84,21 @@ const NftCard = (props) => {
 
   const getSnnipet = async (completeNft) => {
     await axios
-    .post("/api/nft-type/getSnnipet", {
-      nftId: completeNft.nftId,
-      account: account
-    })
-    .then((res) => {
-      console.log("got it", res.data.snnipet)
-      setPartialSong(res.data.snnipet);
-    });
-  }
+      .post("/api/nft-type/getSnnipet", {
+        nftId: completeNft.nftId,
+        account: account,
+      })
+      .then((res) => {
+        console.log("got it", res.data.snnipet);
+        setPartialSong(res.data.snnipet);
+      });
+  };
 
   useEffect(() => {
     setNft({
       ...props.nft,
     });
-    setShareCount({count: props.nft.shareCount});
+    setShareCount({ count: props.nft.shareCount });
     setLikeCount(props.nft.likeCount);
     setLiked(props.nft.liked);
     getSnnipet(props.nft);
@@ -110,6 +118,7 @@ const NftCard = (props) => {
         hide={() => setIsShareOpen(!isShareOpen)}
         updateShareCount={() => setShareCount({ count: shareCount.count + 1 })}
         nft={nft}
+        
       />
       <BuyNftModal
         open={isModalOpen}
@@ -122,7 +131,7 @@ const NftCard = (props) => {
         setLikeCount={setLikeCount}
         setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
       />
-      <CardTop>
+      <CardTop >
         <LikeShare
           nft={nft}
           liked={liked}
@@ -141,28 +150,42 @@ const NftCard = (props) => {
           </IconArea>
         </Side>
       </CardTop>
-      {imageLoaded ? null : <Image src={loading} alt="image" />}
-      <Image
-        src={nft.imageUrl}
-        style={imageLoaded ? {} : { display: "none" }}
-        alt="image"
-        onClick={() => setIsModalOpen(!isModalOpen)}
-        onLoad={() => setImageLoaded(true)}
-      />
-      {!imageLoaded && images[props.nft.nftId] &&
-      <Image
-        src={images[props.nft.nftId]}
-        style={imageLoaded ? {} : { display: "none" }}
-        alt="image"
-        onClick={() => setIsModalOpen(!isModalOpen)}
-        onLoad={() => setImageLoaded(true)}
-      />
-      }
+      {imageLoaded ? null : (
+        <Image
+          src={loading}
+          alt="image"
+          
+        />
+      )}
+        <Image
+          // 
+          src={nft.imageUrl}
+          style={imageLoaded ? {} : { display: "none" }}
+          alt="image"
+          onClick={() => setIsModalOpen(!isModalOpen)}
+          onLoad={() => setImageLoaded(true)}
+        />
+      {!imageLoaded && images[props.nft.nftId] && (
+        <Image
+          // 
+          src={images[props.nft.nftId]}
+          style={imageLoaded ? {} : { display: "none" }}
+          alt="image"
+          onClick={() => setIsModalOpen(!isModalOpen)}
+          onLoad={() => setImageLoaded(true)}
+        />
+      )}
 
-      <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>
+      <TrackName
+        onClick={() => setIsModalOpen(!isModalOpen)}
+        
+      >
         {nft.title}
       </TrackName>
-      <Artist to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}>
+      <Artist
+        to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}
+        
+      >
         {nft.artist}
       </Artist>
       <CostFields>

@@ -60,18 +60,46 @@ const CreateForm = ({open, hide}) => {
           // Create an instance of AudioContext
           let audioContext = new (window.AudioContext || window.webkitAudioContext)();
           
-          console.log(event.target.result);
           // Asynchronously decode audio file data contained in an ArrayBuffer.
           audioContext.decodeAudioData(event.target.result, function(buffer) {
               // Obtain the duration in seconds of the audio file (with milliseconds as well, a float value)
               let duration = buffer.duration;
               setNftData({...nftData, dur: duration});
-              console.log("The duration of the song is of: " + duration + " seconds");
+    
+              const audioFormData = new FormData();
+              audioFormData.append("artist", account);
+              audioFormData.append("audioFile", audioFile);
+              audioFormData.append("dur", duration);
+
+              axios
+              .post("api/nft-type/uploadAudioS3", audioFormData, {
+                headers: {
+                  "content-type": "multipart/form-data",
+                },
+              })
+              .then((res) => {
+                if (res.status === 200) {
+                  let _nftData;
+                  setNftData(currentState=>{
+                    _nftData=currentState
+                    return currentState
+                  })
+                  console.log("RES", res.data.Body.data)
+                  setNftData({..._nftData, dur: duration, snnipet: res.data.Body.data})
+                  setIsAudioUploaded(true);
+                }
+                console.log(res);
+              })
+              .catch((err) => {
+                console.log(err);
+                setAudioUploadError(true);
+              });
           });
         };
 
         reader.readAsArrayBuffer(file);
   }
+
   useEffect(() => {
     user && user.username && setNftData({ ...nftData, artist: user.username });
   }, [user]);
@@ -85,26 +113,7 @@ const CreateForm = ({open, hide}) => {
 
   useEffect(() => {
     if (audioFile) {
-      const audioFormData = new FormData();
-      audioFormData.append("artist", account);
-      audioFormData.append("audioFile", audioFile);
       getFileDur();
-      axios
-        .post("api/nft-type/uploadAudioS3", audioFormData, {
-          headers: {
-            "content-type": "multipart/form-data",
-          },
-        })
-        .then((res) => {
-          if (res.status === 200) {
-            setIsAudioUploaded(true);
-          }
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-          setAudioUploadError(true);
-        });
     }
   }, [audioFile]);
 
@@ -252,12 +261,12 @@ const CreateForm = ({open, hide}) => {
 
     //run these two, store the returns in the nftData state object
     if (!audioUploadError && !imageUploadError) {
+      setIsLoading(true);
       // after nftData has both audio and image references, run this route
       axios
         .post("/api/nft-type/finalize", newNftData)
         .then((res) => {
           console.log("finalize res", res);
-
           if (res.status === 200) {
             mintNFT(
               res.data,
@@ -267,9 +276,9 @@ const CreateForm = ({open, hide}) => {
               },
               () => {
                 console.log("final");
-            setNftData(initialNftState);
-            setImageFile(null);
-            setAudioFile(null);
+                setNftData(initialNftState);
+                setImageFile(null);
+                setAudioFile(null);
                 setIsLoading(false);
                 swal.fire({
                   title: "NFT Minted!",
@@ -278,6 +287,7 @@ const CreateForm = ({open, hide}) => {
                 }).then(() => hide())
               }
             ).catch(err => {
+              setIsLoading(false);
               swal.fire({
                 icon: "error",
                 title: "Couldn't create NFT!",
@@ -313,8 +323,6 @@ const CreateForm = ({open, hide}) => {
         icon: "error",
       });
     }
-
-    setIsLoading(false);
   };
 
   useEffect(() => {

@@ -46,6 +46,10 @@ const NftTypeSchema = new Schema({
     type: Number,
     required: true
   },
+  snnipet: {
+    type: Array,
+    default: []
+  },
   address: {
     type: String,
     required: true,

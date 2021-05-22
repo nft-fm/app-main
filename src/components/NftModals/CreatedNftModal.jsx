@@ -83,9 +83,9 @@ const BuyNftModal = ({
             </Side>
             <Side>
               <IconArea>
-                {nft.sold}
+                {nft.numSold}
                 <span style={{ margin: "0 1px" }}>/</span>
-                {nft.quantity}
+                {nft.numMinted}
                 <Cart />
               </IconArea>
             </Side>
@@ -103,13 +103,13 @@ const BuyNftModal = ({
               <TableRow>
                 <td>ETH</td>
                 <td><EthIcon
-                />{parseFloat(nft.sold * nft.price)}</td>
+                />{parseFloat(nft.numSold * nft.price)}</td>
               </TableRow>
               <TableRow>
                 <td>USD</td>
                 <td>
                   ${" "}
-                  {parseFloat(nft.sold * nft.price * usdPerEth).toLocaleString(
+                  {parseFloat(nft.numSold * nft.price * usdPerEth).toLocaleString(
                     undefined,
                     {
                       minimumFractionDigits: 2,

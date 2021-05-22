@@ -29,26 +29,28 @@ const SMShareModal = ({ open, children, hide, onClose, nft }) => {
     e.stopPropagation();
   };
   const url = `https://www.nftfm.io/discover/${nft._id}`;
-  const message = `Check out this amazing NFT of ${nft.artist}'s song, ${nft.title}`
+  const message = `Check out this amazing NFT of ${nft.artist}'s song, ${nft.title}`;
 
   return (
     <OpaqueFilter onClick={(e) => hide(e)}>
       <Container onClick={(e) => stopProp(e)}>
         <StyledModal>
           <X onClick={(e) => hide(e)} />
-          <span>Share {nft.title} by {nft.artist}!</span>
+          <span>
+            Share {nft.title} by {nft.artist}!
+          </span>
           <Buttons>
-            <TwitterShareButton
-              title={message}
-              url={url}
-            >
-              <TwitterIcon size={50} round={true} />
+            <TwitterShareButton title={message} url={url}>
+              <ButtonHolder>
+                <TwitterIcon size={50} borderRadius={"10px"} />
+                <span>Twitter</span>
+              </ButtonHolder>
             </TwitterShareButton>
-            <FacebookShareButton
-              quote={message}
-              url={url}
-            >
-              <FacebookIcon size={50} round={true} />
+            <FacebookShareButton quote={message} url={url}>
+              <ButtonHolder>
+                <FacebookIcon size={50} borderRadius={"10px"} />
+                <span>Facebook</span>
+              </ButtonHolder>
             </FacebookShareButton>
           </Buttons>
         </StyledModal>
@@ -57,11 +59,31 @@ const SMShareModal = ({ open, children, hide, onClose, nft }) => {
   );
 };
 
+const ButtonHolder = styled.div`
+  width: 50%;
+  background-color: ${(props) => props.theme.color.box};
+  border-radius: ${(props) => props.theme.borderRadius}px;
+  border: 1px solid ${(props) => props.theme.color.boxBorder};
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  padding: 5px;
+  /* padding: 5px 5px 0px 5px; */
+  & > span {
+    color: white;
+    font-size: ${(props) => props.theme.fontSizes.sm};
+    margin-left: 10px;
+  }
+`;
+
 const Buttons = styled.div`
-width: 60%;
-display: flex;
-justify-content: space-evenly;
-`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 250px;
+`;
 
 const X = styled(IconX)`
   position: absolute;
@@ -94,7 +116,7 @@ const Container = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
-  height: 200px;
+  /* height: 200px; */
   /* width: 400px; */
   position: fixed;
   left: 50%;
@@ -117,7 +139,7 @@ const StyledModal = styled.div`
   justify-content: space-evenly;
   position: relative;
   & > span {
-      font-size: ${props => props.theme.fontSizes.md}
+    font-size: ${(props) => props.theme.fontSizes.md};
   }
 `;
 

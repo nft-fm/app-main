@@ -7,6 +7,14 @@ import FlatPriceSaleABI from "./abi/FlatPriceSale.abi.js";
 import VinylABI from "./abi/Vinyl.abi";
 
 
+export const getEthBalance = async (account) => {
+	let provider;
+	provider = new providers.Web3Provider(window.ethereum);
+	let balance = await provider.getBalance(account)
+	return balance
+}
+
+
 export const require = async (statement, error) => {
 	let provider;
 	let walletAddress;

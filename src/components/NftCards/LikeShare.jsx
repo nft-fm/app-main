@@ -27,7 +27,7 @@ const LikeShare = (props) => {
   const share = () => {
     props.setIsShareOpen();
   };
-  console.log('sharecount', shareCount)
+  
   return (
     <Side>
       <IconArea>

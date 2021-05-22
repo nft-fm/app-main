@@ -13,6 +13,7 @@ import LoadingFeatured from "../../../components/NftCards/LoadingFeatured";
 const Listen = () => {
   const { user, account } = useAccountConsumer();
   const [nfts, setNfts] = useState(<LoadingFeatured />);
+  const [hasNfts, setHasNfts] = useState(false);
 
   const formatNfts = (nftsData) => {
     return nftsData.map((nft) => {
@@ -26,6 +27,7 @@ const Listen = () => {
       setTimeout(function () {
         formattedNfts.push(<FillerCard />);
         setNfts(formattedNfts);
+        setHasNfts(true);
       }, 300);
     });
   };

@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import axios from "axios";
-
 import loading from '../../assets/img/loading.gif';
 import ProgressBar from "./components/ProgressBar";
 import TrackInfo from "./components/TrackInfo";
 import AudioControl from "./components/AudioControl";
 import VolumeAndLoopControl from "./components/VolumeAndLoopControl";
 import Swal from "sweetalert2";
+import { ReactComponent as XIcon } from '../../assets/img/icons/x.svg'
 
 const MusicPlayer = (props) => {
   const { nft, setNextNft, setPrevNft } = props;
@@ -422,9 +422,21 @@ const MusicPlayer = (props) => {
         <TrackInfoWrapper>
         {nft && <TrackInfo nft={nft}/>}
         </TrackInfoWrapper>
+      <Exit onClick={props.exitPlayer}/>
+
     </Wrapper>
   )
 }
+
+const Exit = styled(XIcon)`
+cursor: pointer;
+  width: 36px;
+  height: 36px;
+  margin-left: 24px;
+  & path {
+    fill: ${props => props.theme.color.lightgray} !important;
+  }
+`
 
 const Counter = styled.div`
   width: 60px;

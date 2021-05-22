@@ -21,7 +21,7 @@ import {
   FacebookIcon,
 } from "react-share";
 
-const SMShareModal = ({ open, children, hide, onClose, nft }) => {
+const SMShareModal = ({ open, children, hide, onClose, nft, updateShareCount }) => {
   const { account, connect, usdPerEth } = useAccountConsumer();
 
   if (!open) return null;
@@ -31,8 +31,14 @@ const SMShareModal = ({ open, children, hide, onClose, nft }) => {
   const url = `https://www.nftfm.io/discover/${nft._id}`;
   const message = `Check out this amazing NFT of ${nft.artist}'s song, ${nft.title}`;
 
+  const newShare = () => {
+    axios.post('/api/nft-type/newShare', nft);
+    updateShareCount()
+    hide();
+  }
+
   return (
-    <OpaqueFilter onClick={(e) => hide(e)}>
+    <OpaqueFilter onClick={(e) => hide()}>
       <Container onClick={(e) => stopProp(e)}>
         <StyledModal>
           <X onClick={(e) => hide(e)} />
@@ -41,13 +47,13 @@ const SMShareModal = ({ open, children, hide, onClose, nft }) => {
           </span>
           <Buttons>
             <TwitterShareButton title={message} url={url}>
-              <ButtonHolder>
+              <ButtonHolder onClick={() => newShare()}>
                 <TwitterIcon size={50} borderRadius={"10px"} />
                 <span>Twitter</span>
               </ButtonHolder>
             </TwitterShareButton>
             <FacebookShareButton quote={message} url={url}>
-              <ButtonHolder>
+              <ButtonHolder onClick={() => newShare()}>
                 <FacebookIcon size={50} borderRadius={"10px"} />
                 <span>Facebook</span>
               </ButtonHolder>
@@ -67,13 +73,19 @@ const ButtonHolder = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-
+  cursor: pointer;
   padding: 5px;
   /* padding: 5px 5px 0px 5px; */
+  margin-left: auto;
+  margin-right: auto;
   & > span {
     color: white;
     font-size: ${(props) => props.theme.fontSizes.sm};
     margin-left: 10px;
+  }
+  transition: 0.1s ease-in-out;
+  :hover {
+    background-color: ${(props) => props.theme.color.gray};
   }
 `;
 
@@ -140,6 +152,10 @@ const StyledModal = styled.div`
   position: relative;
   & > span {
     font-size: ${(props) => props.theme.fontSizes.md};
+    text-align: center;
+  }
+  @media only screen and (max-width: 776px) {
+    width: 80vw;
   }
 `;
 

@@ -633,4 +633,15 @@ router.post("/purchase", async (req, res) => {
   }
 });
 
+router.post("/newShare", async (req, res) => {
+  try {
+    const getNft = await NftType.findOne({ nftId: req.body.nftId})
+    getNft.shareCount++
+    await getNft.save()
+  } catch (err) {
+    res.status(500).send(err)
+  }
+})
+
+
 module.exports = router;

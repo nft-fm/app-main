@@ -355,7 +355,7 @@ router.post("/uploadAudioS3", async (req, res) => {
 
   console.log("HERE");
   const fileFilter = (req, file, cb) => {
-    if (file.mimetype === "audio/mpeg") {
+    if (file.mimetype === "audio/mpeg" || file.mimetype === "audio/wav") {
       cb(null, true);
     } else {
       cb(new Error("Invalid file type, only MP3s are allowed!"), false);

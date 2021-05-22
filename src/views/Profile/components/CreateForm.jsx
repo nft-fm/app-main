@@ -404,7 +404,7 @@ const CreateForm = ({open, hide}) => {
               </MediaButton>
               <StyledInput
                 type="file"
-                accept=".mp3,.flac"
+                accept=".mp3,.flac,.wav"
                 ref={hiddenAudioInput}
                 onChange={handleAudioChange}
                 style={{ display: "none" }}

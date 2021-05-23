@@ -10,15 +10,15 @@ import ShareModal from "../SMShareModal/SMShareModal";
 import LikeShare from "./LikeShare";
 
 const NftCard = (props) => {
-  const { user, account } = useAccountConsumer();
-  const { nft, selectNft } = props;
+  const { user } = useAccountConsumer();
+  const { nft } = props;
   const [isOpen, setIsOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const { setNftCallback } = usePlaylistConsumer();
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
 
-  const show = () => setIsOpen(true);
+  // const show = () => setIsOpen(true);
   const hide = (e) => {
     setIsOpen(false);
     console.log("isOpen", isOpen);

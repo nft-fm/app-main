@@ -1,12 +1,11 @@
 import React, {  useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 
-
 const AudioProgressBar = (props) => {
   const [filled, setFilled] = useState(0);
   const [bounds, setBounds] = useState();
   const [isDragging, setIsDragging] = useState(false);
-  const [startDragging, setStartDraggging] = useState(0);
+  // const [startDragging, setStartDraggging] = useState(0);
   const invisibleBar = useRef(null);
   const toogle = useRef(null);
 
@@ -14,7 +13,7 @@ const AudioProgressBar = (props) => {
     e.stopPropagation()
     e.preventDefault()
     setIsDragging(true);
-    setStartDraggging(e.clientX);
+    // setStartDraggging(e.clientX);
   }
 
   const handleToogleMove = (e) => {

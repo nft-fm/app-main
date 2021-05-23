@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import NftCard from "../../../components/NftCards/SaleNftCard";
 
-import { usePlaylistConsumer } from "../../../contexts/Playlist";
+// import { usePlaylistConsumer } from "../../../contexts/Playlist";
 
 const ArtistNfts = ({ nfts }) => {
   // const [nfts, setNfts] = useState([]);
-  const [selectedNft, setSelectedNft] = useState();
-  const { setNftsCallback } = usePlaylistConsumer();
+  // const [selectedNft, setSelectedNft] = useState();
+  // const { setNftsCallback } = usePlaylistConsumer();
   const [formattedNft, setFormattedNft] = useState();
   const formatNfts = (nftsData) => {
     const formattedNfts = nftsData.map((nft, index) => (

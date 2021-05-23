@@ -119,16 +119,16 @@ transition: all 0.2s ease-in-out;
   }
 }
 `
-const LikedHeart = styled(IconHeart)`
-  width: 20px;
-  height: 20px;
-  margin: -3px 4px 0 0;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  & path {
-    stroke: ${props => props.theme.color.pink};
-  }
-`;
+// const LikedHeart = styled(IconHeart)`
+//   width: 20px;
+//   height: 20px;
+//   margin: -3px 4px 0 0;
+//   cursor: pointer;
+//   transition: all 0.2s ease-in-out;
+//   & path {
+//     stroke: ${props => props.theme.color.pink};
+//   }
+// `;
 
 const Heart = styled(IconHeart)`
 width: 20px;

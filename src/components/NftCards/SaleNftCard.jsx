@@ -61,9 +61,9 @@ const NftCard = (props) => {
   const [likeCount, setLikeCount] = useState(0);
   const [partialSong, setPartialSong] = useState(false);
   const [shareCount, setShareCount] = useState({count: 0 })
-  const [basicLoaded, setBasicLoaded] = useState(false);
+  // const [basicLoaded, setBasicLoaded] = useState(false);
 
-  const show = () => setIsModalOpen(true);
+  // const show = () => setIsModalOpen(true);
   const hide = () => {
     setIsModalOpen(false);
   };
@@ -95,19 +95,19 @@ const NftCard = (props) => {
 
   }
 
-  const saveData = (data, fileName) => {
-    const a = document.createElement("a");
-    document.body.appendChild(a);
-    a.style = "display: none";
+  // const saveData = (data, fileName) => {
+  //   const a = document.createElement("a");
+  //   document.body.appendChild(a);
+  //   a.style = "display: none";
 
-    const json = JSON.stringify(data),
-      blob = new Blob([json], {type: "octet/stream"}),
-      url = window.URL.createObjectURL(blob);
-    a.href = url;
-    a.download = fileName;
-    a.click();
-    window.URL.revokeObjectURL(url);
-  };
+  //   const json = JSON.stringify(data),
+  //     blob = new Blob([json], {type: "octet/stream"}),
+  //     url = window.URL.createObjectURL(blob);
+  //   a.href = url;
+  //   a.download = fileName;
+  //   a.click();
+  //   window.URL.revokeObjectURL(url);
+  // };
 
   /*const getSnnipet = async (completeNft) => {
     console.log("going to get snnipets");
@@ -133,7 +133,7 @@ const NftCard = (props) => {
       setShareCount({count: props.nft.shareCount});
       setLikeCount(props.nft.likeCount);
       setLiked(props.nft.liked);
-      setBasicLoaded(true);
+      // setBasicLoaded(true);
       
     }
   }, [props.nft, user]);

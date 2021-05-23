@@ -92,7 +92,7 @@ const Profile = () => {
                 </form>
               ) : (
                 <Username>
-                  {user && user.username != "" ? user.username : "No username"}
+                  {user && user.username !== "" ? user.username : "No username"}
                 </Username>
               )}
               <Divider />

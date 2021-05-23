@@ -11,7 +11,7 @@ const PublicProfilePic = (props) => {
   const { account, user, setUser } = useAccountConsumer();
   const { profilePic, setProfilePic, edit } = props;
   const [imageFile, setImageFile] = useState(null);
-  const [imageUploadError, setImageUploadError] = useState(false);
+  // const [imageUploadError, setImageUploadError] = useState(false);
   const [loading, setLoading] = useState(false);
   const hiddenImageInput = useRef(null);
 
@@ -51,7 +51,7 @@ const PublicProfilePic = (props) => {
         .catch((err) => {
           console.log(err);
           setImageFile(null);
-          setImageUploadError(true);
+          // setImageUploadError(true);
           setLoading(false);
           swal.fire({
             title: "Error",
@@ -130,10 +130,6 @@ const ProfilePicHolder = styled.div`
   width: 100px;
   height: 100px;
   overflow: hidden;
-`;
-
-const Pic = styled.div`
-  width: 100%;
 `;
 
 export default PublicProfilePic;

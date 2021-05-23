@@ -8,7 +8,6 @@ import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import { getSetSale } from "../../web3/utils";
-import IconMetamask from "../../assets/img/icons/metamask_icon.png";
 
 import { ReactComponent as eth_icon } from "../../assets/img/icons/ethereum.svg";
 import Swal from "sweetalert2";
@@ -305,13 +304,6 @@ const Image = styled.img`
   margin-bottom: 16px;
 `;
 
-const PricesContainer = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 20px;
-`;
 const InfoContainer = styled.div`
   width: 80%;
   display: flex;
@@ -353,31 +345,6 @@ const Artist = styled.span`
   font-size: ${(props) => props.theme.fontSizes.xs};
   color: ${(props) => props.theme.color.lightgray};
   margin-bottom: 12px;
-`;
-
-const Row = styled.div`
-  width: 90%;
-  display: flex;
-  justify-content: space-between;
-`;
-
-const BuyButton = styled.button`
-  width: 140px;
-  height: 64px;
-  cursor: pointer;
-  transition: all 0.1s ease-in-out;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
-  border: 1px solid ${(props) => props.theme.color.boxBorder};
-  border-radius: 2px;
-  background-color: ${(props) => props.theme.color.box};
-  margin-bottom: 20px;
-  &:hover {
-    background-color: ${(props) => props.theme.color.boxBorder};
-    border: 1px solid #383838;
-  }
 `;
 
 export default BuyNftModal;

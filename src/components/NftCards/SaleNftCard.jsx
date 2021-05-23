@@ -70,34 +70,7 @@ const NftCard = (props) => {
     setIsModalOpen(false);
   };
 
-  const getNSeconds = async (completeNft) => {
-    await axios
-      .post("/api/nft-type/getNSecondsOfSong", {
-        key:
-          completeNft.address +
-          "/" +
-          completeNft.audioUrl.split("/").slice(-1)[0],
-        nft: completeNft,
-      })
-      .then((res) => {
-        console.log("got snnipet");
-        const songFile = res.data.Body.data;
-
-        setPartialSong(songFile);
-      });
-  };
-
-  const getFromPreload = (nftId) => {
-    const preload = preloads[nftId];
-    if (!preload) {
-      getNSeconds(props.nft);
-    } else {
-      setPartialSong(preload);
-    }
-
-  }
-
-  const saveData = (data, fileName) => {
+  /*const saveData = (data, fileName) => {
     const a = document.createElement("a");
     document.body.appendChild(a);
     a.style = "display: none";
@@ -109,9 +82,40 @@ const NftCard = (props) => {
     a.download = fileName;
     a.click();
     window.URL.revokeObjectURL(url);
+  };*/
+
+  const getNSeconds = async (completeNft) => {
+    await axios
+      .post("/api/nft-type/getNSecondsOfSong", {
+        key:
+          completeNft.address +
+          "/" +
+          completeNft.audioUrl.split("/").slice(-1)[0],
+        nft: completeNft,
+        startTime: 30
+      })
+      .then((res) => {
+        console.log("got snnipet");
+        const songFile = res.data.Body.data;
+        //const fileName = completeNft.title + ".json";
+
+        //saveData(songFile, fileName);
+        setPartialSong(songFile);
+      });
   };
 
-  /*const getSnnipet = async (completeNft) => {
+  const getFromPreload = (nftId) => {
+    const preload = preloads[nftId];
+    if (!preload) {
+      getNSeconds(props.nft);
+    } else {
+      setPartialSong(preload);
+    }
+  }
+
+  /*
+
+  const getSnnipet = async (completeNft) => {
     console.log("going to get snnipets");
     await axios
     .post("/api/nft-type/getSnnipet", {
@@ -135,10 +139,9 @@ const NftCard = (props) => {
       setShareCount({count: props.nft.shareCount});
       setLikeCount(props.nft.likeCount);
       setLiked(props.nft.liked);
-      setBasicLoaded(true);
-      
     }
-  }, [props.nft, user]);
+  }, [props.nft]);
+
 
   useEffect(() => {
     if (isModalOpen && !partialSong) {

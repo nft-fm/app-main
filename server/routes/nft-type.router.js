@@ -71,6 +71,17 @@ router.post("/artist-nfts", async (req, res) => {
   }
 });
 
+router.post("/getNftslikes", async (req, res) => {
+  console.log("getting likes", req.body)
+  try {
+    const likes = findLikes(req.body.nfts, req.body.address);
+    res.status(200).send(likes);
+  } catch (err) {
+    console.log("err", err);
+    res.status(500).send(err);
+  }
+});
+
 router.post("/get-NFT", async (req, res) => {
   try {
     let nft = await NftType.findOne({
@@ -552,16 +563,18 @@ router.post("/getNSecondsOfSong", async (req, res) => {
         res.status(500).send("Couldnt retrieve nSec of music");
       });
 
-    const startTime = 0;
+    const startTime = req.body.startTime ? (songFullSize * 35) / req.body.nft.dur : 0;
     const nSec = req.body.nSec || 15;
-    const partialBytes = (songFullSize * nSec) / req.body.nft.dur;
+    const partialBytes = ((songFullSize * nSec) / req.body.nft.dur) + startTime;
     console.log("partial bytes", partialBytes.toFixed(0));
     console.log(req.body.nft);
+    console.log("startTime", startTime.toFixed(0));
+    console.log("bytes=" + startTime.toFixed(0) + "-" + partialBytes.toFixed(0))
     s3.getObject(
       {
         Bucket: "nftfm-music",
         Key: req.body.key,
-        Range: "bytes=0-" + partialBytes.toFixed(0),
+        Range: "bytes=" + startTime.toFixed(0) + "-" + partialBytes.toFixed(0),
       },
       function (error, data) {
         if (error != null) {

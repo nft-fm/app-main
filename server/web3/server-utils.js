@@ -56,6 +56,28 @@ const getSetSale = async (nftId, callback) => {
   return r;
 };
 
+const findLikesAfterPreload = (nfts, account) => {
+  for (let i = 0; i < nfts.length; i++) {
+    const likes = nfts[i]._doc.likes;
+    if (likes && likes.find((like) => like.toString() === account)) {
+      nfts[i] = {
+        ...nfts[i]._doc,
+        likes: [],
+        likeCount: nfts[i]._doc.likes.length,
+        liked: true,
+      };
+    } else {
+      nfts[i] = {
+        ...nfts[i]._doc,
+        likes: [],
+        likeCount: nfts[i]._doc.likes.length || 0,
+        liked: false,
+      };
+    }
+  }
+  return nfts;
+};
+
 const findLikes = (nfts, account) => {
   for (let i = 0; i < nfts.length; i++) {
     const likes = nfts[i]._doc.likes;

@@ -27,10 +27,23 @@ const Listen = () => {
       setTimeout(function () {
         formattedNfts.push(<FillerCard />);
         setNfts(formattedNfts);
-        setHasNfts(true);
+        setHasNfts(res.data);
       }, 300);
     });
   };
+
+  const getLikes = () => {
+    console.log("getting likes")
+    axios.post("/api/nft-type/getNftsLikes", { address: account, nfts: hasNfts }).then((res) => {
+      console.log("res", res.data)
+      const formattedNfts = formatNfts(res.data);
+      setTimeout(function () {
+        formattedNfts.push(<FillerCard />);
+        setNfts(formattedNfts);
+        setHasNfts(res.data);
+      }, 300);
+    });
+  }
 
   useEffect(() => {
     getFeatured();

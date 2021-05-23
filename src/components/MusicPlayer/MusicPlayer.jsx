@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import loading from '../../assets/img/loading.gif';
@@ -14,7 +14,7 @@ const MusicPlayer = (props) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [startTime, setStartTime] = useState(0);
-  const [gainNode, setGainNode] = useState();
+  // const [gainNode, setGainNode] = useState();
   const [volume, setVolume] = useState(0.7);
   const [dur, setDur] = useState(0);
   const [second, setSecond] = useState('00');

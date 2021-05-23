@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import swal from "sweetalert2";
 import { useWallet } from "use-wallet";
-import isMobile from "../../utils/isMobile";
 import { require, getVinylBalance } from "../../web3/utils";
 
 const Community = ({ fetchSuggestions, suggestions }) => {

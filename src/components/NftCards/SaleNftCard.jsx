@@ -6,7 +6,6 @@ import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
 import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.svg";
 import { useAccountConsumer } from "../../contexts/Account";
-import { usePlaylistConsumer } from "../../contexts/Playlist";
 import loading from "../../assets/img/loading.gif";
 import axios from "axios";
 import ShareModal from "../SMShareModal/SMShareModal";
@@ -38,7 +37,7 @@ const images = {
 }
 
 const NftCard = (props) => {
-  const { usdPerEth, user, account } = useAccountConsumer();
+  const { usdPerEth, user } = useAccountConsumer();
   const [nft, setNft] = useState({
     address: "",
     artist: "",
@@ -55,7 +54,6 @@ const NftCard = (props) => {
     sold: "--",
   });
 
-  const { isOpen } = usePlaylistConsumer();
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);

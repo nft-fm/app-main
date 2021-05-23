@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from "react";
-import styled, { keyframes } from "styled-components";
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
 import axios from "axios";
 import NftCard from "../../../components/NftCards/SaleNftCard";
 import logo from "../../../assets/img/logos/logo.png";

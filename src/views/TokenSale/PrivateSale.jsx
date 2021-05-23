@@ -11,10 +11,9 @@ import Swal from "sweetalert2";
 const Disclaimer = () => {
   const { account, connect } = useWallet();
   const [val, setVal] = useState(1);
-  const [stonkVal, setStonkVal] = useState(0);
   const [amountBought, setAmountBought] = useState(0);
   const [signed, setSigned] = useState(false);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
 
   useEffect(() => {
@@ -33,7 +32,7 @@ const Disclaimer = () => {
     signer
       .signMessage(JSON.stringify({ name, walletAddress }))
       .then((authorization) => {
-        setLoading(true);
+        // setLoading(true);
         axios
           .post("/api/forms/disclaimer-signed", {
             name: name,
@@ -46,7 +45,7 @@ const Disclaimer = () => {
               console.log("bought!");
             });
             setSigned(true);
-            setLoading(false);
+            // setLoading(false);
           });
       });
   };

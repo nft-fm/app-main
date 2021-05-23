@@ -9,7 +9,7 @@ import { getVinylBalance } from "../../../web3/utils";
 export const Nav = () => {
   const { user } = useAccountConsumer();
 
-  const { account, connect } = useWallet();
+  const { account } = useWallet();
   const [hasVinyl, setHasVinyl] = useState(false);
 
   useEffect(() => {

@@ -1,8 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { useWallet } from "use-wallet";
 import axios from "axios";
-import swal from "sweetalert2";
 import { ReactComponent as IconX } from "../../assets/img/icons/x.svg";
 import logo from "../../assets/img/logos/logo_tiny.png";
 import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
@@ -24,7 +22,7 @@ const BuyNftModal = ({
   setLikeCount,
   setIsShareOpen,
 }) => {
-  const { account, connect, usdPerEth } = useAccountConsumer();
+  const { account, usdPerEth } = useAccountConsumer();
 
   if (!open) return null;
   const stopProp = (e) => {

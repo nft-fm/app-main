@@ -20,8 +20,8 @@ export const PlaylistProvider = ({ children }) => {
 
   const fetchPrevNext = async () => {
     if (!index || index < 0) setIndex(0)
-    const prevIndex = index == 0 ? nfts.length - 1 : index - 1;
-    const nextIndex = index == nfts.length - 1 ? 0 : index + 1;
+    const prevIndex = index === 0 ? nfts.length - 1 : index - 1;
+    const nextIndex = index === nfts.length - 1 ? 0 : index + 1;
 
     let _nfts = [...nfts];
     let next_nft = _nfts[nextIndex];
@@ -49,7 +49,7 @@ export const PlaylistProvider = ({ children }) => {
       setNfts(_nfts);
     }
     if (!index || index < 0) setIndex(0);
-    const newIndex = index == nfts.length - 1 ? 0 : index + 1;
+    const newIndex = index === nfts.length - 1 ? 0 : index + 1;
     console.log("nEW INDEX", newIndex)
     setSelectedNft(nfts[newIndex]);
     setIndex(newIndex);
@@ -63,7 +63,7 @@ export const PlaylistProvider = ({ children }) => {
       setNfts(_nfts);
     }
     if (!index || index < 0) setIndex(0);
-    const newIndex = index == 0 ? nfts.length - 1 : index - 1;
+    const newIndex = index === 0 ? nfts.length - 1 : index - 1;
     setSelectedNft(nfts[newIndex]);
     setIndex(newIndex);
   }
@@ -138,17 +138,6 @@ export function usePlaylistConsumer() {
 
   return context;
 }
-
-const StyledFooter = styled.footer`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  height: 120px;
-  background-color: ${(props) => props.theme.bgColor};
-`;
-
-
 
 const Wrapper = styled.div`
   position: -webkit-sticky; /* Safari */

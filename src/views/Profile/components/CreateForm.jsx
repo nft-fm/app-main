@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
-import { useWallet } from "use-wallet";
 import axios from "axios";
 import swal from "sweetalert2";
 import upload_icon from "../../../assets/img/profile_page_assets/upload_icon.svg";
@@ -8,14 +7,13 @@ import loading_gif from "../../../assets/img/loading.gif";
 // import eth_icon from "../../../assets/img/profile_page_assets/eth_icon.svg";
 // import eth_icon_white from "../../../assets/img/profile_page_assets/eth_icon_white.svg";
 // import usd_icon from "../../../assets/img/profile_page_assets/usd_icon.svg";
-import { ReactComponent as usd_icon } from "../../../assets/img/icons/dollar.svg";
+// import { ReactComponent as usd_icon } from "../../../assets/img/icons/dollar.svg";
 import { ReactComponent as eth_icon } from "../../../assets/img/icons/ethereum.svg";
-import { ReactComponent as arrow } from "../../../assets/img/icons/arrow_cropped.svg";
+// import { ReactComponent as arrow } from "../../../assets/img/icons/arrow_cropped.svg";
 // import { ReactComponent as arrow_down } from "../../../assets/img/icons/arrow_down.svg";
 
 import x from "../../../assets/img/icons/x.svg";
 import ImagePreview from "./ImagePreview";
-import { useHistory } from "react-router-dom";
 
 import { useAccountConsumer } from "../../../contexts/Account";
 import { mintNFT } from "../../../web3/utils";

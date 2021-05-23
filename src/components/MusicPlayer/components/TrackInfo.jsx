@@ -1,7 +1,5 @@
-import React, { useCallback, useEffect, useState, useRef } from "react";
+import React from "react";
 import styled from "styled-components";
-import { ReactComponent as XIcon } from '../../../assets/img/icons/x.svg'
-
 
 const TrackInfo = ({nft}) => {
   return (

@@ -1,12 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react";
-import styled, { keyframes } from "styled-components";
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
 import axios from "axios";
 import LibraryCard from "../../../components/NftCards/LibraryCard";
-import ArtistCard from "../../../components/NftCards/ArtistCard";
 import loading from "../../../assets/img/loading.gif";
 
 import { usePlaylistConsumer } from "../../../contexts/Playlist";
-import { resolveContent } from "nodemailer/lib/shared";
 import { useAccountConsumer } from "../../../contexts/Account";
 
 const Library = ({ user }) => {

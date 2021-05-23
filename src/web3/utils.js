@@ -1,4 +1,4 @@
-import { Contract, utils, providers, BigNumber } from "ethers";
+import { Contract, utils, providers } from "ethers";
 import { NFTToken, FlatPriceSale, VinylAddress, TokenSaleAddress
 	// Auction
  } from "./constants"
@@ -54,7 +54,7 @@ export const require = async (statement, error) => {
 
 
 export const getSetSale = async (nftId, callback) => {
-	const { provider, walletAddress } = await require()
+	const { provider } = await require()
 	const signer = provider.getSigner();
 	let contract = new Contract(FlatPriceSale, FlatPriceSaleABI, signer);
 
@@ -70,7 +70,7 @@ export const getSetSale = async (nftId, callback) => {
 
 
 export const mintNFT = async (data, pendingCallback, finalCallback) => {
-	const { provider, walletAddress } = await require()
+	const { provider } = await require()
 	const signer = provider.getSigner();
 	let contract = new Contract(NFTToken, NFTTokenABI, signer);
 
@@ -124,7 +124,7 @@ export const buyNFT = async (data, pendingCallback, finalCallback) => {
 }
 
 export const buyPresale = async (amount, callback) => {
-  const { provider, walletAddress } = await require()
+  const { provider } = await require()
   const signer = provider.getSigner()
   const contract = new Contract(
       TokenSaleAddress,
@@ -148,7 +148,7 @@ export const buyPresale = async (amount, callback) => {
 }
 
 export const getPresalePrice = async (callback) => {
-  const { provider, walletAddress } = await require()
+  const { provider } = await require()
   const signer = provider.getSigner();
   const contract = new Contract(
       TokenSaleAddress,
@@ -160,7 +160,7 @@ export const getPresalePrice = async (callback) => {
 }
 
 export const approve = async (callback) => {
-  const { provider, walletAddress } = await require()
+  const { provider } = await require()
   const signer = provider.getSigner();
   const contract = new Contract(
       VinylAddress,

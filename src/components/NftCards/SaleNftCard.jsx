@@ -11,7 +11,7 @@ import loading from "../../assets/img/loading.gif";
 import axios from "axios";
 import ShareModal from "../SMShareModal/SMShareModal";
 import LikeShare from "./LikeShare";
-import { NavLink } from "react-router-dom"
+import { NavLink } from "react-router-dom";
 
 import solPreload from "./Lowkey.json";
 import sexPreload from "./SexKazoo2.json";
@@ -158,6 +158,7 @@ const NftCard = (props) => {
         hide={() => setIsShareOpen(!isShareOpen)}
         updateShareCount={() => setShareCount({ count: shareCount.count + 1 })}
         nft={nft}
+        
       />
       <BuyNftModal
         open={isModalOpen}
@@ -170,7 +171,7 @@ const NftCard = (props) => {
         setLikeCount={setLikeCount}
         setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
       />
-      <CardTop>
+      <CardTop >
         <LikeShare
           nft={nft}
           liked={liked}
@@ -189,28 +190,42 @@ const NftCard = (props) => {
           </IconArea>
         </Side>
       </CardTop>
-      {imageLoaded ? null : <Image src={loading} alt="image" />}
-      <Image
-        src={nft.imageUrl}
-        style={imageLoaded ? {} : { display: "none" }}
-        alt="image"
-        onClick={() => setIsModalOpen(!isModalOpen)}
-        onLoad={() => setImageLoaded(true)}
-      />
-      {!imageLoaded && images[props.nft.nftId] &&
-      <Image
-        src={images[props.nft.nftId]}
-        style={imageLoaded ? {} : { display: "none" }}
-        alt="image"
-        onClick={() => setIsModalOpen(!isModalOpen)}
-        onLoad={() => setImageLoaded(true)}
-      />
-      }
+      {imageLoaded ? null : (
+        <Image
+          src={loading}
+          alt="image"
+          
+        />
+      )}
+        <Image
+          // 
+          src={nft.imageUrl}
+          style={imageLoaded ? {} : { display: "none" }}
+          alt="image"
+          onClick={() => setIsModalOpen(!isModalOpen)}
+          onLoad={() => setImageLoaded(true)}
+        />
+      {!imageLoaded && images[props.nft.nftId] && (
+        <Image
+          // 
+          src={images[props.nft.nftId]}
+          style={imageLoaded ? {} : { display: "none" }}
+          alt="image"
+          onClick={() => setIsModalOpen(!isModalOpen)}
+          onLoad={() => setImageLoaded(true)}
+        />
+      )}
 
-      <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>
+      <TrackName
+        onClick={() => setIsModalOpen(!isModalOpen)}
+        
+      >
         {nft.title}
       </TrackName>
-      <Artist to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}>
+      <Artist
+        to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}
+        
+      >
         {nft.artist}
       </Artist>
       <CostFields>

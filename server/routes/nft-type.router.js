@@ -163,6 +163,8 @@ router.post("/finalize", async (req, res) => {
       // const price = BigNumber.from(newData.price.mul(constants.WeiPerEther));
       const price = utils.parseUnits(newData.price);
       const encodedFee = utils.defaultAbiCoder.encode(["uint32"], [5]); // fee is hardcoded to 5% atm
+      listenForMint();
+
       const signature = sign(
         [
           "string",
@@ -717,5 +719,15 @@ router.post("/newShare", async (req, res) => {
   }
 })
 
+router.post("/get-by-nftId", async (req, res) => {
+  try {
+    console.log('2')
+    const getNft = await NftType.findOne({ nftId: req.body.nftId})
+    console.log('3')
+    res.status(200).send(findLikes(getNft, req.body.address))
+  } catch (err) {
+    res.status(500).send(err)
+  }
+})
 
 module.exports = router;

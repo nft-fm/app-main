@@ -28,12 +28,12 @@
   animation: shine linear 4s infinite;
 }
 .coin__front {
-  background-image: url("https://www.nftfm.io/static/media/record_player_disk.ee57d9e1.png");
+  background-image: url("../../../../assets/img/record_player_disk.png");
   background-size: cover;
   transform: translateZ(4px);
 }
 .coin__back {
-  background-image: url("https://www.nftfm.io/static/media/record_player_disk.ee57d9e1.png");
+  background-image: url("../../../../assets/img/record_player_disk.png");
   background-size: cover;
   transform: translateZ(-4px) rotateY(180deg) scaleX(180deg);
 }

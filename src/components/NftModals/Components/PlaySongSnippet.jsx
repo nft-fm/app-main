@@ -92,7 +92,7 @@ const PlaySongSnippet = (props) => {
     if (props.partialSong && isLoading) {
       startSong(props.partialSong);
     }
-  }, [props.partialSong])
+  }, [props.partialSong, startSong])
 
   useEffect(() => {
     const audioCtx = new AudioContext();

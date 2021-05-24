@@ -7,7 +7,7 @@ import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
 import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { useAccountConsumer } from "../../contexts/Account";
-import { getSetSale } from "../../web3/utils";
+// import { getSetSale } from "../../web3/utils";
 
 import { ReactComponent as eth_icon } from "../../assets/img/icons/ethereum.svg";
 import Swal from "sweetalert2";
@@ -29,14 +29,14 @@ const BuyNftModal = ({
   };
   console.log("nft", nft);
 
-  const purchase = (id) => {
-    axios
-      .post("/api/nft-type/purchase", { id: id, address: account })
-      .then((res) => {
-        console.log("purchase res", res);
-      })
-      .catch((err) => console.log(err));
-  };
+  // const purchase = (id) => {
+  //   axios
+  //     .post("/api/nft-type/purchase", { id: id, address: account })
+  //     .then((res) => {
+  //       console.log("purchase res", res);
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
 
   const like = async () => {
     if (account) {

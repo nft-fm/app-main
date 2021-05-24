@@ -946,15 +946,15 @@ const MediaButtons = styled.div`
   }
 `;
 
-const Image = styled.img`
-  width: 100%;
-  aspect-ratio: 1;
-  /* height: 250px; */
-  border-radius: 15px;
-  border: 1px solid #707070;
-  overflow: hidden;
-  object-fit: cover;
-`;
+// const Image = styled.img`
+//   width: 100%;
+//   aspect-ratio: 1;
+//   /* height: 250px; */
+//   border-radius: 15px;
+//   border: 1px solid #707070;
+//   overflow: hidden;
+//   object-fit: cover;
+// `;
 // const ImagePreview = styled.div``;
 const Files = styled.div`
   width: 50%;

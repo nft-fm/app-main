@@ -338,12 +338,6 @@ const LaunchFeaturesTextLarge = styled.span`
   }
 `;
 
-const LaunchFeaturesTextSmall = styled.span`
-  font-size: ${(props) => props.theme.fontSizes.xs};
-  text-align: center;
-  color: white;
-`;
-
 const LaunchFeaturesTextSmallGray = styled.span`
   font-size: 0.85rem;
   font-size: ${(props) => props.theme.fontSizes.xs};

@@ -284,18 +284,6 @@ const Divider = styled.div`
   margin: 5px 0 20px 0;
 `;
 
-const UtilityContainer = styled.div`
-  width: 60%;
-  color: white;
-  padding: 20px 40px;
-  align-items: center;
-  position: relative;
-  font-size: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 20px;
-`;
 const SaleContainer = styled.div`
   width: 60%;
   border: 2px solid ${(props) => props.theme.color.boxBorder};
@@ -459,39 +447,39 @@ const WalletTitle = styled(Title)`
   text-align: center;
 `;
 
-const Container = !isMobile()
-  ? styled.div`
-      /* margin-top: 20vh; */
-      margin-top: 20px;
-      width: 540px;
-      border: 2px solid rgba(256, 256, 256, 0.5);
-      border-radius: 2px;
-      background-color: rgba(180, 180, 180, 0.3);
-      background-color: rgba(0, 0, 0, 0.3);
-      color: white;
-      padding: 20px 40px;
-      align-items: center;
-      position: relative;
-      font-size: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    `
-  : styled.div`
-      margin-top: 20px;
-      width: 300px;
-      border: 2px solid rgba(256, 256, 256, 0.5);
-      border-radius: 2px;
-      background-color: rgba(180, 180, 180, 0.3);
-      background-color: rgba(0, 0, 0, 0.3);
-      color: white;
-      padding: 20px 20px;
-      align-items: center;
-      position: relative;
-      font-size: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    `;
+// const Container = !isMobile()
+//   ? styled.div`
+//       /* margin-top: 20vh; */
+//       margin-top: 20px;
+//       width: 540px;
+//       border: 2px solid rgba(256, 256, 256, 0.5);
+//       border-radius: 2px;
+//       background-color: rgba(180, 180, 180, 0.3);
+//       background-color: rgba(0, 0, 0, 0.3);
+//       color: white;
+//       padding: 20px 40px;
+//       align-items: center;
+//       position: relative;
+//       font-size: 20px;
+//       display: flex;
+//       flex-direction: column;
+//       align-items: center;
+//     `
+//   : styled.div`
+//       margin-top: 20px;
+//       width: 300px;
+//       border: 2px solid rgba(256, 256, 256, 0.5);
+//       border-radius: 2px;
+//       background-color: rgba(180, 180, 180, 0.3);
+//       background-color: rgba(0, 0, 0, 0.3);
+//       color: white;
+//       padding: 20px 20px;
+//       align-items: center;
+//       position: relative;
+//       font-size: 20px;
+//       display: flex;
+//       flex-direction: column;
+//       align-items: center;
+//     `;
 
 export default Disclaimer;

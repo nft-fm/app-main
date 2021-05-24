@@ -114,7 +114,7 @@ const NftModalHook = ({
       hide();
     };
   
-    const [currChainId, setCurrChainId] = useState(null);
+    // const [currChainId, setCurrChainId] = useState(null);
   
     // const getChain = async () => {
     //   console.log('here')

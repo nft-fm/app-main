@@ -62,12 +62,12 @@ const ProfilePic = (props) => {
           });
         });
     }
-  }, [imageFile,]);
+  }, [imageFile, setProfilePic]);
   return (
     <ProfilePicHolder imageUrl={profilePic}>
       {loading && edit && (
         <EditProfilePic>
-          <img src={Loading} />
+          <img src={Loading} alt="loading-gif"/>
         </EditProfilePic>
       )}
       {!loading && edit && (

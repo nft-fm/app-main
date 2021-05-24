@@ -48,20 +48,6 @@ const MusicPlayer = (props) => {
     return ab;
   }
 
-  const getPartialSong = async () => {
-    if (bufferSrcRef.current) {
-      setIsLoading(true);
-      setIsPlaying(false);
-      bufferSrcRef.current.stop();
-      bufferSrcRef.current.disconnect();
-    }
-    axios.post("api/nft-type/getPartialSong", { key: nft.address + "/" + nft.audioUrl.split('/').slice(-1)[0] })
-        .then((songFile) => {
-            startPartialSong(songFile);
-    }, (e) => { console.log("Error: ", e.err); })
-     
-  }
-
   const startNewContext = async (songFile, startTime) => {
     if (bufferSrcRef.current) {
       bufferSrcRef.current.stop();
@@ -339,6 +325,18 @@ const MusicPlayer = (props) => {
   }
 
   useEffect(() => {
+    const getPartialSong = async () => {
+      if (bufferSrcRef.current) {
+        setIsLoading(true);
+        setIsPlaying(false);
+        bufferSrcRef.current.stop();
+        bufferSrcRef.current.disconnect();
+      }
+      axios.post("api/nft-type/getPartialSong", { key: nft.address + "/" + nft.audioUrl.split('/').slice(-1)[0] })
+          .then((songFile) => {
+              startPartialSong(songFile);
+      }, (e) => { console.log("Error: ", e.err); })
+    }
     setCounter(0);
     if (!nft.buffer) {
       getPartialSong();

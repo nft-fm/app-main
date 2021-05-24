@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
-import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
+// import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
+// import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../assets/img/icons/coins.svg";
 import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.svg";
 import { useAccountConsumer } from "../../contexts/Account";
@@ -12,17 +12,17 @@ import LikeShare from "./LikeShare";
 const NftCard = (props) => {
   const { user } = useAccountConsumer();
   const { nft } = props;
-  const [isOpen, setIsOpen] = useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const { setNftCallback } = usePlaylistConsumer();
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
 
   // const show = () => setIsOpen(true);
-  const hide = (e) => {
-    setIsOpen(false);
-    console.log("isOpen", isOpen);
-  };
+  // const hide = (e) => {
+  //   setIsOpen(false);
+  //   console.log("isOpen", isOpen);
+  // };
 
   useEffect(() => {
     setLikeCount(props.nft.likeCount);
@@ -127,50 +127,50 @@ const Cart = styled(IconCart)`
   }
 `;
 
-const Share = styled(IconShare)`
-  width: 16px;
-  height: 16px;
-  margin: 0 4px 0 0;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  & path {
-    transition: all 0.2s ease-in-out;
-    fill: ${(props) => props.theme.color.gray};
-  }
-  &:hover {
-    & path {
-      fill: #20a4fc;
-    }
-  }
-`;
+// const Share = styled(IconShare)`
+//   width: 16px;
+//   height: 16px;
+//   margin: 0 4px 0 0;
+//   cursor: pointer;
+//   transition: all 0.2s ease-in-out;
+//   & path {
+//     transition: all 0.2s ease-in-out;
+//     fill: ${(props) => props.theme.color.gray};
+//   }
+//   &:hover {
+//     & path {
+//       fill: #20a4fc;
+//     }
+//   }
+// `;
 
-const LikedHeart = styled(IconHeart)`
-  width: 20px;
-  height: 20px;
-  margin: -3px 4px 0 0;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  & path {
-    stroke: ${(props) => props.theme.color.pink};
-  }
-`;
+// const LikedHeart = styled(IconHeart)`
+//   width: 20px;
+//   height: 20px;
+//   margin: -3px 4px 0 0;
+//   cursor: pointer;
+//   transition: all 0.2s ease-in-out;
+//   & path {
+//     stroke: ${(props) => props.theme.color.pink};
+//   }
+// `;
 
-const Heart = styled(IconHeart)`
-  width: 20px;
-  height: 20px;
-  margin: -3px 4px 0 0;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  & path {
-    transition: all 0.2s ease-in-out;
-    stroke: ${(props) => props.theme.color.gray};
-  }
-  &:hover {
-    & path {
-      stroke: ${(props) => props.theme.color.pink};
-    }
-  }
-`;
+// const Heart = styled(IconHeart)`
+//   width: 20px;
+//   height: 20px;
+//   margin: -3px 4px 0 0;
+//   cursor: pointer;
+//   transition: all 0.2s ease-in-out;
+//   & path {
+//     transition: all 0.2s ease-in-out;
+//     stroke: ${(props) => props.theme.color.gray};
+//   }
+//   &:hover {
+//     & path {
+//       stroke: ${(props) => props.theme.color.pink};
+//     }
+//   }
+// `;
 
 const Side = styled.div`
   display: flex;

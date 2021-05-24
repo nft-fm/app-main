@@ -37,7 +37,7 @@ export const FAQ = () => {
   );
 };
 
-{
+// {
   /*FAQ
 What are NFTs?
 NFTs are Non-Fungible Tokens. These are tokens that are unique and cannot be broken down into smaller components. These tokens can hold tidbits of information such as images, video, and audio! NFTs can be held or traded on the open internet.
@@ -61,4 +61,4 @@ I have an NFT that I want to trade away.
  Aren’t cryptocurrencies really bad for the environment?
  While cryptocurrency mining and transactions are becoming more efficient every year, it’s important to acknowledge the potential harm they can cause to the environment at the present. At NFT FM, we use the industry leading cryptoart-footprint API to calculate the global emissions caused by all transactions on our platform. At the end of each month, we purchase Carbon Credits equivalent to the calculated CO2 output to offset any potential carbon we produce. If you want to read more on our commitment to environmental protection, you can read more on our (more details on another page)
 */
-}
+// }

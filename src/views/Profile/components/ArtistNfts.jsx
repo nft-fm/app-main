@@ -28,6 +28,7 @@ const ArtistNfts = ({ user }) => {
   };
 
   useEffect(() => {
+
     getArtistNfts();
   }, [user]);
 

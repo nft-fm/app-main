@@ -4,7 +4,7 @@ import BuyNftModal from "../NftModals";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
-import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.svg";
+// import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import loading from "../../assets/img/loading.gif";
 import axios from "axios";
@@ -248,21 +248,21 @@ const NftCard = (props) => {
   );
 };
 
-const PlayButton = styled(PlayIcon)`
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  & path {
-    transition: all 0.2s ease-in-out;
-    fill: ${(props) => props.theme.color.gray};
-  }
-  &:hover {
-    & path {
-      fill: #20a4fc;
-    }
-  }
-`;
+// const PlayButton = styled(PlayIcon)`
+//   width: 30px;
+//   height: 30px;
+//   cursor: pointer;
+//   transition: all 0.2s ease-in-out;
+//   & path {
+//     transition: all 0.2s ease-in-out;
+//     fill: ${(props) => props.theme.color.gray};
+//   }
+//   &:hover {
+//     & path {
+//       fill: #20a4fc;
+//     }
+//   }
+// `;
 
 const Usd = styled(IconUsd)`
   width: 18px;

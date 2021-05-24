@@ -66,7 +66,7 @@ const PublicProfilePic = (props) => {
     <ProfilePicHolder imageUrl={profilePic}>
       {loading && edit && (
         <EditProfilePic>
-          <img src={Loading} />
+          <img src={Loading} alt="loading"/>
         </EditProfilePic>
       )}
       {!loading && edit && (

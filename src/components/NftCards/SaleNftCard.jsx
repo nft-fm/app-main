@@ -64,11 +64,25 @@ const NftCard = (props) => {
   const [partialSong, setPartialSong] = useState(false);
   const [shareCount, setShareCount] = useState({count: 0 })
   const [basicLoaded, setBasicLoaded] = useState(false);
+  const [likesLoading, setLikesLoading] = useState(false);
 
   const show = () => setIsModalOpen(true);
   const hide = () => {
     setIsModalOpen(false);
   };
+
+  /*const saveData = (data, fileName) => {
+    const a = document.createElement("a");
+    document.body.appendChild(a);
+    a.style = "display: none";
+    const json = JSON.stringify(data),
+      blob = new Blob([json], {type: "octet/stream"}),
+      url = window.URL.createObjectURL(blob);
+    a.href = url;
+    a.download = fileName;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };*/
 
   const getNSeconds = async (completeNft) => {
     await axios
@@ -78,11 +92,14 @@ const NftCard = (props) => {
           "/" +
           completeNft.audioUrl.split("/").slice(-1)[0],
         nft: completeNft,
+        startTime: 30
       })
       .then((res) => {
         console.log("got snnipet");
         const songFile = res.data.Body.data;
+        //const fileName = completeNft.title + ".json";
 
+        //saveData(songFile, fileName);
         setPartialSong(songFile);
       });
   };
@@ -96,20 +113,6 @@ const NftCard = (props) => {
     }
 
   }
-
-  const saveData = (data, fileName) => {
-    const a = document.createElement("a");
-    document.body.appendChild(a);
-    a.style = "display: none";
-
-    const json = JSON.stringify(data),
-      blob = new Blob([json], {type: "octet/stream"}),
-      url = window.URL.createObjectURL(blob);
-    a.href = url;
-    a.download = fileName;
-    a.click();
-    window.URL.revokeObjectURL(url);
-  };
 
   /*const getSnnipet = async (completeNft) => {
     console.log("going to get snnipets");
@@ -128,6 +131,12 @@ const NftCard = (props) => {
   }*/
 
   useEffect(() => {
+    console.log("im here", basicLoaded);
+    if(basicLoaded) {
+      setLikesLoading(true);
+    }
+  }, [account])
+  useEffect(() => {
     if (props.nft) {
       setNft({
         ...props.nft,
@@ -136,7 +145,7 @@ const NftCard = (props) => {
       setLikeCount(props.nft.likeCount);
       setLiked(props.nft.liked);
       setBasicLoaded(true);
-      
+      setLikesLoading(false);
     }
   }, [props.nft, user]);
 
@@ -177,6 +186,7 @@ const NftCard = (props) => {
           setLikeCount={setLikeCount}
           setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
           shareCount={shareCount}
+          isLoading={likesLoading}
         />
         <Side>
           <IconArea>

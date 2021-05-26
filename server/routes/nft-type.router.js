@@ -554,16 +554,18 @@ router.post("/getNSecondsOfSong", async (req, res) => {
         res.status(500).send("Couldnt retrieve nSec of music");
       });
 
-    const startTime = 0;
+    const startTime = req.body.nft.startTime ? (songFullSize * req.body.nft.startTime) / req.body.nft.dur : 0;
     const nSec = req.body.nSec || 15;
-    const partialBytes = (songFullSize * nSec) / req.body.nft.dur;
+    const partialBytes = ((songFullSize * nSec) / req.body.nft.dur) + startTime;
     console.log("partial bytes", partialBytes.toFixed(0));
     console.log(req.body.nft);
+    console.log("startTime", startTime.toFixed(0));
+    console.log("bytes=" + startTime.toFixed(0) + "-" + partialBytes.toFixed(0))
     s3.getObject(
       {
         Bucket: "nftfm-music",
         Key: req.body.key,
-        Range: "bytes=0-" + partialBytes.toFixed(0),
+        Range: "bytes=" + startTime.toFixed(0) + "-" + partialBytes.toFixed(0),
       },
       function (error, data) {
         if (error != null) {

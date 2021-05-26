@@ -89,11 +89,11 @@ const NftCard = (props) => {
 
   const getFromPreload = (nftId) => {
     const preload = preloads[nftId];
-    if (!preload) {
-      getNSeconds(props.nft);
-    } else {
+    // if (!preload) {
+    //   getNSeconds(props.nft);
+    // } else {
       setPartialSong(preload);
-    }
+    // }
 
   }
 

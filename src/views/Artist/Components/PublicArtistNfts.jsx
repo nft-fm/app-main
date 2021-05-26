@@ -4,12 +4,23 @@ import axios from "axios";
 import NftCard from "../../../components/NftCards/SaleNftCard";
 
 import { usePlaylistConsumer } from "../../../contexts/Playlist";
+// import solPreload from "../../../components/NftCards/Lowkey.json";
+// import sexPreload from "../../../components/NftCards/SexKazoo2.json";
+// import touchPreload from "../../../components/NftCards/TOUCHIDv2.json";
+// import herePreload from "../../../components/NftCards/hereforareason.json";
 
+// const preloads = {
+//   1: sexPreload,
+//   2: touchPreload,
+//   3: herePreload,
+//   4: solPreload,
+// };
 const ArtistNfts = ({ nfts }) => {
   // const [nfts, setNfts] = useState([]);
   const [selectedNft, setSelectedNft] = useState();
   const { setNftsCallback } = usePlaylistConsumer();
   const [formattedNft, setFormattedNft] = useState();
+
   const formatNfts = (nftsData) => {
     const formattedNfts = nftsData.map((nft, index) => (
       // <NftCard nft={nft} key={index} index={index} />

@@ -7,13 +7,14 @@ import PublicProfilePic from "./Components/PublicProfilePic";
 import PublicArtistNfts from "./Components/PublicArtistNfts";
 import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
 
-const Artist = ( ) => {
+import { ReactComponent as IconTwitter } from "../../assets/img/icons/social_twitter.svg";
+const Artist = () => {
   const [edit, setEdit] = useState(false);
   const [profilePic, setProfilePic] = useState("");
   const [open, setOpen] = useState(false);
   const [userInfo, setUserInfo] = useState();
   const [userNfts, setUserNfts] = useState();
-
+  console.log("userInfo", userInfo);
   useEffect(() => {
     if (userInfo?.profilePic) {
       setProfilePic(userInfo.profilePic);
@@ -21,14 +22,16 @@ const Artist = ( ) => {
   }, [userInfo]);
   useEffect(() => {
     axios
-      .post("/api/user/get-public-account", { suburl: window.location.pathname.substring(
-                window.location.pathname.lastIndexOf("/") + 1
-              ) })
+      .post("/api/user/get-public-account", {
+        suburl: window.location.pathname.substring(
+          window.location.pathname.lastIndexOf("/") + 1
+        ),
+      })
       .then((res) => {
         setUserInfo(res.data[0]);
         setUserNfts(res.data[1]);
       })
-      .catch(() => window.location = "/")
+      .catch(() => (window.location = "/"));
   }, []);
 
   //   if (!userInfo) return <Error404 />; //this probably needs some work
@@ -59,6 +62,41 @@ const Artist = ( ) => {
             </ProfileInfoHolder>
           </ProfileHolder>
           <Side>
+            <SocialsBar>
+              {userInfo?.socials.map((social) => {
+                console.log(social)
+                if (social.twitter) {
+                  return (<IconContainer
+                    href={setUserInfo.socials.twitter}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Twitter />
+                    <IconText>Twitter</IconText>
+                  </IconContainer>)
+                }
+                if (social.insta) {
+                  return (<IconContainer
+                    href={setUserInfo.socials.insta}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Twitter />
+                    <IconText>Instagram</IconText>
+                  </IconContainer>)
+
+                }
+              }) }
+              {/* {userInfo?.socials.twitter && 
+              <IconContainer
+                href={setUserInfo.socials.twitter}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Twitter />
+                <IconText>Twitter</IconText>
+              </IconContainer>} */}
+            </SocialsBar>
           </Side>
         </ProfileHeading>
       </Landing>
@@ -74,6 +112,64 @@ const Artist = ( ) => {
     </BaseView>
   );
 };
+
+const IconText = styled.span`
+  margin: 1px 0 0 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+`;
+
+const IconContainer = styled.a`
+  text-decoration: none;
+  margin: 0 8px;
+  align-items: center;
+  border: solid #707070;
+  height: 28px;
+  width: 98px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: solid 1px ${(props) => props.theme.color.boxBorder};
+  border-radius: 18px;
+  background-color: ${(props) => props.theme.color.box};
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    background-color: ${(props) => props.theme.color.boxBorder};
+    border: solid 1px #383838;
+  }
+`;
+
+const SocialsBar = styled.div`
+  width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  /* margin-bottom: 80px; */
+  @media only screen and (max-width: 776px) {
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    margin-top: 40px;
+    margin-bottom: 80px;
+    & > * {
+      margin-bottom: 16px;
+    }
+  }
+`;
+
+const Twitter = styled(IconTwitter)`
+  margin-top: 1px;
+  width: 17px;
+  height: 17px;
+  & path {
+    transition: all 0.2s ease-in-out;
+    fill: ${(props) => props.theme.color.white};
+  }
+`;
 
 const CreatedNftHolder = styled.div`
   display: flex;

@@ -5,10 +5,11 @@ import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import axios from "axios";
 import Swal from "sweetalert2";
+import loading from "../../assets/img/loading.gif";
 
 const LikeShare = (props) => {
   const { account } = useAccountConsumer();
-  const { nft, liked, setLiked, likeCount, setLikeCount, shareCount } = props;
+  const { nft, liked, setLiked, likeCount, isLoading, setLikeCount, shareCount } = props;
   const like = async () => {
     if (account) {
       setLikeCount(liked ? likeCount - 1 : likeCount + 1);
@@ -31,7 +32,9 @@ const LikeShare = (props) => {
   return (
     <Side>
       <IconArea>
-        {liked ? (
+        {isLoading ? 
+        <img src={loading}/> :
+        liked ? (
           <LikedHeart onClick={() => like()} />
         ) : (
           <Heart onClick={() => like()} />
@@ -102,6 +105,11 @@ const IconArea = styled.div`
   font-size: 14px;
   height: 100%;
   align-items: center;
+  img {
+    width: 18px;
+    height: 18px;
+    margin-right: 6px;
+  }
 `;
 
 export default LikeShare;

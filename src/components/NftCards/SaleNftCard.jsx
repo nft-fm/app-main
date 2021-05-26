@@ -64,6 +64,7 @@ const NftCard = (props) => {
   const [partialSong, setPartialSong] = useState(false);
   const [shareCount, setShareCount] = useState({count: 0 })
   const [basicLoaded, setBasicLoaded] = useState(false);
+  const [likesLoading, setLikesLoading] = useState(false);
 
   const show = () => setIsModalOpen(true);
   const hide = () => {
@@ -128,6 +129,12 @@ const NftCard = (props) => {
   }*/
 
   useEffect(() => {
+    console.log("im here", basicLoaded);
+    if(basicLoaded) {
+      setLikesLoading(true);
+    }
+  }, [account])
+  useEffect(() => {
     if (props.nft) {
       setNft({
         ...props.nft,
@@ -136,7 +143,7 @@ const NftCard = (props) => {
       setLikeCount(props.nft.likeCount);
       setLiked(props.nft.liked);
       setBasicLoaded(true);
-      
+      setLikesLoading(false);
     }
   }, [props.nft, user]);
 
@@ -177,6 +184,7 @@ const NftCard = (props) => {
           setLikeCount={setLikeCount}
           setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
           shareCount={shareCount}
+          isLoading={likesLoading}
         />
         <Side>
           <IconArea>

@@ -71,6 +71,19 @@ const NftCard = (props) => {
     setIsModalOpen(false);
   };
 
+  /*const saveData = (data, fileName) => {
+    const a = document.createElement("a");
+    document.body.appendChild(a);
+    a.style = "display: none";
+    const json = JSON.stringify(data),
+      blob = new Blob([json], {type: "octet/stream"}),
+      url = window.URL.createObjectURL(blob);
+    a.href = url;
+    a.download = fileName;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };*/
+
   const getNSeconds = async (completeNft) => {
     await axios
       .post("/api/nft-type/getNSecondsOfSong", {
@@ -79,11 +92,14 @@ const NftCard = (props) => {
           "/" +
           completeNft.audioUrl.split("/").slice(-1)[0],
         nft: completeNft,
+        startTime: 30
       })
       .then((res) => {
         console.log("got snnipet");
         const songFile = res.data.Body.data;
+        //const fileName = completeNft.title + ".json";
 
+        //saveData(songFile, fileName);
         setPartialSong(songFile);
       });
   };
@@ -97,20 +113,6 @@ const NftCard = (props) => {
     }
 
   }
-
-  const saveData = (data, fileName) => {
-    const a = document.createElement("a");
-    document.body.appendChild(a);
-    a.style = "display: none";
-
-    const json = JSON.stringify(data),
-      blob = new Blob([json], {type: "octet/stream"}),
-      url = window.URL.createObjectURL(blob);
-    a.href = url;
-    a.download = fileName;
-    a.click();
-    window.URL.revokeObjectURL(url);
-  };
 
   /*const getSnnipet = async (completeNft) => {
     console.log("going to get snnipets");

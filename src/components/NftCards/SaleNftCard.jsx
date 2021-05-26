@@ -136,6 +136,7 @@ const NftCard = (props) => {
       setLikesLoading(true);
     }
   }, [account])
+  
   useEffect(() => {
     if (props.nft) {
       setNft({

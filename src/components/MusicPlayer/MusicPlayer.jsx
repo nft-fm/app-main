@@ -87,7 +87,7 @@ const MusicPlayer = (props) => {
       partialBufferSrc.current = _bufferSrc;
   
       setStartTime(_bufferSrc.context.currentTime);
-      props.setCurrentBuffer(songFile);
+      /*props.setCurrentBuffer(songFile);*/
     })
 
     return _bufferSrc;
@@ -139,7 +139,7 @@ const MusicPlayer = (props) => {
     await axios.post("api/nft-type/getSong", { key: nft.address + "/" + nft.audioUrl.split('/').slice(-1)[0] })
           .then((fullFile) => {
           prepareRemainingSong(fullFile, _bufferSrc);
-          props.setCurrentBuffer(fullFile);
+          /*props.setCurrentBuffer(fullFile);*/
         }, (e) => {
           Swal.fire({
             title: 'Sorry, something went wrong loading the music',
@@ -204,8 +204,8 @@ const MusicPlayer = (props) => {
         setDur(_bufferSrc.buffer.duration);
         setIsLoading(false);
       }
-      /*props.fetchPrevNext();*/
-      props.setCurrentBuffer(songFile);
+      /*props.fetchPrevNext();
+      props.setCurrentBuffer(songFile);*/
     })
   }
 

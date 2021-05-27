@@ -195,12 +195,12 @@ const NftCard = (props) => {
             {nft.numMinted}
             <span style={{ margin: "0 1px" }}>&nbsp;Available</span>
           </IconArea> */}
-          {/* <IconArea>
+          <IconArea>
             {nft.numMinted - nft.numSold}
             <span style={{ margin: "0 1px" }}>&nbsp;of&nbsp;</span>
             {nft.numMinted}
             <span style={{ margin: "0 1px" }}>&nbsp;Available</span>
-          </IconArea> */}
+          </IconArea>
           {/* <IconArea>
             {nft.numMinted - nft.numSold}
             <span style={{ margin: "0 1px" }}>&nbsp;of&nbsp;</span>
@@ -213,12 +213,13 @@ const NftCard = (props) => {
             {nft.numMinted}
             <Cart onClick={() => setIsModalOpen(!isModalOpen)} />
           </IconArea> */}
-          <IconArea>
-            {nft.numSold}
+          {/* <IconArea>
+            {20 - nft.numSold}
             <span style={{ margin: "0 1px" }}>&nbsp;of&nbsp;</span>
             {nft.numMinted}
-            <Cart onClick={() => setIsModalOpen(!isModalOpen)} />
-          </IconArea>
+            {" "}
+            {"available"}
+            {/* <Cart onClick={() => setIsModalOpen(!isModalOpen)} /> */}
         </Side>
       </CardTop>
       {imageLoaded ? null : (
@@ -360,7 +361,7 @@ const Side = styled.div`
 `;
 
 const IconArea = styled.div`
-  margin: 0 8px;
+  /* margin: 0 8px; */
   display: flex;
   font-size: 14px;
   height: 100%;
@@ -370,8 +371,9 @@ const IconArea = styled.div`
 const CardTop = styled.div`
   /* width: calc(100% - 4px); */
   /* padding: 0px 2px; */
-  width: 100%;
+  width: calc(100% - 8px);
   margin-bottom: 12px;
+  padding: 0 4px;
   display: flex;
   justify-content: space-between;
   font-weight: 600;

@@ -88,7 +88,7 @@ const Disclaimer = () => {
 
   const buy = () => {
     if (account) {
-      buyPresale(val * 2200, (res) => {
+      buyPresale(val * 2240, (res) => {
         console.log(res);
         getVinylBalance((r) => {
           setAmountBought(Number(r.vinyl[0]));
@@ -159,7 +159,7 @@ const Disclaimer = () => {
       </Spacer>
       <SaleContainer>
         <Title> Buy </Title>
-        <BuyContent>1 ETH = 2200 $VINYL</BuyContent>
+        <BuyContent>1 ETH = 2240 $VINYL</BuyContent>
         <Divider />
         <Row>
           <PurchaseInput

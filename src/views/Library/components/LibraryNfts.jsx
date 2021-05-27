@@ -6,7 +6,6 @@ import ArtistCard from "../../../components/NftCards/ArtistCard";
 import loading from "../../../assets/img/loading.gif";
 
 import { usePlaylistConsumer } from "../../../contexts/Playlist";
-import { resolveContent } from "nodemailer/lib/shared";
 import { useAccountConsumer } from "../../../contexts/Account";
 
 const Library = ({ user }) => {

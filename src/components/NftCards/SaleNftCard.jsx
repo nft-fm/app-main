@@ -190,10 +190,10 @@ const NftCard = (props) => {
         />
         <Side>
           <IconArea>
-            {nft.numSold}
-            <span style={{ margin: "0 1px" }}>/</span>
+            {nft.numMinted - nft.numSold}
+            <span style={{ margin: "0 1px" }}>&nbsp;of&nbsp;</span>
             {nft.numMinted}
-            <Cart onClick={() => setIsModalOpen(!isModalOpen)} />
+            {/* <Cart onClick={() => setIsModalOpen(!isModalOpen)} /> */}
           </IconArea>
         </Side>
       </CardTop>

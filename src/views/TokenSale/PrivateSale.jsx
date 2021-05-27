@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { buyPresale, getVinylBalance, require } from "../../web3/utils";
+import {
+  buyPresale,
+  getVinylBalance,
+  requir,
+  getEthBalance,
+} from "../../web3/utils";
 import useWallet from "use-wallet";
 import axios from "axios";
 import isMobile from "../../utils/isMobile";
@@ -86,14 +91,27 @@ const Disclaimer = () => {
     }
   };
 
-  const buy = () => {
+  const buy = async () => {
     if (account) {
-      buyPresale(val * 2240, (res) => {
-        console.log(res);
-        getVinylBalance((r) => {
-          setAmountBought(Number(r.vinyl[0]));
-          console.log("bought!");
-        });
+      await getEthBalance(async (balance) => {
+        if (parseFloat(balance) >= val) {
+          buyPresale(val * 2240, (res) => {
+            console.log(res);
+            getVinylBalance((r) => {
+              setAmountBought(Number(r.vinyl[0]));
+              console.log("bought!");
+            });
+          });
+        } else {
+          Swal.fire({
+            title: `Not Enough ETH`,
+            text: `in wallet address: ...${account.substring(
+              account.length - 4
+            )}`,
+            icon: "error",
+          });
+          return;
+        }
       });
     } else {
       if (window.ethereum) {

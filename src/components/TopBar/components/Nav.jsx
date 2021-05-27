@@ -23,23 +23,23 @@ export const Nav = () => {
     }
   }, [account]);
 
-  const presaleTime = 1622134800000;
+  // const presaleTime = 1622134800000;
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (moment().isAfter(presaleTime)) {
-        setIsPresaleTime(true);
-      }
-    }, 600);
-    return () => clearInterval(interval);
-  }, []);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     if (moment().isAfter(presaleTime)) {
+  //       setIsPresaleTime(true);
+  //     }
+  //   }, 600);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   return (
     <StyledNav>
       <StyledLink exact tab="home" activeClassName="active" to="/">
         Home
       </StyledLink>
-      {isPresaleTime && (
+      {/* {isPresaleTime && ( */}
         <StyledLink
           exact
           tab="presale"
@@ -48,7 +48,7 @@ export const Nav = () => {
         >
           Presale
         </StyledLink>
-      )}
+      {/* )} */}
       {/* <StyledLink exact tab="discover" activeClassName="active" to="/discover">
         Discover
       </StyledLink> */}

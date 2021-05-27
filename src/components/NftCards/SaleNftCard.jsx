@@ -189,11 +189,35 @@ const NftCard = (props) => {
           isLoading={likesLoading}
         />
         <Side>
-          <IconArea>
+          {/* <IconArea>
             {nft.numMinted - nft.numSold}
             <span style={{ margin: "0 1px" }}>&nbsp;of&nbsp;</span>
             {nft.numMinted}
-            {/* <Cart onClick={() => setIsModalOpen(!isModalOpen)} /> */}
+            <span style={{ margin: "0 1px" }}>&nbsp;Available</span>
+          </IconArea> */}
+          {/* <IconArea>
+            {nft.numMinted - nft.numSold}
+            <span style={{ margin: "0 1px" }}>&nbsp;of&nbsp;</span>
+            {nft.numMinted}
+            <span style={{ margin: "0 1px" }}>&nbsp;Available</span>
+          </IconArea> */}
+          {/* <IconArea>
+            {nft.numMinted - nft.numSold}
+            <span style={{ margin: "0 1px" }}>&nbsp;of&nbsp;</span>
+            {nft.numMinted}
+            <span style={{ margin: "0 1px" }}>&nbsp;Available</span>
+          </IconArea> */}
+          {/* <IconArea>
+            {nft.numSold}
+            <span style={{ margin: "0 1px" }}>&nbsp;/&nbsp;</span>
+            {nft.numMinted}
+            <Cart onClick={() => setIsModalOpen(!isModalOpen)} />
+          </IconArea> */}
+          <IconArea>
+            {nft.numSold}
+            <span style={{ margin: "0 1px" }}>&nbsp;of&nbsp;</span>
+            {nft.numMinted}
+            <Cart onClick={() => setIsModalOpen(!isModalOpen)} />
           </IconArea>
         </Side>
       </CardTop>

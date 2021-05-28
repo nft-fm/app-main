@@ -413,26 +413,9 @@ router.post("/uploadAudioS3", async (req, res) => {
     } else if (err) {
       console.log("singleUpload error", err);
       return res.status(500).json(err);
+    } else {
+      return res.json({success: true});
     }
-    console.log("file", req.file);
-    console.log("dur", req.body.dur);
-    const partialBytes = (req.file.size * 15) / req.body.dur;
-    console.log("partial bytes", partialBytes.toFixed(0));
-    const AWS = require("aws-sdk");
-    const s3 = new AWS.S3();
-    s3.getObject(
-      {
-        Bucket: "nftfm-music",
-        Key: req.file.key,
-        Range: "bytes=0-" + partialBytes.toFixed(0),
-      },
-      async (error, data) => {
-        if (error != null) {
-          console.log("Failed to retrieve an object: " + error);
-        } else {
-        return res.status(200).send(data);
-      }
-    });
   });
 });
 

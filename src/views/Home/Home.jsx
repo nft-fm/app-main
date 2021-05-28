@@ -7,7 +7,16 @@ import Roadmap from "./Components/Roadmap";
 import { FAQ } from "./Components/FAQ/FAQ";
 import record from "../../assets/img/record_player_disk.png";
 import DemoImage from "./Components/DemoImage/DemoImage"
+import Swal from "sweetalert2"
+
 const Listen = () => {
+  if (window.location.hostname === "localhost" && process.env.REACT_APP_IS_MAINNET) {
+    Swal.fire({
+      title: `You are on MAINNET and LOCALHOST be careful`,
+      text: `🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆`,
+      icon: "error",
+    });
+  }
   return (
     <Switch>
       <BaseView>

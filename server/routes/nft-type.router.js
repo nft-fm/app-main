@@ -365,7 +365,7 @@ router.post("/all", async (req, res) => {
   try {
     let nftTypes = await NftType.find({
       isDraft: false,
-      isMinted: true,
+      isMinted: true
     });
     res.send(findLikes(nftTypes, req.body.address));
   } catch (error) {

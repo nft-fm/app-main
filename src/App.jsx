@@ -48,7 +48,7 @@ const App = () => {
             <Route path="/artist">
               <Artist />
             </Route>
-            <Route path="/privatesale">
+            <Route path="/presale">
               <TokenSale />
             </Route>
             {/* <Route path="/discover">

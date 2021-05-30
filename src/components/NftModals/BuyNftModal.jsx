@@ -167,10 +167,10 @@ const BuyNftModal = ({
             </Side>
             <Side>
               <IconArea>
-                {nft.numSold}
-                <span style={{ margin: "0 1px" }}>/</span>
-                {nft.numMinted}
-                <Cart />
+            {nft.numMinted - nft.numSold}
+            <span style={{ margin: "0 1px" }}>&nbsp;of&nbsp;</span>
+            {nft.numMinted}
+                {/* <Cart /> */}
               </IconArea>
             </Side>
           </CardTop>

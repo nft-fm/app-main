@@ -37,7 +37,7 @@ const images = {
 }
 
 const NftCard = (props) => {
-  const { usdPerEth, user } = useAccountConsumer();
+  const { usdPerEth, user, account } = useAccountConsumer();
   const [nft, setNft] = useState({
     address: "",
     artist: "",
@@ -61,12 +61,26 @@ const NftCard = (props) => {
   const [likeCount, setLikeCount] = useState(0);
   const [partialSong, setPartialSong] = useState(false);
   const [shareCount, setShareCount] = useState({count: 0 })
-  // const [basicLoaded, setBasicLoaded] = useState(false);
+  const [basicLoaded, setBasicLoaded] = useState(false);
+  const [likesLoading, setLikesLoading] = useState(false);
 
   // const show = () => setIsModalOpen(true);
   const hide = () => {
     setIsModalOpen(false);
   };
+
+  /*const saveData = (data, fileName) => {
+    const a = document.createElement("a");
+    document.body.appendChild(a);
+    a.style = "display: none";
+    const json = JSON.stringify(data),
+      blob = new Blob([json], {type: "octet/stream"}),
+      url = window.URL.createObjectURL(blob);
+    a.href = url;
+    a.download = fileName;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };*/
 
   const getNSeconds = async (completeNft) => {
     await axios
@@ -76,11 +90,14 @@ const NftCard = (props) => {
           "/" +
           completeNft.audioUrl.split("/").slice(-1)[0],
         nft: completeNft,
+        startTime: 30
       })
       .then((res) => {
         console.log("got snnipet");
         const songFile = res.data.Body.data;
+        //const fileName = completeNft.title + ".json";
 
+        //saveData(songFile, fileName);
         setPartialSong(songFile);
       });
   };
@@ -94,20 +111,6 @@ const NftCard = (props) => {
     }
 
   }
-
-  // const saveData = (data, fileName) => {
-  //   const a = document.createElement("a");
-  //   document.body.appendChild(a);
-  //   a.style = "display: none";
-
-  //   const json = JSON.stringify(data),
-  //     blob = new Blob([json], {type: "octet/stream"}),
-  //     url = window.URL.createObjectURL(blob);
-  //   a.href = url;
-  //   a.download = fileName;
-  //   a.click();
-  //   window.URL.revokeObjectURL(url);
-  // };
 
   /*const getSnnipet = async (completeNft) => {
     console.log("going to get snnipets");
@@ -126,6 +129,12 @@ const NftCard = (props) => {
   }*/
 
   useEffect(() => {
+    console.log("im here", basicLoaded);
+    if(basicLoaded) {
+      setLikesLoading(true);
+    }
+  }, [account])
+  useEffect(() => {
     if (props.nft) {
       setNft({
         ...props.nft,
@@ -133,8 +142,8 @@ const NftCard = (props) => {
       setShareCount({count: props.nft.shareCount});
       setLikeCount(props.nft.likeCount);
       setLiked(props.nft.liked);
-      // setBasicLoaded(true);
-      
+      setBasicLoaded(true);
+      setLikesLoading(false);
     }
   }, [props.nft, user]);
 
@@ -175,14 +184,40 @@ const NftCard = (props) => {
           setLikeCount={setLikeCount}
           setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
           shareCount={shareCount}
+          isLoading={likesLoading}
         />
         <Side>
+          {/* <IconArea>
+            {nft.numMinted - nft.numSold}
+            <span style={{ margin: "0 1px" }}>&nbsp;of&nbsp;</span>
+            {nft.numMinted}
+            <span style={{ margin: "0 1px" }}>&nbsp;Available</span>
+          </IconArea> */}
           <IconArea>
+            {nft.numMinted - nft.numSold}
+            <span style={{ margin: "0 1px" }}>&nbsp;of&nbsp;</span>
+            {nft.numMinted}
+            <span style={{ margin: "0 1px" }}>&nbsp;Available</span>
+          </IconArea>
+          {/* <IconArea>
+            {nft.numMinted - nft.numSold}
+            <span style={{ margin: "0 1px" }}>&nbsp;of&nbsp;</span>
+            {nft.numMinted}
+            <span style={{ margin: "0 1px" }}>&nbsp;Available</span>
+          </IconArea> */}
+          {/* <IconArea>
             {nft.numSold}
-            <span style={{ margin: "0 1px" }}>/</span>
+            <span style={{ margin: "0 1px" }}>&nbsp;/&nbsp;</span>
             {nft.numMinted}
             <Cart onClick={() => setIsModalOpen(!isModalOpen)} />
-          </IconArea>
+          </IconArea> */}
+          {/* <IconArea>
+            {20 - nft.numSold}
+            <span style={{ margin: "0 1px" }}>&nbsp;of&nbsp;</span>
+            {nft.numMinted}
+            {" "}
+            {"available"}
+            {/* <Cart onClick={() => setIsModalOpen(!isModalOpen)} /> */}
         </Side>
       </CardTop>
       {imageLoaded ? null : (
@@ -324,7 +359,7 @@ const Side = styled.div`
 `;
 
 const IconArea = styled.div`
-  margin: 0 8px;
+  /* margin: 0 8px; */
   display: flex;
   font-size: 14px;
   height: 100%;
@@ -334,8 +369,9 @@ const IconArea = styled.div`
 const CardTop = styled.div`
   /* width: calc(100% - 4px); */
   /* padding: 0px 2px; */
-  width: 100%;
+  width: calc(100% - 8px);
   margin-bottom: 12px;
+  padding: 0 4px;
   display: flex;
   justify-content: space-between;
   font-weight: 600;

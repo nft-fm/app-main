@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import {
-  buyPresale, 
+  buyPresale,
   getVinylBalance,
-  // require 
+  require,
+  getEthBalance,
 } from "../../web3/utils";
 import useWallet from "use-wallet";
 // import axios from "axios";
@@ -89,20 +90,33 @@ const Disclaimer = () => {
     }
   };
 
-  const buy = () => {
+  const buy = async () => {
     if (account) {
-      buyPresale(val * 2750, (res) => {
-        console.log(res);
-        getVinylBalance((r) => {
-          setAmountBought(Number(r.vinyl[0]));
-          console.log("bought!");
-        });
+      await getEthBalance(async (balance) => {
+        if (parseFloat(balance) >= val) {
+          buyPresale(val * 2240, (res) => {
+            console.log(res);
+            getVinylBalance((r) => {
+              setAmountBought(Number(r.vinyl[0]));
+              console.log("bought!");
+            });
+          });
+        } else {
+          Swal.fire({
+            title: `Not Enough ETH`,
+            text: `in wallet address: ...${account.substring(
+              account.length - 4
+            )}`,
+            icon: "error",
+          });
+          return;
+        }
       });
     } else {
       if (window.ethereum) {
-        connect("injected")
+        connect("injected");
       } else {
-        Swal.fire("No MetaMask detected!")
+        Swal.fire("No MetaMask detected!");
       }
     }
   };
@@ -141,62 +155,74 @@ const Disclaimer = () => {
   );
 
   // if (account) {
-    //   pageContents = <Loading src={loadingGif}></Loading>;
-    // } else if (signed) {
-    pageContents = (
-      <PrivateSaleContainer>
-        <Spacer/>
-        <SaleContainer>
-          <Title> Buy </Title>
-          <BuyContent>1 ETH = 2750 $VINYL</BuyContent>
-          <Divider />
-          <Row>
-            <PurchaseInput
-              step="1"
-              min="0"
-              onChange={(e) =>
-                setVal(
-                  parseInt(e.target.value) > 30 ? 30 : e.target.value
-                )
-              }
-              value={val}
-              type="number"
-            /><Ethtext>
-              ETH
-              </Ethtext>
-            {/* <Currency>
+  //   pageContents = <Loading src={loadingGif}></Loading>;
+  // } else if (signed) {
+  pageContents = (
+    <PrivateSaleContainer>
+      <Spacer>
+        <span>
+          If you would like to avoid gas fees you can manually send ETH or
+          StableCoins to this address:
+          <br />
+          0x1903606b97EFAb2438BC648Eb6190ADeB0f99C09
+        </span>
+        {/* <span>
+          DM{" "}
+          <a href="https://t.me/pnkfluffyunicorn" target="_blank">
+            @pnkfluffyunicorn
+          </a>{" "}
+          on Telegram with the transaction ID to receive VINYL
+        </span> */}
+      </Spacer>
+      <SaleContainer>
+        <Title> Buy </Title>
+        <BuyContent>1 ETH = 2240 $VINYL</BuyContent>
+        <Divider />
+        <Row>
+          <PurchaseInput
+            step="1"
+            min="0"
+            onChange={(e) =>
+              setVal(parseInt(e.target.value) > 30 ? 30 : e.target.value)
+            }
+            value={val}
+            type="number"
+          />
+          <Ethtext>ETH</Ethtext>
+          {/* <Currency>
               ETH
             </Currency> */}
-            {account ?
+          {account ? (
             <BuyButton onClick={buy}>BUY</BuyButton>
-           : 
+          ) : (
             <BuyButton onClick={() => connect("injected")}>CONNECT</BuyButton>
-          }
-          </Row>
-          {/* <BuyContent>Wallet Connected: {account.substring(0, 6)}...{account.substring(account.length - 4)} </BuyContent> */}
-        </SaleContainer>
-        <SaleContainer>
-          <TitleContainer>
-            {!isMobile() && (
-              <StonkButton style={{ visibility: "hidden" }} onClick={addStonk}>
-                Add VINYL to Metamask
-              </StonkButton>
-            )}
-            <Title>Purchased</Title>
-            <StonkButton onClick={addStonk}>Add VINYL to MetaMask</StonkButton>
-          </TitleContainer>
-          <Divider />
-          <BuyContent style={{ fontSize: "1.25rem" }}>
-            {parseFloat(amountBought).toFixed(2)} $VINYL
-          </BuyContent>
-        </SaleContainer>
+          )}
+        </Row>
+        {/* <BuyContent>Wallet Connected: {account.substring(0, 6)}...{account.substring(account.length - 4)} </BuyContent> */}
+      </SaleContainer>
+      <SaleContainer>
+        <TitleContainer>
+          {!isMobile() && (
+            <StonkButton style={{ visibility: "hidden" }} onClick={addStonk}>
+              Add VINYL to Metamask
+            </StonkButton>
+          )}
+          <Title>Purchased</Title>
+          <StonkButton onClick={addStonk}>Add VINYL to MetaMask</StonkButton>
+        </TitleContainer>
+        <Divider />
+        <BuyContent style={{ fontSize: "1.25rem" }}>
+          {parseFloat(amountBought).toFixed(2)} $VINYL
+        </BuyContent>
+      </SaleContainer>
       <TelegramHolder>
         <a href="https://t.me/nftfm" target="_blank">
           <TelegramIcon />
         </a>
       </TelegramHolder>
-      </PrivateSaleContainer>
-    );
+      <span>Scroll down to see our Tokenomics</span>
+    </PrivateSaleContainer>
+  );
   // }
 
   // if (!account) {
@@ -211,18 +237,29 @@ const Disclaimer = () => {
 };
 
 const Ethtext = styled.div`
-position: absolute;
-margin-left: -19px;
-margin-top: 12px;
-`
+  position: absolute;
+  margin-left: -19px;
+  margin-top: 12px;
+`;
 
-const Spacer = !isMobile() ? styled.div`
-height: 200px;
-` : styled.div``
+const Spacer = !isMobile()
+  ? styled.div`
+      margin-top: 20px;
+      margin-bottom: 20px;
+      height: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      & > span {
+        text-align: center;
+      }
+    `
+  : styled.div``;
 
 const TelegramHolder = styled.div`
-  margin-top: 45px;
-  margin-bottom: 75px;
+  margin-top: 30px;
+  margin-bottom: 30px;
   /* display: flex; */
 `;
 
@@ -254,11 +291,13 @@ const PrivateSaleContainer = !isMobile()
       align-items: center;
       width: 100%;
       margin-bottom: 30%;
+      color: white;
     `
   : styled.div`
       display: flex;
       flex-direction: column;
       align-items: center;
+      color: white;
     `;
 
 // const Currency = styled.div`
@@ -300,38 +339,40 @@ const SaleContainer = styled.div`
   margin-top: 20px;
 `;
 
-const StonkButton = !isMobile() ? styled.button`
-  /* width: 250px; */
-  /* height: 30px; */
-  /* border: 2px solid white; */
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: all 0.2s linear;
-  margin-top: -10px;
-  margin-bottom: 10px;
-  padding: 0 10px;
-  &:hover {
-    background-color: ${(props) => props.theme.color.blue};
-    color: white;
-    cursor: pointer;
-  }
-` :  styled.button`
-/* width: 250px; */
-/* height: 30px; */
-/* border: 2px solid white; */
-border: none;
-border-radius: 8px;
-font-size: 16px;
-transition: all 0.2s linear;
-margin-top: -10px;
-padding: 0 10px;
-&:hover {
-  background-color: ${(props) => props.theme.color.blue};
-  color: white;
-  cursor: pointer;
-}
-`;
+const StonkButton = !isMobile()
+  ? styled.button`
+      /* width: 250px; */
+      /* height: 30px; */
+      /* border: 2px solid white; */
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: all 0.2s linear;
+      margin-top: -10px;
+      margin-bottom: 10px;
+      padding: 0 10px;
+      &:hover {
+        background-color: ${(props) => props.theme.color.blue};
+        color: white;
+        cursor: pointer;
+      }
+    `
+  : styled.button`
+      /* width: 250px; */
+      /* height: 30px; */
+      /* border: 2px solid white; */
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: all 0.2s linear;
+      margin-top: -10px;
+      padding: 0 10px;
+      &:hover {
+        background-color: ${(props) => props.theme.color.blue};
+        color: white;
+        cursor: pointer;
+      }
+    `;
 
 const BuyButton = styled.button`
   width: 100px;

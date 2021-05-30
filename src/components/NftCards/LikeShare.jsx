@@ -5,10 +5,11 @@ import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import axios from "axios";
 import Swal from "sweetalert2";
+import loading from "../../assets/img/loading.gif";
 
 const LikeShare = (props) => {
   const { account } = useAccountConsumer();
-  const { nft, liked, setLiked, likeCount, setLikeCount, shareCount } = props;
+  const { nft, liked, setLiked, likeCount, isLoading, setLikeCount, shareCount } = props;
   const like = async () => {
     if (account) {
       setLikeCount(liked ? likeCount - 1 : likeCount + 1);
@@ -31,13 +32,16 @@ const LikeShare = (props) => {
   return (
     <Side>
       <IconArea>
-        {liked ? (
+        {isLoading ? 
+        <img src={loading}/> :
+        liked ? (
           <LikedHeart onClick={() => like()} />
         ) : (
           <Heart onClick={() => like()} />
         )}
         {likeCount}
       </IconArea>
+      <Spacer/>
       <IconArea>
         <Share onClick={() => share()} />
         {shareCount?.count ? shareCount.count : nft.shareCount}
@@ -45,6 +49,10 @@ const LikeShare = (props) => {
     </Side>
   );
 };
+
+const Spacer = styled.div`
+width: 8px;
+`
 
 const Share = styled(IconShare)`
   width: 16px;
@@ -97,11 +105,16 @@ const Side = styled.div`
 `;
 
 const IconArea = styled.div`
-  margin: 0 8px;
+  /* margin: 0 8px; */
   display: flex;
   font-size: 14px;
   height: 100%;
   align-items: center;
+  img {
+    width: 18px;
+    height: 18px;
+    margin-right: 6px;
+  }
 `;
 
 export default LikeShare;

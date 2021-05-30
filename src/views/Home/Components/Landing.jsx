@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from "react";
-import styled, { keyframes } from "styled-components";
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
 import axios from "axios";
 import NftCard from "../../../components/NftCards/SaleNftCard";
 import logo from "../../../assets/img/logos/logo.png";
@@ -24,7 +24,7 @@ const preloads = {
 const Listen = () => {
   const { user, account } = useAccountConsumer();
   const [nfts, setNfts] = useState(<LoadingFeatured />);
-  const [hasNfts, setHasNfts] = useState(false);
+  // const [hasNfts, setHasNfts] = useState(false);
 
   const [nftFromUrl, setNftFromUrl] = useState(null);
   const [isUrlModalOpen, setIsUrlModalOpen] = useState(false);
@@ -44,7 +44,7 @@ const Listen = () => {
       setTimeout(function () {
         formattedNfts.push(<FillerCard />);
         setNfts(formattedNfts);
-        setHasNfts(true);
+        // setHasNfts(true);
         setIsLoaded(true);
       }, 300);
     });

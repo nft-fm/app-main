@@ -10,7 +10,7 @@ import moment from "moment"
 export const Nav = () => {
   const { user } = useAccountConsumer();
 
-  const { account, connect } = useWallet();
+  const { account } = useWallet();
   const [hasVinyl, setHasVinyl] = useState(false);
   const [isPresaleTime, setIsPresaleTime] = useState(false);
   console.log('ispresale', isPresaleTime)

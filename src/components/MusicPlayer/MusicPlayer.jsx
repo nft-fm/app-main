@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import loading from "../../assets/img/loading.gif";
@@ -16,7 +16,7 @@ const MusicPlayer = (props) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [startTime, setStartTime] = useState(0);
-  const [gainNode, setGainNode] = useState();
+  // const [gainNode, setGainNode] = useState();
   const [volume, setVolume] = useState(0.7);
   const [dur, setDur] = useState(0);
   const [second, setSecond] = useState("00");
@@ -371,6 +371,18 @@ const MusicPlayer = (props) => {
   };
 
   useEffect(() => {
+    const getPartialSong = async () => {
+      if (bufferSrcRef.current) {
+        setIsLoading(true);
+        setIsPlaying(false);
+        bufferSrcRef.current.stop();
+        bufferSrcRef.current.disconnect();
+      }
+      axios.post("api/nft-type/getPartialSong", { key: nft.address + "/" + nft.audioUrl.split('/').slice(-1)[0] })
+          .then((songFile) => {
+              startPartialSong(songFile);
+      }, (e) => { console.log("Error: ", e.err); })
+    }
     setCounter(0);
     if (!nft.buffer) {
       getPartialSong();
@@ -600,7 +612,7 @@ const Wrapper = styled.div`
   align-items: center;
   width: calc(100vw - 40px);
   padding: 0 20px;
-  /* border-top: 1px solid ${(props) => props.theme.color.boxBorder}; */
+  border-top: 1px solid ${(props) => props.theme.color.boxBorder};
   height: 59px;
   background-color: ${(props) => props.theme.color.darkBlack};
   @media only screen and (max-width: 776px) {

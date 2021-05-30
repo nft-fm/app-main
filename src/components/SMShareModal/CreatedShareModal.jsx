@@ -1,28 +1,15 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { ReactComponent as IconX } from "../../assets/img/icons/x.svg";
-import logo from "../../assets/img/logos/logo_tiny.png";
-import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
-import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
-import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
-import PlayIcon from "../../assets/img/icons/listen_play.svg";
-import { useAccountConsumer } from "../../contexts/Account";
-import IconMetamask from "../../assets/img/icons/metamask_icon.png";
-import loading from "../../assets/img/loading.gif";
-import Swal from "sweetalert2";
-import { usePlaylistConsumer } from "../../contexts/Playlist";
 import {
   FacebookShareButton,
   TwitterShareButton,
-  RedditShareButton,
-  InstapaperShareButton,
   TwitterIcon,
   FacebookIcon,
 } from "react-share";
 
 const SMShareModal = ({ open, children, hide, onClose, nft, updateShareCount }) => {
-  const { account, connect, usdPerEth } = useAccountConsumer();
 
   if (!open) return null;
   const stopProp = (e) => {

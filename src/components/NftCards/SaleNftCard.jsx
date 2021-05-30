@@ -4,9 +4,8 @@ import BuyNftModal from "../NftModals";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
-import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.svg";
+// import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.svg";
 import { useAccountConsumer } from "../../contexts/Account";
-import { usePlaylistConsumer } from "../../contexts/Playlist";
 import loading from "../../assets/img/loading.gif";
 import axios from "axios";
 import ShareModal from "../SMShareModal/SMShareModal";
@@ -55,7 +54,6 @@ const NftCard = (props) => {
     sold: "--",
   });
 
-  const { isOpen } = usePlaylistConsumer();
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
@@ -66,7 +64,7 @@ const NftCard = (props) => {
   const [basicLoaded, setBasicLoaded] = useState(false);
   const [likesLoading, setLikesLoading] = useState(false);
 
-  const show = () => setIsModalOpen(true);
+  // const show = () => setIsModalOpen(true);
   const hide = () => {
     setIsModalOpen(false);
   };
@@ -285,21 +283,21 @@ const NftCard = (props) => {
   );
 };
 
-const PlayButton = styled(PlayIcon)`
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  & path {
-    transition: all 0.2s ease-in-out;
-    fill: ${(props) => props.theme.color.gray};
-  }
-  &:hover {
-    & path {
-      fill: #20a4fc;
-    }
-  }
-`;
+// const PlayButton = styled(PlayIcon)`
+//   width: 30px;
+//   height: 30px;
+//   cursor: pointer;
+//   transition: all 0.2s ease-in-out;
+//   & path {
+//     transition: all 0.2s ease-in-out;
+//     fill: ${(props) => props.theme.color.gray};
+//   }
+//   &:hover {
+//     & path {
+//       fill: #20a4fc;
+//     }
+//   }
+// `;
 
 const Usd = styled(IconUsd)`
   width: 18px;

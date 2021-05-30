@@ -2,13 +2,12 @@ import axios from "axios";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import swal from "sweetalert2";
+// import swal from "sweetalert2";
 import { useWallet } from "use-wallet";
-import isMobile from "../../utils/isMobile";
 import { require, getVinylBalance } from "../../web3/utils";
 
 const Community = ({ fetchSuggestions, suggestions }) => {
-  const [exploitPrevent, setExploitPrevent] = useState(false);
+  // const [exploitPrevent, setExploitPrevent] = useState(false);
   const [votes, setVotes] = useState(1);
   const { account } = useWallet();
   console.log('votes', votes)
@@ -30,14 +29,14 @@ const Community = ({ fetchSuggestions, suggestions }) => {
     }
 
     const castVote = async (voteAmount) => {
-      if (exploitPrevent) {
-        swal.fire({
-          title: `Error`,
-          text: `Wait to vote sdfjil.`,
-          icon: "error",
-        });
-        return;
-      }
+      // if (exploitPrevent) {
+      //   swal.fire({
+      //     title: `Error`,
+      //     text: `Wait to vote sdfjil.`,
+      //     icon: "error",
+      //   });
+      //   return;
+      // }
       const { provider } = await require();
       const signer = provider.getSigner();
       const sig = await signer.signMessage(

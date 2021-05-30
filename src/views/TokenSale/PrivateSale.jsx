@@ -3,11 +3,11 @@ import styled from "styled-components";
 import {
   buyPresale,
   getVinylBalance,
-  requir,
+  require,
   getEthBalance,
 } from "../../web3/utils";
 import useWallet from "use-wallet";
-import axios from "axios";
+// import axios from "axios";
 import isMobile from "../../utils/isMobile";
 import { VinylAddress } from "../../web3/constants";
 import { ReactComponent as telegram_icon } from "../../assets/img/icons/social_telegram.svg";
@@ -16,11 +16,10 @@ import Swal from "sweetalert2";
 const Disclaimer = () => {
   const { account, connect } = useWallet();
   const [val, setVal] = useState(1);
-  const [stonkVal, setStonkVal] = useState(0);
   const [amountBought, setAmountBought] = useState(0);
-  const [signed, setSigned] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [name, setName] = useState("");
+  // const [signed, setSigned] = useState(false);
+  // const [loading, setLoading] = useState(false);
+  // const [name, setName] = useState("");
 
   useEffect(() => {
     getVinylBalance((r) => {
@@ -29,32 +28,32 @@ const Disclaimer = () => {
     });
   }, [account]);
 
-  const sign = async () => {
-    if (!name) {
-      return;
-    }
-    const { provider, walletAddress } = await require();
-    const signer = provider.getSigner();
-    signer
-      .signMessage(JSON.stringify({ name, walletAddress }))
-      .then((authorization) => {
-        setLoading(true);
-        axios
-          .post("/api/forms/disclaimer-signed", {
-            name: name,
-            address: walletAddress,
-            sig: authorization,
-          })
-          .then((res) => {
-            getVinylBalance((r) => {
-              setAmountBought(r);
-              console.log("bought!");
-            });
-            setSigned(true);
-            setLoading(false);
-          });
-      });
-  };
+  // const sign = async () => {
+  //   if (!name) {
+  //     return;
+  //   }
+  //   const { provider, walletAddress } = await require();
+  //   const signer = provider.getSigner();
+  //   signer
+  //     .signMessage(JSON.stringify({ name, walletAddress }))
+  //     .then((authorization) => {
+  //       // setLoading(true);
+  //       axios
+  //         .post("/api/forms/disclaimer-signed", {
+  //           name: name,
+  //           address: walletAddress,
+  //           sig: authorization,
+  //         })
+  //         .then((res) => {
+  //           getVinylBalance((r) => {
+  //             setAmountBought(r);
+  //             console.log("bought!");
+  //           });
+  //           // setSigned(true);
+  //           // setLoading(false);
+  //         });
+  //     });
+  // };
 
   const addStonk = async () => {
     const tokenAddress = VinylAddress;
@@ -301,11 +300,11 @@ const PrivateSaleContainer = !isMobile()
       color: white;
     `;
 
-const Currency = styled.div`
-  width: 0px;
-  margin-left: -130px;
-  margin-top: 5px;
-`;
+// const Currency = styled.div`
+//   width: 0px;
+//   margin-left: -130px;
+//   margin-top: 5px;
+// `;
 
 const BuyContent = styled.span`
   margin-top: 10px;
@@ -324,18 +323,6 @@ const Divider = styled.div`
   margin: 5px 0 20px 0;
 `;
 
-const UtilityContainer = styled.div`
-  width: 60%;
-  color: white;
-  padding: 20px 40px;
-  align-items: center;
-  position: relative;
-  font-size: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 20px;
-`;
 const SaleContainer = styled.div`
   width: 60%;
   border: 2px solid ${(props) => props.theme.color.boxBorder};
@@ -441,54 +428,54 @@ const PurchaseInput = styled.input`
   }
 `;
 
-const SignButton = styled.button`
-  margin: 20px auto 0 auto;
-  width: 80%;
-  padding: 10px 0;
-  /* border: 2px solid white; */
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: all 0.2s linear;
-  &:hover {
-    background-color: ${(props) => props.theme.color.blue};
-    color: white;
-    cursor: pointer;
-  }
-`;
+// const SignButton = styled.button`
+//   margin: 20px auto 0 auto;
+//   width: 80%;
+//   padding: 10px 0;
+//   /* border: 2px solid white; */
+//   border: none;
+//   border-radius: 8px;
+//   font-size: 16px;
+//   transition: all 0.2s linear;
+//   &:hover {
+//     background-color: ${(props) => props.theme.color.blue};
+//     color: white;
+//     cursor: pointer;
+//   }
+// `;
 
-const SignatureContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  text-align: left;
-  display: inline;
-`;
+// const SignatureContainer = styled.div`
+//   display: flex;
+//   flex-direction: row;
+//   text-align: left;
+//   display: inline;
+// `;
 
-const Signature = styled.input`
-  background-color: rgba(0, 0, 0, 0);
-  border: none;
-  border-bottom: 2px solid white;
-  color: white;
-  text-align: center;
-  margin: 0 8px;
-  height: 24px;
-  font-size: 16px;
-  &:focus {
-    outline: none;
-    background-color: rgba(0, 0, 0, 0.2);
-  }
-`;
+// const Signature = styled.input`
+//   background-color: rgba(0, 0, 0, 0);
+//   border: none;
+//   border-bottom: 2px solid white;
+//   color: white;
+//   text-align: center;
+//   margin: 0 8px;
+//   height: 24px;
+//   font-size: 16px;
+//   &:focus {
+//     outline: none;
+//     background-color: rgba(0, 0, 0, 0.2);
+//   }
+// `;
 
-const Loading = styled.img`
-  width: 100px;
-  height: 100px;
-  padding: 20px;
-  border: 2px solid rgba(256, 256, 256, 0.5);
-  border-radius: 2px;
-  background-color: rgba(180, 180, 180, 0.3);
-  background-color: rgba(0, 0, 0, 0.3);
-  margin-top: calc(20vh + 200px);
-`;
+// const Loading = styled.img`
+//   width: 100px;
+//   height: 100px;
+//   padding: 20px;
+//   border: 2px solid rgba(256, 256, 256, 0.5);
+//   border-radius: 2px;
+//   background-color: rgba(180, 180, 180, 0.3);
+//   background-color: rgba(0, 0, 0, 0.3);
+//   margin-top: calc(20vh + 200px);
+// `;
 
 const Title = styled.h1`
   margin: 0;
@@ -501,39 +488,39 @@ const WalletTitle = styled(Title)`
   text-align: center;
 `;
 
-const Container = !isMobile()
-  ? styled.div`
-      /* margin-top: 20vh; */
-      margin-top: 20px;
-      width: 540px;
-      border: 2px solid rgba(256, 256, 256, 0.5);
-      border-radius: 2px;
-      background-color: rgba(180, 180, 180, 0.3);
-      background-color: rgba(0, 0, 0, 0.3);
-      color: white;
-      padding: 20px 40px;
-      align-items: center;
-      position: relative;
-      font-size: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    `
-  : styled.div`
-      margin-top: 20px;
-      width: 300px;
-      border: 2px solid rgba(256, 256, 256, 0.5);
-      border-radius: 2px;
-      background-color: rgba(180, 180, 180, 0.3);
-      background-color: rgba(0, 0, 0, 0.3);
-      color: white;
-      padding: 20px 20px;
-      align-items: center;
-      position: relative;
-      font-size: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    `;
+// const Container = !isMobile()
+//   ? styled.div`
+//       /* margin-top: 20vh; */
+//       margin-top: 20px;
+//       width: 540px;
+//       border: 2px solid rgba(256, 256, 256, 0.5);
+//       border-radius: 2px;
+//       background-color: rgba(180, 180, 180, 0.3);
+//       background-color: rgba(0, 0, 0, 0.3);
+//       color: white;
+//       padding: 20px 40px;
+//       align-items: center;
+//       position: relative;
+//       font-size: 20px;
+//       display: flex;
+//       flex-direction: column;
+//       align-items: center;
+//     `
+//   : styled.div`
+//       margin-top: 20px;
+//       width: 300px;
+//       border: 2px solid rgba(256, 256, 256, 0.5);
+//       border-radius: 2px;
+//       background-color: rgba(180, 180, 180, 0.3);
+//       background-color: rgba(0, 0, 0, 0.3);
+//       color: white;
+//       padding: 20px 20px;
+//       align-items: center;
+//       position: relative;
+//       font-size: 20px;
+//       display: flex;
+//       flex-direction: column;
+//       align-items: center;
+//     `;
 
 export default Disclaimer;

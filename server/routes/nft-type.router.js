@@ -484,7 +484,7 @@ router.post("/handleAudio", async (req, res) => {
         cb(null, "public");
       },
       filename: function (req, file, cb) {
-        cb(null, "snnipet_" + file.originalname);
+        cb(null, file.originalname);
       },
     });
     let upload = multer({ storage: storage }).single("audioFile");

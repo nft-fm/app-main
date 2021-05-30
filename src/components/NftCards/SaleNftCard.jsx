@@ -84,6 +84,22 @@ const NftCard = (props) => {
     window.URL.revokeObjectURL(url);
   };*/
 
+  const getSnnipetAWS = async (completeNft) => {
+    await axios
+    .post("/api/nft-type/getSnnipetAWS", {
+      key:
+        completeNft.address +
+        "/snnipets/" +
+        completeNft.audioUrl.split("/").slice(-1)[0]
+    })
+    .then((res) => {
+      console.log("res", res.data)
+    })
+    .catch(err => {
+      console.log("ERR", err)
+    })
+  };
+
   const getNSeconds = async (completeNft) => {
     await axios
       .post("/api/nft-type/getNSecondsOfSong", {
@@ -152,7 +168,8 @@ const NftCard = (props) => {
 
   useEffect(() => {
     if (isModalOpen && !partialSong) {
-      getFromPreload(props.nft.nftId)
+      getSnnipetAWS(props.nft);
+      //getFromPreload(props.nft.nftId)
       //setPartialSong(partialSong);
       //getNSeconds(props.nft);
     }

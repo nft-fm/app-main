@@ -16,35 +16,44 @@ const UploadAudio = ({
   const { account } = useAccountConsumer();
   const hiddenAudioInput = useRef(null);
   
-  function wavToMp3(channels, sampleRate, samples) {
+  function wavToMp3(channels, sampleRate, left, right) {
     console.log("channels", channels);
     console.log("sampleRate", sampleRate);
-    console.log("samples", samples);
+    console.log("left", left);
+    console.log("right", right);
+
     var buffer = [];
     var mp3enc = new lamejs.Mp3Encoder(channels, sampleRate, 128);
-    var remaining = samples.length;
+    var remaining = left.length;
     var samplesPerFrame = 1152;
+
     for (var i = 0; remaining >= samplesPerFrame; i += samplesPerFrame) {
-        console.log(i);
-        var mono = samples.subarray(i, i + samplesPerFrame);
-        console.log("mono", mono)
+      if (!right)
+      {
+        var mono = left.subarray(i, i + samplesPerFrame);
         var mp3buf = mp3enc.encodeBuffer(mono);
-        if (mp3buf.length > 0) {
-            buffer.push(new Int8Array(mp3buf));
-        }
-        remaining -= samplesPerFrame;
+      }
+      else {
+        var leftChunk = left.subarray(i, i + samplesPerFrame);
+        var rightChunk = right.subarray(i, i + samplesPerFrame);
+        var mp3buf = mp3enc.encodeBuffer(leftChunk,rightChunk);
+      }
+      if (mp3buf.length > 0) {
+        buffer.push(mp3buf);//new Int8Array(mp3buf));
+      }
+      remaining -= samplesPerFrame;
     }
     var d = mp3enc.flush();
     if(d.length > 0){
-        buffer.push(new Int8Array(d));
+            buffer.push(new Int8Array(d));
     }
-
+   
     var mp3Blob = new Blob(buffer, {type: 'audio/mp3'});
     var bUrl = window.URL.createObjectURL(mp3Blob);
-
+   
     // send the download link to the console
     console.log('mp3 download:', bUrl);
-
+    return buffer;
 }
 
   function audioBufferToWav(aBuffer) {
@@ -87,9 +96,27 @@ const UploadAudio = ({
     }
 
     let wavHdr = lamejs.WavHeader.readHeader(new DataView(btwArrBuff));
-    let wavSamples = new Int16Array(btwArrBuff, wavHdr.dataOffset, wavHdr.dataLen / 2);
 
-    wavToMp3(wavHdr.channels, wavHdr.sampleRate, wavSamples);
+    //Stereo
+    let data = new Int16Array(btwArrBuff, wavHdr.dataOffset, wavHdr.dataLen / 2);
+    let leftData = [];
+    let rightData = [];
+    for (let i = 0; i < data.length; i += 2) {
+                 leftData.push(data[i]);
+                 rightData.push(data[i + 1]);
+    }
+    var left = new Int16Array(leftData);
+    var right = new Int16Array(rightData);
+
+    
+    //STEREO
+    if (wavHdr.channels===2)
+        return wavToMp3(wavHdr.channels, wavHdr.sampleRate,left,right);
+    //MONO
+    else if (wavHdr.channels===1)
+        return wavToMp3(wavHdr.channels, wavHdr.sampleRate, data, null);
+    else
+        return btwArrBuff;
 
     function setUint16(data) {
         btwView.setUint16(btwPos, data, true);
@@ -116,15 +143,15 @@ const UploadAudio = ({
     }
   
     // milliseconds to seconds
-    begin = begin/1000;
-    end = end/1000;
+    begin = begin;
+    end = end;
   
     if (begin < 0) {
       begin = 0;
     }
   
     if (end > duration) {
-      error = new RangeError('end time must be less than or equal to ' + duration);
+      end = duration;
     }
   
     if (typeof callback !== 'function') {
@@ -167,18 +194,19 @@ const UploadAudio = ({
         let _nftData;
 
         console.log("originalBUFFER", buffer);
-        sliceBuffer(audioContext, buffer, 0, 15, (error, newBuffer) => {
+        sliceBuffer(audioContext, buffer, 0, 50, (error, newBuffer) => {
           if (error) {
             console.log(error);
           }
           else {
             console.log("NEW BUFFER", newBuffer);
-            audioBufferToWav(newBuffer);
-            let snnipetBlob = new Blob([newBuffer], { 'type' : 'audio/mpeg' });
-            console.log("TYPE", snnipetBlob.type)
-            let snnipetFile = new File([newBuffer], audioFile.name, {type: "audio/mpeg"});
+            const snnipetMp3Buffer = audioBufferToWav(newBuffer);
+            console.log("TYPE", snnipetMp3Buffer)
+
+            let snnipetFile = new File(snnipetMp3Buffer, audioFile.name, {type: "audio/mpeg"});
             console.log("FILE", snnipetFile);
             console.log("ORIGINAL FILE", audioFile);
+
             const snnipetFormData = new FormData();
             snnipetFormData.append("artist", account);
             snnipetFormData.append("audioFile", snnipetFile);
@@ -231,7 +259,6 @@ const UploadAudio = ({
               const audioFormData = new FormData();
               audioFormData.append("artist", account);
               audioFormData.append("audioFile", audioFile);
-
               uploadFile(audioFormData, event.target.result, duration, buffer, audioContext, audioFile);
           });
         };

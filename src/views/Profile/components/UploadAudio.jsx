@@ -35,6 +35,53 @@ const UploadAudio = ({
     return mediaRecorder;
   }
 
+  const uploadFile = (audioFormData, arrayBuffer, duration, audioFile) => {
+    console.log("uploading file")
+    console.log("audioFile", audioFile);
+    axios
+    .post("api/nft-type/uploadAudioS3",
+    audioFormData, {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    })
+    .then((res) => {
+      console.log(res);
+      if (res.status === 200) {
+        let _nftData;
+        let songBlob = new Blob([arrayBuffer], { 'type' : 'audio/mpeg' });
+        let snnipetBlob = songBlob.slice(0, 15,  'audio/mpeg');
+
+        const snnipetFormData = new FormData();
+        snnipetFormData.append("artist", account);
+        snnipetFormData.append("audioFile", snnipetBlob);
+         axios
+        .post("api/nft-type/uploadSnnipetS3",
+        audioFormData, {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        })
+        .then(response => {
+          console.log(response);
+          setNftData(currentState=>{
+            _nftData=currentState
+            return currentState
+          })
+          setNftData({..._nftData, dur: duration})
+          setIsAudioUploaded(true);
+        })
+        .catch(error => {
+          console.log("snnipets upload failed", error);
+        })
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      setAudioUploadError(true);
+    });
+  }
+
   const getFileDurAndSnnipet = () => {
         // Obtain the uploaded file, you can change the logic if you are working with multiupload
         let file = audioFile;
@@ -45,56 +92,18 @@ const UploadAudio = ({
         reader.onload = function (event) {
           // Create an instance of AudioContext
           let audioContext = new (window.AudioContext || window.webkitAudioContext)();
-          let source = audioContext.createBufferSource();
-          let dest = audioContext.createMediaStreamDestination();
-          let mediaRecorder = new MediaRecorder(dest.stream);
-          mediaRecorder = prepareMediaRecorder(mediaRecorder);
-          
+
           // Asynchronously decode audio file data contained in an ArrayBuffer.
           audioContext.decodeAudioData(event.target.result, function(buffer) {
               // Obtain the duration in seconds of the audio file (with milliseconds as well, a float value)
               let duration = buffer.duration;
               setNftData({...nftData, dur: duration});
-    
+
               const audioFormData = new FormData();
               audioFormData.append("artist", account);
               audioFormData.append("audioFile", audioFile);
-              audioFormData.append("dur", duration);
 
-              // Prepare buffer to run and save 15sec snnipet
-              source.buffer = buffer;
-              source.connect(dest);
-              source.onended = (e) => {
-                console.log("HERE");
-                mediaRecorder.stop();
-              }
-
-              mediaRecorder.start();
-              
-              source.start(0, 5);
-              console.log(mediaRecorder)
-              axios
-              .post("api/nft-type/uploadAudioS3", audioFormData, {
-                headers: {
-                  "content-type": "multipart/form-data",
-                },
-              })
-              .then((res) => {
-                if (res.status === 200) {
-                  let _nftData;
-                  setNftData(currentState=>{
-                    _nftData=currentState
-                    return currentState
-                  })
-                  setNftData({..._nftData, dur: duration})
-                  setIsAudioUploaded(true);
-                }
-                console.log(res);
-              })
-              .catch((err) => {
-                console.log(err);
-                setAudioUploadError(true);
-              });
+              uploadFile(audioFormData, event.target.result, duration, audioFile);
           });
         };
 
@@ -118,6 +127,10 @@ const UploadAudio = ({
         account +
         "/" +
         e.target.files[0].name,
+      snnipet: "https://nftfm-music.s3-us-west-1.amazonaws.com/" +
+      account +
+      "/snnipets/snnipet_" +
+      e.target.files[0].name
     });
   };
 

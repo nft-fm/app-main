@@ -93,24 +93,6 @@ const MusicPlayer = (props) => {
     return _bufferSrc;
   }
 
-  /*const startPreviewSong = async () => {
-    console.log("starting preview song")
-    setDur(15);
-    if (nft.partialSong) {
-      console.log("has partial song", nft.partialSong)
-      const abSong = toArrayBuffer(nft.partialSong);
-      const _bufferSrc = audioContextRef.current.createBufferSource();
-      audioContextRef.current.decodeAudioData(abSong, async (_buffer) => {
-        _bufferSrc.buffer = _buffer;
-        fullBufferSrc.current = _bufferSrc;
-  
-        await startNewContext(_bufferSrc);
-        setSongFullyLoaded(true);
-        setIsLoading(false);
-      })
-    }
-  }*/
-
   const startPartialSong = async (songFile) => {
     const _bufferSrc = await startNewContext(songFile);
     setDur(nft.dur ? nft.dur : 80000);
@@ -167,7 +149,7 @@ const MusicPlayer = (props) => {
   }
 
   const prepareRemainingSong = async (songFile, partial) => {
-    console.log("PREPARE REMAINING SONG")
+    console.log("PREPARE REMAINING SONG");
     const fullTime = partial.buffer.duration;
     const abSong = toArrayBuffer(songFile.data.Body.data);
     const _bufferSrc = audioContextRef.current.createBufferSource();

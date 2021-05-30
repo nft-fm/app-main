@@ -374,6 +374,62 @@ router.post("/all", async (req, res) => {
   }
 });
 
+router.post("/getSnnipetAWS", async (req, res) => {
+  console.log("GETTING SNNIPET")
+  const AWS = require('aws-sdk');
+  const s3 = new AWS.S3();
+
+  const params = { Bucket: "nftfm-music", Key: req.body.key, Expires: 60 * 5 };
+  const url = s3.getSignedUrl('getObject', params)
+
+  res.status(200).send(url);
+});
+
+router.post("/uploadSnnipetS3", async (req, res) => {
+  var AWS = require("aws-sdk");
+  AWS.config.region = "us-west-2";
+  const multerS3 = require("multer-s3");
+
+  var s3Client = new AWS.S3();
+
+  const fileFilter = (req, file, cb) => {
+    if (file.mimetype === "audio/mpeg") {
+      cb(null, true);
+    } else {
+      cb(new Error("Invalid file type, only MP3s are allowed!"), false);
+    }
+  };
+
+  let upload = multer({
+    fileFilter,
+    storage: multerS3({
+      ACL: "public-read",
+      s3: s3Client,
+      bucket: "nftfm-music",
+      metadata: function (req, file, cb) {
+        cb(null, { fieldName: "audioFile" });
+      },
+      key: function (req, file, cb) {
+        cb(null, req.body.artist + "/snnipets/" + file.originalname);
+      },
+    }),
+  });
+
+  const singleUpload = upload.single("audioFile");
+  singleUpload(req, res, function (err) {
+    console.log("singleUpload: ", req.body);
+    if (err instanceof multer.MulterError) {
+      console.log("singleUpload multer", err);
+      return res.status(500).json(err);
+    } else if (err) {
+      console.log("singleUpload error", err);
+      return res.status(500).json(err);
+    } else {
+      return res.json({success: true});
+    }
+  });
+});
+
 router.post("/uploadAudioS3", async (req, res) => {
   var AWS = require("aws-sdk");
   AWS.config.region = "us-west-2";
@@ -381,7 +437,6 @@ router.post("/uploadAudioS3", async (req, res) => {
 
   var s3Client = new AWS.S3();
 
-  console.log("HERE");
   const fileFilter = (req, file, cb) => {
     if (file.mimetype === "audio/mpeg" || file.mimetype === "audio/wav") {
       cb(null, true);
@@ -414,6 +469,7 @@ router.post("/uploadAudioS3", async (req, res) => {
       console.log("singleUpload error", err);
       return res.status(500).json(err);
     } else {
+
       return res.json({success: true});
     }
   });
@@ -428,7 +484,7 @@ router.post("/handleAudio", async (req, res) => {
         cb(null, "public");
       },
       filename: function (req, file, cb) {
-        cb(null, file.originalname);
+        cb(null, "snnipet_" + file.originalname);
       },
     });
     let upload = multer({ storage: storage }).single("audioFile");

@@ -299,7 +299,7 @@ router.post("/featured", async (req, res) => {
       // isFeatured: true,
       isDraft: false,
       isMinted: true,
-    }, {snnipet: 0}).limit(5);
+    }, {snnipet: 0}).limit(4);
 
     res.send(findLikes(nftTypes, req.body.address));
   } catch (error) {

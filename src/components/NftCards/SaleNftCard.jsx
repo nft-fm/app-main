@@ -71,18 +71,6 @@ const NftCard = (props) => {
     setIsModalOpen(false);
   };
 
-  /*const saveData = (data, fileName) => {
-    const a = document.createElement("a");
-    document.body.appendChild(a);
-    a.style = "display: none";
-    const json = JSON.stringify(data),
-      blob = new Blob([json], {type: "octet/stream"}),
-      url = window.URL.createObjectURL(blob);
-    a.href = url;
-    a.download = fileName;
-    a.click();
-    window.URL.revokeObjectURL(url);
-  };*/
 
   const getSnnipetAWS = async (completeNft) => {
     await axios
@@ -93,9 +81,13 @@ const NftCard = (props) => {
         completeNft.audioUrl.split("/").slice(-1)[0]
     })
     .then((res) => {
-      console.log("res", res.data)
+      if (!res.data) {
+        getNSeconds(props.nft);
+      } else {
+        setPartialSong(res.data);
+      }
     })
-    .catch(err => {
+    .catch(err => { 
       console.log("ERR", err)
     })
   };
@@ -120,7 +112,7 @@ const NftCard = (props) => {
       });
   };
 
-  const getFromPreload = (nftId) => {
+   /*const getFromPreload = (nftId) => {
     const preload = preloads[nftId];
     if (!preload) {
       getNSeconds(props.nft);
@@ -130,7 +122,7 @@ const NftCard = (props) => {
 
   }
 
-  /*const getSnnipet = async (completeNft) => {
+ const getSnnipet = async (completeNft) => {
     console.log("going to get snnipets");
     await axios
     .post("/api/nft-type/getSnnipet", {

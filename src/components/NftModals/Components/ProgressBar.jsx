@@ -6,7 +6,6 @@ const AudioProgressBar = (props) => {
   const [filled, setFilled] = useState(0);
   const [bounds, setBounds] = useState();
   const [isDragging, setIsDragging] = useState(false);
-
   const invisibleBar = useRef(null);
   const toogle = useRef(null);
 
@@ -28,21 +27,18 @@ const AudioProgressBar = (props) => {
     if (!bounds) setBounds(invisibleBar.current.getBoundingClientRect());
     if (isDragging) {
       let position =  (e.clientX - bounds.left) / bounds.width;
-      props.skipTo(position * props.dur)
-       setIsDragging(false);
+      props.skipTo(position * 15)
+      setIsDragging(false);
     }
 
   }
 
   const changePosition = (e) => {
-    console.log("changing position");
     let position =  (e.clientX - bounds.left) / bounds.width;
-    props.skipTo(position * props.dur);
+    props.skipTo(position * 15);
   }
 
   const checkForToogle = (e) => {
-    console.log("clientx", e.clientX);
-    console.log("x", toogle.current.getBoundingClientRect())
     if (!isDragging) {
       const toogleBounds = toogle.current.getBoundingClientRect();
 
@@ -55,14 +51,14 @@ const AudioProgressBar = (props) => {
 
   const checkForDrag = (e) => {
     if (isDragging) {
-      console.log("checking for drag")
       handleToogleMove(e);
     }
   }
 
   useEffect(() => {
-    if (!isDragging)
-      setFilled(props.filled)
+    if (!isDragging && props.time) {
+      setFilled(props.time / 15 * 100)
+    }
   }, [props])
 
   useEffect(() => {
@@ -106,11 +102,11 @@ const InvisibleBar = styled.div`
 
 const Toogle = styled.div`
   position: absolute;
-  width: 6px;
-  height: 24px;
+  width: 4px;
+  height: 12px;
   background-color: ${props => props.theme.color.lightgray};
   border-radius: 5px;
-  top: -11px;
+  top: -5px;
   left: calc(${props => props.width + "%"} - 2px);
 `;
 
@@ -127,9 +123,11 @@ const FillBar = styled.div`
 
 const ProgressBar = styled.div`
   position: relative;
+  width: 100px;
   height: 2px;
-  flex: 1;
-  /* width: 760px; */
+  
+  margin-top: 6px;
+  margin-bottom: 14px;
   border-radius: 50px;
   background-color: ${props => props.theme.color.lightgray};
 `;

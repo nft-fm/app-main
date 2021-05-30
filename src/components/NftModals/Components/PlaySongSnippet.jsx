@@ -9,98 +9,83 @@ import loading from "../../../assets/img/loading.gif";
 import { useRef } from "react";
 import { usePlaylistConsumer } from "../../../contexts/Playlist";
 
+import AudioProgressBar from './ProgressBar'
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
 const PlaySongSnippet = (props) => {
-  const { setNftCallback } = usePlaylistConsumer();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [time, setTime] = useState(0);
 
-  window.AudioContext = window.AudioContext || window.webkitAudioContext;
-  const audioContextRef = useRef();
-  const bufferSrcRef = useRef();
+  const audioRef = useRef();
 
-  const toArrayBuffer = (buf) => {
-    let ab = new ArrayBuffer(buf.length);
-    let view = new Uint8Array(ab);
-    for (let i = 0; i < buf.length; i++) {
-      view[i] = buf[i];
+  const startSong = (songUrl) => {
+    let audio = new Audio(songUrl);
+    audio.onended = () => {
+      setIsPlaying(false);
+      setTime(0);
+      audio.currentTime = 0;
     }
-    return ab;
+
+    audio.canplay = () => {
+      let _isLoading;
+      setIsLoading(currentState=>{
+        _isLoading=currentState
+        return currentState
+      })
+
+      if (_isLoading) {
+        setIsLoading(false);
+        audio.play();
+      } 
+    }
+
+    audioRef.current = audio;
   }
 
-  const prepareForReplay = (bufferSrc, gain) => {
-    bufferSrc.disconnect();
-    if (audioContextRef.current.state !== "suspended") {
-      /*Prepare song for possible replay (get It, set to zero and then pause)*/
-      const zeroedBufferSrc = audioContextRef.current.createBufferSource();
-      zeroedBufferSrc.buffer = bufferSrc.buffer;
-
-      zeroedBufferSrc.connect(gain);
-      zeroedBufferSrc.start(0, 0);
-
-      zeroedBufferSrc.onended = (e) => {
-        console.log("ended");
-        prepareForReplay(zeroedBufferSrc, gain);
-      }
-
-      bufferSrcRef.current = zeroedBufferSrc;
-    }
-    
-    stopSong();
-  }
-
-  const startSong = (songFile) => {
-    const _gainNode = audioContextRef.current.createGain();
-    _gainNode.gain.value = 0.6;
-    _gainNode.connect(audioContextRef.current.destination);
-
-    const abSong = toArrayBuffer(songFile);
-    const _bufferSrc = audioContextRef.current.createBufferSource();
-
-    audioContextRef.current.decodeAudioData(abSong, async (_buffer) => {
-      _bufferSrc.buffer = _buffer;
-      _bufferSrc.connect(_gainNode);
-      _bufferSrc.start(0);
-
-      _bufferSrc.onended = (e) => {
-        prepareForReplay(_bufferSrc, _gainNode);
-      }
-
-      bufferSrcRef.current = _bufferSrc;
-      playSong();
-      setIsLoading(false);
-    })
+  const skipTo = (pos) => {
+    audioRef.current.currentTime = Math.floor(pos);
+    setTime(Math.floor(pos));
   }
 
   const playSong = () => {
-    setNftCallback(false);
-    if (!props.partialSong && !bufferSrcRef.current) setIsLoading(true);
-    else if(!bufferSrcRef.current) startSong(props.partialSong);
-    else if (audioContextRef.current.state === 'suspended' && audioContextRef.current) audioContextRef.current.resume();
-    else if (audioContextRef.current && audioContextRef.current.start) audioContextRef.current.start(0);
-    setIsPlaying(true);
+    if (props.partialSong && audioRef.current) {
+      audioRef.current.play();
+      setIsPlaying(true);
+      setIsLoading(false);
+    }
+    else {
+      setIsLoading(true);
+    }
    }
  
    const stopSong = () => {
+      audioRef.current.pause();
       setIsPlaying(false);
-      if ( audioContextRef.current.suspend) {
-        audioContextRef.current.suspend();
-      }
    }
   
   useEffect(() => {
-    if (props.partialSong && isLoading) {
+    if (props.partialSong) {
       startSong(props.partialSong);
     }
-  }, [props.partialSong])
+  }, [props.partialSong]) 
 
   useEffect(() => {
-    const audioCtx = new AudioContext();
-    audioContextRef.current = audioCtx;
+    let intervalId;
+    if (isPlaying && audioRef.current) {
+      intervalId = setInterval(() => {
+        let _time = audioRef.current.currentTime || time;
+        if (_time >= 15) {
+          clearInterval(intervalId);
+        }
+        else {
+          setTime(_time);
+        }
+      }, 1)
+    }
 
-    return async () => { await audioCtx.close() };
-  }, []);
+    return () => {if (intervalId) clearInterval(intervalId)};
+  }, [isPlaying, time])
 
   return (
     <Wrapper>
@@ -109,12 +94,16 @@ const PlaySongSnippet = (props) => {
       <PauseButton onClick={stopSong}/> :
       <PlayButton onClick={playSong}/>
       }
+      <AudioProgressBar time={time} skipTo={skipTo}/>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Loading = styled.img`

@@ -40,14 +40,14 @@ export const Nav = () => {
         Home
       </StyledLink>
       {/* {isPresaleTime && ( */}
-        <StyledLink
+        {/* <StyledLink
           exact
           tab="presale"
           activeClassName="active"
           to="/presale"
         >
           Presale
-        </StyledLink>
+        </StyledLink> */}
       {/* )} */}
       {/* <StyledLink exact tab="discover" activeClassName="active" to="/discover">
         Discover

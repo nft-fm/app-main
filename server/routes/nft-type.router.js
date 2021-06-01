@@ -368,7 +368,7 @@ router.post("/all", async (req, res) => {
   try {
     let nftTypes = await NftType.find({
       isDraft: false,
-      isMinted: true,
+      isMinted: true
     });
     res.send(findLikes(nftTypes, req.body.address));
   } catch (error) {
@@ -377,16 +377,26 @@ router.post("/all", async (req, res) => {
   }
 });
 
-router.post("/uploadAudioS3", async (req, res) => {
+router.post("/getSnnipetAWS", async (req, res) => {
+  console.log("GETTING SNNIPET")
+  const AWS = require('aws-sdk');
+  const s3 = new AWS.S3();
+
+  const params = { Bucket: "nftfm-music", Key: req.body.key, Expires: 60 * 5 };
+  const url = s3.getSignedUrl('getObject', params)
+
+  res.status(200).send(url);
+});
+
+router.post("/uploadSnnipetS3", async (req, res) => {
   var AWS = require("aws-sdk");
   AWS.config.region = "us-west-2";
   const multerS3 = require("multer-s3");
 
   var s3Client = new AWS.S3();
 
-  console.log("HERE");
   const fileFilter = (req, file, cb) => {
-    if (file.mimetype === "audio/mpeg" || file.mimetype === "audio/wav") {
+    if (file.mimetype === "audio/mpeg") {
       cb(null, true);
     } else {
       cb(new Error("Invalid file type, only MP3s are allowed!"), false);
@@ -403,10 +413,11 @@ router.post("/uploadAudioS3", async (req, res) => {
         cb(null, { fieldName: "audioFile" });
       },
       key: function (req, file, cb) {
-        cb(null, req.body.artist + "/" + file.originalname);
+        cb(null, req.body.artist + "/snnipets/" + file.originalname);
       },
     }),
   });
+
   const singleUpload = upload.single("audioFile");
   singleUpload(req, res, function (err) {
     console.log("singleUpload: ", req.body);
@@ -416,27 +427,61 @@ router.post("/uploadAudioS3", async (req, res) => {
     } else if (err) {
       console.log("singleUpload error", err);
       return res.status(500).json(err);
+    } else {
+      return res.json({success: true});
     }
-    console.log("file", req.file);
-    console.log("dur", req.body.dur);
-    const partialBytes = (req.file.size * 15) / req.body.dur;
-    console.log("partial bytes", partialBytes.toFixed(0));
-    const AWS = require("aws-sdk");
-    const s3 = new AWS.S3();
-    s3.getObject(
-      {
-        Bucket: "nftfm-music",
-        Key: req.file.key,
-        Range: "bytes=0-" + partialBytes.toFixed(0),
-      },
-      async (error, data) => {
-        if (error != null) {
-          console.log("Failed to retrieve an object: " + error);
-        } else {
-        return res.status(200).send(data);
+  });
+});
+
+router.post("/uploadAudioS3", async (req, res) => {
+  console.log("im here")
+  try {
+    var AWS = require("aws-sdk");
+    AWS.config.region = "us-west-2";
+    const multerS3 = require("multer-s3");
+  
+    var s3Client = new AWS.S3();
+  
+    const fileFilter = (req, file, cb) => {
+      if (file.mimetype === "audio/mpeg" || file.mimetype === "audio/wav") {
+        cb(null, true);
+      } else {
+        cb(new Error("Invalid file type, only MP3s are allowed!"), false);
+      }
+    };
+  
+    let upload = multer({
+      fileFilter,
+      storage: multerS3({
+        ACL: "public-read",
+        s3: s3Client,
+        bucket: "nftfm-music",
+        metadata: function (req, file, cb) {
+          cb(null, { fieldName: "audioFile" });
+        },
+        key: function (req, file, cb) {
+          cb(null, req.body.artist + "/" + file.originalname);
+        },
+      }),
+    });
+    const singleUpload = upload.single("audioFile");
+    singleUpload(req, res, function (err) {
+      console.log("singleUpload: ", req.body);
+      if (err instanceof multer.MulterError) {
+        console.log("singleUpload multer", err);
+        return res.status(500).json(err);
+      } else if (err) {
+        console.log("singleUpload error", err);
+        return res.status(500).json(err);
+      } else {
+        return res.json({success: true});
       }
     });
-  });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+
 });
 
 //send audio file to private bucket

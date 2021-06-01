@@ -11,16 +11,7 @@ import { useAccountConsumer } from "../../../contexts/Account";
 import LoadingFeatured from "../../../components/NftCards/LoadingFeatured";
 import NftModalHook from "../../../components/NftModalHook";
 import ShareModal from "../../../components/SMShareModal/SMShareModal";
-import solPreload from "../../../components/NftCards/Lowkey.json";
-import sexPreload from "../../../components/NftCards/SexKazoo2.json";
-import touchPreload from "../../../components/NftCards/TOUCHIDv2.json";
-import herePreload from "../../../components/NftCards/hereforareason.json";
-const preloads = {
-  1: sexPreload,
-  2: touchPreload,
-  3: herePreload,
-  4: solPreload,
-};
+
 const Listen = () => {
   const { user, account } = useAccountConsumer();
   const [nfts, setNfts] = useState(<LoadingFeatured />);
@@ -59,24 +50,59 @@ const Listen = () => {
   }, [user]);
 
   const [partialSong, setPartialSong] = useState(false);
-  const getFromPreload = (nftId) => {
-    const preload = preloads[nftId];
-    setPartialSong(preload);
+
+  const getSnnipetAWS = async (completeNft) => {
+    await axios
+    .post("/api/nft-type/getSnnipetAWS", {
+      key:
+        completeNft.address +
+        "/snnipets/" +
+        completeNft.audioUrl.split("/").slice(-1)[0]
+    })
+    .then((res) => {
+      if (!res.data) {
+        getNSeconds(completeNft);
+      } else {
+        setPartialSong(res.data);
+      }
+    })
+    .catch(err => { 
+      console.log("ERR", err)
+    })
   };
+
+  const getNSeconds = async (completeNft) => {
+    await axios
+      .post("/api/nft-type/getNSecondsOfSong", {
+        key:
+          completeNft.address +
+          "/" +
+          completeNft.audioUrl.split("/").slice(-1)[0],
+        nft: completeNft,
+        startTime: 30
+      })
+      .then((res) => {
+        console.log("got snnipet");
+        const songFile = res.data.Body.data;
+      
+        setPartialSong(songFile);
+      });
+  };
+
   useEffect(() => {
     if (window.location.pathname.length > 1 && isLoaded) {
       let nftTitle = ""
       let trackUrl = window.location.pathname.split("/").pop()
-      if (trackUrl === "touch_id") nftTitle = "TOUCH ID"
-      if (trackUrl === "sex_kazoo") nftTitle = "Sex Kazoo"
+      if (trackUrl === "touch_id") nftTitle = "TOUCH IDv2"
+      if (trackUrl === "sex_kazoo") nftTitle = "Sex Kazoo 2 "
       if (trackUrl === "lowkey") nftTitle = "Lowkey"
       if (trackUrl === "here_for_a_reason") nftTitle = "here for a reason"
       for (let i = 0; i < rawNftData.length; i++) {
-        console.log(rawNftData[i].nftId);
+        console.log(rawNftData[i]);
         if (nftTitle === rawNftData[i].title) {
           setNftFromUrl(rawNftData[i]);
           setIsUrlModalOpen(true);
-          getFromPreload(rawNftData[i].nftId);
+          getSnnipetAWS(rawNftData[i]);
         }
       }
     }

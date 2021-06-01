@@ -59,7 +59,14 @@ const UserSchema = new Schema({
       insta: {
         type: String,
       },
+    },
+    {
       twitter: {
+        type: String,
+      },
+    },
+    {
+      audius: {
         type: String,
       },
     },

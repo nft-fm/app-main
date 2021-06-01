@@ -8,6 +8,9 @@ import PublicArtistNfts from "./Components/PublicArtistNfts";
 import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
 
 import { ReactComponent as IconTwitter } from "../../assets/img/icons/social_twitter.svg";
+import Instagram from "../../assets/img/icons/social_instagram.png";
+import Audius from "../../assets/img/icons/social_audius.png";
+// import { ReactComponent as IconInstagram } from "../../assets/img/icons/social_instagram.svg";
 const Artist = () => {
   const [edit, setEdit] = useState(false);
   const [profilePic, setProfilePic] = useState("");
@@ -34,7 +37,6 @@ const Artist = () => {
       .catch(() => (window.location = "/"));
   }, []);
 
-  //   if (!userInfo) return <Error404 />; //this probably needs some work
   return (
     <BaseView>
       <Landing>
@@ -61,46 +63,48 @@ const Artist = () => {
               </AddressSpan>
             </ProfileInfoHolder>
           </ProfileHolder>
-          <Side>
-            <SocialsBar>
-              {userInfo?.socials.map((social) => {
-                console.log(social)
-                if (social.twitter) {
-                  return (<IconContainer
-                    href={userInfo.socials.twitter}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Twitter />
-                    <IconText>Twitter</IconText>
-                  </IconContainer>)
-                }
-                if (social.insta) {
-                  return (<IconContainer
-                    href={userInfo.socials.insta}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Twitter />
-                    <IconText>Instagram</IconText>
-                  </IconContainer>)
+          <Side></Side>
+        </ProfileHeading>
+      </Landing>
 
-                }
-              }) }
-              {/* {userInfo?.socials.twitter && 
+      <SocialsBar>
+        {userInfo?.socials.map((social) => {
+          console.log(social);
+          if (social.twitter) {
+            return (
               <IconContainer
-                href={setUserInfo.socials.twitter}
+                href={social.twitter}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <Twitter />
-                <IconText>Twitter</IconText>
-              </IconContainer>} */}
-            </SocialsBar>
-          </Side>
-        </ProfileHeading>
-      </Landing>
-
+              </IconContainer>
+            );
+          }
+          if (social.insta) {
+            return (
+              <IconContainer
+                href={social.insta}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <InstaIcon src={Instagram} alt="instagram icon" />
+              </IconContainer>
+            );
+          }
+          if (social.audius) {
+            return (
+              <IconContainer
+                href={social.audius}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <AudiusIcon src={Audius} alt="instagram icon" />
+              </IconContainer>
+            );
+          }
+        })}
+      </SocialsBar>
       <CreatedNftHolder>
         <NftContainer>
           <NftContainerTitle>AVAILABLE MUSIC</NftContainerTitle>
@@ -108,10 +112,30 @@ const Artist = () => {
           <PublicArtistNfts nfts={userNfts} />
         </NftContainer>
       </CreatedNftHolder>
-      <CreateForm open={open} hide={() => setOpen(false)} />
     </BaseView>
   );
 };
+
+const InstaIcon = styled.img`
+  height: 17px;
+  width: 17px;
+  filter: invert(1);
+`;
+const AudiusIcon = styled.img`
+  height: 17px;
+  width: 17px;
+  /* filter: invert(1); */
+`;
+
+const Twitter = styled(IconTwitter)`
+  /* margin-top: 1px; */
+  width: 17px;
+  height: 17px;
+  & path {
+    transition: all 0.2s ease-in-out;
+    fill: white;
+  }
+`;
 
 const IconText = styled.span`
   margin: 1px 0 0 12px;
@@ -120,22 +144,17 @@ const IconText = styled.span`
 `;
 
 const IconContainer = styled.a`
-  text-decoration: none;
+  cursor: pointer;
   margin: 0 8px;
-  align-items: center;
-  border: solid #707070;
-  height: 28px;
-  width: 98px;
-  padding: 0 16px;
+  border: solid 1px ${(props) => props.theme.color.boxBorder};
+  border-radius: 25px;
+  background-color: ${(props) => props.theme.color.box};
+  width: 25px;
+  height: 25px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: solid 1px ${(props) => props.theme.color.boxBorder};
-  border-radius: 18px;
-  background-color: ${(props) => props.theme.color.box};
-  display: flex;
-  flex-direction: row;
-  cursor: pointer;
+  padding: 5px;
   transition: all 0.2s ease-in-out;
   &:hover {
     background-color: ${(props) => props.theme.color.boxBorder};
@@ -143,33 +162,41 @@ const IconContainer = styled.a`
   }
 `;
 
-const SocialsBar = styled.div`
-  width: 100%;
-  position: relative;
+const Side = styled.div`
+  width: calc(100% / 3);
   display: flex;
-  justify-content: center;
-  /* margin-bottom: 80px; */
-  @media only screen and (max-width: 776px) {
-    flex-direction: column;
-    width: 100%;
-    align-items: center;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  & > span:nth-child(1) {
     margin-top: 40px;
-    margin-bottom: 80px;
-    & > * {
-      margin-bottom: 16px;
-    }
   }
 `;
 
-const Twitter = styled(IconTwitter)`
-  margin-top: 1px;
-  width: 17px;
-  height: 17px;
-  & path {
-    transition: all 0.2s ease-in-out;
-    fill: ${(props) => props.theme.color.white};
+const SocialsBar = styled.div`
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-bottom: -10px;
+  @media only screen and (max-width: 776px) {
+    /* flex-direction: column; */
+    width: 100%;
+    justify-content: center;
+  margin-top: 10px;
   }
 `;
+
+// const Instagram = styled(IconInstagram)`
+//   margin-top: 1px;
+//   width: 17px;
+//   height: 17px;
+//     filter: invert(1);
+//   & path {
+//     transition: all 0.2s ease-in-out;
+//     fill: ${(props) => props.theme.color.white};
+//   }
+// `;
 
 const CreatedNftHolder = styled.div`
   display: flex;
@@ -241,17 +268,6 @@ const ProfileInfoHolder = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
-
-const Side = styled.div`
-  width: calc(100% / 3);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-end;
-  & > span:nth-child(1) {
-    margin-top: 40px;
-  }
 `;
 
 const ProfileHolder = styled.div`

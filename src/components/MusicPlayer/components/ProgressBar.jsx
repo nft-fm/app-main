@@ -1,12 +1,10 @@
-import React, { useCallback, useEffect, useState, useRef } from "react";
+import React, {  useEffect, useState, useRef } from "react";
 import styled from "styled-components";
-
 
 const AudioProgressBar = (props) => {
   const [filled, setFilled] = useState(0);
   const [bounds, setBounds] = useState();
   const [isDragging, setIsDragging] = useState(false);
-
   const invisibleBar = useRef(null);
   const toogle = useRef(null);
 

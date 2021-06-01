@@ -4,9 +4,8 @@ import BuyNftModal from "../NftModals";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
-import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.svg";
+// import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.svg";
 import { useAccountConsumer } from "../../contexts/Account";
-import { usePlaylistConsumer } from "../../contexts/Playlist";
 import loading from "../../assets/img/loading.gif";
 import axios from "axios";
 import ShareModal from "../SMShareModal/SMShareModal";
@@ -43,7 +42,6 @@ const NftCard = (props) => {
     sold: "--",
   });
 
-  const { isOpen } = usePlaylistConsumer();
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
@@ -54,7 +52,7 @@ const NftCard = (props) => {
   const [basicLoaded, setBasicLoaded] = useState(false);
   const [likesLoading, setLikesLoading] = useState(false);
 
-  const show = () => setIsModalOpen(true);
+  // const show = () => setIsModalOpen(true);
   const hide = () => {
     setIsModalOpen(false);
   };
@@ -158,12 +156,37 @@ const NftCard = (props) => {
           isLoading={likesLoading}
         />
         <Side>
+          {/* <IconArea>
+            {nft.numMinted - nft.numSold}
+            <span style={{ margin: "0 1px" }}>&nbsp;of&nbsp;</span>
+            {nft.numMinted}
+            <span style={{ margin: "0 1px" }}>&nbsp;Available</span>
+          </IconArea> */}
           <IconArea>
+            {nft.numMinted - nft.numSold}
+            <span style={{ margin: "0 1px" }}>&nbsp;of&nbsp;</span>
+            {nft.numMinted}
+            <span style={{ margin: "0 1px" }}>&nbsp;Available</span>
+          </IconArea>
+          {/* <IconArea>
+            {nft.numMinted - nft.numSold}
+            <span style={{ margin: "0 1px" }}>&nbsp;of&nbsp;</span>
+            {nft.numMinted}
+            <span style={{ margin: "0 1px" }}>&nbsp;Available</span>
+          </IconArea> */}
+          {/* <IconArea>
             {nft.numSold}
-            <span style={{ margin: "0 1px" }}>/</span>
+            <span style={{ margin: "0 1px" }}>&nbsp;/&nbsp;</span>
             {nft.numMinted}
             <Cart onClick={() => setIsModalOpen(!isModalOpen)} />
-          </IconArea>
+          </IconArea> */}
+          {/* <IconArea>
+            {20 - nft.numSold}
+            <span style={{ margin: "0 1px" }}>&nbsp;of&nbsp;</span>
+            {nft.numMinted}
+            {" "}
+            {"available"}
+            {/* <Cart onClick={() => setIsModalOpen(!isModalOpen)} /> */}
         </Side>
       </CardTop>
       {imageLoaded ? null : (
@@ -229,21 +252,21 @@ const NftCard = (props) => {
   );
 };
 
-const PlayButton = styled(PlayIcon)`
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  & path {
-    transition: all 0.2s ease-in-out;
-    fill: ${(props) => props.theme.color.gray};
-  }
-  &:hover {
-    & path {
-      fill: #20a4fc;
-    }
-  }
-`;
+// const PlayButton = styled(PlayIcon)`
+//   width: 30px;
+//   height: 30px;
+//   cursor: pointer;
+//   transition: all 0.2s ease-in-out;
+//   & path {
+//     transition: all 0.2s ease-in-out;
+//     fill: ${(props) => props.theme.color.gray};
+//   }
+//   &:hover {
+//     & path {
+//       fill: #20a4fc;
+//     }
+//   }
+// `;
 
 const Usd = styled(IconUsd)`
   width: 18px;
@@ -305,7 +328,7 @@ const Side = styled.div`
 `;
 
 const IconArea = styled.div`
-  margin: 0 8px;
+  /* margin: 0 8px; */
   display: flex;
   font-size: 14px;
   height: 100%;
@@ -315,8 +338,9 @@ const IconArea = styled.div`
 const CardTop = styled.div`
   /* width: calc(100% - 4px); */
   /* padding: 0px 2px; */
-  width: 100%;
+  width: calc(100% - 8px);
   margin-bottom: 12px;
+  padding: 0 4px;
   display: flex;
   justify-content: space-between;
   font-weight: 600;

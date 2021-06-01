@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { ReactComponent as IconX } from "../../assets/img/icons/x.svg";
@@ -116,7 +116,7 @@ const BuyNftModal = ({
     hide();
   };
 
-  const [currChainId, setCurrChainId] = useState(null);
+  // const [currChainId, setCurrChainId] = useState(null);
 
   // const getChain = async () => {
   //   console.log('here')
@@ -167,10 +167,10 @@ const BuyNftModal = ({
             </Side>
             <Side>
               <IconArea>
-                {nft.numSold}
-                <span style={{ margin: "0 1px" }}>/</span>
-                {nft.numMinted}
-                <Cart />
+            {nft.numMinted - nft.numSold}
+            <span style={{ margin: "0 1px" }}>&nbsp;of&nbsp;</span>
+            {nft.numMinted}
+                {/* <Cart /> */}
               </IconArea>
             </Side>
           </CardTop>

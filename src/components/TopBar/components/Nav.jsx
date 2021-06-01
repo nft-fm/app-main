@@ -10,7 +10,7 @@ import moment from "moment"
 export const Nav = () => {
   const { user } = useAccountConsumer();
 
-  const { account, connect } = useWallet();
+  const { account } = useWallet();
   const [hasVinyl, setHasVinyl] = useState(false);
   const [isPresaleTime, setIsPresaleTime] = useState(false);
   console.log('ispresale', isPresaleTime)
@@ -23,32 +23,32 @@ export const Nav = () => {
     }
   }, [account]);
 
-  const presaleTime = 1622134800000;
+  // const presaleTime = 1622134800000;
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (moment().isAfter(presaleTime)) {
-        setIsPresaleTime(true);
-      }
-    }, 600);
-    return () => clearInterval(interval);
-  }, []);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     if (moment().isAfter(presaleTime)) {
+  //       setIsPresaleTime(true);
+  //     }
+  //   }, 600);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   return (
     <StyledNav>
       <StyledLink exact tab="home" activeClassName="active" to="/">
         Home
       </StyledLink>
-      {isPresaleTime && (
-        <StyledLink
+      {/* {isPresaleTime && ( */}
+        {/* <StyledLink
           exact
           tab="presale"
           activeClassName="active"
           to="/presale"
         >
           Presale
-        </StyledLink>
-      )}
+        </StyledLink> */}
+      {/* )} */}
       {/* <StyledLink exact tab="discover" activeClassName="active" to="/discover">
         Discover
       </StyledLink> */}

@@ -647,12 +647,6 @@ const StyledHeader = styled.span`
   margin-right: auto;
 `;
 
-const PageContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-`;
-
 const SectionTitle = styled.li`
   color: white;
   font-weight: 600;

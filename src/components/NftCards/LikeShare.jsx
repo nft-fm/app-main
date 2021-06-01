@@ -41,6 +41,7 @@ const LikeShare = (props) => {
         )}
         {likeCount}
       </IconArea>
+      <Spacer/>
       <IconArea>
         <Share onClick={() => share()} />
         {shareCount?.count ? shareCount.count : nft.shareCount}
@@ -48,6 +49,10 @@ const LikeShare = (props) => {
     </Side>
   );
 };
+
+const Spacer = styled.div`
+width: 8px;
+`
 
 const Share = styled(IconShare)`
   width: 16px;
@@ -100,7 +105,7 @@ const Side = styled.div`
 `;
 
 const IconArea = styled.div`
-  margin: 0 8px;
+  /* margin: 0 8px; */
   display: flex;
   font-size: 14px;
   height: 100%;

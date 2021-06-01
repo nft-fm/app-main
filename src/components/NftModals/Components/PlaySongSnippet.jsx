@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
 
 import { ReactComponent as PlayIcon } from '../../../assets/img/icons/listen_play.svg';
 import { ReactComponent as PauseIcon } from '../../../assets/img/icons/listen_pause.svg';

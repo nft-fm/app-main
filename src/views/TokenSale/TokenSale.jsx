@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import BaseView from "../../components/Page/BaseView";
 import PrivateSale from "./PrivateSale";
-import { approve } from "../../web3/utils";
+// import { approve } from "../../web3/utils";
 import isMobile from "../../utils/isMobile";
 import moment from "moment";
 
@@ -305,14 +305,14 @@ const LaunchFeaturesHeader = styled.h3`
   }
 `;
 
-const LaunchFeaturesContent = styled.div`
-  width: 100%;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  margin-top: 40%;
-  margin-bottom: 60%;
-`;
+// const LaunchFeaturesContent = styled.div`
+//   width: 100%;
+//   height: auto;
+//   display: flex;
+//   flex-direction: column;
+//   margin-top: 40%;
+//   margin-bottom: 60%;
+// `;
 
 const LaunchFeaturesTextLargest = styled.span`
   font-size: ${(props) => props.theme.fontSizes.xl};
@@ -336,12 +336,6 @@ const LaunchFeaturesTextLarge = styled.span`
   @media only screen and (max-width: 776px) {
     font-size: ${(props) => props.theme.fontSizes.md};
   }
-`;
-
-const LaunchFeaturesTextSmall = styled.span`
-  font-size: ${(props) => props.theme.fontSizes.xs};
-  text-align: center;
-  color: white;
 `;
 
 const LaunchFeaturesTextSmallGray = styled.span`

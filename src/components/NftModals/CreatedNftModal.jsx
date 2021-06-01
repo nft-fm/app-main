@@ -1,16 +1,13 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { useWallet } from "use-wallet";
 import axios from "axios";
-import swal from "sweetalert2";
 import { ReactComponent as IconX } from "../../assets/img/icons/x.svg";
 import logo from "../../assets/img/logos/logo_tiny.png";
 import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
 import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { useAccountConsumer } from "../../contexts/Account";
-import { getSetSale } from "../../web3/utils";
-import IconMetamask from "../../assets/img/icons/metamask_icon.png";
+// import { getSetSale } from "../../web3/utils";
 
 import { ReactComponent as eth_icon } from "../../assets/img/icons/ethereum.svg";
 import Swal from "sweetalert2";
@@ -24,7 +21,7 @@ const BuyNftModal = ({
   setLikeCount,
   setIsShareOpen,
 }) => {
-  const { account, connect, usdPerEth } = useAccountConsumer();
+  const { account, usdPerEth } = useAccountConsumer();
 
   if (!open) return null;
   const stopProp = (e) => {
@@ -32,14 +29,14 @@ const BuyNftModal = ({
   };
   console.log("nft", nft);
 
-  const purchase = (id) => {
-    axios
-      .post("/api/nft-type/purchase", { id: id, address: account })
-      .then((res) => {
-        console.log("purchase res", res);
-      })
-      .catch((err) => console.log(err));
-  };
+  // const purchase = (id) => {
+  //   axios
+  //     .post("/api/nft-type/purchase", { id: id, address: account })
+  //     .then((res) => {
+  //       console.log("purchase res", res);
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
 
   const like = async () => {
     if (account) {
@@ -307,13 +304,6 @@ const Image = styled.img`
   margin-bottom: 16px;
 `;
 
-const PricesContainer = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 20px;
-`;
 const InfoContainer = styled.div`
   width: 80%;
   display: flex;
@@ -355,31 +345,6 @@ const Artist = styled.span`
   font-size: ${(props) => props.theme.fontSizes.xs};
   color: ${(props) => props.theme.color.lightgray};
   margin-bottom: 12px;
-`;
-
-const Row = styled.div`
-  width: 90%;
-  display: flex;
-  justify-content: space-between;
-`;
-
-const BuyButton = styled.button`
-  width: 140px;
-  height: 64px;
-  cursor: pointer;
-  transition: all 0.1s ease-in-out;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
-  border: 1px solid ${(props) => props.theme.color.boxBorder};
-  border-radius: 2px;
-  background-color: ${(props) => props.theme.color.box};
-  margin-bottom: 20px;
-  &:hover {
-    background-color: ${(props) => props.theme.color.boxBorder};
-    border: 1px solid #383838;
-  }
 `;
 
 export default BuyNftModal;

@@ -1,18 +1,16 @@
-import React, { useCallback, useEffect, useState } from "react";
-import styled, { keyframes } from "styled-components";
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
 import axios from "axios";
 import LibraryCard from "../../../components/NftCards/LibraryCard";
-import ArtistCard from "../../../components/NftCards/ArtistCard";
 import loading from "../../../assets/img/loading.gif";
 
 import { usePlaylistConsumer } from "../../../contexts/Playlist";
-import { resolveContent } from "nodemailer/lib/shared";
 import { useAccountConsumer } from "../../../contexts/Account";
 
 const Library = ({ user }) => {
   const {account} = useAccountConsumer();
   const [nfts, setNfts] = useState();
-  const [selectedNft, setSelectedNft] = useState();
+  // const [selectedNft, setSelectedNft] = useState();
   const { setNftsCallback, setIsPreview } = usePlaylistConsumer();
   const [noNfts, setNoNfts] = useState(false);
 
@@ -24,7 +22,7 @@ const Library = ({ user }) => {
           nft={nft}
           key={index}
           index={index}
-          selectNft={setSelectedNft}
+          // selectNft={setSelectedNft}
         />
       );
     });
@@ -34,23 +32,22 @@ const Library = ({ user }) => {
     return formattedNfts;
   };
 
-  const getUserNfts = async () => {
-    console.log("gonna get them")
-    axios.post("api/nft-type/get-user-nfts", user).then((res) => {
-      console.log(res);
-      if (res.data === "no nfts!") {
-        setNoNfts(true);
-        setNfts([]);
-      } else {
-        console.log("this", res.data);
-        setNfts(formatNfts(res.data));
-        setNftsCallback(res.data);
-        setIsPreview(false);
-      }
-    });
-  };
-
   useEffect(() => {
+    const getUserNfts = async () => {
+      console.log("gonna get them")
+      axios.post("api/nft-type/get-user-nfts", user).then((res) => {
+        console.log(res);
+        if (res.data === "no nfts!") {
+          setNoNfts(true);
+          setNfts([]);
+        } else {
+          console.log("this", res.data);
+          setNfts(formatNfts(res.data));
+          setNftsCallback(res.data);
+          setIsPreview(false);
+        }
+      });
+    };
     if (user) {
       getUserNfts();
     }
@@ -75,6 +72,7 @@ const StyledTitle = styled.div`
   margin: 60px 0 40px 0;
   font-weight: 600;
   /* letter-spacing: 3px; */
+  text-align: center;
   color: white;
 `;
 const FillerCard = styled.div`
@@ -117,64 +115,6 @@ const LaunchContainer = styled.div`
   flex-direction: column;
   align-items: center;
   margin-bottom: 40px;
-`;
-
-const ContainerTitleLeft = styled.span`
-  position: absolute;
-  font-weight: 600;
-  left: calc(10% + 20px);
-  top: -13px;
-  padding: 5px 12px 3px;
-  font: "Compita";
-  background-color: ${(props) => props.theme.bgColor};
-  font-size: ${(props) => props.theme.fontSizes.xs};
-  color: ${(props) => props.theme.color.gray};
-  display: flex;
-  flex-direction: row;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  border: 4px solid #383838;
-  border-radius: 20px;
-  transition: 0.2s;
-  ${({ active }) =>
-    active &&
-    `
-  color: white;
-  `}
-  &:hover {
-    color: white;
-  }
-`;
-
-const ContainerTitleRight = styled.span`
-  position: absolute;
-  font-weight: 600;
-  right: calc(10% + 20px);
-  top: -13px;
-  padding: 5px 12px 3px;
-  font: "Compita";
-  background-color: ${(props) => props.theme.bgColor};
-  font-size: ${(props) => props.theme.fontSizes.xs};
-  color: ${(props) => props.theme.color.gray};
-  display: flex;
-  flex-direction: row;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  border: 4px solid #383838;
-  border-radius: 20px;
-  transition: 0.2s;
-  ${({ active }) =>
-    !active &&
-    `
-  color:  white;
-  `}
-  &:hover {
-    color: white;
-  }
 `;
 
 const ContainerOutline = styled.div`

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { ReactComponent as IconX } from "../../assets/img/icons/x.svg";
@@ -114,7 +114,7 @@ const NftModalHook = ({
       hide();
     };
   
-    const [currChainId, setCurrChainId] = useState(null);
+    // const [currChainId, setCurrChainId] = useState(null);
   
     // const getChain = async () => {
     //   console.log('here')

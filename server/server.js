@@ -10,6 +10,7 @@ const userRouter = require('./routes/user.router')
 const nftTypeRouter = require('./routes/nft-type.router')
 const nftRouter = require('./routes/nft.router')
 const govRouter = require('./routes/gov.router')
+const paymentRouter = require('./routes/payment.router')
 const connectDB = require('./modules/db')
 const sessionMiddleware = require('./middleware/session-middleware')
 const path = require('path')
@@ -54,6 +55,7 @@ app.use('/api/user', userRouter)
 app.use('/api/nft-type', nftTypeRouter)
 app.use('/api/nft', nftRouter)
 app.use('/api/gov', govRouter)
+app.use('/api/payment', paymentRouter)
 
 app.get('/*', function (req, res) {
   res.sendFile(path.join(__dirname, '../build/index.html'), function (err) {

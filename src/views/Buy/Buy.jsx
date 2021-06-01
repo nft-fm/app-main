@@ -1,18 +1,19 @@
 import React from "react";
-import { Switch } from "react-router-dom";
-import styled from "styled-components";
-import TopDisplayContainer from "../../components/TopDisplayContainer";
-import { NavLink } from "react-router-dom";
-import isMobile from "../../utils/isMobile";
 import BaseView from "../../components/Page/BaseView";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import CheckoutForm from "./CheckoutForm";
+
+const promise = loadStripe(process.env.STRIPE_PUBLIC_KEY);
 
 const Buy = () => {
   return (
     <BaseView>
-    <div style={{backgroundColor: "white"}}>
-      <h1>Hello</h1>
-    </div>
-     
+      <div style={{backgroundColor: "white"}}>
+        <Elements stripe={promise}>
+          <CheckoutForm />
+        </Elements>
+      </div>
     </BaseView>
   );
 };

@@ -26,19 +26,23 @@ export const Features = () => {
   return (
     <Container>
       <FeatureContainer reverse>
-        <FeaturesTextContainer>
+        <FeaturesTextContainer data-aos="fade-right">
           <FeaturesHeader>Jam out to exclusive tunes</FeaturesHeader>
           <FeaturesDescription>
-            NFTs on NFT FM aren’t just amazing pieces of visual art. They contain full-length tracks directly from the musicians. Owning these NFTs grants you the ability to stream these one-of-a-kind songs at any time.
+            NFTs on NFT FM aren’t just amazing pieces of visual art. They contain full-length tracks directly from the musicians. Owning these NFTs grants you the exclusive ability to stream these amazing songs at any time.
           </FeaturesDescription>
         </FeaturesTextContainer>
-        <ExclusiveImageContainer data-aos="fade-left" data-aos-mirror="true">
+        <ExclusiveImageContainer data-aos="fade-left">
           <Exclusive  src={exclusive} alt="homepage-exclusive"/>
         </ExclusiveImageContainer>
       </FeatureContainer>
-      <MobileSpacer />
-      <FeatureContainer>
-        <CarbonImageContainer>
+      <Spacer />
+      <FeatureContainer
+      data-aos="fade-in"
+      data-aos-anchor-placement="top-center"
+      data-aos-once="true"
+      >
+        <CarbonImageContainer data-aos="fade-right">
           <Carbon src={carbon} alt="homepage-carbon"/>
         </CarbonImageContainer>
         <FeaturesTextContainer data-aos="fade-left"  >
@@ -57,10 +61,10 @@ export const Features = () => {
         <FeaturesTextContainer data-aos-anchor-placement="bottom-bottom" data-aos="fade-right">
           <FeaturesHeader>Support Amazing Artists</FeaturesHeader>
           <FeaturesDescription>
-            It’s no secret that musicians are not provided fair revenue from traditional streaming services. That’s why musicians make 95% through their sales on NFT FM.
+            It’s no secret that traditional streaming services are not offering fair compensation to artists. With us, musicians make 95% of their sales.
           </FeaturesDescription>
         </FeaturesTextContainer>
-        <FeaturesImageContainer>
+        <FeaturesImageContainer data-aos-anchor-placement="bottom-bottom" data-aos="fade-left">
           <Revenue src={revenue} alt="homepage-revenue"/>
         </FeaturesImageContainer>
       </FeatureContainer>
@@ -72,7 +76,7 @@ export const Features = () => {
       >
           <Join src={join} alt="homepage-join"/>
         </FeaturesImageContainer>
-        <FeaturesTextContainer>
+        <FeaturesTextContainer data-aos="fade-left">
           <FeaturesHeader>Receive Airdrops!</FeaturesHeader>
           <FeaturesDescription>
             NFTs holders on our platform get monthly airdrops of our governance token, $VINYL. 30% of the supply is being dropped to NFT holding wallets throughout our first 4 years of operation!
@@ -82,16 +86,14 @@ export const Features = () => {
     </Container>
   )
 }
-
-const MobileSpacer = styled.div`
-  @media only screen and (max-width: 800px) {
-    height: 80px;
-  }
+const Spacer = styled.div`
+  height: 40px;
 `
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 900px;
+  width: 1000px;
   justify-content: center;
   align-items: center;
   margin-left: 80px;
@@ -112,15 +114,16 @@ const Exclusive = styled.img`
     padding-bottom: 50px;
   }
   @media only screen and (max-width: 600px) {
-    height: 80vw;
+    height: 70vw;
   }
 `
 
 const Carbon = styled.img`
   object-fit: cover;
-  width: 350px;
-  height: 350px;
+  width: 340px;
+  height: 340px;
   margin-left: -60px;
+  margin-top: 30px;
   @media only screen and (max-width: 1100px) {
     margin-left: -150px;
   }
@@ -129,8 +132,8 @@ const Carbon = styled.img`
     padding: 40px;
   }
   @media only screen and (max-width: 600px) {
-    height: 80vw;
-    width: 80vw;
+    height: 75vw;
+    width: 75vw;
   }
 `
 
@@ -167,7 +170,7 @@ const Join = styled.img`
 
 const FeaturesImageContainer = styled.div`
   display: flex;
-  width: 50%;
+  width: 58%;
   align-items: center;
   justify-content: center;
 `
@@ -190,7 +193,7 @@ const FeaturesTextContainer = styled.div`
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  width: 50%;
+  width: 42%;
   margin-top: -30px;
   @media only screen and (max-width: 800px) {
     width: 80vw;
@@ -199,7 +202,7 @@ const FeaturesTextContainer = styled.div`
   }
 `
 
-const FeaturesHeader = styled.h2`
+const FeaturesHeader = styled.h1`
   color: white;
   @media only screen and (max-width: 800px) {
     text-align: center;
@@ -210,7 +213,8 @@ const FeaturesDescription = styled.div`
   color: #888888;
   position: relative;
   display: block;
-  font-size: 16px;
+  font-size: 17px;
+  line-height: 1.3;
 `
 
 const FeatureContainer = styled.div`
@@ -220,7 +224,7 @@ const FeatureContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 72px 32px;
+  padding: 120px 32px;
   line-height: 30px;
   width: calc(100% - 64px);
   @media only screen and (max-width: 800px) {

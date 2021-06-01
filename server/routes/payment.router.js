@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const stripe = require('stripe')(process.env.STRIPE_SECRET);
+const stripe = require('stripe');
 
 const calculateOrderAmount = items => {
   // Replace this constant with a calculation of the order's amount
@@ -12,10 +12,12 @@ const calculateOrderAmount = items => {
 
 router.post("/create-payment-intent", async (req, res) => {
   try {
+    const authorize = stripe(process.env.STRIPE_SECRET);
+
     const { items } = req.body;
     console.log("creating payment intent")
     // Create a PaymentIntent with the order amount and currency
-    const paymentIntent = await stripe.paymentIntents.create({
+    const paymentIntent = await authorize.paymentIntents.create({
       amount: calculateOrderAmount(items),
       currency: "usd"
     });

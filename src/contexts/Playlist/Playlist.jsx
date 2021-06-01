@@ -6,7 +6,7 @@ import axios from 'axios'
 const PlaylistContext = createContext();
 
 export const PlaylistProvider = ({ children }) => {
-  const { user } = useAccountConsumer();
+  const { user, account } = useAccountConsumer();
 
   const [nfts, setNfts] = useState([]);
   const [selectedNft, setSelectedNft] = useState();
@@ -51,8 +51,8 @@ export const PlaylistProvider = ({ children }) => {
     if (!index || index < 0) setIndex(0);
     const newIndex = index === nfts.length - 1 ? 0 : index + 1;
     console.log("nEW INDEX", newIndex)
-    setSelectedNft(nfts[newIndex]);
-    setIndex(newIndex);
+    //setSelectedNft(nfts[newIndex]);
+    //setIndex(newIndex);
   }
 
   const setPrevNft = () => {
@@ -63,25 +63,30 @@ export const PlaylistProvider = ({ children }) => {
       setNfts(_nfts);
     }
     if (!index || index < 0) setIndex(0);
-    const newIndex = index === 0 ? nfts.length - 1 : index - 1;
-    setSelectedNft(nfts[newIndex]);
-    setIndex(newIndex);
+    const newIndex = index == 0 ? nfts.length - 1 : index - 1;
+    //setSelectedNft(nfts[newIndex]);
+    //setIndex(newIndex);
   }
 
   const setNftsCallback = (_nfts) => {
+    console.log("set nfts callback")
     setNfts(_nfts);
   }
 
   const setNftCallback = (_nft) => {
+    console.log("setting nft callback")
     if (selectedNft) {
+      console.log("set with selecting");
       setSelectedNft(false);
       const timer = setTimeout(() => {
+        console.log("timer out");
         setSelectedNft(_nft);
         setIndex(nfts.indexOf(_nft));
         clearTimeout(timer);
       }, 10)
     }
     else if (_nft) {
+      console.log("set not selected");
       setSelectedNft(_nft);
       setIndex(nfts.indexOf(_nft));
       setIsOpen(true);
@@ -89,17 +94,22 @@ export const PlaylistProvider = ({ children }) => {
   }
 
   const exitPlayer = () => {
+    console.log("exit player");
     setIsOpen(false);
     const timer = setTimeout(() => {
+      console.log("exit player time out")
       setSelectedNft(null)
       clearTimeout(timer);
     }, animTime * 1000)
   }
 
   useEffect(() => {
+    console.log("selected nft changed", selectedNft);
+  }, [selectedNft])
+  useEffect(() => {  
     setNfts([]);
     setSelectedNft();
-  }, [user]);
+  }, [account]);
 
   return (
     <PlaylistContext.Provider

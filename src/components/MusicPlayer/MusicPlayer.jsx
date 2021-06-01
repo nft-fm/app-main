@@ -98,29 +98,11 @@ const MusicPlayer = (props) => {
       partialBufferSrc.current = _bufferSrc;
 
       setStartTime(_bufferSrc.context.currentTime);
-      props.setCurrentBuffer(songFile);
-    });
+      /*props.setCurrentBuffer(songFile);*/
+    })
 
     return _bufferSrc;
   };
-
-  /*const startPreviewSong = async () => {
-    console.log("starting preview song")
-    setDur(15);
-    if (nft.partialSong) {
-      console.log("has partial song", nft.partialSong)
-      const abSong = toArrayBuffer(nft.partialSong);
-      const _bufferSrc = audioContextRef.current.createBufferSource();
-      audioContextRef.current.decodeAudioData(abSong, async (_buffer) => {
-        _bufferSrc.buffer = _buffer;
-        fullBufferSrc.current = _bufferSrc;
-  
-        await startNewContext(_bufferSrc);
-        setSongFullyLoaded(true);
-        setIsLoading(false);
-      })
-    }
-  }*/
 
   const startPartialSong = async (songFile) => {
     const _bufferSrc = await startNewContext(songFile);
@@ -157,9 +139,8 @@ const MusicPlayer = (props) => {
       .then(
         (fullFile) => {
           prepareRemainingSong(fullFile, _bufferSrc);
-          props.setCurrentBuffer(fullFile);
-        },
-        (e) => {
+          /*props.setCurrentBuffer(fullFile);*/
+        }, (e) => {
           Swal.fire({
             title: "Sorry, something went wrong loading the music",
             text: "Please reload the page",
@@ -225,10 +206,10 @@ const MusicPlayer = (props) => {
         setDur(_bufferSrc.buffer.duration);
         setIsLoading(false);
       }
-      /*props.fetchPrevNext();*/
-      props.setCurrentBuffer(songFile);
-    });
-  };
+      /*props.fetchPrevNext();
+      props.setCurrentBuffer(songFile);*/
+    })
+  }
 
   const startSong = async (songFile) => {
     const _bufferSrc = await startNewContext(songFile);

@@ -116,11 +116,11 @@ const Listen = () => {
           setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
         />
       )}
-      {/* <LandingTitle>
+      <LandingTitle>
         <Logo src={logo} />
         <StyledTitle>NFT FM</StyledTitle>
         <NftFmTagline>Tune in to your favorite artists.</NftFmTagline>
-      </LandingTitle> */}
+      </LandingTitle>
       <LaunchContainer>
         <ContainerTitle>
           PROUD TO

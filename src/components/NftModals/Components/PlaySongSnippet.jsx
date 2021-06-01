@@ -87,6 +87,9 @@ const PlaySongSnippet = (props) => {
     return () => {if (intervalId) clearInterval(intervalId)};
   }, [isPlaying, time])
 
+  useEffect(() => {
+    return () => {if (audioRef && audioRef.current) audioRef.current.pause()};
+  }, [])
   return (
     <Wrapper>
       {isLoading ? <Loading src={loading}/> :

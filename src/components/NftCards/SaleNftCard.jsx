@@ -18,8 +18,6 @@ import sex from "../../assets/img/nftcovers/sex_kazoo_updated.gif";
 import touch from "../../assets/img/nftcovers/touch_id_glitch.gif";
 import here from "../../assets/img/nftcovers/here_for_a_reason_glitch.gif";
 
-
-
 const images = {
   1: sex,
   2: touch,

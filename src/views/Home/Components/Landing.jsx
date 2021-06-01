@@ -93,12 +93,12 @@ const Listen = () => {
     if (window.location.pathname.length > 1 && isLoaded) {
       let nftTitle = ""
       let trackUrl = window.location.pathname.split("/").pop()
-      if (trackUrl === "touch_id") nftTitle = "TOUCH ID"
-      if (trackUrl === "sex_kazoo") nftTitle = "Sex Kazoo"
+      if (trackUrl === "touch_id") nftTitle = "TOUCH IDv2"
+      if (trackUrl === "sex_kazoo") nftTitle = "Sex Kazoo 2 "
       if (trackUrl === "lowkey") nftTitle = "Lowkey"
       if (trackUrl === "here_for_a_reason") nftTitle = "here for a reason"
       for (let i = 0; i < rawNftData.length; i++) {
-        console.log(rawNftData[i].nftId);
+        console.log(rawNftData[i]);
         if (nftTitle === rawNftData[i].title) {
           setNftFromUrl(rawNftData[i]);
           setIsUrlModalOpen(true);

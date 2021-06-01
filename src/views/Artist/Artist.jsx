@@ -67,7 +67,7 @@ const Artist = () => {
                 console.log(social)
                 if (social.twitter) {
                   return (<IconContainer
-                    href={setUserInfo.socials.twitter}
+                    href={userInfo.socials.twitter}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -77,7 +77,7 @@ const Artist = () => {
                 }
                 if (social.insta) {
                   return (<IconContainer
-                    href={setUserInfo.socials.insta}
+                    href={userInfo.socials.insta}
                     target="_blank"
                     rel="noopener noreferrer"
                   >

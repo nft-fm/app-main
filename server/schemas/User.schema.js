@@ -62,9 +62,6 @@ const UserSchema = new Schema({
       twitter: {
         type: String,
       },
-      facebook: {
-        type: String,
-      },
     },
   ],
 });

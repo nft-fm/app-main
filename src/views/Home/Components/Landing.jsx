@@ -194,7 +194,7 @@ const Listen = () => {
           <IconText>Twitter</IconText>
         </IconContainer>
         <IconContainer
-          href="https://discord.gg/KsgkXNwY"
+          href="https://discord.gg/ejXAypqHD6"
           target="_blank"
           rel="noopener noreferrer"
         >

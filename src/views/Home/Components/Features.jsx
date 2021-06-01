@@ -28,19 +28,24 @@ export const Features = () => {
       <FeatureContainer reverse>
         <FeaturesTextContainer>
           <FeaturesHeader>Jam out to exclusive tunes</FeaturesHeader>
-          <FeaturesDescription>NFTs on NFT FM include full-length music only the NFT holders can listen to!</FeaturesDescription>
+          <FeaturesDescription>
+            NFTs on NFT FM aren’t just amazing pieces of visual art. They contain full-length tracks directly from the musicians. Owning these NFTs grants you the ability to stream these one-of-a-kind songs at any time.
+          </FeaturesDescription>
         </FeaturesTextContainer>
         <ExclusiveImageContainer data-aos="fade-left" data-aos-mirror="true">
           <Exclusive  src={exclusive} alt="homepage-exclusive"/>
         </ExclusiveImageContainer>
       </FeatureContainer>
+      <MobileSpacer />
       <FeatureContainer>
-        <FeaturesImageContainer>
+        <CarbonImageContainer>
           <Carbon src={carbon} alt="homepage-carbon"/>
-        </FeaturesImageContainer>
+        </CarbonImageContainer>
         <FeaturesTextContainer data-aos="fade-left"  >
-          <FeaturesHeader>Save the Earth</FeaturesHeader>
-          <FeaturesDescription>I don't get this section...🤔 Help me with a description. How does this save the Earth?</FeaturesDescription>
+          <FeaturesHeader>Committed to Carbon Neutrality</FeaturesHeader>
+          <FeaturesDescription>
+            We have partnered with Offsetra to provide transparency on our commitment to carbon neutrality. Each month, donations are made to chosen ecological funds to offset the emissions generated through transactions made on our platform.
+          </FeaturesDescription>
         </FeaturesTextContainer>
       </FeatureContainer>
       <FeatureContainer
@@ -50,8 +55,10 @@ export const Features = () => {
         data-aos-once="true"
       >
         <FeaturesTextContainer data-aos-anchor-placement="bottom-bottom" data-aos="fade-right">
-          <FeaturesHeader>Support musicians 95%</FeaturesHeader>
-          <FeaturesDescription>App stores and producers often take a large cut of the artists' pay. Directly support your artist here!</FeaturesDescription>
+          <FeaturesHeader>Support Amazing Artists</FeaturesHeader>
+          <FeaturesDescription>
+            It’s no secret that musicians are not provided fair revenue from traditional streaming services. That’s why musicians make 95% through their sales on NFT FM.
+          </FeaturesDescription>
         </FeaturesTextContainer>
         <FeaturesImageContainer>
           <Revenue src={revenue} alt="homepage-revenue"/>
@@ -66,18 +73,25 @@ export const Features = () => {
           <Join src={join} alt="homepage-join"/>
         </FeaturesImageContainer>
         <FeaturesTextContainer>
-          <FeaturesHeader>Exclusive Airdrops</FeaturesHeader>
-          <FeaturesDescription>Get rare and exclusive access to your favorite music! You also own it too!</FeaturesDescription>
+          <FeaturesHeader>Receive Airdrops!</FeaturesHeader>
+          <FeaturesDescription>
+            NFTs holders on our platform get monthly airdrops of our governance token, $VINYL. 30% of the supply is being dropped to NFT holding wallets throughout our first 4 years of operation!
+          </FeaturesDescription>
         </FeaturesTextContainer>
       </FeatureContainer>
     </Container>
   )
 }
 
+const MobileSpacer = styled.div`
+  @media only screen and (max-width: 800px) {
+    height: 80px;
+  }
+`
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 1100px;
+  width: 900px;
   justify-content: center;
   align-items: center;
   margin-left: 80px;
@@ -93,7 +107,7 @@ const Container = styled.div`
 
 const Exclusive = styled.img`
   object-fit: cover;
-  height: 414px;
+  height: 350px;
   @media only screen and (max-width: 800px) {
     padding-bottom: 50px;
   }
@@ -104,14 +118,15 @@ const Exclusive = styled.img`
 
 const Carbon = styled.img`
   object-fit: cover;
-  width: 414px;
-  height: 414px;
+  width: 350px;
+  height: 350px;
+  margin-left: -60px;
   @media only screen and (max-width: 1100px) {
-    margin-left: -120px;
+    margin-left: -150px;
   }
   @media only screen and (max-width: 800px) {
     margin: 0;
-    padding: 50px;
+    padding: 40px;
   }
   @media only screen and (max-width: 600px) {
     height: 80vw;
@@ -121,7 +136,9 @@ const Carbon = styled.img`
 
 const Revenue = styled(Carbon)`
   object-fit: cover;
-  margin-left: 80px;
+  width: 380px;
+  height: 380px;
+  margin-left: 20px;
   @media only screen and (max-width: 1100px) {
     margin: 0px;
   }
@@ -135,8 +152,8 @@ const Revenue = styled(Carbon)`
 `
 
 const Join = styled.img`
-  width: 580px;
-  margin-left: -80px;
+  width: 493px;
+  margin-left: -100px;
   @media only screen and (max-width: 1100px) {
     margin-left: -90px;
   }
@@ -150,7 +167,7 @@ const Join = styled.img`
 
 const FeaturesImageContainer = styled.div`
   display: flex;
-  width: 58%;
+  width: 50%;
   align-items: center;
   justify-content: center;
 `
@@ -159,15 +176,30 @@ const ExclusiveImageContainer = styled(FeaturesImageContainer)`
   display: flex;
 `
 
-const FeaturesTextContainer = styled.div`
-  box-sizing: border-box;
-  width: 42%;
+const CarbonImageContainer = styled(FeaturesImageContainer)`
+  @media only screen and (max-width: 1100px) {
+    margin-left: 50px;
+    margin-right: -50px;
+  }
   @media only screen and (max-width: 800px) {
-    width: 80vw;
+    margin: 0;
   }
 `
 
-const FeaturesHeader = styled.h1`
+const FeaturesTextContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 50%;
+  margin-top: -30px;
+  @media only screen and (max-width: 800px) {
+    width: 80vw;
+    justify-content: center;
+    align-items: center;
+  }
+`
+
+const FeaturesHeader = styled.h2`
   color: white;
   @media only screen and (max-width: 800px) {
     text-align: center;
@@ -178,7 +210,7 @@ const FeaturesDescription = styled.div`
   color: #888888;
   position: relative;
   display: block;
-  font-size: 18px;
+  font-size: 16px;
 `
 
 const FeatureContainer = styled.div`
@@ -188,13 +220,18 @@ const FeatureContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 72px 48px;
+  padding: 72px 32px;
   line-height: 30px;
-  width: calc(100% - 96px);
+  width: calc(100% - 64px);
   @media only screen and (max-width: 800px) {
     flex-direction: ${({ reverse }) => reverse ? "column-reverse": "column" };
     margin-top: 0px;
-    padding-bottom: 25vw;
+    padding-bottom: 100px;
+    padding-top: 50px;
+  }
+  @media only screen and (max-width: 600px) {
+    margin-top: 0px;
+    padding-bottom: 30vw;
     padding-top: 15vw;
   }
 `

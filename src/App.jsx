@@ -15,11 +15,14 @@ import Profile from "./views/Profile";
 import Artist from "./views/Artist";
 import Community from "./views/Community"
 import Error404 from "./views/404";
+import Buy from "./views/Buy";
 import TokenSale from "./views/TokenSale";
 import TermsOfService from "./views/FooterLinks/TermsOfService"
 import PrivacyPolicy from "./views/FooterLinks/PrivacyPolicy"
+
 import { AccountProvider } from "./contexts/Account";
 import { PlaylistProvider } from "./contexts/Playlist/Playlist";
+
 import preloadImage from "./utils/preloadImg";
 import recordPlayer from "./assets/img/record_player.png";
 import recordPlayerSpin from "./assets/img/record_player_spin.png";
@@ -62,6 +65,9 @@ const App = () => {
             </Route>
             <Route path="/privacypolicy">
               <PrivacyPolicy />
+            </Route>
+            <Route path="/buy" >
+              <Buy />
             </Route>
             <Route path="/" >
               <Listen />

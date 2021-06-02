@@ -82,6 +82,7 @@ const StyledHeader = styled.h1`
   margin: 0 0 24px 0;
   font-family: "Compita";
   padding: 32px 0px;
+  text-align: center; 
 `;
 
 

@@ -10,14 +10,43 @@ const calculateOrderAmount = items => {
   return 1400;
 };
 
-router.post("/register-receiver", async (req, res) => {
+router.post("/registerAccount", async (req, res) => {
+  try {
+    const user = await User.findOne({address: req.body.account});
 
+    if (user && user.isArtist) {
+      const authorize = stripe(process.env.STRIPE_SECRET);
+
+      const account = await authorize.accounts.create({
+        type: 'express',
+      });
+  
+      const accountLinks = await authorize.accountLinks.create({
+        account: account,
+        refresh_url: process.env.API + '/payment/finishedRegistration',
+        return_url: '/payment/finishedRegistration',
+        type: 'account_onboarding',
+      });
+  
+      console.log(accountLinks);
+      res.json(accountLinks);
+    } else {
+      res.status.send("No user or user is not artist");
+    }
+    
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err);
+  }
 })
+
+router.get("/finishedRegistration", async(req, res) => {
+
+});
 
 router.post("/create-payment-intent", async (req, res) => {
   try {
     const authorize = stripe(process.env.STRIPE_SECRET);
-
     const { items } = req.body;
     console.log("creating payment intent")
     // Create a PaymentIntent with the order amount and currency
@@ -29,7 +58,7 @@ router.post("/create-payment-intent", async (req, res) => {
       clientSecret: paymentIntent.client_secret
     });
   } catch (err) {
-      console.log(err);
+    console.log(err);
     res.status(500).send(err);
   }
 

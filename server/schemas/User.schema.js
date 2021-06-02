@@ -24,6 +24,10 @@ const UserSchema = new Schema({
     type: String,
     default: "",
   },
+  stripeAccount: {
+    type: String,
+    required: false
+  },
   isArtist: {
     type: Boolean,
     default: false,

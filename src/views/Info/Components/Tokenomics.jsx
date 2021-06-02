@@ -14,22 +14,15 @@ const Tokenomics = () => {
               TEAM / PROJECT
             </LaunchFeaturesHeader>
             <SubHolder>
-              <LaunchFeaturesTextLarge>10%</LaunchFeaturesTextLarge>
+              <LaunchFeaturesTextLarge>7%</LaunchFeaturesTextLarge>
               <LaunchFeaturesTextSmallGray>
                 For investors, advisors, community builders, content creators
               </LaunchFeaturesTextSmallGray>
             </SubHolder>
-            {/* <br />
-            <SubHolder>
-              <LaunchFeaturesTextLarge>5%</LaunchFeaturesTextLarge>
-              <LaunchFeaturesTextSmallGray>
-                for Investors
-              </LaunchFeaturesTextSmallGray>
-            </SubHolder> */}
 
             <br />
             <SubHolder>
-              <LaunchFeaturesTextLarge>15% 🔒</LaunchFeaturesTextLarge>
+              <LaunchFeaturesTextLarge>14.25% 🔒</LaunchFeaturesTextLarge>
               <LaunchFeaturesTextSmallGray>
                 Locked for 6 months.
               </LaunchFeaturesTextSmallGray>
@@ -40,47 +33,45 @@ const Tokenomics = () => {
           </LaunchFeaturesBox>
           <LaunchFeaturesBox>
             <LaunchFeaturesHeader style={{ color: "#fde404" }}>
-              SALES
+              CIRCULATING
             </LaunchFeaturesHeader>
+            <MiniSpacer />
             <SubHolder>
-              <LaunchFeaturesTextLarge>
-                Private Sale: 15%
-              </LaunchFeaturesTextLarge>
+              <LaunchFeaturesTextLargest>43.75%</LaunchFeaturesTextLargest>
               <LaunchFeaturesTextSmallGray>
-                750,000 $VINYL at $1 per
+                In circulation within the NFT FM community
               </LaunchFeaturesTextSmallGray>
             </SubHolder>
+            <MiniSpacer />
             <br />
-            <SubHolder>
-              <LaunchFeaturesTextLarge>Presale: 20%</LaunchFeaturesTextLarge>
-              <LaunchFeaturesTextSmallGray>
-                1,000,000 $VINYL at $1.25 per
-              </LaunchFeaturesTextSmallGray>
-            </SubHolder>
           </LaunchFeaturesBox>
           <LaunchFeaturesBox>
             <LaunchFeaturesHeader style={{ color: "#68c12f" }}>
               LIQUIDITY
             </LaunchFeaturesHeader>
-            {/* <LaunchFeaturesContent> */}
-            <LaunchFeaturesTextLargest>10%</LaunchFeaturesTextLargest>
+            <MiniSpacer />
+            <SubHolder>
+            <LaunchFeaturesTextLargest>5%</LaunchFeaturesTextLargest>
+              <LaunchFeaturesTextSmallGray>
+                Greater than 10% of the circulating supply
+              </LaunchFeaturesTextSmallGray>
+            </SubHolder>
+            <MiniSpacer />
             <br />
-            <SubHolder />
-            {/* </LaunchFeaturesContent> */}
           </LaunchFeaturesBox>
           <LaunchFeaturesBox>
             <LaunchFeaturesHeader style={{ color: "#fa423e" }}>
               AIRDROPS
             </LaunchFeaturesHeader>
+            <MiniSpacer />
             <SubHolder>
               <LaunchFeaturesTextLargest>30%</LaunchFeaturesTextLargest>
               <LaunchFeaturesTextSmallGray>
-                1,500,000 $VINYL to be airdropped to NFT owners and platform
-                users
+                120,000 $VINYL to be airdropped to NFT owners
               </LaunchFeaturesTextSmallGray>
             </SubHolder>
+            <MiniSpacer />
             <br />
-            <SubHolder />
           </LaunchFeaturesBox>
         </LaunchFeaturesContainer>
       </LaunchContainer>
@@ -311,6 +302,10 @@ const SubHolder = styled.div`
   @media only screen and (max-width: 776px) {
     height: auto;
   }
+`;
+
+const MiniSpacer = styled.div`
+  height: 51px;
 `;
 
 export default Tokenomics;

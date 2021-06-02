@@ -64,7 +64,7 @@ const ProjectSummary = styled.div`
   display: flex;
   flex-direction: column;
   color: white;
-  text-align: center;
+  /* text-align: center; */
 `;
 
 const Button = styled.button`

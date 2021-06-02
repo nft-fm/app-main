@@ -12,17 +12,14 @@ import revenue from "../../../assets/img/homepage_assets/homepage_revenue.png"
 // import art from "../../../assets/img/homepage_assets/homepage_art.png"
 // import video from "../../../assets/img/homepage_assets/homepage_video.png"
 
-export const Features = () => {
+export const Features = ({ isLoaded, setIsLoaded }) => {
   useEffect(() => {
     Aos.init({
-      duration: 2000
+      duration: 2000,
+      disable: 'mobile'
     })
   }, [])
-  // const isMobile = window.innerWidth <= 500;
 
-  // if (isMobile) return (
-  //   <> </>
-  // );
   return (
     <Container>
       <FeatureContainer reverse>
@@ -38,9 +35,9 @@ export const Features = () => {
       </FeatureContainer>
       <Spacer />
       <FeatureContainer
-      data-aos="fade-in"
-      data-aos-anchor-placement="top-center"
-      data-aos-once="true"
+        data-aos="fade-in"
+        data-aos-anchor-placement="top-center"
+        data-aos-once="true"
       >
         <CarbonImageContainer data-aos="fade-right">
           <Carbon src={carbon} alt="homepage-carbon"/>
@@ -55,16 +52,21 @@ export const Features = () => {
       <FeatureContainer
         reverse
         data-aos="fade-in"
-        data-aos-anchor-placement="top-center"
+        // data-aos-anchor-placement="top-center"
         data-aos-once="true"
       >
-        <FeaturesTextContainer data-aos-anchor-placement="bottom-bottom" data-aos="fade-right">
+        <FeaturesTextContainer
+        // data-aos-anchor-placement="bottom-bottom" 
+        data-aos="fade-right">
           <FeaturesHeader>Support Amazing Artists</FeaturesHeader>
           <FeaturesDescription>
             It’s no secret that traditional streaming services are not offering fair compensation to artists. With us, musicians make 95% of their sales.
           </FeaturesDescription>
         </FeaturesTextContainer>
-        <FeaturesImageContainer data-aos-anchor-placement="bottom-bottom" data-aos="fade-left">
+        <FeaturesImageContainer
+          data-aos-anchor-placement="bottom-bottom"
+          data-aos="fade-left"
+        >
           <Revenue src={revenue} alt="homepage-revenue"/>
         </FeaturesImageContainer>
       </FeatureContainer>

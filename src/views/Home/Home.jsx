@@ -25,11 +25,11 @@ const Listen = () => {
         <Divider />
         <Features />
         <Divider />
-        <DescriptionBoxContainer>
+        {/* <DescriptionBoxContainer> */}
           <DemoImage />
           <StyledHeader>Are you an artist? Launch with us!</StyledHeader>
           <StyledAccountButton href="mailto:info@nftfm.io" target="_blank">Contact us!</StyledAccountButton>
-        </DescriptionBoxContainer>
+        {/* </DescriptionBoxContainer> */}
         <Roadmap />
         <LaunchContainer>
           <ContainerTitle faq>

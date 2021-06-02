@@ -7,7 +7,7 @@ import Swal from "sweetalert2"
 import Roadmap from "./Components/Roadmap";
 import { Features } from "./Components/Features"
 import { FAQ } from "./Components/FAQ/FAQ";
-
+import DemoImage from "./Components/DemoImage/DemoImage"
 
 const Listen = () => {
   if (window.location.hostname === "localhost" && process.env.REACT_APP_IS_MAINNET) {
@@ -25,6 +25,11 @@ const Listen = () => {
         <Divider />
         <Features />
         <Divider />
+        <DescriptionBoxContainer>
+          <DemoImage />
+          <StyledHeader>Are you an artist? Launch with us!</StyledHeader>
+          <StyledAccountButton href="mailto:info@nftfm.io" target="_blank">Contact us!</StyledAccountButton>
+        </DescriptionBoxContainer>
         <Roadmap />
         <LaunchContainer>
           <ContainerTitle faq>
@@ -37,6 +42,47 @@ const Listen = () => {
     </Switch>
   );
 };
+
+const StyledAccountButton = styled.a`
+  margin-top: -20px;
+  width: 200px;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid ${(props) => props.theme.color.red};
+  height: 45px;
+  border-radius: 20px;
+  font-size: 20px;
+  font-family: "Compita";
+  background-color: #181818;
+  color: white;
+  text-decoration: none;
+  &:hover {
+    background-color: rgba(256, 256, 256, 0.2);
+  }
+`;
+
+const DescriptionBoxContainer = styled.div`
+  border-radius: ${(props) => props.theme.borderRadius}px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: calc(100% - 64px);
+  padding: 32px;
+  margin-bottom: 40px;
+  border: solid 1px #262626;
+  background-color: #181818;
+`;
+
+const StyledHeader = styled.h1`
+  color: white;
+  margin: 0 0 24px 0;
+  font-family: "Compita";
+  padding: 32px 0px;
+`;
 
 
 const Divider = styled.div`

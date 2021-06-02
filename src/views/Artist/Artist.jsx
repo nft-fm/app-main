@@ -183,7 +183,7 @@ const SocialsBar = styled.div`
     /* flex-direction: column; */
     width: 100%;
     justify-content: center;
-  margin-top: 10px;
+    margin-top: 10px;
   }
 `;
 

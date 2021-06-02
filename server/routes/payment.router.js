@@ -10,6 +10,10 @@ const calculateOrderAmount = items => {
   return 1400;
 };
 
+router.post("/register-receiver", async (req, res) => {
+
+})
+
 router.post("/create-payment-intent", async (req, res) => {
   try {
     const authorize = stripe(process.env.STRIPE_SECRET);

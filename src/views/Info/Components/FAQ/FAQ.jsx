@@ -5,7 +5,8 @@ import styled from "styled-components";
 export const FAQ = () => {
   return (
     <Container>
-      <Title>FAQ</Title>
+      {/* <ContainerTitle>FAQ</ContainerTitle>
+      <ContainerOutline /> */}
       <Question
         question="What are NFTs?"
         // answer={<h1>hi</h1>}
@@ -44,12 +45,46 @@ const Title = styled.h1`
 `;
 
 const Container = styled.div`
-display: flex;
-flex-direction: column;
-& > h1 {
-  align-self: center;
-}
-`
+  display: flex;
+  flex-direction: column;
+  & > h1 {
+    align-self: center;
+  }
+`;
+const ContainerTitle = styled.span`
+  position: absolute;
+  font-weight: 600;
+  left: calc(10% + 50px);
+  top: ${(props) => (props.faq ? "-8px" : "-8px")};
+  padding: 0 12px;
+  font: "Compita";
+  background-color: ${(props) => props.theme.bgColor};
+  font-size: ${(props) => props.theme.fontSizes.sm};
+  color: ${(props) => (props.faq ? "#3d3d3d" : props.theme.color.gray)};
+  display: flex;
+  flex-direction: row;
+  display: flex;
+  align-items: center;
+  b {
+    margin-left: 5px;
+    // font-size: 18px;
+    color: ${(props) => props.theme.color.gray};
+    font-size: ${(props) => props.theme.fontSizes.sm};
+  }
+  b.first {
+    margin-left: 0px;
+  }
+`;
+
+const ContainerOutline = styled.div`
+  border-radius: 24px 24px 0 0;
+  border: 6px solid #383838;
+  border-bottom: none;
+  height: 40px;
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+`;
 
 // {
 /*FAQ

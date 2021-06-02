@@ -3,13 +3,10 @@ import styled from "styled-components";
 import isMobile from "../../../utils/isMobile";
 
 const Tokenomics = () => {
-
   return (
     <>
       <LaunchContainer>
-        <ContainerTitle 
-        // onClick={() => approve()}
-        >TOKENOMICS</ContainerTitle>
+        <ContainerTitle>TOKENOMICS</ContainerTitle>
         <ContainerOutline />
         <LaunchFeaturesContainer>
           <LaunchFeaturesBox>
@@ -181,7 +178,7 @@ const LaunchContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* margin-bottom: 40px; */
+  margin-top: 100px;
 `;
 const ContainerTitle = styled.span`
   position: absolute;

@@ -41,10 +41,13 @@ const Info = () => {
             Sustainable practices are important and we hope that we can be a
             model going forward in this industry.
           </span>
+          <StyledAccountButton
+            target="_blank"
+            href="https://drive.google.com/file/d/1ibbxyEiD0I2urotiQjvewsbTwHq9Lzm2/view?usp=sharing"
+          >
+            <Button>Whitepaper</Button>
+          </StyledAccountButton>
         </ProjectSummary>
-        <StyledAccountButton target="_blank" href="https://drive.google.com/file/d/1ibbxyEiD0I2urotiQjvewsbTwHq9Lzm2/view?usp=sharing">
-          <Button>Whitepaper</Button>
-        </StyledAccountButton>
         <Team />
         <LaunchContainer>
           <ContainerTitle faq>
@@ -64,6 +67,10 @@ const ProjectSummary = styled.div`
   display: flex;
   flex-direction: column;
   color: white;
+  background-color: ${(props) => props.theme.color.box};
+  border-radius: ${(props) => props.theme.borderRadius}px;
+  border: 1px solid ${(props) => props.theme.color.boxBorder};
+  padding: 20px;
   /* text-align: center; */
 `;
 
@@ -84,6 +91,8 @@ const Button = styled.button`
   } */
 `;
 const StyledAccountButton = styled.a`
+  margin-left: auto;
+  margin-right: auto;
   text-decoration: none;
   margin-top: 20px;
   width: 140px;

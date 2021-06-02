@@ -73,21 +73,24 @@ router.post("/artist-nfts", async (req, res) => {
 
 router.post("/get-NFT", async (req, res) => {
   try {
-    let nft = await NftType.findOne({
-      address: req.body.account,
-      isDraft: true,
-    });
-    if (!nft) {
-      console.log("CREATED DRAFT");
-      const newNft = await new NftType({
+    if (req.body.account) {
+      let nft = await NftType.findOne({
         address: req.body.account,
-        dur: 0,
         isDraft: true,
       });
-      await newNft.save();
-      res.send(newNft);
-    } else {
-      res.send(nft);
+      if (!nft) {
+        console.log("CREATED DRAFT");
+        const newNft = await new NftType({
+          address: req.body.account,
+          dur: 0,
+          isDraft: true,
+        });
+        await newNft.save();
+        res.send(newNft);
+      } else {
+        res.send(nft);
+      }
+
     }
   } catch (error) {
     console.log("fetchNFT error", error);

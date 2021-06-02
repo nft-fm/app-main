@@ -7,13 +7,17 @@ import PublicProfilePic from "./Components/PublicProfilePic";
 import PublicArtistNfts from "./Components/PublicArtistNfts";
 import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
 
-const Artist = ( ) => {
+import { ReactComponent as IconTwitter } from "../../assets/img/icons/social_twitter.svg";
+import Instagram from "../../assets/img/icons/social_instagram.png";
+import Audius from "../../assets/img/icons/social_audius.png";
+// import { ReactComponent as IconInstagram } from "../../assets/img/icons/social_instagram.svg";
+const Artist = () => {
   const [edit, setEdit] = useState(false);
   const [profilePic, setProfilePic] = useState("");
   const [open, setOpen] = useState(false);
   const [userInfo, setUserInfo] = useState();
   const [userNfts, setUserNfts] = useState();
-
+  console.log("userInfo", userInfo);
   useEffect(() => {
     if (userInfo?.profilePic) {
       setProfilePic(userInfo.profilePic);
@@ -21,17 +25,18 @@ const Artist = ( ) => {
   }, [userInfo]);
   useEffect(() => {
     axios
-      .post("/api/user/get-public-account", { suburl: window.location.pathname.substring(
-                window.location.pathname.lastIndexOf("/") + 1
-              ) })
+      .post("/api/user/get-public-account", {
+        suburl: window.location.pathname.substring(
+          window.location.pathname.lastIndexOf("/") + 1
+        ),
+      })
       .then((res) => {
         setUserInfo(res.data[0]);
         setUserNfts(res.data[1]);
       })
-      .catch(() => window.location = "/")
+      .catch(() => (window.location = "/"));
   }, []);
 
-  //   if (!userInfo) return <Error404 />; //this probably needs some work
   return (
     <BaseView>
       <Landing>
@@ -58,11 +63,48 @@ const Artist = ( ) => {
               </AddressSpan>
             </ProfileInfoHolder>
           </ProfileHolder>
-          <Side>
-          </Side>
+          <Side></Side>
         </ProfileHeading>
       </Landing>
 
+      <SocialsBar>
+        {userInfo?.socials.map((social) => {
+          console.log(social);
+          if (social.twitter) {
+            return (
+              <IconContainer
+                href={social.twitter}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Twitter />
+              </IconContainer>
+            );
+          }
+          if (social.insta) {
+            return (
+              <IconContainer
+                href={social.insta}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <InstaIcon src={Instagram} alt="instagram icon" />
+              </IconContainer>
+            );
+          }
+          if (social.audius) {
+            return (
+              <IconContainer
+                href={social.audius}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <AudiusIcon src={Audius} alt="instagram icon" />
+              </IconContainer>
+            );
+          }
+        })}
+      </SocialsBar>
       <CreatedNftHolder>
         <NftContainer>
           <NftContainerTitle>AVAILABLE MUSIC</NftContainerTitle>
@@ -70,10 +112,91 @@ const Artist = ( ) => {
           <PublicArtistNfts nfts={userNfts} />
         </NftContainer>
       </CreatedNftHolder>
-      <CreateForm open={open} hide={() => setOpen(false)} />
     </BaseView>
   );
 };
+
+const InstaIcon = styled.img`
+  height: 17px;
+  width: 17px;
+  filter: invert(1);
+`;
+const AudiusIcon = styled.img`
+  height: 17px;
+  width: 17px;
+  /* filter: invert(1); */
+`;
+
+const Twitter = styled(IconTwitter)`
+  /* margin-top: 1px; */
+  width: 17px;
+  height: 17px;
+  & path {
+    transition: all 0.2s ease-in-out;
+    fill: white;
+  }
+`;
+
+const IconText = styled.span`
+  margin: 1px 0 0 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+`;
+
+const IconContainer = styled.a`
+  cursor: pointer;
+  margin: 0 8px;
+  border: solid 1px ${(props) => props.theme.color.boxBorder};
+  border-radius: 25px;
+  background-color: ${(props) => props.theme.color.box};
+  width: 25px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    background-color: ${(props) => props.theme.color.boxBorder};
+    border: solid 1px #383838;
+  }
+`;
+
+const Side = styled.div`
+  width: calc(100% / 3);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  & > span:nth-child(1) {
+    margin-top: 40px;
+  }
+`;
+
+const SocialsBar = styled.div`
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-bottom: -10px;
+  @media only screen and (max-width: 776px) {
+    /* flex-direction: column; */
+    width: 100%;
+    justify-content: center;
+  margin-top: 10px;
+  }
+`;
+
+// const Instagram = styled(IconInstagram)`
+//   margin-top: 1px;
+//   width: 17px;
+//   height: 17px;
+//     filter: invert(1);
+//   & path {
+//     transition: all 0.2s ease-in-out;
+//     fill: ${(props) => props.theme.color.white};
+//   }
+// `;
 
 const CreatedNftHolder = styled.div`
   display: flex;
@@ -145,17 +268,6 @@ const ProfileInfoHolder = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
-
-const Side = styled.div`
-  width: calc(100% / 3);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-end;
-  & > span:nth-child(1) {
-    margin-top: 40px;
-  }
 `;
 
 const ProfileHolder = styled.div`

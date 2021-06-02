@@ -3,11 +3,11 @@ import { Switch } from "react-router-dom";
 import styled from "styled-components";
 import BaseView from "../../components/Page/BaseView";
 import Landing from "./Components/Landing";
-import Roadmap from "./Components/Roadmap";
-import { FAQ } from "./Components/FAQ/FAQ";
-import record from "../../assets/img/record_player_disk.png";
-import DemoImage from "./Components/DemoImage/DemoImage"
 import Swal from "sweetalert2"
+import Roadmap from "./Components/Roadmap";
+import { Features } from "./Components/Features"
+import { FAQ } from "./Components/FAQ/FAQ";
+import DemoImage from "./Components/DemoImage/DemoImage"
 
 const Listen = () => {
   if (window.location.hostname === "localhost" && process.env.REACT_APP_IS_MAINNET) {
@@ -17,30 +17,18 @@ const Listen = () => {
       icon: "error",
     });
   }
+
   return (
     <Switch>
       <BaseView>
         <Landing />
         <Divider />
+        <Features />
+        <Divider />
         <DescriptionBoxContainer>
-          <DescriptionColumn>
-            <StyledHeader>Welcome to NFT FM</StyledHeader>
-            <StyledSubHeader>
-              collect music from artists you know and love
-            </StyledSubHeader>
-            <StyledParagraph>
-              We are a music distribution platform dedicated to artists and fans
-              alike. We aim to add legitimacy to both the Music and the Crypto
-              industry by providing fans a way to directly support the artists
-              they love. On NFT FM, artists have full control over how they
-              distribute their music. Over 95% of all purchases go directly to
-              the Musicians.
-            </StyledParagraph>
-          </DescriptionColumn>
-          {/* <ImageImage src={record} /> */}
-          {/* <DemoImageContainer> */}
           <DemoImage />
-          {/* </DemoImageContainer> */}
+          <StyledHeader>Are you an artist? Launch with us!</StyledHeader>
+          <StyledAccountButton href="mailto:info@nftfm.io" target="_blank">Contact us!</StyledAccountButton>
         </DescriptionBoxContainer>
         <Roadmap />
         <LaunchContainer>
@@ -55,29 +43,48 @@ const Listen = () => {
   );
 };
 
-const DescriptionColumn = styled.div`
+const StyledAccountButton = styled.a`
+  margin-top: -20px;
+  width: 200px;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
   display: flex;
-  flex-direction: column;
-  flex: 1;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid ${(props) => props.theme.color.red};
+  height: 45px;
+  border-radius: 20px;
+  font-size: 20px;
+  font-family: "Compita";
+  background-color: #181818;
+  color: white;
+  text-decoration: none;
+  &:hover {
+    background-color: rgba(256, 256, 256, 0.2);
+  }
 `;
 
-const DemoImageContainer = styled.div`
-  display: block;
-  height: 213px;
-  width: auto;
-  margin: auto 0 auto 20%;
-  @media only screen and (max-width: 776px) {
-    display: none;
-  }
-`
-const ImageImage = styled.img`
-  height: 213px;
-  width: auto;
-  margin: auto 0 auto 20%;
-  @media only screen and (max-width: 776px) {
-    display: none;
-  }
+const DescriptionBoxContainer = styled.div`
+  border-radius: ${(props) => props.theme.borderRadius}px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: calc(100% - 64px);
+  padding: 32px;
+  margin-bottom: 40px;
+  border: solid 1px #262626;
+  background-color: #181818;
 `;
+
+const StyledHeader = styled.h1`
+  color: white;
+  margin: 0 0 24px 0;
+  font-family: "Compita";
+  padding: 32px 0px;
+  text-align: center; 
+`;
+
 
 const Divider = styled.div`
   width: 80%;
@@ -90,41 +97,9 @@ const Divider = styled.div`
   }
 `;
 
-const StyledParagraph = styled.p`
-  color: white;
-  font-family: "Compita";
-  margin: auto 0;
-`;
-
-const StyledSubHeader = styled.h2`
-  color: white;
-  font-family: "Compita";
-  margin: 0 0 24px 32px;
-  @media only screen and (max-width: 776px) {
-    display: none;
-  }
-`;
-
-const StyledHeader = styled.h1`
-  color: white;
-  margin: 0 0 24px 0;
-  font-family: "Compita";
-`;
-
-const DescriptionBoxContainer = styled.div`
-  border-radius: ${(props) => props.theme.borderRadius}px;
-  display: flex;
-  flex-direction: row;
-  width: calc(100% - 64px);
-  padding: 32px;
-  margin-bottom: 40px;
-  border: solid 1px #262626;
-  background-color: #181818;
-`;
 
 const LaunchContainer = styled.div`
   position: relative;
-  // border-radius: ${(props) => props.theme.borderRadius}px;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -149,7 +124,6 @@ const ContainerTitle = styled.span`
   align-items: center;
   b {
     margin-left: 5px;
-    // font-size: 18px;
     color: ${(props) => props.theme.color.gray};
     font-size: ${(props) => props.theme.fontSizes.sm};
   }

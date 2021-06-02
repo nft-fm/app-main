@@ -34,7 +34,7 @@ const Team = () => {
 };
 
 const Title = styled.h1`
-margin-top: 100px;
+margin-top: 80px;
 color: white;
 `
 const TeamSection = styled.div`
@@ -44,16 +44,10 @@ const TeamSection = styled.div`
   align-items: center;
 
   margin-bottom: 30px;
-
-  /* @media only screen and (min-width: 601px) and (max-width: 991px) {
-    flex-wrap: wrap;
-    width: 80%;
-
-  }
-  @media only screen and (max-width: 600px) {
+  @media only screen and (max-width: 776px) {
     flex-direction: column;
-    justify-content: space-evenly;
-  } */
+    /* justify-content: space-evenly; */
+  }
 `;
 
 export default Team;

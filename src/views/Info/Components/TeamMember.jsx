@@ -23,9 +23,9 @@ const TeamMember = (props) => {
 };
 
 const LinkedInLink = styled.a`
-  border: solid 1px ${(props) => props.theme.color.boxBorder};
-  border-radius: 25px;
-  background-color: ${(props) => props.theme.color.box};
+  border: solid 1px ${(props) => props.theme.color.gray};
+  border-radius: 4px;
+  background-color: ${(props) => props.theme.color.boxBorder};
   width: 25px;
   height: 25px;
   display: flex;
@@ -34,8 +34,7 @@ const LinkedInLink = styled.a`
   padding: 5px;
   transition: all 0.2s ease-in-out;
   &:hover {
-    background-color: ${(props) => props.theme.color.boxBorder};
-    border: solid 1px #383838;
+    border: solid 1px ${(props) => props.theme.color.blue};
   }
 `;
 
@@ -71,7 +70,7 @@ const TeamImage = styled.img`
   width: 200px;
   height: 200px;
   object-fit: cover;
-  border-radius: ${(props) => props.theme.borderRadius}px;
+  border-radius: 8px;
   border: 1px solid ${(props) => props.theme.color.boxBorder};
 `;
 
@@ -82,6 +81,10 @@ const Container = styled.div`
   color: white;
   align-items: center;
   margin: 20px;
+  background-color: ${(props) => props.theme.color.box};
+  border-radius: ${(props) => props.theme.borderRadius}px;
+  border: 1px solid ${(props) => props.theme.color.boxBorder};
+  padding: 10px;
   /* @media only screen and (min-width: 601px) and (max-width: 850px) {
     width: 40%;
   }

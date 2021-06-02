@@ -19,12 +19,9 @@ export const Question = (props) => {
 
   return (
     <FaqCard onClick={toggleActive}>
-      <FaqQuestion >
-        <QuestionText>
-          {props.question}
-
-        </QuestionText>
-        <Arrow style={active ? { transform: 'rotate(180deg)' } : null} />
+      <FaqQuestion>
+        <QuestionText>{props.question}</QuestionText>
+        <Arrow style={active ? { transform: "rotate(180deg)" } : null} />
         {/* <Toggle>
           <ExpandMoreIcon src={demoImage}style={active ? { transform: 'rotate(180deg)' } : null} />
         </Toggle> */}
@@ -43,13 +40,13 @@ const QuestionText = styled.h2`
   margin: 0px;
   /* margin: 0px 50px 0 20px; */
   font-weight: 400;
-`
+`;
 
 const Arrow = styled(down_arrow)`
   /* float: right; */
   /* top: 80%;
 left: 90%; */
-position: absolute;
+  position: absolute;
   right: 0px;
   width: 30px;
   height: 30px;
@@ -97,15 +94,12 @@ const FaqQuestion = styled.div`
   width: 100%;
   display: flex;
   text-align: left;
-  @media only screen and (max-width: 776px) {
-    width: 100%;
-  }
 `;
 
 const FaqCard = styled.div`
   margin-bottom: 15px;
   cursor: pointer;
-  border: 1px solid ${props => props.theme.color.boxBorder};
+  border: 1px solid ${(props) => props.theme.color.boxBorder};
   // border-radius: 2px;
   border-radius: ${(props) => props.theme.borderRadius}px;
   background-color: #181818;
@@ -117,4 +111,8 @@ const FaqCard = styled.div`
   justify-content: space-between;
   position: relative;
   // font-size: 20px;
+  @media only screen and (max-width: 776px) {
+    width: 80vw;
+    padding: 20px 20px;
+  }
 `;

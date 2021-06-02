@@ -48,7 +48,6 @@ const Info = () => {
             <Button>Whitepaper</Button>
           </StyledAccountButton>
         </ProjectSummary>
-        <Team />
         <LaunchContainer>
           <ContainerTitle faq>
             <b className="first">F</b>requently<b>A</b>sked<b>Q</b>uestions
@@ -57,21 +56,34 @@ const Info = () => {
           <FAQ />
         </LaunchContainer>
         <Tokenomics />
+        <Team />
       </BaseView>
     </Switch>
   );
 };
 
 const ProjectSummary = styled.div`
-  width: 80%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   color: white;
   background-color: ${(props) => props.theme.color.box};
   border-radius: ${(props) => props.theme.borderRadius}px;
   border: 1px solid ${(props) => props.theme.color.boxBorder};
-  padding: 20px;
+  padding: 20px 0;
   /* text-align: center; */
+  & > span {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  @media only screen and (max-width: 776px) {
+    width: 80vw;
+    padding: 20px;
+  & > span {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  }
 `;
 
 const Button = styled.button`

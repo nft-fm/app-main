@@ -51,7 +51,7 @@ const Tokenomics = () => {
             </LaunchFeaturesHeader>
             <MiniSpacer />
             <SubHolder>
-            <LaunchFeaturesTextLargest>5%</LaunchFeaturesTextLargest>
+              <LaunchFeaturesTextLargest>5%</LaunchFeaturesTextLargest>
               <LaunchFeaturesTextSmallGray>
                 Greater than 10% of the circulating supply
               </LaunchFeaturesTextSmallGray>
@@ -75,22 +75,30 @@ const Tokenomics = () => {
           </LaunchFeaturesBox>
         </LaunchFeaturesContainer>
       </LaunchContainer>
+      <div style={{ height: "50px" }} />
       <UtilityContainer>
         <Title>Utility </Title>
         <Divider />
         <BulletPoint>
-          -Make and vote on proposals for new features or changes to NFTFM
+          {" "}&nbsp;
+          - Make and vote on proposals for new features or changes to NFTFM
         </BulletPoint>
+        <br />
         <BulletPoint>
-          -Votes are weighted based on the amount of $VINYL that the user holds
+          {" "}&nbsp;
+          - Votes are weighted based on the amount of $VINYL that the user holds
         </BulletPoint>
+        <br />
         <BulletPoint>
-          -On a regular basis, $VINYL holders will be polled on a decision being
-          made. They get to vote on these corporate decisions with their vote
-          being weighted by their coin ownership
+          {" "}&nbsp;
+          - On a regular basis, $VINYL holders will be polled on a decision
+          being made. They get to vote on these corporate decisions with their
+          vote being weighted by their coin ownership
         </BulletPoint>
+        <br />
         <BulletPoint>
-          -Token holders likes cast on the site are weighted based off of the
+          {" "}&nbsp;
+          - Token holders likes cast on the site are weighted based off of the
           quantity of $VINYL that they hold
         </BulletPoint>
       </UtilityContainer>
@@ -108,6 +116,8 @@ const BulletPoint = !isMobile()
       text-align: left;
       font-size: 16px;
       width: 100%;
+      margin: 0;
+      padding: 0;
     `
   : styled.span`
       margin-bottom: 10px;
@@ -119,7 +129,7 @@ const BulletPoint = !isMobile()
 const Divider = !isMobile()
   ? styled.div`
       height: 1px;
-      width: calc(100% + 80px);
+      width: 100%;
       background-color: rgba(256, 256, 256, 0.6);
       -webkit-align-self: center;
       -ms-flex-item-align: center;
@@ -138,21 +148,9 @@ const Divider = !isMobile()
 
 const UtilityContainer = !isMobile()
   ? styled.div`
-      width: 60%;
-      color: white;
-      padding: 20px 0;
-      align-items: center;
-      position: relative;
-      font-size: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 20px;
-      margin-bottom: 80px;
-    `
-  : styled.div`
       width: 100%;
       color: white;
+      padding: 20px 10px;
       align-items: center;
       position: relative;
       font-size: 20px;
@@ -160,7 +158,25 @@ const UtilityContainer = !isMobile()
       flex-direction: column;
       align-items: center;
       margin-top: 20px;
-      margin-bottom: 80px;
+      background-color: ${(props) => props.theme.color.box};
+      border-radius: ${(props) => props.theme.borderRadius}px;
+      border: 1px solid ${(props) => props.theme.color.boxBorder};
+      padding: 20px 0px;
+    `
+  : styled.div`
+      width: 80vw;
+      color: white;
+      align-items: center;
+      position: relative;
+      font-size: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+      background-color: ${(props) => props.theme.color.box};
+      border-radius: ${(props) => props.theme.borderRadius}px;
+      border: 1px solid ${(props) => props.theme.color.boxBorder};
+      padding: 20px;
     `;
 const LaunchContainer = styled.div`
   position: relative;
@@ -169,7 +185,7 @@ const LaunchContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 100px;
+  margin-top: 80px;
 `;
 const ContainerTitle = styled.span`
   position: absolute;

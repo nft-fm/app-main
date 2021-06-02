@@ -16,7 +16,6 @@ import { buyNFT, getEthBalance } from "../../web3/utils";
 import swal from "sweetalert2";
 import PlaySongSnippet from "./Components/PlaySongSnippet";
 
-
 const BuyNftModal = ({
   open,
   children,
@@ -128,13 +127,12 @@ const BuyNftModal = ({
 
   const connectWallet = async () => {
     const newChainId = await window.ethereum.request({ method: "eth_chainId" });
-    if ((Number(newChainId) === process.env.REACT_APP_IS_MAINNET ? 1 : 4)) {
+    if (Number(newChainId) === process.env.REACT_APP_IS_MAINNET ? 1 : 4) {
       connect("injected");
     } else {
       swal.fire({
         title: "Wrong Chain",
-        text:
-          "You are on the wrong chain. Please connect to Ethereum Mainnet.",
+        text: "You are on the wrong chain. Please connect to Ethereum Mainnet.",
         icon: "warning",
       });
     }
@@ -146,11 +144,11 @@ const BuyNftModal = ({
       <Container onClick={(e) => stopProp(e)}>
         <StyledModal>
           <X onClick={(e) => hide(e)} />
-          <CardTitle>
+          {/* <CardTitle>
             <Logo src={logo} />
             Buy NFT
-          </CardTitle>
-          <CardTop>
+          </CardTitle> */}
+          {/* <CardTop>
             <Side>
               <IconArea>
                 {liked ? (
@@ -170,67 +168,77 @@ const BuyNftModal = ({
             {nft.numMinted - nft.numSold}
             <span style={{ margin: "0 1px" }}>&nbsp;of&nbsp;</span>
             {nft.numMinted}
-                {/* <Cart /> */}
               </IconArea>
             </Side>
-          </CardTop>
+          </CardTop> */}
           <Image src={nft.imageUrl} alt="image" />
-          {!isBought && <PlaySongSnippet partialSong={partialSong} />}
-          <SnippetText>15 Sec Preview</SnippetText>
-          <InfoContainer>
-            <TrackName>{nft.title}</TrackName>
-            <Artist>{nft.artist}</Artist>
-          </InfoContainer>
-          <PricesContainer>
-            <Row>
-              <PriceItem>Price:</PriceItem>
-              <PriceItem>
-                {" "}
-                {nft.price
-                  ? parseFloat(nft.price).toLocaleString(undefined, {
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 6,
-                    })
-                  : "--"}{" "}
-                &nbsp; ETH
-              </PriceItem>
-            </Row>
-            <Divider />
-            <Row>
-              <AvailableItem>Price:</AvailableItem>
-              <AvailableItem>
-                {" "}
-                {usdPerEth
-                  ? parseFloat(usdPerEth * nft.price).toLocaleString(
-                      undefined,
-                      {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      }
-                    )
-                  : "..."}{" "}
-                &nbsp; USD
-              </AvailableItem>
-            </Row>
-          </PricesContainer>
-          {!account ? (
-            <BuyButton onClick={() => connectWallet()}>
-              {/* <BuyButton onClick={() => connect("injected")}> */}
-              <MetaMask src={IconMetamask} />
-              <ButtonText>Connect Wallet</ButtonText>
-            </BuyButton>
-          ) : nft.numSold !== nft.numMinted ? (
-            !isLoading ? (
-              isBought ? (
-                <BuyButton
-                  style={{ backgroundColor: "#bbb" }}
-                  onClick={() => playSong()}
-                >
-                  <Loading src={PlayIcon} />
-                </BuyButton>
+          <RightSide>
+            {!isBought && <PlaySongSnippet partialSong={partialSong} />}
+            <SnippetText>15 Sec Preview</SnippetText>
+            <InfoContainer>
+              <TrackName>{nft.title}</TrackName>
+              <Artist>{nft.artist}</Artist>
+            </InfoContainer>
+            <PricesContainer>
+              <Row>
+                <PriceItem>Price:</PriceItem>
+                <PriceItem>
+                  {" "}
+                  {nft.price
+                    ? parseFloat(nft.price).toLocaleString(undefined, {
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 6,
+                      })
+                    : "--"}{" "}
+                  &nbsp; ETH
+                </PriceItem>
+              </Row>
+              <Divider />
+              <Row>
+                <AvailableItem>Price:</AvailableItem>
+                <AvailableItem>
+                  {" "}
+                  {usdPerEth
+                    ? parseFloat(usdPerEth * nft.price).toLocaleString(
+                        undefined,
+                        {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }
+                      )
+                    : "..."}{" "}
+                  &nbsp; USD
+                </AvailableItem>
+              </Row>
+            </PricesContainer>
+            {!account ? (
+              <BuyButton onClick={() => connectWallet()}>
+                {/* <BuyButton onClick={() => connect("injected")}> */}
+                <MetaMask src={IconMetamask} />
+                <ButtonText>Connect Wallet</ButtonText>
+              </BuyButton>
+            ) : nft.numSold !== nft.numMinted ? (
+              !isLoading ? (
+                isBought ? (
+                  <BuyButton
+                    style={{ backgroundColor: "#bbb" }}
+                    onClick={() => playSong()}
+                  >
+                    <Loading src={PlayIcon} />
+                  </BuyButton>
+                ) : (
+                  <BuyButton onClick={() => purchase(nft._id)}>
+                    <ButtonText>Buy</ButtonText>
+                  </BuyButton>
+                )
               ) : (
-                <BuyButton onClick={() => purchase(nft._id)}>
-                  <ButtonText>Buy</ButtonText>
+                <BuyButton
+                  style={{
+                    backgroundColor: "#262626",
+                    border: "1px solid #383838",
+                  }}
+                >
+                  <Loading src={loading} />
                 </BuyButton>
               )
             ) : (
@@ -240,31 +248,23 @@ const BuyNftModal = ({
                   border: "1px solid #383838",
                 }}
               >
-                <Loading src={loading} />
+                <ButtonText>Sold Out!</ButtonText>
               </BuyButton>
-            )
-          ) : (
-            <BuyButton
-              style={{
-                backgroundColor: "#262626",
-                border: "1px solid #383838",
-              }}
-            >
-              <ButtonText>Sold Out!</ButtonText>
-            </BuyButton>
-          )}
+            )}
+          </RightSide>
         </StyledModal>
       </Container>
     </OpaqueFilter>
   );
 };
 
+
 const SnippetText = styled.span`
-/* position: absolute; */
-font-size: ${props => props.theme.fontSizes.xxs};
-margin-top: -5px;
-margin-bottom: 10px
-`
+  /* position: absolute; */
+  font-size: ${(props) => props.theme.fontSizes.xxs};
+  margin-top: -5px;
+  margin-bottom: 10px;
+`;
 
 const Loading = styled.img`
   width: 40px;
@@ -428,38 +428,43 @@ const Container = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
-  width: 340px;
+  width: 680px;
   position: fixed;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
 `;
 
+const RightSide = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+`;
 const StyledModal = styled.div`
   border-radius: 8px;
-  border: solid 2px #181818;
-  width: calc(100% - 60px);
-  height: 100%;
-  padding: 10px 30px;
+  border: solid 1px #181818;
+  width: 600px;
+  /* height: 100%; */
+  /* padding: 10px 30px; */
   background-color: ${(props) => props.theme.bgColor};
   font-size: 16px;
   font-weight: normal;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
+  /* flex-direction: column; */
+  /* align-items: center; */
+  justify-content: space-between;
   position: relative;
 `;
 
 const Image = styled.img`
-  width: 280px;
-  height: 280px;
-  border-radius: 15px;
+  width: 60%;
+  aspect-ratio: 1;
+  border-radius: 8px;
   border: 1px solid #262626;
   background-color: #1e1e1e;
   object-fit: cover;
   overflow: hidden;
-  margin-bottom: 16px;
+  /* margin-bottom: 16px; */
 `;
 
 const PricesContainer = styled.div`

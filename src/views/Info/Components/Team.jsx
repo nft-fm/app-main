@@ -43,7 +43,7 @@ const TeamSection = styled.div`
   justify-content: space-evenly;
   align-items: center;
 
-  margin-bottom: 30px;
+  margin-bottom: 80px;
   @media only screen and (max-width: 776px) {
     flex-direction: column;
     /* justify-content: space-evenly; */

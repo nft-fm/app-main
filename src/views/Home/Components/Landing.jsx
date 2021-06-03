@@ -186,7 +186,7 @@ const Listen = () => {
           <IconText>Medium</IconText>
         </IconContainer>
         <IconContainer
-          href="https://twitter.com/fm_nft"
+          href="https://twitter.com/NFTFM_IO"
           target="_blank"
           rel="noopener noreferrer"
         >

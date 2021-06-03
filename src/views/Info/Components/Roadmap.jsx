@@ -134,7 +134,7 @@ const LaunchContainer = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 80px;
-  margin-bottom: 40px;
+  /* margin-bottom: 40px; */
 `;
 
 const FillerLine = styled.div`

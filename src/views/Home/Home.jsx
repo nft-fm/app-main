@@ -1,12 +1,10 @@
 import React from "react";
-import { Switch } from "react-router-dom";
+import { Switch, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import BaseView from "../../components/Page/BaseView";
 import Landing from "./Components/Landing";
 import Swal from "sweetalert2"
-import Roadmap from "./Components/Roadmap";
 import { Features } from "./Components/Features"
-import { FAQ } from "./Components/FAQ/FAQ";
 import DemoImage from "./Components/DemoImage/DemoImage"
 import send from "../../assets/img/homepage_assets/homepage_send.png"
 // import send from "../../assets/img/homepage_assets/homepage_send.png"
@@ -32,21 +30,21 @@ const Listen = () => {
         <StyledHeader>Are you an artist? Launch with us!</StyledHeader>
         <StyledAccountButton href="mailto:info@nftfm.io" target="_blank">Contact us!</StyledAccountButton>
         <DescriptionBoxContainer>
-          <InfoHeaderContainer>
+          <InfoHeaderContainer to="/info">
             <InfoHeader>Info Page</InfoHeader>
             <RightArrow />
           </InfoHeaderContainer>
           <InfoDetails>Learn more about our project!</InfoDetails>
           <InfoContainer>
             <InfoSubContainer>
-              <img src={send} alt="send"/>
-              <h3>Roadmap</h3>
-              <section>Keep track of where the project is going</section>
+              <img src={send} alt="send"/> 
+              <h3>Litepaper</h3>
+              <section>In depth review of NFT FM</section>
             </InfoSubContainer>
             <InfoSubContainer>
               <img src={send} alt="send"/>
-              <h3>Tokenomics</h3>
-              <section>How we use our token $VINYL</section>
+              <h3>Roadmap</h3>
+              <section>Keep track of where the project is going</section>
             </InfoSubContainer>
             <InfoSubContainer>
               <img src={send} alt="send"/>
@@ -55,13 +53,13 @@ const Listen = () => {
             </InfoSubContainer>
             <InfoSubContainer>
               <img src={send} alt="send"/>
-              <h3>Litepaper</h3>
-              <section>In depth review of NFT FM</section>
+              <h3>Tokenomics</h3>
+              <section>How we use our token $VINYL</section>
             </InfoSubContainer>
             <InfoSubContainer>
               <img src={send} alt="send"/>
-              <h3>Litepaper</h3>
-              <section>In depth review of NFT FM</section>
+              <h3>Team</h3>
+              <section>Meet the NFT FM Team</section>
             </InfoSubContainer>
           </InfoContainer>
         </DescriptionBoxContainer>
@@ -81,7 +79,7 @@ const Listen = () => {
 const RightArrow = styled(rightArrow)`
   width: 18px;
   height: 18px;
-  margin-top: 18px;
+  margin-top: 9px;
   margin-left: 10px;
   & path {
     fill: white;
@@ -143,9 +141,10 @@ const InfoHeader = styled.h1`
   }
 `;
 
-const InfoHeaderContainer = styled.div`
+const InfoHeaderContainer = styled(NavLink)`
   display: flex;
   flex-direction: row;
+  text-decoration: none;
 `;
 
 const InfoDetails = styled.h2`

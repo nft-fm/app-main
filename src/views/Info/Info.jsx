@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Switch } from "react-router-dom";
 import styled from "styled-components";
 import BaseView from "../../components/Page/BaseView";
@@ -6,8 +6,12 @@ import Swal from "sweetalert2";
 import { FAQ } from "./Components/FAQ/FAQ";
 import Tokenomics from "./Components/Tokenomics";
 import Team from "./Components/Team";
+import RoadMap from "./Components/Roadmap";
 
 const Info = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
   return (
     <Switch>
       <BaseView>
@@ -45,9 +49,10 @@ const Info = () => {
             target="_blank"
             href="https://drive.google.com/file/d/1ibbxyEiD0I2urotiQjvewsbTwHq9Lzm2/view?usp=sharing"
           >
-            <Button>Whitepaper</Button>
+            <Button>Litepaper</Button>
           </StyledAccountButton>
         </ProjectSummary>
+        <RoadMap />
         <LaunchContainer>
           <ContainerTitle faq>
             <b className="first">F</b>requently<b>A</b>sked<b>Q</b>uestions
@@ -139,7 +144,7 @@ const LaunchContainer = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 80px;
-  margin-bottom: 40px;
+  /* margin-bottom: 40px; */
 `;
 
 const ContainerTitle = styled.span`

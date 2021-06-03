@@ -35,22 +35,58 @@ export const Footer = ({ isOpen }) => (
           /> */}
       {/* </Row> */}
       <FooterLinks>
-        <EmailLink href="mailto:info@nftfm.io" target="_blank">Contact Us</EmailLink>
+        {/* <EmailLink href="mailto:info@nftfm.io" target="_blank">
+          Contact Us
+        </EmailLink> */}
+        <ContactDiv>
+          <span>2120 Oxford Ave</span>
+          <span>Austin, TX</span>
+          <br />
+          <EmailLink href="mailto:info@nftfm.io" target="_blank">E: info@nftfm.io</EmailLink>
+        </ContactDiv>
         <FooterLink to="/termsofservice">Terms of Service</FooterLink>
         <FooterLink to="/privacypolicy">Privacy Policy</FooterLink>
       </FooterLinks>
+      <FooterContact>
+        <Contact>
+        </Contact>
+        <div style={{ width: "150px" }} />
+        <div style={{ width: "150px" }} />
+      </FooterContact>
       <FooterCopy>&copy; 2021 NFT FM Inc.</FooterCopy>
     </Column>
   </StyledFooter>
 );
 
-const EmailLink = styled.a`
-  cursor: pointer;
+const FooterContact = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 500px;
+`;
+
+const Contact = styled.div`
+  width: 150px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  /* text-align: center; */
+  /* align-items: center; */
+  & > span {
+    padding-left: ${(props) => props.theme.spacing[3]}px;
+    padding-right: ${(props) => props.theme.spacing[3]}px;
+
+  align-items: center;
+    text-align: center;
+  }
+`;
+const ContactDiv = styled.div`
   text-decoration: none;
   font-family: "Compita";
   font-size: ${(props) => props.theme.fontSizes.xs};
   line-height: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
   transition: all 0.2s ease-in-out;
   color: #ffffff;
@@ -59,6 +95,13 @@ const EmailLink = styled.a`
   justify-content: center;
   text-align: center;
   width: 150px;
+  /* &:hover {
+    color: #ffcb46;
+  } */
+`;
+const EmailLink = styled.a`
+  cursor: pointer;
+  text-decoration: none;
   &:hover {
     color: #ffcb46;
     /* text-decoration: underline; */
@@ -72,7 +115,7 @@ const FooterLink = styled(NavLink)`
   font-size: ${(props) => props.theme.fontSizes.xs};
   line-height: 1;
   display: flex;
-  align-items: center;
+  /* align-items: center; */
   transition: all 0.2s ease-in-out;
   color: #ffffff;
   padding-left: ${(props) => props.theme.spacing[3]}px;
@@ -125,6 +168,6 @@ const StyledFooter = styled.footer`
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  height: 120px;
+  height: 200px;
   background-color: ${(props) => props.theme.bgColor};
 `;

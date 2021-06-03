@@ -140,9 +140,7 @@ const Carbon = styled.img`
 `
 
 const Revenue = styled(Carbon)`
-  object-fit: cover;
-  width: 330px;
-  height: 330px;
+  height: 300px;
   margin-left: 20px;
   @media only screen and (max-width: 1100px) {
     margin: 0px;
@@ -151,8 +149,7 @@ const Revenue = styled(Carbon)`
     margin-bottom: -20px;
   }
   @media only screen and (max-width: 600px) {
-    height: 80vw;
-    width: 80vw;
+    height: 60vw;
   }
 `
 
@@ -166,7 +163,7 @@ const Join = styled.img`
     margin: 0px;
   }
   @media only screen and (max-width: 600px) {
-    width: 90vw;
+    width: 70vw;
   }
 `
 
@@ -196,7 +193,6 @@ const FeaturesTextContainer = styled.div`
   flex-direction: column;
   box-sizing: border-box;
   width: 42%;
-  margin-top: -30px;
   @media only screen and (max-width: 800px) {
     width: 80vw;
     justify-content: center;

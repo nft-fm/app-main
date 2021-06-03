@@ -47,7 +47,7 @@ const Info = () => {
           </span>
           <StyledAccountButton
             target="_blank"
-            href="https://drive.google.com/file/d/1ibbxyEiD0I2urotiQjvewsbTwHq9Lzm2/view?usp=sharing"
+            href="https://drive.google.com/file/d/1i24DtdT2pIxu5YgIvud0bGa6zxl888GJ/view?usp=sharing"
           >
             <Button>Litepaper</Button>
           </StyledAccountButton>

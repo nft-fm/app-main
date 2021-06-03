@@ -7,6 +7,9 @@ const Tokenomics = () => {
     <>
       <LaunchContainer>
         <ContainerTitle>TOKENOMICS</ContainerTitle>
+        <NftContainerRight href="https://drive.google.com/file/d/1BHmrjYef0FBp4Q0I-juXVfllviT0Paj9/view?usp=sharing" target="_blank">
+          CONTRACT AUDIT
+        </NftContainerRight>
         <ContainerOutline />
         <LaunchFeaturesContainer>
           <LaunchFeaturesBox>
@@ -80,31 +83,66 @@ const Tokenomics = () => {
         <Title>Utility </Title>
         <Divider />
         <BulletPoint>
-          {" "}&nbsp;
-          - Make and vote on proposals for new features or changes to NFTFM
+          {" "}
+          &nbsp; - Make and vote on proposals for new features or changes to
+          NFTFM
         </BulletPoint>
         <br />
         <BulletPoint>
-          {" "}&nbsp;
-          - Votes are weighted based on the amount of $VINYL that the user holds
+          {" "}
+          &nbsp; - Votes are weighted based on the amount of $VINYL that the
+          user holds
         </BulletPoint>
         <br />
         <BulletPoint>
-          {" "}&nbsp;
-          - On a regular basis, $VINYL holders will be polled on a decision
-          being made. They get to vote on these corporate decisions with their
-          vote being weighted by their coin ownership
+          {" "}
+          &nbsp; - On a regular basis, $VINYL holders will be polled on a
+          decision being made. They get to vote on these corporate decisions
+          with their vote being weighted by their coin ownership
         </BulletPoint>
         <br />
         <BulletPoint>
-          {" "}&nbsp;
-          - Token holders likes cast on the site are weighted based off of the
-          quantity of $VINYL that they hold
+          {" "}
+          &nbsp; - Token holders likes cast on the site are weighted based off
+          of the quantity of $VINYL that they hold
         </BulletPoint>
       </UtilityContainer>
     </>
   );
 };
+
+const NftContainerRight = styled.a`
+  text-decoration: none;
+  white-space: nowrap;
+  position: absolute;
+  font-weight: 600;
+  margin-left: 80%;
+  margin-right: 20%;
+  height: 17px;
+  /* width: 17px; */
+  top: -13px;
+  padding: 5px 5px 3px 5px;
+  font: "Compita";
+  background-color: ${(props) => props.theme.bgColor};
+  font-size: ${(props) => props.theme.fontSizes.xs};
+  color: ${(props) => props.theme.color.lightgray};
+  display: flex;
+  flex-direction: row;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid #383838;
+  border-radius: 20px;
+  transition: 0.2s;
+  /* ${({ active }) =>
+    !active &&
+    `
+  color:  white;
+  `} */
+  &:hover {
+    color: white;
+  }
+`;
 
 const Title = styled.h1`
   margin: 0;

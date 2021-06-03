@@ -35,7 +35,7 @@ const Listen = () => {
             <RightArrow />
           </InfoHeaderContainer>
           <InfoDetails>Learn more about our project!</InfoDetails>
-          <InfoContainer>
+          {/* <InfoContainer>
             <InfoSubContainer>
               <img src={send} alt="send"/> 
               <h3>Litepaper</h3>
@@ -61,7 +61,7 @@ const Listen = () => {
               <h3>Team</h3>
               <section>Meet the NFT FM Team</section>
             </InfoSubContainer>
-          </InfoContainer>
+          </InfoContainer> */}
         </DescriptionBoxContainer>
         {/* <Roadmap />
         <LaunchContainer>

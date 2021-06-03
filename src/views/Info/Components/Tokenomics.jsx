@@ -146,38 +146,21 @@ const Divider = !isMobile()
       margin: 5px 0 20px 0;
     `;
 
-const UtilityContainer = !isMobile()
-  ? styled.div`
-      width: 100%;
-      color: white;
-      padding: 20px 10px;
-      align-items: center;
-      position: relative;
-      font-size: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 20px;
-      background-color: ${(props) => props.theme.color.box};
-      border-radius: ${(props) => props.theme.borderRadius}px;
-      border: 1px solid ${(props) => props.theme.color.boxBorder};
-      padding: 20px 0px;
-    `
-  : styled.div`
-      width: 80vw;
-      color: white;
-      align-items: center;
-      position: relative;
-      font-size: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 20px;
-      background-color: ${(props) => props.theme.color.box};
-      border-radius: ${(props) => props.theme.borderRadius}px;
-      border: 1px solid ${(props) => props.theme.color.boxBorder};
-      padding: 20px;
-    `;
+const UtilityContainer = styled.div`
+  margin-top: 80px;
+  color: white;
+  border-radius: ${(props) => props.theme.borderRadius}px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: calc(100% - 64px);
+  padding: 32px;
+  margin-bottom: 40px;
+  border: solid 1px #262626;
+  background-color: #181818;
+`;
+
 const LaunchContainer = styled.div`
   position: relative;
   // border-radius: ${(props) => props.theme.borderRadius}px;
@@ -185,7 +168,10 @@ const LaunchContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 80px;
+  margin-top: 120px;
+  @media only screen and (max-width: 800px) {
+    margin-top: 80;
+  }
 `;
 const ContainerTitle = styled.span`
   position: absolute;

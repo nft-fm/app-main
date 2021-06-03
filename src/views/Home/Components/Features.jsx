@@ -141,8 +141,8 @@ const Carbon = styled.img`
 
 const Revenue = styled(Carbon)`
   object-fit: cover;
-  width: 380px;
-  height: 380px;
+  width: 330px;
+  height: 330px;
   margin-left: 20px;
   @media only screen and (max-width: 1100px) {
     margin: 0px;
@@ -157,10 +157,10 @@ const Revenue = styled(Carbon)`
 `
 
 const Join = styled.img`
-  width: 493px;
+  width: 400px;
   margin-left: -100px;
   @media only screen and (max-width: 1100px) {
-    margin-left: -90px;
+    margin-left: -75px;
   }
   @media only screen and (max-width: 800px) {
     margin: 0px;

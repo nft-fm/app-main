@@ -63,7 +63,7 @@ const ImageWrapper = styled.div`
   align-items: center;
   justify-content: center;
   width: 200px;
-  padding: 0 10px;
+  padding: 10px 10px;
 `;
 
 const TeamImage = styled.img`

@@ -43,13 +43,14 @@ export const Footer = ({ isOpen }) => (
           <span>2120 Oxford Ave</span>
           <span>Austin, TX</span>
           <br />
-          <EmailLink href="mailto:info@nftfm.io" target="_blank">E: info@nftfm.io</EmailLink>
+          <EmailLink href="mailto:info@nftfm.io" target="_blank">
+            E: info@nftfm.io
+          </EmailLink>
         </ContactDiv>
         <FooterLink to="/privacypolicy">Privacy Policy</FooterLink>
       </FooterLinks>
       <FooterContact>
-        <Contact>
-        </Contact>
+        <Contact></Contact>
         <div style={{ width: "150px" }} />
         <div style={{ width: "150px" }} />
       </FooterContact>
@@ -76,7 +77,7 @@ const Contact = styled.div`
     padding-left: ${(props) => props.theme.spacing[3]}px;
     padding-right: ${(props) => props.theme.spacing[3]}px;
 
-  align-items: center;
+    align-items: center;
     text-align: center;
   }
 `;

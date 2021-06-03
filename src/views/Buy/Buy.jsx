@@ -15,17 +15,6 @@ const Buy = () => {
   const [isValid, setIsValid] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const prepareAccount = () => {
-    axios.post('api/payment/register-account', {account: account} ,{ withCredentials: true })
-    .then(res => {
-      console.log(res.data);
-      window.location.href = res.data.url;
-    })
-    .catch(err => {
-      console.log(err);
-    });
-  }
-
   const verifyAccount = () => {
     console.log("HERE");
     axios.post('api/payment/verify-account', {account: account} ,{ withCredentials: true })
@@ -47,12 +36,6 @@ const Buy = () => {
 
   return (
     <BaseView>
-      <Message>PAYMENT FLOW</Message>
-      <div style={{backgroundColor: "white", marginTop: "50px"}}>
-        <Elements stripe={promise}>
-          <CheckoutForm />
-        </Elements>
-      </div>
       <Message>ARTIST PAYOUT REGISTRATION FLOW</Message>
       {isLoading ? <img src={loading}/> : isValid ?
         <Message> ---- Account is ready to receive payouts ----</Message> :
@@ -60,7 +43,6 @@ const Buy = () => {
         Prepare to receive money
       </Button>
       }
-      
     </BaseView>
   );
 };

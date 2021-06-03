@@ -15,7 +15,7 @@ import { usePlaylistConsumer } from "../../contexts/Playlist";
 import { buyNFT, getEthBalance } from "../../web3/utils";
 import swal from "sweetalert2";
 import PlaySongSnippet from "./Components/PlaySongSnippet";
-
+import BuyWithCard from "./Components/BuyWithCard";
 
 const BuyNftModal = ({
   open,
@@ -32,6 +32,7 @@ const BuyNftModal = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isBought, setIsBought] = useState(false);
+  const [isCardPayment, setIsCardPayment] = useState(false);
   const { account, connect, usdPerEth, getUser } = useAccountConsumer();
   const { setNftCallback } = usePlaylistConsumer();
 
@@ -39,7 +40,7 @@ const BuyNftModal = ({
     e.stopPropagation();
   };
 
-  const purchase = async (id) => {
+  const purchaseMetamask = async (id) => {
     setIsLoading(true);
     await getEthBalance(async (balance) => {
       if (parseFloat(balance) >= nft.price) {
@@ -229,9 +230,17 @@ const BuyNftModal = ({
                   <Loading src={PlayIcon} />
                 </BuyButton>
               ) : (
-                <BuyButton onClick={() => purchase(nft._id)}>
-                  <ButtonText>Buy</ButtonText>
+                <>
+                <BuyButton onClick={() => purchaseMetamask(nft._id)}>
+                  <ButtonText>Buy With Metamask</ButtonText>
                 </BuyButton>
+                {isCardPayment ?
+                <BuyWithCard nftId={nft._id} price={usdPerEth ? parseFloat(usdPerEth * nft.price) : undefined }/> :
+                <BuyButton onClick={() => setIsCardPayment(true)}>
+                  <ButtonText>Buy With Debit/Credit Card</ButtonText>
+                </BuyButton> 
+                }                
+                </>
               )
             ) : (
               <BuyButton

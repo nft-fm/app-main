@@ -16,52 +16,52 @@ import team from "../../assets/img/litepaper_assets/team.png"
 import tokenomics from "../../assets/img/litepaper_assets/tokenomics.png"
 
 const Info = () => {
-  let litepaperRef = useRef() 
-  let roadmapRef = useRef()
-  let faqRef = useRef()
-  let tokenomicsRef = useRef()
-  let teamsRef = useRef()
+  // let litepaperRef = useRef() 
+  // let roadmapRef = useRef()
+  // let faqRef = useRef()
+  // let tokenomicsRef = useRef()
+  // let teamsRef = useRef()
 
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
 
   const handleClick = (ref) => {
-    console.log(ref)
-    window.scrollTo({ behavior: 'smooth', top: ref.current.offsetTop })
+    const element = document.getElementById(ref);
+    element.scrollIntoView({ behavior: "smooth" });
   }
   return (
     <Switch>
       <BaseView>
         <Header1>All About NFT FM</Header1>
         <InfoContainer>
-          <InfoSubContainer onClick={() => handleClick(litepaperRef)}>
+          <InfoSubContainer onClick={() => handleClick("litepaperRef")}>
             <img src={litepaper} alt="litepaper"/> 
             <h3>Litepaper</h3>
             <section>In depth review of NFT FM</section>
           </InfoSubContainer>
-          <InfoSubContainer onClick={() => handleClick(roadmapRef)}>
+          <InfoSubContainer onClick={() => handleClick("roadmapRef")}>
             <img src={roadmap} alt="roadmap"/>
             <h3>Roadmap</h3>
             <section>Keep track of where the project is going</section>
           </InfoSubContainer>
-          <InfoSubContainer onClick={() => handleClick(faqRef)}>
+          <InfoSubContainer onClick={() => handleClick("faqRef")}>
             <img src={faq} alt="faq"/>
             <h3>FAQ</h3>
             <section>We answer your questions</section>
           </InfoSubContainer>
-          <InfoSubContainer onClick={() => handleClick(tokenomicsRef)}>
+          <InfoSubContainer onClick={() => handleClick("tokenomicsRef")}>
             <img src={tokenomics} alt="tokenomics"/>
             <h3>Tokenomics</h3>
             <section>How we use our token $VINYL</section>
           </InfoSubContainer>
-          <InfoSubContainer onClick={() => handleClick(teamsRef)}>
+          <InfoSubContainer onClick={() => handleClick("teamsRef")}>
             <img src={team} alt="team"/>
             <h3>Team</h3>
             <section>Meet the NFT FM Team</section>
           </InfoSubContainer>
         </InfoContainer>
-        <div style={{marginTop: "-19px", marginBottom: "31px"}} ref={litepaperRef}/>
+        <div style={{marginTop: "-19px", marginBottom: "31px"}} id="litepaperRef"/>
         <ProjectSummary>
           <h3>NFT FM is the first Audiocentric NFT marketplace.</h3>
           <br />
@@ -93,14 +93,14 @@ const Info = () => {
           </span>
           <StyledAccountButton
             target="_blank"
-            href="https://drive.google.com/file/d/1ibbxyEiD0I2urotiQjvewsbTwHq9Lzm2/view?usp=sharing"
+            href="https://drive.google.com/file/d/1i24DtdT2pIxu5YgIvud0bGa6zxl888GJ/view?usp=sharing"
           >
             <Button>Litepaper</Button>
           </StyledAccountButton>
         </ProjectSummary>
-        <div ref={roadmapRef}/>
+        <div id="roadmapRef"/>
         <RoadMap/>
-        <div ref={faqRef}/>
+        <div id="faqRef"/>
         <LaunchContainer>
           <ContainerTitle faq>
             <b className="first">F</b>requently<b>A</b>sked<b>Q</b>uestions
@@ -108,9 +108,9 @@ const Info = () => {
           <ContainerOutline />
           <FAQ />
         </LaunchContainer>
-        <div ref={tokenomicsRef}/>
+        <div id="tokenomicsRef"/>
         <Tokenomics/>
-        <div ref={teamsRef}/>
+        <div id="teamsRef"/>
         <Team />
       </BaseView>
     </Switch>

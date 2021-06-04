@@ -4,10 +4,11 @@ import Aos from 'aos'
 import 'aos/dist/aos.css'
 
 /* new assets! */
-import exclusive from "../../../assets/img/homepage_assets/homepage_exclusive.png"
+import exclusive from "../../../assets/img/homepage_assets/homepage_exclusive2.png"
 import carbon from "../../../assets/img/homepage_assets/homepage_carbon.png"
 
 import join from "../../../assets/img/homepage_assets/homepage_join.png"
+import airdrop from "../../../assets/img/homepage_assets/homepage_airdrop.png"
 import revenue from "../../../assets/img/homepage_assets/homepage_revenue.png"
 // import art from "../../../assets/img/homepage_assets/homepage_art.png"
 // import video from "../../../assets/img/homepage_assets/homepage_video.png"
@@ -33,7 +34,7 @@ export const Features = ({ isLoaded, setIsLoaded }) => {
           <Exclusive  src={exclusive} alt="homepage-exclusive"/>
         </ExclusiveImageContainer>
       </FeatureContainer>
-      <Spacer />
+      {/* <Spacer /> */}
       <FeatureContainer
         data-aos="fade-in"
         data-aos-anchor-placement="top-center"
@@ -76,7 +77,7 @@ export const Features = ({ isLoaded, setIsLoaded }) => {
         data-aos-once="true">
         <FeaturesImageContainer data-aos="fade-right"
       >
-          <Join src={join} alt="homepage-join"/>
+          <Join src={airdrop} alt="homepage-airdrop"/>
         </FeaturesImageContainer>
         <FeaturesTextContainer data-aos="fade-left">
           <FeaturesHeader>Receive Airdrops!</FeaturesHeader>
@@ -163,7 +164,7 @@ const Join = styled.img`
     margin: 0px;
   }
   @media only screen and (max-width: 600px) {
-    width: 70vw;
+    width: 80vw;
   }
 `
 

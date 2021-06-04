@@ -40,17 +40,21 @@ export const FAQ = () => {
   );
 };
 
-const Title = styled.h1`
-  color: white;
-`;
-
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  & > h1 {
-    align-self: center;
-  }
+  align-items: center;
+  justify-content: space-between;
 `;
+
+
+// const Container = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   & > h1 {
+//     align-self: center;
+//   }
+// `;
 const ContainerTitle = styled.span`
   position: absolute;
   font-weight: 600;

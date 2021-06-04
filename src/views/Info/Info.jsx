@@ -16,12 +16,6 @@ import team from "../../assets/img/litepaper_assets/team.png"
 import tokenomics from "../../assets/img/litepaper_assets/tokenomics.png"
 
 const Info = () => {
-  // let litepaperRef = useRef() 
-  // let roadmapRef = useRef()
-  // let faqRef = useRef()
-  // let tokenomicsRef = useRef()
-  // let teamsRef = useRef()
-
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
@@ -35,16 +29,19 @@ const Info = () => {
       <BaseView>
         <Header1>All About NFT FM</Header1>
         <InfoContainer>
-          <InfoSubContainer onClick={() => handleClick("litepaperRef")}>
-            <LinkImage src={litepaper} alt="litepaper"/> 
-            <h3>Litepaper</h3>
-            <section>In depth review of NFT FM</section>
-          </InfoSubContainer>
-          <InfoSubContainer onClick={() => handleClick("roadmapRef")}>
-            <LinkImage src={roadmap} alt="roadmap"/>
-            <h3>Roadmap</h3>
-            <section>Keep track of where the project is going</section>
-          </InfoSubContainer>
+          <MobileInfo childs={2}>
+            <InfoSubContainer onClick={() => handleClick("litepaperRef")}>
+              <LinkImage src={litepaper} alt="litepaper"/> 
+              <h3>Litepaper</h3>
+              <section>In depth review of NFT FM</section>
+            </InfoSubContainer>
+            <InfoSubContainer onClick={() => handleClick("roadmapRef")}>
+              <LinkImage src={roadmap} alt="roadmap"/>
+              <h3>Roadmap</h3>
+              <section>Keep track of where the project is going</section>
+            </InfoSubContainer>
+          </MobileInfo>
+          <MobileInfo childs={2}>
           <InfoSubContainer onClick={() => handleClick("faqRef")}>
             <LinkImage src={faq} alt="faq"/>
             <h3>FAQ</h3>
@@ -55,11 +52,14 @@ const Info = () => {
             <h3>Tokenomics</h3>
             <section>How we use our token $VINYL</section>
           </InfoSubContainer>
+          </MobileInfo>
+          <MobileInfo childs={1}>
           <InfoSubContainer onClick={() => handleClick("teamsRef")}>
             <LinkImage src={team} alt="team"/>
             <h3>Team</h3>
             <section>Meet the NFT FM Team</section>
           </InfoSubContainer>
+          </MobileInfo>
         </InfoContainer>
         <div style={{marginTop: "-19px", marginBottom: "31px"}} id="litepaperRef"/>
         <ProjectSummary>
@@ -138,16 +138,22 @@ const Header1 = styled.h1`
 
 const InfoContainer = styled.div`
   display: flex;
-  width: 100%;
-  padding-top: 20px;
+  width: calc(100% - 32px);
+  padding: 16px;
   flex-direction: row;
-  justify-content: space-around;
-  align-content: space-around;
-  @media only screen and (max-width: 400px) {
+  justify-content: center;
+  align-content: center;
+  @media only screen and (min-width: 1200px) {
+    justify-content: center;
+    align-content: center;
+  }
+  @media only screen and (max-width: 500px) {
     flex-direction: column;
     justify-content: center;
     align-items: center;
   }
+
+
 `
 
 const InfoSubContainer = styled.div`
@@ -156,11 +162,11 @@ const InfoSubContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-content: center;
-  width: 17%;
-  max-width: 160px;
-  @media only screen and (max-width: 400px) {
-    width: 50%;
-    max-width: 50%;
+  max-width: 250px;
+  @media only screen and (max-width: 500px) {
+    padding: 8px;
+    width: calc(50%- 16px);
+    max-width: calc(50%- 16px);
   }
   img {
     margin-left: auto;
@@ -181,11 +187,25 @@ const InfoSubContainer = styled.div`
   }
 `
 
+const MobileInfo = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-content: space-around;
+  flex-direction: row;
+  @media only screen and (max-width: 500px) {
+    width: ${({childs}) => childs * 50}%;
+    display: flex;
+    flex-direction: row;
+  }
+`
+
 const ProjectSummary = styled.div`
-  margin-top: 50px;
+  margin-top: 80px;
   color: white;
   border-radius: ${(props) => props.theme.borderRadius}px;
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
   width: calc(100% - 64px);
   padding: 32px;
@@ -202,16 +222,14 @@ const ProjectSummary = styled.div`
     padding-right: 20px;
   }
   @media only screen and (max-width: 776px) {
-    width: 80vw;
-    padding: 20px;
-  & > span {
-    padding-left: 0;
-    padding-right: 0;
-  }
-  h3 {
-    padding-left: 0px;
-    padding-right: 0  px;
-  }
+    & > span {
+      padding-left: 0;
+      padding-right: 0;
+    }
+    h3 {
+      padding-left: 0px;
+      padding-right: 0  px;
+    }
   }
 `;
 
@@ -269,7 +287,7 @@ const LaunchContainer = styled.div`
   align-items: center;
   margin-top: 120px;
 
-  @media only screen and (max-width: 800px) {
+  @media only screen and (max-width: 776px) {
     margin-top: 80px;
   }  /* margin-bottom: 40px; */
 `;

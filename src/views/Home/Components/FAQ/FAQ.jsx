@@ -1,9 +1,10 @@
 import React from "react";
 import { Question } from "./Question";
+import styled from "styled-components";
 
 export const FAQ = () => {
   return (
-    <div>
+    <LaunchFeaturesContainer>
       <Question
         question="What are NFTs?"
         // answer={<h1>hi</h1>}
@@ -33,9 +34,20 @@ export const FAQ = () => {
         question="Can a NFT Platform be Carbon Neutral?"
         answer="While cryptocurrency mining and transactions are becoming more efficient every year, it’s important to acknowledge the potential harm they can cause to the environment at the present. At NFT FM, we use the industry leading cryptoart-footprint API to calculate the global emissions caused by all transactions on our platform. At the end of each month, we purchase Carbon Credits equivalent to the calculated CO2 output to offset any potential carbon we produce."
       />
-    </div>
+    </LaunchFeaturesContainer>
   );
 };
+
+const LaunchFeaturesContainer = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  @media only screen and (max-width: 776px) {
+    width: 100%;
+    align-items: center;
+  }
+`;
 
 // {
   /*FAQ

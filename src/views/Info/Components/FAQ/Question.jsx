@@ -97,10 +97,10 @@ const FaqQuestion = styled.div`
 `;
 
 const FaqCard = styled.div`
+  width: calc(100% - 20px);
   margin-bottom: 15px;
   cursor: pointer;
   border: 1px solid ${(props) => props.theme.color.boxBorder};
-  // border-radius: 2px;
   border-radius: ${(props) => props.theme.borderRadius}px;
   background-color: #181818;
   color: white;
@@ -112,7 +112,7 @@ const FaqCard = styled.div`
   position: relative;
   // font-size: 20px;
   @media only screen and (max-width: 776px) {
-    width: 80vw;
+    width: calc(100% - 64px);
     padding: 20px 20px;
   }
 `;

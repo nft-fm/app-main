@@ -14,6 +14,16 @@ const Buy = () => {
   const {account} = useAccountConsumer();
   const [isValid, setIsValid] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const prepareAccount = () => {
+    axios.post('api/payment/register-account', {account: account} ,{ withCredentials: true })
+    .then(res => {
+      console.log(res.data);
+      window.location.href = res.data.url;
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  }
 
   const verifyAccount = () => {
     console.log("HERE");

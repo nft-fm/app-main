@@ -14,7 +14,12 @@ import Swal from "sweetalert2";
 import { usePlaylistConsumer } from "../../contexts/Playlist";
 import { buyNFT, getEthBalance } from "../../web3/utils";
 import swal from "sweetalert2";
+import ReactToolTip from "react-tooltip";
 import PlaySongSnippet from "./Components/PlaySongSnippet";
+import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
+import { ReactComponent as Founder } from "../../assets/img/Badges/founder.svg";
+import { ReactComponent as Premium } from "../../assets/img/Badges/premium.svg";
+import { ReactComponent as Prerelease } from "../../assets/img/Badges/prerelease.svg";
 
 const BuyNftModal = ({
   open,
@@ -33,7 +38,6 @@ const BuyNftModal = ({
   const [isBought, setIsBought] = useState(false);
   const { account, connect, usdPerEth, getUser } = useAccountConsumer();
   const { setNftCallback } = usePlaylistConsumer();
-
   const stopProp = (e) => {
     e.stopPropagation();
   };
@@ -148,73 +152,101 @@ const BuyNftModal = ({
             <Logo src={logo} />
             Buy NFT
           </CardTitle> */}
-          {/* <CardTop>
-            <Side>
-              <IconArea>
-                {liked ? (
-                  <LikedHeart onClick={() => like()} />
-                ) : (
-                  <Heart onClick={() => like()} />
-                )}
-                {likeCount}
-              </IconArea>
-              <IconArea>
-                <Share onClick={() => share()} />
-                {nft.shareCount}
-              </IconArea>
-            </Side>
-            <Side>
-              <IconArea>
-            {nft.numMinted - nft.numSold}
-            <span style={{ margin: "0 1px" }}>&nbsp;of&nbsp;</span>
-            {nft.numMinted}
-              </IconArea>
-            </Side>
-          </CardTop> */}
           <Image src={nft.imageUrl} alt="image" />
           <RightSide>
-            {!isBought && <PlaySongSnippet partialSong={partialSong} />}
-            <SnippetText>15 Sec Preview</SnippetText>
+            <CardTop>
+              <Side>
+                <IconArea>
+                  {liked ? (
+                    <LikedHeart onClick={() => like()} />
+                  ) : (
+                    <Heart onClick={() => like()} />
+                  )}
+                  {likeCount}
+                </IconArea>
+                <IconArea>
+                  <Share onClick={() => share()} />
+                  {nft.shareCount}
+                </IconArea>
+              </Side>
+              <Side>
+                <IconArea>
+                  {nft.numMinted - nft.numSold}
+                  <span style={{ margin: "0 1px" }}>&nbsp;of&nbsp;</span>
+                  {nft.numMinted}
+                </IconArea>
+              </Side>
+            </CardTop>
+            <BadgeHolder>
+              {nft.badges?.map((badge) => {
+                console.log("badge", badge);
+                if (badge.founder) {
+                  return (
+                    <FounderBadge
+                      className="founderBadge"
+                      data-tip
+                      data-for="founderTip"
+                    />
+                  );
+                }
+                if (badge.premium) {
+                  return (
+                    <PremiumBadge
+                      className="premiumBadge"
+                      data-tip
+                      data-for="premiumTip"
+                    />
+                  );
+                }
+                if (badge.prerelease) {
+                  return (
+                    <PrereleaseBadge
+                      className="prereleaseBadge"
+                      data-tip
+                      data-for="prereleaseTip"
+                    />
+                  );
+                }
+              })}
+              <ReactToolTip id="founderTip" place="top" effect="solid">
+                Founder
+              </ReactToolTip>
+              <ReactToolTip id="premiumTip" place="top" effect="solid">
+                Premium
+              </ReactToolTip>
+              <ReactToolTip id="prereleaseTip" place="top" effect="solid">
+                Prerelease
+              </ReactToolTip>
+            </BadgeHolder>
             <InfoContainer>
               <TrackName>{nft.title}</TrackName>
               <Artist>{nft.artist}</Artist>
             </InfoContainer>
+            <SnippetHolder>
+              {!isBought && <PlaySongSnippet partialSong={partialSong} />}
+              <SnippetText>15 Sec Preview</SnippetText>
+            </SnippetHolder>
+            <DescriptionHolder>
+              <DescriptionLegend>Description</DescriptionLegend>
+              <DescriptionContent>alskhgyfawe,jkfbhv</DescriptionContent>
+            </DescriptionHolder>
             <PricesContainer>
-              <Row>
-                <PriceItem>Price:</PriceItem>
+              <PriceHolder>
                 <PriceItem>
-                  {" "}
                   {nft.price
                     ? parseFloat(nft.price).toLocaleString(undefined, {
                         minimumFractionDigits: 0,
                         maximumFractionDigits: 6,
                       })
                     : "--"}{" "}
-                  &nbsp; ETH
                 </PriceItem>
-              </Row>
-              <Divider />
-              <Row>
-                <AvailableItem>Price:</AvailableItem>
-                <AvailableItem>
-                  {" "}
-                  {usdPerEth
-                    ? parseFloat(usdPerEth * nft.price).toLocaleString(
-                        undefined,
-                        {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        }
-                      )
-                    : "..."}{" "}
-                  &nbsp; USD
-                </AvailableItem>
-              </Row>
+                &nbsp;
+                <Eth />
+              </PriceHolder>
             </PricesContainer>
             {!account ? (
               <BuyButton onClick={() => connectWallet()}>
-                {/* <BuyButton onClick={() => connect("injected")}> */}
-                <MetaMask src={IconMetamask} />
+                {/* <MetaMask src={IconMetamask} /> */}
                 <ButtonText>Connect Wallet</ButtonText>
               </BuyButton>
             ) : nft.numSold !== nft.numMinted ? (
@@ -228,7 +260,7 @@ const BuyNftModal = ({
                   </BuyButton>
                 ) : (
                   <BuyButton onClick={() => purchase(nft._id)}>
-                    <ButtonText>Buy</ButtonText>
+                    <ButtonText>Purchase</ButtonText>
                   </BuyButton>
                 )
               ) : (
@@ -258,6 +290,47 @@ const BuyNftModal = ({
   );
 };
 
+const FounderBadge = styled(Founder)`
+  width: 20px;
+  height: 20px;
+  padding: 0 5px;
+`;
+const PremiumBadge = styled(Premium)`
+  width: 20px;
+  height: 20px;
+  padding: 0 5px;
+`;
+const PrereleaseBadge = styled(Prerelease)`
+  width: 20px;
+  height: 20px;
+  padding: 0 5px;
+`;
+
+const DescriptionHolder = styled.fieldset`
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid ${(props) => props.theme.color.lightgray};
+  padding: 2px 0;
+  height: 100px;
+  /* margin-top: 10px; */
+`;
+const DescriptionLegend = styled.legend`
+  padding: 0 5px;
+  margin-left: 10px;
+`;
+const DescriptionContent = styled.span`
+  margin-top: -10px;
+  padding: 0 10px;
+`;
+
+const SnippetHolder = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px, 0;
+  width: 100%;
+  margin-top: 10px;
+`;
 
 const SnippetText = styled.span`
   /* position: absolute; */
@@ -293,6 +366,29 @@ const Divider = styled.div`
 const AvailableItem = styled.div`
   font-size: 0.8rem;
   color: ${(props) => props.theme.color.lightgray};
+`;
+
+const PricesContainer = styled.div`
+  width: 100%;
+  height: 1px;
+  border-top: 1px solid ${(props) => props.theme.color.lightgray};
+  display: flex;
+  justify-content: center;
+  /* margin-left: 10%; */
+  margin: 30px 0;
+`;
+const PriceHolder = styled.div`
+  display: flex;
+  background-color: ${(props) => props.theme.bgColor};
+  margin-top: -8px;
+  padding: 0 10px;
+`;
+const Eth = styled(IconEth)`
+  width: 18px;
+  height: 18px;
+  & path {
+    fill: ${(props) => props.theme.color.white};
+  }
 `;
 
 const PriceItem = styled.span`
@@ -375,6 +471,7 @@ const Heart = styled(IconHeart)`
 const Side = styled.div`
   display: flex;
   align-items: center;
+  margin-left: -25px;
 `;
 
 const IconArea = styled.div`
@@ -388,7 +485,7 @@ const IconArea = styled.div`
 const CardTop = styled.div`
   /* padding: 0px 2px; */
   width: 100%;
-  margin-bottom: 8px;
+  /* margin-bottom: 8px; */
   display: flex;
   justify-content: space-between;
   font-weight: 600;
@@ -428,7 +525,6 @@ const Container = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
-  width: 680px;
   position: fixed;
   left: 50%;
   top: 50%;
@@ -438,13 +534,16 @@ const Container = styled.div`
 const RightSide = styled.div`
   display: flex;
   flex-direction: column;
-  width: 50%;
+  align-items: center;
+  width: calc(100% - 500px);
+  padding: 10px 30px;
 `;
 const StyledModal = styled.div`
-  border-radius: 8px;
+  border-radius: 16px;
   border: solid 1px #181818;
-  width: 600px;
-  /* height: 100%; */
+  width: 800px;
+  /* width: 700px; */
+  /* height: 600px; */
   /* padding: 10px 30px; */
   background-color: ${(props) => props.theme.bgColor};
   font-size: 16px;
@@ -457,9 +556,10 @@ const StyledModal = styled.div`
 `;
 
 const Image = styled.img`
-  width: 60%;
+  width: 500px;
+  /* height: 400px; */
   aspect-ratio: 1;
-  border-radius: 8px;
+  border-radius: 16px;
   border: 1px solid #262626;
   background-color: #1e1e1e;
   object-fit: cover;
@@ -467,28 +567,33 @@ const Image = styled.img`
   /* margin-bottom: 16px; */
 `;
 
-const PricesContainer = styled.div`
+const BadgeHolder = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 0;
+  & > span {
+    padding: 0 5px;
+  }
+`;
+
+const InfoContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin-bottom: 20px;
-`;
-const InfoContainer = styled.div`
-  width: 80%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   white-space: nowrap;
+  margin-top: -10px;
 `;
 const TrackName = styled.span`
   color: white;
-  font-size: ${(props) => props.theme.fontSizes.sm};
+  font-size: ${(props) => props.theme.fontSizes.md};
+  font-weight: 600;
   margin-bottom: 6px;
 `;
 const Artist = styled.span`
-  font-size: ${(props) => props.theme.fontSizes.xs};
-  color: ${(props) => props.theme.color.lightgray};
+  font-size: ${(props) => props.theme.fontSizes.sm};
+  color: white;
   margin-bottom: 12px;
 `;
 
@@ -499,8 +604,8 @@ const Row = styled.div`
 `;
 
 const BuyButton = styled.button`
-  width: 140px;
-  height: 64px;
+  width: 150px;
+  /* height: 64px; */
   cursor: pointer;
   transition: all 0.1s ease-in-out;
   display: flex;
@@ -508,9 +613,10 @@ const BuyButton = styled.button`
   align-items: center;
   justify-content: space-evenly;
   border: 1px solid ${(props) => props.theme.color.boxBorder};
-  border-radius: 2px;
+  border-radius: 8px;
   background-color: ${(props) => props.theme.color.box};
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
+  padding: 10px 20px;
   &:hover {
     background-color: ${(props) => props.theme.color.boxBorder};
     border: 1px solid #383838;

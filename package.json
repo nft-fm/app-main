@@ -47,6 +47,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-share": "^4.4.0",
+    "react-tooltip": "^4.2.21",
     "styled-components": "^5.1.1",
     "sweetalert2": "^10.3.5",
     "use-wallet": "^0.8.0",

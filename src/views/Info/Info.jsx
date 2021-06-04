@@ -36,27 +36,27 @@ const Info = () => {
         <Header1>All About NFT FM</Header1>
         <InfoContainer>
           <InfoSubContainer onClick={() => handleClick("litepaperRef")}>
-            <img src={litepaper} alt="litepaper"/> 
+            <LinkImage src={litepaper} alt="litepaper"/> 
             <h3>Litepaper</h3>
             <section>In depth review of NFT FM</section>
           </InfoSubContainer>
           <InfoSubContainer onClick={() => handleClick("roadmapRef")}>
-            <img src={roadmap} alt="roadmap"/>
+            <LinkImage src={roadmap} alt="roadmap"/>
             <h3>Roadmap</h3>
             <section>Keep track of where the project is going</section>
           </InfoSubContainer>
           <InfoSubContainer onClick={() => handleClick("faqRef")}>
-            <img src={faq} alt="faq"/>
+            <LinkImage src={faq} alt="faq"/>
             <h3>FAQ</h3>
             <section>We answer your questions</section>
           </InfoSubContainer>
           <InfoSubContainer onClick={() => handleClick("tokenomicsRef")}>
-            <img src={tokenomics} alt="tokenomics"/>
+            <LinkImage src={tokenomics} alt="tokenomics"/>
             <h3>Tokenomics</h3>
             <section>How we use our token $VINYL</section>
           </InfoSubContainer>
           <InfoSubContainer onClick={() => handleClick("teamsRef")}>
-            <img src={team} alt="team"/>
+            <LinkImage src={team} alt="team"/>
             <h3>Team</h3>
             <section>Meet the NFT FM Team</section>
           </InfoSubContainer>
@@ -116,6 +116,13 @@ const Info = () => {
     </Switch>
   );
 };
+
+const LinkImage = styled.img`
+transition: all 0.2s ease-in-out;
+&:hover {
+  filter: brightness(110%) contrast(105%) saturate(110%);
+}
+`
 
 const Header1 = styled.h1`
   margin-top: 100px;

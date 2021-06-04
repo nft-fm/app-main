@@ -80,7 +80,7 @@ const Tokenomics = () => {
       </LaunchContainer>
       <div style={{ height: "50px" }} />
       <UtilityContainer>
-        <Title>Utility </Title>
+        <Title>VINYL Utility </Title>
         <Divider />
         <BulletPoint>
           {" "}

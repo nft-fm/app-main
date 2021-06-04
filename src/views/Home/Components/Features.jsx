@@ -102,7 +102,7 @@ const Container = styled.div`
   margin-left: 80px;
   @media only screen and (max-width: 1100px) {
     width: 800px;
-    margin-left: 40px;
+    margin-left: 0px;
   }
   @media only screen and (max-width: 800px) {
     margin: 0;

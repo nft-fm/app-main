@@ -171,8 +171,6 @@ const InfoSubContainer = styled.div`
     @media only screen and (max-width: 776px) {
       height: 70px;
     }
-    @media only screen and (max-width: 550px) {
-    }
   }
 `
 

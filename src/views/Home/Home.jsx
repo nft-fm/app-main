@@ -34,17 +34,24 @@ const Listen = () => {
         <StyledAccountButton href="mailto:info@nftfm.io" target="_blank">
           Contact us!
         </StyledAccountButton>
-        <DescriptionBoxContainer>
-          <InfoHeaderContainer to="/info">
+        <DescriptionLink to="/info">
+
+        <DescriptionBox>
+          <InfoHeaderContainer >
             <InfoHeader>Info Page</InfoHeader>
             <RightArrow />
           </InfoHeaderContainer>
           <InfoDetails>Learn more about our project!</InfoDetails>
-        </DescriptionBoxContainer>
+        </DescriptionBox>
+        </DescriptionLink>
       </BaseView>
     </Switch>
   );
 };
+
+const DescriptionLink = styled(NavLink)`
+width: 60%;
+`
 
 const RightArrow = styled(rightArrow)`
   width: 18px;
@@ -78,16 +85,16 @@ const StyledAccountButton = styled.a`
   }
 `;
 
-const DescriptionBoxContainer = styled.div`
-  margin-top: 80px;
+
+const DescriptionBox = styled.div`
+  margin: 80px 0;
   border-radius: ${(props) => props.theme.borderRadius}px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  width: 40%;
+  width: calc(100% - 64px);
   padding: 32px;
-  margin-bottom: 40px;
   border: solid 1px #262626;
   background-color: #181818;
 `;
@@ -103,7 +110,7 @@ const StyledHeader = styled.h1`
 
 const InfoHeader = styled.h1`
   color: white;
-  margin: 0 0 16px 18px;
+  margin: 0 0 16px 0;
   font-family: "Compita";
   text-align: center;
   @media only screen and (max-width: 500px) {
@@ -111,7 +118,7 @@ const InfoHeader = styled.h1`
   }
 `;
 
-const InfoHeaderContainer = styled(NavLink)`
+const InfoHeaderContainer = styled.div`
   display: flex;
   flex-direction: row;
   text-decoration: none;
@@ -122,6 +129,7 @@ const InfoDetails = styled.h2`
   font-family: "Compita";
   text-align: center;
   font-size: 22px;
+  margin: 0px;
 `;
 
 const Divider = styled.div`

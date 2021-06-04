@@ -38,18 +38,18 @@ const Listen = () => {
             </StyledParagraph>
           </DescriptionColumn>
           {/* <ImageImage src={record} /> */}
-          {/* <DemoImageContainer> */}
+          <DemoImageContainer>
           <DemoImage />
-          {/* </DemoImageContainer> */}
+          </DemoImageContainer>
         </DescriptionBoxContainer>
-        <Roadmap />
+        {/* <Roadmap />
         <LaunchContainer>
           <ContainerTitle faq>
             <b className="first">F</b>requently<b>A</b>sked<b>Q</b>uestions
           </ContainerTitle>
           <ContainerOutline />
           <FAQ />
-        </LaunchContainer>
+        </LaunchContainer> */}
       </BaseView>
     </Switch>
   );

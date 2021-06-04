@@ -1,13 +1,14 @@
 import React from "react";
-import { Switch } from "react-router-dom";
+import { Switch, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import BaseView from "../../components/Page/BaseView";
 import Landing from "./Components/Landing";
 import Swal from "sweetalert2"
-import Roadmap from "./Components/Roadmap";
 import { Features } from "./Components/Features"
-import { FAQ } from "./Components/FAQ/FAQ";
 import DemoImage from "./Components/DemoImage/DemoImage"
+import send from "../../assets/img/homepage_assets/homepage_send.png"
+// import send from "../../assets/img/homepage_assets/homepage_send.png"
+import { ReactComponent as rightArrow } from "../../assets/img/homepage_assets/right-arrow-3.svg";
 
 const Listen = () => {
   if (window.location.hostname === "localhost" && process.env.REACT_APP_IS_MAINNET) {
@@ -25,23 +26,66 @@ const Listen = () => {
         <Divider />
         <Features />
         <Divider />
+        <DemoImage />
+        <StyledHeader>Are you an artist? Launch with us!</StyledHeader>
+        <StyledAccountButton href="mailto:info@nftfm.io" target="_blank">Contact us!</StyledAccountButton>
         <DescriptionBoxContainer>
-          <DemoImage />
-          <StyledHeader>Are you an artist? Launch with us!</StyledHeader>
-          <StyledAccountButton href="mailto:info@nftfm.io" target="_blank">Contact us!</StyledAccountButton>
+          <InfoHeaderContainer to="/info">
+            <InfoHeader>Info Page</InfoHeader>
+            <RightArrow />
+          </InfoHeaderContainer>
+          <InfoDetails>Learn more about our project!</InfoDetails>
+          {/* <InfoContainer>
+            <InfoSubContainer>
+              <img src={send} alt="send"/> 
+              <h3>Litepaper</h3>
+              <section>In depth review of NFT FM</section>
+            </InfoSubContainer>
+            <InfoSubContainer>
+              <img src={send} alt="send"/>
+              <h3>Roadmap</h3>
+              <section>Keep track of where the project is going</section>
+            </InfoSubContainer>
+            <InfoSubContainer>
+              <img src={send} alt="send"/>
+              <h3>FAQ</h3>
+              <section>We answer your questions</section>
+            </InfoSubContainer>
+            <InfoSubContainer>
+              <img src={send} alt="send"/>
+              <h3>Tokenomics</h3>
+              <section>How we use our token $VINYL</section>
+            </InfoSubContainer>
+            <InfoSubContainer>
+              <img src={send} alt="send"/>
+              <h3>Team</h3>
+              <section>Meet the NFT FM Team</section>
+            </InfoSubContainer>
+          </InfoContainer> */}
         </DescriptionBoxContainer>
-        <Roadmap />
+        {/* <Roadmap />
         <LaunchContainer>
           <ContainerTitle faq>
             <b className="first">F</b>requently<b>A</b>sked<b>Q</b>uestions
           </ContainerTitle>
           <ContainerOutline />
           <FAQ />
-        </LaunchContainer>
+        </LaunchContainer> */}
       </BaseView>
     </Switch>
   );
 };
+
+const RightArrow = styled(rightArrow)`
+  width: 18px;
+  height: 18px;
+  margin-top: 9px;
+  margin-left: 10px;
+  & path {
+    fill: white;
+    font-weight: 900;
+  }
+`;
 
 const StyledAccountButton = styled.a`
   margin-top: -20px;
@@ -65,6 +109,7 @@ const StyledAccountButton = styled.a`
 `;
 
 const DescriptionBoxContainer = styled.div`
+  margin-top: 80px;
   border-radius: ${(props) => props.theme.borderRadius}px;
   display: flex;
   justify-content: center;
@@ -78,12 +123,76 @@ const DescriptionBoxContainer = styled.div`
 `;
 
 const StyledHeader = styled.h1`
+  display: flex;
   color: white;
   margin: 0 0 24px 0;
   font-family: "Compita";
   padding: 32px 0px;
   text-align: center; 
 `;
+
+const InfoHeader = styled.h1`
+  color: white;
+  margin: 0 0 16px 18px;
+  font-family: "Compita";
+  text-align: center; 
+  @media only screen and (max-width: 500px) {
+    margin-bottom: 0;
+  }
+`;
+
+const InfoHeaderContainer = styled(NavLink)`
+  display: flex;
+  flex-direction: row;
+  text-decoration: none;
+`;
+
+const InfoDetails = styled.h2`
+  color: #d3d3d3;
+  font-family: "Compita";
+  padding-bottom: 32px;
+  text-align: center;
+  font-size: 22px;
+`;
+
+const InfoContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-content: space-around;
+  @media only screen and (max-width: 550px) {
+    display: none;
+  }
+`
+
+const InfoSubContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  width: 17%;
+  max-width: 160px;
+  img {
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+  }
+  h3 {
+    color: white;
+    text-align: center;
+  }
+  section {
+    color: #888888;
+    text-align: center;
+    @media only screen and (max-width: 1200px) {
+      height: 52px;
+    }
+    @media only screen and (max-width: 776px) {
+      height: 70px;
+    }
+
+  }
+`
 
 
 const Divider = styled.div`

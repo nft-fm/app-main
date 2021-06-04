@@ -35,42 +35,7 @@ const Listen = () => {
             <RightArrow />
           </InfoHeaderContainer>
           <InfoDetails>Learn more about our project!</InfoDetails>
-          {/* <InfoContainer>
-            <InfoSubContainer>
-              <img src={send} alt="send"/> 
-              <h3>Litepaper</h3>
-              <section>In depth review of NFT FM</section>
-            </InfoSubContainer>
-            <InfoSubContainer>
-              <img src={send} alt="send"/>
-              <h3>Roadmap</h3>
-              <section>Keep track of where the project is going</section>
-            </InfoSubContainer>
-            <InfoSubContainer>
-              <img src={send} alt="send"/>
-              <h3>FAQ</h3>
-              <section>We answer your questions</section>
-            </InfoSubContainer>
-            <InfoSubContainer>
-              <img src={send} alt="send"/>
-              <h3>Tokenomics</h3>
-              <section>How we use our token $VINYL</section>
-            </InfoSubContainer>
-            <InfoSubContainer>
-              <img src={send} alt="send"/>
-              <h3>Team</h3>
-              <section>Meet the NFT FM Team</section>
-            </InfoSubContainer>
-          </InfoContainer> */}
         </DescriptionBoxContainer>
-        {/* <Roadmap />
-        <LaunchContainer>
-          <ContainerTitle faq>
-            <b className="first">F</b>requently<b>A</b>sked<b>Q</b>uestions
-          </ContainerTitle>
-          <ContainerOutline />
-          <FAQ />
-        </LaunchContainer> */}
       </BaseView>
     </Switch>
   );
@@ -150,7 +115,6 @@ const InfoHeaderContainer = styled(NavLink)`
 const InfoDetails = styled.h2`
   color: #d3d3d3;
   font-family: "Compita";
-  padding-bottom: 32px;
   text-align: center;
   font-size: 22px;
 `;

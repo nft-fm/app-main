@@ -9,16 +9,14 @@ import Team from "./Components/Team";
 import RoadMap from "./Components/Roadmap";
 import send from "../../assets/img/homepage_assets/homepage_send.png"
 
-const useScroll = () => {
-  const elRef = useRef(null);
-  const executeScroll = () => elRef.current.scrollIntoView();
+import faq from "../../assets/img/litepaper_assets/faq.png"
+import litepaper from "../../assets/img/litepaper_assets/litepaper.png"
+import roadmap from "../../assets/img/litepaper_assets/roadmap.png"
+import team from "../../assets/img/litepaper_assets/team.png"
+import tokenomics from "../../assets/img/litepaper_assets/tokenomics.png"
 
-  return [executeScroll, elRef];
-};
-
-// style={{ color: "white" }}
 const Info = () => {
-  let litepaperRef = useRef()
+  let litepaperRef = useRef() 
   let roadmapRef = useRef()
   let faqRef = useRef()
   let tokenomicsRef = useRef()
@@ -29,42 +27,43 @@ const Info = () => {
   }, [])
 
   const handleClick = (ref) => {
+    console.log(ref)
     window.scrollTo({ behavior: 'smooth', top: ref.current.offsetTop })
   }
   return (
     <Switch>
       <BaseView>
         <Header1>All About NFT FM</Header1>
-
         <InfoContainer>
           <InfoSubContainer onClick={() => handleClick(litepaperRef)}>
-            <img src={send} alt="send"/> 
+            <img src={litepaper} alt="litepaper"/> 
             <h3>Litepaper</h3>
             <section>In depth review of NFT FM</section>
           </InfoSubContainer>
           <InfoSubContainer onClick={() => handleClick(roadmapRef)}>
-            <img src={send} alt="send"/>
+            <img src={roadmap} alt="roadmap"/>
             <h3>Roadmap</h3>
             <section>Keep track of where the project is going</section>
           </InfoSubContainer>
           <InfoSubContainer onClick={() => handleClick(faqRef)}>
-            <img src={send} alt="send"/>
+            <img src={faq} alt="faq"/>
             <h3>FAQ</h3>
             <section>We answer your questions</section>
           </InfoSubContainer>
           <InfoSubContainer onClick={() => handleClick(tokenomicsRef)}>
-            <img src={send} alt="send"/>
+            <img src={tokenomics} alt="tokenomics"/>
             <h3>Tokenomics</h3>
             <section>How we use our token $VINYL</section>
           </InfoSubContainer>
           <InfoSubContainer onClick={() => handleClick(teamsRef)}>
-            <img src={send} alt="send"/>
+            <img src={team} alt="team"/>
             <h3>Team</h3>
             <section>Meet the NFT FM Team</section>
           </InfoSubContainer>
         </InfoContainer>
-        <ProjectSummary ref={litepaperRef}>
-          <span>NFT FM is the first Audiocentric NFT marketplace.</span>
+        <div style={{marginTop: "-19px", marginBottom: "31px"}} ref={litepaperRef}/>
+        <ProjectSummary>
+          <h3>NFT FM is the first Audiocentric NFT marketplace.</h3>
           <br />
           <span>
             NFT FM allows musicians to dictate artistically and financially the
@@ -119,35 +118,48 @@ const Info = () => {
 };
 
 const Header1 = styled.h1`
-  width: 3.125rem;
+  margin-top: 100px;
+  font-size: 3.125rem;
   color: white;
   width: 40rem;
   text-align: center;
+  @media only screen and (max-width: 400px) {
+    margin-top: 50px;
+    font-size: 2.3rem;
+  }
 `
 
 const InfoContainer = styled.div`
   display: flex;
+  width: 100%;
   padding-top: 20px;
   flex-direction: row;
   justify-content: space-around;
   align-content: space-around;
-  @media only screen and (max-width: 550px) {
-    display: none;
+  @media only screen and (max-width: 400px) {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 `
 
 const InfoSubContainer = styled.div`
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-content: center;
   width: 17%;
   max-width: 160px;
+  @media only screen and (max-width: 400px) {
+    width: 50%;
+    max-width: 50%;
+  }
   img {
     margin-left: auto;
     margin-right: auto;
-    width: 50%;
-  }
+    width: 80%;
+  } 
   h3 {
     color: white;
     text-align: center;
@@ -155,13 +167,12 @@ const InfoSubContainer = styled.div`
   section {
     color: #888888;
     text-align: center;
-    @media only screen and (max-width: 1200px) {
       height: 52px;
-    }
     @media only screen and (max-width: 776px) {
       height: 70px;
     }
-
+    @media only screen and (max-width: 550px) {
+    }
   }
 `
 
@@ -176,7 +187,11 @@ const ProjectSummary = styled.div`
   margin-bottom: 40px;
   border: solid 1px #262626;
   background-color: #181818;
-
+  h3 {
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 25px;
+  }
   & > span {
     padding-left: 20px;
     padding-right: 20px;
@@ -187,6 +202,10 @@ const ProjectSummary = styled.div`
   & > span {
     padding-left: 0;
     padding-right: 0;
+  }
+  h3 {
+    padding-left: 0px;
+    padding-right: 0  px;
   }
   }
 `;

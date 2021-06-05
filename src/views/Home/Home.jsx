@@ -50,7 +50,8 @@ const Listen = () => {
 };
 
 const DescriptionLink = styled(NavLink)`
-width: 60%;
+  width: 60%;
+  text-decoration: none;
 `
 
 const RightArrow = styled(rightArrow)`
@@ -113,9 +114,7 @@ const InfoHeader = styled.h1`
   margin: 0 0 16px 0;
   font-family: "Compita";
   text-align: center;
-  @media only screen and (max-width: 500px) {
-    margin-bottom: 0;
-  }
+  text-decoration: none;
 `;
 
 const InfoHeaderContainer = styled.div`
@@ -125,6 +124,7 @@ const InfoHeaderContainer = styled.div`
 `;
 
 const InfoDetails = styled.h2`
+  text-decoration: none;
   color: #d3d3d3;
   font-family: "Compita";
   text-align: center;

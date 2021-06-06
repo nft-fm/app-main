@@ -13,8 +13,7 @@ export const Nav = () => {
   const { account } = useWallet();
   const [hasVinyl, setHasVinyl] = useState(false);
   const [isPresaleTime, setIsPresaleTime] = useState(false);
-  console.log('ispresale', isPresaleTime)
-
+ 
   useEffect(() => {
     if (account) {
       getVinylBalance(

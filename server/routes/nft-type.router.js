@@ -602,9 +602,18 @@ router.post("/getNSecondsOfSong", async (req, res) => {
         res.status(500).send("Couldnt retrieve nSec of music");
       });
 
-    const startTime = req.body.nft.startTime ? (songFullSize * req.body.nft.startTime) / req.body.nft.dur : 0;
+    const startTime = req.body.startTime ? (songFullSize * req.body.startTime) / req.body.nft.dur : 0;
     const nSec = req.body.nSec || 15;
-    const partialBytes = ((songFullSize * nSec) / req.body.nft.dur) + startTime;
+    let partialBytes = ((songFullSize * nSec) / req.body.nft.dur) + startTime;
+  
+    if (startTime > songFullSize) {
+      console.log("NO MORE DATA");
+      res.status(200).send();
+      return ;
+    } else if (partialBytes > songFullSize) {
+      partialBytes = songFullSize;
+    }
+
     console.log("partial bytes", partialBytes.toFixed(0));
     console.log(req.body.nft);
     console.log("startTime", startTime.toFixed(0));
@@ -618,6 +627,7 @@ router.post("/getNSecondsOfSong", async (req, res) => {
       function (error, data) {
         if (error != null) {
           console.log("Failed to retrieve an object: " + error);
+          res.status(500).send(error);
         } else {
           const _end = new Date();
 

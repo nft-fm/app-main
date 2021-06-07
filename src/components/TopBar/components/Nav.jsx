@@ -55,6 +55,9 @@ export const Nav = () => {
       <StyledLink exact tab="library" activeClassName="active" to="/library">
         Library
       </StyledLink>
+      <StyledLink exact tab="about" activeClassName="active" to="/info">
+        Info
+      </StyledLink>
       {hasVinyl && (
         <StyledLink
           exact

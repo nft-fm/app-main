@@ -10,12 +10,11 @@ import styled from "styled-components";
 import ModalsProvider from "./contexts/Modals";
 import Listen from "./views/Home";
 import Library from "./views/Library";
-// import Discover from "./views/Discover";
+import Discover from "./views/Discover";
 import Profile from "./views/Profile";
 import Artist from "./views/Artist";
 import Community from "./views/Community"
 import Error404 from "./views/404";
-import TokenSale from "./views/TokenSale";
 import TermsOfService from "./views/FooterLinks/TermsOfService"
 import PrivacyPolicy from "./views/FooterLinks/PrivacyPolicy"
 import { AccountProvider } from "./contexts/Account";
@@ -48,12 +47,9 @@ const App = () => {
             <Route path="/artist">
               <Artist />
             </Route>
-            {/* <Route path="/presale">
-              <TokenSale />
-            </Route> */}
-            {/* <Route path="/discover">
+            <Route path="/discover">
               <Discover />
-            </Route> */}
+            </Route>
             <Route path="/community">
               <Community />
             </Route>

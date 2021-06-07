@@ -20,6 +20,9 @@ import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as Founder } from "../../assets/img/Badges/founder.svg";
 import { ReactComponent as Premium } from "../../assets/img/Badges/premium.svg";
 import { ReactComponent as Prerelease } from "../../assets/img/Badges/prerelease.svg";
+import moment from "moment"
+import { NavLink } from "react-router-dom";
+
 
 const BuyNftModal = ({
   open,
@@ -142,6 +145,18 @@ const BuyNftModal = ({
     }
   };
 
+  const formatSongDur = (d) => {
+    d = Number(d);
+    var h = Math.floor(d / 3600);
+    var m = Math.floor((d % 3600) / 60);
+    var s = Math.floor((d % 3600) % 60);
+
+    var hDisplay = h > 0 ? h + ":" : "";
+    var mDisplay = m > 0 ? m + ":" : "0:";
+    var sDisplay = s;
+    return hDisplay + mDisplay + sDisplay;
+  }
+
   if (!open) return null;
   return (
     <OpaqueFilter onClick={(e) => hide(e)}>
@@ -179,7 +194,6 @@ const BuyNftModal = ({
             </CardTop>
             <BadgeHolder>
               {nft.badges?.map((badge) => {
-                console.log("badge", badge);
                 if (badge.founder) {
                   return (
                     <FounderBadge
@@ -220,16 +234,22 @@ const BuyNftModal = ({
             </BadgeHolder>
             <InfoContainer>
               <TrackName>{nft.title}</TrackName>
-              <Artist>{nft.artist}</Artist>
+              <Artist to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}>{nft.artist}</Artist>
             </InfoContainer>
             <SnippetHolder>
               {!isBought && <PlaySongSnippet partialSong={partialSong} />}
               <SnippetText>15 Sec Preview</SnippetText>
             </SnippetHolder>
-            <DescriptionHolder>
+            <TrackDetailsHolder>
+              <span>Genre: {nft.genre}</span>
+              <span>Producer: {nft.producer}</span>
+              <span>Track Length: {formatSongDur(nft.dur)}</span>
+              <span>NFT FM Release: {moment(nft.timestamp).format("MMM Do YYYY")}</span>
+            </TrackDetailsHolder>
+            {/* <DescriptionHolder>
               <DescriptionLegend>Description</DescriptionLegend>
               <DescriptionContent>alskhgyfawe,jkfbhv</DescriptionContent>
-            </DescriptionHolder>
+            </DescriptionHolder> */}
             <PricesContainer>
               <PriceHolder>
                 <PriceItem>
@@ -289,6 +309,15 @@ const BuyNftModal = ({
     </OpaqueFilter>
   );
 };
+
+const TrackDetailsHolder = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 125px;
+  justify-content: space-around;
+  padding-left: 20px;
+`;
 
 const FounderBadge = styled(Founder)`
   width: 20px;
@@ -371,7 +400,7 @@ const AvailableItem = styled.div`
 const PricesContainer = styled.div`
   width: 100%;
   height: 1px;
-  border-top: 1px solid ${(props) => props.theme.color.lightgray};
+  border-top: 1px solid ${(props) => props.theme.color.gray};
   display: flex;
   justify-content: center;
   /* margin-left: 10%; */
@@ -571,6 +600,7 @@ const BadgeHolder = styled.div`
   width: 100%;
   display: flex;
   justify-content: flex-end;
+  height: 20px;
   padding: 10px 0;
   & > span {
     padding: 0 5px;
@@ -583,7 +613,7 @@ const InfoContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   white-space: nowrap;
-  margin-top: -10px;
+  /* margin-top: -10px; */
 `;
 const TrackName = styled.span`
   color: white;
@@ -591,7 +621,8 @@ const TrackName = styled.span`
   font-weight: 600;
   margin-bottom: 6px;
 `;
-const Artist = styled.span`
+const Artist = styled(NavLink)`
+text-decoration: none;
   font-size: ${(props) => props.theme.fontSizes.sm};
   color: white;
   margin-bottom: 12px;

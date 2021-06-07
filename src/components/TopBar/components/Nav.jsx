@@ -49,9 +49,9 @@ export const Nav = () => {
           Presale
         </StyledLink> */}
       {/* )} */}
-      {/* <StyledLink exact tab="discover" activeClassName="active" to="/discover">
+      <StyledLink exact tab="discover" activeClassName="active" to="/discover">
         Discover
-      </StyledLink> */}
+      </StyledLink>
       <StyledLink exact tab="library" activeClassName="active" to="/library">
         Library
       </StyledLink>

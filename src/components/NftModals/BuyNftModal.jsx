@@ -249,7 +249,7 @@ const BuyNftModal = ({
               <span>Producer: {nft.producer}</span>
               <span>Track Length: {formatSongDur(nft.dur)}</span>
               <span>
-                NFT FM Release: {moment(nft.timestamp).format("MMM Do YYYY")}
+                Release Date: {moment(nft.timestamp).format("MMM Do YYYY")}
               </span>
             </TrackDetailsHolder>
             {/* <DescriptionHolder>

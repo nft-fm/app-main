@@ -20,9 +20,8 @@ import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as Founder } from "../../assets/img/Badges/founder.svg";
 import { ReactComponent as Premium } from "../../assets/img/Badges/premium.svg";
 import { ReactComponent as Prerelease } from "../../assets/img/Badges/prerelease.svg";
-import moment from "moment"
+import moment from "moment";
 import { NavLink } from "react-router-dom";
-
 
 const BuyNftModal = ({
   open,
@@ -155,7 +154,7 @@ const BuyNftModal = ({
     var mDisplay = m > 0 ? m + ":" : "0:";
     var sDisplay = s;
     return hDisplay + mDisplay + sDisplay;
-  }
+  };
 
   if (!open) return null;
   return (
@@ -197,54 +196,61 @@ const BuyNftModal = ({
                 if (badge.founder) {
                   return (
                     <FounderBadge
-                      className="founderBadge"
+                      key={badge}
                       data-tip
-                      data-for="founderTip"
+                      data-for="founderBadge"
                     />
                   );
                 }
                 if (badge.premium) {
                   return (
                     <PremiumBadge
-                      className="premiumBadge"
+                      key={badge}
                       data-tip
-                      data-for="premiumTip"
+                      data-for="premiumBadge"
                     />
                   );
                 }
                 if (badge.prerelease) {
                   return (
                     <PrereleaseBadge
-                      className="prereleaseBadge"
+                      key={badge}
                       data-tip
-                      data-for="prereleaseTip"
+                      data-for="prereleaseBadge"
                     />
                   );
                 }
               })}
-              <ReactToolTip id="founderTip" place="top" effect="solid">
+              <ReactToolTip id="founderBadge" place="top" effect="solid">
                 Founder
               </ReactToolTip>
-              <ReactToolTip id="premiumTip" place="top" effect="solid">
+              <ReactToolTip id="premiumBadge" place="top" effect="solid">
                 Premium
               </ReactToolTip>
-              <ReactToolTip id="prereleaseTip" place="top" effect="solid">
+              <ReactToolTip id="prereleaseBadge" place="top" effect="solid">
                 Prerelease
               </ReactToolTip>
             </BadgeHolder>
             <InfoContainer>
               <TrackName>{nft.title}</TrackName>
-              <Artist to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}>{nft.artist}</Artist>
+              <Artist
+                to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}
+              >
+                {nft.artist}
+              </Artist>
             </InfoContainer>
             <SnippetHolder>
-              {!isBought && <PlaySongSnippet partialSong={partialSong} />}
+              {/* {!isBought && <PlaySongSnippet partialSong={partialSong} />} */}
+              <PlaySongSnippet partialSong={partialSong} />
               <SnippetText>15 Sec Preview</SnippetText>
             </SnippetHolder>
             <TrackDetailsHolder>
               <span>Genre: {nft.genre}</span>
               <span>Producer: {nft.producer}</span>
               <span>Track Length: {formatSongDur(nft.dur)}</span>
-              <span>NFT FM Release: {moment(nft.timestamp).format("MMM Do YYYY")}</span>
+              <span>
+                NFT FM Release: {moment(nft.timestamp).format("MMM Do YYYY")}
+              </span>
             </TrackDetailsHolder>
             {/* <DescriptionHolder>
               <DescriptionLegend>Description</DescriptionLegend>
@@ -369,7 +375,7 @@ const SnippetText = styled.span`
 `;
 
 const Loading = styled.img`
-  width: 40px;
+  width: 17px;
   height: auto;
 `;
 
@@ -622,7 +628,7 @@ const TrackName = styled.span`
   margin-bottom: 6px;
 `;
 const Artist = styled(NavLink)`
-text-decoration: none;
+  text-decoration: none;
   font-size: ${(props) => props.theme.fontSizes.sm};
   color: white;
   margin-bottom: 12px;

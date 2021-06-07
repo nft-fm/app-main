@@ -302,7 +302,7 @@ router.post("/featured", async (req, res) => {
       // isFeatured: true,
       isDraft: false,
       isMinted: true,
-    }, {snnipet: 0}).limit(5);
+    }, {snnipet: 0}).limit(4);
 
     res.send(findLikes(nftTypes, req.body.address));
   } catch (error) {
@@ -370,6 +370,7 @@ router.post("/all", async (req, res) => {
       isDraft: false,
       isMinted: true
     });
+    console.log('/all hit', nftTypes)
     res.send(findLikes(nftTypes, req.body.address));
   } catch (error) {
     console.log(error);

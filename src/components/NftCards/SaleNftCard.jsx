@@ -172,7 +172,6 @@ const NftCard = (props) => {
       <BottomSection>
         <BadgeHolder>
           {nft.badges?.map((badge) => {
-            console.log("badge", badge);
             if (badge.founder) {
               return (
                 <>

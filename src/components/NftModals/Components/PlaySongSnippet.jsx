@@ -147,6 +147,9 @@ const PlayButton = styled(PlayIcon)`
     }
   }
   margin-top: 10px;
+  @media only screen and (max-width: 776px) {
+    margin-top: 0;
+  }
 `;
 
 export default PlaySongSnippet;

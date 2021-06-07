@@ -29,6 +29,8 @@ export const Nav = () => {
   //   return () => clearInterval(interval);
   // }, []);
 
+  console.log('user', user)
+
   return (
     <StyledNav>
       <StyledLink exact tab="home" activeClassName="active" to="/">

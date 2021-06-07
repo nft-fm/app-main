@@ -23,7 +23,7 @@ import { ReactComponent as Prerelease } from "../../assets/img/Badges/prerelease
 import moment from "moment";
 import { NavLink } from "react-router-dom";
 
-const BuyNftModal = ({
+const LibraryModal = ({
   open,
   children,
   hide,
@@ -192,10 +192,7 @@ const BuyNftModal = ({
               </Side>
             </CardTop>
             <BadgeHolder>
-              <FounderBadge data-tip data-for="founderBadge" />
-              <PremiumBadge data-tip data-for="premiumBadge" />
-              <PrereleaseBadge data-tip data-for="prereleaseBadge" />
-              {/* {nft.badges?.map((badge) => {
+              {nft.badges?.map((badge) => {
                 if (badge.founder) {
                   return (
                     <FounderBadge
@@ -223,7 +220,7 @@ const BuyNftModal = ({
                     />
                   );
                 }
-              })} */}
+              })}
               <ReactToolTip id="founderBadge" place="top" effect="solid">
                 Founder
               </ReactToolTip>
@@ -242,11 +239,10 @@ const BuyNftModal = ({
                 {nft.artist}
               </Artist>
             </InfoContainer>
-            <SnippetHolder>
-              {/* {!isBought && <PlaySongSnippet partialSong={partialSong} />} */}
+            {/* <SnippetHolder>
               <PlaySongSnippet partialSong={partialSong} />
               <SnippetText>15 Sec Preview</SnippetText>
-            </SnippetHolder>
+            </SnippetHolder> */}
             <TrackDetailsHolder>
               <span>Genre: {nft.genre}</span>
               <span>Producer: {nft.producer}</span>
@@ -326,9 +322,6 @@ const TrackDetailsHolder = styled.div`
   height: 125px;
   justify-content: space-around;
   padding-left: 20px;
-  @media only screen and (max-width: 776px) {
-    height: auto;
-  }
 `;
 
 const FounderBadge = styled(Founder)`
@@ -371,9 +364,6 @@ const SnippetHolder = styled.div`
   padding: 10px, 0;
   width: 100%;
   margin-top: 10px;
-  @media only screen and (max-width: 776px) {
-    width: 90%;
-  }
 `;
 
 const SnippetText = styled.span`
@@ -381,9 +371,6 @@ const SnippetText = styled.span`
   font-size: ${(props) => props.theme.fontSizes.xxs};
   margin-top: -5px;
   margin-bottom: 10px;
-  @media only screen and (max-width: 776px) {
-  margin-bottom: 0;
-  }
 `;
 
 const Loading = styled.img`
@@ -423,9 +410,6 @@ const PricesContainer = styled.div`
   justify-content: center;
   /* margin-left: 10%; */
   margin: 30px 0;
-  @media only screen and (max-width: 776px) {
-    margin: 20px 0;
-  }
 `;
 const PriceHolder = styled.div`
   display: flex;
@@ -522,9 +506,6 @@ const Side = styled.div`
   display: flex;
   align-items: center;
   margin-left: -25px;
-  @media only screen and (max-width: 776px) {
-    margin-left: 0;
-  }
 `;
 
 const IconArea = styled.div`
@@ -590,27 +571,22 @@ const RightSide = styled.div`
   align-items: center;
   width: calc(100% - 500px);
   padding: 10px 30px;
-  @media only screen and (max-width: 776px) {
-    width: 90vw;
-  }
 `;
 const StyledModal = styled.div`
   border-radius: 16px;
   border: solid 1px #181818;
   width: 800px;
+  /* width: 700px; */
+  /* height: 600px; */
+  /* padding: 10px 30px; */
   background-color: ${(props) => props.theme.bgColor};
   font-size: 16px;
   font-weight: normal;
   display: flex;
+  /* flex-direction: column; */
+  /* align-items: center; */
   justify-content: space-between;
   position: relative;
-
-  @media only screen and (max-width: 776px) {
-    width: 90vw;
-    height: 95vh;
-    flex-direction: column;
-    align-items: center;
-  }
 `;
 
 const Image = styled.img`
@@ -623,10 +599,6 @@ const Image = styled.img`
   object-fit: cover;
   overflow: hidden;
   /* margin-bottom: 16px; */
-  @media only screen and (max-width: 776px) {
-    width: 90vw;
-    height: 90vw;
-  }
 `;
 
 const BadgeHolder = styled.div`
@@ -638,9 +610,6 @@ const BadgeHolder = styled.div`
   & > span {
     padding: 0 5px;
   }
-  @media only screen and (max-width: 776px) {
-    padding-bottom: 0px;
-  }
 `;
 
 const InfoContainer = styled.div`
@@ -650,31 +619,18 @@ const InfoContainer = styled.div`
   align-items: flex-start;
   white-space: nowrap;
   /* margin-top: -10px; */
-  @media only screen and (max-width: 776px) {
-    width: 90%;
-    /* align-items: center; */
-    margin-top: -25px;
-  }
 `;
 const TrackName = styled.span`
   color: white;
   font-size: ${(props) => props.theme.fontSizes.md};
   font-weight: 600;
   margin-bottom: 6px;
-  @media only screen and (max-width: 776px) {
-    margin-top: 5px;
-    margin-bottom: 0px;
-  font-size: ${(props) => props.theme.fontSizes.sm};
-  }
 `;
 const Artist = styled(NavLink)`
   text-decoration: none;
   font-size: ${(props) => props.theme.fontSizes.sm};
   color: white;
   margin-bottom: 12px;
-  @media only screen and (max-width: 776px) {
-    margin-bottom: 0px;
-  }
 `;
 
 const Row = styled.div`
@@ -703,4 +659,4 @@ const BuyButton = styled.button`
   }
 `;
 
-export default BuyNftModal;
+export default LibraryModal;

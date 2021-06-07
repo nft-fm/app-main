@@ -9,10 +9,12 @@ import { usePlaylistConsumer } from "../../contexts/Playlist";
 import ShareModal from "../SMShareModal/SMShareModal";
 import LikeShare from "./LikeShare";
 
+import LibraryModal from "../NftModals/LibraryModal";
+
 const NftCard = (props) => {
   const { user } = useAccountConsumer();
   const { nft } = props;
-  // const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const { setNftCallback } = usePlaylistConsumer();
   const [liked, setLiked] = useState(false);
@@ -23,6 +25,10 @@ const NftCard = (props) => {
   //   setIsOpen(false);
   //   console.log("isOpen", isOpen);
   // };
+
+  const hide = () => {
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     setLikeCount(props.nft.likeCount);
@@ -36,8 +42,8 @@ const NftCard = (props) => {
         hide={() => setIsShareOpen(!isShareOpen)}
         nft={nft}
       />
-      {/* <BuyNftModal
-        open={isOpen}
+      <LibraryModal
+        open={isModalOpen}
         hide={hide}
         nft={nft}
         liked={liked}
@@ -45,7 +51,7 @@ const NftCard = (props) => {
         likeCount={likeCount}
         setLikeCount={setLikeCount}
         setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
-      /> */}
+      />
       <CardTop>
         <LikeShare
           nft={nft}
@@ -69,11 +75,12 @@ const NftCard = (props) => {
       <Image
         src={nft.imageUrl}
         alt="image"
+        onClick={() => setIsModalOpen(!isModalOpen)}
       // onClick={() => setIsOpen(!isOpen)}
       />
       <BottomWrapper>
         <Bottom>
-          <TrackName>{nft.title}</TrackName>
+          <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>{nft.title}</TrackName>
           <Artist>{nft.artist}</Artist>
         </Bottom>
         <PlayButton src={PlayIcon} onClick={() => setNftCallback(nft)} />

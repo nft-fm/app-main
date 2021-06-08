@@ -9,21 +9,13 @@ import Team from "./Components/Team";
 import RoadMap from "./Components/Roadmap";
 import send from "../../assets/img/homepage_assets/homepage_send.png"
 
-const useScroll = () => {
-  const elRef = useRef(null);
-  const executeScroll = () => elRef.current.scrollIntoView();
+import faq from "../../assets/img/litepaper_assets/faq.png"
+import litepaper from "../../assets/img/litepaper_assets/litepaper.png"
+import roadmap from "../../assets/img/litepaper_assets/roadmap.png"
+import team from "../../assets/img/litepaper_assets/team.png"
+import tokenomics from "../../assets/img/litepaper_assets/tokenomics.png"
 
-  return [executeScroll, elRef];
-};
-
-// style={{ color: "white" }}
 const Info = () => {
-  let litepaperRef = useRef()
-  let roadmapRef = useRef()
-  let faqRef = useRef()
-  let tokenomicsRef = useRef()
-  let teamsRef = useRef()
-
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
@@ -36,36 +28,42 @@ const Info = () => {
     <Switch>
       <BaseView>
         <Header1>All About NFT FM</Header1>
-
         <InfoContainer>
-          <InfoSubContainer onClick={() => handleClick("litepaperRef")}>
-            <img src={send} alt="send"/> 
-            <h3>Litepaper</h3>
-            <section>In depth review of NFT FM</section>
-          </InfoSubContainer>
-          <InfoSubContainer onClick={() => handleClick("roadmapRef")}>
-            <img src={send} alt="send"/>
-            <h3>Roadmap</h3>
-            <section>Keep track of where the project is going</section>
-          </InfoSubContainer>
+          <MobileInfo childs={2}>
+            <InfoSubContainer onClick={() => handleClick("litepaperRef")}>
+              <LinkImage src={litepaper} alt="litepaper"/> 
+              <h3>Litepaper</h3>
+              <section>In depth review of NFT FM</section>
+            </InfoSubContainer>
+            <InfoSubContainer onClick={() => handleClick("roadmapRef")}>
+              <LinkImage src={roadmap} alt="roadmap"/>
+              <h3>Roadmap</h3>
+              <section>Keep track of where the project is going</section>
+            </InfoSubContainer>
+          </MobileInfo>
+          <MobileInfo childs={2}>
           <InfoSubContainer onClick={() => handleClick("faqRef")}>
-            <img src={send} alt="send"/>
+            <LinkImage src={faq} alt="faq"/>
             <h3>FAQ</h3>
             <section>We answer your questions</section>
           </InfoSubContainer>
           <InfoSubContainer onClick={() => handleClick("tokenomicsRef")}>
-            <img src={send} alt="send"/>
+            <LinkImage src={tokenomics} alt="tokenomics"/>
             <h3>Tokenomics</h3>
             <section>How we use our token $VINYL</section>
           </InfoSubContainer>
+          </MobileInfo>
+          <MobileInfo childs={1}>
           <InfoSubContainer onClick={() => handleClick("teamsRef")}>
-            <img src={send} alt="send"/>
+            <LinkImage src={team} alt="team"/>
             <h3>Team</h3>
             <section>Meet the NFT FM Team</section>
           </InfoSubContainer>
+          </MobileInfo>
         </InfoContainer>
-        <ProjectSummary id="litepaperRef">
-          <span>NFT FM is the first Audiocentric NFT marketplace.</span>
+        <div style={{marginTop: "-19px", marginBottom: "31px"}} id="litepaperRef"/>
+        <ProjectSummary>
+          <h3>NFT FM is the first Audiocentric NFT marketplace.</h3>
           <br />
           <span>
             NFT FM allows musicians to dictate artistically and financially the
@@ -119,33 +117,62 @@ const Info = () => {
   );
 };
 
+const LinkImage = styled.img`
+transition: all 0.2s ease-in-out;
+&:hover {
+  filter: brightness(110%) contrast(105%) saturate(110%);
+}
+`
+
 const Header1 = styled.h1`
-  width: 3.125rem;
+  margin-top: 100px;
+  font-size: 3.125rem;
   color: white;
   width: 40rem;
   text-align: center;
+  @media only screen and (max-width: 400px) {
+    margin-top: 50px;
+    font-size: 2.3rem;
+  }
 `
 
 const InfoContainer = styled.div`
   display: flex;
-  padding-top: 20px;
+  width: calc(100% - 32px);
+  padding: 16px;
   flex-direction: row;
-  justify-content: space-around;
-  align-content: space-around;
+  justify-content: center;
+  align-content: center;
+  @media only screen and (min-width: 1200px) {
+    justify-content: center;
+    align-content: center;
+  }
+  @media only screen and (max-width: 500px) {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+
 `
 
 const InfoSubContainer = styled.div`
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-content: center;
-  width: 17%;
-  max-width: 160px;
+  max-width: 250px;
+  @media only screen and (max-width: 500px) {
+    padding: 8px;
+    width: calc(50%- 16px);
+    max-width: calc(50%- 16px);
+  }
   img {
     margin-left: auto;
     margin-right: auto;
-    width: 50%;
-  }
+    width: 80%;
+  } 
   h3 {
     color: white;
     text-align: center;
@@ -153,39 +180,56 @@ const InfoSubContainer = styled.div`
   section {
     color: #888888;
     text-align: center;
-    @media only screen and (max-width: 1200px) {
       height: 52px;
-    }
     @media only screen and (max-width: 776px) {
       height: 70px;
     }
+  }
+`
 
+const MobileInfo = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-content: space-around;
+  flex-direction: row;
+  @media only screen and (max-width: 500px) {
+    width: ${({childs}) => childs * 50}%;
+    display: flex;
+    flex-direction: row;
   }
 `
 
 const ProjectSummary = styled.div`
-  margin-top: 50px;
+  margin-top: 80px;
   color: white;
   border-radius: ${(props) => props.theme.borderRadius}px;
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
   width: calc(100% - 64px);
   padding: 32px;
   margin-bottom: 40px;
   border: solid 1px #262626;
   background-color: #181818;
-
+  h3 {
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 25px;
+  }
   & > span {
     padding-left: 20px;
     padding-right: 20px;
   }
   @media only screen and (max-width: 776px) {
-    width: 80vw;
-    padding: 20px;
-  & > span {
-    padding-left: 0;
-    padding-right: 0;
-  }
+    & > span {
+      padding-left: 0;
+      padding-right: 0;
+    }
+    h3 {
+      padding-left: 0px;
+      padding-right: 0  px;
+    }
   }
 `;
 
@@ -243,7 +287,7 @@ const LaunchContainer = styled.div`
   align-items: center;
   margin-top: 120px;
 
-  @media only screen and (max-width: 800px) {
+  @media only screen and (max-width: 776px) {
     margin-top: 80px;
   }  /* margin-bottom: 40px; */
 `;

@@ -80,7 +80,7 @@ const Tokenomics = () => {
       </LaunchContainer>
       <div style={{ height: "50px" }} />
       <UtilityContainer>
-        <Title>Utility </Title>
+        <Title>VINYL Utility </Title>
         <Divider />
         <BulletPoint>
           {" "}
@@ -121,7 +121,7 @@ const NftContainerRight = styled.a`
   height: 17px;
   /* width: 17px; */
   top: -13px;
-  padding: 5px 5px 3px 5px;
+  padding: 5px 8px 3px 8px;
   font: "Compita";
   background-color: ${(props) => props.theme.bgColor};
   font-size: ${(props) => props.theme.fontSizes.xs};

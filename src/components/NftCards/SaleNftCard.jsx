@@ -258,7 +258,7 @@ const NftCard = (props) => {
 const BadgeHolder = styled.div`
   width: 100%;
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
 `;
 

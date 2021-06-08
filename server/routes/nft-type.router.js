@@ -299,7 +299,7 @@ router.post("/getSnnipet", async (req, res) => {
 router.post("/featured", async (req, res) => {
   try {
     let nftTypes = await NftType.find({
-      // isFeatured: true,
+      isFeatured: true,
       isDraft: false,
       isMinted: true,
     }, {snnipet: 0}).limit(4);

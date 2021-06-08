@@ -91,21 +91,6 @@ const NftCard = (props) => {
       </BottomWrapper>
       <BottomSection>
         <BadgeHolder>
-                  <FounderBadge
-                    className="founderBadge"
-                    data-tip
-                    data-for="founderTip"
-                  />
-                  <PremiumBadge
-                    className="premiumBadge"
-                    data-tip
-                    data-for="premiumTip"
-                  />
-                  <PrereleaseBadge
-                    className="prereleaseBadge"
-                    data-tip
-                    data-for="prereleaseTip"
-                  />
           {nft.badges?.map((badge) => {
             if (badge.founder) {
               return (

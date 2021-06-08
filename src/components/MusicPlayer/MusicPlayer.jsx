@@ -52,13 +52,23 @@ const MusicPlayer = (props) => {
     return ab;
   };
 
-  const smoothTransition = (startTime, endTime) => {
+  const createGainNode = (endTime) => {
     console.log("prepare smooth transition", startTime + " and " + endTime)
     console.log("volume", volume)
-    volumeRef.current.gain.linearRampToValueAtTime(0, startTime);
-    volumeRef.current.gain.linearRampToValueAtTime(volume, startTime + 1);
-    volumeRef.current.gain.linearRampToValueAtTime(volume, endTime - 1);
-    volumeRef.current.gain.linearRampToValueAtTime(0, endTime);
+
+    const gainNode = audioContextRef.current.createGain();
+    gainNode.gain.value = 0;
+    gainNode.connect(audioContextRef.current.destination);
+    
+    const start = audioContextRef.current.currentTime;
+    gainNode.gain.linearRampToValueAtTime(0, start);
+    gainNode.gain.linearRampToValueAtTime(volume, start + 0.000001);
+    gainNode.gain.linearRampToValueAtTime(volume, endTime - 0.0000001);
+    gainNode.gain.linearRampToValueAtTime(0, endTime);
+    
+    volumeRef.current = gainNode;
+
+    return gainNode;
   }
 
   const getNextBuffer = async (prevBuffer, start, nSec) => {
@@ -101,23 +111,15 @@ const MusicPlayer = (props) => {
 
     if (!startTime) startTime = 0;
 
-    const _gainNode = volumeRef.current
-      ? volumeRef.current
-      : audioContextRef.current.createGain();
-    _gainNode.gain.value = volume;
-    _gainNode.connect(audioContextRef.current.destination);
-    volumeRef.current = _gainNode;
-
     const abSong = toArrayBuffer(songFile.data.Body.data);
     const _bufferSrc = audioContextRef.current.createBufferSource();
 
     audioContextRef.current.decodeAudioData(abSong, async (_buffer) => {
-      smoothTransition(0, _buffer.duration);
+      const gainNode = createGainNode(_buffer.duration);
       _bufferSrc.buffer = _buffer;
-      _bufferSrc.connect(_gainNode);
+      _bufferSrc.connect(gainNode);
       _bufferSrc.start(0, startTime);
 
-      console.log("in start  context", _bufferSrc);
       bufferList.current = [{time: startTime, buffer: _bufferSrc}];
       currentIndex.current = 0;
 
@@ -136,11 +138,9 @@ const MusicPlayer = (props) => {
         console.log("--buffer ended--", currentIndex.current);
         if (bufferList.length > currentIndex.current) {
           startNextBuffer(e);
-          _bufferSrc.disconnect();
         } else {
           setIsLoading(true);
           setIsPlaying(false);
-          _bufferSrc.disconnect();
           stopSong();
         }
       };
@@ -161,8 +161,6 @@ const MusicPlayer = (props) => {
       let currentBuffer = bufferList.current[currentIndex.current].buffer;
       let nextBuffer = bufferList.current[currentIndex.current + 1].buffer;
 
-      smoothTransition(0, nextBuffer.buffer.duration);
-
       currentIndex.current = currentIndex.current + 1;
 
       if (audioContextRef.current.state === "suspended" &&
@@ -170,15 +168,14 @@ const MusicPlayer = (props) => {
       )
         audioContextRef.current.resume();
 
-      nextBuffer.connect(volumeRef.current);
+      const gainNode = createGainNode(nextBuffer.buffer.duration);
+      nextBuffer.connect(gainNode);
       nextBuffer.start(0, 0);
 
       nextBuffer.onended = (e) => {
         console.log("--buffer ended--", currentIndex.current);
         if (bufferList.current.length > currentIndex.current) {
-          volumeRef.current.gain.value = 0;
           startNextBuffer(e);
-          nextBuffer.disconnect();
         } else {
           setIsLoading(true);
           setIsPlaying(false);

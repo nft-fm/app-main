@@ -6,7 +6,7 @@ import logo from "../../assets/img/logos/logo_tiny.png";
 import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
 import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
-import PlayIcon from "../../assets/img/icons/listen_play.svg";
+// import PlayIcon from "../../assets/img/icons/listen_play.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import IconMetamask from "../../assets/img/icons/metamask_icon.png";
 import loading from "../../assets/img/loading.gif";
@@ -22,6 +22,7 @@ import { ReactComponent as Premium } from "../../assets/img/Badges/premium.svg";
 import { ReactComponent as Prerelease } from "../../assets/img/Badges/prerelease.svg";
 import moment from "moment";
 import { NavLink } from "react-router-dom";
+import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.svg";
 
 const LibraryModal = ({
   open,
@@ -97,7 +98,7 @@ const LibraryModal = ({
   };
 
   const playSong = () => {
-    hide();
+    // hide();
     setNftCallback(nft);
   };
 
@@ -191,7 +192,19 @@ const LibraryModal = ({
                 </IconArea>
               </Side>
             </CardTop>
+            <InfoContainer>
+              <TrackName>{nft.title}</TrackName>
+              <Artist
+                to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}
+              >
+                {nft.artist}
+              </Artist>
+            </InfoContainer>
+            <PlayButtonMobile src={PlayIcon} onClick={() => setNftCallback(nft)} />
             <BadgeHolder>
+              <FounderBadge data-tip data-for="founderBadge" />
+              <PremiumBadge data-tip data-for="premiumBadge" />
+              <PrereleaseBadge data-tip data-for="prereleaseBadge" />
               {nft.badges?.map((badge) => {
                 if (badge.founder) {
                   return (
@@ -231,14 +244,6 @@ const LibraryModal = ({
                 Prerelease
               </ReactToolTip>
             </BadgeHolder>
-            <InfoContainer>
-              <TrackName>{nft.title}</TrackName>
-              <Artist
-                to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}
-              >
-                {nft.artist}
-              </Artist>
-            </InfoContainer>
             {/* <SnippetHolder>
               <PlaySongSnippet partialSong={partialSong} />
               <SnippetText>15 Sec Preview</SnippetText>
@@ -255,7 +260,7 @@ const LibraryModal = ({
               <DescriptionLegend>Description</DescriptionLegend>
               <DescriptionContent>alskhgyfawe,jkfbhv</DescriptionContent>
             </DescriptionHolder> */}
-            <PricesContainer>
+            {/* <PricesContainer>
               <PriceHolder>
                 <PriceItem>
                   {nft.price
@@ -268,36 +273,14 @@ const LibraryModal = ({
                 &nbsp;
                 <Eth />
               </PriceHolder>
-            </PricesContainer>
-            {!account ? (
-              <BuyButton onClick={() => connectWallet()}>
-                {/* <MetaMask src={IconMetamask} /> */}
-                <ButtonText>Connect Wallet</ButtonText>
+            </PricesContainer> */}
+            {/* {!isLoading ? (
+              <BuyButton
+                style={{ backgroundColor: "#bbb" }}
+                onClick={() => playSong()}
+              >
+                <Loading src={PlayIcon} />
               </BuyButton>
-            ) : nft.numSold !== nft.numMinted ? (
-              !isLoading ? (
-                isBought ? (
-                  <BuyButton
-                    style={{ backgroundColor: "#bbb" }}
-                    onClick={() => playSong()}
-                  >
-                    <Loading src={PlayIcon} />
-                  </BuyButton>
-                ) : (
-                  <BuyButton onClick={() => purchase(nft._id)}>
-                    <ButtonText>Purchase</ButtonText>
-                  </BuyButton>
-                )
-              ) : (
-                <BuyButton
-                  style={{
-                    backgroundColor: "#262626",
-                    border: "1px solid #383838",
-                  }}
-                >
-                  <Loading src={loading} />
-                </BuyButton>
-              )
             ) : (
               <BuyButton
                 style={{
@@ -305,9 +288,10 @@ const LibraryModal = ({
                   border: "1px solid #383838",
                 }}
               >
-                <ButtonText>Sold Out!</ButtonText>
+                <Loading src={loading} />
               </BuyButton>
-            )}
+            )} */}
+            <PlayButtonDesktop src={PlayIcon} onClick={() => setNftCallback(nft)} />
           </RightSide>
         </StyledModal>
       </Container>
@@ -315,29 +299,83 @@ const LibraryModal = ({
   );
 };
 
+
+const PlayButtonMobile = styled(PlayIcon)`
+display: none;
+  margin-top: -55px;
+  margin-left: 70%;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  & path {
+    transition: all 0.2s ease-in-out;
+    fill: ${(props) => props.theme.color.gray};
+  }
+  &:hover {
+    & path {
+      fill: #20a4fc;
+    }
+  }
+
+  @media only screen and (max-width: 776px) {
+    display: block;
+  /* width: 50px;
+  height: 50px; */
+  }
+`;
+const PlayButtonDesktop = styled(PlayIcon)`
+  margin-top: 10px;
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  & path {
+    transition: all 0.2s ease-in-out;
+    fill: ${(props) => props.theme.color.gray};
+  }
+  &:hover {
+    & path {
+      fill: #20a4fc;
+    }
+  }
+
+  @media only screen and (max-width: 776px) {
+    display: none;
+  /* width: 50px;
+  height: 50px; */
+  }
+`;
 const TrackDetailsHolder = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
   height: 125px;
-  justify-content: space-around;
+  /* justify-content: space-around; */
   padding-left: 20px;
+  /* margin-top: 10px; */
+  & > span {
+    padding-bottom: 10px;
+  }
+  @media only screen and (max-width: 776px) {
+    height: auto;
+  }
 `;
 
 const FounderBadge = styled(Founder)`
-  width: 20px;
-  height: 20px;
-  padding: 0 5px;
+  width: 30px;
+  height: 30px;
+  padding: 0 10px;
 `;
 const PremiumBadge = styled(Premium)`
-  width: 20px;
-  height: 20px;
-  padding: 0 5px;
+  width: 30px;
+  height: 30px;
+  padding: 0 10px;
 `;
 const PrereleaseBadge = styled(Prerelease)`
-  width: 20px;
-  height: 20px;
-  padding: 0 5px;
+  width: 30px;
+  height: 30px;
+  padding: 0 10px;
 `;
 
 const DescriptionHolder = styled.fieldset`
@@ -506,6 +544,9 @@ const Side = styled.div`
   display: flex;
   align-items: center;
   margin-left: -25px;
+  @media only screen and (max-width: 776px) {
+    margin-left: 0;
+  }
 `;
 
 const IconArea = styled.div`
@@ -571,6 +612,9 @@ const RightSide = styled.div`
   align-items: center;
   width: calc(100% - 500px);
   padding: 10px 30px;
+  @media only screen and (max-width: 776px) {
+    width: 90vw;
+  }
 `;
 const StyledModal = styled.div`
   border-radius: 16px;
@@ -587,6 +631,12 @@ const StyledModal = styled.div`
   /* align-items: center; */
   justify-content: space-between;
   position: relative;
+  @media only screen and (max-width: 776px) {
+    width: 90vw;
+    height: 95vh;
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const Image = styled.img`
@@ -599,17 +649,22 @@ const Image = styled.img`
   object-fit: cover;
   overflow: hidden;
   /* margin-bottom: 16px; */
+  @media only screen and (max-width: 776px) {
+    width: 90vw;
+    height: 90vw;
+  }
 `;
 
 const BadgeHolder = styled.div`
   width: 100%;
   display: flex;
-  justify-content: flex-end;
-  height: 20px;
-  padding: 10px 0;
-  & > span {
-    padding: 0 5px;
-  }
+  justify-content: center;
+  height: 40px;
+  padding: 15px 0;
+  align-items: center;
+  /* & > span {
+    padding: 0 10px;
+  } */
 `;
 
 const InfoContainer = styled.div`
@@ -618,7 +673,12 @@ const InfoContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   white-space: nowrap;
-  /* margin-top: -10px; */
+  margin-top: 20px;
+  @media only screen and (max-width: 776px) {
+    width: 90%;
+    /* align-items: center; */
+    /* margin-top: -25px; */
+  }
 `;
 const TrackName = styled.span`
   color: white;
@@ -630,7 +690,7 @@ const Artist = styled(NavLink)`
   text-decoration: none;
   font-size: ${(props) => props.theme.fontSizes.sm};
   color: white;
-  margin-bottom: 12px;
+  /* margin-bottom: 12px; */
 `;
 
 const Row = styled.div`

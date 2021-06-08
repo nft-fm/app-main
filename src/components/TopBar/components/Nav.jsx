@@ -69,6 +69,14 @@ const StyledNav = styled.nav`
   align-items: center;
   display: flex;
   font-family: "Compita";
+  @media only screen and (max-width: 776px) {
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    & > * {
+      padding-top: 10px;
+      width: calc(100vw / 4);
+    }
+  }
 `;
 
 const StyledLink = styled(NavLink)`
@@ -89,8 +97,12 @@ const StyledLink = styled(NavLink)`
     color: white;
   }
   @media only screen and (max-width: 776px) {
-    &:last-child {
+    padding-right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* &:last-child {
       padding-right: 0px;
-    }
+    } */
   }
 `;

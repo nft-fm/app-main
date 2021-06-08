@@ -192,15 +192,20 @@ const LibraryModal = ({
                 </IconArea>
               </Side>
             </CardTop>
-            <InfoContainer>
-              <TrackName>{nft.title}</TrackName>
-              <Artist
-                to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}
-              >
-                {nft.artist}
-              </Artist>
-            </InfoContainer>
-            <PlayButtonMobile src={PlayIcon} onClick={() => setNftCallback(nft)} />
+            <TitleAndPlayButton>
+              <InfoContainer>
+                <TrackName>{nft.title}</TrackName>
+                <Artist
+                  to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}
+                >
+                  {nft.artist}
+                </Artist>
+              </InfoContainer>
+              <PlayButtonMobile
+                src={PlayIcon}
+                onClick={() => setNftCallback(nft)}
+              />
+            </TitleAndPlayButton>
             <BadgeHolder>
               <FounderBadge data-tip data-for="founderBadge" />
               <PremiumBadge data-tip data-for="premiumBadge" />
@@ -291,7 +296,10 @@ const LibraryModal = ({
                 <Loading src={loading} />
               </BuyButton>
             )} */}
-            <PlayButtonDesktop src={PlayIcon} onClick={() => setNftCallback(nft)} />
+            <PlayButtonDesktop
+              src={PlayIcon}
+              onClick={() => setNftCallback(nft)}
+            />
           </RightSide>
         </StyledModal>
       </Container>
@@ -299,11 +307,17 @@ const LibraryModal = ({
   );
 };
 
+const TitleAndPlayButton = styled.div`
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+`;
 
 const PlayButtonMobile = styled(PlayIcon)`
-display: none;
-  margin-top: -55px;
-  margin-left: 70%;
+  display: none;
+  /* margin-top: -55px;
+  margin-left: 70%; */
   width: 50px;
   height: 50px;
   cursor: pointer;
@@ -320,7 +334,7 @@ display: none;
 
   @media only screen and (max-width: 776px) {
     display: block;
-  /* width: 50px;
+    /* width: 50px;
   height: 50px; */
   }
 `;
@@ -342,7 +356,7 @@ const PlayButtonDesktop = styled(PlayIcon)`
 
   @media only screen and (max-width: 776px) {
     display: none;
-  /* width: 50px;
+    /* width: 50px;
   height: 50px; */
   }
 `;
@@ -614,6 +628,8 @@ const RightSide = styled.div`
   padding: 10px 30px;
   @media only screen and (max-width: 776px) {
     width: 90vw;
+    height: calc(100vh / 2);
+    justify-content: space-between;
   }
 `;
 const StyledModal = styled.div`
@@ -636,6 +652,7 @@ const StyledModal = styled.div`
     height: 95vh;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
   }
 `;
 
@@ -673,7 +690,7 @@ const InfoContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   white-space: nowrap;
-  margin-top: 20px;
+  /* margin-top: 20px; */
   @media only screen and (max-width: 776px) {
     width: 90%;
     /* align-items: center; */

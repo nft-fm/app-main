@@ -10,7 +10,11 @@ import ShareModal from "../SMShareModal/SMShareModal";
 import LikeShare from "./LikeShare";
 
 import LibraryModal from "../NftModals/LibraryModal";
+import { ReactComponent as Founder } from "../../assets/img/Badges/founder.svg";
+import { ReactComponent as Premium } from "../../assets/img/Badges/premium.svg";
+import { ReactComponent as Prerelease } from "../../assets/img/Badges/prerelease.svg";
 
+import ReactToolTip from "react-tooltip";
 const NftCard = (props) => {
   const { user } = useAccountConsumer();
   const { nft } = props;
@@ -85,9 +89,99 @@ const NftCard = (props) => {
         </Bottom>
         <PlayButton src={PlayIcon} onClick={() => setNftCallback(nft)} />
       </BottomWrapper>
+      <BottomSection>
+        <BadgeHolder>
+                  <FounderBadge
+                    className="founderBadge"
+                    data-tip
+                    data-for="founderTip"
+                  />
+                  <PremiumBadge
+                    className="premiumBadge"
+                    data-tip
+                    data-for="premiumTip"
+                  />
+                  <PrereleaseBadge
+                    className="prereleaseBadge"
+                    data-tip
+                    data-for="prereleaseTip"
+                  />
+          {nft.badges?.map((badge) => {
+            if (badge.founder) {
+              return (
+                <>
+                  <FounderBadge
+                    className="founderBadge"
+                    data-tip
+                    data-for="founderTip"
+                  />
+                  <ReactToolTip id="founderTip" place="top" effect="solid">
+                    Founder
+                  </ReactToolTip>
+                </>
+              );
+            }
+            if (badge.premium) {
+              return (
+                <>
+                  <PremiumBadge
+                    className="premiumBadge"
+                    data-tip
+                    data-for="premiumTip"
+                  />
+                  <ReactToolTip id="premiumTip" place="top" effect="solid">
+                    Premium
+                  </ReactToolTip>
+                </>
+              );
+            }
+            if (badge.prerelease) {
+              return (
+                <>
+                  <PrereleaseBadge
+                    className="prereleaseBadge"
+                    data-tip
+                    data-for="prereleaseTip"
+                  />
+                  <ReactToolTip id="prereleaseTip" place="top" effect="solid">
+                    Prerelease
+                  </ReactToolTip>
+                </>
+              );
+            }
+          })}
+        </BadgeHolder>
+      </BottomSection>
     </Container>
   );
 };
+
+const FounderBadge = styled(Founder)`
+  width: 15px;
+  height: 15px;
+  padding: 0 5px;
+`;
+const PremiumBadge = styled(Premium)`
+  width: 15px;
+  height: 15px;
+  padding: 0 5px;
+`;
+const PrereleaseBadge = styled(Prerelease)`
+  width: 15px;
+  height: 15px;
+  padding: 0 5px;
+`;
+const BadgeHolder = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const BottomSection = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+`;
 
 const PlayButton = styled(PlayIcon)`
   width: 50px;

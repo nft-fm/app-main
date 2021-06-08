@@ -258,9 +258,8 @@ const NftCard = (props) => {
 const BadgeHolder = styled.div`
   width: 100%;
   display: flex;
-  & > span {
-    padding: 0 5px;
-  }
+  justify-content: center;
+  align-items: center;
 `;
 
 const FounderBadge = styled(Founder)`

@@ -591,7 +591,9 @@ const RightSide = styled.div`
   width: calc(100% - 500px);
   padding: 10px 30px;
   @media only screen and (max-width: 776px) {
-    width: 90vw;
+    width: 90vw;    
+    height: calc(100vh / 2);
+    justify-content: space-between;
   }
 `;
 const StyledModal = styled.div`
@@ -610,6 +612,7 @@ const StyledModal = styled.div`
     height: 95vh;
     flex-direction: column;
     align-items: center;
+  /* justify-content: flex-start; */
   }
 `;
 

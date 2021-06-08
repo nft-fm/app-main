@@ -1,8 +1,8 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useAccountConsumer } from "../Account";
 import styled from "styled-components";
-import MusicPlayer from "../../components/MusicPlayer"
-import axios from 'axios'
+import MusicPlayer from "../../components/MusicPlayer";
+import axios from "axios";
 const PlaylistContext = createContext();
 
 export const PlaylistProvider = ({ children }) => {
@@ -19,7 +19,7 @@ export const PlaylistProvider = ({ children }) => {
   const animTime = 0.45;
 
   const fetchPrevNext = async () => {
-    if (!index || index < 0) setIndex(0)
+    if (!index || index < 0) setIndex(0);
     const prevIndex = index === 0 ? nfts.length - 1 : index - 1;
     const nextIndex = index === nfts.length - 1 ? 0 : index + 1;
 
@@ -27,54 +27,54 @@ export const PlaylistProvider = ({ children }) => {
     let next_nft = _nfts[nextIndex];
     let prev_nft = _nfts[prevIndex];
     if (next_nft && !next_nft.buffer) {
-      console.log("fetching next")
-      const next_song = await axios.post("api/nft-type/getSong", { key: next_nft.address + "/" + next_nft.audioUrl.split('/').slice(-1)[0] })
-      _nfts[nextIndex] = {..._nfts[nextIndex],
-                          buffer: next_song};
+      console.log("fetching next");
+      const next_song = await axios.post("api/nft-type/getSong", {
+        key: next_nft.address + "/" + next_nft.audioUrl.split("/").slice(-1)[0],
+      });
+      _nfts[nextIndex] = { ..._nfts[nextIndex], buffer: next_song };
     }
     if (prev_nft && !prev_nft.buffer) {
-      console.log("fetching prev")
-      const prev_song = await axios.post("api/nft-type/getSong", { key: prev_nft.address + "/" + prev_nft.audioUrl.split('/').slice(-1)[0] })
-      _nfts[prevIndex] = {..._nfts[prevIndex],
-                          buffer: prev_song};
+      console.log("fetching prev");
+      const prev_song = await axios.post("api/nft-type/getSong", {
+        key: prev_nft.address + "/" + prev_nft.audioUrl.split("/").slice(-1)[0],
+      });
+      _nfts[prevIndex] = { ..._nfts[prevIndex], buffer: prev_song };
     }
     setNfts(_nfts);
-  }
+  };
 
   const setNextNft = () => {
     if (index && !nfts[index].buffer) {
       let _nfts = [...nfts];
-      _nfts[index] = {..._nfts[index],
-                      buffer: currentBuffer};
+      _nfts[index] = { ..._nfts[index], buffer: currentBuffer };
       setNfts(_nfts);
     }
     if (!index || index < 0) setIndex(0);
     const newIndex = index === nfts.length - 1 ? 0 : index + 1;
-    console.log("nEW INDEX", newIndex)
+    console.log("nEW INDEX", newIndex);
     //setSelectedNft(nfts[newIndex]);
     //setIndex(newIndex);
-  }
+  };
 
   const setPrevNft = () => {
     if (index && !nfts[index].buffer) {
       let _nfts = [...nfts];
-      _nfts[index] = {..._nfts[index],
-                      buffer: currentBuffer};
+      _nfts[index] = { ..._nfts[index], buffer: currentBuffer };
       setNfts(_nfts);
     }
     if (!index || index < 0) setIndex(0);
     const newIndex = index == 0 ? nfts.length - 1 : index - 1;
     //setSelectedNft(nfts[newIndex]);
     //setIndex(newIndex);
-  }
+  };
 
   const setNftsCallback = (_nfts) => {
-    console.log("set nfts callback")
+    console.log("set nfts callback");
     setNfts(_nfts);
-  }
+  };
 
   const setNftCallback = (_nft) => {
-    console.log("setting nft callback")
+    console.log("setting nft callback");
     if (selectedNft) {
       console.log("set with selecting");
       setSelectedNft(false);
@@ -83,30 +83,29 @@ export const PlaylistProvider = ({ children }) => {
         setSelectedNft(_nft);
         setIndex(nfts.indexOf(_nft));
         clearTimeout(timer);
-      }, 10)
-    }
-    else if (_nft) {
+      }, 10);
+    } else if (_nft) {
       console.log("set not selected");
       setSelectedNft(_nft);
       setIndex(nfts.indexOf(_nft));
       setIsOpen(true);
     }
-  }
+  };
 
   const exitPlayer = () => {
     console.log("exit player");
     setIsOpen(false);
     const timer = setTimeout(() => {
-      console.log("exit player time out")
-      setSelectedNft(null)
+      console.log("exit player time out");
+      setSelectedNft(null);
       clearTimeout(timer);
-    }, animTime * 1000)
-  }
+    }, animTime * 1000);
+  };
 
   useEffect(() => {
     console.log("selected nft changed", selectedNft);
-  }, [selectedNft])
-  useEffect(() => {  
+  }, [selectedNft]);
+  useEffect(() => {
     setNfts([]);
     setSelectedNft();
   }, [account]);
@@ -114,12 +113,16 @@ export const PlaylistProvider = ({ children }) => {
   return (
     <PlaylistContext.Provider
       value={{
-        setPrevNft, setNextNft,
-        setNftsCallback, setNftCallback,
-        setIsPreview, isOpen
-      }}>
+        setPrevNft,
+        setNextNft,
+        setNftsCallback,
+        setNftCallback,
+        setIsPreview,
+        isOpen,
+      }}
+    >
       {children}
-      {selectedNft &&
+      {selectedNft && (
         <Wrapper animTime={animTime} isOpen={isOpen}>
           <MusicPlayer
             isPreview={isPreview}
@@ -133,17 +136,18 @@ export const PlaylistProvider = ({ children }) => {
             exitPlayer={exitPlayer}
             fetchPrevNext={fetchPrevNext}
             setStatus={setStatus}
-            status={status}/>
+            status={status}
+          />
         </Wrapper>
-      }
+      )}
     </PlaylistContext.Provider>
   );
-}
+};
 
 export function usePlaylistConsumer() {
   const context = useContext(PlaylistContext);
   if (!context) {
-    throw new Error('no context')
+    throw new Error("no context");
   }
 
   return context;
@@ -154,15 +158,26 @@ const Wrapper = styled.div`
   position: fixed;
   width: 100vw;
   bottom: 0;
-  animation: ${({ isOpen, animTime }) => isOpen ? `onSetNft ${animTime}s forwards` : `onCloseNft ${animTime}s forwards`};
-  
-  bottom: ${(props) => props.isOpen ? '120px': '0px'};
+  animation: ${({ isOpen, animTime }) =>
+    isOpen
+      ? `onSetNft ${animTime}s forwards`
+      : `onCloseNft ${animTime}s forwards`};
+  z-index: 501;
+  bottom: ${(props) => (props.isOpen ? "120px" : "0px")};
   @keyframes onSetNft {
-    0% { bottom: -50px}
-    100% {bottom: 0px}
+    0% {
+      bottom: -50px;
+    }
+    100% {
+      bottom: 0px;
+    }
   }
   @keyframes onCloseNft {
-    0% { bottom: 0px}
-    100% {bottom: -100px}
+    0% {
+      bottom: 0px;
+    }
+    100% {
+      bottom: -100px;
+    }
   }
-  `;
+`;

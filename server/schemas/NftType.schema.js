@@ -67,6 +67,24 @@ const NftTypeSchema = new Schema({
     type: Number,
     default: 0,
   },
+  badges: [
+    {
+      founder: {
+        type: Boolean,
+      },
+    },
+    {
+      premium: {
+        type: Boolean,
+      },
+    },
+    {
+      prerelease: {
+        type: Boolean,
+      },
+    },
+  ],
+
   likes: [
     {
       type: String

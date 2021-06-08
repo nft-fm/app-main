@@ -21,13 +21,15 @@ router.post("/get-account", async (req, res) => {
     //This overwrites the user's database nfts with the nfts attributed to the user in the smart contract
     //handles when user's buy/sell nfts off platform
     let nfts = await getUserNfts(user.address);
-    console.log("nfts", nfts)
+    console.log("nfts", nfts);
     if (nfts) {
       user.nfts = [];
       for (nft of nfts) {
         if (nft.quantity > 0) {
           let usersNft = await NftType.findOne({ nftId: nft.id });
-          user.nfts.push({ nft: usersNft._id, quantity: nft.quantity });
+          if (usersNft) {
+            user.nfts.push({ nft: usersNft._id, quantity: nft.quantity });
+          }
         }
       }
       user.save();

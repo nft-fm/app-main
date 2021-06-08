@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { ReactComponent as PlayIcon } from '../../../assets/img/icons/listen_play.svg';
-import { ReactComponent as PauseIcon } from '../../../assets/img/icons/listen_pause.svg';
+import { ReactComponent as PlayIcon } from "../../../assets/img/icons/listen_play.svg";
+import { ReactComponent as PauseIcon } from "../../../assets/img/icons/listen_pause.svg";
 import loading from "../../../assets/img/loading.gif";
 
 import { useRef } from "react";
 import { usePlaylistConsumer } from "../../../contexts/Playlist";
 
-import AudioProgressBar from './ProgressBar'
+import AudioProgressBar from "./ProgressBar";
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
 const PlaySongSnippet = (props) => {
@@ -24,50 +24,49 @@ const PlaySongSnippet = (props) => {
       setIsPlaying(false);
       setTime(0);
       audio.currentTime = 0;
-    }
+    };
 
     audio.canplay = () => {
       let _isLoading;
-      setIsLoading(currentState=>{
-        _isLoading=currentState
-        return currentState
-      })
+      setIsLoading((currentState) => {
+        _isLoading = currentState;
+        return currentState;
+      });
 
       if (_isLoading) {
         setIsLoading(false);
         audio.play();
-      } 
-    }
+      }
+    };
 
     audioRef.current = audio;
-  }
+  };
 
   const skipTo = (pos) => {
     audioRef.current.currentTime = Math.floor(pos);
     setTime(Math.floor(pos));
-  }
+  };
 
   const playSong = () => {
     if (props.partialSong && audioRef.current) {
       audioRef.current.play();
       setIsPlaying(true);
       setIsLoading(false);
-    }
-    else {
+    } else {
       setIsLoading(true);
     }
-   }
- 
-   const stopSong = () => {
-      audioRef.current.pause();
-      setIsPlaying(false);
-   }
-  
+  };
+
+  const stopSong = () => {
+    audioRef.current.pause();
+    setIsPlaying(false);
+  };
+
   useEffect(() => {
     if (props.partialSong) {
       startSong(props.partialSong);
     }
-  }, [props.partialSong]) 
+  }, [props.partialSong]);
 
   useEffect(() => {
     let intervalId;
@@ -76,27 +75,32 @@ const PlaySongSnippet = (props) => {
         let _time = audioRef.current.currentTime || time;
         if (_time >= 15) {
           clearInterval(intervalId);
-        }
-        else {
+        } else {
           setTime(_time);
         }
-      }, 1)
+      }, 1);
     }
 
-    return () => {if (intervalId) clearInterval(intervalId)};
-  }, [isPlaying, time])
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [isPlaying, time]);
 
   useEffect(() => {
-    return () => {if (audioRef && audioRef.current) audioRef.current.pause()};
-  }, [])
+    return () => {
+      if (audioRef && audioRef.current) audioRef.current.pause();
+    };
+  }, []);
   return (
     <Wrapper>
-      {isLoading ? <Loading src={loading}/> :
-      isPlaying ?
-      <PauseButton onClick={stopSong}/> :
-      <PlayButton onClick={playSong}/>
-      }
-      <AudioProgressBar time={time} skipTo={skipTo}/>
+      <AudioProgressBar time={time} skipTo={skipTo} />
+      {isLoading ? (
+        <Loading src={loading} />
+      ) : isPlaying ? (
+        <PauseButton onClick={stopSong} />
+      ) : (
+        <PlayButton onClick={playSong} />
+      )}
     </Wrapper>
   );
 };
@@ -106,14 +110,16 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100%;
 `;
 
 const Loading = styled.img`
   width: 30px;
   height: 30px;
   & path {
-    stroke: ${props => props.theme.color.lightgray};
+    stroke: ${(props) => props.theme.color.lightgray};
   }
+  margin-top: 10px;
 `;
 
 const PauseButton = styled(PauseIcon)`
@@ -123,6 +129,7 @@ const PauseButton = styled(PauseIcon)`
   & path {
     fill: ${(props) => props.theme.color.gray};
   }
+  margin-top: 10px;
 `;
 
 const PlayButton = styled(PlayIcon)`
@@ -138,6 +145,10 @@ const PlayButton = styled(PlayIcon)`
     & path {
       fill: #20a4fc;
     }
+  }
+  margin-top: 10px;
+  @media only screen and (max-width: 776px) {
+    margin-top: 0;
   }
 `;
 

@@ -5,16 +5,11 @@ import styled from "styled-components";
 import { useAccountConsumer } from "../../../contexts/Account";
 import { useWallet } from "use-wallet";
 import { getVinylBalance } from "../../../web3/utils";
-import moment from "moment"
-
 export const Nav = () => {
   const { user } = useAccountConsumer();
 
   const { account } = useWallet();
   const [hasVinyl, setHasVinyl] = useState(false);
-  const [isPresaleTime, setIsPresaleTime] = useState(false);
-  console.log('ispresale', isPresaleTime)
-
   useEffect(() => {
     if (account) {
       getVinylBalance(
@@ -34,24 +29,16 @@ export const Nav = () => {
   //   return () => clearInterval(interval);
   // }, []);
 
+  console.log('user', user)
+
   return (
     <StyledNav>
       <StyledLink exact tab="home" activeClassName="active" to="/">
         Home
       </StyledLink>
-      {/* {isPresaleTime && ( */}
-        {/* <StyledLink
-          exact
-          tab="presale"
-          activeClassName="active"
-          to="/presale"
-        >
-          Presale
-        </StyledLink> */}
-      {/* )} */}
-      {/* <StyledLink exact tab="discover" activeClassName="active" to="/discover">
+      <StyledLink exact tab="discover" activeClassName="active" to="/discover">
         Discover
-      </StyledLink> */}
+      </StyledLink>
       <StyledLink exact tab="library" activeClassName="active" to="/library">
         Library
       </StyledLink>
@@ -82,6 +69,14 @@ const StyledNav = styled.nav`
   align-items: center;
   display: flex;
   font-family: "Compita";
+  @media only screen and (max-width: 776px) {
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    & > * {
+      padding-top: 10px;
+      width: calc(100vw / 4);
+    }
+  }
 `;
 
 const StyledLink = styled(NavLink)`
@@ -102,8 +97,12 @@ const StyledLink = styled(NavLink)`
     color: white;
   }
   @media only screen and (max-width: 776px) {
-    &:last-child {
+    padding-right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* &:last-child {
       padding-right: 0px;
-    }
+    } */
   }
 `;

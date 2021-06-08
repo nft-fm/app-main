@@ -36,9 +36,9 @@ export const Nav = () => {
       <StyledLink exact tab="home" activeClassName="active" to="/">
         Home
       </StyledLink>
-      <StyledLink exact tab="discover" activeClassName="active" to="/discover">
+      {/* <StyledLink exact tab="discover" activeClassName="active" to="/discover">
         Discover
-      </StyledLink>
+      </StyledLink> */}
       <StyledLink exact tab="library" activeClassName="active" to="/library">
         Library
       </StyledLink>

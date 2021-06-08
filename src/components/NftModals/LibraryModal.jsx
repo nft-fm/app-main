@@ -207,9 +207,6 @@ const LibraryModal = ({
               />
             </TitleAndPlayButton>
             <BadgeHolder>
-              <FounderBadge data-tip data-for="founderBadge" />
-              <PremiumBadge data-tip data-for="premiumBadge" />
-              <PrereleaseBadge data-tip data-for="prereleaseBadge" />
               {nft.badges?.map((badge) => {
                 if (badge.founder) {
                   return (

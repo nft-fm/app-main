@@ -11,18 +11,11 @@ import axios from "axios";
 import ShareModal from "../SMShareModal/SMShareModal";
 import LikeShare from "./LikeShare";
 import { NavLink } from "react-router-dom";
+import { ReactComponent as Founder } from "../../assets/img/Badges/founder.svg";
+import { ReactComponent as Premium } from "../../assets/img/Badges/premium.svg";
+import { ReactComponent as Prerelease } from "../../assets/img/Badges/prerelease.svg";
 
-import sol from "../../assets/img/nftcovers/sol_rising.gif";
-import sex from "../../assets/img/nftcovers/sex_kazoo_updated.gif";
-import touch from "../../assets/img/nftcovers/touch_id_glitch.gif";
-import here from "../../assets/img/nftcovers/here_for_a_reason_glitch.gif";
-
-const images = {
-  1: sex,
-  2: touch,
-  3: here,
-  4: sol
-}
+import ReactToolTip from "react-tooltip";
 
 const NftCard = (props) => {
   const { usdPerEth, user, account } = useAccountConsumer();
@@ -48,7 +41,7 @@ const NftCard = (props) => {
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const [partialSong, setPartialSong] = useState(false);
-  const [shareCount, setShareCount] = useState({count: 0 })
+  const [shareCount, setShareCount] = useState({ count: 0 });
   const [basicLoaded, setBasicLoaded] = useState(false);
   const [likesLoading, setLikesLoading] = useState(false);
 
@@ -57,25 +50,24 @@ const NftCard = (props) => {
     setIsModalOpen(false);
   };
 
-
   const getSnnipetAWS = async (completeNft) => {
     await axios
-    .post("/api/nft-type/getSnnipetAWS", {
-      key:
-        completeNft.address +
-        "/snnipets/" +
-        completeNft.audioUrl.split("/").slice(-1)[0]
-    })
-    .then((res) => {
-      if (!res.data) {
-        getNSeconds(props.nft);
-      } else {
-        setPartialSong(res.data);
-      }
-    })
-    .catch(err => { 
-      console.log("ERR", err)
-    })
+      .post("/api/nft-type/getSnnipetAWS", {
+        key:
+          completeNft.address +
+          "/snnipets/" +
+          completeNft.audioUrl.split("/").slice(-1)[0],
+      })
+      .then((res) => {
+        if (!res.data) {
+          getNSeconds(props.nft);
+        } else {
+          setPartialSong(res.data);
+        }
+      })
+      .catch((err) => {
+        console.log("ERR", err);
+      });
   };
 
   const getNSeconds = async (completeNft) => {
@@ -86,29 +78,29 @@ const NftCard = (props) => {
           "/" +
           completeNft.audioUrl.split("/").slice(-1)[0],
         nft: completeNft,
-        startTime: 30
+        startTime: 30,
       })
       .then((res) => {
         console.log("got snnipet");
         const songFile = res.data.Body.data;
-      
+
         setPartialSong(songFile);
       });
   };
 
   useEffect(() => {
     console.log("im here", basicLoaded);
-    if(basicLoaded) {
+    if (basicLoaded) {
       setLikesLoading(true);
     }
-  }, [account])
-  
+  }, [account]);
+
   useEffect(() => {
     if (props.nft) {
       setNft({
         ...props.nft,
       });
-      setShareCount({count: props.nft.shareCount});
+      setShareCount({ count: props.nft.shareCount });
       setLikeCount(props.nft.likeCount);
       setLiked(props.nft.liked);
       setBasicLoaded(true);
@@ -131,7 +123,6 @@ const NftCard = (props) => {
         hide={() => setIsShareOpen(!isShareOpen)}
         updateShareCount={() => setShareCount({ count: shareCount.count + 1 })}
         nft={nft}
-        
       />
       <BuyNftModal
         open={isModalOpen}
@@ -144,7 +135,7 @@ const NftCard = (props) => {
         setLikeCount={setLikeCount}
         setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
       />
-      <CardTop >
+      <CardTop>
         <LikeShare
           nft={nft}
           liked={liked}
@@ -156,78 +147,75 @@ const NftCard = (props) => {
           isLoading={likesLoading}
         />
         <Side>
-          {/* <IconArea>
-            {nft.numMinted - nft.numSold}
-            <span style={{ margin: "0 1px" }}>&nbsp;of&nbsp;</span>
-            {nft.numMinted}
-            <span style={{ margin: "0 1px" }}>&nbsp;Available</span>
-          </IconArea> */}
           <IconArea>
             {nft.numMinted - nft.numSold}
             <span style={{ margin: "0 1px" }}>&nbsp;of&nbsp;</span>
             {nft.numMinted}
             <span style={{ margin: "0 1px" }}>&nbsp;Available</span>
           </IconArea>
-          {/* <IconArea>
-            {nft.numMinted - nft.numSold}
-            <span style={{ margin: "0 1px" }}>&nbsp;of&nbsp;</span>
-            {nft.numMinted}
-            <span style={{ margin: "0 1px" }}>&nbsp;Available</span>
-          </IconArea> */}
-          {/* <IconArea>
-            {nft.numSold}
-            <span style={{ margin: "0 1px" }}>&nbsp;/&nbsp;</span>
-            {nft.numMinted}
-            <Cart onClick={() => setIsModalOpen(!isModalOpen)} />
-          </IconArea> */}
-          {/* <IconArea>
-            {20 - nft.numSold}
-            <span style={{ margin: "0 1px" }}>&nbsp;of&nbsp;</span>
-            {nft.numMinted}
-            {" "}
-            {"available"}
-            {/* <Cart onClick={() => setIsModalOpen(!isModalOpen)} /> */}
         </Side>
       </CardTop>
-      {imageLoaded ? null : (
-        <Image
-          src={loading}
-          alt="image"
-          
-        />
-      )}
-        <Image
-          // 
-          src={nft.imageUrl}
-          style={imageLoaded ? {} : { display: "none" }}
-          alt="image"
-          onClick={() => setIsModalOpen(!isModalOpen)}
-          onLoad={() => setImageLoaded(true)}
-        />
-      {!imageLoaded && images[props.nft.nftId] && (
-        <Image
-          // 
-          src={images[props.nft.nftId]}
-          style={imageLoaded ? {} : { display: "none" }}
-          alt="image"
-          onClick={() => setIsModalOpen(!isModalOpen)}
-          onLoad={() => setImageLoaded(true)}
-        />
-      )}
-
-      <TrackName
+      {imageLoaded ? null : <Image src={loading} alt="image" />}
+      <Image
+        src={nft.imageUrl}
+        style={imageLoaded ? {} : { display: "none" }}
+        alt="image"
         onClick={() => setIsModalOpen(!isModalOpen)}
-        
-      >
+        onLoad={() => setImageLoaded(true)}
+      />
+      <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>
         {nft.title}
       </TrackName>
-      <Artist
-        to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}
-        
-      >
+      <Artist to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}>
         {nft.artist}
       </Artist>
-      <CostFields>
+      <BottomSection>
+        <BadgeHolder>
+          {nft.badges?.map((badge) => {
+            if (badge.founder) {
+              return (
+                <>
+                  <FounderBadge
+                    className="founderBadge"
+                    data-tip
+                    data-for="founderTip"
+                  />
+                  <ReactToolTip id="founderTip" place="top" effect="solid">
+                    Founder
+                  </ReactToolTip>
+                </>
+              );
+            }
+            if (badge.premium) {
+              return (
+                <>
+                  <PremiumBadge
+                    className="premiumBadge"
+                    data-tip
+                    data-for="premiumTip"
+                  />
+                  <ReactToolTip id="premiumTip" place="top" effect="solid">
+                    Premium
+                  </ReactToolTip>
+                </>
+              );
+            }
+            if (badge.prerelease) {
+              return (
+                <>
+                  <PrereleaseBadge
+                    className="prereleaseBadge"
+                    data-tip
+                    data-for="prereleaseTip"
+                  />
+                  <ReactToolTip id="prereleaseTip" place="top" effect="solid">
+                    Prerelease
+                  </ReactToolTip>
+                </>
+              );
+            }
+          })}
+        </BadgeHolder>
         <CostEth>
           {nft.price !== "..."
             ? parseFloat(nft.price).toLocaleString(undefined, {
@@ -237,7 +225,7 @@ const NftCard = (props) => {
             : nft.price}
           <Eth />
         </CostEth>
-        <CostUsd>
+        {/* <CostUsd>
           {usdPerEth
             ? parseFloat(usdPerEth * nft.price).toLocaleString(undefined, {
                 minimumFractionDigits: 2,
@@ -245,8 +233,8 @@ const NftCard = (props) => {
               })
             : "..."}
           <Usd />
-        </CostUsd>
-      </CostFields>
+        </CostUsd> */}
+      </BottomSection>
       {/* <PlayButton src={PlayIcon} onClick={() => {setIsModalOpen(true)}} /> */}
     </Container>
   );
@@ -267,6 +255,28 @@ const NftCard = (props) => {
 //     }
 //   }
 // `;
+const BadgeHolder = styled.div`
+  width: 100%;
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+`;
+
+const FounderBadge = styled(Founder)`
+  width: 15px;
+  height: 15px;
+  padding: 0 5px;
+`;
+const PremiumBadge = styled(Premium)`
+  width: 15px;
+  height: 15px;
+  padding: 0 5px;
+`;
+const PrereleaseBadge = styled(Prerelease)`
+  width: 15px;
+  height: 15px;
+  padding: 0 5px;
+`;
 
 const Usd = styled(IconUsd)`
   width: 18px;
@@ -299,7 +309,7 @@ const CostEth = styled.span`
   color: white;
 `;
 
-const CostFields = styled.div`
+const BottomSection = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;

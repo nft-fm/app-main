@@ -11,6 +11,7 @@ import loading_gif from "../../../assets/img/loading.gif";
 import { ReactComponent as eth_icon } from "../../../assets/img/icons/ethereum.svg";
 // import { ReactComponent as arrow } from "../../../assets/img/icons/arrow_cropped.svg";
 // import { ReactComponent as arrow_down } from "../../../assets/img/icons/arrow_down.svg";
+import moment from "moment";
 
 import x from "../../../assets/img/icons/x.svg";
 import ImagePreview from "./ImagePreview";
@@ -36,7 +37,7 @@ const initialNftState = {
   audioUrl: "",
 };
 
-const CreateForm = ({open, hide}) => {
+const CreateForm = ({ open, hide }) => {
   const { account, user, usdPerEth } = useAccountConsumer();
   const [isLoading, setIsLoading] = useState(false);
   const [nftData, setNftData] = useState(initialNftState);
@@ -128,7 +129,7 @@ const CreateForm = ({open, hide}) => {
     if (!isComplete()) {
       return;
     }
-    let newNftData = nftData;
+    let newNftData = { ...nftData, timestamp: moment().format() }; //sets timestamp to right when the /finalize route is called
     if (curr === "USD") {
       newNftData = {
         ...nftData,
@@ -201,20 +202,22 @@ const CreateForm = ({open, hide}) => {
                 setImageFile(null);
                 setAudioFile(null);
                 setIsLoading(false);
-                swal.fire({
-                  title: "NFT Minted!",
-                  text: "It can take 2-3 minutes for the new NFT to appear on your profile.",
-                  timer: 10000,
-                }).then(() => hide())
+                swal
+                  .fire({
+                    title: "NFT Minted!",
+                    text: "It can take 2-3 minutes for the new NFT to appear on your profile.",
+                    timer: 10000,
+                  })
+                  .then(() => hide());
               }
-            ).catch(err => {
+            ).catch((err) => {
               setIsLoading(false);
               swal.fire({
                 icon: "error",
                 title: "Couldn't create NFT!",
                 text: "Please try again",
-              })
-            })
+              });
+            });
             console.log("MINT");
           } else {
             setIsLoading(false);
@@ -239,8 +242,7 @@ const CreateForm = ({open, hide}) => {
       setIsLoading(false);
       swal.fire({
         title: "Error uploading audio or image.",
-        text:
-          "Please refresh the page and try again. If the issues persists, contact NFT FM.",
+        text: "Please refresh the page and try again. If the issues persists, contact NFT FM.",
         icon: "error",
       });
     }
@@ -277,7 +279,6 @@ const CreateForm = ({open, hide}) => {
       if (curr === "USD" && Number(e.target.value) > 1000 * usdPerEth) {
         return;
       }
-      
     }
     if (e.target.name === "price") {
       curr === "ETH"
@@ -302,107 +303,111 @@ const CreateForm = ({open, hide}) => {
   if (!open) return false;
   return (
     <OpaqueFilter>
-    <FormContainer onSubmit={(e) => handleSubmit(e)}>
-      <Header>
-        <span>Create NFTs</span>
+      <FormContainer onSubmit={(e) => handleSubmit(e)}>
+        <Header>
+          <span>Create NFTs</span>
           <X src={x} onClick={() => hide()} />
-      </Header>
-      <Main>
-        <Files>
-          <ImagePreview imageFile={imageFile} />
-        </Files>
-        <Inputs autoComplete="off">
-          <TopInputs>
-            <MediaButtons>
-              <UploadAudio
-                audioFile={audioFile} setAudioFile={setAudioFile}
-                nftData={nftData} setNftData={setNftData}
-                isAudioUploaded={isAudioUploaded} setIsAudioUploaded={setIsAudioUploaded}
-                audioUploadError={audioUploadError} setAudioUploadError={setAudioUploadError}
-              />
-              <MediaButton onClick={() => handleImage()} type="button">
-                <span>Upload image</span>
-                <span>.png, .jpeg, .gif</span>
-                {imageFile && !isImageUploaded ? (
-                  <img src={loading_gif} alt="loading" />
-                ) : (
-                  <img src={upload_icon} alt="upload-file-icon" />
-                )}
-              </MediaButton>
+        </Header>
+        <Main>
+          <Files>
+            <ImagePreview imageFile={imageFile} />
+          </Files>
+          <Inputs autoComplete="off">
+            <TopInputs>
+              <MediaButtons>
+                <UploadAudio
+                  audioFile={audioFile}
+                  setAudioFile={setAudioFile}
+                  nftData={nftData}
+                  setNftData={setNftData}
+                  isAudioUploaded={isAudioUploaded}
+                  setIsAudioUploaded={setIsAudioUploaded}
+                  audioUploadError={audioUploadError}
+                  setAudioUploadError={setAudioUploadError}
+                />
+                <MediaButton onClick={() => handleImage()} type="button">
+                  <span>Upload image</span>
+                  <span>.png, .jpeg, .gif</span>
+                  {imageFile && !isImageUploaded ? (
+                    <img src={loading_gif} alt="loading" />
+                  ) : (
+                    <img src={upload_icon} alt="upload-file-icon" />
+                  )}
+                </MediaButton>
+                <StyledInput
+                  type="file"
+                  accept=".jpg,.jpeg,.png,.gif"
+                  ref={hiddenImageInput}
+                  onChange={handleImageChange}
+                  style={{ display: "none" }}
+                  defaultValue={imageFile}
+                  // required
+                />
+              </MediaButtons>
+              <FileNames>
+                <span>
+                  {audioFile?.name.length > 10
+                    ? audioFile?.name.substring(0, 10) +
+                      "-" +
+                      audioFile?.name.substring(audioFile.name.lastIndexOf("."))
+                    : audioFile?.name}
+                </span>
+                <span>
+                  {imageFile?.name.length > 10
+                    ? imageFile?.name.substring(0, 10) +
+                      "-" +
+                      imageFile?.name.substring(imageFile.name.lastIndexOf("."))
+                    : imageFile?.name}
+                </span>
+              </FileNames>
+            </TopInputs>
+            <MiddleInputs>
               <StyledInput
-                type="file"
-                accept=".jpg,.jpeg,.png,.gif"
-                ref={hiddenImageInput}
-                onChange={handleImageChange}
-                style={{ display: "none" }}
-                defaultValue={imageFile}
-                // required
-              />
-            </MediaButtons>
-            <FileNames>
-              <span>
-                {audioFile?.name.length > 10
-                  ? audioFile?.name.substring(0, 10) +
-                    "-" +
-                    audioFile?.name.substring(audioFile.name.lastIndexOf("."))
-                  : audioFile?.name}
-              </span>
-              <span>
-                {imageFile?.name.length > 10
-                  ? imageFile?.name.substring(0, 10) +
-                    "-" +
-                    imageFile?.name.substring(imageFile.name.lastIndexOf("."))
-                  : imageFile?.name}
-              </span>
-            </FileNames>
-          </TopInputs>
-          <MiddleInputs>
-            <StyledInput
-              type="text"
-              placeholder="Title"
-              name="title"
-              onChange={(e) => updateState(e)}
-              value={nftData.title}
-              required
-            />
-            <StyledInput
-              type="text"
-              placeholder="Genre"
-              name="genre"
-              onChange={(e) => updateState(e)}
-              value={nftData.genre}
-              required
-            />
-            <StyledInput
-              type="text"
-              placeholder="Producer"
-              name="producer"
-              onChange={(e) => updateState(e)}
-              value={nftData.producer}
-              required
-            />
-            <StyledInput
-              type="text"
-              placeholder="Writer"
-              name="writer"
-              onChange={(e) => updateState(e)}
-              value={nftData.writer}
-              required
-            />
-          </MiddleInputs>
-          <BottomInput>
-            <StyledDivInput1>
-              <label>Total Copies</label>
-              <StyledNumberInput
-                className="mint"
-                type="number"
-                name="numMinted"
+                type="text"
+                placeholder="Title"
+                name="title"
                 onChange={(e) => updateState(e)}
-                min="0"
-                value={nftData.numMinted === 0 ? "" : nftData.numMinted}
+                value={nftData.title}
                 required
               />
-              {/* <Spinner>
+              <StyledInput
+                type="text"
+                placeholder="Genre"
+                name="genre"
+                onChange={(e) => updateState(e)}
+                value={nftData.genre}
+                required
+              />
+              <StyledInput
+                type="text"
+                placeholder="Producer"
+                name="producer"
+                onChange={(e) => updateState(e)}
+                value={nftData.producer}
+                required
+              />
+              <StyledInput
+                type="text"
+                placeholder="Writer"
+                name="writer"
+                onChange={(e) => updateState(e)}
+                value={nftData.writer}
+                required
+              />
+            </MiddleInputs>
+            <BottomInput>
+              <StyledDivInput1>
+                <label>Total Copies</label>
+                <StyledNumberInput
+                  className="mint"
+                  type="number"
+                  name="numMinted"
+                  onChange={(e) => updateState(e)}
+                  min="0"
+                  value={nftData.numMinted === 0 ? "" : nftData.numMinted}
+                  required
+                />
+                {/* <Spinner>
                 <ArrowUp
                   onClick={() =>
                     setNftData({
@@ -421,31 +426,31 @@ const CreateForm = ({open, hide}) => {
                   }
                 />
               </Spinner> */}
-            </StyledDivInput1>
-            <StyledDivInput2>
-              <label>
-                NFT Price /ea &nbsp;
-                <EthIcon
-                  onClick={() => setCurr("ETH")}
-                  active={curr === "ETH" ? true : false}
-                />{" "}
-                {/* <UsdIcon
+              </StyledDivInput1>
+              <StyledDivInput2>
+                <label>
+                  NFT Price /ea &nbsp;
+                  <EthIcon
+                    onClick={() => setCurr("ETH")}
+                    active={curr === "ETH" ? true : false}
+                  />{" "}
+                  {/* <UsdIcon
                   onClick={() => setCurr("USD")}
                   active={curr === "USD" ? true : false}
                 /> */}
-              </label>
-              <StyledNumberInput
-                className="cost"
-                type="number"
-                name="price"
-                onChange={(e) => updateState(e)}
-                min="0"
-                max={curr === "ETH" ? "1000" : `1000 * ${usdPerEth}`}
-                step="0.0001"
-                value={nftData.price === 0 ? "" : nftData.price}
-                required
-              />
-              {/* <Spinner>
+                </label>
+                <StyledNumberInput
+                  className="cost"
+                  type="number"
+                  name="price"
+                  onChange={(e) => updateState(e)}
+                  min="0"
+                  max={curr === "ETH" ? "1000" : `1000 * ${usdPerEth}`}
+                  step="0.0001"
+                  value={nftData.price === 0 ? "" : nftData.price}
+                  required
+                />
+                {/* <Spinner>
                 <ArrowUp
                   onClick={
                     () =>
@@ -465,43 +470,44 @@ const CreateForm = ({open, hide}) => {
                   }
                 />
               </Spinner> */}
-              <span>/{curr}</span>
-              <SubText>
-                <span>
-                  ${" "}
-                  {nftData.price &&
-                    (nftData.price * usdPerEth).toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}
-                </span>
-              </SubText>
-            </StyledDivInput2>
-          </BottomInput>
-        </Inputs>
-      </Main>
-      {isLoading ? (
-        <SubmitButton type="button" 
-        style={{ filter: "saturate(.2)", cursor: "not-allowed" }}>
-          <img src={loading_gif} alt="loading" />
-        </SubmitButton>
-      ) : (
-        <SubmitButton
-          type="submit"
-          style={
-            !isComplete()
-              ? { filter: "saturate(.2)", cursor: "not-allowed" }
-              : null
-          }
-        >
-          <span>Mint NFTs!</span>
-        </SubmitButton>
-      )}
-    </FormContainer>
+                <span>/{curr}</span>
+                <SubText>
+                  <span>
+                    ${" "}
+                    {nftData.price &&
+                      (nftData.price * usdPerEth).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
+                  </span>
+                </SubText>
+              </StyledDivInput2>
+            </BottomInput>
+          </Inputs>
+        </Main>
+        {isLoading ? (
+          <SubmitButton
+            type="button"
+            style={{ filter: "saturate(.2)", cursor: "not-allowed" }}
+          >
+            <img src={loading_gif} alt="loading" />
+          </SubmitButton>
+        ) : (
+          <SubmitButton
+            type="submit"
+            style={
+              !isComplete()
+                ? { filter: "saturate(.2)", cursor: "not-allowed" }
+                : null
+            }
+          >
+            <span>Mint NFTs!</span>
+          </SubmitButton>
+        )}
+      </FormContainer>
     </OpaqueFilter>
   );
 };
-
 
 // const OpaqueFilter = styled.div`
 //   width: 100vw;
@@ -513,7 +519,6 @@ const CreateForm = ({open, hide}) => {
 //   background-color: rgba(0, 0, 0, 0.8);
 //   z-index: 500;
 // `;
-
 
 const SubText = styled.div`
   position: absolute;
@@ -800,7 +805,7 @@ const SubmitButton = styled.button`
   color: white;
   background-color: ${(props) => props.theme.color.blue};
   border: none;
-  border-radius: ${props => props.theme.borderRadius}px;
+  border-radius: ${(props) => props.theme.borderRadius}px;
   font-size: 20px;
   margin-right: auto;
   margin-left: auto;
@@ -822,7 +827,7 @@ const SubmitButton = styled.button`
 
 const MediaButton = styled.button`
   background-color: ${(props) => props.theme.color.box};
-  border-radius: ${props => props.theme.borderRadius}px;
+  border-radius: ${(props) => props.theme.borderRadius}px;
   color: ${(props) => props.theme.fontColor.gray};
   display: flex;
   flex-direction: column;
@@ -920,7 +925,7 @@ const Header = styled.div`
 const FormContainer = styled.form`
   width: 600px;
   /* height: 600px; */
-  border-radius: ${props => props.theme.borderRadius}px;
+  border-radius: ${(props) => props.theme.borderRadius}px;
   background-color: ${(props) => props.theme.color.box};
   border: 1px solid ${(props) => props.theme.color.boxBorder};
   display: flex;
@@ -939,15 +944,15 @@ const FormContainer = styled.form`
 `;
 
 const OpaqueFilter = styled.div`
-/* position: absolute; */
-width: 100%;
-height: 100%;
-position: fixed;
-background-color: rgba(0, 0, 0, 0.9);
--webkit-backdrop-filter: blur(4.6px);
-backdrop-filter: blur(4.6px);
-z-index: 10;
-top: 0;
+  /* position: absolute; */
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.9);
+  -webkit-backdrop-filter: blur(4.6px);
+  backdrop-filter: blur(4.6px);
+  z-index: 10;
+  top: 0;
 `;
 
 const X = styled.img`

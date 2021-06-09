@@ -9,10 +9,16 @@ import { usePlaylistConsumer } from "../../contexts/Playlist";
 import ShareModal from "../SMShareModal/SMShareModal";
 import LikeShare from "./LikeShare";
 
+import LibraryModal from "../NftModals/LibraryModal";
+import { ReactComponent as Founder } from "../../assets/img/Badges/founder.svg";
+import { ReactComponent as Premium } from "../../assets/img/Badges/premium.svg";
+import { ReactComponent as Prerelease } from "../../assets/img/Badges/prerelease.svg";
+
+import ReactToolTip from "react-tooltip";
 const NftCard = (props) => {
   const { user } = useAccountConsumer();
   const { nft } = props;
-  // const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const { setNftCallback } = usePlaylistConsumer();
   const [liked, setLiked] = useState(false);
@@ -23,6 +29,10 @@ const NftCard = (props) => {
   //   setIsOpen(false);
   //   console.log("isOpen", isOpen);
   // };
+
+  const hide = () => {
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     setLikeCount(props.nft.likeCount);
@@ -36,8 +46,8 @@ const NftCard = (props) => {
         hide={() => setIsShareOpen(!isShareOpen)}
         nft={nft}
       />
-      {/* <BuyNftModal
-        open={isOpen}
+      <LibraryModal
+        open={isModalOpen}
         hide={hide}
         nft={nft}
         liked={liked}
@@ -45,7 +55,7 @@ const NftCard = (props) => {
         likeCount={likeCount}
         setLikeCount={setLikeCount}
         setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
-      /> */}
+      />
       <CardTop>
         <LikeShare
           nft={nft}
@@ -69,18 +79,94 @@ const NftCard = (props) => {
       <Image
         src={nft.imageUrl}
         alt="image"
+        onClick={() => setIsModalOpen(!isModalOpen)}
       // onClick={() => setIsOpen(!isOpen)}
       />
       <BottomWrapper>
         <Bottom>
-          <TrackName>{nft.title}</TrackName>
+          <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>{nft.title}</TrackName>
           <Artist>{nft.artist}</Artist>
         </Bottom>
         <PlayButton src={PlayIcon} onClick={() => setNftCallback(nft)} />
       </BottomWrapper>
+      <BottomSection>
+        <BadgeHolder>
+          {nft.badges?.map((badge) => {
+            if (badge.founder) {
+              return (
+                <>
+                  <FounderBadge
+                    className="founderBadge"
+                    data-tip
+                    data-for="founderTip"
+                  />
+                  <ReactToolTip id="founderTip" place="top" effect="solid">
+                    Founder
+                  </ReactToolTip>
+                </>
+              );
+            }
+            if (badge.premium) {
+              return (
+                <>
+                  <PremiumBadge
+                    className="premiumBadge"
+                    data-tip
+                    data-for="premiumTip"
+                  />
+                  <ReactToolTip id="premiumTip" place="top" effect="solid">
+                    Premium
+                  </ReactToolTip>
+                </>
+              );
+            }
+            if (badge.prerelease) {
+              return (
+                <>
+                  <PrereleaseBadge
+                    className="prereleaseBadge"
+                    data-tip
+                    data-for="prereleaseTip"
+                  />
+                  <ReactToolTip id="prereleaseTip" place="top" effect="solid">
+                    Prerelease
+                  </ReactToolTip>
+                </>
+              );
+            }
+          })}
+        </BadgeHolder>
+      </BottomSection>
     </Container>
   );
 };
+
+const FounderBadge = styled(Founder)`
+  width: 15px;
+  height: 15px;
+  padding: 0 5px;
+`;
+const PremiumBadge = styled(Premium)`
+  width: 15px;
+  height: 15px;
+  padding: 0 5px;
+`;
+const PrereleaseBadge = styled(Prerelease)`
+  width: 15px;
+  height: 15px;
+  padding: 0 5px;
+`;
+const BadgeHolder = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const BottomSection = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+`;
 
 const PlayButton = styled(PlayIcon)`
   width: 50px;

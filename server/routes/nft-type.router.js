@@ -389,15 +389,12 @@ router.post("/all", async (req, res) => {
 router.post("/getSnnipetAWS", async (req, res) => {
 
   console.log("GETTING SNNIPET", req.body.key)
-  const AWS = require('aws-sdk');
   const s3 = getBucket();
 
   const params = { Bucket: "nftfm-music", Key: req.body.key, Expires: 60 * 5 };
   const url = s3.getSignedUrl('getObject', params)
-  console.log("res", url.split('?')[0]);
 
-  // res.status(200).send(url);
-  res.status(200).send(url.split('?')[0]);
+  res.status(200).send(url);
 });
 
 router.post("/uploadSnnipetS3", async (req, res) => {
@@ -604,7 +601,6 @@ router.post("/getNSecondsOfSong", async (req, res) => {
   console.log("getting n seconds");
 
   if (req.body.nft) {
-    const AWS = require("aws-sdk");
     const s3 = getBucket();
     const songFullSize = await s3
       .headObject({ Key: req.body.key, Bucket: "nftfm-music" })
@@ -645,7 +641,6 @@ router.post("/getNSecondsOfSong", async (req, res) => {
 
 router.post("/getPartialSong", async (req, res) => {
   console.log("getting partial");
-  const AWS = require("aws-sdk");
   const s3 = getBucket();
   const songFullSize = await s3
     .headObject({ Key: req.body.key, Bucket: "nftfm-music" })
@@ -679,7 +674,6 @@ router.post("/getPartialSong", async (req, res) => {
 
 router.post("/getSong", async (req, res) => {
   const start = Date.now();
-  const AWS = require("aws-sdk");
   // AWS.config.update({accessKeyId: 'id-omitted', secretAccessKey: 'key-omitted'})
 
   // Tried with and without this. Since s3 is not region-specific, I don't

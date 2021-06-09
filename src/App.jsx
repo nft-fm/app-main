@@ -51,9 +51,9 @@ const App = () => {
             <Route path="/artist">
               <Artist />
             </Route>
-            {/* <Route path="/discover">
+            <Route path="/discover">
               <Discover />
-            </Route> */}
+            </Route>
             <Route path="/community">
               <Community />
             </Route>

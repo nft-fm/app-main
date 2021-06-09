@@ -264,22 +264,26 @@ router.post("/finalize", async (req, res) => {
 router.post("/get-one", async (req, res) => {
   try {
     let { id, address } = req.body;
-    let nftType = await NftType.findById(id);
-    console.log("1", nftType);
+    let nftType = await NftType.findOne({nftId: id});
+    console.log("getone hit", id, nftType);
 
     //for some reason this isn't pulling the likeCount
-    nftType = JSON.parse(JSON.stringify(findLikes(nftType, address)));
+    // nftType = JSON.parse(JSON.stringify(findLikes(nftType, address)));
 
-    const extraInfo = await getSetSale(nftType.nftId);
+    // const extraInfo = await getSetSale(nftType.nftId);
     console.log("nftType", nftType);
-    nftType = {
-      ...nftType,
-      price: utils.formatEther(extraInfo.price),
-      quantity: extraInfo.quantity,
-      sold: extraInfo.sold,
-      likeCount: nftType.likeCount ? nftType.likeCount : nftType.likes.length,
-    };
-    res.send(nftType);
+    // nftType = {
+    //   ...nftType,
+    //   price: utils.formatEther(extraInfo.price),
+    //   quantity: extraInfo.quantity,
+    //   sold: extraInfo.sold,
+    //   likeCount: nftType.likeCount ? nftType.likeCount : nftType.likes.length,
+    // };
+    if (nftType) {
+      res.send(findLikes(nftType));
+    } else {
+      res.status(404).send('NFT not found')
+    }
   } catch (error) {
     console.log(error);
     res.status(500).send("server error");

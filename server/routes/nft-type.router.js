@@ -5,6 +5,7 @@ const { flushSync } = require("react-dom");
 const router = express.Router();
 const NftType = require("../schemas/NftType.schema");
 const multer = require("multer");
+const AWS = require('aws-sdk');
 const User = require("../schemas/User.schema");
 const { MAIN_FlatPriceSale, TEST_FlatPriceSale } = require("../web3/constants");
 const { sign, getSetSale, findLikes } = require("../web3/server-utils");
@@ -31,6 +32,13 @@ const { ObjectId } = require("mongodb");
 //   // console.log("NFTS", nfts);
 //   return nfts;
 // }
+
+const getBucket = () => {
+  return new AWS.S3({
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+  })
+}
 
 const findRemainingInfo = async (nft) => {
   const extraInfo = await getSetSale(nft.nftId);
@@ -382,7 +390,7 @@ router.post("/getSnnipetAWS", async (req, res) => {
 
   console.log("GETTING SNNIPET", req.body.key)
   const AWS = require('aws-sdk');
-  const s3 = new AWS.S3();
+  const s3 = getBucket();
 
   const params = { Bucket: "nftfm-music", Key: req.body.key, Expires: 60 * 5 };
   const url = s3.getSignedUrl('getObject', params)
@@ -397,7 +405,7 @@ router.post("/uploadSnnipetS3", async (req, res) => {
   AWS.config.region = "us-west-2";
   const multerS3 = require("multer-s3");
 
-  var s3Client = new AWS.S3();
+  var s3Client = getBucket();
 
   const fileFilter = (req, file, cb) => {
     if (file.mimetype === "audio/mpeg") {
@@ -444,7 +452,7 @@ router.post("/uploadAudioS3", async (req, res) => {
     AWS.config.region = "us-west-2";
     const multerS3 = require("multer-s3");
   
-    var s3Client = new AWS.S3();
+    var s3Client = getBucket();
   
     const fileFilter = (req, file, cb) => {
       if (file.mimetype === "audio/mpeg" || file.mimetype === "audio/wav") {
@@ -522,7 +530,7 @@ router.post("/uploadImageS3", async (req, res) => {
   AWS.config.region = "us-west-2";
   const path = require("path");
   const multerS3 = require("multer-s3");
-  var s3Client = new AWS.S3();
+  var s3Client = getBucket();
 
   const fileFilter = (req, file, cb) => {
     // if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
@@ -597,7 +605,7 @@ router.post("/getNSecondsOfSong", async (req, res) => {
 
   if (req.body.nft) {
     const AWS = require("aws-sdk");
-    const s3 = new AWS.S3();
+    const s3 = getBucket();
     const songFullSize = await s3
       .headObject({ Key: req.body.key, Bucket: "nftfm-music" })
       .promise()
@@ -638,7 +646,7 @@ router.post("/getNSecondsOfSong", async (req, res) => {
 router.post("/getPartialSong", async (req, res) => {
   console.log("getting partial");
   const AWS = require("aws-sdk");
-  const s3 = new AWS.S3();
+  const s3 = getBucket();
   const songFullSize = await s3
     .headObject({ Key: req.body.key, Bucket: "nftfm-music" })
     .promise()
@@ -682,7 +690,7 @@ router.post("/getSong", async (req, res) => {
   //const params = { Bucket: "nftfm-music", Key: req.body.key, Expires: 60 * 5 };
   //const url = s3.getSignedUrl('getObject', params)
   //res.status(200).send(url);
-  const s3 = new AWS.S3();
+  const s3 = getBucket();
 
   s3.getObject(
     { Bucket: "nftfm-music", Key: req.body.key },
@@ -713,7 +721,7 @@ router.post("/getSongList", async (req, res) => {
   const path = require("path");
 
   // AWS.config.loadFromPath(path.join(__dirname, '../aws_config.json'));
-  var s3 = new AWS.S3();
+  var s3 = getBucket();
   s3.listObjectsV2(params, function (err, data) {
     console.log(data);
     if (err) console.log(err, err.stack);

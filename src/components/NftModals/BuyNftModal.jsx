@@ -152,7 +152,7 @@ const BuyNftModal = ({
 
     var hDisplay = h > 0 ? h + ":" : "";
     var mDisplay = m > 0 ? m + ":" : "0:";
-    var sDisplay = s;
+    var sDisplay = s < 10 ? "0" + s : s;
     return hDisplay + mDisplay + sDisplay;
   };
 

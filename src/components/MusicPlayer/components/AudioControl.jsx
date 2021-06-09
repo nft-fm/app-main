@@ -22,6 +22,7 @@ const AudioControl = (props) => {
 }
 
 const SkipForward = styled(NextIcon)`
+cursor: pointer;
   width: 18px;
   height: 18px;
   & path {
@@ -33,6 +34,7 @@ const SkipForward = styled(NextIcon)`
 `;
 
 const SkipBackward = styled(NextIcon)`
+cursor: pointer;
   width: 18px;
   height: 18px;
   transform: scaleX(-1);
@@ -42,6 +44,7 @@ const SkipBackward = styled(NextIcon)`
 `;
 
 const Pause = styled(PauseIcon)`
+cursor: pointer;
   width: 36px;
   height: 36px;
   margin: 0 4px;
@@ -51,6 +54,7 @@ const Pause = styled(PauseIcon)`
 `;
 
 const Play = styled(PlayIcon)`
+cursor: pointer;
   width: 36px;
   height: 36px;
   margin: 0 4px;

@@ -100,6 +100,7 @@ const InvisibleBar = styled.div`
   top: -6px;
   left: 0;
   border-radius: 50px;
+cursor: pointer;
 `;
 
 const Toogle = styled.div`

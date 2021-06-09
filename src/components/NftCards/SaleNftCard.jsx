@@ -59,6 +59,7 @@ const NftCard = (props) => {
           completeNft.audioUrl.split("/").slice(-1)[0],
       })
       .then((res) => {
+        console.log("res", res);
         if (!res.data) {
           getNSeconds(props.nft);
         } else {

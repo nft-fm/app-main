@@ -388,7 +388,8 @@ router.post("/getSnnipetAWS", async (req, res) => {
   const url = s3.getSignedUrl('getObject', params)
   console.log("res", url.split('?')[0]);
 
-  res.status(200).send(url);
+  // res.status(200).send(url);
+  res.status(200).send(url.split('?')[0]);
 });
 
 router.post("/uploadSnnipetS3", async (req, res) => {

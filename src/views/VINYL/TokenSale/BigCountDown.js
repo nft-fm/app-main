@@ -1,7 +1,7 @@
 import React from "react";
 import moment from "moment";
 import styled from "styled-components";
-import isMobile from "../../utils/isMobile";
+import isMobile from "../../../utils/isMobile";
 
 class CountDown extends React.Component {
   constructor(props) {

@@ -22,7 +22,7 @@ const SMShareModal = ({
   const stopProp = (e) => {
     e.stopPropagation();
   };
-  const url = `https://www.nftfm.io/discover/${nft.nftId}`;
+  const url = `https://www.nftfm.io/market/${nft.nftId}`;
   const message = `Check out this amazing NFT of ${nft.artist}'s song, ${nft.title}!\nAvailable only at: `;
 
   const newShare = () => {

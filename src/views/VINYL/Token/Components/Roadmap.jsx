@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import greenCheckMark from "../../../assets/img/green_check.png";
-import grayCheckMark from "../../../assets/img/gray_check.png";
+import greenCheckMark from "../../../../assets/img/green_check.png";
+import grayCheckMark from "../../../../assets/img/gray_check.png";
 
 const Roadmap = () => {
   return (

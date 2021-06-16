@@ -5,11 +5,11 @@ import {
   getVinylBalance,
   require,
   getEthBalance,
-} from "../../web3/utils";
+} from "../../../web3/utils";
 import useWallet from "use-wallet";
 // import axios from "axios";
-import isMobile from "../../utils/isMobile";
-import { VinylAddress } from "../../web3/constants";
+import isMobile from "../../../utils/isMobile";
+import { VinylAddress } from "../../../web3/constants";
 import { ReactComponent as telegram_icon } from "../../assets/img/icons/social_telegram.svg";
 import Swal from "sweetalert2";
 

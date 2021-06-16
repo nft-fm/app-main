@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import styled, { css } from "styled-components";
-import { ReactComponent as down_arrow } from "../../../../assets/img/icons/down_arrow.svg";
+import { ReactComponent as down_arrow } from "../../../../../assets/img/icons/down_arrow.svg";
 
 //what is happening
 // import ExpandMoreIcon from '@material-ui/icons/ExpandMore';

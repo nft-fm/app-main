@@ -10,34 +10,8 @@ import { NavLink } from "react-router-dom";
 export const Footer = ({ isOpen }) => (
   <StyledFooter isOpen={isOpen}>
     <Column>
-      {/* <Row> */}
-
       <Logo src={logo} />
-      {/* <FooterLink
-            link="https://twitter.com/Blockduelers"
-            icon={twitter}
-            text="Twitter"
-          />
-          <FooterLink
-            link="https://discord.com/invite/7ww5YaYfWC"
-            icon={discord}
-            text="Discord"
-          />
-          <FooterLink
-            link="https://medium.com/@blockduelers"
-            icon={medium}
-            text="Medium"
-          />
-          <FooterLink
-            link="https://t.me/BlockDuelers"
-            icon={telegram}
-            text="Telegram"
-          /> */}
-      {/* </Row> */}
       <FooterLinks>
-        {/* <EmailLink href="mailto:info@nftfm.io" target="_blank">
-          Contact Us
-        </EmailLink> */}
         <FooterLink to="/termsofservice">Terms of Service</FooterLink>
         <ContactDiv>
           <span>2120 Oxford Ave</span>
@@ -170,5 +144,5 @@ const StyledFooter = styled.footer`
   align-items: center;
   justify-content: space-evenly;
   height: 200px;
-  background-color: ${(props) => props.theme.bgColor};
+  /* background-color: ${(props) => props.theme.bgColor}; */
 `;

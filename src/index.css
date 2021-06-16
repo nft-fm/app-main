@@ -198,11 +198,7 @@ code {
 }
 
 .pagination > li {
-  border-top: solid 2px white;
-  border-bottom: solid 2px white;
-  border-right: solid 2px white;
-  background-color: rgba(256, 256, 256, 0.08);
-  color: rgba(256, 256, 256, 0.8);
+
   cursor: pointer;
   user-select: none;
   height: 24px;
@@ -210,9 +206,7 @@ code {
   transition: all 0.1s linear;
 }
 
-.pagination > li:hover {
-  background-color: rgba(256, 256, 256, 0.16);
-}
+
 
 .pagination > li > a {
   outline: none;
@@ -237,9 +231,5 @@ code {
 
 .pagination > li:first-child {
   border-radius: 5px 0 0 5px;
-  border-left: solid 2px white;
 }
 
-.pagination > li.active {
-  background-color: rgba(0, 0, 0, 0.2);
-}

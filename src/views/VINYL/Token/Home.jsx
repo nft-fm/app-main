@@ -1,76 +1,81 @@
 import React from "react";
 import { Switch } from "react-router-dom";
 import styled from "styled-components";
-import BaseView from "../../components/Page/BaseView";
-import Landing from "./Components/Landing";
+import BaseView from "../../../components/Page/TokenView";
+// import Landing from "./Components/Landing";
 import Roadmap from "./Components/Roadmap";
 import { FAQ } from "./Components/FAQ/FAQ";
-import record from "../../assets/img/record_player_disk.png";
-import DemoImage from "./Components/DemoImage/DemoImage"
-import Swal from "sweetalert2"
+import record from "../../../assets/img/record_player_disk.png";
+import logo from "../../../assets/img/logos/logo.png";
+import Tokenomics from "./Components/Tokenomics"
+import Airdrops from "./Components/Airdrops"
 
 const Listen = () => {
-  if (window.location.hostname === "localhost" && process.env.REACT_APP_IS_MAINNET) {
-    Swal.fire({
-      title: `You are on MAINNET and LOCALHOST be careful`,
-      text: `🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆`,
-      icon: "error",
-    });
-  }
   return (
     <Switch>
       <BaseView>
-        <Landing />
-        <Divider />
-        <DescriptionBoxContainer>
-          <DescriptionColumn>
-            <StyledHeader>Welcome to NFT FM</StyledHeader>
-            <StyledSubHeader>
-              collect music from artists you know and love
-            </StyledSubHeader>
-            <StyledParagraph>
-              We are a music distribution platform dedicated to artists and fans
-              alike. We aim to add legitimacy to both the Music and the Crypto
-              industry by providing fans a way to directly support the artists
-              they love. On NFT FM, artists have full control over how they
-              distribute their music. Over 95% of all purchases go directly to
-              the Musicians.
-            </StyledParagraph>
-          </DescriptionColumn>
-          {/* <ImageImage src={record} /> */}
-          <DemoImageContainer>
-          <DemoImage />
-          </DemoImageContainer>
-        </DescriptionBoxContainer>
-        {/* <Roadmap />
-        <LaunchContainer>
-          <ContainerTitle faq>
-            <b className="first">F</b>requently<b>A</b>sked<b>Q</b>uestions
-          </ContainerTitle>
-          <ContainerOutline />
-          <FAQ />
-        </LaunchContainer> */}
+        <Landing>
+          <LandingTitle>
+            <Logo src={logo} />
+            <StyledTitle>NFT FM Community</StyledTitle>
+            <NftFmTagline>Tune in to your favorite community.</NftFmTagline>
+          </LandingTitle>
+        </Landing>
+        <Tokenomics />
+        <FAQ />
       </BaseView>
     </Switch>
   );
 };
 
+const LandingTitle = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+`;
+
+const Logo = styled.img`
+  width: 100px;
+  height: 153.84px;
+  margin-bottom: 24px;
+`;
+const StyledTitle = styled.div`
+  font-family: "Compita";
+  font-size: ${(props) => props.theme.fontSizes.xl};
+  margin-bottom: 16px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  color: white;
+  text-align: center;
+`;
+
+const NftFmTagline = styled.div`
+  padding-bottom: 20px;
+  font-size: large;
+  color: white;
+  text-align: center;
+  white-space: wrap;
+`;
+const Landing = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  /* height: calc(100vh - ${(props) => props.theme.topBarSize}px + 1px); */
+  width: 100%;
+  padding-top: 40px;
+  color: white;
+  font-size: ${(props) => props.theme.fontSizes.xs};
+`;
 const DescriptionColumn = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
 `;
 
-const DemoImageContainer = styled.div`
-  display: block;
-  height: 213px;
-  width: auto;
-  margin: auto 0 auto 20%;
-  @media only screen and (max-width: 776px) {
-    display: none;
-  }
-`
-const ImageImage = styled.img`
+const DemoImage = styled.img`
   height: 213px;
   width: auto;
   margin: auto 0 auto 20%;

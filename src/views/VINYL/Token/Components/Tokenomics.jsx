@@ -204,6 +204,11 @@ const ContainerTitle = styled.div`
   border: 4px solid #383838;
   border-radius: 20px;
   display: flex;
+  @media only screen and (max-width: 776px) {
+    left: auto;
+    margin-left: auto;
+    margin-right: auto;
+  }
 `;
 
 const ContainerOutline = styled.div`

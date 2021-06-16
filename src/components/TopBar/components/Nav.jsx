@@ -29,7 +29,7 @@ export const Nav = () => {
   //   return () => clearInterval(interval);
   // }, []);
 
-  console.log('user', user)
+  const [open, setOpen] = useState(false);
 
   return (
     <StyledNav>
@@ -45,16 +45,55 @@ export const Nav = () => {
       <StyledLink exact tab="about" activeClassName="active" to="/info">
         Info
       </StyledLink>
-      {hasVinyl && (
-        <StyledLink
-          exact
-          tab="community"
-          activeClassName="active"
-          to="/community"
-        >
-          Community
-        </StyledLink>
-      )}
+      <StyledDropdownLink
+        // exact
+        // tab="community"
+        activeClassName="active"
+        // to="/community"
+        onMouseOver={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+      >
+        VINYL
+        <Dropdown style={open ? { display: "flex" } : { display: "none" }}>
+          <Spacer />
+          <DropdownLinks>
+            <StyledLink
+              style={{ paddingRight: "0" }}
+              exact
+              tab="token"
+              activeClassName="active"
+              to="/token"
+            >
+              Token
+            </StyledLink>
+            <StyledLink
+              style={{ paddingRight: "0" }}
+              exact
+              tab="community"
+              activeClassName="active"
+              to="/community"
+            >
+              Community
+            </StyledLink>
+          </DropdownLinks>
+        </Dropdown>
+      </StyledDropdownLink>
+      <MobileCommunityLink
+        exact
+        tab="token"
+        activeClassName="active"
+        to="/token"
+      >
+        Token
+      </MobileCommunityLink>
+      <MobileCommunityLink
+        exact
+        tab="community"
+        activeClassName="active"
+        to="/community"
+      >
+        Community
+      </MobileCommunityLink>
       {user?.isArtist && (
         <StyledLink exact tab="profile" activeClassName="active" to="/profile">
           Profile
@@ -63,6 +102,53 @@ export const Nav = () => {
     </StyledNav>
   );
 };
+
+const DropdownLinks = styled.div`
+  height: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  /* background-color: #121212; */
+  background-color: rgb(18, 18, 18, 0.2);
+  border-bottom: 1px solid #232323;
+  border-left: 1px solid #232323;
+  border-right: 1px solid #232323;
+  padding: 0 10px;
+`;
+
+const Spacer = styled.div`
+  height: 21px;
+`;
+
+const StyledDropdownLink = styled.span`
+  font-size: ${(props) => props.theme.fontSizes.xs};
+  font-weight: 600;
+  letter-spacing: 1px;
+  padding-right: ${(props) => props.theme.spacing[5]}px;
+  transition: all 0.1s ease-in-out;
+  text-decoration: none;
+  color: ${(props) => props.theme.color.lightgray};
+
+  &:hover {
+    filter: brightness(125%) saturate(125%);
+  }
+  &.active {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    color: white;
+  }
+  @media only screen and (max-width: 776px) {
+    display: none;
+  }
+`;
+
+const Dropdown = styled.div`
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  margin-left: -20px;
+`;
 
 const StyledNav = styled.nav`
   justify-content: center;
@@ -76,6 +162,39 @@ const StyledNav = styled.nav`
       padding-top: 10px;
       width: calc(100vw / 4);
     }
+  }
+`;
+const MobileCommunityLink = styled(NavLink)`
+  font-size: ${(props) => props.theme.fontSizes.xs};
+  font-weight: 600;
+  letter-spacing: 1px;
+  padding-right: ${(props) => props.theme.spacing[5]}px;
+  transition: all 0.1s ease-in-out;
+  text-decoration: none;
+  color: ${(props) => props.theme.color.lightgray};
+
+  &:hover {
+    filter: brightness(125%) saturate(125%);
+  }
+  &.active {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    color: white;
+  }
+  @media only screen and (max-width: 776px) {
+    padding-right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* &:last-child {
+    padding-right: 0px;
+  } */
+  }
+  @media only screen and (min-width: 776px) {
+    display: none;
+    /* &:last-child {
+    padding-right: 0px;
+  } */
   }
 `;
 

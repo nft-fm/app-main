@@ -37,7 +37,6 @@ router.post("/verify-admin", async (req, res) => {
   }
 });
 
-
 router.post('/suggestion', async (req, res) => {
   try {
     console.log("info", req.body.address, req.body.suggestion);
@@ -100,7 +99,11 @@ router.post('/get-suggestions', async (req, res) => {
       // console.log("\n\n\nuser: ", user, suggestion)
       suggestions.push({ totalVotes, _id, userId, message, address, picture, pictureColor, nickname, upDooted, downDooted, timestamp })
     }
-    let totalPages = await Suggestion.countDocuments() / 6;
+    let totalPages = await Suggestion.countDocuments({ batch }) / 6;
+    if (!totalPages) {
+
+      totalPages = 1
+    }
     totalPages = Math.ceil(totalPages);
     // console.log("done: ", suggestions)
     res.send({ suggestions, totalPages });

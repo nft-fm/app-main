@@ -29,6 +29,8 @@ export const Nav = () => {
   //   return () => clearInterval(interval);
   // }, []);
 
+  const noPropagation = e => e.stopPropagation()
+
   const [open, setOpen] = useState(false);
 
   return (
@@ -46,18 +48,18 @@ export const Nav = () => {
         Info
       </StyledLink>
       <StyledDropdownLink
-        // exact
-        // tab="community"
-        activeClassName="active"
-        // to="/community"
+exact tab="about" activeClassName="active" to="/token"
         onMouseOver={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
       >
         VINYL
-        <Dropdown style={open ? { display: "flex" } : { display: "none" }}>
+        <Dropdown 
+        
+        style={open ? { display: "flex" } : { display: "none" }}>
           <Spacer />
           <DropdownLinks>
           <StyledA
+              onClick={noPropagation}
               style={{ paddingRight: "0" }}
               target="_blank"
               rel="noopener noreferrer"
@@ -128,7 +130,7 @@ const Spacer = styled.div`
   height: 21px;
 `;
 
-const StyledDropdownLink = styled.span`
+const StyledDropdownLink =  styled(NavLink)`
   font-size: ${(props) => props.theme.fontSizes.xs};
   font-weight: 600;
   letter-spacing: 1px;

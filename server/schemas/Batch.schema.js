@@ -10,6 +10,10 @@ const BatchSchema = new Schema({
   startTime: {
     type: Number,
     required: true
+  },
+  endTime: {
+    type: Number,
+    required: true
   }
 })
 

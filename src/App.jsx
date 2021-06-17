@@ -16,6 +16,7 @@ import Artist from "./views/Artist";
 import Error404 from "./views/404";
 import Community from "./views/VINYL/Community"
 import Token from "./views/VINYL/Token";
+import GovPolls from "./views/VINYL/GovPolls";
 
 import Info from "./views/Info";
 import TermsOfService from "./views/FooterLinks/TermsOfService"
@@ -60,6 +61,9 @@ const App = () => {
             </Route>
             <Route path="/token">
               <Token />
+            </Route>
+            <Route path='/gov-polls'>
+              <GovPolls/>
             </Route>
             <Route path="/termsofservice">
               <TermsOfService />

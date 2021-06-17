@@ -13,6 +13,8 @@ const govRouter = require('./routes/gov.router')
 const connectDB = require('./modules/db')
 const sessionMiddleware = require('./middleware/session-middleware')
 const path = require('path')
+const adminPollRouter = require('./routes/admin-poll.router')
+const vinylOwnerRouter = require('./routes/vinyl-owner.router')
 const { listenForMint } = require("./web3/mint-listener");
 
 const PORT = process.env.PORT || 5000
@@ -54,6 +56,8 @@ app.use('/api/user', userRouter)
 app.use('/api/nft-type', nftTypeRouter)
 app.use('/api/nft', nftRouter)
 app.use('/api/gov', govRouter)
+app.use('/api/vinyl-owner', vinylOwnerRouter)
+app.use('/api/admin-poll', adminPollRouter)
 
 app.get('/*', function (req, res) {
   res.sendFile(path.join(__dirname, '../build/index.html'), function (err) {

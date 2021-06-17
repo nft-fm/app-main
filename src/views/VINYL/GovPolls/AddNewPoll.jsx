@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react"
 import styled from 'styled-components'
 import axios from 'axios'
 import swal from "sweetalert2";
-import { require } from "../../web3/utils";
+import { require } from "../../../web3/utils";
 import { useWallet } from 'use-wallet'
 
 const NewOptionForm = ({ index, option, options, setOptions }) => {

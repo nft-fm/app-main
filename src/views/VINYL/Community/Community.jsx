@@ -7,7 +7,7 @@ import { useWallet } from "use-wallet";
 import useModal from "../../../hooks/useModal";
 import isMobile from "../../../utils/isMobile";
 import { require, getVinylBalance } from "../../../web3/utils";
-import { BaseView } from "../../../components/Page/TokenView";
+import { BaseView } from "../../../components/Page/BaseView";
 // import RulesModal from "./RulesModal";
 import Suggestion from "./Suggestion";
 import GovernancePolls from "./GovernancePolls";
@@ -58,6 +58,7 @@ const Community = () => {
         sort,
       })
       .then((res) => {
+        console.log("TotalPages", res.data.totalPages);
         setSuggestions(res.data.suggestions);
         setUserAlreadySuggested(res.data.userAlreadySuggested);
         setTotalPages(res.data.totalPages);
@@ -134,10 +135,8 @@ const Community = () => {
   return (
     <BaseView>
       <Container>
-        <Title>COMMING SOON</Title>
-        <Fat/>
-        {/* <Title>COMMUNITY</Title> */}
-        {/* <GovernancePolls
+        <Title>COMMUNITY</Title>
+        <GovernancePolls
           hasVinyl={hasVinyl}
           getConnectedFam={getConnectedFam}
           poll={poll}
@@ -175,6 +174,7 @@ const Community = () => {
                       value={newSuggestion}
                       onChange={(e) => (account ? handleChange(e) : null)}
                       isDesktop={isDesktop}
+                      disabled={account ? false : true}
                     />
                   </InputWrapper>
                 </Wrapper>
@@ -244,7 +244,7 @@ const Community = () => {
             />
           </Pagination>
         </LaunchContainer>
-        {!poll.question ? <Socials /> : null} */}
+        {!poll.question ? <Socials /> : null}
       </Container>
     </BaseView>
   );

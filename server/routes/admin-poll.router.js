@@ -14,6 +14,8 @@ router.post('/add-poll', async (req, res) => {
     const pollId = prevPoll[0] ? prevPoll[0].pollId + 1 : 1;
     let s = { address, question, endTime, options }
 
+    // console.log("poll?", req.body);
+
     const signingAddress = web3.eth.accounts.recover(JSON.stringify(s), sig);
 
     if (!signingAddress === address || !ADMIN_ACCOUNTS.includes(address)) {

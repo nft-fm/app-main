@@ -2,6 +2,11 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const SuggestionSchema = new Schema({
+  batch: {
+    type: Number,
+    default: 0,
+    required: true,
+  },
   userId: {
     type: Schema.Types.ObjectId,
     ref: "user",
@@ -44,3 +49,4 @@ const SuggestionSchema = new Schema({
 })
 
 module.exports = Suggestion = mongoose.model('suggestion', SuggestionSchema)
+

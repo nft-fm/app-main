@@ -35,6 +35,7 @@ const AccountContext = createContext();
 export const AccountProvider = ({ children }) => {
   const { account, connect } = useWallet();
   const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [currChainId, setCurrChainId] = useState(false);
   const [usdPerEth, setUsdPerEth] = useState(0);
   const [oneSecToLoadMetaMask, setOneSecToLoadMetaMask] = useState(false);
@@ -51,6 +52,13 @@ export const AccountProvider = ({ children }) => {
       .post(`/api/user/get-account`, { address: account })
       .then((res) => {
         setUser(res.data);
+        axios
+          .post(`/api/gov/verify-admin`, { address: account }).then(res => {
+            setIsAdmin(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       })
       .catch((err) => {
         console.log(err);
@@ -101,6 +109,7 @@ export const AccountProvider = ({ children }) => {
   return (
     <AccountContext.Provider
       value={{
+        isAdmin,
         account,
         connect,
         initialize,

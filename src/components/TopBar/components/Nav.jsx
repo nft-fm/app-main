@@ -57,6 +57,14 @@ export const Nav = () => {
         <Dropdown style={open ? { display: "flex" } : { display: "none" }}>
           <Spacer />
           <DropdownLinks>
+          <StyledA
+              style={{ paddingRight: "0" }}
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0xc17b6c92bb728259ca2f76c88a4a48ac077587f7&use=V2"
+            >
+              Buy
+            </StyledA>
             <StyledLink
               style={{ paddingRight: "0" }}
               exact
@@ -104,7 +112,7 @@ export const Nav = () => {
 };
 
 const DropdownLinks = styled.div`
-  height: 70px;
+  height: 105px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -143,7 +151,7 @@ const StyledDropdownLink = styled.span`
 `;
 
 const Dropdown = styled.div`
-  height: 120px;
+  height: 155px;
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -197,6 +205,35 @@ const MobileCommunityLink = styled(NavLink)`
   } */
   }
 `;
+
+const StyledA = styled.a`
+  font-size: ${(props) => props.theme.fontSizes.xs};
+  font-weight: 600;
+  letter-spacing: 1px;
+  padding-right: ${(props) => props.theme.spacing[5]}px;
+  transition: all 0.1s ease-in-out;
+  text-decoration: none;
+  color: ${(props) => props.theme.color.lightgray};
+
+  &:hover {
+    filter: brightness(125%) saturate(125%);
+  }
+  &.active {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    color: white;
+  }
+  @media only screen and (max-width: 776px) {
+    padding-right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* &:last-child {
+      padding-right: 0px;
+    } */
+  }
+`;
+
 
 const StyledLink = styled(NavLink)`
   font-size: ${(props) => props.theme.fontSizes.xs};

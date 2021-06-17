@@ -106,6 +106,10 @@ const Tokenomics = () => {
           &nbsp; - Token holders likes cast on the site are weighted based off
           of the quantity of $VINYL that they hold
         </BulletPoint>
+        <BulletPoint>
+          {" "}
+          &nbsp; - More coming soon!
+        </BulletPoint>
       </UtilityContainer>
     </>
   );

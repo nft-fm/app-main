@@ -10,7 +10,7 @@ const Page = ({ children }) => {
   const { isOpen } = usePlaylistConsumer();
   return (
     <StyledPage>
-      <BackgroundSection>
+      <BackgroundSection/>
       <Aesthetics>
         <Aesthetics1 />
         <Aesthetics2 />
@@ -27,7 +27,6 @@ const Page = ({ children }) => {
       </StyledMain>
       <Footer />
       {isOpen ? <Spacer/> : ''}
-      </BackgroundSection>
     </StyledPage>
   )
 }
@@ -39,7 +38,9 @@ const BackgroundSection = styled.div`
   background-image: url(${Background});
   /* background-position: center; */
   top: 0;
-  background-repeat: y;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
   /* background-size: cover; */
 `
 

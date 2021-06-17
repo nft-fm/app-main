@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch } from "react-router-dom";
 import styled from "styled-components";
-import BaseView from "../../../components/Page/TokenView";
+import BaseView from "../../../components/Page/BaseView";
 // import Landing from "./Components/Landing";
 import Roadmap from "./Components/Roadmap";
 import { FAQ } from "./Components/FAQ/FAQ";
@@ -17,8 +17,8 @@ const Listen = () => {
         <Landing>
           <LandingTitle>
             <Logo src={logo} />
-            <StyledTitle>NFT FM Community</StyledTitle>
-            <NftFmTagline>Tune in to your favorite community.</NftFmTagline>
+            <StyledTitle>Everything About $VINYL</StyledTitle>
+            {/* <NftFmTagline>Tune in to your favorite community.</NftFmTagline> */}
           </LandingTitle>
         </Landing>
         <Tokenomics />
@@ -68,7 +68,9 @@ const Landing = styled.div`
   padding-top: 40px;
   color: white;
   font-size: ${(props) => props.theme.fontSizes.xs};
+  /* z-index: 50; */
 `;
+
 const DescriptionColumn = styled.div`
   display: flex;
   flex-direction: column;

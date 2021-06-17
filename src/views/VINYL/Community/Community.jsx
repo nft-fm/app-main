@@ -7,7 +7,7 @@ import { useWallet } from "use-wallet";
 import useModal from "../../../hooks/useModal";
 import isMobile from "../../../utils/isMobile";
 import { require, getVinylBalance } from "../../../web3/utils";
-import { BaseView } from "../../../components/Page/BaseView";
+import { BaseView } from "../../../components/Page/TokenView";
 // import RulesModal from "./RulesModal";
 import Suggestion from "./Suggestion";
 import GovernancePolls from "./GovernancePolls";
@@ -134,8 +134,10 @@ const Community = () => {
   return (
     <BaseView>
       <Container>
-        <Title>COMMUNITY</Title>
-        <GovernancePolls
+        <Title>COMMING SOON</Title>
+        <Fat/>
+        {/* <Title>COMMUNITY</Title> */}
+        {/* <GovernancePolls
           hasVinyl={hasVinyl}
           getConnectedFam={getConnectedFam}
           poll={poll}
@@ -242,11 +244,15 @@ const Community = () => {
             />
           </Pagination>
         </LaunchContainer>
-        {!poll.question ? <Socials /> : null}
+        {!poll.question ? <Socials /> : null} */}
       </Container>
     </BaseView>
   );
 };
+
+const Fat = styled.div`
+flex: 1;
+`
 
 const LaunchContainer = styled.div`
   position: relative;

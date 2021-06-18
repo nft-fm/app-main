@@ -7,17 +7,22 @@ import Roadmap from "./Components/Roadmap";
 import { FAQ } from "./Components/FAQ/FAQ";
 import record from "../../../assets/img/record_player_disk.png";
 import logo from "../../../assets/img/logos/logo.png";
-import Tokenomics from "./Components/Tokenomics"
-import Airdrops from "./Components/Airdrops"
+import Tokenomics from "./Components/Tokenomics";
+import Airdrops from "./Components/Airdrops";
+import VinylLinks from "./Components/VinylLinks";
 
-const Listen = () => {
+const Vinyl = () => {
   return (
     <Switch>
       <BaseView>
         <Landing>
           <LandingTitle>
-            <Logo src={logo} />
-            <StyledTitle>Everything About $VINYL</StyledTitle>
+            {/* <Logo src={logo} /> */}
+            <StyledTitle>VINYL</StyledTitle>
+            <StyledContent>
+              Driving NFT FM forward through community interactions
+            </StyledContent>
+            <VinylLinks />
             {/* <NftFmTagline>Tune in to your favorite community.</NftFmTagline> */}
           </LandingTitle>
         </Landing>
@@ -27,6 +32,16 @@ const Listen = () => {
     </Switch>
   );
 };
+const StyledContent = styled.div`
+  width: 60%;
+  font-family: "Compita";
+  font-size: ${(props) => props.theme.fontSizes.md};
+  margin-bottom: 16px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  color: white;
+  text-align: center;
+`;
 
 const LandingTitle = styled.div`
   display: flex;
@@ -175,4 +190,4 @@ const ContainerOutline = styled.div`
   flex-direction: row;
 `;
 
-export default Listen;
+export default Vinyl;

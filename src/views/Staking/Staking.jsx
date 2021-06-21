@@ -6,6 +6,8 @@ import Swal from "sweetalert2";
 import { useWallet } from "use-wallet";
 import { getVinylBalance } from "../../web3/utils";
 import { connect } from "mongoose";
+import gold_star from "../../assets/img/icons/gold_star.png";
+import silver_star from "../../assets/img/icons/silver_star.png";
 
 const Staking = () => {
   const { account, connect } = useWallet();
@@ -21,7 +23,14 @@ const Staking = () => {
     <BaseView>
       <PageContents>
         <RewardSection>
-          <span>Rewards section goes here</span>
+          <RewardTitle>STAKING REWARDS</RewardTitle>
+          <RewardMeter>
+            <span>75/100</span>
+            <MeterProgress style={{ width: "75%" }} />
+            <RewardStar src={gold_star} alt="gold reward star" />
+          </RewardMeter>
+          {/* <img src={gold_star} />
+          <img src={silver_star} /> */}
         </RewardSection>
         <StakingSection>
           <StakingBox>
@@ -93,8 +102,51 @@ const PageContents = styled.div`
 `;
 
 const RewardSection = styled.div`
-  width: 100%;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  margin: 50px 0;
 `;
+
+const RewardTitle = styled.h3`
+  color: white;
+  font-family: "Compita";
+  padding: 0 10px 10px;
+  margin: 0;
+`;
+
+const RewardMeter = styled.div`
+  border: solid 1px #262626;
+  border-radius: ${(props) => props.theme.borderRadius}px;
+  width: 100%;
+  height: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  position: relative;
+  & > span {
+    margin-right: auto;
+    margin-left: auto;
+    z-index: 1;
+  }
+`;
+const MeterProgress = styled.div`
+  position: absolute;
+  height: 100%;
+  background-color: ${(props) => props.theme.color.green};
+  border-radius: ${(props) => props.theme.borderRadius}px;
+  left: 0;
+  z-index: 0;
+`;
+
+const RewardStar = styled.img`
+  height: 70px;
+  aspect-ratio: 1;
+  position: absolute;
+  margin: -15px -35px 0 0;
+`;
+
 const StakingSection = styled.div`
   display: flex;
   justify-content: space-between;

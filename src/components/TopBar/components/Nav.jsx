@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { useAccountConsumer } from "../../../contexts/Account";
 import { useWallet } from "use-wallet";
 import { getVinylBalance } from "../../../web3/utils";
+import { ReactComponent as IconDown } from "../../../assets/img/icons/down_arrow.svg";
 export const Nav = () => {
   const { user } = useAccountConsumer();
 
@@ -52,7 +53,7 @@ exact tab="about" activeClassName="active" to="/token"
         onMouseOver={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
       >
-        VINYL
+        VINYL <DownArrow />
         <Dropdown 
         
         style={open ? { display: "flex" } : { display: "none" }}>
@@ -112,6 +113,17 @@ exact tab="about" activeClassName="active" to="/token"
     </StyledNav>
   );
 };
+
+const DownArrow = styled(IconDown)`
+  /* margin-top: 1px; */
+  width: 10px;
+  height: 10px;
+  & path {
+    transition: all 0.2s ease-in-out;
+    fill: ${(props) => props.theme.color.lightgray};
+  }
+`;
+
 
 const DropdownLinks = styled.div`
   height: 105px;

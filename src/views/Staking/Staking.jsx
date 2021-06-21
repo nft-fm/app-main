@@ -19,6 +19,32 @@ const Staking = () => {
       );
     }
   }, [account]);
+
+  const approve = () => {
+    
+  }
+
+  const approveLP = () => {
+    
+  }
+
+  const stake = () => {
+    
+  }
+
+  const stakeLP = () => {
+    
+  }
+
+  const unstake = () => {
+    
+  }
+  const unstakeLP = () => {
+    
+  }
+
+
+
   return (
     <BaseView>
       <PageContents>

@@ -70,6 +70,15 @@ exact tab="about" activeClassName="active" to="/token"
             <StyledLink
               style={{ paddingRight: "0" }}
               exact
+              tab="staking"
+              activeClassName="active"
+              to="/staking"
+            >
+              Staking
+            </StyledLink>
+            <StyledLink
+              style={{ paddingRight: "0" }}
+              exact
               tab="token"
               activeClassName="active"
               to="/token"

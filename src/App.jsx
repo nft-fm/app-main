@@ -17,6 +17,7 @@ import Error404 from "./views/404";
 import Community from "./views/VINYL/Community"
 import Token from "./views/VINYL/Token";
 import GovPolls from "./views/VINYL/GovPolls";
+import Staking from "./views/Staking";
 
 import Info from "./views/Info";
 import TermsOfService from "./views/FooterLinks/TermsOfService"
@@ -44,6 +45,9 @@ const App = () => {
       <StyledCanvas>
         <Router>
           <Switch>
+            <Route path="/staking" exact>
+              <Staking />
+            </Route>
             <Route path="/library" exact>
               <Library />
             </Route>

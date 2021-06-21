@@ -28,8 +28,8 @@ const Listen = () => {
   const [isOpen, setIsOpen] = useState(true);
   const { account} = useAccountConsumer();
   useEffect(() => {
-    if (window.location.pathname.length > 10) {
-      axios.post("/api/nft-type/get-one", { id: window.location.pathname.slice(10), address: account })
+    if (window.location.pathname.length > 7) {
+      axios.post("/api/nft-type/get-one", { id: window.location.pathname.slice(8), address: account })
       .then((res) => {
         console.log("res", res);
         setNft(res.data);
@@ -39,7 +39,6 @@ const Listen = () => {
 
   const hide = (e) => {
     setIsOpen(false);
-    console.log("isOpen", isOpen);
   };
 
   return (

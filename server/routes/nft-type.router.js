@@ -780,4 +780,14 @@ router.post("/get-by-nftId", async (req, res) => {
   }
 })
 
+router.post("/search", async (req, res) => {
+  try {
+    console.log('/search hit', req.body.params)
+    // const getNfts = await NftType
+
+  } catch (err) {
+    res.status(500).send(err)
+  }
+})
+
 module.exports = router;

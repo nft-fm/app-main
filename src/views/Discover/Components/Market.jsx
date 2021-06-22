@@ -3,39 +3,66 @@ import styled from "styled-components";
 import axios from "axios";
 import NftCard from "../../../components/NftCards/SaleNftCard";
 import { useAccountConsumer } from "../../../contexts/Account";
-import Select from "react-dropdown-select";
 
 const Listen = () => {
   const { user, account } = useAccountConsumer();
+  const [unformattedNftData, setUnformattedNftData] = useState([]);
+  const [search, setSearch] = useState();
   const [allNfts, setAllNfts] = useState([]);
-  const [everyArtist, setEveryArtist] = useState([]);
+  const [displayedNfts, setDisplayedNfts] = useState([]);
   const formatNfts = (nftsData) => {
     return nftsData.map((nft) => <NftCard nft={nft} />);
   };
 
   const getAll = () => {
     axios.post("/api/nft-type/all", { address: account }).then((res) => {
+      setUnformattedNftData(res.data);
       const formattedNfts = formatNfts(res.data);
       for (let i = 0; i < 5; i++) {
         formattedNfts.push(<FillerCard />);
       }
+      setDisplayedNfts(formattedNfts);
       setAllNfts(formattedNfts);
-      setEveryArtist([...new Set(res.data.map((item) => item))]);
     });
   };
 
   useEffect(() => {
     getAll();
   }, [user]);
+  useEffect(() => {
+    axios
+      .post("/api/nft-type/search", { params: search })
+      .then((res) => console.log("res", res))
+      .catch((err) => console.log(err));
+  }, [search]);
 
-  const dropDownStyle = {
-    backgroundColor: "#262626",
-    color: "#3d3d3d",
-    outline: "none",
-  };
+  // useEffect(() => {
+  //   let searchResult = [];
+  //   for (let i = 0; i < unformattedNftData.length; i++) {
+  //     if (unformattedNftData[i].artist.toLowerCase().indexOf(search) >= 0) {
+  //       searchResult.push(unformattedNftData[i]);
+  //     }
+  //   }
+  //   if (searchResult.length > 0) {
+  //     for (let i = 0; i < searchResult.length; i++) {
+  //       for (let y = 0; y < unformattedNftData.length; i++) {
 
-  const [selectedArtist, setSelectedArtist] = useState([])
-  console.log("selectedArtist", selectedArtist);
+  //       }
+  //     }
+  //     const formattedNfts = formatNfts(searchResult);
+  //     for (let i = 0; i < 5; i++) {
+  //       formattedNfts.push(<FillerCard />);
+  //     }
+  //     setDisplayedNfts(formattedNfts);
+  //   }
+  //   if (searchResult === []) {
+  //     const formattedNfts = formatNfts(unformattedNftData);
+  //     for (let i = 0; i < 5; i++) {
+  //       formattedNfts.push(<FillerCard />);
+  //     }
+  //     setDisplayedNfts(formattedNfts);
+  //   }
+  // }, [search]);
 
   return (
     <LaunchContainer>
@@ -43,71 +70,30 @@ const Listen = () => {
         <span>MARKET</span>
       </ContainerTitle>
       <ContainerTitleRight>
-        <StyledSelect
-        value={[]}
-          options={everyArtist}
-          style={dropDownStyle}
-          onChange={(e) => setSelectedArtist(e)}
-        />
+        <input type="text" onChange={(e) => setSearch(e.target.value)} />
       </ContainerTitleRight>
       <ContainerOutline />
-      <NftScroll> {allNfts} </NftScroll>
+      <NftScroll> {displayedNfts} </NftScroll>
     </LaunchContainer>
   );
 };
-
-const StyledSelect = styled(Select)`
-  background: #333;
-  border: #333 !important;
-  color: #fff;
-  .react-dropdown-select-clear,
-  .react-dropdown-select-dropdown-handle {
-    color: #fff;
-  }
-  .react-dropdown-select-option {
-    border: 1px solid #fff;
-  }
-  .react-dropdown-select-item {
-    /* color: #333; */
-    color: white;
-  }
-  .react-dropdown-select-input {
-    color: #fff;
-  }
-  .react-dropdown-select-dropdown {
-    position: absolute;
-    left: 0;
-    border: none;
-    width: 500px;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    border-radius: 2px;
-    max-height: 300px;
-    overflow: auto;
-    z-index: 9;
-    background: #333;
-    box-shadow: none;
-    color: #fff !important;
-  }
-  .react-dropdown-select-item {
-    color: #f2f2f2;
-    border-bottom: 1px solid #333;
-       
-    :hover {
-       color: #ffffff80;
-    }
-  }
-  .react-dropdown-select-item.react-dropdown-select-item-selected,
-  .react-dropdown-select-item.react-dropdown-select-item-active {
-    //background: #111;
-    border-bottom: 1px solid #333;
-    color: #fff;
-    font-weight: bold;
-  }
-  .react-dropdown-select-item.react-dropdown-select-item-disabled {
-    background: #777;
-    color: #ccc;
+const ContainerTitleRight = styled.div`
+  position: absolute;
+  font-weight: 600;
+  right: calc(10% + 50px);
+  top: -17px;
+  padding: 5px 8px 3px 8px;
+  font: "Compita";
+  background-color: ${(props) => props.theme.color.boxBorder};
+  font-size: ${(props) => props.theme.fontSizes.sm};
+  color: ${(props) => (props.faq ? "#3d3d3d" : props.theme.color.gray)};
+  border: 4px solid #383838;
+  border-radius: 20px;
+  display: flex;
+  @media only screen and (max-width: 776px) {
+    left: auto;
+    margin-left: auto;
+    margin-right: auto;
   }
 `;
 
@@ -141,25 +127,6 @@ const ContainerTitle = styled.div`
   position: absolute;
   font-weight: 600;
   left: calc(10% + 50px);
-  top: -17px;
-  padding: 5px 8px 3px 8px;
-  font: "Compita";
-  background-color: ${(props) => props.theme.color.boxBorder};
-  font-size: ${(props) => props.theme.fontSizes.sm};
-  color: ${(props) => (props.faq ? "#3d3d3d" : props.theme.color.gray)};
-  border: 4px solid #383838;
-  border-radius: 20px;
-  display: flex;
-  @media only screen and (max-width: 776px) {
-    left: auto;
-    margin-left: auto;
-    margin-right: auto;
-  }
-`;
-const ContainerTitleRight = styled.div`
-  position: absolute;
-  font-weight: 600;
-  right: calc(10% + 50px);
   top: -17px;
   padding: 5px 8px 3px 8px;
   font: "Compita";

@@ -60,7 +60,7 @@ const Staking = () => {
         </RewardSection>
         <StakingSection>
           <StakingBox>
-            <StakingBoxHeader>LP</StakingBoxHeader>
+            <StakingBoxHeader>VINYL</StakingBoxHeader>
             <StakingBoxItems>
               <StakingBoxItem>
                 <StakingBoxItemText>Your Balance</StakingBoxItemText>
@@ -87,7 +87,7 @@ const Staking = () => {
             </StakingBoxItems>
           </StakingBox>
           <StakingBox>
-            <StakingBoxHeader>BitTunes</StakingBoxHeader>
+            <StakingBoxHeader>VINYL-LP</StakingBoxHeader>
             <StakingBoxItems>
               <StakingBoxItem>
                 <StakingBoxItemText>Your Balance</StakingBoxItemText>

@@ -5,7 +5,7 @@ const { flushSync } = require("react-dom");
 const router = express.Router();
 const NftType = require("../schemas/NftType.schema");
 const multer = require("multer");
-const AWS = require('aws-sdk');
+const AWS = require("aws-sdk");
 const User = require("../schemas/User.schema");
 const { MAIN_FlatPriceSale, TEST_FlatPriceSale } = require("../web3/constants");
 const { sign, getSetSale, findLikes } = require("../web3/server-utils");
@@ -35,10 +35,10 @@ const { ObjectId } = require("mongodb");
 
 const getBucket = () => {
   return new AWS.S3({
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-  })
-}
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  });
+};
 
 const findRemainingInfo = async (nft) => {
   const extraInfo = await getSetSale(nft.nftId);
@@ -98,7 +98,6 @@ router.post("/get-NFT", async (req, res) => {
       } else {
         res.send(nft);
       }
-
     }
   } catch (error) {
     console.log("fetchNFT error", error);
@@ -110,11 +109,11 @@ router.post("/get-user-nfts", async (req, res) => {
   try {
     let ids = [];
     //if user owns > 1 copy of the same nft, this whole chain of logic will get the same nft as many times as they own it
-    console.log("here nfts", req.body.nfts)
+    console.log("here nfts", req.body.nfts);
     if (!req.body.nfts || !req.body.nfts.length) {
       res.send("no nfts!");
       return;
-    } 
+    }
     for (nft of req.body.nfts) {
       console.log("nft", nft);
       if (nft.quantity > 1) {
@@ -127,10 +126,13 @@ router.post("/get-user-nfts", async (req, res) => {
     }
     const gottenNfts = [];
     for (id of ids) {
-      const getNft = await NftType.findOne({
-        _id: id,
-      }, {snnipet: 0});
-      console.log("got nft", getNft)
+      const getNft = await NftType.findOne(
+        {
+          _id: id,
+        },
+        { snnipet: 0 }
+      );
+      console.log("got nft", getNft);
       gottenNfts.push(getNft);
     }
 
@@ -148,14 +150,16 @@ const toArrayBuffer = (buf) => {
     view[i] = buf[i];
   }
   return ab;
-}
+};
 
 router.post("/finalize", async (req, res) => {
   try {
     let newData = req.body;
     console.log("newdata", newData);
     newData.isDraft = false;
-    const FlatPriceSale = process.env.REACT_APP_IS_MAINNET ? MAIN_FlatPriceSale : TEST_FlatPriceSale;
+    const FlatPriceSale = process.env.REACT_APP_IS_MAINNET
+      ? MAIN_FlatPriceSale
+      : TEST_FlatPriceSale;
     console.log("im here");
     let updateNFT = await NftType.findByIdAndUpdate(newData._id, newData);
     if (updateNFT) {
@@ -264,7 +268,7 @@ router.post("/finalize", async (req, res) => {
 router.post("/get-one", async (req, res) => {
   try {
     let { id, address } = req.body;
-    let nftType = await NftType.findOne({nftId: id});
+    let nftType = await NftType.findOne({ nftId: id });
     console.log("getone hit", id, nftType);
 
     //for some reason this isn't pulling the likeCount
@@ -282,7 +286,7 @@ router.post("/get-one", async (req, res) => {
     if (nftType) {
       res.send(findLikes(nftType));
     } else {
-      res.status(404).send('NFT not found')
+      res.status(404).send("NFT not found");
     }
   } catch (error) {
     console.log(error);
@@ -292,29 +296,35 @@ router.post("/get-one", async (req, res) => {
 
 router.post("/getSnnipet", async (req, res) => {
   try {
-    console.log("getting snnipet")
-    let nftType = await NftType.findOne({
-      // isFeatured: true,
-      nftId: req.body.nftId,
-      isDraft: false,
-      isMinted: true,
-    }, {snnipet: 1});
+    console.log("getting snnipet");
+    let nftType = await NftType.findOne(
+      {
+        // isFeatured: true,
+        nftId: req.body.nftId,
+        isDraft: false,
+        isMinted: true,
+      },
+      { snnipet: 1 }
+    );
 
-    console.log("got it", nftType)
+    console.log("got it", nftType);
     res.send(nftType);
   } catch (error) {
     console.log(error);
     res.status(500).send("server error");
   }
-})
+});
 
 router.post("/featured", async (req, res) => {
   try {
-    let nftTypes = await NftType.find({
-      isFeatured: true,
-      isDraft: false,
-      isMinted: true,
-    }, {snnipet: 0}).limit(4);
+    let nftTypes = await NftType.find(
+      {
+        isFeatured: true,
+        isDraft: false,
+        isMinted: true,
+      },
+      { snnipet: 0 }
+    ).limit(4);
 
     res.send(findLikes(nftTypes, req.body.address));
   } catch (error) {
@@ -380,9 +390,9 @@ router.post("/all", async (req, res) => {
   try {
     let nftTypes = await NftType.find({
       isDraft: false,
-      isMinted: true
+      isMinted: true,
     });
-    console.log('/all hit', nftTypes)
+    console.log("/all hit", nftTypes);
     res.send(findLikes(nftTypes, req.body.address));
   } catch (error) {
     console.log(error);
@@ -391,12 +401,11 @@ router.post("/all", async (req, res) => {
 });
 
 router.post("/getSnnipetAWS", async (req, res) => {
-
-  console.log("GETTING SNNIPET", req.body.key)
+  console.log("GETTING SNNIPET", req.body.key);
   const s3 = getBucket();
 
   const params = { Bucket: "nftfm-music", Key: req.body.key, Expires: 60 * 5 };
-  const url = s3.getSignedUrl('getObject', params)
+  const url = s3.getSignedUrl("getObject", params);
 
   res.status(200).send(url);
 });
@@ -441,20 +450,20 @@ router.post("/uploadSnnipetS3", async (req, res) => {
       console.log("singleUpload error", err);
       return res.status(500).json(err);
     } else {
-      return res.json({success: true});
+      return res.json({ success: true });
     }
   });
 });
 
 router.post("/uploadAudioS3", async (req, res) => {
-  console.log("im here")
+  console.log("im here");
   try {
     var AWS = require("aws-sdk");
     AWS.config.region = "us-west-2";
     const multerS3 = require("multer-s3");
-  
+
     var s3Client = getBucket();
-  
+
     const fileFilter = (req, file, cb) => {
       if (file.mimetype === "audio/mpeg" || file.mimetype === "audio/wav") {
         cb(null, true);
@@ -462,7 +471,7 @@ router.post("/uploadAudioS3", async (req, res) => {
         cb(new Error("Invalid file type, only MP3s are allowed!"), false);
       }
     };
-  
+
     let upload = multer({
       fileFilter,
       storage: multerS3({
@@ -487,14 +496,13 @@ router.post("/uploadAudioS3", async (req, res) => {
         console.log("singleUpload error", err);
         return res.status(500).json(err);
       } else {
-        return res.json({success: true});
+        return res.json({ success: true });
       }
     });
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
   }
-
 });
 
 //send audio file to private bucket
@@ -599,7 +607,6 @@ router.post("/handleImage", async (req, res) => {
   }
 });
 
-
 router.post("/getNSecondsOfSong", async (req, res) => {
   const _start = new Date();
   console.log("getting n seconds");
@@ -615,13 +622,17 @@ router.post("/getNSecondsOfSong", async (req, res) => {
         res.status(500).send("Couldnt retrieve nSec of music");
       });
 
-    const startTime = req.body.nft.startTime ? (songFullSize * req.body.nft.startTime) / req.body.nft.dur : 0;
+    const startTime = req.body.nft.startTime
+      ? (songFullSize * req.body.nft.startTime) / req.body.nft.dur
+      : 0;
     const nSec = req.body.nSec || 15;
-    const partialBytes = ((songFullSize * nSec) / req.body.nft.dur) + startTime;
+    const partialBytes = (songFullSize * nSec) / req.body.nft.dur + startTime;
     console.log("partial bytes", partialBytes.toFixed(0));
     console.log(req.body.nft);
     console.log("startTime", startTime.toFixed(0));
-    console.log("bytes=" + startTime.toFixed(0) + "-" + partialBytes.toFixed(0))
+    console.log(
+      "bytes=" + startTime.toFixed(0) + "-" + partialBytes.toFixed(0)
+    );
     s3.getObject(
       {
         Bucket: "nftfm-music",
@@ -634,7 +645,9 @@ router.post("/getNSecondsOfSong", async (req, res) => {
         } else {
           const _end = new Date();
 
-          console.log('Operation took ' + (_end.getTime() - _start.getTime()) + ' msec');
+          console.log(
+            "Operation took " + (_end.getTime() - _start.getTime()) + " msec"
+          );
           console.log("LOADED " + data.ContentLength + " bytes");
           res.status(200).send(data);
         }
@@ -761,33 +774,44 @@ router.post("/purchase", async (req, res) => {
 
 router.post("/newShare", async (req, res) => {
   try {
-    const getNft = await NftType.findOne({ nftId: req.body.nftId})
-    getNft.shareCount++
-    await getNft.save()
+    const getNft = await NftType.findOne({ nftId: req.body.nftId });
+    getNft.shareCount++;
+    await getNft.save();
   } catch (err) {
-    res.status(500).send(err)
+    res.status(500).send(err);
   }
-})
+});
 
 router.post("/get-by-nftId", async (req, res) => {
   try {
-    console.log('2')
-    const getNft = await NftType.findOne({ nftId: req.body.nftId})
-    console.log('3')
-    res.status(200).send(findLikes(getNft, req.body.address))
+    console.log("2");
+    const getNft = await NftType.findOne({ nftId: req.body.nftId });
+    console.log("3");
+    res.status(200).send(findLikes(getNft, req.body.address));
   } catch (err) {
-    res.status(500).send(err)
+    res.status(500).send(err);
   }
-})
+});
 
+//returns NFTs that match search params
+//queries by both artist and song title
+//$options: 'i' = case insensitive
 router.post("/search", async (req, res) => {
   try {
-    console.log('/search hit', req.body.params)
-    // const getNfts = await NftType
-
+    const getNfts = await NftType.find({
+      $or: [
+        {
+          artist: { $regex: req.body.params, $options: "i" },
+        },
+        {
+          title: { $regex: req.body.params, $options: "i" },
+        },
+      ],
+    });
+    res.send(getNfts);
   } catch (err) {
-    res.status(500).send(err)
+    res.status(500).send(err);
   }
-})
+});
 
 module.exports = router;

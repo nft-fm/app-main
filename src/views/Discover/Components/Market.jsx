@@ -30,54 +30,58 @@ const Listen = () => {
     getAll();
   }, [user]);
   useEffect(() => {
-    axios
-      .post("/api/nft-type/search", { params: search })
-      .then((res) => console.log("res", res))
-      .catch((err) => console.log(err));
+    if (search) {
+      axios
+        .post("/api/nft-type/search", { params: search })
+        .then((res) => {
+          const formattedNfts = formatNfts(res.data);
+          for (let i = 0; i < 5; i++) {
+            formattedNfts.push(<FillerCard />);
+          }
+          setDisplayedNfts(formattedNfts);
+        })
+        .catch((err) => console.log(err));
+    } else {
+      setDisplayedNfts(allNfts)
+    }
   }, [search]);
-
-  // useEffect(() => {
-  //   let searchResult = [];
-  //   for (let i = 0; i < unformattedNftData.length; i++) {
-  //     if (unformattedNftData[i].artist.toLowerCase().indexOf(search) >= 0) {
-  //       searchResult.push(unformattedNftData[i]);
-  //     }
-  //   }
-  //   if (searchResult.length > 0) {
-  //     for (let i = 0; i < searchResult.length; i++) {
-  //       for (let y = 0; y < unformattedNftData.length; i++) {
-
-  //       }
-  //     }
-  //     const formattedNfts = formatNfts(searchResult);
-  //     for (let i = 0; i < 5; i++) {
-  //       formattedNfts.push(<FillerCard />);
-  //     }
-  //     setDisplayedNfts(formattedNfts);
-  //   }
-  //   if (searchResult === []) {
-  //     const formattedNfts = formatNfts(unformattedNftData);
-  //     for (let i = 0; i < 5; i++) {
-  //       formattedNfts.push(<FillerCard />);
-  //     }
-  //     setDisplayedNfts(formattedNfts);
-  //   }
-  // }, [search]);
 
   return (
     <LaunchContainer>
-      <ContainerTitle>
+      <ContainerTitleLeft>
         <span>MARKET</span>
-      </ContainerTitle>
-      <ContainerTitleRight>
+      </ContainerTitleLeft>
+      {/* <ContainerTitlePrice onClick={() => }>
+        Price
+      </ContainerTitlePrice> */}
+      <ContainerTitleInput>
         <input type="text" onChange={(e) => setSearch(e.target.value)} />
-      </ContainerTitleRight>
+      </ContainerTitleInput>
       <ContainerOutline />
       <NftScroll> {displayedNfts} </NftScroll>
     </LaunchContainer>
   );
 };
-const ContainerTitleRight = styled.div`
+const ContainerTitlePrice = styled.div`
+  position: absolute;
+  font-weight: 600;
+  right: calc(30% + 50px);
+  top: -17px;
+  padding: 5px 8px 3px 8px;
+  font: "Compita";
+  background-color: ${(props) => props.theme.color.boxBorder};
+  font-size: ${(props) => props.theme.fontSizes.sm};
+  color: ${(props) => (props.faq ? "#3d3d3d" : props.theme.color.gray)};
+  border: 4px solid #383838;
+  border-radius: 20px;
+  display: flex;
+  @media only screen and (max-width: 776px) {
+    left: auto;
+    margin-left: auto;
+    margin-right: auto;
+  }
+`;
+const ContainerTitleInput = styled.div`
   position: absolute;
   font-weight: 600;
   right: calc(10% + 50px);
@@ -123,7 +127,7 @@ const LaunchContainer = styled.div`
   margin-bottom: 40px;
 `;
 
-const ContainerTitle = styled.div`
+const ContainerTitleLeft = styled.div`
   position: absolute;
   font-weight: 600;
   left: calc(10% + 50px);

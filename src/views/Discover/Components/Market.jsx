@@ -3,6 +3,8 @@ import styled from "styled-components";
 import axios from "axios";
 import NftCard from "../../../components/NftCards/SaleNftCard";
 import { useAccountConsumer } from "../../../contexts/Account";
+import { ReactComponent as down_arrow } from "../../../assets/img/icons/down_arrow.svg";
+import { ReactComponent as IconEth } from "../../../assets/img/icons/ethereum.svg";
 
 const Listen = () => {
   const { user, account } = useAccountConsumer();
@@ -10,6 +12,7 @@ const Listen = () => {
   const [search, setSearch] = useState();
   const [allNfts, setAllNfts] = useState([]);
   const [displayedNfts, setDisplayedNfts] = useState([]);
+  const [priceOrientation, setPriceOrientation] = useState(true);
   const formatNfts = (nftsData) => {
     return nftsData.map((nft) => <NftCard nft={nft} />);
   };
@@ -17,7 +20,11 @@ const Listen = () => {
   const getAll = () => {
     axios.post("/api/nft-type/all", { address: account }).then((res) => {
       setUnformattedNftData(res.data);
-      const formattedNfts = formatNfts(res.data);
+      const formattedNfts = formatNfts(
+        res.data.sort(function (a, b) {
+          return b.price - a.price;
+        })
+      );
       for (let i = 0; i < 5; i++) {
         formattedNfts.push(<FillerCard />);
       }
@@ -34,6 +41,7 @@ const Listen = () => {
       axios
         .post("/api/nft-type/search", { params: search })
         .then((res) => {
+          setUnformattedNftData(res.data);
           const formattedNfts = formatNfts(res.data);
           for (let i = 0; i < 5; i++) {
             formattedNfts.push(<FillerCard />);
@@ -42,31 +50,94 @@ const Listen = () => {
         })
         .catch((err) => console.log(err));
     } else {
-      setDisplayedNfts(allNfts)
+      setDisplayedNfts(allNfts);
     }
   }, [search]);
 
+  useEffect(() => {
+    if (priceOrientation) {
+      //high to low
+      const formattedNfts = formatNfts(
+        unformattedNftData.sort(function (a, b) {
+          return b.price - a.price;
+        })
+      );
+      for (let i = 0; i < 5; i++) {
+        formattedNfts.push(<FillerCard />);
+      }
+      setDisplayedNfts(formattedNfts);
+    }
+    if (!priceOrientation) {
+      //low to high
+      const formattedNfts = formatNfts(
+        unformattedNftData.sort(function (a, b) {
+          return a.price - b.price;
+        })
+      );
+      for (let i = 0; i < 5; i++) {
+        formattedNfts.push(<FillerCard />);
+      }
+      setDisplayedNfts(formattedNfts);
+    }
+  }, [priceOrientation]);
+
   return (
     <LaunchContainer>
-      <ContainerTitleLeft>
+      {/* <ContainerTitleLeft>
         <span>MARKET</span>
-      </ContainerTitleLeft>
-      {/* <ContainerTitlePrice onClick={() => }>
-        Price
-      </ContainerTitlePrice> */}
-      <ContainerTitleInput>
-        <input type="text" onChange={(e) => setSearch(e.target.value)} />
-      </ContainerTitleInput>
+      </ContainerTitleLeft> */}
+      <ContainerTitlePrice
+        onClick={() => setPriceOrientation(!priceOrientation)}
+      >
+        <Eth />
+        <Arrow
+          style={priceOrientation ? { transform: "rotate(180deg)" } : null}
+        />
+      </ContainerTitlePrice>
+      {/* <ContainerTitleInput> */}
+      <ContainerTitleInput
+        type="text"
+        placeholder="Search..."
+        onChange={(e) => setSearch(e.target.value)}
+      />
+      {/* </ContainerTitleInput> */}
       <ContainerOutline />
       <NftScroll> {displayedNfts} </NftScroll>
     </LaunchContainer>
   );
 };
+const Eth = styled(IconEth)`
+  width: 18px;
+  height: 18px;
+  & path {
+    fill: ${(props) => props.theme.color.white};
+  }
+`;
+
+const Arrow = styled(down_arrow)`
+  /* float: right; */
+  /* top: 80%;
+left: 90%; */
+  /* position: absolute; */
+  /* right: 0px; */
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  transition: all 0.2s linear;
+  margin-left: 7px;
+  margin-top: -3px;
+  & path {
+    fill: ${(props) => props.theme.color.gray};
+  }
+  @media only screen and (max-width: 776px) {
+  }
+`;
 const ContainerTitlePrice = styled.div`
+  cursor: pointer;
   position: absolute;
-  font-weight: 600;
-  right: calc(30% + 50px);
-  top: -17px;
+  left: calc(37%);
+  top: -15px;
+  height: 20px;
   padding: 5px 8px 3px 8px;
   font: "Compita";
   background-color: ${(props) => props.theme.color.boxBorder};
@@ -75,21 +146,21 @@ const ContainerTitlePrice = styled.div`
   border: 4px solid #383838;
   border-radius: 20px;
   display: flex;
+  align-items: center;
   @media only screen and (max-width: 776px) {
-    left: auto;
-    margin-left: auto;
-    margin-right: auto;
+    left: 80%;
   }
 `;
-const ContainerTitleInput = styled.div`
+const ContainerTitleInput = styled.input`
+  outline: none;
   position: absolute;
-  font-weight: 600;
-  right: calc(10% + 50px);
-  top: -17px;
+  left: calc(10% + 50px);
+  top: -15px;
   padding: 5px 8px 3px 8px;
+  height: 20px;
   font: "Compita";
   background-color: ${(props) => props.theme.color.boxBorder};
-  font-size: ${(props) => props.theme.fontSizes.sm};
+  font-size: ${(props) => props.theme.fontSizes.xs};
   color: ${(props) => (props.faq ? "#3d3d3d" : props.theme.color.gray)};
   border: 4px solid #383838;
   border-radius: 20px;

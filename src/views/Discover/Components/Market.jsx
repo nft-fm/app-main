@@ -36,6 +36,8 @@ const Listen = () => {
   useEffect(() => {
     getAll();
   }, [user]);
+
+  //search function, sorts and sets returned NFTs to displayedNfts
   useEffect(() => {
     if (search) {
       axios
@@ -54,6 +56,7 @@ const Listen = () => {
     }
   }, [search]);
 
+  //flips the orientation of price from high to low with the .sort()
   useEffect(() => {
     if (priceOrientation) {
       //high to low
@@ -83,9 +86,6 @@ const Listen = () => {
 
   return (
     <LaunchContainer>
-      {/* <ContainerTitleLeft>
-        <span>MARKET</span>
-      </ContainerTitleLeft> */}
       <ContainerTitlePrice
         onClick={() => setPriceOrientation(!priceOrientation)}
       >
@@ -94,13 +94,11 @@ const Listen = () => {
           style={priceOrientation ? { transform: "rotate(180deg)" } : null}
         />
       </ContainerTitlePrice>
-      {/* <ContainerTitleInput> */}
       <ContainerTitleInput
         type="text"
         placeholder="Search..."
         onChange={(e) => setSearch(e.target.value)}
       />
-      {/* </ContainerTitleInput> */}
       <ContainerOutline />
       <NftScroll> {displayedNfts} </NftScroll>
     </LaunchContainer>
@@ -115,11 +113,6 @@ const Eth = styled(IconEth)`
 `;
 
 const Arrow = styled(down_arrow)`
-  /* float: right; */
-  /* top: 80%;
-left: 90%; */
-  /* position: absolute; */
-  /* right: 0px; */
   width: 15px;
   height: 15px;
   cursor: pointer;

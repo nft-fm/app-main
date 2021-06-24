@@ -22,6 +22,7 @@ import { ReactComponent as Premium } from "../../assets/img/Badges/premium.svg";
 import { ReactComponent as Prerelease } from "../../assets/img/Badges/prerelease.svg";
 import moment from "moment";
 import { NavLink } from "react-router-dom";
+import ReactPlayer from "react-player";
 
 const BuyNftModal = ({
   open,
@@ -162,11 +163,20 @@ const BuyNftModal = ({
       <Container onClick={(e) => stopProp(e)}>
         <StyledModal>
           <X onClick={(e) => hide(e)} />
-          {/* <CardTitle>
-            <Logo src={logo} />
-            Buy NFT
-          </CardTitle> */}
-          <Image src={nft.imageUrl} alt="image" />
+          {/* if videoUrl exists, render video instead of image */}
+          {nft.videoUrl ? (
+            <ReactPlayer
+              url={nft.videoUrl}
+              controls="true"
+              playing="true"
+              loop="true"
+              width="500px"
+              height="500px"
+              style={{ marginTop: "auto", marginBottom: "auto" }}
+            />
+          ) : (
+            <Image src={nft.imageUrl} alt="image" />
+          )}
           <RightSide>
             <CardTop>
               <Side>
@@ -379,7 +389,7 @@ const SnippetText = styled.span`
   margin-top: -5px;
   margin-bottom: 10px;
   @media only screen and (max-width: 776px) {
-  margin-bottom: 0;
+    margin-bottom: 0;
   }
 `;
 
@@ -588,7 +598,7 @@ const RightSide = styled.div`
   width: calc(100% - 500px);
   padding: 10px 30px;
   @media only screen and (max-width: 776px) {
-    width: 90vw;    
+    width: 90vw;
     height: calc(100vh / 2);
     justify-content: space-between;
   }
@@ -609,7 +619,7 @@ const StyledModal = styled.div`
     height: 95vh;
     flex-direction: column;
     align-items: center;
-  /* justify-content: flex-start; */
+    /* justify-content: flex-start; */
   }
 `;
 
@@ -664,7 +674,7 @@ const TrackName = styled.span`
   @media only screen and (max-width: 776px) {
     margin-top: 5px;
     margin-bottom: 0px;
-  font-size: ${(props) => props.theme.fontSizes.sm};
+    font-size: ${(props) => props.theme.fontSizes.sm};
   }
 `;
 const Artist = styled(NavLink)`

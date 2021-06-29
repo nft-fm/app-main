@@ -1,8 +1,8 @@
-const express = require('express')
-const router = express.Router()
-const NftType = require('../schemas/NftType.schema')
+const express = require("express");
+const router = express.Router();
+const NftType = require("../schemas/NftType.schema");
 
-router.get('/:id', async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const nft = await NftType.findOne({ nftId: id });
@@ -18,7 +18,8 @@ router.get('/:id', async (req, res) => {
           trait_type: "Genre",
           value: nft.genre,
         },
-      ]
+      ];
+      console.log('nft', nft)
       const data = nft.videoUrl
         ? {
             name: nft.artist + " - " + nft.title,
@@ -36,10 +37,10 @@ router.get('/:id', async (req, res) => {
 
       res.send(data);
     }
-    } catch (error) {
-        console.log(error);
-        res.status(500).send("server error");
-}
-})
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("server error");
+  }
+});
 
-module.exports = router
+module.exports = router;

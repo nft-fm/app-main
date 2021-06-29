@@ -9,7 +9,7 @@ import { ReactComponent as IconEth } from "../../../assets/img/icons/ethereum.sv
 const Listen = () => {
   const { user, account } = useAccountConsumer();
   const [unformattedNftData, setUnformattedNftData] = useState([]);
-  const [search, setSearch] = useState();
+  const [search, setSearch] = useState("");
   const [allNfts, setAllNfts] = useState([]);
   const [displayedNfts, setDisplayedNfts] = useState([]);
   const [priceOrientation, setPriceOrientation] = useState(true);
@@ -20,6 +20,7 @@ const Listen = () => {
   const getAll = () => {
     axios.post("/api/nft-type/all", { address: account }).then((res) => {
       setUnformattedNftData(res.data);
+      setAllNfts(res.data);
       const formattedNfts = formatNfts(
         res.data.sort(function (a, b) {
           return b.price - a.price;
@@ -29,7 +30,6 @@ const Listen = () => {
         formattedNfts.push(<FillerCard />);
       }
       setDisplayedNfts(formattedNfts);
-      setAllNfts(formattedNfts);
     });
   };
 
@@ -39,12 +39,22 @@ const Listen = () => {
 
   //search function, sorts and sets returned NFTs to displayedNfts
   useEffect(() => {
-    if (search) {
+    if (search != "") {
       axios
         .post("/api/nft-type/search", { params: search })
         .then((res) => {
           setUnformattedNftData(res.data);
-          const formattedNfts = formatNfts(res.data);
+          const formattedNfts = priceOrientation
+            ? formatNfts(
+                res.data.sort(function (a, b) {
+                  return b.price - a.price;
+                })
+              )
+            : formatNfts(
+                res.data.sort(function (a, b) {
+                  return a.price - b.price;
+                })
+              );
           for (let i = 0; i < 5; i++) {
             formattedNfts.push(<FillerCard />);
           }
@@ -52,37 +62,68 @@ const Listen = () => {
         })
         .catch((err) => console.log(err));
     } else {
-      setDisplayedNfts(allNfts);
+      const formattedNfts = formatNfts(allNfts);
+      for (let i = 0; i < 5; i++) {
+        formattedNfts.push(<FillerCard />);
+      }
+      setDisplayedNfts(formattedNfts);
     }
   }, [search]);
 
+  console.log("allnfts", allNfts);
   //flips the orientation of price from high to low with the .sort()
   useEffect(() => {
     if (priceOrientation) {
       //high to low
-      const formattedNfts = formatNfts(
-        unformattedNftData.sort(function (a, b) {
-          return b.price - a.price;
-        })
-      );
-      for (let i = 0; i < 5; i++) {
-        formattedNfts.push(<FillerCard />);
+      if (search === "") {
+        const everyNft = formatNfts(
+          allNfts.sort(function (a, b) {
+            return b.price - a.price;
+          })
+        );
+        for (let i = 0; i < 5; i++) {
+          everyNft.push(<FillerCard />);
+        }
+        setDisplayedNfts(everyNft);
+      } else {
+        const formattedNfts = formatNfts(
+          unformattedNftData.sort(function (a, b) {
+            return b.price - a.price;
+          })
+        );
+        for (let i = 0; i < 5; i++) {
+          formattedNfts.push(<FillerCard />);
+        }
+        setDisplayedNfts(formattedNfts);
       }
-      setDisplayedNfts(formattedNfts);
     }
     if (!priceOrientation) {
       //low to high
-      const formattedNfts = formatNfts(
-        unformattedNftData.sort(function (a, b) {
-          return a.price - b.price;
-        })
-      );
-      for (let i = 0; i < 5; i++) {
-        formattedNfts.push(<FillerCard />);
+      if (search === "") {
+        const everyNft = formatNfts(
+          allNfts.sort(function (a, b) {
+            return a.price - b.price;
+          })
+        );
+        for (let i = 0; i < 5; i++) {
+          everyNft.push(<FillerCard />);
+        }
+        setDisplayedNfts(everyNft);
+      } else {
+        const formattedNfts = formatNfts(
+          unformattedNftData.sort(function (a, b) {
+            return a.price - b.price;
+          })
+        );
+        for (let i = 0; i < 5; i++) {
+          formattedNfts.push(<FillerCard />);
+        }
+        setDisplayedNfts(formattedNfts);
       }
-      setDisplayedNfts(formattedNfts);
     }
   }, [priceOrientation]);
+
+  // console.log("displayed nfts", displayedNfts.length, search);
 
   return (
     <LaunchContainer>
@@ -128,7 +169,7 @@ const Arrow = styled(down_arrow)`
 const ContainerTitlePrice = styled.div`
   cursor: pointer;
   position: absolute;
-  left: calc(37%);
+  left: 37%;
   top: -15px;
   height: 20px;
   padding: 5px 8px 3px 8px;
@@ -142,6 +183,11 @@ const ContainerTitlePrice = styled.div`
   align-items: center;
   @media only screen and (max-width: 776px) {
     left: 80%;
+  }
+  @media only screen and (max-width: 1200px) {
+    /* left: 70%; */
+    left: auto;
+    right: calc(10% + 50px);
   }
 `;
 const ContainerTitleInput = styled.input`

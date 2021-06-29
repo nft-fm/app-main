@@ -19,12 +19,20 @@ router.get('/:id', async (req, res) => {
           value: nft.genre,
         },
       ]
-      const data = {
-        name: nft.artist + " - " + nft.title,
-        description: `This is an NFT from ${nft.artist}. The owner of this NFT can listen to this exclusive full length song at nftfm.io`,
-        image: nft.imageUrl,
-        attributes
-      };
+      const data = nft.videoUrl
+        ? {
+            name: nft.artist + " - " + nft.title,
+            description: `This is an NFT from ${nft.artist}. The owner of this NFT can listen to this exclusive full length song at nftfm.io`,
+            image: nft.imageUrl,
+            video: nft.videoUrl,
+            attributes,
+          }
+        : {
+            name: nft.artist + " - " + nft.title,
+            description: `This is an NFT from ${nft.artist}. The owner of this NFT can listen to this exclusive full length song at nftfm.io`,
+            image: nft.imageUrl,
+            attributes,
+          };
 
       res.send(data);
     }

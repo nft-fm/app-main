@@ -45,9 +45,12 @@ const CreateForm = ({ open, hide }) => {
   const [audioUploadError, setAudioUploadError] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(false);
+  const [videoFile, setVideoFile] = useState(null);
+  const [videoUploadError, setVideoUploadError] = useState(false);
   const [curr, setCurr] = useState("ETH");
   const [isAudioUploaded, setIsAudioUploaded] = useState(false);
   const [isImageUploaded, setIsImageUploaded] = useState(false);
+  const [isVideoUploaded, setIsVideoUploaded] = useState(false);
 
   useEffect(() => {
     user && user.username && setNftData({ ...nftData, artist: user.username });
@@ -80,6 +83,19 @@ const CreateForm = ({ open, hide }) => {
         });
     }
   }, [imageFile]);
+
+
+
+  const hiddenVideoInput = useRef(null);
+  const handleVideo = () => {
+    setIsVideoUploaded(null);
+    setVideoFile(null);
+    hiddenVideoInput.current.click();
+  };
+  const handleVideoChange = (e) => {
+    console.log('here')
+  }
+
 
   //this is all to handle the image
   const hiddenImageInput = useRef(null);
@@ -341,6 +357,24 @@ const CreateForm = ({ open, hide }) => {
                   onChange={handleImageChange}
                   style={{ display: "none" }}
                   defaultValue={imageFile}
+                  // required
+                />
+                <MediaButton onClick={() => handleImage()} type="button">
+                  <span>Upload video</span>
+                  <span>.mp4</span>
+                  {videoFile && !isVideoUploaded ? (
+                    <img src={loading_gif} alt="loading" />
+                  ) : (
+                    <img src={upload_icon} alt="upload-file-icon" />
+                  )}
+                </MediaButton>
+                <StyledInput
+                  type="file"
+                  accept=".mp4"
+                  ref={hiddenVideoInput}
+                  onChange={handleVideoChange}
+                  style={{ display: "none" }}
+                  defaultValue={videoFile}
                   // required
                 />
               </MediaButtons>

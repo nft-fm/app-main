@@ -1,5 +1,5 @@
-const { findAllByDisplayValue } = require('@testing-library/dom');
-const mongoose = require('mongoose');
+const { findAllByDisplayValue } = require("@testing-library/dom");
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const NftTypeSchema = new Schema({
@@ -28,27 +28,27 @@ const NftTypeSchema = new Schema({
   },
   price: {
     type: Number,
-    default: 0
+    default: 0,
   },
   numMinted: {
     type: Number,
-    default: 0
+    default: 0,
   },
   numSold: {
     type: Number,
-    default: 0
+    default: 0,
   },
   startTime: {
     type: Number,
-    default: 0
+    default: 0,
   },
   dur: {
     type: Number,
-    required: true
+    required: true,
   },
   snnipet: {
     type: Array,
-    default: []
+    default: [],
   },
   address: {
     type: String,
@@ -62,6 +62,9 @@ const NftTypeSchema = new Schema({
   audioUrl: {
     type: String,
     default: "",
+  },
+  videoUrl: {
+    type: String,
   },
   numListens: {
     type: Number,
@@ -87,8 +90,8 @@ const NftTypeSchema = new Schema({
 
   likes: [
     {
-      type: String
-    }
+      type: String,
+    },
   ],
   shareCount: {
     type: Number,
@@ -108,8 +111,8 @@ const NftTypeSchema = new Schema({
   },
   timestamp: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
-})
+});
 
-module.exports = NftType = mongoose.model('type', NftTypeSchema);
+module.exports = NftType = mongoose.model("type", NftTypeSchema);

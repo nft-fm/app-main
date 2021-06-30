@@ -181,13 +181,14 @@ const ContainerTitlePrice = styled.div`
   border-radius: 20px;
   display: flex;
   align-items: center;
-  @media only screen and (max-width: 776px) {
-    left: 80%;
-  }
   @media only screen and (max-width: 1200px) {
     /* left: 70%; */
     left: auto;
     right: calc(10% + 50px);
+  }
+  @media only screen and (max-width: 776px) {
+    left: 80vw;
+    right: auto;
   }
 `;
 const ContainerTitleInput = styled.input`

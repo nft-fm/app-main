@@ -19,18 +19,16 @@ router.get("/:id", async (req, res) => {
           value: nft.genre,
         },
       ];
-      console.log('nft', nft)
       const data = nft.videoUrl
         ? {
             name: nft.artist + " - " + nft.title,
-            description: `This is an NFT from ${nft.artist}. The owner of this NFT can listen to this exclusive full length song at nftfm.io`,
+            description: `This is a music NFT from ${nft.artist}. The owner of this NFT can listen to this exclusive full length song and view the music video at nftfm.io.`,
             image: nft.imageUrl,
-            video: nft.videoUrl,
             attributes,
           }
         : {
             name: nft.artist + " - " + nft.title,
-            description: `This is an NFT from ${nft.artist}. The owner of this NFT can listen to this exclusive full length song at nftfm.io`,
+            description: `This is a music NFT from ${nft.artist}. The owner of this NFT can listen to this exclusive full length song only at nftfm.io`,
             image: nft.imageUrl,
             attributes,
           };

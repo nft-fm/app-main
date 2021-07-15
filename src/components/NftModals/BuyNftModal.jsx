@@ -177,11 +177,18 @@ const BuyNftModal = ({
             <ReactPlayer
               url={nft.videoUrl}
               controls="true"
-              playing="true"
+              onStart="false"
+              playing={false}
               loop="true"
               width="500px"
               height="500px"
               style={{ marginTop: "auto", marginBottom: "auto" }}
+              onContextMenu={e => e.preventDefault()}
+              config={{ file: { 
+                attributes: {
+                  controlsList: 'nodownload'
+                }
+              }}}
             />
           ) : (
             <Image src={nft.imageUrl} alt="image" />

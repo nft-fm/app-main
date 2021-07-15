@@ -10,6 +10,7 @@ import VolumeAndLoopControl from "./components/VolumeAndLoopControl";
 import Swal from "sweetalert2";
 import { ReactComponent as XIcon } from "../../assets/img/icons/x.svg";
 import isMobile from "../../utils/isMobile";
+import { errorIcon, imageWidth, imageHeight } from "../../utils/swalImages";
 
 const MusicPlayer = (props) => {
   const { nft, setNextNft, setPrevNft } = props;
@@ -144,7 +145,9 @@ const MusicPlayer = (props) => {
           Swal.fire({
             title: "Sorry, something went wrong loading the music",
             text: "Please reload the page",
-            icon: "error",
+            imageUrl: errorIcon,
+            imageWidth,
+            imageHeight          
           });
           console.log("Error: ", e.err);
         }

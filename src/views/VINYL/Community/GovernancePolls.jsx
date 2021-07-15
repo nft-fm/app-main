@@ -8,6 +8,7 @@ import { PollOptions, PollResults } from "./PollOptions"
 // import isMobile from "../../../utils/isMobile";
 import { require, getVinylBalance } from "../../../web3/utils";
 import Loading from "../../../assets/img/loading.gif";
+import { errorIcon, warningIcon, questionIcon, successIcon, infoIcon, imageWidth, imageHeight } from "../../../utils/swalImages";
 
 
 const Community = ({ poll, setPoll, hasVinyl, getConnectedFam }) => {
@@ -37,7 +38,9 @@ const Community = ({ poll, setPoll, hasVinyl, getConnectedFam }) => {
       return swal.fire({
         title: `Error`,
         text: `You cannot vote without $VINYL.`,
-        icon: "error",
+        imageUrl: errorIcon,
+        imageWidth,
+        imageHeight
       });
     }
     const { provider } = await require();
@@ -61,7 +64,9 @@ const Community = ({ poll, setPoll, hasVinyl, getConnectedFam }) => {
         swal.fire({
           title: `You have successfully voted`,
           // text: `You have succesfully voted`,
-          icon: "success",
+          imageUrl: successIcon,
+          imageWidth,
+          imageHeight        
         });
       })
       .catch((err) => {
@@ -69,7 +74,9 @@ const Community = ({ poll, setPoll, hasVinyl, getConnectedFam }) => {
         swal.fire({
           title: `Error: ${err.response ? err.response.status : 404}`,
           text: `${err.response ? err.response.data : "server error"}`,
-          icon: "error",
+          imageUrl: errorIcon,
+          imageWidth,
+          imageHeight
         });
       });
   };

@@ -5,6 +5,8 @@ import styled from "styled-components";
 import swal from "sweetalert2";
 import { useWallet } from "use-wallet";
 import { require, getVinylBalance } from "../../../web3/utils";
+import { errorIcon, warningIcon, questionIcon, successIcon, infoIcon, imageWidth, imageHeight } from "../../../utils/swalImages";
+
 // import AccountBoxIcon from '@material-ui/icons/AccountBox';
 
 const Suggestion = ({ fetchSuggestions, suggestions, isDesktop, hasVinyl }) => {
@@ -87,7 +89,9 @@ const Suggestion = ({ fetchSuggestions, suggestions, isDesktop, hasVinyl }) => {
         return swal.fire({
           title: `Error`,
           text: `You cannot vote without $VINYL`,
-          icon: "error",
+          imageUrl: warningIcon,
+          imageWidth,
+          imageHeight
         });
       }
       castVote(suggestion.upDooted ? 0 : votes);
@@ -98,7 +102,9 @@ const Suggestion = ({ fetchSuggestions, suggestions, isDesktop, hasVinyl }) => {
         return swal.fire({
           title: `Error`,
           text: `You cannot vote without $VINYL`,
-          icon: "error",
+          imageUrl: errorIcon,
+          imageWidth,
+          imageHeight
         });
       }      
       castVote(suggestion.downDooted ? 0 : votes * -1);

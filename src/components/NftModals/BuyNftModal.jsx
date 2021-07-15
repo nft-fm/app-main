@@ -25,6 +25,7 @@ import { ReactComponent as Exclusive } from "../../assets/img/Badges/exclusive.s
 import moment from "moment";
 import { NavLink } from "react-router-dom";
 import ReactPlayer from "react-player";
+import { errorIcon, warningIcon, imageWidth, imageHeight } from "../../utils/swalImages";
 
 const BuyNftModal = ({
   open,
@@ -80,7 +81,9 @@ const BuyNftModal = ({
         ).catch((err) => {
           console.log(err);
           swal.fire({
-            icon: "error",
+            imageUrl: errorIcon,
+            imageWidth,
+            imageHeight,            
             title: "Couldn't complete sale!",
             text: "Please try again",
           });
@@ -92,7 +95,9 @@ const BuyNftModal = ({
           text: `in wallet address: ...${account.substring(
             account.length - 4
           )}`,
-          icon: "error",
+          imageUrl: errorIcon,
+          imageWidth,
+          imageHeight        
         });
         return;
       }
@@ -142,7 +147,9 @@ const BuyNftModal = ({
       swal.fire({
         title: "Wrong Chain",
         text: "You are on the wrong chain. Please connect to Ethereum Mainnet.",
-        icon: "warning",
+        imageUrl: warningIcon,
+        imageWidth,
+        imageHeight
       });
     }
   };

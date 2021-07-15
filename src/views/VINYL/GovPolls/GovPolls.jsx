@@ -2,9 +2,7 @@ import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { BaseView } from "../../../components/Page/BaseView";
 import styled from "styled-components";
-import swal from "sweetalert2";
 import AddNewPoll from './AddNewPoll'
-import useModal from "../../../hooks/useModal"
 import { useAccountConsumer } from "../../../contexts/Account";
 
 import Error404 from "../../404"

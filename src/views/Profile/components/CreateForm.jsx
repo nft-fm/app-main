@@ -12,6 +12,7 @@ import { ReactComponent as eth_icon } from "../../../assets/img/icons/ethereum.s
 // import { ReactComponent as arrow } from "../../../assets/img/icons/arrow_cropped.svg";
 // import { ReactComponent as arrow_down } from "../../../assets/img/icons/arrow_down.svg";
 import moment from "moment";
+import { errorIcon, imageWidth, imageHeight } from "../../../utils/swalImages";
 
 import x from "../../../assets/img/icons/x.svg";
 import ImagePreview from "./ImagePreview";
@@ -165,7 +166,9 @@ const CreateForm = ({ open, hide }) => {
       swal.fire({
         title: "Created amount cannot be 0.",
         timer: 5000,
-        icon: "error",
+        imageUrl: errorIcon,
+        imageWidth,
+        imageHeight      
       });
       return;
     }
@@ -174,7 +177,9 @@ const CreateForm = ({ open, hide }) => {
       swal.fire({
         title: "Total Copies or NFT Price cannot be 0.",
         timer: 5000,
-        icon: "error",
+        imageUrl: errorIcon,
+        imageWidth,
+        imageHeight      
       });
       return;
     }
@@ -183,7 +188,9 @@ const CreateForm = ({ open, hide }) => {
       swal.fire({
         title: "Cannot submit without audio and image files.",
         timer: 5000,
-        icon: "error",
+        imageUrl: errorIcon,
+        imageWidth,
+        imageHeight     
       });
       return;
     }
@@ -192,7 +199,9 @@ const CreateForm = ({ open, hide }) => {
       swal.fire({
         title: "Please wait for your audio and image files to be processed.",
         timer: 5000,
-        icon: "error",
+        imageUrl: errorIcon,
+        imageWidth,
+        imageHeight      
       });
       return;
     }
@@ -229,7 +238,9 @@ const CreateForm = ({ open, hide }) => {
             ).catch((err) => {
               setIsLoading(false);
               swal.fire({
-                icon: "error",
+                imageUrl: errorIcon,
+                imageWidth,
+                imageHeight,
                 title: "Couldn't create NFT!",
                 text: "Please try again",
               });
@@ -259,7 +270,9 @@ const CreateForm = ({ open, hide }) => {
       swal.fire({
         title: "Error uploading audio or image.",
         text: "Please refresh the page and try again. If the issues persists, contact NFT FM.",
-        icon: "error",
+        imageUrl: errorIcon,
+        imageWidth,
+        imageHeight      
       });
     }
   };

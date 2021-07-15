@@ -4,6 +4,7 @@ import axios from 'axios'
 import swal from "sweetalert2";
 import { require } from "../../../web3/utils";
 import { useWallet } from 'use-wallet'
+import { errorIcon, successIcon, imageWidth, imageHeight } from "../../../utils/swalImages";
 
 const NewOptionForm = ({ index, option, options, setOptions }) => {
   const onChange = e => {
@@ -82,7 +83,9 @@ const AddNewPoll = () => {
           swal.fire({
             title: `Success`,
             text: `Poll has been successfully created`,
-            icon: `success`,
+            imageUrl: successIcon,
+            imageWidth,
+            imageHeight          
           });
         })
         .catch((err) => {
@@ -90,7 +93,9 @@ const AddNewPoll = () => {
           swal.fire({
             title: `Error: ${err.response ? err.response.status : 404}`,
             text: `${err.response ? err.response.data : "server error"}`,
-            icon: "error",
+            imageUrl: errorIcon,
+            imageWidth,
+            imageHeight
           });
         });
     });

@@ -2,12 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import { Switch, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import BaseView from "../../components/Page/BaseView";
-import Swal from "sweetalert2";
 import { FAQ } from "./Components/FAQ/FAQ";
 import Tokenomics from "./Components/Tokenomics";
 import Team from "./Components/Team";
 import RoadMap from "./Components/Roadmap";
-import send from "../../assets/img/homepage_assets/homepage_send.png"
+// import send from "../../assets/img/homepage_assets/homepage_send.png"
 
 import faq from "../../assets/img/litepaper_assets/faq.png"
 import litepaper from "../../assets/img/litepaper_assets/litepaper.png"

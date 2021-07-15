@@ -86,6 +86,11 @@ const NftTypeSchema = new Schema({
         type: Boolean,
       },
     },
+    {
+      exclusive: {
+        type: Boolean,
+      },
+    },
   ],
 
   likes: [

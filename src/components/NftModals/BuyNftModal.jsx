@@ -20,6 +20,8 @@ import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as Founder } from "../../assets/img/Badges/founder.svg";
 import { ReactComponent as Premium } from "../../assets/img/Badges/premium.svg";
 import { ReactComponent as Prerelease } from "../../assets/img/Badges/prerelease.svg";
+import { ReactComponent as Exclusive } from "../../assets/img/Badges/exclusive.svg";
+
 import moment from "moment";
 import { NavLink } from "react-router-dom";
 import ReactPlayer from "react-player";
@@ -230,6 +232,15 @@ const BuyNftModal = ({
                     />
                   );
                 }
+                if (badge.exclusive) {
+                  return (
+                    <ExclusiveBadge
+                      key={badge}
+                      data-tip
+                      data-for="exclusiveBadge"
+                    />
+                  );
+                }
               })}
               <ReactToolTip id="founderBadge" place="top" effect="solid">
                 Founder
@@ -239,6 +250,9 @@ const BuyNftModal = ({
               </ReactToolTip>
               <ReactToolTip id="prereleaseBadge" place="top" effect="solid">
                 Prerelease
+              </ReactToolTip>
+              <ReactToolTip id="exclusiveBadge" place="top" effect="solid">
+                Exclusive
               </ReactToolTip>
             </BadgeHolder>
             <InfoContainer>
@@ -337,7 +351,11 @@ const TrackDetailsHolder = styled.div`
     height: auto;
   }
 `;
-
+const ExclusiveBadge = styled(Exclusive)`
+  width: 20px;
+  height: 20px;
+  padding: 0 5px;
+`;
 const FounderBadge = styled(Founder)`
   width: 20px;
   height: 20px;

@@ -13,6 +13,7 @@ import LibraryModal from "../NftModals/LibraryModal";
 import { ReactComponent as Founder } from "../../assets/img/Badges/founder.svg";
 import { ReactComponent as Premium } from "../../assets/img/Badges/premium.svg";
 import { ReactComponent as Prerelease } from "../../assets/img/Badges/prerelease.svg";
+import { ReactComponent as Exclusive } from "../../assets/img/Badges/exclusive.svg";
 
 import ReactToolTip from "react-tooltip";
 const NftCard = (props) => {
@@ -134,13 +135,31 @@ const NftCard = (props) => {
                 </>
               );
             }
+            if (badge.exclusive) {
+              return (
+                <>
+                  <ExclusiveBadge
+                    className="exclusiveBadge"
+                    data-tip
+                    data-for="exclusiveTip"
+                  />
+                  <ReactToolTip id="exclusiveTip" place="top" effect="solid">
+                    Exclusive
+                  </ReactToolTip>
+                </>
+              );
+            }
           })}
         </BadgeHolder>
       </BottomSection>
     </Container>
   );
 };
-
+const ExclusiveBadge = styled(Exclusive)`
+  width: 15px;
+  height: 15px;
+  padding: 0 5px;
+`;
 const FounderBadge = styled(Founder)`
   width: 15px;
   height: 15px;

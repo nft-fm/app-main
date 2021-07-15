@@ -9,6 +9,7 @@ import DemoImage from "./Components/DemoImage/DemoImage";
 import send from "../../assets/img/homepage_assets/homepage_send.png";
 // import send from "../../assets/img/homepage_assets/homepage_send.png"
 import { ReactComponent as rightArrow } from "../../assets/img/homepage_assets/right-arrow-3.svg";
+import { errorIcon, imageWidth, imageHeight } from "../../utils/swalImages";
 
 const Listen = () => {
   if (
@@ -18,7 +19,9 @@ const Listen = () => {
     Swal.fire({
       title: `You are on MAINNET and LOCALHOST be careful`,
       text: `🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆`,
-      icon: "error",
+      imageUrl: errorIcon,
+      imageWidth,
+      imageHeight
     });
   }
 

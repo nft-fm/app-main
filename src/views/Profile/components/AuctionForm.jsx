@@ -18,6 +18,8 @@ import { NavLink, useHistory } from "react-router-dom";
 
 import { useAccountConsumer } from "../../../contexts/Account";
 import { auctionNFT } from "../../../web3/utils";
+import { errorIcon, imageWidth, imageHeight } from "../../utils/swalImages";
+
 
 const initialNftState = {
   artist: "",
@@ -214,7 +216,9 @@ const AuctionForm = () => {
       swal.fire({
         title: "Total Copies or NFT Price cannot be 0.",
         timer: 5000,
-        icon: "error",
+        imageUrl: errorIcon,
+        imageWidth,
+        imageHeight      
       });
       return;
     }
@@ -222,7 +226,9 @@ const AuctionForm = () => {
       swal.fire({
         title: "Start time must be before end time.",
         timer: 5000,
-        icon: "error",
+        imageUrl: errorIcon,
+        imageWidth,
+        imageHeight      
       });
       return;
     }
@@ -230,7 +236,9 @@ const AuctionForm = () => {
       swal.fire({
         title: "End time cannot be in the past.",
         timer: 5000,
-        icon: "error",
+        imageUrl: errorIcon,
+        imageWidth,
+        imageHeight
       });
       return;
     }
@@ -238,7 +246,9 @@ const AuctionForm = () => {
       swal.fire({
         title: "Bid incremenet must be a percent between 0 and 100.",
         timer: 5000,
-        icon: "error",
+        imageUrl: errorIcon,
+        imageWidth,
+        imageHeight
       });
       return;
     }
@@ -247,7 +257,9 @@ const AuctionForm = () => {
       swal.fire({
         title: "Cannot submit without audio and image files.",
         timer: 5000,
-        icon: "error",
+        imageUrl: errorIcon,
+        imageWidth,
+        imageHeight
       });
       return;
     }
@@ -256,7 +268,9 @@ const AuctionForm = () => {
       swal.fire({
         title: "Please wait for your audio and image files to be processed.",
         timer: 5000,
-        icon: "error",
+        imageUrl: errorIcon,
+        imageWidth,
+        imageHeight      
       });
       return;
     }
@@ -292,7 +306,9 @@ const AuctionForm = () => {
             ).catch(err => {
               console.log(err)
               swal.fire({
-                icon: "error",
+                imageUrl: errorIcon,
+                imageWidth,
+                imageHeight,
                 title: "Couldn't create NFT!",
                 text: "Please try again",
               })
@@ -323,8 +339,10 @@ const AuctionForm = () => {
         title: "Error uploading audio or image.",
         text:
           "Please refresh the page and try again. If the issues persists, contact NFT FM.",
-        icon: "error",
-      });
+          imageUrl: errorIcon,
+          imageWidth,
+          imageHeight      
+        });
     }
 
     setIsLoading(false);

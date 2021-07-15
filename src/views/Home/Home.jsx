@@ -7,6 +7,9 @@ import Swal from "sweetalert2";
 import { Features } from "./Components/Features";
 import DemoImage from "./Components/DemoImage/DemoImage";
 import { ReactComponent as rightArrow } from "../../assets/img/homepage_assets/right-arrow-3.svg";
+import { errorIcon, imageWidth, imageHeight } from "../../utils/swalImages";
+
+
 const Listen = () => {
 
   if (
@@ -16,7 +19,9 @@ const Listen = () => {
     Swal.fire({
       title: `You are on MAINNET and LOCALHOST be careful`,
       text: `🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆`,
-      icon: "error",
+      imageUrl: errorIcon,
+      imageWidth,
+      imageHeight
     });
   }
 

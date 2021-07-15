@@ -12,6 +12,7 @@ import isMobile from "../../../utils/isMobile";
 import { VinylAddress } from "../../../web3/constants";
 import { ReactComponent as telegram_icon } from "../../assets/img/icons/social_telegram.svg";
 import Swal from "sweetalert2";
+import { errorIcon, imageWidth, imageHeight } from "../../../utils/swalImages";
 
 const Disclaimer = () => {
   const { account, connect } = useWallet();
@@ -107,7 +108,9 @@ const Disclaimer = () => {
             text: `in wallet address: ...${account.substring(
               account.length - 4
             )}`,
-            icon: "error",
+            imageUrl: errorIcon,
+            imageWidth,
+            imageHeight          
           });
           return;
         }

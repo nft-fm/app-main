@@ -22,6 +22,8 @@ import { ReactComponent as Prerelease } from "../../assets/img/Badges/prerelease
 import ReactToolTip from "react-tooltip";
 import moment from "moment";
 import { NavLink } from "react-router-dom";
+import { errorIcon, warningIcon, imageWidth, imageHeight } from "../../utils/swalImages";
+
 const initialNftState = {
   artist: "",
   address: "",
@@ -105,7 +107,9 @@ const NftModalHook = ({
         ).catch((err) => {
           console.log(err);
           swal.fire({
-            icon: "error",
+            imageUrl: errorIcon,
+            imageWidth,
+            imageHeight,
             title: "Couldn't complete sale!",
             text: "Please try again",
           });
@@ -117,7 +121,9 @@ const NftModalHook = ({
           text: `in wallet address: ...${account.substring(
             account.length - 4
           )}`,
-          icon: "error",
+          imageUrl: errorIcon,
+          imageWidth,
+          imageHeight
         });
         return;
       }
@@ -167,7 +173,9 @@ const NftModalHook = ({
       swal.fire({
         title: "Wrong Chain",
         text: "You are on the wrong chain. Please connect to Ethereum Mainnet.",
-        icon: "warning",
+        imageUrl: warningIcon,
+        imageWidth,
+        imageHeight
       });
     }
   };

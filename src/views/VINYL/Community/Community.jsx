@@ -12,6 +12,7 @@ import { BaseView } from "../../../components/Page/BaseView";
 import Suggestion from "./Suggestion";
 import GovernancePolls from "./GovernancePolls";
 import { Socials } from "./Socials";
+import { errorIcon, imageWidth, imageHeight } from "../../../utils/swalImages";
 
 const Community = () => {
   const { account, connect } = useWallet();
@@ -42,7 +43,9 @@ const Community = () => {
     swal.fire({
       title: `You are on MAINNET and LOCALHOST be careful`,
       text: `🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆`,
-      icon: "error",
+      imageUrl: errorIcon,
+      imageWidth,
+      imageHeight    
     });
   }
 
@@ -89,7 +92,9 @@ const Community = () => {
       return swal.fire({
         title: `Error`,
         text: `You cannot submit proposals without $VINYL.`,
-        icon: "error",
+        imageUrl: errorIcon,
+        imageWidth,
+        imageHeight      
       });
     }
     if (!newSuggestion) {
@@ -120,7 +125,9 @@ const Community = () => {
         swal.fire({
           title: `Error: ${err.response ? err.response.status : 404}`,
           text: `${err.response ? err.response.data : "server error"}`,
-          icon: "error",
+          imageUrl: errorIcon,
+          imageWidth,
+          imageHeight       
         });
       });
   };

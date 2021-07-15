@@ -44,7 +44,7 @@ const LikeShare = (props) => {
       <Spacer/>
       <IconArea>
         <Share onClick={() => share()} />
-        {shareCount?.count ? shareCount.count : nft.shareCount}
+        {/* {shareCount?.count ? shareCount.count : nft.shareCount} */}
       </IconArea>
     </Side>
   );

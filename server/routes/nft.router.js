@@ -22,8 +22,9 @@ router.get("/:id", async (req, res) => {
       const data = nft.videoUrl
         ? {
             name: nft.artist + " - " + nft.title,
-            description: `This is a music NFT from ${nft.artist}. The owner of this NFT can listen to this exclusive full length song and view the music video at nftfm.io.`,
+            description: `This is an NFT from ${nft.artist}. The owner of this NFT can listen to this exclusive full length song at nftfm.io`,
             image: nft.imageUrl,
+            video: nft.videoUrl,
             attributes,
           }
         : {

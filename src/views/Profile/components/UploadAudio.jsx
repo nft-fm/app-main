@@ -9,22 +9,27 @@ import audioBufferToMp3 from "../../../utils/audioBufferToMp3";
 import upload_icon from "../../../assets/img/profile_page_assets/upload_icon.svg";
 import loading_gif from "../../../assets/img/loading.gif";
 const UploadAudio = ({
-  audioFile, setAudioFile,
-  nftData, setNftData,
-  isAudioUploaded, setIsAudioUploaded,
-  setAudioUploadError, audioUploadError}) => {
+  audioFile,
+  setAudioFile,
+  nftData,
+  setNftData,
+  isAudioUploaded,
+  setIsAudioUploaded,
+  setAudioUploadError,
+  audioUploadError,
+}) => {
   const { account } = useAccountConsumer();
   const hiddenAudioInput = useRef(null);
 
   const sliceBuffer = (audioContext, buffer, begin, end, callback) => {
     var error = null;
-  
+
     var duration = buffer.duration;
     var channels = buffer.numberOfChannels;
     var rate = buffer.sampleRate;
-  
+
     console.log("channels", channels);
-    if (typeof end === 'function') {
+    if (typeof end === "function") {
       callback = end;
       end = duration;
     }
@@ -32,94 +37,103 @@ const UploadAudio = ({
     if (begin < 0) {
       begin = 0;
     }
-  
+
     if (end > duration) {
       end = duration;
     }
-  
-    if (typeof callback !== 'function') {
-      error = new TypeError('callback must be a function');
+
+    if (typeof callback !== "function") {
+      error = new TypeError("callback must be a function");
     }
-  
+
     var startOffset = rate * begin;
     var endOffset = rate * end;
     var frameCount = endOffset - startOffset;
     var newArrayBuffer;
-  
+
     try {
-      newArrayBuffer = audioContext.createBuffer(channels, endOffset - startOffset, rate);
+      newArrayBuffer = audioContext.createBuffer(
+        channels,
+        endOffset - startOffset,
+        rate
+      );
       var anotherArray = new Float32Array(frameCount);
       var offset = 0;
-  
+
       for (var channel = 0; channel < channels; channel++) {
         buffer.copyFromChannel(anotherArray, channel, startOffset);
         newArrayBuffer.copyToChannel(anotherArray, channel, offset);
       }
-    } catch(e) {
+    } catch (e) {
       error = e;
     }
-  
+
     callback(error, newArrayBuffer);
-  }
+  };
 
-  const uploadFile = (audioFormData, duration, buffer, audioContext, audioFile) => {
-    console.log("uploading file")
+  const uploadFile = (
+    audioFormData,
+    duration,
+    buffer,
+    audioContext,
+    audioFile
+  ) => {
+    console.log("uploading file");
     axios
-    .post("api/nft-type/uploadAudioS3",
-    audioFormData, {
-      headers: {
-        "content-type": "multipart/form-data",
-      },
-    })
-    .then((res) => {
-      console.log(res);
-      if (res.status === 200) {
-        let _nftData;
+      .post("api/nft-type/uploadAudioS3", audioFormData, {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        if (res.status === 200) {
+          let _nftData;
 
-        console.log("originalBUFFER", buffer);
-        sliceBuffer(audioContext, buffer, 0, 15, (error, newBuffer) => {
-          if (error) {
-            console.log(error);
-          }
-          else {
-            console.log("NEW BUFFER", newBuffer);
-            const snnipetMp3Buffer = audioBufferToMp3(newBuffer);
+          console.log("originalBUFFER", buffer);
+          sliceBuffer(audioContext, buffer, 0, 15, (error, newBuffer) => {
+            if (error) {
+              console.log(error);
+            } else {
+              console.log("NEW BUFFER", newBuffer);
+              const snnipetMp3Buffer = audioBufferToMp3(newBuffer);
 
-            const snnipetFile = new File(snnipetMp3Buffer, audioFile.name, {type: "audio/mpeg"});
-  
-            const snnipetFormData = new FormData();
-            snnipetFormData.append("artist", account);
-            snnipetFormData.append("audioFile", snnipetFile);
+              const snnipetFile = new File(snnipetMp3Buffer, audioFile.name, {
+                type: "audio/mpeg",
+              });
 
-            axios
-            .post("api/nft-type/uploadSnnipetS3",
-            snnipetFormData, {
-              headers: {
-                "content-type": "multipart/form-data",
-              },
-            })
-            .then(response => {
-              console.log(response);
-              setNftData(currentState=>{
-                _nftData=currentState
-                return currentState
-              })
-              setNftData({..._nftData, dur: duration})
-              setIsAudioUploaded(true);
-            })
-            .catch(error => {
-              setAudioUploadError(true);
-              console.log("snnipets upload failed", error);
-            })
-          } 
-        });
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      setAudioUploadError(true);
-    });
-  }
+              const snnipetFormData = new FormData();
+              snnipetFormData.append("artist", account);
+              snnipetFormData.append("audioFile", snnipetFile);
+
+              axios
+                .post("api/nft-type/uploadSnnipetS3", snnipetFormData, {
+                  headers: {
+                    "content-type": "multipart/form-data",
+                  },
+                })
+                .then((response) => {
+                  console.log(response);
+                  setNftData((currentState) => {
+                    _nftData = currentState;
+                    return currentState;
+                  });
+                  setNftData({ ..._nftData, dur: duration });
+                  setIsAudioUploaded(true);
+                })
+                .catch((error) => {
+                  setAudioUploadError(true);
+                  console.log("snnipets upload failed", error);
+                });
+            }
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        setAudioUploadError(true);
+      });
+  };
 
   const getFileDurAndSnnipet = () => {
     // Obtain the uploaded file, you can change the logic if you are working with multiupload
@@ -130,23 +144,24 @@ const UploadAudio = ({
     // When the file has been succesfully read
     reader.onload = function (event) {
       // Create an instance of AudioContext
-      let audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      let audioContext = new (window.AudioContext ||
+        window.webkitAudioContext)();
 
       // Asynchronously decode audio file data contained in an ArrayBuffer.
-      audioContext.decodeAudioData(event.target.result, function(buffer) {
-          // Obtain the duration in seconds of the audio file (with milliseconds as well, a float value)
-          let duration = buffer.duration;
-          setNftData({...nftData, dur: duration});
+      audioContext.decodeAudioData(event.target.result, function (buffer) {
+        // Obtain the duration in seconds of the audio file (with milliseconds as well, a float value)
+        let duration = buffer.duration;
+        setNftData({ ...nftData, dur: duration });
 
-          const audioFormData = new FormData();
-          audioFormData.append("artist", account);
-          audioFormData.append("audioFile", audioFile);
-          uploadFile(audioFormData, duration, buffer, audioContext, audioFile);
+        const audioFormData = new FormData();
+        audioFormData.append("artist", account);
+        audioFormData.append("audioFile", audioFile);
+        uploadFile(audioFormData, duration, buffer, audioContext, audioFile);
       });
     };
 
     reader.readAsArrayBuffer(file);
-  }
+  };
 
   const handleAudio = (e) => {
     setIsAudioUploaded(null);
@@ -165,10 +180,11 @@ const UploadAudio = ({
         account +
         "/" +
         e.target.files[0].name,
-      snnipet: "https://nftfm-music.s3-us-west-1.amazonaws.com/" +
-      account +
-      "/snnipets/snnipet_" +
-      e.target.files[0].name
+      snnipet:
+        "https://nftfm-music.s3-us-west-1.amazonaws.com/" +
+        account +
+        "/snnipets/snnipet_" +
+        e.target.files[0].name,
     });
   };
 
@@ -197,8 +213,8 @@ const UploadAudio = ({
         style={{ display: "none" }}
         defaultValue={audioFile}
         // required
-      />  
-    </>  
+      />
+    </>
   );
 };
 
@@ -218,7 +234,7 @@ const StyledInput = styled.input`
 
 const MediaButton = styled.button`
   background-color: ${(props) => props.theme.color.box};
-  border-radius: ${props => props.theme.borderRadius}px;
+  border-radius: ${(props) => props.theme.borderRadius}px;
   color: ${(props) => props.theme.fontColor.gray};
   display: flex;
   flex-direction: column;

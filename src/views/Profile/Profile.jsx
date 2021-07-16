@@ -52,16 +52,6 @@ const Profile = () => {
           </GetConnected>
         </IsConnected>
       )}
-      {/* {user && !user?.username && (
-      <IsConnected>
-        <GetConnectedNav>
-          <span>Head to the Library page and set a username. Then you can start making NFT's!</span>
-          <ConnectNavLink to="/library">
-            <ButtonTextNav>Library</ButtonTextNav>
-          </ConnectNavLink>
-        </GetConnectedNav>
-      </IsConnected>
-    )} */}
       <Landing>
         <Banner />
         <ProfileHeading>
@@ -103,23 +93,10 @@ const Profile = () => {
                     "..." +
                     user.address.substring(user.address.length - 4)
                   : " "}
-                {/* {user && (
-                <CopyButton
-                  onClick={() => {
-                    navigator.clipboard.writeText(user.address);
-                  }}
-                />
-              )} */}
               </AddressSpan>
             </ProfileInfoHolder>
           </ProfileHolder>
           <Side>
-            {/* <SideSpan>
-            12 <BlueSpan>/NFTs</BlueSpan>
-          </SideSpan>
-          <SideSpan>
-            8 <BlueSpan>Traded</BlueSpan>
-          </SideSpan> */}
           </Side>
         </ProfileHeading>
       </Landing>

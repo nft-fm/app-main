@@ -26,7 +26,7 @@ const CreateFormPaginator = ({ currentStep, setCurrentStep, handleSubmit, stepsC
         <Dot step={3} currentStep={currentStep} onClick={() => onClickDotNavigate(3)} color="yellowgreen"/>
         <Dot step={4} currentStep={currentStep} onClick={() => onClickDotNavigate(4)} color="tomato"/>
       </DotContainer>
-      {currentStep === 4 ? 
+      {currentStep === 5 ? 
         <PaginatorButton currentStep={currentStep} onClick={handleSubmit}>Submit</PaginatorButton> : 
         <PaginatorButton currentStep={currentStep} onClick={() => setCurrentStep(currentStep + 1)}>Next</PaginatorButton>
       }

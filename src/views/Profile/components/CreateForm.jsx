@@ -13,10 +13,10 @@ import { errorIcon, imageWidth, imageHeight } from "../../../utils/swalImages";
 import { useAccountConsumer } from "../../../contexts/Account";
 import { mintNFT } from "../../../web3/utils";
 
-import ImagePreview from "./ImagePreview";
-import UploadAudio from "./UploadAudio";
+import { SelectSingleOrMultiple } from "./CreateFormPages/SelectSingleOrMultiple";
+import { ModalFormSteps } from "./CreateFormPages/ModalFormSteps";
 
-import { Step1, Step2, Step3, Step4, SubmitStep } from "./CreateFormPages/Step1";
+
 import CreateFormPaginator from "./CreateFormPaginator";
 
 const initialNftState = {
@@ -330,24 +330,28 @@ const CreateForm = ({ open, hide }) => {
       <OpaqueFilter>
         <Step1Container>
           <X src={x} onClick={() => hide()} />
-          <Step1 setCurrentStep={setCurrentStep} />
+          <SelectSingleOrMultiple setCurrentStep={setCurrentStep} />
           <CreateFormPaginator currentStep={currentStep} setCurrentStep={setCurrentStep}/>
         </Step1Container>
       </OpaqueFilter>  
     )
-  } else if (currentStep === 2){
-    return (
+  } else {
+    return(
       <OpaqueFilter>
         <Step1Container>
-          <Step2 
+          <ModalFormSteps 
             hide={hide}
+            currentStep={currentStep}
+            nftData={nftData}
             hiddenImageInput={hiddenImageInput}
             imageFile={imageFile}
             handleImage={handleImage}
+            handleImageChange={handleImageChange}
+            updateState={updateState}
+            usdPerEth={usdPerEth}
             // UploadAudioStuff
             audioFile={audioFile}
             setAudioFile={setAudioFile}
-            nftData={nftData}
             setNftData={setNftData}
             isAudioUploaded={isAudioUploaded}
             setIsAudioUploaded={setIsAudioUploaded}
@@ -357,37 +361,184 @@ const CreateForm = ({ open, hide }) => {
           <CreateFormPaginator currentStep={currentStep} setCurrentStep={setCurrentStep}/>
         </Step1Container>
       </OpaqueFilter>
-    );
-  } else if (currentStep === 3){
-    return (
-      <OpaqueFilter>
-        <Step1Container>
-          <Step3
-            setCurrentStep={setCurrentStep} 
-            hide={hide} 
-            nftData={nftData}
-            updateState={updateState}
-          />          
-          <CreateFormPaginator currentStep={currentStep} setCurrentStep={setCurrentStep}/>
-        </Step1Container>
-      </OpaqueFilter>
-    )
-  }  else if (currentStep === 4){
-    return (
-      <OpaqueFilter>
-        <Step1Container>
-          <Step4 
-            setCurrentStep={setCurrentStep} 
-            hide={hide} 
-            nftData={nftData}
-            updateState={updateState}
-            usdPerEth={usdPerEth}
-          />
-          <CreateFormPaginator currentStep={currentStep} setCurrentStep={setCurrentStep}/>
-        </Step1Container>
-      </OpaqueFilter>
     )
   }
+
+  // <Header>
+  //   <span>Create NFTs</span>
+  //   <X src={x} onClick={() => hide()} />
+  // </Header>
+  // <Main>
+  //   <Files>
+  //     <ImagePreview imageFile={imageFile} />
+  //   </Files>
+  //   <Inputs autoComplete="off">
+  //     <TopInputs>
+  //       <MediaButtons>
+  //         <UploadAudio
+  //           audioFile={audioFile}
+  //           setAudioFile={setAudioFile}
+  //           nftData={nftData}
+  //           setNftData={setNftData}
+  //           isAudioUploaded={isAudioUploaded}
+  //           setIsAudioUploaded={setIsAudioUploaded}
+  //           audioUploadError={audioUploadError}
+  //           setAudioUploadError={setAudioUploadError}
+  //         />
+  //         <MediaButton onClick={() => handleImage()} type="button">
+  //           <span>Upload image</span>
+  //           <span>.png, .jpeg, .gif</span>
+  //           {imageFile && !isImageUploaded ? (
+  //             <img src={loading_gif} alt="loading" />
+  //           ) : (
+  //             <img src={upload_icon} alt="upload-file-icon" />
+  //           )}
+  //         </MediaButton>
+  //         <StyledInput
+  //           type="file"
+  //           accept=".jpg,.jpeg,.png,.gif"
+  //           ref={hiddenImageInput}
+  //           onChange={handleImageChange}
+  //           style={{ display: "none" }}
+  //           defaultValue={imageFile}
+  //           // required
+  //         />
+  //         <MediaButton onClick={() => handleImage()} type="button">
+  //           <span>Upload video</span>
+  //           <span>.mp4</span>
+  //           {videoFile ? (
+  //             <img src={loading_gif} alt="loading" />
+  //           ) : (
+  //             <img src={upload_icon} alt="upload-file-icon" />
+  //           )}
+  //         </MediaButton>
+  //         <StyledInput
+  //           type="file"
+  //           accept=".mp4"
+  //           ref={hiddenVideoInput}
+  //           onChange={handleVideoChange}
+  //           style={{ display: "none" }}
+  //           defaultValue={videoFile}
+  //           // required
+  //         />
+  //       </MediaButtons>
+  //       <FileNames>
+  //         <span>
+  //           {audioFile?.name.length > 10
+  //             ? audioFile?.name.substring(0, 10) +
+  //               "-" +
+  //               audioFile?.name.substring(audioFile.name.lastIndexOf("."))
+  //             : audioFile?.name}
+  //         </span>
+  //         <span>
+  //           {imageFile?.name.length > 10
+  //             ? imageFile?.name.substring(0, 10) +
+  //               "-" +
+  //               imageFile?.name.substring(imageFile.name.lastIndexOf("."))
+  //             : imageFile?.name}
+  //         </span>
+  //       </FileNames>
+  //     </TopInputs>
+  //     <MiddleInputs>
+  //       <StyledInput
+  //         type="text"
+  //         placeholder="Title"
+  //         name="title"
+  //         onChange={(e) => updateState(e)}
+  //         value={nftData.title}
+  //         required
+  //       />
+  //       <StyledInput
+  //         type="text"
+  //         placeholder="Genre"
+  //         name="genre"
+  //         onChange={(e) => updateState(e)}
+  //         value={nftData.genre}
+  //         required
+  //       />
+  //       <StyledInput
+  //         type="text"
+  //         placeholder="Producer"
+  //         name="producer"
+  //         onChange={(e) => updateState(e)}
+  //         value={nftData.producer}
+  //         required
+  //       />
+  //       <StyledInput
+  //         type="text"
+  //         placeholder="Writer"
+  //         name="writer"
+  //         onChange={(e) => updateState(e)}
+  //         value={nftData.writer}
+  //         required
+  //       />
+  //     </MiddleInputs>
+  //     <BottomInput>
+  //       <StyledDivInput1>
+  //         <label>Total Copies</label>
+  //         <StyledNumberInput
+  //           className="mint"
+  //           type="number"
+  //           name="numMinted"
+  //           onChange={(e) => updateState(e)}
+  //           min="0"
+  //           value={nftData.numMinted === 0 ? "" : nftData.numMinted}
+  //           required
+  //         />
+  //       </StyledDivInput1>
+  //       <StyledDivInput2>
+  //         <label>
+  //           NFT Price /ea &nbsp;
+  //           <EthIcon
+  //             onClick={() => setCurr("ETH")}
+  //             active={curr === "ETH" ? true : false}
+  //           />{" "}
+  //         </label>
+  //         <StyledNumberInput
+  //           className="cost"
+  //           type="number"
+  //           name="price"
+  //           onChange={(e) => updateState(e)}
+  //           min="0"
+  //           max={curr === "ETH" ? "1000" : `1000 * ${usdPerEth}`}
+  //           step="0.0001"
+  //           value={nftData.price === 0 ? "" : nftData.price}
+  //           required
+  //         />
+  //         <span>/{curr}</span>
+  //         <SubText>
+  //           <span>
+  //             ${" "}
+  //             {nftData.price &&
+  //               (nftData.price * usdPerEth).toLocaleString(undefined, {
+  //                 minimumFractionDigits: 2,
+  //                 maximumFractionDigits: 2,
+  //               })}
+  //           </span>
+  //         </SubText>
+  //       </StyledDivInput2>
+  //     </BottomInput>
+  //   </Inputs>
+  // </Main>
+  // {isLoading ? (
+  //   <SubmitButton
+  //     type="button"
+  //     style={{ filter: "saturate(.2)", cursor: "not-allowed" }}
+  //   >
+  //     <img src={loading_gif} alt="loading" />
+  //   </SubmitButton>
+  // ) : (
+  //   <SubmitButton
+  //     type="submit"
+  //     style={
+  //       !isComplete()
+  //         ? { filter: "saturate(.2)", cursor: "not-allowed" }
+  //         : null
+  //     }
+  //   >
+  //     <span>Mint NFTs!</span>
+  //   </SubmitButton>
+  // )
 };
 
 const Step1Container = styled.div`
@@ -399,6 +550,12 @@ const Step1Container = styled.div`
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  @media only screen and (max-width: 776px) {
+    width: 90vw;
+    height: 95vh;
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const SubText = styled.div`

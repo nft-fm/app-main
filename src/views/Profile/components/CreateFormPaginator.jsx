@@ -34,6 +34,17 @@ const CreateFormPaginator = ({ currentStep, setCurrentStep, handleSubmit, stepsC
   )
 }
 
+const Step1Container = styled.div`
+  width: 800px;
+  align-items: space-between;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+`;
+
 const PaginatorContainer = styled.div`
   display: flex;
   width: 1000px;

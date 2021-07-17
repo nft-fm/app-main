@@ -4,6 +4,8 @@ import single_nft from "../../../../assets/img/profile_page_assets/PNG_500px_sin
 import many_nft from "../../../../assets/img/profile_page_assets/PNG_500px_multi.png";
 import x from "../../../../assets/img/icons/x.svg";
 import DemoImage from "../../../Home/Components/DemoImage/DemoImage"
+import UploadAudio from "../UploadAudio";
+
 /* 
   Select multiple or single
   https://app.zeplin.io/project/606f54fb991137523a503e45/screen/60947ff83e5b930e7a327ba6
@@ -54,7 +56,22 @@ export const Step1 = ({ setCurrentStep }) => {
   https://app.zeplin.io/project/606f54fb991137523a503e45/screen/60947ff818830a3516b3d3d2
 */
 
-export const Step2 = ({ hide }) => {
+export const Step2 = ({
+  hide,
+  hiddenImageInput,
+  handleImageChange,
+  imageFile,
+  handleImage,
+
+  audioFile,
+  setAudioFile,
+  nftData,
+  setNftData,
+  isAudioUploaded,
+  setIsAudioUploaded,
+  audioUploadError,
+  setAudioUploadError
+}) => {
   return (<StyledModal>
     <X src={x} onClick={() => hide()} />
     <LeftSide>
@@ -66,12 +83,32 @@ export const Step2 = ({ hide }) => {
       <h2>Visual</h2>
       <UploadContainer>
         <p>PNG, JPG, GIF, MP4</p>
-        <ChooseFile>Choose File</ChooseFile>
+        <ChooseFile onClick={() => handleImage()} type="button">
+          Choose File
+        </ChooseFile>
+        <StyledInput
+          type="file"
+          accept=".jpg,.jpeg,.png,.gif"
+          ref={hiddenImageInput}
+          onChange={handleImageChange}
+          style={{ display: "none" }}
+          defaultValue={imageFile}
+          // required
+        />
       </UploadContainer>
       <h2 style={{paddingTop: "20px"}}>Audio</h2>
       <UploadContainer>
         <p>MP3, FLAC</p>
-        <ChooseFile>Choose File</ChooseFile>
+        <UploadAudio
+          audioFile={audioFile}
+          setAudioFile={setAudioFile}
+          nftData={nftData}
+          setNftData={setNftData}
+          isAudioUploaded={isAudioUploaded}
+          setIsAudioUploaded={setIsAudioUploaded}
+          audioUploadError={audioUploadError}
+          setAudioUploadError={setAudioUploadError}
+        />
       </UploadContainer>
     </RightSide>
   </StyledModal>
@@ -82,7 +119,7 @@ export const Step2 = ({ hide }) => {
   Artist Data
   https://app.zeplin.io/project/606f54fb991137523a503e45/screen/60947ff85ef6bb0a06f6ab24
 */
-export const Step3 = ({ hide, nftData }) => {
+export const Step3 = ({ hide, nftData, updateState }) => {
   return (<StyledModal>
     <X src={x} onClick={() => hide()} />
     <LeftSide>
@@ -92,50 +129,50 @@ export const Step3 = ({ hide, nftData }) => {
     </LeftSide>
     <RightSide>
       <InputContainer>
-        <h2>Musician Data</h2>
-        <Text style={{textAlign: "left"}}>Title</Text>
+        <h2 style={{marginTop: "-15px"}}>Musician Data</h2>
+        <SubHeader>Title</SubHeader>
         <StyledInput
           type="text"
           placeholder="Title"
           name="title"
-          onChange={(e) => {}}
+          onChange={(e) => {updateState(e)}}
           value={nftData.title}
           required
         />
-        <Text style={{textAlign: "left"}}>Producer</Text>
+        <SubHeader>Producer</SubHeader>
         <StyledInput
           type="text"
           placeholder="Producer"
           name="producer"
-          onChange={(e) => {}}
+          onChange={(e) => {updateState(e)}}
           value={nftData.producer}
           required
         />
-        <Text style={{textAlign: "left"}}>Writer</Text>
+        <SubHeader>Writer</SubHeader>
         <StyledInput
           type="text"
           placeholder="Writer"
           name="writer"
-          onChange={(e) => {}}
-          value={nftData.title}
+          onChange={(e) => {updateState(e)}}
+          value={nftData.writer}
           required
         />
-        <Text style={{textAlign: "left"}}>ISRC</Text>
+        <SubHeader>ISRC</SubHeader>
         <StyledInput
           type="text"
-          placeholder="Irsc"
+          placeholder="IRSC"
           name="irsc"
-          onChange={(e) => {}}
-          value={nftData.title}
+          onChange={(e) => {updateState(e)}}
+          value={nftData.isrc}
           required
         />
-        <Text style={{textAlign: "left"}}>Description</Text>
+        <SubHeader>Description</SubHeader>
         <StyledInput
           type="text"
           placeholder="Description"
           name="description"
-          onChange={(e) => {}}
-          value={nftData.title}
+          onChange={(e) => {updateState(e)}}
+          value={nftData.description}
           required
         />
       </InputContainer>
@@ -149,7 +186,7 @@ export const Step3 = ({ hide, nftData }) => {
   Pricing and Quantity Data:
   https://app.zeplin.io/project/606f54fb991137523a503e45/screen/60947ff82e79553624128070
 */
-export const Step4 = ({ hide, nftData }) => {
+export const Step4 = ({ hide, nftData, updateState, usdPerEth }) => {
   return (<StyledModal>
     <X src={x} onClick={() => hide()} />
     <LeftSide>
@@ -160,22 +197,30 @@ export const Step4 = ({ hide, nftData }) => {
     <RightSide>
       <InputContainer>
         <h2>Price and Quantity</h2>
-        <Text style={{textAlign: "left"}}>Price</Text>
-        <StyledInput
-          type="text"
-          placeholder="Price"
-          name="price"
-          onChange={(e) => {}}
-          value={nftData.title}
-          required
-        />
-        <Text style={{textAlign: "left"}}>Number of NFTs</Text>
+        <SubHeader>Price</SubHeader>
+        <PriceContainer>
+          <StyledInput
+            type="text"
+            placeholder="Price"
+            name="price"
+            onChange={(e) => {updateState(e)}}
+            value={nftData.price}
+            noborder
+            required
+          />
+          <p>ETH</p>
+        </PriceContainer>
+        <PriceContainer noBorder>
+          <div/>
+          <p>{nftData.price * usdPerEth} $USD</p>
+        </PriceContainer>
+        <SubHeader>Number of NFTs</SubHeader>
         <StyledInput
           type="text"
           placeholder="Quantity"
-          name="quantity"
-          onChange={(e) => {}}
-          value={nftData.producer}
+          name="numMinted"
+          onChange={(e) => {updateState(e)}}
+          value={nftData.numMinted}
           required
         />
         <div style={{height: "120px", width: "100px"}}/>
@@ -191,6 +236,22 @@ export const Step4 = ({ hide, nftData }) => {
 export const SubmitStep = () => {
   return (<>Step 5</>)
 }
+
+const PriceContainer = styled.div`
+  display: flex;
+  border-bottom: 1px solid ${(props) => props.theme.color.boxBorder};
+  align-items: flex-end;
+  justify-content: space-between;
+  ${props => props.noBorder && css`
+    border: none;
+  `}
+  p {
+    padding: 0;
+    margin: 7px;
+    color: #343434;
+  }
+`
+
 
 const InputContainer = styled.div`
   height: 400px;
@@ -211,11 +272,13 @@ const StyledInput = styled.input`
   color: white;
   background-color: #090909;
   border: none;
-  border-bottom: 1px solid ${(props) => props.theme.color.boxBorder};
   outline: none;
-  margin-bottom: 5px;
   height: 30px;
-
+  font-size: 16px;
+  border-bottom: 1px solid ${(props) => props.theme.color.boxBorder};
+  ${props => props.noborder && css`
+    border: none;
+  `}
   @media only screen and (max-width: 776px) {
     background-color: transparent;
     height: 30px;
@@ -273,6 +336,10 @@ const ChooseFile = styled.div`
   text-align: center;
   color: #ffffff;
   background-image: linear-gradient(to right, #262626, #383838);
+  &:hover {
+    cursor: pointer;
+    background-image: linear-gradient(to right, #333333, #8b8b8b);
+  }
 `
 
 const StyledModal = styled.div`
@@ -338,6 +405,11 @@ const Text = styled.div`
   width: 100%;
   color: #888888;
 `;
+
+const SubHeader = styled.h4`
+  color: white;
+  text-align: left;
+`
 
 const List = styled.div`
   display: flex;

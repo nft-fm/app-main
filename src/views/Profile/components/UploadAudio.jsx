@@ -197,13 +197,7 @@ const UploadAudio = ({
   return (
     <>
       <MediaButton onClick={() => handleAudio()} type="button">
-        <span>Upload audio</span>
-        <span>.mp3, .flac</span>
-        {audioFile && !isAudioUploaded ? (
-          <img src={loading_gif} alt="loading" />
-        ) : (
-          <img src={upload_icon} alt="upload-file-icon" />
-        )}
+        Choose File
       </MediaButton>
       <StyledInput
         type="file"
@@ -233,32 +227,23 @@ const StyledInput = styled.input`
 `;
 
 const MediaButton = styled.button`
-  background-color: ${(props) => props.theme.color.box};
-  border-radius: ${(props) => props.theme.borderRadius}px;
-  color: ${(props) => props.theme.fontColor.gray};
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  border: solid 1.5px #181818;
   align-items: center;
-  border: 1px solid ${(props) => props.theme.fontColor.boxBorderColor};
-  padding: 5px;
-  cursor: pointer;
-  /* margin-top: 30px; */
-  /* position: relative; */
-  /* height: 50px; */
-  width: 40%;
-  & > img {
-    margin-top: 5px;
-    height: 20px;
-    opacity: 0.5;
-  }
-
-  @media only screen and (max-width: 776px) {
-    width: 45%;
+  text-align: center;
+  border-radius: 8px;
+  width: 120px;
+  height: 40px;
+  font-family: Compita;
+  font-size: 18px;
+  text-align: center;
+  color: #ffffff;
+  background-image: linear-gradient(to right, #262626, #383838);
+  &:hover {
+    cursor: pointer;
+    background-image: linear-gradient(to right, #333333, #8b8b8b);
   }
 `;
 
 export default UploadAudio;
-
-// @media only screen and (max-width: 776px) {
-//   margin-top: 6px;
-//   }

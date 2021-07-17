@@ -339,7 +339,21 @@ const CreateForm = ({ open, hide }) => {
     return (
       <OpaqueFilter>
         <Step1Container>
-          <Step2 setCurrentStep={setCurrentStep} hide={hide} nftData={nftData}/>
+          <Step2 
+            hide={hide}
+            hiddenImageInput={hiddenImageInput}
+            imageFile={imageFile}
+            handleImage={handleImage}
+            // UploadAudioStuff
+            audioFile={audioFile}
+            setAudioFile={setAudioFile}
+            nftData={nftData}
+            setNftData={setNftData}
+            isAudioUploaded={isAudioUploaded}
+            setIsAudioUploaded={setIsAudioUploaded}
+            audioUploadError={audioUploadError}
+            setAudioUploadError={setAudioUploadError}
+          />
           <CreateFormPaginator currentStep={currentStep} setCurrentStep={setCurrentStep}/>
         </Step1Container>
       </OpaqueFilter>
@@ -348,7 +362,12 @@ const CreateForm = ({ open, hide }) => {
     return (
       <OpaqueFilter>
         <Step1Container>
-          <Step3 setCurrentStep={setCurrentStep} hide={hide} nftData={nftData}/>
+          <Step3
+            setCurrentStep={setCurrentStep} 
+            hide={hide} 
+            nftData={nftData}
+            updateState={updateState}
+          />          
           <CreateFormPaginator currentStep={currentStep} setCurrentStep={setCurrentStep}/>
         </Step1Container>
       </OpaqueFilter>
@@ -357,7 +376,13 @@ const CreateForm = ({ open, hide }) => {
     return (
       <OpaqueFilter>
         <Step1Container>
-          <Step4 setCurrentStep={setCurrentStep} hide={hide} nftData={nftData}/>
+          <Step4 
+            setCurrentStep={setCurrentStep} 
+            hide={hide} 
+            nftData={nftData}
+            updateState={updateState}
+            usdPerEth={usdPerEth}
+          />
           <CreateFormPaginator currentStep={currentStep} setCurrentStep={setCurrentStep}/>
         </Step1Container>
       </OpaqueFilter>

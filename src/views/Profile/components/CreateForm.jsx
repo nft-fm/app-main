@@ -328,11 +328,11 @@ const CreateForm = ({ open, hide }) => {
   if (currentStep === 1) {
     return (
       <OpaqueFilter>
-        <Step1Container>
+        <SelectContainer>
           <X src={x} onClick={() => hide()} />
           <SelectSingleOrMultiple setCurrentStep={setCurrentStep} />
           <CreateFormPaginator currentStep={currentStep} setCurrentStep={setCurrentStep}/>
-        </Step1Container>
+        </SelectContainer>
       </OpaqueFilter>  
     )
   } else {
@@ -553,6 +553,22 @@ const Step1Container = styled.div`
   @media only screen and (max-width: 776px) {
     width: 90vw;
     height: 95vh;
+    flex-direction: column;
+    align-items: center;
+  }
+`;
+
+const SelectContainer = styled.div`
+  width: 800px;
+  align-items: space-between;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  @media only screen and (max-width: 776px) {
+    width: 90vw;
     flex-direction: column;
     align-items: center;
   }
@@ -989,7 +1005,7 @@ const OpaqueFilter = styled.div`
   background-color: rgba(0, 0, 0, 0.9);
   -webkit-backdrop-filter: blur(4.6px);
   backdrop-filter: blur(4.6px);
-  z-index: 10;
+  z-index: 500;
   top: 0;
 `;
 

@@ -23,7 +23,7 @@ export const SelectSingleOrMultiple = ({ setCurrentStep }) => {
             </Row>
             <Row>
               <Text>
-                Pick a price and time and sell to the highest bidder
+                Pick a price and time and sell to the highest bidder.
               </Text>
             </Row>
           </List>
@@ -34,12 +34,10 @@ export const SelectSingleOrMultiple = ({ setCurrentStep }) => {
           <Image src={many_nft} alt="many"/>
           <List>
             <Row>
-              <Text>
-                Create multiple NFTs
-              </Text>
+              <Text>Create multiple NFTs</Text>
             </Row>
             <Row>
-              <Text>Pick a price and how many NFTs you would like to have minted on the marketplace</Text>
+              <Text>Pick a price and how many NFTs you would like to have minted on the marketplace.</Text>
             </Row>
           </List>
         </Box>
@@ -50,7 +48,9 @@ export const SelectSingleOrMultiple = ({ setCurrentStep }) => {
 
 const Image = styled.img`
   width: 70%;
-  max-width: 250px;
+  @media only screen and (max-width: 500px) {
+    width: 50%;
+  }
 `
 
 const Fixed = styled.h1`
@@ -61,6 +61,10 @@ const Fixed = styled.h1`
   transform: translate(-50%, -50%);
   color: white;
   cursor: not-allowed;
+  @media only screen and (max-width: 500px) {
+    left: 50%;
+    top: 30%;
+  }
 `;
 
 const Header = styled.h3`
@@ -121,15 +125,22 @@ const Box = styled.div`
     opacity: 0.7;
     cursor: not-allowed;
   `}
+  @media only screen and (max-width: 500px) {
+    width: calc(100% - 32px);
+    &:first-child {
+      margin-bottom: 20px;
+    }
+  }
 `;
 const Outer = styled.div`
   margin-top: 60px;
   width: 800px;
-  max-width: 70vw;
-  height: 400px;
   align-items: space-between;
   display: flex;
   flex-direction: column;
+  @media only screen and (max-width: 776px) {
+    width: calc(100% - 64px);
+  }
 `;
 
 const SelectContainer = styled.div`
@@ -137,7 +148,8 @@ const SelectContainer = styled.div`
   width: 100%;
   flex-direction: row;
   justify-content: space-between;
-  @media only screen and (max-width: 776px) {
+  @media only screen and (max-width: 500px) {
+    flex-direction: column;
     width: 100%;
     align-items: center;
   }

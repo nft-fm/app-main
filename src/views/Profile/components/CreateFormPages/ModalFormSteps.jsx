@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 import x from "../../../../assets/img/icons/x.svg";
 import DemoImage from "../../../Home/Components/DemoImage/DemoImage"
 import UploadAudio from "../UploadAudio";
-
+import PreviewBuyModal from "./PreviewBuyModal"
 export const ModalFormSteps = ({
   hide,
   currentStep,
@@ -11,6 +11,7 @@ export const ModalFormSteps = ({
   hiddenImageInput,
   imageFile,
   handleImage,
+  handleImageChange,
   updateState,
   usdPerEth,
   // UploadAudioStuff
@@ -28,6 +29,7 @@ export const ModalFormSteps = ({
       hiddenImageInput={hiddenImageInput}
       imageFile={imageFile}
       handleImage={handleImage}
+      handleImageChange={handleImageChange}
       // UploadAudioStuff
       audioFile={audioFile}
       setAudioFile={setAudioFile}
@@ -47,18 +49,25 @@ export const ModalFormSteps = ({
       updateState={updateState}
       usdPerEth={usdPerEth} 
     />,
-    <SubmitStep />,
+    <PreviewBuyModal
+      nft={nftData}
+    />,
   ];
 
   return (
     <StyledModal>
       <X src={x} onClick={() => hide()} />
-      <LeftSide>
-        <div style={{height: "280px"}}>
-          <DemoImage />
-        </div>
-      </LeftSide>
-      <RightSide>
+        {
+          nftData.imageUrl === "" ?
+            <LeftSide>
+              {/* <div style={{height: "280px"}}> */}
+                {/* <DemoImage /> */}
+              {/* </div>  */}
+            </LeftSide>
+          :
+          <Image src={nftData.imageUrl} alt="image" />
+        }
+      <RightSide step={currentStep}>
         {steps[currentStep - 1]}
       </RightSide>
     </StyledModal>
@@ -81,7 +90,7 @@ const UploadImageAndMusic = ({
 }) => {
   return (
     <>
-      <h2>Visual</h2>
+      <h2 style={{textAlign: "left"}}>Visual</h2>
       <UploadContainer>
         <p>PNG, JPG, GIF, MP4</p>
         <ChooseFile onClick={() => handleImage()} type="button">
@@ -97,7 +106,7 @@ const UploadImageAndMusic = ({
         />
       </UploadContainer>
 
-      <h2 style={{paddingTop: "20px"}}>Audio</h2>
+      <h2 style={{paddingTop: "20px", textAlign: "left"}}>Audio</h2>
       <UploadContainer>
         <p>MP3, FLAC</p>
         <UploadAudio
@@ -257,6 +266,19 @@ const PriceContainer = styled.div`
   }
 `
 
+const Image = styled.img`
+  width: 500px;
+  aspect-ratio: 1;
+  border-radius: 16px;
+  border: 1px solid #262626;
+  background-color: #1e1e1e;
+  object-fit: cover;
+  overflow: hidden;
+  @media only screen and (max-width: 776px) {
+    width: 90vw;
+    height: 90vw;
+  }
+`;
 
 const InputContainer = styled.div`
   height: 400px;
@@ -304,9 +326,8 @@ const X = styled.img`
 
 const LeftSide = styled.div`
   display: flex;
-  width: 100%;
-  /* width: 500px;
-  height: 500px; */
+  width: 500px;
+  height: 500px;
   border-radius: 18px;
   background-color: white;
   justify-content: center;
@@ -318,7 +339,7 @@ const UploadContainer = styled.div`
   justify-content: space-evenly;
   align-items: center;
   text-align: center;
-  background-color: #343434;
+  background-image: linear-gradient(to right, #262626, #383838);
   width: 220px;
   height: 120px;
   border-radius: 16px;
@@ -372,21 +393,35 @@ const StyledModal = styled.div`
 `;
 
 const RightSide = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: calc(100% - 500px);
-  padding: 10px 30px;
-  @media only screen and (max-width: 776px) {
-    width: 90vw;
-    height: calc(100vh / 2);
-    justify-content: space-between;
-  }
+  ${props => props.currentStep === 4 ? css`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: calc(100% - 500px);
+    padding: 10px 30px;
+    @media only screen and (max-width: 776px) {
+      width: 90vw;
+      height: calc(100vh / 2);
+      justify-content: space-between;
+    }
   h2 {
     color: white;
     padding: 0;
     margin: 0;
   }
+  ` : css`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: calc(100% - 500px);
+    padding: 10px 30px;
+    @media only screen and (max-width: 776px) {
+      width: 90vw;
+      height: calc(100vh / 2);
+      justify-content: space-between;
+    }
+    color: white;
+  `}
 `;
 
 const SubHeader = styled.h4`

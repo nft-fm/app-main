@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useRef } from "react";
+import React from "react";
 import styled, { css } from "styled-components";
+import ReactToolTip from "react-tooltip";
 
 const PaginatorButton = ({ children, currentStep, prev, onClick }) => 
   <StyledAccountButton currentStep={currentStep} prev={prev} onClick={onClick}>
@@ -21,12 +22,24 @@ const CreateFormPaginator = ({ currentStep, setCurrentStep, handleSubmit, stepsC
         Back
       </PaginatorButton>
       <DotContainer>
-        <Dot step={1} currentStep={currentStep} onClick={() => onClickDotNavigate(1)} color="dodgerblue"/>
-        <Dot step={2} currentStep={currentStep} onClick={() => onClickDotNavigate(2)} color="gold"/>
-        <Dot step={3} currentStep={currentStep} onClick={() => onClickDotNavigate(3)} color="yellowgreen"/>
-        <Dot step={4} currentStep={currentStep} onClick={() => onClickDotNavigate(4)} color="tomato"/>
+        <Dot id="saleorauction" data-tip data-for="saleorauction" step={1} currentStep={currentStep} onClick={() => onClickDotNavigate(1)} color="dodgerblue"/>
+        <Dot id="upload-assets" data-tip data-for="upload-assets" step={2} currentStep={currentStep} onClick={() => onClickDotNavigate(2)} color="gold"/>
+        <Dot id="artist-info" data-tip data-for="artist-info" step={3} currentStep={currentStep} onClick={() => onClickDotNavigate(3)} color="yellowgreen"/>
+        <Dot id="sale-options" data-tip data-for="sale-options" step={4} currentStep={currentStep} onClick={() => onClickDotNavigate(4)} color="tomato"/>
+        <ReactToolTip id="saleorauction" place="bottom" effect="solid">
+          Auction or Sale
+        </ReactToolTip>
+        <ReactToolTip id="upload-assets" place="bottom" effect="solid">
+          Upload Assets
+        </ReactToolTip>
+        <ReactToolTip id="artist-info" place="bottom" effect="solid">
+          Artist Info
+        </ReactToolTip>
+        <ReactToolTip id="sale-options" place="bottom" effect="solid" >
+          Sale Options
+        </ReactToolTip>
       </DotContainer>
-      {currentStep === 5 ? 
+      {currentStep === 5 ?
         <PaginatorButton currentStep={currentStep} onClick={handleSubmit}>Submit</PaginatorButton> : 
         <PaginatorButton currentStep={currentStep} onClick={() => setCurrentStep(currentStep + 1)}>Next</PaginatorButton>
       }
@@ -34,23 +47,12 @@ const CreateFormPaginator = ({ currentStep, setCurrentStep, handleSubmit, stepsC
   )
 }
 
-const Step1Container = styled.div`
-  width: 800px;
-  align-items: space-between;
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-`;
-
 const PaginatorContainer = styled.div`
   display: flex;
-  width: 1000px;
+  /* width: 1000px; */
   justify-content: space-around;
   align-items: center;
-  margin-left: -100px;
+  /* margin-left: -100px; */
   margin-top: 10px;
 `
 
@@ -93,8 +95,8 @@ const DotContainer = styled.div`
 `
 
 const Dot = styled.span`
-  height: 20px;
-  width: 20px;
+  height: 15px;
+  width: 15px;
   margin: 20px 5px;
   background-color: ${
     props => props.color && props.currentStep >= props.step ? props.color : "#181818"

@@ -39,7 +39,7 @@ const Roadmap = () => {
           </LaunchFeatureList>
         </LaunchFeaturesBox>
         <LaunchFeaturesBox>
-          <LaunchFeaturesHeader>Q2</LaunchFeaturesHeader>
+          <LaunchFeaturesHeader>Q3</LaunchFeaturesHeader>
           <LaunchFeatureList>
             <LaunchFeatureRow>
               <LaunchFeatureText>Full Album NFTs</LaunchFeatureText>
@@ -57,7 +57,7 @@ const Roadmap = () => {
               <Checkmark src={grayCheckMark} />
             </LaunchFeatureRow>
             <LaunchFeatureRow>
-              <LaunchFeatureText>Credit Card Support</LaunchFeatureText>
+              <LaunchFeatureText>Streamlined Artist Uploading</LaunchFeatureText>
               <FillerLine />
               <Checkmark src={grayCheckMark} />
             </LaunchFeatureRow>

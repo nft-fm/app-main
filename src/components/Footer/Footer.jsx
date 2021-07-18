@@ -14,11 +14,11 @@ export const Footer = ({ isOpen }) => (
       <FooterLinks>
         <FooterLink to="/termsofservice">Terms of Service</FooterLink>
         <ContactDiv>
-          <span>2120 Oxford Ave</span>
+          {/* <span>2120 Oxford Ave</span>
           <span>Austin, TX</span>
-          <br />
+          <br /> */}
           <EmailLink href="mailto:info@nftfm.io" target="_blank">
-            E: info@nftfm.io
+            info@nftfm.io
           </EmailLink>
         </ContactDiv>
         <FooterLink to="/privacypolicy">Privacy Policy</FooterLink>

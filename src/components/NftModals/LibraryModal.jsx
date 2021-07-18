@@ -21,7 +21,7 @@ import { ReactComponent as Founder } from "../../assets/img/Badges/founder.svg";
 import { ReactComponent as Premium } from "../../assets/img/Badges/premium.svg";
 import { ReactComponent as Prerelease } from "../../assets/img/Badges/prerelease.svg";
 import { ReactComponent as Exclusive } from "../../assets/img/Badges/exclusive.svg";
-
+import ReactPlayer from "react-player";
 import moment from "moment";
 import { NavLink } from "react-router-dom";
 import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.svg";
@@ -176,7 +176,26 @@ const LibraryModal = ({
             <Logo src={logo} />
             Buy NFT
           </CardTitle> */}
-          <Image src={nft.imageUrl} alt="image" />
+          {nft.videoUrl ? (
+            <ReactPlayer
+              url={nft.videoUrl}
+              controls="true"
+              onStart="false"
+              playing={false}
+              loop="true"
+              width="500px"
+              height="500px"
+              style={{ marginTop: "auto", marginBottom: "auto" }}
+              onContextMenu={e => e.preventDefault()}
+              config={{ file: { 
+                attributes: {
+                  controlsList: 'nodownload'
+                }
+              }}}
+            />
+          ) : (
+            <Image src={nft.imageUrl} alt="image" />
+          )}
           <RightSide>
             <CardTop>
               <Side>

@@ -173,7 +173,7 @@ const BuyNftModal = ({
         <StyledModal>
           <X onClick={(e) => hide(e)} />
           {/* if videoUrl exists, render video instead of image */}
-          {nft.videoUrl ? (
+          {/* {nft.videoUrl ? (
             <ReactPlayer
               url={nft.videoUrl}
               controls="true"
@@ -190,9 +190,9 @@ const BuyNftModal = ({
                 }
               }}}
             />
-          ) : (
+          ) : ( */}
             <Image src={nft.imageUrl} alt="image" />
-          )}
+          {/* )} */}
           <RightSide>
             <CardTop>
               <Side>

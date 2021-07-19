@@ -125,7 +125,7 @@ const UploadImageAndMusic = ({
 }
 
 const ArtistInfo = ({ 
-  nftData: { title, producer, writer, isrc, description }, 
+  nftData: { title, producer, isrc, description, genre }, 
   updateState 
 }) => {
   return (
@@ -155,13 +155,13 @@ const ArtistInfo = ({
         value={producer}
         required
       />
-      <SubHeader>Writer</SubHeader>
+      <SubHeader>Genre</SubHeader>
       <StyledInput
         type="text"
-        placeholder="Writer"
-        name="writer"
+        placeholder="Genre"
+        name="genre"
         onChange={(e) => {updateState(e)}}
-        value={writer}
+        value={genre}
         required
       />
       <SubHeader>ISRC</SubHeader>
@@ -185,7 +185,6 @@ const ArtistInfo = ({
     </InputContainer>
   )
 }
-
 
 const PriceAndQuantity = ({ nftData: { price, numMinted }, updateState, usdPerEth }) => {
   return (
@@ -393,7 +392,7 @@ const StyledModal = styled.div`
 `;
 
 const RightSide = styled.div`
-  ${props => props.currentStep === 4 ? css`
+  ${props => props.currentStep !== 6 ? css`
     display: flex;
     flex-direction: column;
     align-items: center;

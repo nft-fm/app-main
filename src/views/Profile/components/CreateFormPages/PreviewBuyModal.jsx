@@ -1,13 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
+import axios from 'axios';
 import PlaySongSnippet from "../../../../components/NftModals/Components/PlaySongSnippet"
 import moment from "moment";
-import { ReactComponent as Exclusive } from "../../../../assets/img/Badges/exclusive.svg";
-import { ReactComponent as Founder } from "../../../../assets/img/Badges/founder.svg";
-import { ReactComponent as Premium } from "../../../../assets/img/Badges/premium.svg";
-import { ReactComponent as Prerelease } from "../../../../assets/img/Badges/prerelease.svg";
-import { ReactComponent as IconX } from "../../../../assets/img/icons/x.svg";
 import { ReactComponent as IconEth } from "../../../../assets/img/icons/ethereum.svg";
 import { ReactComponent as IconHeart } from "../../../../assets/img/icons/heart.svg";
 import { ReactComponent as IconShare } from "../../../../assets/img/icons/share.svg";
@@ -27,7 +23,7 @@ const PreviewBuyModal = ({ nft, partialSong }) => {
   };
 
   return (
-    <RightSide>
+    <>
       <CardTop>
         <Side>
           <IconArea>
@@ -56,7 +52,7 @@ const PreviewBuyModal = ({ nft, partialSong }) => {
         </Artist>
       </InfoContainer>
       <SnippetHolder>
-        <PlaySongSnippet partialSong={partialSong} />
+        {/* <PlaySongSnippet partialSong={partialSong} /> */}
         <SnippetText>15 Sec Preview</SnippetText>
       </SnippetHolder>
       <TrackDetailsHolder>
@@ -84,7 +80,7 @@ const PreviewBuyModal = ({ nft, partialSong }) => {
       <BuyButton>
         <ButtonText>Purchase</ButtonText>
       </BuyButton>
-    </RightSide>
+    </>
   )
 }
 
@@ -98,44 +94,11 @@ const TrackDetailsHolder = styled.div`
   @media only screen and (max-width: 776px) {
     height: auto;
   }
-`;
-const ExclusiveBadge = styled(Exclusive)`
-  width: 20px;
-  height: 20px;
-  padding: 0 5px;
-`;
-const FounderBadge = styled(Founder)`
-  width: 20px;
-  height: 20px;
-  padding: 0 5px;
-`;
-const PremiumBadge = styled(Premium)`
-  width: 20px;
-  height: 20px;
-  padding: 0 5px;
-`;
-const PrereleaseBadge = styled(Prerelease)`
-  width: 20px;
-  height: 20px;
-  padding: 0 5px;
+  span {
+    color: ${(props) => props.theme.color.gray};
+  }
 `;
 
-const DescriptionHolder = styled.fieldset`
-  width: 100%;
-  border-radius: 8px;
-  border: 1px solid ${(props) => props.theme.color.lightgray};
-  padding: 2px 0;
-  height: 100px;
-  /* margin-top: 10px; */
-`;
-const DescriptionLegend = styled.legend`
-  padding: 0 5px;
-  margin-left: 10px;
-`;
-const DescriptionContent = styled.span`
-  margin-top: -10px;
-  padding: 0 10px;
-`;
 
 const SnippetHolder = styled.div`
   display: flex;
@@ -219,33 +182,6 @@ const PriceItem = styled.span`
   color: white;
 `;
 
-const X = styled(IconX)`
-  position: absolute;
-  right: 2px;
-  top: 9px;
-  width: 24px;
-  height: 24px;
-  margin: 0 4px 0 0;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  & path {
-    transition: all 0.2s ease-in-out;
-    stroke: ${(props) => props.theme.color.gray};
-    fill: ${(props) => props.theme.color.gray};
-  }
-`;
-
-const LikedHeart = styled(IconHeart)`
-  width: 24px;
-  height: 24px;
-  margin: -3px 4px 0 0;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  & path {
-    stroke: ${(props) => props.theme.color.pink};
-  }
-`;
-
 const Cart = styled(IconCart)`
   width: 24px;
   height: 24px;
@@ -316,94 +252,7 @@ const CardTop = styled.div`
   justify-content: space-between;
   font-weight: 600;
   font-family: "Compita";
-`;
-
-const Logo = styled.img`
-  width: 20px;
-  margin-right: 8px;
-  height: auto;
-`;
-
-const CardTitle = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "Compita";
-  font-weight: 600;
   color: white;
-  font-size: ${(props) => props.theme.fontSizes.sm};
-  margin-bottom: 12px;
-`;
-
-const OpaqueFilter = styled.div`
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(0, 0, 0, 0.8);
-  z-index: 500;
-`;
-
-const Container = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-`;
-
-const RightSide = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: calc(100% - 500px);
-  padding: 10px 30px;
-  @media only screen and (max-width: 776px) {
-    width: 90vw;
-    height: calc(100vh / 2);
-    justify-content: space-between;
-  }
-  color: white;
-`;
-const StyledModal = styled.div`
-  border-radius: 16px;
-  border: solid 1px #181818;
-  width: 800px;
-  background-color: ${(props) => props.theme.bgColor};
-  font-size: 16px;
-  font-weight: normal;
-  display: flex;
-  justify-content: space-between;
-  position: relative;
-
-  @media only screen and (max-width: 776px) {
-    width: 90vw;
-    height: 95vh;
-    flex-direction: column;
-    align-items: center;
-    /* justify-content: flex-start; */
-  }
-`;
-
-const Image = styled.img`
-  width: 500px;
-  /* height: 400px; */
-  aspect-ratio: 1;
-  border-radius: 16px;
-  border: 1px solid #262626;
-  background-color: #1e1e1e;
-  object-fit: cover;
-  overflow: hidden;
-  /* margin-bottom: 16px; */
-  @media only screen and (max-width: 776px) {
-    width: 90vw;
-    height: 90vw;
-  }
 `;
 
 const BadgeHolder = styled.div`

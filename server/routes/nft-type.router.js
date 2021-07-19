@@ -54,6 +54,18 @@ const findRemainingInfo = async (nft) => {
   return newNft;
 };
 
+router.get('/get-draft/:address', async (req, res) => {
+  try {
+    if (!req.params.address) {
+      return res.status(400).send("Error, no address in field")
+    }
+    let nfts = await NftType.find({ address:req.params.address, isDraft: true }).sort({ timestamp: -1 })
+    res.send(nfts)
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
 router.post("/full-nft-info", async (req, res) => {
   try {
     const fullInfo = await findRemainingInfo(req.body.nft).catch((err) =>

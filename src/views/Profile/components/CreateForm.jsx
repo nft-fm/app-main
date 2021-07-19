@@ -19,18 +19,34 @@ import { ModalFormSteps } from "./CreateFormPages/ModalFormSteps";
 
 import CreateFormPaginator from "./CreateFormPaginator";
 
+// const initialNftState = {
+//   artist: "",
+//   address: "",
+//   isDraft: true,
+//   genre: "",
+//   startTime: 0,
+//   dur: 0,
+//   numMinted: 0,
+//   price: 0,
+//   producer: "",
+//   title: "",
+//   writer: "",
+//   imageUrl: "",
+//   audioUrl: "",
+// };
+
 const initialNftState = {
-  artist: "",
-  address: "",
+  artist: "Vincent",
+  address: "0x1603a6aD5C6960C89572cca55C4f5031838Bb941",
   isDraft: true,
-  genre: "",
+  genre: "Testing",
   startTime: 0,
   dur: 0,
-  numMinted: 0,
-  price: 0,
-  producer: "",
-  title: "",
-  writer: "",
+  numMinted: 5,
+  price: 0.005,
+  producer: "Vincent",
+  title: "Testing",
+  writer: "Vincent",
   imageUrl: "",
   audioUrl: "",
 };
@@ -357,6 +373,7 @@ const CreateForm = ({ open, hide }) => {
             setIsAudioUploaded={setIsAudioUploaded}
             audioUploadError={audioUploadError}
             setAudioUploadError={setAudioUploadError}
+            handleSubmit={handleSubmit}
           />
           <CreateFormPaginator currentStep={currentStep} setCurrentStep={setCurrentStep}/>
         </Step1Container>

@@ -19,34 +19,18 @@ import { ModalFormSteps } from "./CreateFormPages/ModalFormSteps";
 
 import CreateFormPaginator from "./CreateFormPaginator";
 
-// const initialNftState = {
-//   artist: "",
-//   address: "",
-//   isDraft: true,
-//   genre: "",
-//   startTime: 0,
-//   dur: 0,
-//   numMinted: 0,
-//   price: 0,
-//   producer: "",
-//   title: "",
-//   writer: "",
-//   imageUrl: "",
-//   audioUrl: "",
-// };
-
 const initialNftState = {
-  artist: "Vincent",
-  address: "0x1603a6aD5C6960C89572cca55C4f5031838Bb941",
+  artist: "",
+  address: "",
   isDraft: true,
-  genre: "Testing",
+  genre: "",
   startTime: 0,
   dur: 0,
-  numMinted: 5,
-  price: 0.005,
-  producer: "Vincent",
-  title: "Testing",
-  writer: "Vincent",
+  numMinted: 0,
+  price: 0,
+  producer: "",
+  title: "",
+  writer: "",
   imageUrl: "",
   audioUrl: "",
 };
@@ -67,13 +51,21 @@ const CreateForm = ({ open, hide }) => {
   const [audioUploadError, setAudioUploadError] = useState(false);
   const [isAudioUploaded, setIsAudioUploaded] = useState(false);
   const [isImageUploaded, setIsImageUploaded] = useState(false);
-
   const [currentStep, setCurrentStep] = useState(1);
 
 
   useEffect(() => {
     user && user.username && setNftData({ ...nftData, artist: user.username });
   }, [user]);
+
+  // useEffect(() => {
+  //   const getDraft = async () => {
+  //     const draft = await axios.get(`/api/nft-type/get-draft/${account}`);
+  //     setNftData(draft.data[0]);
+  //     console.log(draft.data[0]);
+  //   }
+  //   getDraft();
+  // }, [open, account])
 
   useEffect(() => {
     setNftData({ ...nftData, address: account });
@@ -347,7 +339,11 @@ const CreateForm = ({ open, hide }) => {
         <SelectContainer>
           <X src={x} onClick={() => hide()} />
           <SelectSingleOrMultiple setCurrentStep={setCurrentStep} />
-          <CreateFormPaginator currentStep={currentStep} setCurrentStep={setCurrentStep}/>
+          <CreateFormPaginator 
+            nftData={nftData} 
+            currentStep={currentStep}
+            setCurrentStep={setCurrentStep}
+          />
         </SelectContainer>
       </OpaqueFilter>  
     )
@@ -375,7 +371,11 @@ const CreateForm = ({ open, hide }) => {
             setAudioUploadError={setAudioUploadError}
             handleSubmit={handleSubmit}
           />
-          <CreateFormPaginator currentStep={currentStep} setCurrentStep={setCurrentStep}/>
+          <CreateFormPaginator 
+            nftData={nftData} 
+            currentStep={currentStep} 
+            setCurrentStep={setCurrentStep}
+          />
         </Step1Container>
       </OpaqueFilter>
     )

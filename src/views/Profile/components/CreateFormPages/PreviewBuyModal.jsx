@@ -21,7 +21,6 @@ const PreviewBuyModal = ({ nft, partialSong }) => {
     var sDisplay = s < 10 ? "0" + s : s;
     return hDisplay + mDisplay + sDisplay;
   };
-
   return (
     <>
       <CardTop>
@@ -46,13 +45,13 @@ const PreviewBuyModal = ({ nft, partialSong }) => {
       <InfoContainer>
         <TrackName>{nft.title}</TrackName>
         <Artist
-          to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}
+          to={`/artist/${nft.artist ? nft.artist.replace(/ /g, "").toLowerCase() : ''}`}
         >
           {nft.writer}
         </Artist>
       </InfoContainer>
       <SnippetHolder>
-        {/* <PlaySongSnippet partialSong={partialSong} /> */}
+        <PlaySongSnippet partialSong={partialSong} />
         <SnippetText>15 Sec Preview</SnippetText>
       </SnippetHolder>
       <TrackDetailsHolder>
@@ -120,6 +119,7 @@ const SnippetText = styled.span`
   @media only screen and (max-width: 776px) {
     margin-bottom: 0;
   }
+  color: white;
 `;
 
 const Loading = styled.img`

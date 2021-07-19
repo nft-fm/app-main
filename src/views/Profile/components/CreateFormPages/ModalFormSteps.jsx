@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styled, { css } from "styled-components";
 import x from "../../../../assets/img/icons/x.svg";
 import DemoImage from "../../../Home/Components/DemoImage/DemoImage"
@@ -58,7 +58,7 @@ export const ModalFormSteps = ({
     <StyledModal>
       <X src={x} onClick={() => hide()} />
         {
-          nftData.imageUrl === "" ?
+          nftData.imageUrl === "" || !nftData.imageUrl ?
             <LeftSide>
               {/* <div style={{height: "280px"}}> */}
                 {/* <DemoImage /> */}
@@ -193,7 +193,7 @@ const PriceAndQuantity = ({ nftData: { price, numMinted }, updateState, usdPerEt
       <SubHeader>Price</SubHeader>
       <PriceContainer>
         <StyledInput
-          type="text"
+          type="number"
           placeholder="Price"
           name="price"
           onChange={(e) => {updateState(e)}}
@@ -209,7 +209,7 @@ const PriceAndQuantity = ({ nftData: { price, numMinted }, updateState, usdPerEt
       </PriceContainer>
       <SubHeader>Number of NFTs</SubHeader>
       <StyledInput
-        type="text"
+        type="number"
         placeholder="Quantity"
         name="numMinted"
         onChange={(e) => {updateState(e)}}
@@ -224,6 +224,8 @@ const PriceAndQuantity = ({ nftData: { price, numMinted }, updateState, usdPerEt
     </InputContainer>
   )
 }
+
+
 /*
   Preview and Submit
   https://app.zeplin.io/project/606f54fb991137523a503e45/screen/60947ff91620fe37238fc146
@@ -294,6 +296,14 @@ const InputContainer = styled.div`
     margin-left: auto;
     margin-right: auto;
   }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
 `;
 
 const StyledInput = styled.input`
@@ -312,7 +322,6 @@ const StyledInput = styled.input`
     height: 30px;
   }
 `;
-
 
 const X = styled.img`
   width: 25px;

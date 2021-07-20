@@ -20,6 +20,7 @@ const Listen = () => {
   const [allNfts, setAllNfts] = useState([]);
   const [displayedNfts, setDisplayedNfts] = useState([]);
   const [priceOrientation, setPriceOrientation] = useState(true);
+
   const numTotalNfts = useRef(0);
   const numNftsFetched = useRef(1);
   const isAtBottom = useRef(false);
@@ -32,9 +33,7 @@ const Listen = () => {
         setUnformattedNftData(res.data);
         setAllNfts(res.data);
         const formattedNfts = formatNfts(
-          res.data.sort(function (a, b) {
-            return b.price - a.price;
-          })
+          res.data
         );
         for (let i = 0; i < 5; i++) {
           formattedNfts.push(<FillerCard />);
@@ -65,20 +64,36 @@ const Listen = () => {
       return () => window.removeEventListener("resize", handleResize);
     }
   }, [hasWindow]);
+  
+//   const onScroll = function () {
+//     // + 80 pixels to make it the actual full window height
+// console.log('windowHeight', windowHeight, window.outerHeight, window.scrollY)
+//     if (window.outerHeight + window.scrollY >= windowHeight + 80) {
+//       isAtBottom.current = true;
+//       getMoreNftsIfAtBottom();
+//     } else {
+//       isAtBottom.current = false;
+//     }
+//   };
+
+  const onScroll = function () {
+    // + 80 pixels to make it the actual full window height
+    console.log('windowHeight', window.innerHeight + window.scrollY, window.outerHeight + 50)
+    if (window.innerHeight + window.scrollY >= windowHeight - 50) {
+      isAtBottom.current = true;
+      getMoreNftsIfAtBottom();
+    } else {
+      isAtBottom.current = false;
+    }
+  };
+
 
   useEffect(() => {
-    const onScroll = function () {
-      // + 80 pixels to make it the actual full window height
-  console.log('windowHeight', windowHeight, window.outerHeight, window.scrollY)
-      if (window.outerHeight + window.scrollY >= windowHeight + 80) {
-        isAtBottom.current = true;
-        getMoreNftsIfAtBottom();
-      } else {
-        isAtBottom.current = false;
-      }
-    };
     window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("touchmove", onScroll);
+    return () => {
+      window.removeEventListener("touchmove", onScroll);
+      window.removeEventListener("scroll", onScroll)};
   }, []);
   // ~~~~~~~~~~~~~~~~~ Window Height Calculation ~~~~~~~~~~~~~~~~~~~~~~
 

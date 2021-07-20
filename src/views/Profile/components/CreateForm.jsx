@@ -41,9 +41,11 @@ const initialNftState = {
 
 const CreateForm = ({ open, hide }) => {
   const { account, user, usdPerEth } = useAccountConsumer();
-  const [isLoading, setIsLoading] = useState(false);
   const [nftData, setNftData] = useState(initialNftState);
   const [curr, setCurr] = useState("ETH");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingImage, setIsLoadingImage] = useState(false);
+  const [isLoadingAudio, setIsLoadingAudio] = useState(false);
 
   const [currentStep, setCurrentStep] = useState(1);
 
@@ -147,19 +149,18 @@ const CreateForm = ({ open, hide }) => {
       });
       return;
     }
-    // !! {I need to reimplement this}
 
-    // if (!isAudioUploaded || !isImageUploaded) {
-    //   console.log("here");
-    //   swal.fire({
-    //     title: "Please wait for your audio and image files to be processed.",
-    //     timer: 5000,
-    //     imageUrl: errorIcon,
-    //     imageWidth,
-    //     imageHeight      
-    //   });
-    //   return;
-    // }
+    if (!nftData.imageUrl || !nftData.audioUrl) {
+      console.log("here");
+      swal.fire({
+        title: "Please wait for your audio and image files to be processed.",
+        timer: 5000,
+        imageUrl: errorIcon,
+        imageWidth,
+        imageHeight      
+      });
+      return;
+    }
 
     //run these two, store the returns in the nftData state object
 
@@ -180,8 +181,6 @@ const CreateForm = ({ open, hide }) => {
               () => {
                 console.log("final");
                 setNftData(initialNftState);
-                // setImageFile(null);
-                // setAudioFile(null);
                 setIsLoading(false);
                 swal
                   .fire({
@@ -269,7 +268,14 @@ const CreateForm = ({ open, hide }) => {
   if (!open) return false;
 
   const steps = [
-    <Step2 nftData={nftData} setNftData={setNftData} />,
+    <Step2 
+      nftData={nftData} 
+      setNftData={setNftData}
+      isLoadingAudio={isLoadingAudio}
+      setIsLoadingAudio={setIsLoadingAudio}
+      isLoadingImage={isLoadingImage}
+      setIsLoadingImage={setIsLoadingImage}
+    />,
     <Step3 nftData={nftData} updateState={updateState} />,
     <Step4 nftData={nftData} updateState={updateState} usdPerEth={usdPerEth} />,
     <PreviewBuyModal nft={nftData} />
@@ -277,17 +283,14 @@ const CreateForm = ({ open, hide }) => {
 
   if (currentStep === 1) {
     return (
-      <OpaqueFilter>
-        <SelectContainer>
-          <X src={x} onClick={() => hide()} />
-          <Step1 setCurrentStep={setCurrentStep} />
-          <CreateFormPaginator 
-            nftData={nftData} 
-            currentStep={currentStep}
-            setCurrentStep={setCurrentStep}
-          />
+      <>
+        <SelectContainer style={{zIndex: 501}}>
+          <StyledModal style={{background: "none", border: "none"}}>
+            <Step1 setCurrentStep={setCurrentStep} />
+          </StyledModal>
         </SelectContainer>
-      </OpaqueFilter>  
+        <OpaqueFilter onClick={() => hide()} />
+      </> 
     )
   } else {
     return(
@@ -297,13 +300,7 @@ const CreateForm = ({ open, hide }) => {
             <X src={x} onClick={() => hide()} />
             {
               nftData.imageUrl === "" || !nftData.imageUrl ?
-              <LeftSide>
-                {/* <div style={{height: "280px"}}> */}
-                  {/* <DemoImage /> */}
-                {/* </div>  */}
-              </LeftSide>
-            :
-            <Image src={nftData.imageUrl} alt="image" />
+              <LeftSide /> : <Image src={nftData.imageUrl} alt="image" />
             }
           <RightSide step={currentStep}>
             {steps[currentStep - 2]}

@@ -76,6 +76,22 @@ const CreateFormPaginator = ({
         });
       }
       return setCurrentStep(currentStep + 1);
+    } else if (currentStep === 2) {
+      return swal.fire({
+        title: "Music + image, or an video file must be available to continue.",
+        timer: 5000,
+        imageUrl: errorIcon,
+        imageWidth,
+        imageHeight      
+      });
+    } else if (currentStep === 3) {
+      return swal.fire({
+        title: "You must fill out the required artist fields.",
+        timer: 5000,
+        imageUrl: errorIcon,
+        imageWidth,
+        imageHeight      
+      });
     }
   }
 

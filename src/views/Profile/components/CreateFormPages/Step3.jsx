@@ -68,7 +68,7 @@ const ArtistTop = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
-  margin-top: -15px;
+  /* margin-top: -15px; */
 `
 
 const FieldHeaders = styled.div`

@@ -5,12 +5,23 @@ import axios from "axios";
 import { useAccountConsumer } from "../../../../contexts/Account";
 import { errorIcon, imageWidth, imageHeight } from "../../../../utils/swalImages";
 import swal from "sweetalert2";
+import loading_gif from "../../../../assets/img/loading.gif";
 
-const Step2 = ({ nftData, setNftData, isAudioUploaded }) => {
+const Step2 = ({ 
+  nftData, 
+  setNftData, 
+  isAudioUploaded, 
+  isLoadingAudio, 
+  setIsLoadingAudio,
+  isLoadingImage,
+  setIsLoadingImage 
+}) => {
+  const { account } = useAccountConsumer();
+  const imageUrlLength = 49 + account.length
+  const audioUrlLength = 48 + account.length
   const [imageFile, setImageFile] = useState(null);
   const [audioUploadError, setAudioUploadError] = useState(false);
   const [imageName, setImageName] = useState("");
-  const { account } = useAccountConsumer();
 
   const hiddenImageInput = useRef(null);
   const handleImage = () => {
@@ -22,6 +33,7 @@ const Step2 = ({ nftData, setNftData, isAudioUploaded }) => {
     if (!e.target.files[0]) {
       return;
     }
+    setIsLoadingImage(true);
     setImageFile(e.target.files[0]);
     setImageName(e.target.files[0].name);
   };
@@ -44,11 +56,13 @@ const Step2 = ({ nftData, setNftData, isAudioUploaded }) => {
                 "/" +
                 imageName
             });
+            setIsLoadingImage(false);
             setImageName("");
           }
           console.log(res);
         })
         .catch((err) => {
+          setIsLoadingImage(false);
           console.log(err);
           swal.fire({
             imageUrl: errorIcon,
@@ -64,11 +78,16 @@ const Step2 = ({ nftData, setNftData, isAudioUploaded }) => {
 
   return (
     <>
-      <h2 style={{textAlign: "left"}}>Visual</h2>
+      <div style={{width: "100%", paddingLeft: "60px"}}>
+        <h2 style={{textAlign: "left"}}>Visual</h2>
+      </div>
       <UploadContainer>
         <p>PNG, JPG, GIF, MP4</p>
+        <small style={{color: "white"}}>
+          {nftData && nftData.imageUrl !== "" ? nftData.imageUrl.slice(imageUrlLength, nftData.imageUrl.length) : ""}
+        </small>
         <ChooseFile onClick={() => handleImage()} type="button">
-          Choose File
+          {!isLoadingImage ? "Choose File" : <img style={{width: "25px", height: "25px"}} src={loading_gif} alt="loading" />}
         </ChooseFile>
         <StyledInput
           type="file"
@@ -79,15 +98,22 @@ const Step2 = ({ nftData, setNftData, isAudioUploaded }) => {
         />
       </UploadContainer>
 
-      <h2 style={{paddingTop: "20px", textAlign: "left"}}>Audio</h2>
+      <div style={{width: "100%", paddingLeft: "60px"}}>
+        <h2 style={{paddingTop: "20px", textAlign: "left"}}>Audio</h2>
+      </div>
       <UploadContainer>
         <p>MP3, FLAC</p>
+        <small style={{color: "white"}}>
+          {nftData && nftData.audioUrl !== "" ? nftData.audioUrl.slice(audioUrlLength, nftData.audioUrl.length) : ""}
+        </small>
         <UploadAudio
           nftData={nftData}
           setNftData={setNftData}
           isAudioUploaded={isAudioUploaded}
           audioUploadError={audioUploadError}
           setAudioUploadError={setAudioUploadError}
+          isLoadingAudio={isLoadingAudio}
+          setIsLoadingAudio={setIsLoadingAudio}
         />
       </UploadContainer>
     </>

@@ -7,6 +7,12 @@ import { ReactComponent as down_arrow } from "../../../assets/img/icons/down_arr
 import { ReactComponent as IconEth } from "../../../assets/img/icons/ethereum.svg";
 import moment from "moment";
 
+const hasWindow = typeof window !== "undefined";
+function getwindowHeight() {
+  const height = hasWindow ? window.outerHeight : null;
+  return height;
+}
+
 const Listen = () => {
   const { user, account } = useAccountConsumer();
   const [unformattedNftData, setUnformattedNftData] = useState([]);
@@ -14,11 +20,11 @@ const Listen = () => {
   const [allNfts, setAllNfts] = useState([]);
   const [displayedNfts, setDisplayedNfts] = useState([]);
   const [priceOrientation, setPriceOrientation] = useState(true);
-  // const [numTotalNfts, setNumTotalNfts] = useState(0);
+  const [windowHeight, setwindowHeight] = useState(getwindowHeight());
   const numTotalNfts = useRef(0);
   const numNftsFetched = useRef(10);
-  // const [numNftsFetched, setNumNftsFetched] = useState(4);
-  console.log("numTotalNfts", numTotalNfts);
+  const isAtBottom = useRef(false);
+
   const getAll = (limit) => {
     axios
       .post("/api/nft-type/all", { address: account, limit: limit })
@@ -37,67 +43,44 @@ const Listen = () => {
         setDisplayedNfts(formattedNfts);
       });
   };
-  const hasWindow = typeof window !== "undefined";
 
-  function getwindowHeight() {
-    const height = hasWindow ? window.outerHeight : null;
-    return height;
-  }
 
-  const [windowHeight, setwindowHeight] = useState(getwindowHeight());
+  const getMoreNftsIfAtBottom = () => {
+    while (
+      isAtBottom.current &&
+      numTotalNfts.current > numNftsFetched.current
+    ) {
+      numNftsFetched.current = numNftsFetched.current + 10;
+      getAll(numNftsFetched.current + 10);
+    }
+  };
 
+
+  // ~~~~~~~~~~~~~~~~~  Dynamic Window Height Calculation Start  ~~~~~~~~~~~~~~~~~~~~~~
   useEffect(() => {
     if (hasWindow) {
       function handleResize() {
         setwindowHeight(getwindowHeight());
       }
-
       window.addEventListener("resize", handleResize);
       return () => window.removeEventListener("resize", handleResize);
     }
   }, [hasWindow]);
 
-  // const [isFetching, setIsFetching] = useState(false);
-
-  // const getPaginatedNfts = () => {
-
-  //   if (window.innerHeight + window.scrollY >= windowHeight) {
-  //     console.log(
-  //       "you're at the bottom of the page",
-  //       numTotalNfts,
-  //       numNftsFetched
-  //     );
-  //     //function call to fetch more NFTs
-  //     //     if (numTotalNfts > numNftsFetched) {
-  //     //       // getAll(8);
-  //     // setIsFetching(true);
-  //     setNumNftsFetched(numNftsFetched + 4);
-  //     getAll(numNftsFetched + 4);
-
-  //     }
-  // }
-
   useEffect(() => {
     const onScroll = function () {
-      // getPaginatedNfts()
-      if (window.innerHeight + window.scrollY >= windowHeight) {
-        console.log(
-          "you're at the bottom of the page",
-          numTotalNfts.current,
-          numNftsFetched
-        );
-        //function call to fetch more NFTs
-        if (numTotalNfts.current > numNftsFetched.current) {
-          // getAll(8);
-          // setIsFetching(true);
-          numNftsFetched.current = numNftsFetched.current + 10;
-          getAll(numNftsFetched.current + 10);
-        }
+      // + 80 pixels to make it the actual full window height
+      if (window.outerHeight + window.scrollY >= windowHeight + 80) {
+        isAtBottom.current = true;
+        getMoreNftsIfAtBottom();
+      } else {
+        isAtBottom.current = false;
       }
     };
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+  // ~~~~~~~~~~~~~~~~~  Window Height Calculation End ~~~~~~~~~~~~~~~~~~~~~~
 
   const formatNfts = (nftsData) => {
     return nftsData.map((nft) => <NftCard nft={nft} />);
@@ -106,7 +89,6 @@ const Listen = () => {
   useEffect(() => {
     axios.post("/api/nft-type/countNfts").then((res) => {
       console.log("this", res.data);
-      // setNumTotalNfts(res.data.count);
       numTotalNfts.current = res.data.count;
       getAll(10);
     });

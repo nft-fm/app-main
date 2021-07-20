@@ -19,6 +19,7 @@ const Listen = () => {
 
   const getAll = () => {
     axios.post("/api/nft-type/all", { address: account }).then((res) => {
+      console.log("gotten all", res.data);
       setUnformattedNftData(res.data);
       setAllNfts(res.data);
       const formattedNfts = formatNfts(

@@ -27,23 +27,26 @@ import { NavLink } from "react-router-dom";
 import ReactPlayer from "react-player";
 import { errorIcon, warningIcon, imageWidth, imageHeight } from "../../utils/swalImages";
 
-const BuyNftModal = ({
-  open,
-  children,
-  hide,
-  onClose,
-  nft,
-  partialSong,
-  liked,
-  setLiked,
-  likeCount,
-  setLikeCount,
-  setIsShareOpen,
-}) => {
+const BuyNftModal = (props) => {
+  const {
+    open,
+    hide,
+    nft,
+    partialSong,
+    liked,
+    setLiked,
+    likeCount,
+    setLikeCount,
+    setIsShareOpen,
+  } = props;
+
+  console.log("buynftmodal", props);
+
   const [isLoading, setIsLoading] = useState(false);
   const [isBought, setIsBought] = useState(false);
   const { account, connect, usdPerEth, getUser } = useAccountConsumer();
   const { setNftCallback } = usePlaylistConsumer();
+  
   const stopProp = (e) => {
     e.stopPropagation();
   };

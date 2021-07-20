@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
-import BuyNftModal from "../NftModals";
 import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
 import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
@@ -11,8 +10,6 @@ import { useAccountConsumer } from "../../contexts/Account";
 
 const NftCard = (props) => {
   const { usdPerEth, user, account } = useAccountConsumer();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isShareOpen, setIsShareOpen] = useState(false);
 
   return (
     <Container>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import BuyNftModal from "../NftModals";
+import NftModalHook from "../NftModalHook/NftModalHook";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
@@ -20,21 +20,7 @@ import ReactToolTip from "react-tooltip";
 
 const NftCard = (props) => {
   const { usdPerEth, user, account } = useAccountConsumer();
-  const [nft, setNft] = useState({
-    address: "",
-    artist: "",
-    audioUrl: "",
-    genre: "",
-    imageUrl: "",
-    likeCount: 0,
-    liked: false,
-    nftId: 0,
-    title: "",
-    writer: "",
-    price: "...",
-    quantity: "--",
-    sold: "--",
-  });
+  const [nft, setNft] = useState(null);
 
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -118,6 +104,9 @@ const NftCard = (props) => {
     }
   }, [isModalOpen]);
 
+  if (!nft) {
+    return null;
+  }
   return (
     <Container>
       <ShareModal
@@ -126,13 +115,13 @@ const NftCard = (props) => {
         updateShareCount={() => setShareCount({ count: shareCount.count + 1 })}
         nft={nft}
       />
-      <BuyNftModal
+      <NftModalHook
         open={isModalOpen}
         hide={hide}
         nft={nft}
         partialSong={partialSong}
         liked={liked}
-        setLiked={setLiked}
+        SetLiked={setLiked}
         likeCount={likeCount}
         setLikeCount={setLikeCount}
         setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
@@ -241,36 +230,10 @@ const NftCard = (props) => {
             : nft.price}
           <Eth />
         </CostEth>
-        {/* <CostUsd>
-          {usdPerEth
-            ? parseFloat(usdPerEth * nft.price).toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })
-            : "..."}
-          <Usd />
-        </CostUsd> */}
       </BottomSection>
-      {/* <PlayButton src={PlayIcon} onClick={() => {setIsModalOpen(true)}} /> */}
     </Container>
   );
 };
-
-// const PlayButton = styled(PlayIcon)`
-//   width: 30px;
-//   height: 30px;
-//   cursor: pointer;
-//   transition: all 0.2s ease-in-out;
-//   & path {
-//     transition: all 0.2s ease-in-out;
-//     fill: ${(props) => props.theme.color.gray};
-//   }
-//   &:hover {
-//     & path {
-//       fill: #20a4fc;
-//     }
-//   }
-// `;
 
 const ExclusiveBadge = styled(Exclusive)`
   width: 15px;
@@ -416,14 +379,6 @@ const TrackName = styled.span`
   margin-bottom: 12px;
 `;
 
-// const Artist = styled(NavLink)`
-//   font-size: ${(props) => props.theme.fontSizes.xxs}px;
-//   text-align: center;
-//   color: ${(props) => props.theme.gray};
-//   margin-bottom: 12px;
-//   text-decoration: none;
-//   /* cursor: pointer; */
-// `;
 const Artist = styled(NavLink)`
   font-size: ${(props) => props.theme.fontSizes.xxs}px;
   text-align: center;

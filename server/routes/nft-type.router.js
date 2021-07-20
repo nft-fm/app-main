@@ -271,20 +271,11 @@ router.post("/get-one", async (req, res) => {
     let nftType = await NftType.findOne({ nftId: id });
     console.log("getone hit", id, nftType);
 
-    //for some reason this isn't pulling the likeCount
-    // nftType = JSON.parse(JSON.stringify(findLikes(nftType, address)));
-
-    // const extraInfo = await getSetSale(nftType.nftId);
     console.log("nftType", nftType);
-    // nftType = {
-    //   ...nftType,
-    //   price: utils.formatEther(extraInfo.price),
-    //   quantity: extraInfo.quantity,
-    //   sold: extraInfo.sold,
-    //   likeCount: nftType.likeCount ? nftType.likeCount : nftType.likes.length,
-    // };
+
     if (nftType) {
-      res.send(findLikes(nftType));
+      console.log()
+      res.send({...nftType.toObject(), likeCount: nftType.likes.length});
     } else {
       res.status(404).send("NFT not found");
     }
@@ -392,7 +383,7 @@ router.post("/all", async (req, res) => {
       isDraft: false,
       isMinted: true,
     });
-    console.log("/all hit", nftTypes);
+    // console.log("/all hit", nftTypes);
     res.send(findLikes(nftTypes, req.body.address));
   } catch (error) {
     console.log(error);

@@ -205,8 +205,6 @@ const UploadAudio = ({
         ref={hiddenAudioInput}
         onChange={handleAudioChange}
         style={{ display: "none" }}
-        defaultValue={audioFile}
-        // required
       />
     </>
   );

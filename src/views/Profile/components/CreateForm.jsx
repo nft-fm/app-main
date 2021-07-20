@@ -286,6 +286,24 @@ const CreateForm = ({ open, hide }) => {
 
   if (!open) return false;
 
+  const steps = [
+    <Step2
+      setIsImageUploaded={setIsImageUploaded}
+      setImageUploadError={setImageUploadError}
+      audioFile={audioFile}
+      setAudioFile={setAudioFile}
+      nftData={nftData}
+      setNftData={setNftData}
+      isAudioUploaded={isAudioUploaded}
+      setIsAudioUploaded={setIsAudioUploaded}
+      audioUploadError={audioUploadError}
+      setAudioUploadError={setAudioUploadError}
+    />,
+    <Step3 nftData={nftData} updateState={updateState} />,
+    <Step4 nftData={nftData} updateState={updateState} usdPerEth={usdPerEth} />,
+    <PreviewBuyModal nft={nftData} />
+  ]
+
   if (currentStep === 1) {
     return (
       <OpaqueFilter>
@@ -317,29 +335,7 @@ const CreateForm = ({ open, hide }) => {
             <Image src={nftData.imageUrl} alt="image" />
             }
           <RightSide step={currentStep}>
-            <CurrentStep currentStep={currentStep} step={2}>
-              <Step2
-                setIsImageUploaded={setIsImageUploaded}
-                setImageUploadError={setImageUploadError}
-                audioFile={audioFile}
-                setAudioFile={setAudioFile}
-                nftData={nftData}
-                setNftData={setNftData}
-                isAudioUploaded={isAudioUploaded}
-                setIsAudioUploaded={setIsAudioUploaded}
-                audioUploadError={audioUploadError}
-                setAudioUploadError={setAudioUploadError}
-              />
-            </CurrentStep>
-            <CurrentStep currentStep={currentStep} step={3}>
-              <Step3 nftData={nftData} updateState={updateState} />
-            </CurrentStep>
-            <CurrentStep currentStep={currentStep} step={4}>
-              <Step4 nftData={nftData} updateState={updateState} usdPerEth={usdPerEth} />
-            </CurrentStep>
-            <CurrentStep currentStep={currentStep} step={5}>
-              <PreviewBuyModal nft={nftData} />
-            </CurrentStep>
+            {steps[currentStep - 2]}
           </RightSide>
           </StyledModal>
           <CreateFormPaginator 

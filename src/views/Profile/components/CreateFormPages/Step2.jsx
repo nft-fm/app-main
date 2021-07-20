@@ -79,7 +79,7 @@ const Step2 = ({
           ref={hiddenImageInput}
           onChange={handleImageChange}
           style={{ display: "none" }}
-          defaultValue={imageFile}
+          // defaultValue={imageFile}
         />
       </UploadContainer>
 

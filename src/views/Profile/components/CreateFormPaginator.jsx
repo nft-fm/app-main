@@ -18,12 +18,12 @@ const CreateFormPaginator = ({
   nftData
 }) => {
   // checking for completion
-  // const [step2, setStep2] = useState(false);
-  // const [step3, setStep3] = useState(false);
-  // const [step4, setStep4] = useState(false);
-  const [step2, setStep2] = useState(true);
-  const [step3, setStep3] = useState(true);
-  const [step4, setStep4] = useState(true);
+  const [step2, setStep2] = useState(false);
+  const [step3, setStep3] = useState(false);
+  const [step4, setStep4] = useState(false);
+  // const [step2, setStep2] = useState(true);
+  // const [step3, setStep3] = useState(true);
+  // const [step4, setStep4] = useState(true);
   const { 
     imageUrl, audioUrl,
     producer, title, writer, artist, genre, isrc, description,

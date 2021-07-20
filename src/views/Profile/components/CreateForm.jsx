@@ -46,16 +46,13 @@ const CreateForm = ({ open, hide }) => {
   const [nftData, setNftData] = useState(initialNftState);
 
   // const [imageFile, setImageFile] = useState(null);
-  const [imageUploadError, setImageUploadError] = useState(false);
 
   const [videoFile, setVideoFile] = useState(null);
   // const [videoUploadError, setVideoUploadError] = useState(false);
   const [curr, setCurr] = useState("ETH");
 
-  const [audioFile, setAudioFile] = useState(null);
-  const [audioUploadError, setAudioUploadError] = useState(false);
-  const [isAudioUploaded, setIsAudioUploaded] = useState(false);
-  const [isImageUploaded, setIsImageUploaded] = useState(false);
+  // const [isAudioUploaded, setIsAudioUploaded] = useState(false);
+  // const [isImageUploaded, setIsImageUploaded] = useState(false);
 
   const [currentStep, setCurrentStep] = useState(1);
 
@@ -105,9 +102,9 @@ const CreateForm = ({ open, hide }) => {
       nftData.numMinted === "" ||
       nftData.price === 0 ||
       nftData.price === "0" ||
-      nftData.price === "" ||
-      !isAudioUploaded ||
-      !isImageUploaded
+      nftData.price === "" 
+      // !isAudioUploaded ||
+      // !isImageUploaded
     ) {
       return false;
     } else {
@@ -158,20 +155,22 @@ const CreateForm = ({ open, hide }) => {
       });
       return;
     }
-    if (!isAudioUploaded || !isImageUploaded) {
-      console.log("here");
-      swal.fire({
-        title: "Please wait for your audio and image files to be processed.",
-        timer: 5000,
-        imageUrl: errorIcon,
-        imageWidth,
-        imageHeight      
-      });
-      return;
-    }
+    // !! {I need to reimplement this}
+
+    // if (!isAudioUploaded || !isImageUploaded) {
+    //   console.log("here");
+    //   swal.fire({
+    //     title: "Please wait for your audio and image files to be processed.",
+    //     timer: 5000,
+    //     imageUrl: errorIcon,
+    //     imageWidth,
+    //     imageHeight      
+    //   });
+    //   return;
+    // }
 
     //run these two, store the returns in the nftData state object
-    if (!audioUploadError && !imageUploadError) {
+    // if (!audioUploadError && !imageUploadError) {
       setIsLoading(true);
       // after nftData has both audio and image references, run this route
       axios
@@ -189,7 +188,7 @@ const CreateForm = ({ open, hide }) => {
                 console.log("final");
                 setNftData(initialNftState);
                 // setImageFile(null);
-                setAudioFile(null);
+                // setAudioFile(null);
                 setIsLoading(false);
                 swal
                   .fire({
@@ -229,17 +228,7 @@ const CreateForm = ({ open, hide }) => {
             text: "Nft creation failed on the server, please try again.",
           });
         });
-    } else {
-      setIsLoading(false);
-      swal.fire({
-        title: "Error uploading audio or image.",
-        text: "Please refresh the page and try again. If the issues persists, contact NFT FM.",
-        imageUrl: errorIcon,
-        imageWidth,
-        imageHeight      
-      });
     }
-  };
 
   useEffect(() => {
     if (nftData.price > 0) {
@@ -287,18 +276,7 @@ const CreateForm = ({ open, hide }) => {
   if (!open) return false;
 
   const steps = [
-    <Step2
-      setIsImageUploaded={setIsImageUploaded}
-      setImageUploadError={setImageUploadError}
-      audioFile={audioFile}
-      setAudioFile={setAudioFile}
-      nftData={nftData}
-      setNftData={setNftData}
-      isAudioUploaded={isAudioUploaded}
-      setIsAudioUploaded={setIsAudioUploaded}
-      audioUploadError={audioUploadError}
-      setAudioUploadError={setAudioUploadError}
-    />,
+    <Step2 nftData={nftData} setNftData={setNftData} />,
     <Step3 nftData={nftData} updateState={updateState} />,
     <Step4 nftData={nftData} updateState={updateState} usdPerEth={usdPerEth} />,
     <PreviewBuyModal nft={nftData} />

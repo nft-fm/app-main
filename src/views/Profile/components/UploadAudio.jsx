@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 
 import axios from "axios";
@@ -9,17 +9,18 @@ import audioBufferToMp3 from "../../../utils/audioBufferToMp3";
 import upload_icon from "../../../assets/img/profile_page_assets/upload_icon.svg";
 import loading_gif from "../../../assets/img/loading.gif";
 const UploadAudio = ({
-  audioFile,
-  setAudioFile,
+  // audioFile,
+  // setAudioFile,
   nftData,
   setNftData,
   isAudioUploaded,
-  setIsAudioUploaded,
+  // setIsAudioUploaded,
   setAudioUploadError,
   audioUploadError,
 }) => {
   const { account } = useAccountConsumer();
   const hiddenAudioInput = useRef(null);
+  const [audioFile, setAudioFile] = useState(null);
 
   const sliceBuffer = (audioContext, buffer, begin, end, callback) => {
     var error = null;
@@ -119,7 +120,7 @@ const UploadAudio = ({
                     return currentState;
                   });
                   setNftData({ ..._nftData, dur: duration });
-                  setIsAudioUploaded(true);
+                  // setIsAudioUploaded(true);
                 })
                 .catch((error) => {
                   setAudioUploadError(true);
@@ -164,7 +165,7 @@ const UploadAudio = ({
   };
 
   const handleAudio = (e) => {
-    setIsAudioUploaded(null);
+    // setIsAudioUploaded(null);
     setAudioFile(null);
     hiddenAudioInput.current.click();
   };

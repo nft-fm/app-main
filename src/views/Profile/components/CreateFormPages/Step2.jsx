@@ -5,27 +5,20 @@ import axios from "axios";
 import { useAccountConsumer } from "../../../../contexts/Account";
 
 const Step2 = ({
-  // hiddenImageInput,
-  // handleImageChange,
-  // imageFile,
-  // handleImage,
-  audioFile,
-  setAudioFile,
   nftData,
   setNftData,
   isAudioUploaded,
-  setIsAudioUploaded,
-  audioUploadError,
-  setAudioUploadError,
-  setIsImageUploaded,
-  setImageUploadError
 }) => {
   const [imageFile, setImageFile] = useState(null);
+  const [imageUploadError, setImageUploadError] = useState(false);
+  const [audioUploadError, setAudioUploadError] = useState(false);
+  const [isImageUploaded, setIsImageUploaded] = useState(false);
+
   const { account } = useAccountConsumer();
 
   const hiddenImageInput = useRef(null);
   const handleImage = () => {
-    setIsImageUploaded(null);
+    // setIsImageUploaded(null);
     setImageFile(null);
     hiddenImageInput.current.click();
   };
@@ -65,6 +58,7 @@ const Step2 = ({
         });
     }
   }, [imageFile]);
+
   return (
     <>
       <h2 style={{textAlign: "left"}}>Visual</h2>
@@ -87,12 +81,12 @@ const Step2 = ({
       <UploadContainer>
         <p>MP3, FLAC</p>
         <UploadAudio
-          audioFile={audioFile}
-          setAudioFile={setAudioFile}
+          // audioFile={audioFile}
+          // setAudioFile={setAudioFile}
           nftData={nftData}
           setNftData={setNftData}
           isAudioUploaded={isAudioUploaded}
-          setIsAudioUploaded={setIsAudioUploaded}
+          // setIsAudioUploaded={setIsAudioUploaded}
           audioUploadError={audioUploadError}
           setAudioUploadError={setAudioUploadError}
         />

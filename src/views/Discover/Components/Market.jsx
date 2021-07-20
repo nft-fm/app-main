@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import NftCard from "../../../components/NftCards/SaleNftCard";
@@ -14,29 +14,102 @@ const Listen = () => {
   const [allNfts, setAllNfts] = useState([]);
   const [displayedNfts, setDisplayedNfts] = useState([]);
   const [priceOrientation, setPriceOrientation] = useState(true);
-  const [dateOrientation, setDateOrientation] = useState(true);
+  // const [numTotalNfts, setNumTotalNfts] = useState(0);
+  const numTotalNfts = useRef(0);
+  const numNftsFetched = useRef(10);
+  // const [numNftsFetched, setNumNftsFetched] = useState(4);
+  console.log("numTotalNfts", numTotalNfts);
+  const getAll = (limit) => {
+    axios
+      .post("/api/nft-type/all", { address: account, limit: limit })
+      .then((res) => {
+        // setIsFetching(true);
+        setUnformattedNftData(res.data);
+        setAllNfts(res.data);
+        const formattedNfts = formatNfts(
+          res.data.sort(function (a, b) {
+            return b.price - a.price;
+          })
+        );
+        for (let i = 0; i < 5; i++) {
+          formattedNfts.push(<FillerCard />);
+        }
+        setDisplayedNfts(formattedNfts);
+      });
+  };
+  const hasWindow = typeof window !== "undefined";
+
+  function getwindowHeight() {
+    const height = hasWindow ? window.outerHeight : null;
+    return height;
+  }
+
+  const [windowHeight, setwindowHeight] = useState(getwindowHeight());
+
+  useEffect(() => {
+    if (hasWindow) {
+      function handleResize() {
+        setwindowHeight(getwindowHeight());
+      }
+
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }
+  }, [hasWindow]);
+
+  // const [isFetching, setIsFetching] = useState(false);
+
+  // const getPaginatedNfts = () => {
+
+  //   if (window.innerHeight + window.scrollY >= windowHeight) {
+  //     console.log(
+  //       "you're at the bottom of the page",
+  //       numTotalNfts,
+  //       numNftsFetched
+  //     );
+  //     //function call to fetch more NFTs
+  //     //     if (numTotalNfts > numNftsFetched) {
+  //     //       // getAll(8);
+  //     // setIsFetching(true);
+  //     setNumNftsFetched(numNftsFetched + 4);
+  //     getAll(numNftsFetched + 4);
+
+  //     }
+  // }
+
+  useEffect(() => {
+    const onScroll = function () {
+      // getPaginatedNfts()
+      if (window.innerHeight + window.scrollY >= windowHeight) {
+        console.log(
+          "you're at the bottom of the page",
+          numTotalNfts.current,
+          numNftsFetched
+        );
+        //function call to fetch more NFTs
+        if (numTotalNfts.current > numNftsFetched.current) {
+          // getAll(8);
+          // setIsFetching(true);
+          numNftsFetched.current = numNftsFetched.current + 10;
+          getAll(numNftsFetched.current + 10);
+        }
+      }
+    };
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   const formatNfts = (nftsData) => {
     return nftsData.map((nft) => <NftCard nft={nft} />);
   };
 
-  const getAll = () => {
-    axios.post("/api/nft-type/all", { address: account }).then((res) => {
-      setUnformattedNftData(res.data);
-      setAllNfts(res.data);
-      const formattedNfts = formatNfts(
-        res.data.sort(function (a, b) {
-          return b.price - a.price;
-        })
-      );
-      for (let i = 0; i < 5; i++) {
-        formattedNfts.push(<FillerCard />);
-      }
-      setDisplayedNfts(formattedNfts);
-    });
-  };
-
   useEffect(() => {
-    getAll();
+    axios.post("/api/nft-type/countNfts").then((res) => {
+      console.log("this", res.data);
+      // setNumTotalNfts(res.data.count);
+      numTotalNfts.current = res.data.count;
+      getAll(10);
+    });
   }, [user]);
 
   //search function, sorts and sets returned NFTs to displayedNfts
@@ -71,58 +144,6 @@ const Listen = () => {
       setDisplayedNfts(formattedNfts);
     }
   }, [search]);
-
-  //flips the orientation of price from high to low with the .sort()
-  // useEffect(() => {
-  //   if (priceOrientation) {
-  //     //high to low
-  //     if (search === "") {
-  //       const everyNft = formatNfts(
-  //         allNfts.sort(function (a, b) {
-  //           return b.price - a.price;
-  //         })
-  //       );
-  //       for (let i = 0; i < 5; i++) {
-  //         everyNft.push(<FillerCard />);
-  //       }
-  //       setDisplayedNfts(everyNft);
-  //     } else {
-  //       const formattedNfts = formatNfts(
-  //         unformattedNftData.sort(function (a, b) {
-  //           return b.price - a.price;
-  //         })
-  //       );
-  //       for (let i = 0; i < 5; i++) {
-  //         formattedNfts.push(<FillerCard />);
-  //       }
-  //       setDisplayedNfts(formattedNfts);
-  //     }
-  //   }
-  //   if (!priceOrientation) {
-  //     //low to high
-  //     if (search === "") {
-  //       const everyNft = formatNfts(
-  //         allNfts.sort(function (a, b) {
-  //           return a.price - b.price;
-  //         })
-  //       );
-  //       for (let i = 0; i < 5; i++) {
-  //         everyNft.push(<FillerCard />);
-  //       }
-  //       setDisplayedNfts(everyNft);
-  //     } else {
-  //       const formattedNfts = formatNfts(
-  //         unformattedNftData.sort(function (a, b) {
-  //           return a.price - b.price;
-  //         })
-  //       );
-  //       for (let i = 0; i < 5; i++) {
-  //         formattedNfts.push(<FillerCard />);
-  //       }
-  //       setDisplayedNfts(formattedNfts);
-  //     }
-  //   }
-  // }, [priceOrientation]);
 
   const masterSort = (i) => {
     //price high to low
@@ -173,8 +194,56 @@ const Listen = () => {
         setDisplayedNfts(formattedNfts);
       }
     }
-    //date high to low
+    //likes high to low
     if (i === 2) {
+      if (search === "") {
+        const everyNft = formatNfts(
+          allNfts.sort(function (a, b) {
+            return b.likeCount - a.likeCount;
+          })
+        );
+        for (let i = 0; i < 5; i++) {
+          everyNft.push(<FillerCard />);
+        }
+        setDisplayedNfts(everyNft);
+      } else {
+        const formattedNfts = formatNfts(
+          unformattedNftData.sort(function (a, b) {
+            return b.likeCount - a.likeCount;
+          })
+        );
+        for (let i = 0; i < 5; i++) {
+          formattedNfts.push(<FillerCard />);
+        }
+        setDisplayedNfts(formattedNfts);
+      }
+    }
+    //likeCount low to high
+    if (i === 3) {
+      if (search === "") {
+        const everyNft = formatNfts(
+          allNfts.sort(function (a, b) {
+            return a.likeCount - b.likeCount;
+          })
+        );
+        for (let i = 0; i < 5; i++) {
+          everyNft.push(<FillerCard />);
+        }
+        setDisplayedNfts(everyNft);
+      } else {
+        const formattedNfts = formatNfts(
+          unformattedNftData.sort(function (a, b) {
+            return a.likeCount - b.likeCount;
+          })
+        );
+        for (let i = 0; i < 5; i++) {
+          formattedNfts.push(<FillerCard />);
+        }
+        setDisplayedNfts(formattedNfts);
+      }
+    }
+    //date high to low
+    if (i === 4) {
       if (search === "") {
         const everyNft = formatNfts(
           allNfts.sort(function (a, b) {
@@ -198,7 +267,7 @@ const Listen = () => {
       }
     }
     //date low to high
-    if (i === 3) {
+    if (i === 5) {
       if (search === "") {
         const everyNft = formatNfts(
           allNfts.sort(function (a, b) {
@@ -224,58 +293,85 @@ const Listen = () => {
   };
 
   const [menuOpen, setMenuOpen] = useState(false);
-  const [selected, setSelected] = useState("Price (high to low)");
+  const [selected, setSelected] = useState("Price: High - Low");
   const menuOptions = [
     <MenuSpan
       isMenuOpen={menuOpen}
       onClick={() => {
         masterSort(0);
-        setSelected("Price (high to low)");
+        setSelected("Price: High - Low");
+        setMenuOpen(false);
       }}
     >
-      Price (high to low)
+      Price: High - Low
     </MenuSpan>,
     <MenuSpan
       isMenuOpen={menuOpen}
       onClick={() => {
         masterSort(1);
-        setSelected("Price (low to high)");
+        setSelected("Price: Low - High");
+        setMenuOpen(false);
       }}
     >
-      Price (low to high)
+      Price: Low - High
     </MenuSpan>,
     <MenuSpan
       isMenuOpen={menuOpen}
       onClick={() => {
         masterSort(2);
-        setSelected("Date (high to low)");
+        setSelected("Likes: High - Low");
+        setMenuOpen(false);
       }}
     >
-      Date (high to low)
+      Likes: High - Low
     </MenuSpan>,
     <MenuSpan
       isMenuOpen={menuOpen}
       onClick={() => {
         masterSort(3);
-        setSelected("Date (low to high)");
+        setSelected("Likes: Low - High");
+        setMenuOpen(false);
       }}
     >
-      Date (low to high)
+      Likes: Low - High
+    </MenuSpan>,
+    <MenuSpan
+      isMenuOpen={menuOpen}
+      onClick={() => {
+        masterSort(4);
+        setSelected("Date: High - Low");
+        setMenuOpen(false);
+      }}
+    >
+      Date: High - Low
+    </MenuSpan>,
+    <MenuSpan
+      isMenuOpen={menuOpen}
+      onClick={() => {
+        masterSort(5);
+        setSelected("Date: Low - High");
+        setMenuOpen(false);
+      }}
+    >
+      Date: Low - High
     </MenuSpan>,
   ];
 
   return (
     <LaunchContainer>
-      <ContainerTitlePrice
+      <ContainerTitleSorting
         onMouseEnter={() => setMenuOpen(true)}
         onMouseLeave={() => setMenuOpen(false)}
         isMenuOpen={menuOpen}
       >
-        <span>{selected}</span>
+        <SelectedSpan onClick={() => setMenuOpen(!menuOpen)}>
+          {selected}
+        </SelectedSpan>
+        {/* <SelectedSpanMobile>Sort</SelectedSpanMobile> */}
         {menuOptions.map((item, index) => {
           return item;
         })}
-      </ContainerTitlePrice>
+      </ContainerTitleSorting>
       <ContainerTitleInput
         type="text"
         placeholder="Search..."
@@ -307,12 +403,28 @@ const Arrow = styled(down_arrow)`
   @media only screen and (max-width: 776px) {
   }
 `;
+
+const SelectedSpanMobile = styled.span`
+  text-decoration: underline;
+  margin-top: -3px;
+  @media only screen and (min-width: 776px) {
+    content: "Sort";
+  }
+`;
+const SelectedSpan = styled.span`
+  text-decoration: underline;
+  margin-top: -3px;
+  /* @media only screen and (max-width: 776px) {
+    display: none;
+  } */
+`;
+
 const MenuSpan = styled.span`
   display: ${(props) => (props.isMenuOpen ? "block" : "none")};
   padding-top: 5px;
   cursor: pointer;
 `;
-const ContainerTitlePrice = styled.div`
+const ContainerTitleSorting = styled.div`
   position: absolute;
   left: 37%;
   top: -15px;
@@ -328,15 +440,18 @@ const ContainerTitlePrice = styled.div`
   flex-direction: column;
   align-items: center;
 
-  height: ${(props) => props.isMenuOpen && "140px"};
+  height: ${(props) => props.isMenuOpen && "195px"};
 
   @media only screen and (max-width: 1200px) {
     left: auto;
     right: calc(10% + 50px);
   }
   @media only screen and (max-width: 776px) {
-    left: 80vw;
+    /* left: 80vw;
+    right: auto; */
+    left: auto;
     right: auto;
+    top: 25px;
   }
 `;
 const ContainerTitleDate = styled.div`
@@ -398,6 +513,7 @@ const NftScroll = styled.div`
   @media only screen and (max-width: 776px) {
     flex-direction: column;
     align-items: center;
+    margin-top: 25px;
   }
 `;
 

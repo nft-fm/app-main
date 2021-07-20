@@ -1,53 +1,23 @@
-import React, { useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import styled, { css } from "styled-components";
 import x from "../../../../assets/img/icons/x.svg";
 import DemoImage from "../../../Home/Components/DemoImage/DemoImage"
 import UploadAudio from "../UploadAudio";
 import PreviewBuyModal from "./PreviewBuyModal"
-export const ModalFormSteps = ({
-  hide,
-  currentStep,
-  nftData,
-  hiddenImageInput,
-  imageFile,
-  handleImage,
-  handleImageChange,
-  updateState,
-  usdPerEth,
-  // UploadAudioStuff
-  audioFile,
-  setAudioFile,
-  setNftData,
-  isAudioUploaded,
-  setIsAudioUploaded,
-  audioUploadError,
-  setAudioUploadError
-}) => {
+export const ModalFormSteps = (props) => {
+  const {
+    hide,
+    currentStep,
+    nftData,
+    updateState,
+    usdPerEth,
+  } = props
   const steps = [
     null,
-    <UploadImageAndMusic 
-      hiddenImageInput={hiddenImageInput}
-      imageFile={imageFile}
-      handleImage={handleImage}
-      handleImageChange={handleImageChange}
-      // UploadAudioStuff
-      audioFile={audioFile}
-      setAudioFile={setAudioFile}
-      nftData={nftData}
-      setNftData={setNftData}
-      isAudioUploaded={isAudioUploaded}
-      setIsAudioUploaded={setIsAudioUploaded}
-      audioUploadError={audioUploadError}
-      setAudioUploadError={setAudioUploadError}
-    />,
-    <ArtistInfo 
-      nftData={nftData}
-      updateState={updateState}
-    />,
+    <UploadImageAndMusic props={props} />,
+    <ArtistInfo props={props} />,
     <PriceAndQuantity
-      nftData={nftData}
-      updateState={updateState}
-      usdPerEth={usdPerEth} 
+      props={props}
     />,
     <PreviewBuyModal
       nft={nftData}
@@ -75,6 +45,7 @@ export const ModalFormSteps = ({
 }
 
 const UploadImageAndMusic = ({
+  props:{
   hiddenImageInput,
   handleImageChange,
   imageFile,
@@ -86,8 +57,17 @@ const UploadImageAndMusic = ({
   isAudioUploaded,
   setIsAudioUploaded,
   audioUploadError,
-  setAudioUploadError
-}) => {
+  setAudioUploadError,
+  // newly added
+  setIsImageUploaded,
+  setImageFile
+}}) => {
+  // const hiddenImageInput = useRef(null);
+  // const handleImage = () => {
+  //   setIsImageUploaded(null);
+  //   setImageFile(null);
+  //   hiddenImageInput.current.click();
+  // };
   return (
     <>
       <h2 style={{textAlign: "left"}}>Visual</h2>
@@ -124,10 +104,10 @@ const UploadImageAndMusic = ({
   )
 }
 
-const ArtistInfo = ({ 
+const ArtistInfo = ({props:{ 
   nftData: { title, producer, isrc, description, genre }, 
   updateState 
-}) => {
+}}) => {
   return (
     <InputContainer>
       <ArtistTop>
@@ -186,7 +166,7 @@ const ArtistInfo = ({
   )
 }
 
-const PriceAndQuantity = ({ nftData: { price, numMinted }, updateState, usdPerEth }) => {
+const PriceAndQuantity = ({props:{ nftData: { price, numMinted }, updateState, usdPerEth }}) => {
   return (
     <InputContainer>
       <h2>Price and Quantity</h2>

@@ -33,6 +33,7 @@ const initialNftState = {
   writer: "",
   imageUrl: "",
   audioUrl: "",
+  description: ""
 };
 
 const CreateForm = ({ open, hide }) => {
@@ -375,6 +376,7 @@ const CreateForm = ({ open, hide }) => {
             nftData={nftData} 
             currentStep={currentStep} 
             setCurrentStep={setCurrentStep}
+            handleSubmit={handleSubmit}
           />
         </Step1Container>
       </OpaqueFilter>

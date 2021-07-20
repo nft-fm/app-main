@@ -18,12 +18,12 @@ const CreateFormPaginator = ({
   nftData
 }) => {
   // checking for completion
-  // const [step2, setStep2] = useState(false);
-  // const [step3, setStep3] = useState(false);
-  // const [step4, setStep4] = useState(false);
-  const [step2, setStep2] = useState(true);
-  const [step3, setStep3] = useState(true);
-  const [step4, setStep4] = useState(true);
+  const [step2, setStep2] = useState(false);
+  const [step3, setStep3] = useState(false);
+  const [step4, setStep4] = useState(false);
+  // const [step2, setStep2] = useState(true);
+  // const [step3, setStep3] = useState(true);
+  // const [step4, setStep4] = useState(true);
   const { 
     imageUrl, audioUrl,
     producer, title, writer, artist, genre, isrc, description,
@@ -47,40 +47,40 @@ const CreateFormPaginator = ({
     (step3 && currentStep === 3)) {
       return setCurrentStep(currentStep + 1);
     } else if (currentStep === 4) {
-        if (imageUrl === "" || audioUrl === "") {
-          return swal.fire({
-            title: "Music + image, or an video file must be available to continue.",
-            timer: 5000,
-            imageUrl: errorIcon,
-            imageWidth,
-            imageHeight      
-          });
-        }
-        if (!producer || !title || !genre || !description ||
-          producer === "" || title === "" || genre === "" || description === "") {
-          return swal.fire({
-            title: "You must fill out the required artist fields.",
-            timer: 5000,
-            imageUrl: errorIcon,
-            imageWidth,
-            imageHeight      
-          });
-        }
-        if (price <= 0 || numMinted <= 0) {
-          return swal.fire({
-            title: "Price and Quantity must be greater than 0",
-            timer: 5000,
-            imageUrl: errorIcon,
-            imageWidth,
-            imageHeight      
-          });
-        }
+      if (imageUrl === "" || audioUrl === "") {
+        return swal.fire({
+          title: "Music + image, or an video file must be available to continue.",
+          timer: 5000,
+          imageUrl: errorIcon,
+          imageWidth,
+          imageHeight      
+        });
       }
-    
+      if (!producer || !title || !genre || !description ||
+        producer === "" || title === "" || genre === "" || description === "") {
+        return swal.fire({
+          title: "You must fill out the required artist fields.",
+          timer: 5000,
+          imageUrl: errorIcon,
+          imageWidth,
+          imageHeight      
+        });
+      }
+      if (price <= 0 || numMinted <= 0) {
+        return swal.fire({
+          title: "Price and Quantity must be greater than 0",
+          timer: 5000,
+          imageUrl: errorIcon,
+          imageWidth,
+          imageHeight      
+        });
+      }
+      return setCurrentStep(currentStep + 1);
+    }
   }
 
   useEffect(() => {
-    if (imageUrl !== "" && audioUrl !== "") 
+    if (imageUrl !== "" && audioUrl !== "")
       setStep2(true)
     if (producer !== "" && title !=="" && genre !== "" && description !== "") 
       setStep3(true)
@@ -148,11 +148,7 @@ const CreateFormPaginator = ({
         <PaginatorButton currentStep={currentStep} onClick={handleSubmit}>Submit</PaginatorButton> : 
         <PaginatorButton 
           currentStep={currentStep} 
-          onClick={() => {
-            currentStep === 4 ? 
-            paginateNext() :
-            paginateNext()
-          }}
+          onClick={() => paginateNext()}
         >
           {currentStep === 4 ? 'Preview' :'Next'}
         </PaginatorButton>

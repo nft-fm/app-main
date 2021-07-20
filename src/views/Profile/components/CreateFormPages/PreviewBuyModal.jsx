@@ -45,7 +45,7 @@ const PreviewBuyModal = ({ nft, partialSong }) => {
       <InfoContainer>
         <TrackName>{nft.title}</TrackName>
         <Artist
-          to={`/artist/${nft.artist ? nft.artist.replace(/ /g, "").toLowerCase() : ''}`}
+          to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}
         >
           {nft.writer}
         </Artist>

@@ -8,7 +8,7 @@ import many_nft from "../../../../assets/img/profile_page_assets/PNG_500px_multi
   https://app.zeplin.io/project/606f54fb991137523a503e45/screen/60947ff83e5b930e7a327ba6
 */
 
-export const SelectSingleOrMultiple = ({ setCurrentStep }) => {
+export const Step1 = ({ setCurrentStep }) => {
   return (
     <Outer>
       <SelectContainer>

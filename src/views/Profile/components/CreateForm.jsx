@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import axios from "axios";
 import moment from "moment";
 import swal from "sweetalert2";
@@ -13,8 +13,11 @@ import { errorIcon, imageWidth, imageHeight } from "../../../utils/swalImages";
 import { useAccountConsumer } from "../../../contexts/Account";
 import { mintNFT } from "../../../web3/utils";
 
-import { SelectSingleOrMultiple } from "./CreateFormPages/SelectSingleOrMultiple";
-import { ModalFormSteps } from "./CreateFormPages/ModalFormSteps";
+import { Step1 } from "./CreateFormPages/Step1";
+import Step2 from "./CreateFormPages/Step2";
+import Step3 from "./CreateFormPages/Step3"
+import Step4 from "./CreateFormPages/Step4"
+import PreviewBuyModal from "./CreateFormPages/PreviewBuyModal"
 
 
 import CreateFormPaginator from "./CreateFormPaginator";
@@ -39,9 +42,10 @@ const initialNftState = {
 const CreateForm = ({ open, hide }) => {
   const { account, user, usdPerEth } = useAccountConsumer();
   const [isLoading, setIsLoading] = useState(false);
+
   const [nftData, setNftData] = useState(initialNftState);
 
-  const [imageFile, setImageFile] = useState(null);
+  // const [imageFile, setImageFile] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(false);
 
   const [videoFile, setVideoFile] = useState(null);
@@ -52,6 +56,7 @@ const CreateForm = ({ open, hide }) => {
   const [audioUploadError, setAudioUploadError] = useState(false);
   const [isAudioUploaded, setIsAudioUploaded] = useState(false);
   const [isImageUploaded, setIsImageUploaded] = useState(false);
+
   const [currentStep, setCurrentStep] = useState(1);
 
 
@@ -75,27 +80,6 @@ const CreateForm = ({ open, hide }) => {
       .then((res) => setNftData(res.data));
   }, [account]);
 
-  useEffect(() => {
-    if (imageFile) {
-      const imageFormData = new FormData();
-      imageFormData.append("artist", account);
-      imageFormData.append("imageFile", imageFile);
-
-      axios
-        .post("/api/nft-type/uploadImageS3", imageFormData)
-        .then((res) => {
-          if (res.status === 200) {
-            setIsImageUploaded(true);
-          }
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-          setImageUploadError(true);
-        });
-    }
-  }, [imageFile]);
-
 
 
   const hiddenVideoInput = useRef(null);
@@ -110,33 +94,12 @@ const CreateForm = ({ open, hide }) => {
 
 
   //this is all to handle the image
-  const hiddenImageInput = useRef(null);
-  const handleImage = () => {
-    setIsImageUploaded(null);
-    setImageFile(null);
-    hiddenImageInput.current.click();
-  };
-  const handleImageChange = (e) => {
-    if (!e.target.files[0]) {
-      return;
-    }
-    setImageFile(e.target.files[0]);
-    setNftData({
-      ...nftData,
-      imageUrl:
-        "https://nftfm-images.s3-us-west-1.amazonaws.com/" +
-        account +
-        "/" +
-        e.target.files[0].name,
-    });
-  };
 
   const isComplete = () => {
     if (
       nftData.title === "" ||
       nftData.genre === "" ||
       nftData.producer === "" ||
-      nftData.writer === "" ||
       nftData.numMinted === 0 ||
       nftData.numMinted === "0" ||
       nftData.numMinted === "" ||
@@ -195,17 +158,6 @@ const CreateForm = ({ open, hide }) => {
       });
       return;
     }
-    if (!imageFile || !audioFile) {
-      console.log("ere");
-      swal.fire({
-        title: "Cannot submit without audio and image files.",
-        timer: 5000,
-        imageUrl: errorIcon,
-        imageWidth,
-        imageHeight     
-      });
-      return;
-    }
     if (!isAudioUploaded || !isImageUploaded) {
       console.log("here");
       swal.fire({
@@ -236,7 +188,7 @@ const CreateForm = ({ open, hide }) => {
               () => {
                 console.log("final");
                 setNftData(initialNftState);
-                setImageFile(null);
+                // setImageFile(null);
                 setAudioFile(null);
                 setIsLoading(false);
                 swal
@@ -339,7 +291,7 @@ const CreateForm = ({ open, hide }) => {
       <OpaqueFilter>
         <SelectContainer>
           <X src={x} onClick={() => hide()} />
-          <SelectSingleOrMultiple setCurrentStep={setCurrentStep} />
+          <Step1 setCurrentStep={setCurrentStep} />
           <CreateFormPaginator 
             nftData={nftData} 
             currentStep={currentStep}
@@ -352,26 +304,44 @@ const CreateForm = ({ open, hide }) => {
     return(
       <OpaqueFilter>
         <Step1Container>
-          <ModalFormSteps 
-            hide={hide}
-            currentStep={currentStep}
-            nftData={nftData}
-            hiddenImageInput={hiddenImageInput}
-            imageFile={imageFile}
-            handleImage={handleImage}
-            handleImageChange={handleImageChange}
-            updateState={updateState}
-            usdPerEth={usdPerEth}
-            // UploadAudioStuff
-            audioFile={audioFile}
-            setAudioFile={setAudioFile}
-            setNftData={setNftData}
-            isAudioUploaded={isAudioUploaded}
-            setIsAudioUploaded={setIsAudioUploaded}
-            audioUploadError={audioUploadError}
-            setAudioUploadError={setAudioUploadError}
-            handleSubmit={handleSubmit}
-          />
+          <StyledModal>
+            <X src={x} onClick={() => hide()} />
+            {
+              nftData.imageUrl === "" || !nftData.imageUrl ?
+              <LeftSide>
+                {/* <div style={{height: "280px"}}> */}
+                  {/* <DemoImage /> */}
+                {/* </div>  */}
+              </LeftSide>
+            :
+            <Image src={nftData.imageUrl} alt="image" />
+            }
+          <RightSide step={currentStep}>
+            <CurrentStep currentStep={currentStep} step={2}>
+              <Step2
+                setIsImageUploaded={setIsImageUploaded}
+                setImageUploadError={setImageUploadError}
+                audioFile={audioFile}
+                setAudioFile={setAudioFile}
+                nftData={nftData}
+                setNftData={setNftData}
+                isAudioUploaded={isAudioUploaded}
+                setIsAudioUploaded={setIsAudioUploaded}
+                audioUploadError={audioUploadError}
+                setAudioUploadError={setAudioUploadError}
+              />
+            </CurrentStep>
+            <CurrentStep currentStep={currentStep} step={3}>
+              <Step3 nftData={nftData} updateState={updateState} />
+            </CurrentStep>
+            <CurrentStep currentStep={currentStep} step={4}>
+              <Step4 nftData={nftData} updateState={updateState} usdPerEth={usdPerEth} />
+            </CurrentStep>
+            <CurrentStep currentStep={currentStep} step={5}>
+              <PreviewBuyModal nft={nftData} />
+            </CurrentStep>
+          </RightSide>
+          </StyledModal>
           <CreateFormPaginator 
             nftData={nftData} 
             currentStep={currentStep} 
@@ -382,7 +352,89 @@ const CreateForm = ({ open, hide }) => {
       </OpaqueFilter>
     )
   }
+};
 
+const RightSide = styled.div`
+  ${props => props.currentStep !== 6 ? css`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: calc(100% - 500px);
+    padding: 10px 30px;
+    @media only screen and (max-width: 776px) {
+      width: 90vw;
+      height: calc(100vh / 2);
+      justify-content: space-between;
+    }
+  h2 {
+    color: white;
+    padding: 0;
+    margin: 0;
+  }
+  ` : css`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: calc(100% - 500px);
+    padding: 10px 30px;
+    @media only screen and (max-width: 776px) {
+      width: 90vw;
+      height: calc(100vh / 2);
+      justify-content: space-between;
+    }
+    color: white;
+  `}
+`;
+
+const CurrentStep = styled.div`
+  ${props => props.step !== props.currentStep && css`
+    display: none;
+  `}
+`
+  const StyledModal = styled.div`
+    border-radius: 8px;
+    border: solid 1px #181818;
+    width: 800px;
+    background-color: ${(props) => props.theme.bgColor};
+    font-size: 16px;
+    font-weight: normal;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+
+    @media only screen and (max-width: 776px) {
+      width: 90vw;
+      height: 95vh;
+      flex-direction: column;
+      align-items: center;
+      /* justify-content: flex-start; */
+    }
+`;
+
+const LeftSide = styled.div`
+  display: flex;
+  width: 500px;
+  height: 500px;
+  border-radius: 18px;
+  background-color: white;
+  justify-content: center;
+  align-items: center;
+`
+
+const Image = styled.img`
+  width: 500px;
+  aspect-ratio: 1;
+  border-radius: 16px;
+  border: 1px solid #262626;
+  background-color: #1e1e1e;
+  object-fit: cover;
+  overflow: hidden;
+  @media only screen and (max-width: 776px) {
+    width: 90vw;
+    height: 90vw;
+  }
+`;
   // <Header>
   //   <span>Create NFTs</span>
   //   <X src={x} onClick={() => hide()} />
@@ -558,7 +610,6 @@ const CreateForm = ({ open, hide }) => {
   //     <span>Mint NFTs!</span>
   //   </SubmitButton>
   // )
-};
 
 const Step1Container = styled.div`
   width: 800px;

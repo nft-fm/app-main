@@ -614,7 +614,7 @@ router.post("/handleImage", async (req, res) => {
       return res.status(200).send(req.file);
     });
   } catch (err) {
-    console.log(error);
+    console.log(err);
     res.status(500).send("server error");
   }
 });

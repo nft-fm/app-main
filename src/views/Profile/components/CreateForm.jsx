@@ -42,17 +42,8 @@ const initialNftState = {
 const CreateForm = ({ open, hide }) => {
   const { account, user, usdPerEth } = useAccountConsumer();
   const [isLoading, setIsLoading] = useState(false);
-
   const [nftData, setNftData] = useState(initialNftState);
-
-  // const [imageFile, setImageFile] = useState(null);
-
-  const [videoFile, setVideoFile] = useState(null);
-  // const [videoUploadError, setVideoUploadError] = useState(false);
   const [curr, setCurr] = useState("ETH");
-
-  // const [isAudioUploaded, setIsAudioUploaded] = useState(false);
-  // const [isImageUploaded, setIsImageUploaded] = useState(false);
 
   const [currentStep, setCurrentStep] = useState(1);
 
@@ -78,16 +69,17 @@ const CreateForm = ({ open, hide }) => {
   }, [account]);
 
 
+  // const [videoFile, setVideoFile] = useState(null);
 
-  const hiddenVideoInput = useRef(null);
+  // const hiddenVideoInput = useRef(null);
   // const handleVideo = () => {
   //   setIsVideoUploaded(null);
   //   setVideoFile(null);
   //   hiddenVideoInput.current.click();
   // };
-  const handleVideoChange = (e) => {
-    console.log('here')
-  }
+  // const handleVideoChange = (e) => {
+  //   console.log('here')
+  // }
 
 
   //this is all to handle the image
@@ -170,6 +162,7 @@ const CreateForm = ({ open, hide }) => {
     // }
 
     //run these two, store the returns in the nftData state object
+
     // if (!audioUploadError && !imageUploadError) {
       setIsLoading(true);
       // after nftData has both audio and image references, run this route

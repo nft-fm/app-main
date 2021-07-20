@@ -3,22 +3,17 @@ import styled, { css } from "styled-components";
 import UploadAudio from "../UploadAudio";
 import axios from "axios";
 import { useAccountConsumer } from "../../../../contexts/Account";
+import { errorIcon, imageWidth, imageHeight } from "../../../../utils/swalImages";
+import swal from "sweetalert2";
 
-const Step2 = ({
-  nftData,
-  setNftData,
-  isAudioUploaded,
-}) => {
+const Step2 = ({ nftData, setNftData, isAudioUploaded }) => {
   const [imageFile, setImageFile] = useState(null);
-  const [imageUploadError, setImageUploadError] = useState(false);
   const [audioUploadError, setAudioUploadError] = useState(false);
-  const [isImageUploaded, setIsImageUploaded] = useState(false);
-
+  const [imageName, setImageName] = useState("");
   const { account } = useAccountConsumer();
 
   const hiddenImageInput = useRef(null);
   const handleImage = () => {
-    // setIsImageUploaded(null);
     setImageFile(null);
     hiddenImageInput.current.click();
   };
@@ -28,18 +23,11 @@ const Step2 = ({
       return;
     }
     setImageFile(e.target.files[0]);
-    setNftData({
-      ...nftData,
-      imageUrl:
-        "https://nftfm-images.s3-us-west-1.amazonaws.com/" +
-        account +
-        "/" +
-        e.target.files[0].name,
-    });
+    setImageName(e.target.files[0].name);
   };
 
   useEffect(() => {
-    if (imageFile) {
+    if (imageFile && imageName !== "") {
       const imageFormData = new FormData();
       imageFormData.append("artist", account);
       imageFormData.append("imageFile", imageFile);
@@ -48,16 +36,31 @@ const Step2 = ({
         .post("/api/nft-type/uploadImageS3", imageFormData)
         .then((res) => {
           if (res.status === 200) {
-            setIsImageUploaded(true);
+            setNftData({
+              ...nftData,
+              imageUrl:
+                "https://nftfm-images.s3-us-west-1.amazonaws.com/" +
+                account +
+                "/" +
+                imageName
+            });
+            setImageName("");
           }
           console.log(res);
         })
         .catch((err) => {
           console.log(err);
-          setImageUploadError(true);
+          swal.fire({
+            imageUrl: errorIcon,
+            imageWidth,
+            imageHeight,
+            timer: 5000,
+            title: "Error",
+            text: "Image upload failed on the server, please try again.",
+          });
         });
     }
-  }, [imageFile]);
+  }, [imageFile, account, imageName, nftData, setNftData]);
 
   return (
     <>
@@ -73,7 +76,6 @@ const Step2 = ({
           ref={hiddenImageInput}
           onChange={handleImageChange}
           style={{ display: "none" }}
-          // defaultValue={imageFile}
         />
       </UploadContainer>
 
@@ -81,12 +83,9 @@ const Step2 = ({
       <UploadContainer>
         <p>MP3, FLAC</p>
         <UploadAudio
-          // audioFile={audioFile}
-          // setAudioFile={setAudioFile}
           nftData={nftData}
           setNftData={setNftData}
           isAudioUploaded={isAudioUploaded}
-          // setIsAudioUploaded={setIsAudioUploaded}
           audioUploadError={audioUploadError}
           setAudioUploadError={setAudioUploadError}
         />

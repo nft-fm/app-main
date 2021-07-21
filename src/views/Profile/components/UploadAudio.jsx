@@ -213,7 +213,7 @@ const UploadAudio = ({
   };
 
   useEffect(() => {
-    if (audioFile && audioName) {
+    if (audioFile && !isLoadingAudio && audioName !== "") {
       getFileDurAndSnnipet();
     }
   }, [audioFile, audioName]);
@@ -221,7 +221,7 @@ const UploadAudio = ({
   return (
     <>
       <MediaButton onClick={() => handleAudio()} type="button">
-        {!isLoadingAudio ? "Choose File" : <img style={{width: "25px", height: "25px"}} src={loading_gif} alt="loading" />}
+        {!isLoadingAudio ? "Choose Audio" : <img style={{width: "25px", height: "25px"}} src={loading_gif} alt="loading" />}
       </MediaButton>
       <StyledInput
         type="file"

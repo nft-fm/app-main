@@ -78,16 +78,16 @@ const Step2 = ({
 
   return (
     <>
-      <div style={{width: "100%", paddingLeft: "60px"}}>
-        <h2 style={{textAlign: "left"}}>Visual</h2>
-      </div>
+      <HeaderContainer>
+        <Header>Visual</Header>
+      </HeaderContainer>
       <UploadContainer>
         <p>PNG, JPG, GIF, MP4</p>
-        <small style={{color: "white"}}>
+        <small>
           {nftData && nftData.imageUrl !== "" ? nftData.imageUrl.slice(imageUrlLength, nftData.imageUrl.length) : ""}
         </small>
         <ChooseFile onClick={() => handleImage()} type="button">
-          {!isLoadingImage ? "Choose File" : <img style={{width: "25px", height: "25px"}} src={loading_gif} alt="loading" />}
+          {!isLoadingImage ? "Choose Image" : <img style={{width: "25px", height: "25px"}} src={loading_gif} alt="loading" />}
         </ChooseFile>
         <StyledInput
           type="file"
@@ -98,12 +98,12 @@ const Step2 = ({
         />
       </UploadContainer>
 
-      <div style={{width: "100%", paddingLeft: "60px"}}>
-        <h2 style={{paddingTop: "20px", textAlign: "left"}}>Audio</h2>
-      </div>
+      <HeaderContainer>
+        <Header bottomHeader>Audio</Header>
+      </HeaderContainer>
       <UploadContainer>
         <p>MP3, FLAC</p>
-        <small style={{color: "white"}}>
+        <small>
           {nftData && nftData.audioUrl !== "" ? nftData.audioUrl.slice(audioUrlLength, nftData.audioUrl.length) : ""}
         </small>
         <UploadAudio
@@ -119,6 +119,25 @@ const Step2 = ({
     </>
   )
 }
+
+const HeaderContainer = styled.div`
+  width: 100%;
+  padding-left: 60px;
+  @media only screen and (max-width: 776px) {
+    text-align: center;
+    padding-left: 0;
+  }
+`
+
+const Header = styled.h2`
+  text-align: left;
+  @media only screen and (max-width: 776px) {
+    text-align: center;
+    font-size: 18px;
+  }
+
+  ${props => props.bottomHeader ? `padding-top: 20px` : ``}
+`
 
 
 const StyledInput = styled.input`
@@ -149,6 +168,7 @@ const UploadContainer = styled.div`
   height: 120px;
   border-radius: 16px;
   margin: 20px;
+  color: white;
   p {
     padding: 0;
     margin: 0;

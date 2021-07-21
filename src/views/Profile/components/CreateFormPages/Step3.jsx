@@ -68,7 +68,9 @@ const ArtistTop = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
-  /* margin-top: -15px; */
+  @media only screen and (max-width: 776px) {
+      margin-bottom: -15px;
+  }
 `
 
 const FieldHeaders = styled.div`
@@ -119,13 +121,18 @@ const StyledInput = styled.input`
   `}
   @media only screen and (max-width: 776px) {
     background-color: transparent;
-    height: 30px;
+    height: 20px;
+    font-size: 14px;
+    margin-top: -15px;
   }
 `;
 
 const SubHeader = styled.h4`
   color: white;
   text-align: left;
+  @media only screen and (max-width: 776px) {
+    font-size: 16;
+  }
 `
 
 export default Step3;

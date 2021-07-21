@@ -26,7 +26,7 @@ const CreateFormPaginator = ({
   // const [step4, setStep4] = useState(true);
   const { 
     imageUrl, audioUrl,
-    producer, title, writer, artist, genre, isrc, description,
+    producer, title, genre,  description,
     price, numMinted,
   } = nftData;
 
@@ -161,7 +161,12 @@ const CreateFormPaginator = ({
         </ReactToolTip>
       </DotContainer>
       {currentStep === 5 ?
-        <PaginatorButton currentStep={currentStep} onClick={handleSubmit}>Submit</PaginatorButton> : 
+        <PaginatorButton 
+          currentStep={currentStep} 
+          onClick={handleSubmit}
+        >
+          Submit
+        </PaginatorButton> : 
         <PaginatorButton 
           currentStep={currentStep} 
           onClick={() => paginateNext()}
@@ -175,10 +180,9 @@ const CreateFormPaginator = ({
 
 const PaginatorContainer = styled.div`
   display: flex;
-  /* width: 1000px; */
+  width: 100%;
   justify-content: space-around;
   align-items: center;
-  /* margin-left: -100px; */
   margin-top: 10px;
 `
 

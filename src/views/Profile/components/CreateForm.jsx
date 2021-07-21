@@ -8,6 +8,7 @@ import upload_icon from "../../../assets/img/profile_page_assets/upload_icon.svg
 import loading_gif from "../../../assets/img/loading.gif";
 import { ReactComponent as eth_icon } from "../../../assets/img/icons/ethereum.svg";
 import x from "../../../assets/img/icons/x.svg";
+import { ReactComponent as IconX } from "../../../assets/img/icons/x.svg";
 
 import { errorIcon, imageWidth, imageHeight } from "../../../utils/swalImages";
 import { useAccountConsumer } from "../../../contexts/Account";
@@ -300,7 +301,7 @@ const CreateForm = ({ open, hide }) => {
             <X src={x} onClick={() => hide()} />
             {
               nftData.imageUrl === "" || !nftData.imageUrl ?
-              <LeftSide /> : <Image src={nftData.imageUrl} alt="image" />
+              < LeftSide /> : <Image src={nftData.imageUrl} alt="image" />
             }
           <RightSide step={currentStep}>
             {steps[currentStep - 2]}
@@ -350,30 +351,24 @@ const RightSide = styled.div`
   `}
 `;
 
-const CurrentStep = styled.div`
-  ${props => props.step !== props.currentStep && css`
-    display: none;
-  `}
-`
-  const StyledModal = styled.div`
-    border-radius: 8px;
-    border: solid 1px #181818;
-    width: 800px;
-    background-color: ${(props) => props.theme.bgColor};
-    font-size: 16px;
-    font-weight: normal;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
+const StyledModal = styled.div`
+  border-radius: 8px;
+  border: solid 1px #181818;
+  width: 800px;
+  background-color: ${(props) => props.theme.bgColor};
+  font-size: 16px;
+  font-weight: normal;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
 
-    @media only screen and (max-width: 776px) {
-      width: 90vw;
-      height: 95vh;
-      flex-direction: column;
-      align-items: center;
-      /* justify-content: flex-start; */
-    }
+  @media only screen and (max-width: 776px) {
+    width: 90vw;
+    height: 95%;
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const LeftSide = styled.div`
@@ -384,6 +379,9 @@ const LeftSide = styled.div`
   background-color: white;
   justify-content: center;
   align-items: center;
+  @media only screen and (max-width: 776px) {
+    width: 100%;
+  }
 `
 
 const Image = styled.img`
@@ -395,8 +393,7 @@ const Image = styled.img`
   object-fit: cover;
   overflow: hidden;
   @media only screen and (max-width: 776px) {
-    width: 90vw;
-    height: 90vw;
+    width: 100%;
   }
 `;
   // <Header>
@@ -585,8 +582,8 @@ const Step1Container = styled.div`
   top: 50%;
   transform: translate(-50%, -50%);
   @media only screen and (max-width: 776px) {
-    width: 90vw;
-    height: 95vh;
+    width: 100vw;
+    height: calc(95vh - 60px);
     flex-direction: column;
     align-items: center;
   }
@@ -1043,14 +1040,30 @@ const OpaqueFilter = styled.div`
   top: 0;
 `;
 
-const X = styled.img`
-  width: 25px;
-  height: 25px;
-  cursor: pointer;
+// const X = styled.img`
+//   width: 25px;
+//   height: 25px;
+//   cursor: pointer;
+//   position: absolute;
+//   top: 10px;
+//   right: 10px;
+// `;
+const X = styled(IconX)`
   position: absolute;
-  top: 10px;
-  right: 10px;
+  right: 2px;
+  top: 9px;
+  width: 24px;
+  height: 24px;
+  margin: 0 4px 0 0;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  & path {
+    transition: all 0.2s ease-in-out;
+    stroke: ${(props) => props.theme.color.gray};
+    fill: ${(props) => props.theme.color.gray};
+  }
 `;
+
 
 export default CreateForm;
 

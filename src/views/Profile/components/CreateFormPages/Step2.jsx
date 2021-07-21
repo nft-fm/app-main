@@ -7,21 +7,30 @@ import { errorIcon, imageWidth, imageHeight } from "../../../../utils/swalImages
 import swal from "sweetalert2";
 import loading_gif from "../../../../assets/img/loading.gif";
 
+// from UploadAudio
+import audioBufferToMp3 from "../../../../utils/audioBufferToMp3";
+
+
 const Step2 = ({ 
   nftData, 
-  setNftData, 
-  isAudioUploaded, 
+  setNftData,
   isLoadingAudio, 
   setIsLoadingAudio,
   isLoadingImage,
-  setIsLoadingImage 
+  setIsLoadingImage
 }) => {
   const { account } = useAccountConsumer();
   const imageUrlLength = 49 + account.length
-  const audioUrlLength = 48 + account.length
   const [imageFile, setImageFile] = useState(null);
-  const [audioUploadError, setAudioUploadError] = useState(false);
   const [imageName, setImageName] = useState("");
+  const [tempImageUrl, setTempImageUrl] = useState(null)
+
+  const audioUrlLength = 48 + account.length
+  const [audioUploadError, setAudioUploadError] = useState(false);
+  const hiddenAudioInput = useRef(null);
+  const [audioFile, setAudioFile] = useState(null);
+  const [audioName, setAudioName] = useState("");
+  const [tempAudioData, setTempAudioData] = useState(null)
 
   const hiddenImageInput = useRef(null);
   const handleImage = () => {
@@ -30,32 +39,51 @@ const Step2 = ({
   };
 
   const handleImageChange = (e) => {
-    if (!e.target.files[0]) {
-      return;
+    if (e.target.files[0] && !isLoadingImage) {
+      setImageFile(e.target.files[0]);
+      setImageName(e.target.files[0].name);
     }
-    setIsLoadingImage(true);
-    setImageFile(e.target.files[0]);
-    setImageName(e.target.files[0].name);
   };
 
   useEffect(() => {
-    if (imageFile && imageName !== "") {
+    if (tempImageUrl) {
+      setNftData({
+        ...nftData,
+        imageUrl: tempImageUrl
+      })
+      setTempImageUrl(null)
+    }
+    if (tempAudioData) {
+      let audioUrl= tempAudioData.audioUrl;
+      let snnipet = tempAudioData.snnipet;
+      let dur = tempAudioData.dur;
+      setNftData({
+        ...nftData,
+        audioUrl,
+        snnipet,
+        dur
+      });
+      setTempAudioData(null)
+    }
+  }, [tempImageUrl, tempAudioData, setNftData, nftData])
+
+  useEffect(() => {
+    if (imageFile && imageName !== "" && !isLoadingImage) {
       const imageFormData = new FormData();
       imageFormData.append("artist", account);
       imageFormData.append("imageFile", imageFile);
-
+      setIsLoadingImage(true);
       axios
         .post("/api/nft-type/uploadImageS3", imageFormData)
         .then((res) => {
           if (res.status === 200) {
-            setNftData({
-              ...nftData,
-              imageUrl:
-                "https://nftfm-images.s3-us-west-1.amazonaws.com/" +
-                account +
-                "/" +
-                imageName
-            });
+            setImageFile(null);
+            setTempImageUrl(
+              "https://nftfm-images.s3-us-west-1.amazonaws.com/" +
+              account +
+              "/" +
+              imageName
+            )
             setIsLoadingImage(false);
             setImageName("");
           }
@@ -63,6 +91,7 @@ const Step2 = ({
         })
         .catch((err) => {
           setIsLoadingImage(false);
+          setImageFile(null);
           console.log(err);
           swal.fire({
             imageUrl: errorIcon,
@@ -74,7 +103,201 @@ const Step2 = ({
           });
         });
     }
-  }, [imageFile, account, imageName, nftData, setNftData]);
+  }, [imageFile, account, imageName, nftData, setNftData, isLoadingImage, setIsLoadingImage]);
+
+
+  const sliceBuffer = (audioContext, buffer, begin, end, callback) => {
+    var error = null;
+
+    var duration = buffer.duration;
+    var channels = buffer.numberOfChannels;
+    var rate = buffer.sampleRate;
+
+    console.log("channels", channels);
+    if (typeof end === "function") {
+      callback = end;
+      end = duration;
+    }
+
+    if (begin < 0) {
+      begin = 0;
+    }
+
+    if (end > duration) {
+      end = duration;
+    }
+
+    if (typeof callback !== "function") {
+      error = new TypeError("callback must be a function");
+    }
+
+    var startOffset = rate * begin;
+    var endOffset = rate * end;
+    var frameCount = endOffset - startOffset;
+    var newArrayBuffer;
+
+    try {
+      newArrayBuffer = audioContext.createBuffer(
+        channels,
+        endOffset - startOffset,
+        rate
+      );
+      var anotherArray = new Float32Array(frameCount);
+      var offset = 0;
+
+      for (var channel = 0; channel < channels; channel++) {
+        buffer.copyFromChannel(anotherArray, channel, startOffset);
+        newArrayBuffer.copyToChannel(anotherArray, channel, offset);
+      }
+    } catch (e) {
+      error = e;
+    }
+
+    callback(error, newArrayBuffer);
+  };
+
+  const uploadFile = (
+    audioFormData,
+    duration,
+    buffer,
+    audioContext,
+    audioFile
+  ) => {
+    console.log("uploading file");
+    setIsLoadingAudio(true);
+    axios
+      .post("api/nft-type/uploadAudioS3", audioFormData, {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        if (res.status === 200) {
+          // let _nftData;
+
+          console.log("originalBUFFER", buffer);
+          sliceBuffer(audioContext, buffer, 0, 15, (error, newBuffer) => {
+            if (error) {
+              console.log(error);
+            } else {
+              console.log("NEW BUFFER", newBuffer);
+              const snnipetMp3Buffer = audioBufferToMp3(newBuffer);
+
+              const snnipetFile = new File(snnipetMp3Buffer, audioFile.name, {
+                type: "audio/mpeg",
+              });
+
+              const snnipetFormData = new FormData();
+              snnipetFormData.append("artist", account);
+              snnipetFormData.append("audioFile", snnipetFile);
+
+              axios
+                .post("api/nft-type/uploadSnnipetS3", snnipetFormData, {
+                  headers: {
+                    "content-type": "multipart/form-data",
+                  },
+                })
+                .then((response) => {
+                  console.log(response);
+                  setTempAudioData({
+                    audioUrl:
+                      "https://nftfm-music.s3-us-west-1.amazonaws.com/" +
+                      account +
+                      "/" +
+                      audioName,
+                    snnipet:
+                      "https://nftfm-music.s3-us-west-1.amazonaws.com/" +
+                      account +
+                      "/snnipets/snnipet_" +
+                      audioName,
+                    dur: duration
+                  })
+                  setIsLoadingAudio(false);
+                  setAudioName("")
+                })
+                .catch((error) => {
+                  setAudioUploadError(true);
+                  swal.fire({
+                    imageUrl: errorIcon,
+                    imageWidth,
+                    imageHeight,
+                    // timer: 5000,
+                    title: "Error",
+                    text: "Audio upload failed on the server, please try again.",
+                  });
+                  console.log("snnipets upload failed", error);
+                  setIsLoadingAudio(false);
+                  setAudioName("")
+                });
+            }
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoadingAudio(false);
+        setAudioName("")
+        swal.fire({
+          imageUrl: errorIcon,
+          imageWidth,
+          imageHeight,
+          timer: 5000,
+          title: "Error",
+          text: "Audio upload failed on the server, please try again.",
+        });
+        setAudioUploadError(true);
+      });
+  };
+
+  
+
+  const getFileDurAndSnnipet = () => {
+    // Obtain the uploaded file, you can change the logic if you are working with multiupload
+    let file = audioFile;
+    // Create instance of FileReader
+    let reader = new FileReader();
+
+    // When the file has been succesfully read
+    reader.onload = function (event) {
+      // Create an instance of AudioContext
+      let audioContext = new (window.AudioContext ||
+        window.webkitAudioContext)();
+
+      // Asynchronously decode audio file data contained in an ArrayBuffer.
+      audioContext.decodeAudioData(event.target.result, function (buffer) {
+        // Obtain the duration in seconds of the audio file (with milliseconds as well, a float value)
+        let duration = buffer.duration;
+        // setNftData({ ...nftData, dur: duration });
+
+        const audioFormData = new FormData();
+        audioFormData.append("artist", account);
+        audioFormData.append("audioFile", audioFile);
+        uploadFile(audioFormData, duration, buffer, audioContext, audioFile);
+      });
+    };
+
+    reader.readAsArrayBuffer(file);
+  };
+
+  const handleAudio = (e) => {
+    // setIsAudioUploaded(null);
+    setAudioFile(null);
+    hiddenAudioInput.current.click();
+  };
+  const handleAudioChange = (e) => {
+    if (e.target.files[0] && !isLoadingAudio) {
+      setAudioFile(e.target.files[0]);
+      setAudioName(e.target.files[0].name);    
+    }
+  };
+
+  useEffect(() => {
+    if (audioFile && !isLoadingAudio && audioName !== "") {
+      getFileDurAndSnnipet();
+    }
+  }, [audioFile, audioName]);
+
 
   return (
     <>
@@ -84,7 +307,7 @@ const Step2 = ({
       <UploadContainer>
         <p>PNG, JPG, GIF, MP4</p>
         <small>
-          {nftData && nftData.imageUrl !== "" ? nftData.imageUrl.slice(imageUrlLength, nftData.imageUrl.length) : ""}
+          {nftData && nftData.imageUrl &&nftData.imageUrl !== "" ? nftData.imageUrl.slice(imageUrlLength, nftData.imageUrl.length) : ""}
         </small>
         <ChooseFile onClick={() => handleImage()} type="button">
           {!isLoadingImage ? "Choose Image" : <img style={{width: "25px", height: "25px"}} src={loading_gif} alt="loading" />}
@@ -106,7 +329,18 @@ const Step2 = ({
         <small>
           {nftData && nftData.audioUrl !== "" ? nftData.audioUrl.slice(audioUrlLength, nftData.audioUrl.length) : ""}
         </small>
-        <UploadAudio
+
+      <ChooseFile onClick={() => handleAudio()} type="button">
+        {!isLoadingAudio ? "Choose Audio" : <img style={{width: "25px", height: "25px"}} src={loading_gif} alt="loading" />}
+      </ChooseFile>
+      <StyledInput
+        type="file"
+        accept=".mp3,.flac,.wav"
+        ref={hiddenAudioInput}
+        onChange={handleAudioChange}
+        style={{ display: "none" }}
+      />
+        {/* <UploadAudio
           nftData={nftData}
           setNftData={setNftData}
           isAudioUploaded={isAudioUploaded}
@@ -114,7 +348,7 @@ const Step2 = ({
           setAudioUploadError={setAudioUploadError}
           isLoadingAudio={isLoadingAudio}
           setIsLoadingAudio={setIsLoadingAudio}
-        />
+        /> */}
       </UploadContainer>
     </>
   )

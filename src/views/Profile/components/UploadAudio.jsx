@@ -88,22 +88,7 @@ const UploadAudio = ({
       .then((res) => {
         console.log(res);
         if (res.status === 200) {
-          let _nftData;
-
-          setNftData({
-            ...nftData,
-            audioUrl:
-              "https://nftfm-music.s3-us-west-1.amazonaws.com/" +
-              account +
-              "/" +
-              audioName,
-            snnipet:
-              "https://nftfm-music.s3-us-west-1.amazonaws.com/" +
-              account +
-              "/snnipets/snnipet_" +
-              audioName,
-          });
-
+          // let _nftData;
 
           console.log("originalBUFFER", buffer);
           sliceBuffer(audioContext, buffer, 0, 15, (error, newBuffer) => {
@@ -129,11 +114,21 @@ const UploadAudio = ({
                 })
                 .then((response) => {
                   console.log(response);
-                  setNftData((currentState) => {
-                    _nftData = currentState;
-                    return currentState;
+                  // console.log("nftData audio", nftData, "_nftData", _nftData)
+                  setNftData({
+                    ...nftData,
+                    audioUrl:
+                      "https://nftfm-music.s3-us-west-1.amazonaws.com/" +
+                      account +
+                      "/" +
+                      audioName,
+                    snnipet:
+                      "https://nftfm-music.s3-us-west-1.amazonaws.com/" +
+                      account +
+                      "/snnipets/snnipet_" +
+                      audioName,
+                      dur: duration
                   });
-                  setNftData({ ..._nftData, dur: duration });
                   setIsLoadingAudio(false);
                   setAudioName("")
                 })

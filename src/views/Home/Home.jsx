@@ -34,7 +34,7 @@ const Listen = () => {
         <Divider />
         <DemoImage />
         <StyledHeader>Are you an artist? Launch with us!</StyledHeader>
-        <StyledAccountButton href="mailto:info@nftfm.io" target="_blank">
+        <StyledAccountButton href="/register-artist" >
           Contact us!
         </StyledAccountButton>
         <DescriptionLink to="/info">

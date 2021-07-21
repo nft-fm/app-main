@@ -6,6 +6,9 @@ const User = require("../schemas/User.schema");
 const Suggestion = require("../schemas/Suggestion.schema");
 const NftType = require("../schemas/NftType.schema");
 const { findLikes, getUserNfts } = require("../web3/server-utils");
+const sendSignRequest = require('../modules/eversign')
+const { utils } = require("ethers");
+
 
 router.post("/get-account", async (req, res) => {
   try {
@@ -262,6 +265,26 @@ router.post("/get-public-account", async (req, res) => {
     if (getUser) res.status(200).send([getUser, findLikes(getNfts)]);
     else return res.status(500).send("No User Found");
   } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
+router.post("/send-artist-form", async (req, res) => {
+  try {
+    console.log("/send-artist-form", req.body);
+    const sender = utils.verifyMessage(
+      JSON.stringify({ name: req.body.name, email: req.body.email, account: req.body.account }),
+      req.body.auth
+    );
+    if (sender !== req.body.account)
+      return res.sendStatus(403)
+    if (req.body.name && req.body.email) {
+      sendSignRequest(req.body)
+      return res.sendStatus(200)
+    }
+    res.sendStatus(401)
+  } catch (err) {
+    console.log(err)
     res.status(500).send(err);
   }
 });

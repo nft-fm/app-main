@@ -11,14 +11,11 @@ import { LexModelBuildingService } from "aws-sdk";
 const Listen = () => {
   const { account } = useAccountConsumer();
   const [allNfts, setAllNfts] = useState([]);
-  const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
 
   const getNftsWithParams = async (limit, pageIncrease) => {
     console.log("1");
-    if (allNfts.length >= 7) {
-      setHasMore(false);
-    } else {
       if (hasMore) {
         console.log("fetching");
         await axios
@@ -29,21 +26,12 @@ const Listen = () => {
           })
           .then((res) => {
             console.log(res.data);
-            if (res.data.length) {
-              setAllNfts([...allNfts, ...res.data]);
+              setAllNfts([...allNfts, ...res.data.nfts]);
               setPage(page + pageIncrease);
-            } else {
-              setHasMore(false);
-            }
+              setHasMore(res.data.hasMore);
           });
-      }
     }
   };
-
-  useEffect(() => {
-    //loading 3 pages
-    getNftsWithParams(10 * 3, 3);
-  }, [])
 
   console.log("here", page, hasMore, allNfts.length,);
 
@@ -54,10 +42,10 @@ const Listen = () => {
         <InfiniteScroll
           dataLength={allNfts.length}
           //setting limit as 5
-          next={() => getNftsWithParams(10, 1)} //pass function to get next set of NFTs
+          next={() => getNftsWithParams(30, 1)} //pass function to get next set of NFTs
           hasMore={hasMore}
-          loader={<span style={{ color: "white" }}>Loading...</span>}
-          endMessage={<End style={{ color: "white" }}>No more NFTs</End>}
+          // loader={<span style={{ color: "white" }}>Loading...</span>}
+          // endMessage={<End style={{ color: "white" }}>No more NFTs</End>}
         >
           {allNfts.map((item, index) => (
             <NftCard nft={item} />
@@ -71,6 +59,8 @@ const Listen = () => {
 const End = styled.div`
 width: 40vw;
 margin: auto;
+align-items: center;
+text-align: center;
 `
 
 {
@@ -463,6 +453,7 @@ const NftScroll = styled.div`
     flex-direction: column;
     align-items: center;
     margin-top: 25px;
+    
   }
   &>div {
     display: flex;
@@ -481,6 +472,7 @@ const NftScroll = styled.div`
   flex-wrap: wrap;
   width: 100%;
   justify-content: space-between;
+  overflow-x: clip !important;
   @media only screen and (max-width: 776px) {
     flex-direction: column;
     align-items: center;

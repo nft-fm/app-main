@@ -8,40 +8,6 @@ import { ReactComponent as IconEth } from "../../../assets/img/icons/ethereum.sv
 import moment from "moment";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-const formatNfts = (nftsData) => {
-  return nftsData.map((nft) => <NftCard nft={nft} />);
-};
-// const getNftsWithParams = () => {
-//   axios
-//     .post("/api/nft-type/all", { address: account, limit: limit, page: page})
-//     .then((res) => {
-//       // setIsFetching(true);
-//       setUnformattedNftData(res.data);
-//       setAllNfts(res.data);
-//       const formattedNfts = formatNfts(res.data);
-//       for (let i = 0; i < 5; i++) {
-//         formattedNfts.push(<FillerCard />);
-//       }
-//       setDisplayedNfts(formattedNfts);
-//     });
-// };
-
-// const [unformattedNftData, setUnformattedNftData] = useState([]);
-// const [search, setSearch] = useState("");
-
-// useEffect(() => {
-//   getNftsWithParams();
-//   // axios.post("/api/nft-type/countNfts").then((res) => {
-//   //   console.log("this", res.data);
-//   //   numTotalNfts.current = res.data.count;
-//   // });
-// }, [user]);
-
-// const formattedNfts = formatNfts(res.data);
-// for (let i = 0; i < 5; i++) {
-//   formattedNfts.push(<FillerCard />);
-// }
-// setDisplayedNfts(formattedNfts);
 const Listen = () => {
   const { account } = useAccountConsumer();
   const [allNfts, setAllNfts] = useState([]);
@@ -49,16 +15,13 @@ const Listen = () => {
   const [isFetching, setIsFetching] = useState(false);
   const numTotalNfts = 8;
   const [page, setPage] = useState(0);
-  // const page = useRef(0);
   const limit = 5;
 
   const getNftsWithParams = async () => {
     if (allNfts.length >= 7) {
       setHasMore(false);
     } else {
-      // if (hasMore && !isFetching) {
       if (hasMore) {
-        // setIsFetching(true);
         await axios
           .post("/api/nft-type/getNftsWithParams", {
             address: account,
@@ -73,7 +36,6 @@ const Listen = () => {
             } else {
               setHasMore(false);
             }
-            // setIsFetching(false);
           });
       }
     }

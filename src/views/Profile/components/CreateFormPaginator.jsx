@@ -51,7 +51,6 @@ const CreateFormPaginator = ({
     swal.fire({
       title: "Are you sure you want this NFT?",
       text: "This action cannot be reversed",
-      timer: 5000,
       imageUrl: warningIcon,
       imageWidth,
       imageHeight,

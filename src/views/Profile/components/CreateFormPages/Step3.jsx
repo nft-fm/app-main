@@ -1,6 +1,26 @@
 import React, { useState, useRef } from 'react';
 import styled, { css } from "styled-components";
 
+// https://en.wikipedia.org/wiki/Music_genre#Major_music_genres
+const GENRES = [
+  "Country",
+  "Electronic",
+  "Funk",
+  "Hip hop",
+  "Jazz",
+  "Latin",
+  "Pop",
+  "Punk",
+  "Raggae",
+  "Rock",
+  "Metal",
+  "Soul music and R&B",
+  "Polka",
+  "Traditional/Folk",
+  "Other"
+];
+
+
 const Step3 = ({ 
   nftData: { title, producer, description, genre }, 
   updateState 
@@ -39,14 +59,15 @@ const Step3 = ({
         <SubHeader>Genre</SubHeader>
         <p>*</p>
       </FieldHeaders>
-      <StyledInput
-        type="text"
-        placeholder="Genre"
+      <StyledSelect 
         name="genre"
         onChange={(e) => {updateState(e)}}
         value={genre}
-        required
-      />
+      >
+        {GENRES.map(genre => 
+          <option value={genre}>{genre}</option>
+        )}
+      </StyledSelect>
       <FieldHeaders>
         <SubHeader>Description</SubHeader>
         <p>*</p>
@@ -126,6 +147,25 @@ const StyledInput = styled.input`
     margin-top: -15px;
   }
 `;
+
+const StyledSelect = styled.select`
+  color: white;
+  background-color: #090909;
+  border: none;
+  outline: none;
+  height: 30px;
+  font-size: 16px;
+  border-bottom: 1px solid ${(props) => props.theme.color.boxBorder};
+  ${props => props.noborder && css`
+    border: none;
+  `}
+  @media only screen and (max-width: 776px) {
+    background-color: transparent;
+    height: 20px;
+    font-size: 14px;
+    margin-top: -15px;
+  }
+`
 
 const SubHeader = styled.h4`
   color: white;

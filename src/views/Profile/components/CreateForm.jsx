@@ -22,7 +22,6 @@ import PreviewBuyModal from "./CreateFormPages/PreviewBuyModal"
 
 
 import CreateFormPaginator from "./CreateFormPaginator";
-import { getAccountPath } from "ethers/lib/utils";
 
 const initialNftState = {
   artist: "",
@@ -62,22 +61,28 @@ const CreateForm = ({ open, hide }) => {
   }, [isLoadingAudio, isLoadingImage])
   
   useEffect(() => {
-    user && user.username && setNftData({ ...nftData, artist: user.username });
-    // const getDraft = async () => {
-    //   const draft = await axios.get(`/api/nft-type/get-draft/${account}`);
-    //   setNftData(draft.data[0]);
-    //   console.log(draft.data[0]);
-    // }
-    // getDraft();
-  }, [user, open, account, nftData]);
-
+    if (!isLoading && !isLoadingImage && !isLoadingAudio && currentStep !== 1) {
+      setIsLoading(true)
+      axios
+      .post("/api/nft-type/update-and-fetch", nftData)
+      .then((res) => {
+        console.log("success", res.data)
+        setNftData(res.data)
+      })
+      .catch(err => console.log(err));
+      setIsLoading(false)
+    }
+  }, [currentStep])
 
   useEffect(() => {
-    setNftData({ ...nftData, address: account });
-    axios
+    if (account && user && user.username) {
+      setNftData({ ...nftData, address: account , artist: user.username ? user.username : ''});
+      axios
       .post("/api/nft-type/get-NFT", { account: account })
       .then((res) => setNftData(res.data));
-  }, [account]);
+    } 
+  }, [user, account]);
+
 
 
   // const [videoFile, setVideoFile] = useState(null);
@@ -117,7 +122,7 @@ const CreateForm = ({ open, hide }) => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     console.log("DUR", nftData.dur);
     if (!isComplete()) {
       return;
@@ -315,6 +320,16 @@ const CreateForm = ({ open, hide }) => {
         </SelectContainer>
         <OpaqueFilter onClick={() => hide()} />
       </> 
+    )
+  } else if (isLoading) {
+    return (
+      <OpaqueFilter>
+        <Step1Container>
+          <StyledModal>
+            <img src={loading_gif} alt="loading"/>
+          </StyledModal>
+        </Step1Container>
+      </OpaqueFilter>
     )
   } else {
     return(

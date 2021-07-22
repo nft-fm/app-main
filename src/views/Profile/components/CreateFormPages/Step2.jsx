@@ -68,6 +68,14 @@ const Step2 = ({
       const imageFormData = new FormData();
       imageFormData.append("artist", account);
       imageFormData.append("imageFile", imageFile);
+      imageFormData.append(
+        "imageURL",
+        "https://nftfm-images.s3-us-west-1.amazonaws.com/" +
+        account +
+        "/" +
+        imageName
+      );
+
       setIsLoadingImage(true);
       axios
         .post("/api/nft-type/uploadImageS3", imageFormData)
@@ -184,7 +192,20 @@ const Step2 = ({
               const snnipetFormData = new FormData();
               snnipetFormData.append("artist", account);
               snnipetFormData.append("audioFile", snnipetFile);
-
+              snnipetFormData.append(
+                "audioURL", 
+                "https://nftfm-music.s3-us-west-1.amazonaws.com/" +
+                account +
+                "/" +
+                audioFile.name
+              );
+              snnipetFormData.append(
+                "snnipetURL", 
+                "https://nftfm-music.s3-us-west-1.amazonaws.com/" +
+                account +
+                "/snnipets/snnipet_" +
+                audioFile.name,
+              );
               axios
                 .post("api/nft-type/uploadSnnipetS3", snnipetFormData, {
                   headers: {
@@ -243,6 +264,7 @@ const Step2 = ({
   
 
   const getFileDurAndSnnipet = () => {
+    if (!audioFile) return ;
     // Obtain the uploaded file, you can change the logic if you are working with multiupload
     let file = audioFile;
     // Create instance of FileReader
@@ -404,6 +426,7 @@ const ChooseFile = styled.button`
   font-size: 18px;
   text-align: center;
   color: #ffffff;
+  font-size: 16px;
   background-image: linear-gradient(to right, #262626, #383838);
   &:hover {
     cursor: pointer;

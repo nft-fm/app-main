@@ -397,13 +397,14 @@ router.post("/countNfts", async (req, res) => {
   // res.sendStatus(200).json({countNfts});
 });
 
-router.post("/all", async (req, res) => {
+router.post("/getNftsWithParams", async (req, res) => {
   try {
     let nftTypes = await NftType.find({
       isDraft: false,
       isMinted: true,
-    }).limit(req.body.limit);
-    console.log("/all hit", req.body);
+    }).skip(req.body.page).limit(req.body.limit);
+    console.log("/all hit", req.body, nftTypes);
+
     res.send(findLikes(nftTypes, req.body.address));
   } catch (error) {
     console.log(error);

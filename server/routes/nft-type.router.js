@@ -164,6 +164,25 @@ const toArrayBuffer = (buf) => {
   return ab;
 };
 
+router.post("/update-draft", async (req, res) => {
+  try {
+    if (!req.body.address) return res.status(400).send("No address :(((")
+    const draft = req.body;
+    console.log("updating draft", req.body);
+    let updatedDraft = await NftType.findByIdAndUpdate(draft._id, draft);
+    if (updatedDraft) {
+      console.log(`Updated Draft: ${updatedDraft}`);
+      res.send("draft updated");
+    } else {
+      console.log("Failed to update draft");
+      res.status(500).json("error");
+    }
+  } catch(error) {
+    console.log(error);
+    res.status(500).send("server error");
+  }
+})
+
 router.post("/finalize", async (req, res) => {
   try {
     let newData = req.body;

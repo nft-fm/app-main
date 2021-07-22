@@ -6,10 +6,7 @@ import { useAccountConsumer } from "../../../../contexts/Account";
 import { errorIcon, imageWidth, imageHeight } from "../../../../utils/swalImages";
 import swal from "sweetalert2";
 import loading_gif from "../../../../assets/img/loading.gif";
-
-// from UploadAudio
 import audioBufferToMp3 from "../../../../utils/audioBufferToMp3";
-
 
 const Step2 = ({ 
   nftData, 
@@ -26,7 +23,6 @@ const Step2 = ({
   const [tempImageUrl, setTempImageUrl] = useState(null)
 
   const audioUrlLength = 48 + account.length
-  const [audioUploadError, setAudioUploadError] = useState(false);
   const hiddenAudioInput = useRef(null);
   const [audioFile, setAudioFile] = useState(null);
   const [audioName, setAudioName] = useState("");
@@ -51,18 +47,18 @@ const Step2 = ({
         ...nftData,
         imageUrl: tempImageUrl
       })
+      setIsLoadingImage(false);
       setTempImageUrl(null)
     }
     if (tempAudioData) {
-      let audioUrl= tempAudioData.audioUrl;
-      let snnipet = tempAudioData.snnipet;
-      let dur = tempAudioData.dur;
+      let { audioUrl, snnipet, dur } = tempAudioData
       setNftData({
         ...nftData,
         audioUrl,
         snnipet,
         dur
       });
+      setIsLoadingAudio(false);
       setTempAudioData(null)
     }
   }, [tempImageUrl, tempAudioData, setNftData, nftData])
@@ -84,7 +80,6 @@ const Step2 = ({
               "/" +
               imageName
             )
-            setIsLoadingImage(false);
             setImageName("");
           }
           console.log(res);
@@ -174,8 +169,6 @@ const Step2 = ({
       .then((res) => {
         console.log(res);
         if (res.status === 200) {
-          // let _nftData;
-
           console.log("originalBUFFER", buffer);
           sliceBuffer(audioContext, buffer, 0, 15, (error, newBuffer) => {
             if (error) {
@@ -213,16 +206,14 @@ const Step2 = ({
                       audioName,
                     dur: duration
                   })
-                  setIsLoadingAudio(false);
                   setAudioName("")
                 })
                 .catch((error) => {
-                  setAudioUploadError(true);
                   swal.fire({
                     imageUrl: errorIcon,
                     imageWidth,
                     imageHeight,
-                    // timer: 5000,
+                    timer: 5000,
                     title: "Error",
                     text: "Audio upload failed on the server, please try again.",
                   });
@@ -246,7 +237,6 @@ const Step2 = ({
           title: "Error",
           text: "Audio upload failed on the server, please try again.",
         });
-        setAudioUploadError(true);
       });
   };
 
@@ -307,7 +297,7 @@ const Step2 = ({
       <UploadContainer>
         <p>PNG, JPG, GIF, MP4</p>
         <small>
-          {nftData && nftData.imageUrl &&nftData.imageUrl !== "" ? nftData.imageUrl.slice(imageUrlLength, nftData.imageUrl.length) : ""}
+          {nftData && nftData.imageUrl && nftData.imageUrl !== "" ? nftData.imageUrl.slice(imageUrlLength, nftData.imageUrl.length) : ""}
         </small>
         <ChooseFile onClick={() => handleImage()} type="button">
           {!isLoadingImage ? "Choose Image" : <img style={{width: "25px", height: "25px"}} src={loading_gif} alt="loading" />}
@@ -340,15 +330,6 @@ const Step2 = ({
         onChange={handleAudioChange}
         style={{ display: "none" }}
       />
-        {/* <UploadAudio
-          nftData={nftData}
-          setNftData={setNftData}
-          isAudioUploaded={isAudioUploaded}
-          audioUploadError={audioUploadError}
-          setAudioUploadError={setAudioUploadError}
-          isLoadingAudio={isLoadingAudio}
-          setIsLoadingAudio={setIsLoadingAudio}
-        /> */}
       </UploadContainer>
     </>
   )

@@ -57,7 +57,7 @@ const Fixed = styled.h1`
   flex-direction: column;
   position: fixed;
   left: 25%;
-  top: 40%;
+  top: 50%;
   transform: translate(-50%, -50%);
   color: white;
   cursor: not-allowed;

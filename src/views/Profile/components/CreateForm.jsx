@@ -10,7 +10,7 @@ import { ReactComponent as eth_icon } from "../../../assets/img/icons/ethereum.s
 import x from "../../../assets/img/icons/x.svg";
 import { ReactComponent as IconX } from "../../../assets/img/icons/x.svg";
 
-import { errorIcon, imageWidth, imageHeight } from "../../../utils/swalImages";
+import { errorIcon, questionIcon, imageWidth, imageHeight } from "../../../utils/swalImages";
 import { useAccountConsumer } from "../../../contexts/Account";
 import { mintNFT } from "../../../web3/utils";
 
@@ -22,6 +22,7 @@ import PreviewBuyModal from "./CreateFormPages/PreviewBuyModal"
 
 
 import CreateFormPaginator from "./CreateFormPaginator";
+import { getAccountPath } from "ethers/lib/utils";
 
 const initialNftState = {
   artist: "",
@@ -50,19 +51,26 @@ const CreateForm = ({ open, hide }) => {
 
   const [currentStep, setCurrentStep] = useState(1);
 
-
+  useEffect(() => {
+    if (isLoadingAudio || isLoadingImage) {
+      window.onbeforeunload = () => {
+        return 'Navigating away from this page may result in unsaved data. Are you sure?'
+      }
+    } else {
+      window.onbeforeunload = undefined;
+    }
+  }, [isLoadingAudio, isLoadingImage])
+  
   useEffect(() => {
     user && user.username && setNftData({ ...nftData, artist: user.username });
-  }, [user]);
+    // const getDraft = async () => {
+    //   const draft = await axios.get(`/api/nft-type/get-draft/${account}`);
+    //   setNftData(draft.data[0]);
+    //   console.log(draft.data[0]);
+    // }
+    // getDraft();
+  }, [user, open, account, nftData]);
 
-  // useEffect(() => {
-  //   const getDraft = async () => {
-  //     const draft = await axios.get(`/api/nft-type/get-draft/${account}`);
-  //     setNftData(draft.data[0]);
-  //     console.log(draft.data[0]);
-  //   }
-  //   getDraft();
-  // }, [open, account])
 
   useEffect(() => {
     setNftData({ ...nftData, address: account });
@@ -97,9 +105,10 @@ const CreateForm = ({ open, hide }) => {
       nftData.numMinted === "" ||
       nftData.price === 0 ||
       nftData.price === "0" ||
-      nftData.price === "" 
-      // !isAudioUploaded ||
-      // !isImageUploaded
+      nftData.price === ""  ||
+      nftData.imageUrl === "" ||
+      nftData.audioUrl === "" ||
+      nftData.snnipet === ""
     ) {
       return false;
     } else {
@@ -268,6 +277,21 @@ const CreateForm = ({ open, hide }) => {
 
   if (!open) return false;
 
+  const onCloseModal = () => {
+    if (isLoadingAudio || isLoadingImage) {
+      return swal.fire({
+        title: "You are currently uploading files. Are you sure you want to leave?",
+        imageUrl: questionIcon,
+        imageWidth,
+        imageHeight,
+        showCancelButton: true     
+      }).then(res => 
+        !res.isDismissed ? hide() : null
+      );
+    }
+    hide();
+  }
+
   const steps = [
     <Step2 
       nftData={nftData} 
@@ -281,7 +305,6 @@ const CreateForm = ({ open, hide }) => {
     <Step4 nftData={nftData} updateState={updateState} usdPerEth={usdPerEth} />,
     <PreviewBuyModal nft={nftData} />
   ]
-
   if (currentStep === 1) {
     return (
       <>
@@ -298,7 +321,7 @@ const CreateForm = ({ open, hide }) => {
       <OpaqueFilter>
         <Step1Container>
           <StyledModal>
-            <X src={x} onClick={() => hide()} />
+            <X src={x} onClick={onCloseModal} />
             {
               nftData.imageUrl === "" || !nftData.imageUrl ?
               < LeftSide /> : <Image src={nftData.imageUrl} alt="image" />
@@ -312,6 +335,8 @@ const CreateForm = ({ open, hide }) => {
             currentStep={currentStep} 
             setCurrentStep={setCurrentStep}
             handleSubmit={handleSubmit}
+            isLoadingAudio={isLoadingAudio}
+            isLoadingImage={isLoadingImage}
           />
         </Step1Container>
       </OpaqueFilter>

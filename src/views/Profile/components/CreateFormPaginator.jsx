@@ -2,20 +2,25 @@ import React, { useState, useEffect } from "react";
 import styled, { css } from "styled-components";
 import ReactToolTip from "react-tooltip";
 import swal from "sweetalert2";
-import { errorIcon, imageWidth, imageHeight } from "../../../utils/swalImages";
+import { errorIcon, warningIcon, questionIcon, imageWidth, imageHeight } from "../../../utils/swalImages";
+import { ReactComponent as rightArrow } from "../../../assets/img/homepage_assets/right-arrow-3.svg";
 
 const PaginatorButton = ({ children, currentStep, prev, onClick }) => 
   <StyledAccountButton currentStep={currentStep} prev={prev} onClick={onClick}>
+    {prev ? <RightArrow prev={prev} /> : null}
     <Button type="button">
       {children}
     </Button>
+    {!prev ? <RightArrow /> : null}
   </StyledAccountButton>
 
 const CreateFormPaginator = ({ 
   currentStep,
   setCurrentStep, 
   handleSubmit, 
-  nftData
+  nftData,
+  isLoadingAudio,
+  isLoadingImage
 }) => {
   // checking for completion
   // const [step2, setStep2] = useState(false);
@@ -31,7 +36,7 @@ const CreateFormPaginator = ({
   } = nftData;
 
   const onClickDotNavigate = (step) => {
-    console.log(step2)
+    if (isLoadingAudio || isLoadingImage) return;
     if (step === 1 || currentStep > step) return setCurrentStep(step);
     if ((step2 && step === 2) || 
     (step3 && step === 3) || 
@@ -42,7 +47,20 @@ const CreateFormPaginator = ({
     }
   }
 
+  const confirmSubmit = () => 
+    swal.fire({
+      title: "Are you sure you want this NFT?",
+      text: "This action cannot be reversed",
+      timer: 5000,
+      imageUrl: warningIcon,
+      imageWidth,
+      imageHeight,
+      showCancelButton: true     
+    }).then(res => !res.isDismissed ? handleSubmit() : null);
+  
+
   const paginateNext = () => {
+    if (isLoadingAudio || isLoadingImage) return;
     if (currentStep === 1 || (step2 && currentStep === 2) || 
     (step3 && currentStep === 3)) {
       return setCurrentStep(currentStep + 1);
@@ -95,6 +113,11 @@ const CreateFormPaginator = ({
     }
   }
 
+  const paginateBack = () => {
+    if (!isLoadingAudio && !isLoadingImage)
+      setCurrentStep(currentStep - 1)
+  }
+
   useEffect(() => {
     if (imageUrl !== "" && audioUrl !== "")
       setStep2(true)
@@ -106,7 +129,7 @@ const CreateFormPaginator = ({
   
   return (
     <PaginatorContainer>
-      <PaginatorButton prev currentStep={currentStep} onClick={() => setCurrentStep(currentStep - 1)}>
+      <PaginatorButton prev currentStep={currentStep} onClick={() => paginateBack()}>
         Back
       </PaginatorButton>
       <DotContainer>
@@ -163,7 +186,7 @@ const CreateFormPaginator = ({
       {currentStep === 5 ?
         <PaginatorButton 
           currentStep={currentStep} 
-          onClick={handleSubmit}
+          onClick={() => confirmSubmit()}
         >
           Submit
         </PaginatorButton> : 
@@ -178,10 +201,23 @@ const CreateFormPaginator = ({
   )
 }
 
+const RightArrow = styled(rightArrow)`
+  width: 18px;
+  height: 18px;
+  & path {
+    fill: white;
+    font-weight: 900;
+  }
+  ${props => props.prev && css` 
+    transform: rotate(180deg);
+  `}
+`;
+
 const PaginatorContainer = styled.div`
   display: flex;
-  width: 100%;
-  justify-content: space-around;
+  padding: 0 20px;
+  width: calc(100% - 40px);
+  justify-content: space-between;
   align-items: center;
   margin-top: 10px;
 `
@@ -193,23 +229,26 @@ const Button = styled.button`
   display: flex;
   letter-spacing: 1px;
   align-items: center;
-  justify-content: center;
+  /* justify-content: center; */
   font-weight: 600;
   cursor: pointer;
   color: white;
 `;
 
 const StyledAccountButton = styled.div`
-  width: 140px;
+  width: 100px;
+  padding: 8px 15px;
+  display: flex;
   cursor: pointer;
   transition: all 0.1s ease-in-out;
   display: flex;
-  justify-content: center;
-  border: 1px solid ${(props) => props.theme.color.red};
-  height: 32px;
-  border-radius: 20px;
+  justify-content: space-evenly;
+  align-items: center;
+  /* border: 1px solid ${(props) => props.theme.color.red}; */
+  height: 24px;
+  border-radius: 8px;
   font-family: "Compita";
-  background-color: #181818;
+  background-color: ${props => props.prev ? "#181818" : props.theme.color.blue };
   &:hover {
     background-color: rgba(256, 256, 256, 0.2);
   }

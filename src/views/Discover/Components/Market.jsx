@@ -5,7 +5,6 @@ import NftCard from "../../../components/NftCards/SaleNftCard";
 import { useAccountConsumer } from "../../../contexts/Account";
 import { ReactComponent as down_arrow } from "../../../assets/img/icons/down_arrow.svg";
 import { ReactComponent as IconEth } from "../../../assets/img/icons/ethereum.svg";
-import moment from "moment";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 const Listen = () => {
@@ -13,15 +12,16 @@ const Listen = () => {
   const [allNfts, setAllNfts] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
-  const numTotalNfts = 8;
   const [page, setPage] = useState(0);
   const limit = 5;
 
   const getNftsWithParams = async () => {
+    console.log("1");
     if (allNfts.length >= 7) {
       setHasMore(false);
     } else {
       if (hasMore) {
+        console.log("fetching");
         await axios
           .post("/api/nft-type/getNftsWithParams", {
             address: account,
@@ -32,7 +32,7 @@ const Listen = () => {
             console.log(res.data);
             if (res.data.length) {
               setAllNfts([...allNfts, ...res.data]);
-              setPage(page + 5);
+              setPage(page+1);
             } else {
               setHasMore(false);
             }
@@ -40,6 +40,10 @@ const Listen = () => {
       }
     }
   };
+
+  useEffect(() => {
+    getNftsWithParams();
+  }, [])
 
   console.log("here", page, hasMore, isFetching, allNfts.length,);
 
@@ -52,7 +56,7 @@ const Listen = () => {
           next={() => getNftsWithParams()} //pass function to get next set of NFTs
           hasMore={hasMore}
           loader={<span style={{ color: "white" }}>Loading...</span>}
-          endMessage={<span style={{ color: "white" }}>No more NFTs</span>}
+          endMessage={<End style={{ color: "white" }}>No more NFTs</End>}
         >
           {allNfts.map((item, index) => (
             <NftCard nft={item} />
@@ -62,6 +66,11 @@ const Listen = () => {
     </LaunchContainer>
   );
 };
+
+const End = styled.div`
+width: 40vw;
+
+`
 
 {
   /* <ContainerTitleInput
@@ -453,6 +462,30 @@ const NftScroll = styled.div`
     flex-direction: column;
     align-items: center;
     margin-top: 25px;
+  }
+  &>div {
+    display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: space-between;
+  @media only screen and (max-width: 776px) {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 25px;
+}
+&>div {
+    display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: space-between;
+  @media only screen and (max-width: 776px) {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 25px;
+  }
+  }
   }
 `;
 

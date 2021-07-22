@@ -6,16 +6,15 @@ import { useAccountConsumer } from "../../../contexts/Account";
 import { ReactComponent as down_arrow } from "../../../assets/img/icons/down_arrow.svg";
 import { ReactComponent as IconEth } from "../../../assets/img/icons/ethereum.svg";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { LexModelBuildingService } from "aws-sdk";
 
 const Listen = () => {
   const { account } = useAccountConsumer();
   const [allNfts, setAllNfts] = useState([]);
   const [hasMore, setHasMore] = useState(true);
-  const [isFetching, setIsFetching] = useState(false);
   const [page, setPage] = useState(0);
-  const limit = 5;
 
-  const getNftsWithParams = async () => {
+  const getNftsWithParams = async (limit, pageIncrease) => {
     console.log("1");
     if (allNfts.length >= 7) {
       setHasMore(false);
@@ -25,14 +24,14 @@ const Listen = () => {
         await axios
           .post("/api/nft-type/getNftsWithParams", {
             address: account,
-            limit: limit,
+            limit,
             page: page,
           })
           .then((res) => {
             console.log(res.data);
             if (res.data.length) {
               setAllNfts([...allNfts, ...res.data]);
-              setPage(page+1);
+              setPage(page + pageIncrease);
             } else {
               setHasMore(false);
             }
@@ -42,10 +41,11 @@ const Listen = () => {
   };
 
   useEffect(() => {
-    getNftsWithParams();
+    //loading 3 pages
+    getNftsWithParams(10 * 3, 3);
   }, [])
 
-  console.log("here", page, hasMore, isFetching, allNfts.length,);
+  console.log("here", page, hasMore, allNfts.length,);
 
   return (
     <LaunchContainer>
@@ -53,7 +53,8 @@ const Listen = () => {
       <NftScroll>
         <InfiniteScroll
           dataLength={allNfts.length}
-          next={() => getNftsWithParams()} //pass function to get next set of NFTs
+          //setting limit as 5
+          next={() => getNftsWithParams(10, 1)} //pass function to get next set of NFTs
           hasMore={hasMore}
           loader={<span style={{ color: "white" }}>Loading...</span>}
           endMessage={<End style={{ color: "white" }}>No more NFTs</End>}
@@ -69,7 +70,7 @@ const Listen = () => {
 
 const End = styled.div`
 width: 40vw;
-
+margin: auto;
 `
 
 {

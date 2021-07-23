@@ -27,7 +27,7 @@ const initialNftState = {
   artist: "",
   address: "",
   isDraft: true,
-  genre: "",
+  genre: "Select",
   startTime: 0,
   dur: 0,
   numMinted: 0,
@@ -61,7 +61,7 @@ const CreateForm = ({ open, hide }) => {
   }, [isLoadingAudio, isLoadingImage])
   
   useEffect(() => {
-    if (!isLoading && !isLoadingImage && !isLoadingAudio && currentStep !== 1) {
+    if (account && !isLoading && !isLoadingImage && !isLoadingAudio && currentStep !== 1) {
       setIsLoading(true)
       axios
       .post("/api/nft-type/update-and-fetch", nftData)
@@ -75,13 +75,15 @@ const CreateForm = ({ open, hide }) => {
   }, [currentStep])
 
   useEffect(() => {
-    if (account && user && user.username) {
-      setNftData({ ...nftData, address: account , artist: user.username ? user.username : ''});
-      axios
+    user && user.username && setNftData({ ...nftData, artist: user.username });
+  }, [user]);
+
+  useEffect(() => {
+    setNftData({ ...nftData, address: account });
+    axios
       .post("/api/nft-type/get-NFT", { account: account })
       .then((res) => setNftData(res.data));
-    } 
-  }, [user, account]);
+  }, [account]);
 
 
 
@@ -182,59 +184,60 @@ const CreateForm = ({ open, hide }) => {
     // if (!audioUploadError && !imageUploadError) {
       setIsLoading(true);
       // after nftData has both audio and image references, run this route
-      axios
-        .post("/api/nft-type/finalize", newNftData)
-        .then((res) => {
-          console.log("finalize res", res);
-          if (res.status === 200) {
-            mintNFT(
-              res.data,
-              () => {
-                console.log("pending...");
-                setIsLoading(true);
-              },
-              () => {
-                console.log("final");
-                setNftData(initialNftState);
-                setIsLoading(false);
-                swal
-                  .fire({
-                    title: "NFT Minted!",
-                    text: "It can take 2-3 minutes for the new NFT to appear on your profile.",
-                    timer: 10000,
-                  })
-                  .then(() => hide());
-              }
-            ).catch((err) => {
-              setIsLoading(false);
-              swal.fire({
-                imageUrl: errorIcon,
-                imageWidth,
-                imageHeight,
-                title: "Couldn't create NFT!",
-                text: "Please try again",
-              });
-            });
-            console.log("MINT");
-          } else {
-            setIsLoading(false);
-            swal.fire({
-              title: "Error",
-              background: `#000`,
-              boxShadow: `24px 24px 48px -24px #131313`,
-              text: "Nft creation failed here, please try again.",
-            });
-          }
-        })
-        .catch((err) => {
-          setIsLoading(false);
-          swal.fire({
-            title: "Error",
-            background: `#000`,
-            boxShadow: `24px 24px 48px -24px #131313`,
-            text: "Nft creation failed on the server, please try again.",
-          });
-        });
+      console.log("newNftData", newNftData);
+      // axios
+      //   .post("/api/nft-type/finalize", newNftData)
+      //   .then((res) => {
+      //     console.log("finalize res", res);
+      //     if (res.status === 200) {
+      //       mintNFT(
+      //         res.data,
+      //         () => {
+      //           console.log("pending...");
+      //           setIsLoading(true);
+      //         },
+      //         () => {
+      //           console.log("final");
+      //           setNftData(initialNftState);
+      //           setIsLoading(false);
+      //           swal
+      //             .fire({
+      //               title: "NFT Minted!",
+      //               text: "It can take 2-3 minutes for the new NFT to appear on your profile.",
+      //               timer: 10000,
+      //             })
+      //             .then(() => hide());
+      //         }
+      //       ).catch((err) => {
+      //         setIsLoading(false);
+      //         swal.fire({
+      //           imageUrl: errorIcon,
+      //           imageWidth,
+      //           imageHeight,
+      //           title: "Couldn't create NFT!",
+      //           text: "Please try again",
+      //         });
+      //       });
+      //       console.log("MINT");
+      //     } else {
+      //       setIsLoading(false);
+      //       swal.fire({
+      //         title: "Error",
+      //         background: `#000`,
+      //         boxShadow: `24px 24px 48px -24px #131313`,
+      //         text: "Nft creation failed here, please try again.",
+      //       });
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     setIsLoading(false);
+      //     swal.fire({
+      //       title: "Error",
+      //       background: `#000`,
+      //       boxShadow: `24px 24px 48px -24px #131313`,
+      //       text: "Nft creation failed on the server, please try again.",
+      //     });
+      //   });
     }
 
   useEffect(() => {

@@ -85,8 +85,14 @@ router.post("/update-and-fetch", async (req, res) => {
     if (!req.body.address) return res.status(400).send("No address")
     let draft = await NftType.findOne({ isDraft: true, address: req.body.address});
     if (!draft) res.status(500).send("Unable to update NFT");
+
     for (const key in nftData) {
       if (key in draft) draft[key] = nftData[key];
+    }
+
+    if (draft.address && draft.artist === '') {
+      let user = await User.findOne({ address: req.body.address });
+      draft.artist = user.username;
     }
     await draft.save();
     res.send(draft);
@@ -177,6 +183,7 @@ router.post("/update-draft", async (req, res) => {
     const draft = req.body;
     console.log("updating draft", req.body);
     let updatedDraft = await NftType.findByIdAndUpdate(draft._id, draft);
+
     if (updatedDraft) {
       console.log(`Updated Draft: ${updatedDraft}`);
       res.send("draft updated");
@@ -220,8 +227,8 @@ router.post("/finalize", async (req, res) => {
         [
           "NFTFM_mintAndStake",
           newData.address,
-          newData.numMinted,
-          price,
+          newData.numMinted.toString(),
+          price.toString(),
           startTime,
           FlatPriceSale,
           encodedFee,
@@ -231,7 +238,7 @@ router.post("/finalize", async (req, res) => {
       res.status(200).send({
         ...signature,
         amount: newData.numMinted,
-        price: price,
+        price: price.toString(),
         address: newData.address,
         startTime: startTime,
         dur: newData.dur,

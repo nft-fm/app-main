@@ -74,7 +74,7 @@ const CreateFormPaginator = ({
         });
       }
       if (!producer || !title || !genre || !description ||
-        producer === "" || title === "" || genre === "" || description === "") {
+        producer === "" || title === "" || genre === "Select" || description === "") {
         return swal.fire({
           title: "You must fill out the required artist fields.",
           timer: 5000,
@@ -120,7 +120,7 @@ const CreateFormPaginator = ({
   useEffect(() => {
     if (imageUrl !== "" && audioUrl !== "")
       setStep2(true)
-    if (producer !== "" && title !=="" && genre !== "" && description !== "") 
+    if (producer !== "" && title !=="" && genre !== "Select a genre" && description !== "") 
       setStep3(true)
     if (price > 0 && numMinted > 0) 
       setStep4(true)

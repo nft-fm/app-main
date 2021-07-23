@@ -3,6 +3,7 @@ import styled, { css } from "styled-components";
 
 // https://en.wikipedia.org/wiki/Music_genre#Major_music_genres
 const GENRES = [
+  "Select",
   "Country",
   "Electronic",
   "Funk",

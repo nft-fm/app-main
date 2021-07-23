@@ -40,7 +40,7 @@ const BuyNftModal = (props) => {
     setIsShareOpen,
   } = props;
 
-  console.log("buynftmodal", props);
+  // console.log("buynftmodal", props);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isBought, setIsBought] = useState(false);

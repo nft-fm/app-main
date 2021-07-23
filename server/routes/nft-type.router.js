@@ -274,8 +274,8 @@ router.post("/get-one", async (req, res) => {
     console.log("nftType", nftType);
 
     if (nftType) {
-      console.log()
-      res.send({...nftType.toObject(), likeCount: nftType.likes.length});
+      console.log();
+      res.send({ ...nftType.toObject(), likeCount: nftType.likes.length });
     } else {
       res.status(404).send("NFT not found");
     }
@@ -384,21 +384,44 @@ router.post("/countNfts", async (req, res) => {
     isMinted: true,
   });
   console.log("here", countNfts);
-  res.send({count: countNfts})
+  res.send({ count: countNfts });
   // res.sendStatus(200).json({countNfts});
 });
 
 router.post("/getNftsWithParams", async (req, res) => {
   try {
-    console.log("getting nfts with params", req.body);
+    console.log("getting nfts", req.body);
+    const getSortParam = () => {
+      if (req.body.sort === 0) {
+        return { price: -1 };
+      } else if (req.body.sort === 1) {
+        return { price: 1 };
+      } else if (req.body.sort === 2) {
+        return { timestamp: -1 };
+      } else if (req.body.sort === 3) {
+        return { timestamp: 1 };
+      }
+    };
     let nftTypes = await NftType.find({
       isDraft: false,
       isMinted: true,
-    }).skip(req.body.page * req.body.limit).limit(req.body.limit);
-    // console.log("/all hit", req.body, nftTypes);
+      $or: [
+        {
+          title: { $regex: req.body.search, $options: "i" },
+        },
+        {
+          artist: { $regex: req.body.search, $options: "i" },
+        },
+      ],
+    })
+      .sort(getSortParam())
+      .skip(req.body.page * req.body.limit)
+      .limit(req.body.limit);
+      console.log(nftTypes.length === req.body.limit)
     res.send({
       nfts: findLikes(nftTypes, req.body.address),
-      hasMore: nftTypes.length === req.body.limit});
+      hasMore: nftTypes.length === req.body.limit,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send("server error");

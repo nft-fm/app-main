@@ -12,47 +12,225 @@ const Listen = () => {
   const [allNfts, setAllNfts] = useState([]);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [selected, setSelected] = useState("Date: High - Low");
+  const [search, setSearch] = useState("");
+  const [sort, setSort] = useState(2);
+  const limit = 30;
 
-  const getNftsWithParams = async (limit, pageIncrease) => {
-    console.log("1");
-      if (hasMore) {
-        console.log("fetching");
+  const getNftsWithParams = async (pageIncrease, searchParam, sortParam) => {
+    console.log("1", searchParam);
+    if (hasMore) {
+      console.log("fetching");
+      await axios
+        .post("/api/nft-type/getNftsWithParams", {
+          address: account,
+          limit,
+          page: page,
+          search: searchParam,
+          sort: sortParam,
+        })
+        .then((res) => {
+          console.log(res.data);
+          setAllNfts([...allNfts, ...res.data.nfts]);
+          setPage(page + pageIncrease);
+          setHasMore(res.data.hasMore);
+        });
+    }
+  };
+
+  // useEffect(() => {
+  //   getNftsWithParams(1, search);
+  // }, []);
+
+  useEffect(() => {
+    const fetchWithNoSearch = async () => {
+      setPage(0);
+      if (search === "") {
+        console.log("search", search);
+        setHasMore(true);
+        setAllNfts([]);
         await axios
           .post("/api/nft-type/getNftsWithParams", {
             address: account,
             limit,
-            page: page,
+            page: 0,
+            search: "",
+            sort: sort,
           })
           .then((res) => {
-            console.log(res.data);
-              setAllNfts([...allNfts, ...res.data.nfts]);
-              setPage(page + pageIncrease);
-              setHasMore(res.data.hasMore);
+            setAllNfts(res.data.nfts);
+            setPage(page + 1);
+            setHasMore(res.data.hasMore);
           });
-    }
-  };
+      }
+    };
+
+    fetchWithNoSearch();
+  }, [search]);
 
   useEffect(() => {
-    getNftsWithParams(10, 1);
-  }, [])
+    const handleSort = async (pageIncrease, searchParam, sortParam) => {
+      setPage(0);
+      setHasMore(true);
+      setAllNfts([]);
+      console.log("sortParam", sortParam);
+      await axios
+        .post("/api/nft-type/getNftsWithParams", {
+          address: account,
+          limit,
+          page: 0,
+          search: searchParam,
+          sort: sortParam,
+        })
+        .then((res) => {
+          console.log(res.data);
+          setAllNfts(res.data.nfts);
+          setPage(1);
+          setHasMore(res.data.hasMore);
+        });
+    };
 
-  console.log("here", page, hasMore, allNfts.length,);
+    handleSort(1, search, sort);
+  }, [sort]);
+
+  const handleSearch = async (e, pageIncrease, searchParam, sortParam) => {
+    e.preventDefault();
+    if (search != "") {
+      setPage(0);
+      setHasMore(true);
+      console.log(search);
+      await axios
+        .post("/api/nft-type/getNftsWithParams", {
+          address: account,
+          limit,
+          page: 0,
+          search: searchParam,
+          sort: sortParam,
+        })
+        .then((res) => {
+          console.log(res.data);
+          setAllNfts(res.data.nfts);
+          setPage(page + pageIncrease);
+          setHasMore(res.data.hasMore);
+        });
+    }
+  };
+  console.log(
+    "page: ",
+    page,
+    "\n",
+    "hasMore: ",
+    hasMore,
+    "\n",
+    "allNfts.length: ",
+    allNfts.length,
+    "\n",
+    "search: ",
+    search
+  );
+
+  const menuOptions = [
+    <MenuSpan
+      isMenuOpen={menuOpen}
+      onClick={() => {
+        setSort(0);
+        setSelected("Price: High - Low");
+        setMenuOpen(false);
+      }}
+    >
+      Price: High - Low
+    </MenuSpan>,
+    <MenuSpan
+      isMenuOpen={menuOpen}
+      onClick={() => {
+        setSort(1);
+        setSelected("Price: Low - High");
+        setMenuOpen(false);
+      }}
+    >
+      Price: Low - High
+    </MenuSpan>,
+    <MenuSpan
+      isMenuOpen={menuOpen}
+      onClick={() => {
+        setSort(2);
+        setSelected("Date: High - Low");
+        setMenuOpen(false);
+      }}
+    >
+      Date: High - Low
+    </MenuSpan>,
+    <MenuSpan
+      isMenuOpen={menuOpen}
+      onClick={() => {
+        setSort(3);
+        setSelected("Date: Low - High");
+        setMenuOpen(false);
+      }}
+    >
+      Date: Low - High
+    </MenuSpan>,
+  ];
 
   return (
     <LaunchContainer>
+      <ContainerTitleForm onSubmit={(e) => handleSearch(e, 1, search, 2)}>
+        <ContainerTitleInput
+          type="text"
+          placeholder="Search..."
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </ContainerTitleForm>
+
+      <ContainerTitleSorting
+        onMouseEnter={() => setMenuOpen(true)}
+        onMouseLeave={() => setMenuOpen(false)}
+        isMenuOpen={menuOpen}
+      >
+        <SelectedSpan onClick={() => setMenuOpen(!menuOpen)}>
+          {selected}
+        </SelectedSpan>
+        {menuOptions.map((item, index) => {
+          return item;
+        })}
+      </ContainerTitleSorting>
+
       <ContainerOutline />
       <NftScroll>
         <InfiniteScroll
           dataLength={allNfts.length}
-          //setting limit as 5
-          next={() => getNftsWithParams(10, 1)} //pass function to get next set of NFTs
+          next={() => getNftsWithParams(1, search, sort)}
           hasMore={hasMore}
-          // loader={<span style={{ color: "white" }}>Loading...</span>}
-          // endMessage={<End style={{ color: "white" }}>No more NFTs</End>}
         >
+          {/* {allNfts.map((item, index) => {
+          if (hasMore) {
+            return <NftCard nft={item} />
+          } else {
+            return (
+              <> 
+                <NftCard nft={item} />
+                <FillerCard />
+                <FillerCard />
+                <FillerCard />
+                <FillerCard />
+                <FillerCard />
+              </>
+            )
+          }
+        })} */}
           {allNfts.map((item, index) => (
             <NftCard nft={item} />
           ))}
+          {!hasMore && (
+            <>
+              <FillerCard />
+              <FillerCard />
+              <FillerCard />
+              <FillerCard />
+              <FillerCard />
+            </>
+          )}
         </InfiniteScroll>
       </NftScroll>
     </LaunchContainer>
@@ -60,269 +238,11 @@ const Listen = () => {
 };
 
 const End = styled.div`
-width: 40vw;
-margin: auto;
-align-items: center;
-text-align: center;
-`
-
-{
-  /* <ContainerTitleInput
-type="text"
-placeholder="Search..."
-onChange={(e) => setSearch(e.target.value)}
-/> */
-}
-
-// //search function, sorts and sets returned NFTs to displayedNfts
-// useEffect(() => {
-//   if (search != "") {
-//     axios
-//       .post("/api/nft-type/search", { params: search })
-//       .then((res) => {
-//         setUnformattedNftData(res.data);
-//         formatNfts(res.data)
-//         for (let i = 0; i < 5; i++) {
-//           formattedNfts.push(<FillerCard />);
-//         }
-//         setDisplayedNfts(formattedNfts);
-//       })
-//       .catch((err) => console.log(err));
-//   } else {
-//     const formattedNfts = formatNfts(allNfts);
-//     for (let i = 0; i < 5; i++) {
-//       formattedNfts.push(<FillerCard />);
-//     }
-//     setDisplayedNfts(formattedNfts);
-//   }
-// }, [search]);
-
-// const masterSort = (i) => {
-//   //price high to low
-//   if (i === 0) {
-//     if (search === "") {
-//       const everyNft = formatNfts(
-//         allNfts.sort(function (a, b) {
-//           return b.price - a.price;
-//         })
-//       );
-//       for (let i = 0; i < 5; i++) {
-//         everyNft.push(<FillerCard />);
-//       }
-//       setDisplayedNfts(everyNft);
-//     } else {
-//       const formattedNfts = formatNfts(
-//         unformattedNftData.sort(function (a, b) {
-//           return b.price - a.price;
-//         })
-//       );
-//       for (let i = 0; i < 5; i++) {
-//         formattedNfts.push(<FillerCard />);
-//       }
-//       setDisplayedNfts(formattedNfts);
-//     }
-//   }
-//   //price low to high
-//   if (i === 1) {
-//     if (search === "") {
-//       const everyNft = formatNfts(
-//         allNfts.sort(function (a, b) {
-//           return a.price - b.price;
-//         })
-//       );
-//       for (let i = 0; i < 5; i++) {
-//         everyNft.push(<FillerCard />);
-//       }
-//       setDisplayedNfts(everyNft);
-//     } else {
-//       const formattedNfts = formatNfts(
-//         unformattedNftData.sort(function (a, b) {
-//           return a.price - b.price;
-//         })
-//       );
-//       for (let i = 0; i < 5; i++) {
-//         formattedNfts.push(<FillerCard />);
-//       }
-//       setDisplayedNfts(formattedNfts);
-//     }
-//   }
-//   //likes high to low
-//   if (i === 2) {
-//     if (search === "") {
-//       const everyNft = formatNfts(
-//         allNfts.sort(function (a, b) {
-//           return b.likeCount - a.likeCount;
-//         })
-//       );
-//       for (let i = 0; i < 5; i++) {
-//         everyNft.push(<FillerCard />);
-//       }
-//       setDisplayedNfts(everyNft);
-//     } else {
-//       const formattedNfts = formatNfts(
-//         unformattedNftData.sort(function (a, b) {
-//           return b.likeCount - a.likeCount;
-//         })
-//       );
-//       for (let i = 0; i < 5; i++) {
-//         formattedNfts.push(<FillerCard />);
-//       }
-//       setDisplayedNfts(formattedNfts);
-//     }
-//   }
-//   //likeCount low to high
-//   if (i === 3) {
-//     if (search === "") {
-//       const everyNft = formatNfts(
-//         allNfts.sort(function (a, b) {
-//           return a.likeCount - b.likeCount;
-//         })
-//       );
-//       for (let i = 0; i < 5; i++) {
-//         everyNft.push(<FillerCard />);
-//       }
-//       setDisplayedNfts(everyNft);
-//     } else {
-//       const formattedNfts = formatNfts(
-//         unformattedNftData.sort(function (a, b) {
-//           return a.likeCount - b.likeCount;
-//         })
-//       );
-//       for (let i = 0; i < 5; i++) {
-//         formattedNfts.push(<FillerCard />);
-//       }
-//       setDisplayedNfts(formattedNfts);
-//     }
-//   }
-//   //date high to low
-//   if (i === 4) {
-//     if (search === "") {
-//       const everyNft = formatNfts(
-//         allNfts.sort(function (a, b) {
-//           return moment(b.timestamp) - moment(a.timestamp);
-//         })
-//       );
-//       for (let i = 0; i < 5; i++) {
-//         everyNft.push(<FillerCard />);
-//       }
-//       setDisplayedNfts(everyNft);
-//     } else {
-//       const formattedNfts = formatNfts(
-//         unformattedNftData.sort(function (a, b) {
-//           return moment(b.timestamp) - moment(a.timestamp);
-//         })
-//       );
-//       for (let i = 0; i < 5; i++) {
-//         formattedNfts.push(<FillerCard />);
-//       }
-//       setDisplayedNfts(formattedNfts);
-//     }
-//   }
-//   //date low to high
-//   if (i === 5) {
-//     if (search === "") {
-//       const everyNft = formatNfts(
-//         allNfts.sort(function (a, b) {
-//           return moment(a.timestamp) - moment(b.timestamp);
-//         })
-//       );
-//       for (let i = 0; i < 5; i++) {
-//         everyNft.push(<FillerCard />);
-//       }
-//       setDisplayedNfts(everyNft);
-//     } else {
-//       const formattedNfts = formatNfts(
-//         unformattedNftData.sort(function (a, b) {
-//           return moment(a.timestamp) - moment(b.timestamp);
-//         })
-//       );
-//       for (let i = 0; i < 5; i++) {
-//         formattedNfts.push(<FillerCard />);
-//       }
-//       setDisplayedNfts(formattedNfts);
-//     }
-//   }
-// };
-
-{
-  /* <ContainerTitleSorting
-  onMouseEnter={() => setMenuOpen(true)}
-  onMouseLeave={() => setMenuOpen(false)}
-  isMenuOpen={menuOpen}
->
-  <SelectedSpan onClick={() => setMenuOpen(!menuOpen)}>
-    {selected}
-  </SelectedSpan>
-  {menuOptions.map((item, index) => {
-    return item;
-  })}
-</ContainerTitleSorting> */
-}
-
-// const [menuOpen, setMenuOpen] = useState(false);
-// const [selected, setSelected] = useState("Price: High - Low");
-// const menuOptions = [
-//   <MenuSpan
-//     isMenuOpen={menuOpen}
-//     onClick={() => {
-//       masterSort(0);
-//       setSelected("Price: High - Low");
-//       setMenuOpen(false);
-//     }}
-//   >
-//     Price: High - Low
-//   </MenuSpan>,
-//   <MenuSpan
-//     isMenuOpen={menuOpen}
-//     onClick={() => {
-//       masterSort(1);
-//       setSelected("Price: Low - High");
-//       setMenuOpen(false);
-//     }}
-//   >
-//     Price: Low - High
-//   </MenuSpan>,
-//   <MenuSpan
-//     isMenuOpen={menuOpen}
-//     onClick={() => {
-//       masterSort(2);
-//       setSelected("Likes: High - Low");
-//       setMenuOpen(false);
-//     }}
-//   >
-//     Likes: High - Low
-//   </MenuSpan>,
-//   <MenuSpan
-//     isMenuOpen={menuOpen}
-//     onClick={() => {
-//       masterSort(3);
-//       setSelected("Likes: Low - High");
-//       setMenuOpen(false);
-//     }}
-//   >
-//     Likes: Low - High
-//   </MenuSpan>,
-//   <MenuSpan
-//     isMenuOpen={menuOpen}
-//     onClick={() => {
-//       masterSort(4);
-//       setSelected("Date: High - Low");
-//       setMenuOpen(false);
-//     }}
-//   >
-//     Date: High - Low
-//   </MenuSpan>,
-//   <MenuSpan
-//     isMenuOpen={menuOpen}
-//     onClick={() => {
-//       masterSort(5);
-//       setSelected("Date: Low - High");
-//       setMenuOpen(false);
-//     }}
-//   >
-//     Date: Low - High
-//   </MenuSpan>,
-// ];
+  width: 40vw;
+  margin: auto;
+  align-items: center;
+  text-align: center;
+`;
 
 const Eth = styled(IconEth)`
   width: 18px;
@@ -420,6 +340,7 @@ const ContainerTitleDate = styled.div`
     right: auto;
   }
 `;
+const ContainerTitleForm = styled.form``;
 const ContainerTitleInput = styled.input`
   outline: none;
   position: absolute;
@@ -456,32 +377,31 @@ const NftScroll = styled.div`
     flex-direction: column;
     align-items: center;
     margin-top: 25px;
-    
   }
-  &>div {
+  & > div {
     display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
-  justify-content: space-between;
-  @media only screen and (max-width: 776px) {
-    flex-direction: column;
-    align-items: center;
-    margin-top: 25px;
-}
-&>div {
-    display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
-  justify-content: space-between;
-  overflow-x: clip !important;
-  @media only screen and (max-width: 776px) {
-    flex-direction: column;
-    align-items: center;
-    margin-top: 25px;
-  }
-  }
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-between;
+    @media only screen and (max-width: 776px) {
+      flex-direction: column;
+      align-items: center;
+      margin-top: 25px;
+    }
+    & > div {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      width: 100%;
+      justify-content: space-between;
+      overflow-x: clip !important;
+      @media only screen and (max-width: 776px) {
+        flex-direction: column;
+        align-items: center;
+        margin-top: 25px;
+      }
+    }
   }
 `;
 

@@ -17,6 +17,7 @@ import Error404 from "./views/404";
 import Community from "./views/VINYL/Community"
 import Token from "./views/VINYL/Token";
 import GovPolls from "./views/VINYL/GovPolls";
+import RegisterArtist from './views/RegisterArtist'
 
 import Info from "./views/Info";
 import TermsOfService from "./views/FooterLinks/TermsOfService"
@@ -70,6 +71,9 @@ const App = () => {
             </Route>
             <Route path="/privacypolicy">
               <PrivacyPolicy />
+            </Route>
+            <Route path="/register-artist">
+              <RegisterArtist />
             </Route>
             <Route path="/info" >
               <Info />

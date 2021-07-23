@@ -39,10 +39,6 @@ const Listen = () => {
     }
   };
 
-  // useEffect(() => {
-  //   getNftsWithParams(1, search);
-  // }, []);
-
   useEffect(() => {
     const fetchWithNoSearch = async () => {
       setPage(0);
@@ -116,19 +112,6 @@ const Listen = () => {
         });
     }
   };
-  console.log(
-    "page: ",
-    page,
-    "\n",
-    "hasMore: ",
-    hasMore,
-    "\n",
-    "allNfts.length: ",
-    allNfts.length,
-    "\n",
-    "search: ",
-    search
-  );
 
   const menuOptions = [
     <MenuSpan
@@ -203,22 +186,6 @@ const Listen = () => {
           next={() => getNftsWithParams(1, search, sort)}
           hasMore={hasMore}
         >
-          {/* {allNfts.map((item, index) => {
-          if (hasMore) {
-            return <NftCard nft={item} />
-          } else {
-            return (
-              <> 
-                <NftCard nft={item} />
-                <FillerCard />
-                <FillerCard />
-                <FillerCard />
-                <FillerCard />
-                <FillerCard />
-              </>
-            )
-          }
-        })} */}
           {allNfts.map((item, index) => (
             <NftCard nft={item} />
           ))}

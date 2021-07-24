@@ -94,12 +94,6 @@ const getUserNfts = async (account) => {
   let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
   const contract = new Contract(NFTToken, NFTTokenABI, walletWithProvider);
 
-  let userBalance = [];
-  const nftIds = [0, 1, 2, 3, 4, 5];
-  for (nftId of nftIds) {
-    const balance = await contract.balanceOf(account, nftId);
-    console.log("nft bal:", nftId, Number(balance));
-  }
   let userNfts = await contract.getFullBalance(account);
   // let nftIds = [];
   // let numNfts = [];

@@ -99,7 +99,7 @@ const StyledTextArea = styled.textarea`
   background-color: #181818;
   border: none;
   outline: none;
-  height: 80px;
+  height: 65px;
   resize: none;
   font-size: 18px;
   border: 1px solid #383838;

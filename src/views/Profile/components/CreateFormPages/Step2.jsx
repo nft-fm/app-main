@@ -454,8 +454,6 @@ const ChooseFile = styled.button`
     background-image: linear-gradient(to right, #333333, #8b8b8b);
   }
 `
-
-
   /* border: solid 1.5px #181818; */
 
 export default Step2;

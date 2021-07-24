@@ -364,10 +364,9 @@ const CreateForm = ({ open, hide }) => {
         <Step1Container>
           <StyledModal>
             <X src={x} onClick={onCloseModal} />
-            {
-              nftData.imageUrl === "" || !nftData.imageUrl ?
-              < LeftSide /> : <Image src={nftData.imageUrl} alt="image" />
-            }
+            <LeftSide>
+              {nftData.imageUrl && <Image src={nftData.imageUrl} alt="image" />}
+            </LeftSide>
           <RightSide step={currentStep}>
             {steps[currentStep - 2]}
           </RightSide>
@@ -391,13 +390,13 @@ const RightSide = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: calc(100% - 500px);
+    width: calc(100% - 465px - 80px);
     padding: 10px 40px;
     @media only screen and (max-width: 776px) {
-      width: 90vw;
+      width: 100%;
       height: 40vw;
       /* height: calc(100vh / 2); */
-      justify-content: space-between;
+      /* justify-content: space-between; */
     }
   h2 {
     color: white;
@@ -408,12 +407,11 @@ const RightSide = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: calc(100% - 500px);
+    width: calc(100% - 465px);
     padding: 10px 30px;
     @media only screen and (max-width: 776px) {
       width: 90vw;
       height: calc(100vh / 2);
-      justify-content: space-between;
     }
     color: white;
   `}
@@ -426,14 +424,13 @@ const StyledModal = styled.div`
   font-size: 16px;
   font-weight: normal;
   display: flex;
-  justify-content: space-between;
   align-items: center;
   position: relative;
   background-color: #181818;
   color: white;
 
   @media only screen and (max-width: 776px) {
-    width: 90vw;
+    width: 100%;
     height: 100%;
     flex-direction: column;
     align-items: center;
@@ -444,29 +441,70 @@ const StyledModal = styled.div`
 // background-color: ${(props) => props.theme.bgColor};
 
 
+// const getMobileImageDimensions = () => {
+//   let height = window.innerHeight;
+//   let width = window.innerWidth;
+//   if (width > height) {
+//     return css`
+//       width: 75vh;
+//       height: 75vh;
+//     `
+//   }
+//   if (width > (height * 0.60)) {
+//     return css`
+//       width: 60vh;
+//       height: 60vh;
+//     `
+//   }
+//   return css`
+//     width: 90vw;
+//     height: 90vw;
+//   `
+// }
+
+// const getMobileModalDimensions = () => {
+//   let height = window.innerHeight;
+//   let width = window.innerWidth;
+//   if (width > height) {
+//     return css`
+//       width: 75vh;
+//     `
+//   }
+//   return (width > (height * 0.60) && height > 600) ? css`
+//     width: 60vh;
+//   ` : css`
+//     width: 90vw;
+//   `
+// }
+
 const LeftSide = styled.div`
   display: flex;
-  width: 500px;
-  height: 500px;
+  width: 465px;
+  height: 465px;
   border-radius: 18px;
   background-color: white;
   justify-content: center;
   align-items: center;
   @media only screen and (max-width: 776px) {
-    width: 100%;
+    width: 90vw;
+    height: 90vw;
   }
 `
 
 const Image = styled.img`
-  width: 100%;
-  aspect-ratio: 1/1;
+  width: 465px;
+  height: 465px;
   border-radius: 16px;
   border: 1px solid #262626;
   background-color: #1e1e1e;
   object-fit: cover;
   overflow: hidden;
+  aspect-ratio: 1;
+  background-color: white;
+  visibility: ${props => props.src !== "" ? `visibile` : `hidden`};
   @media only screen and (max-width: 776px) {
-    width: 100%;
+    width: 90vw;
+    height: 90vw;
   }
 `;
 
@@ -480,7 +518,7 @@ const Step1Container = styled.div`
   top: 50%;
   transform: translate(-50%, -50%);
   @media only screen and (max-width: 776px) {
-    width: 100vw;
+    width: 93vw;
     height: calc(100vh - ${props => props.currentStep === 1 ? 0 : 40}px);
     flex-direction: column;
     align-items: center;
@@ -497,7 +535,7 @@ const SelectContainer = styled.div`
   top: 50%;
   transform: translate(-50%, -50%);
   @media only screen and (max-width: 776px) {
-    width: 90vw;
+    width: 90%;
     height: 100%;
     flex-direction: column;
     align-items: center;

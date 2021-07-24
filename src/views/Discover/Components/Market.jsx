@@ -6,6 +6,7 @@ import { useAccountConsumer } from "../../../contexts/Account";
 import { ReactComponent as down_arrow } from "../../../assets/img/icons/down_arrow.svg";
 import { ReactComponent as IconEth } from "../../../assets/img/icons/ethereum.svg";
 import InfiniteScroll from "react-infinite-scroll-component";
+// import { ReactComponent as down_arrow } from "../../../assets/img/icons/down_arrow.svg";
 
 const Listen = () => {
   const { account } = useAccountConsumer();
@@ -122,7 +123,7 @@ const Listen = () => {
         setMenuOpen(false);
       }}
     >
-      Price: High - Low
+      Most Expensive
     </MenuSpan>,
     <MenuSpan
       isMenuOpen={menuOpen}
@@ -132,7 +133,7 @@ const Listen = () => {
         setMenuOpen(false);
       }}
     >
-      Price: Low - High
+      Cheapest
     </MenuSpan>,
     <MenuSpan
       isMenuOpen={menuOpen}
@@ -142,18 +143,18 @@ const Listen = () => {
         setMenuOpen(false);
       }}
     >
-      Date: High - Low
+      Recently Added
     </MenuSpan>,
-    <MenuSpan
-      isMenuOpen={menuOpen}
-      onClick={() => {
-        setSort(3);
-        setSelected("Date: Low - High");
-        setMenuOpen(false);
-      }}
-    >
-      Date: Low - High
-    </MenuSpan>,
+    // <MenuSpan
+    //   isMenuOpen={menuOpen}
+    //   onClick={() => {
+    //     setSort(3);
+    //     setSelected("Date: Low - High");
+    //     setMenuOpen(false);
+    //   }}
+    // >
+    //   Date: Low - High
+    // </MenuSpan>,
   ];
 
   return (
@@ -172,7 +173,8 @@ const Listen = () => {
         isMenuOpen={menuOpen}
       >
         <SelectedSpan onClick={() => setMenuOpen(!menuOpen)}>
-          {selected}
+          {/* {selected} */}
+          Sort by <DownArrow />
         </SelectedSpan>
         {menuOptions.map((item, index) => {
           return item;
@@ -203,6 +205,19 @@ const Listen = () => {
     </LaunchContainer>
   );
 };
+
+
+const DownArrow = styled(down_arrow)`
+position: absolute;
+  right: 15px;
+  top:5px;
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  & path {
+    fill: ${(props) => props.theme.color.gray};
+  }
+`;
 
 const End = styled.div`
   width: 40vw;
@@ -241,35 +256,36 @@ const SelectedSpanMobile = styled.span`
   }
 `;
 const SelectedSpan = styled.span`
-  text-decoration: underline;
-  margin-top: -3px;
-  /* @media only screen and (max-width: 776px) {
-    display: none;
-  } */
+  color: white;
+  position: relative;
+  width: 100%;
+  padding-left: 10px;
 `;
 
 const MenuSpan = styled.span`
   display: ${(props) => (props.isMenuOpen ? "block" : "none")};
   padding-top: 5px;
   cursor: pointer;
+  font-size: 1rem;
 `;
 const ContainerTitleSorting = styled.div`
+width: 110px;
   position: absolute;
-  left: 37%;
+  right: calc(10% + 50px);
   top: -15px;
   height: 20px;
-  padding: 5px 8px 3px 8px;
+  padding: 5px 10px 5px 10px;
   font: "Compita";
   background-color: ${(props) => props.theme.color.boxBorder};
-  font-size: ${(props) => props.theme.fontSizes.sm};
+  font-size: 1.2rem;
   color: ${(props) => (props.faq ? "#3d3d3d" : props.theme.color.gray)};
   border: 4px solid #383838;
   border-radius: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
 
-  height: ${(props) => props.isMenuOpen && "195px"};
+  height: ${(props) => props.isMenuOpen && "90px"};
 
   @media only screen and (max-width: 1200px) {
     left: auto;
@@ -307,12 +323,17 @@ const ContainerTitleDate = styled.div`
     right: auto;
   }
 `;
-const ContainerTitleForm = styled.form``;
+const ContainerTitleForm = styled.form`
+position: absolute;
+top: -15px;
+  left: calc(10% + 50px);
+  @media only screen and (max-width: 776px) {
+    left: auto;
+  }
+`;
+
 const ContainerTitleInput = styled.input`
   outline: none;
-  position: absolute;
-  left: calc(10% + 50px);
-  top: -15px;
   padding: 5px 8px 3px 8px;
   height: 20px;
   font: "Compita";
@@ -323,7 +344,6 @@ const ContainerTitleInput = styled.input`
   border-radius: 20px;
   display: flex;
   @media only screen and (max-width: 776px) {
-    left: auto;
     margin-left: auto;
     margin-right: auto;
   }
@@ -343,7 +363,6 @@ const NftScroll = styled.div`
   @media only screen and (max-width: 776px) {
     flex-direction: column;
     align-items: center;
-    margin-top: 25px;
   }
   & > div {
     display: flex;

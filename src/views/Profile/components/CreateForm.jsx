@@ -27,7 +27,7 @@ const initialNftState = {
   artist: "",
   address: "",
   isDraft: true,
-  genre: "Select",
+  genre: "Select a genre",
   startTime: 0,
   dur: 0,
   numMinted: 0,
@@ -66,11 +66,14 @@ const CreateForm = ({ open, hide }) => {
       axios
       .post("/api/nft-type/update-and-fetch", nftData)
       .then((res) => {
-        console.log("success", res.data)
+        // console.log("success", res.data)
         setNftData(res.data)
+        setIsLoading(false)
       })
-      .catch(err => console.log(err));
-      setIsLoading(false)
+      .catch(err => {
+        console.log(err)
+        setIsLoading(false)
+      });
     }
   }, [currentStep])
 
@@ -184,60 +187,60 @@ const CreateForm = ({ open, hide }) => {
     // if (!audioUploadError && !imageUploadError) {
       setIsLoading(true);
       // after nftData has both audio and image references, run this route
-      console.log("newNftData", newNftData);
-      // axios
-      //   .post("/api/nft-type/finalize", newNftData)
-      //   .then((res) => {
-      //     console.log("finalize res", res);
-      //     if (res.status === 200) {
-      //       mintNFT(
-      //         res.data,
-      //         () => {
-      //           console.log("pending...");
-      //           setIsLoading(true);
-      //         },
-      //         () => {
-      //           console.log("final");
-      //           setNftData(initialNftState);
-      //           setIsLoading(false);
-      //           swal
-      //             .fire({
-      //               title: "NFT Minted!",
-      //               text: "It can take 2-3 minutes for the new NFT to appear on your profile.",
-      //               timer: 10000,
-      //             })
-      //             .then(() => hide());
-      //         }
-      //       ).catch((err) => {
-      //         setIsLoading(false);
-      //         swal.fire({
-      //           imageUrl: errorIcon,
-      //           imageWidth,
-      //           imageHeight,
-      //           title: "Couldn't create NFT!",
-      //           text: "Please try again",
-      //         });
-      //       });
-      //       console.log("MINT");
-      //     } else {
-      //       setIsLoading(false);
-      //       swal.fire({
-      //         title: "Error",
-      //         background: `#000`,
-      //         boxShadow: `24px 24px 48px -24px #131313`,
-      //         text: "Nft creation failed here, please try again.",
-      //       });
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     setIsLoading(false);
-      //     swal.fire({
-      //       title: "Error",
-      //       background: `#000`,
-      //       boxShadow: `24px 24px 48px -24px #131313`,
-      //       text: "Nft creation failed on the server, please try again.",
-      //     });
-      //   });
+      // console.log("newNftData", newNftData);
+      axios
+        .post("/api/nft-type/finalize", newNftData)
+        .then((res) => {
+          console.log("finalize res", res);
+          if (res.status === 200) {
+            mintNFT(
+              res.data,
+              () => {
+                console.log("pending...");
+                setIsLoading(true);
+              },
+              () => {
+                console.log("final");
+                setNftData(initialNftState);
+                setIsLoading(false);
+                swal
+                  .fire({
+                    title: "NFT Minted!",
+                    text: "It can take 2-3 minutes for the new NFT to appear on your profile.",
+                    timer: 10000,
+                  })
+                  .then(() => hide());
+              }
+            ).catch((err) => {
+              setIsLoading(false);
+              swal.fire({
+                imageUrl: errorIcon,
+                imageWidth,
+                imageHeight,
+                title: "Couldn't create NFT!",
+                text: "Please try again",
+              });
+            });
+            console.log("MINT");
+          } else {
+            setIsLoading(false);
+            swal.fire({
+              title: "Error",
+              background: `#000`,
+              boxShadow: `24px 24px 48px -24px #131313`,
+              text: "Nft creation failed here, please try again.",
+            });
+          }
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          swal.fire({
+            title: "Error",
+            background: `#000`,
+            boxShadow: `24px 24px 48px -24px #131313`,
+            text: "Nft creation failed on the server, please try again.",
+          });
+        });
     }
 
   useEffect(() => {
@@ -328,9 +331,8 @@ const CreateForm = ({ open, hide }) => {
     return (
       <OpaqueFilter>
         <Step1Container>
-          <StyledModal>
-            <img src={loading_gif} alt="loading"/>
-          </StyledModal>
+          <StyledModal style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+            <img style={{width: "70px", height: "70px"}} src={loading_gif} alt="loading" />          </StyledModal>
         </Step1Container>
       </OpaqueFilter>
     )
@@ -348,7 +350,7 @@ const CreateForm = ({ open, hide }) => {
             {steps[currentStep - 2]}
           </RightSide>
           </StyledModal>
-          <CreateFormPaginator 
+          <CreateFormPaginator
             nftData={nftData} 
             currentStep={currentStep} 
             setCurrentStep={setCurrentStep}
@@ -368,10 +370,11 @@ const RightSide = styled.div`
     flex-direction: column;
     align-items: center;
     width: calc(100% - 500px);
-    padding: 10px 30px;
+    padding: 10px 40px;
     @media only screen and (max-width: 776px) {
       width: 90vw;
-      height: calc(100vh / 2);
+      height: 40vw;
+      /* height: calc(100vh / 2); */
       justify-content: space-between;
     }
   h2 {
@@ -398,21 +401,25 @@ const StyledModal = styled.div`
   border-radius: 8px;
   border: solid 1px #181818;
   width: 800px;
-  background-color: ${(props) => props.theme.bgColor};
   font-size: 16px;
   font-weight: normal;
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: relative;
+  background-color: #181818;
 
   @media only screen and (max-width: 776px) {
     width: 90vw;
-    height: 95%;
+    height: 100%;
     flex-direction: column;
     align-items: center;
+    overflow-x: hidden;
+    overflow-y: scroll;
   }
 `;
+// background-color: ${(props) => props.theme.bgColor};
+
 
 const LeftSide = styled.div`
   display: flex;
@@ -429,7 +436,7 @@ const LeftSide = styled.div`
 
 const Image = styled.img`
   width: 500px;
-  aspect-ratio: 1;
+  height: 500px;
   border-radius: 16px;
   border: 1px solid #262626;
   background-color: #1e1e1e;
@@ -437,6 +444,7 @@ const Image = styled.img`
   overflow: hidden;
   @media only screen and (max-width: 776px) {
     width: 100%;
+    aspect-ratio: 1/1;
   }
 `;
   // <Header>
@@ -626,7 +634,7 @@ const Step1Container = styled.div`
   transform: translate(-50%, -50%);
   @media only screen and (max-width: 776px) {
     width: 100vw;
-    height: calc(95vh - 60px);
+    height: calc(100vh - 40px);
     flex-direction: column;
     align-items: center;
   }
@@ -1095,8 +1103,8 @@ const X = styled(IconX)`
   position: absolute;
   right: 2px;
   top: 9px;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   margin: 0 4px 0 0;
   cursor: pointer;
   transition: all 0.2s ease-in-out;

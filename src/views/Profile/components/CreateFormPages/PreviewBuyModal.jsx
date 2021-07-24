@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
-import axios from 'axios';
+// import axios from 'axios';
 import PlaySongSnippet from "../../../../components/NftModals/Components/PlaySongSnippet"
 import moment from "moment";
 import { ReactComponent as IconEth } from "../../../../assets/img/icons/ethereum.svg";
@@ -22,7 +22,7 @@ const PreviewBuyModal = ({ nft, partialSong }) => {
     return hDisplay + mDisplay + sDisplay;
   };
   return (
-    <>
+    <Container>
       <CardTop>
         <Side>
           <IconArea>
@@ -51,7 +51,7 @@ const PreviewBuyModal = ({ nft, partialSong }) => {
         </Artist>
       </InfoContainer>
       <SnippetHolder>
-        <PlaySongSnippet partialSong={partialSong} />
+        <PlaySongSnippet partialSong={nft.snnipet} />
         <SnippetText>15 Sec Preview</SnippetText>
       </SnippetHolder>
       <TrackDetailsHolder>
@@ -79,9 +79,20 @@ const PreviewBuyModal = ({ nft, partialSong }) => {
       <BuyButton>
         <ButtonText>Purchase</ButtonText>
       </BuyButton>
-    </>
+    </Container>
   )
 }
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  @media only screen and (max-width: 776px) {
+    height: 700px;
+  }
+`
 
 const TrackDetailsHolder = styled.div`
   width: 100%;
@@ -134,23 +145,6 @@ const ButtonText = styled.span`
   color: white;
 `;
 
-const MetaMask = styled.img`
-  width: 32px;
-  height: auto;
-`;
-
-const Divider = styled.div`
-  margin: 5px 0;
-  width: 100%;
-  height: 1px;
-  background-color: ${(props) => props.theme.color.gray};
-`;
-
-const AvailableItem = styled.div`
-  font-size: 0.8rem;
-  color: ${(props) => props.theme.color.lightgray};
-`;
-
 const PricesContainer = styled.div`
   width: 100%;
   height: 1px;
@@ -165,7 +159,7 @@ const PricesContainer = styled.div`
 `;
 const PriceHolder = styled.div`
   display: flex;
-  background-color: ${(props) => props.theme.bgColor};
+  background-color: #181818;
   margin-top: -8px;
   padding: 0 10px;
 `;

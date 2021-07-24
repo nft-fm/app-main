@@ -23,12 +23,12 @@ const CreateFormPaginator = ({
   isLoadingImage
 }) => {
   // checking for completion
-  // const [step2, setStep2] = useState(false);
-  // const [step3, setStep3] = useState(false);
-  // const [step4, setStep4] = useState(false);
-  const [step2, setStep2] = useState(true);
-  const [step3, setStep3] = useState(true);
-  const [step4, setStep4] = useState(true);
+  const [step2, setStep2] = useState(false);
+  const [step3, setStep3] = useState(false);
+  const [step4, setStep4] = useState(false);
+  // const [step2, setStep2] = useState(true);
+  // const [step3, setStep3] = useState(true);
+  // const [step4, setStep4] = useState(true);
   const { 
     imageUrl, audioUrl,
     producer, title, genre,  description,
@@ -193,7 +193,7 @@ const CreateFormPaginator = ({
           currentStep={currentStep} 
           onClick={() => paginateNext()}
         >
-          {currentStep === 4 ? 'Preview' :'Next'}
+          Next
         </PaginatorButton>
       }
     </PaginatorContainer>
@@ -219,6 +219,10 @@ const PaginatorContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-top: 10px;
+  z-index: 502;
+  @media only screen and (max-width: 776px) {
+    width: calc(95% - 40px);
+  }
 `
 
 const Button = styled.button`
@@ -228,10 +232,12 @@ const Button = styled.button`
   display: flex;
   letter-spacing: 1px;
   align-items: center;
-  /* justify-content: center; */
   font-weight: 600;
   cursor: pointer;
   color: white;
+  @media only screen and (max-width: 776px) {
+    display: none;
+  }
 `;
 
 const StyledAccountButton = styled.div`
@@ -254,6 +260,9 @@ const StyledAccountButton = styled.div`
   ${props => (props.currentStep === 1 && props.prev) && css`
     visibility: hidden;
   `}
+  @media only screen and (max-width: 776px) {
+    width: 50px;
+  }
 `;
 
 const DotContainer = styled.div`

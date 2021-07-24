@@ -7,13 +7,13 @@ const Step4 = ({ nftData: { price, numMinted }, updateState, usdPerEth }) => {
   return (
     <InputContainer>
       <ArtistTop>
-        <h2>Price and Quantity</h2>
+        <h1>Data</h1>
         <IconContainer>
           <EthIcon/>
           <UsdIcon/>
         </IconContainer>
       </ArtistTop>
-      <SubHeader>Price</SubHeader>
+      <SubHeader style={{marginBottom: "15px"}}>Price</SubHeader>
       <PriceContainer>
         <StyledInput
           type="number"
@@ -25,13 +25,15 @@ const Step4 = ({ nftData: { price, numMinted }, updateState, usdPerEth }) => {
           min="0"
           required
         />
-        <p>ETH</p>
+        <p style ={{ padding: 0, margin: 0, paddingBottom: "3px", fontSize: "18px"}}>ETH</p>
       </PriceContainer>
       <PriceContainer noBorder>
         <div/>
         <p>{price * usdPerEth} $USD</p>
       </PriceContainer>
-      <SubHeader>Number of NFTs</SubHeader>
+      <MobileSpacer height={30}/>
+      <SubHeader style={{marginBottom: "15px"}}>Number of NFTs</SubHeader>
+      <MobileSpacer height={5}/>
       <StyledInput
         type="number"
         placeholder="Quantity"
@@ -46,17 +48,25 @@ const Step4 = ({ nftData: { price, numMinted }, updateState, usdPerEth }) => {
         <div/>
         <p>{price * usdPerEth * numMinted} $USD</p>
       </PriceContainer>
-      <div style={{height: "120px", width: "100px"}}/>
+      <BottomSpacer />
     </InputContainer>
   )
 }
 
-
+const MobileSpacer = styled.div`
+  @media only screen and (max-width: 776px) {
+    height: ${props => props.height}px;
+  }
+`
+const BottomSpacer = styled.div`
+  height: 120px;
+  width: 100px;
+`
 
 const IconContainer = styled.div`
   display: flex;
   flex-direction: row;
-`
+`;
 
 const UsdIcon = styled(usd_icon)`
   width: 20px;
@@ -89,36 +99,50 @@ const ArtistTop = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
+  h1 {
+    margin: 0;
+  }
+  padding: 20px 0;
+  /* @media only screen and (max-width: 776px) {
+    padding: 20px 0;
+  } */
 `
 
 const PriceContainer = styled.div`
   display: flex;
-  border-bottom: 1px solid ${(props) => props.theme.color.boxBorder};
+  border-bottom: 1px solid #383838;
   align-items: flex-end;
+  color: #5c5c5c;
   justify-content: space-between;
   ${props => props.noBorder && css`
     border: none;
   `}
   p {
-    padding: 0;
-    margin: 7px;
-    color: #343434;
+    @media only screen and (min-width: 776px) {
+      margin: 0;
+      padding: 8px 0 10px 0;
+    }
   }
-`
+
+  @media only screen and (max-width: 776px) {
+    height: 40px;
+  }
+`;
 
 
 const InputContainer = styled.div`
-  height: 400px;
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   color: white;
   small {
-    color: #343434;
+    opacity: 1;
+    color: #5c5c5c;
   }
   @media only screen and (max-width: 776px) {
-    width: 95%;
+    width: 90%;
     margin-left: auto;
     margin-right: auto;
   }
@@ -130,28 +154,30 @@ const InputContainer = styled.div`
   input[type=number] {
     -moz-appearance: textfield;
   }
+  @media only screen and (max-width: 776px) {
+    height: 400px;
+  }
 `;
 
 const StyledInput = styled.input`
   color: white;
-  background-color: #090909;
+  background-color: #181818;
   border: none;
   outline: none;
   height: 30px;
-  font-size: 16px;
-  border-bottom: 1px solid ${(props) => props.theme.color.boxBorder};
+  font-size: 18px;
+  border-bottom: 1px solid #383838;
   ${props => props.noborder && css`
     border: none;
   `}
   @media only screen and (max-width: 776px) {
     background-color: transparent;
-    height: 30px;
   }
 `;
 
-const SubHeader = styled.h4`
+const SubHeader = styled.h3`
   color: white;
   text-align: left;
-`
+`;
 
 export default Step4;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from "styled-components";
-import UploadAudio from "../UploadAudio";
+// import UploadAudio from "../UploadAudio";
 import axios from "axios";
 import { useAccountConsumer } from "../../../../contexts/Account";
 import { errorIcon, imageWidth, imageHeight } from "../../../../utils/swalImages";
@@ -312,7 +312,7 @@ const Step2 = ({
 
 
   return (
-    <>
+    <Outer>
       <HeaderContainer>
         <Header>Visual</Header>
       </HeaderContainer>
@@ -353,24 +353,39 @@ const Step2 = ({
         style={{ display: "none" }}
       />
       </UploadContainer>
-    </>
+    </Outer>
   )
 }
 
+const Outer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  @media only screen and (max-width: 776px) {
+    height: 600px;
+  }
+`;
+
 const HeaderContainer = styled.div`
   width: 100%;
-  padding-left: 60px;
+  /* padding-left: 60px; */
   @media only screen and (max-width: 776px) {
     text-align: center;
     padding-left: 0;
+    margin-bottom: -8px;
   }
 `
 
-const Header = styled.h2`
+const Header = styled.h1`
   text-align: left;
+  color: white;
+  padding: 0;
+  margin: 0;
   @media only screen and (max-width: 776px) {
     text-align: center;
-    font-size: 18px;
+    font-size: 24px;
   }
 
   ${props => props.bottomHeader ? `padding-top: 20px` : ``}
@@ -401,37 +416,46 @@ const UploadContainer = styled.div`
   align-items: center;
   text-align: center;
   background-image: linear-gradient(to right, #262626, #383838);
-  width: 220px;
+  /* width: 280px; */
+  width: 100%;
   height: 120px;
   border-radius: 16px;
-  margin: 20px;
+  margin: 12px;
   color: white;
   p {
     padding: 0;
     margin: 0;
     color: white;
   }
+  @media only screen and (max-width: 776px) {
+    width: 80%;
+  }
 `
 
 const ChooseFile = styled.button`
   display: flex;
   justify-content: center;
-  border: solid 1.5px #181818;
   align-items: center;
   text-align: center;
   border-radius: 8px;
-  width: 120px;
+  width: 140px;
   height: 40px;
   font-family: Compita;
   font-size: 18px;
   text-align: center;
   color: #ffffff;
   font-size: 16px;
+  transition: background-image 0.5s ease;
   background-image: linear-gradient(to right, #262626, #383838);
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
+  border: none;
   &:hover {
     cursor: pointer;
     background-image: linear-gradient(to right, #333333, #8b8b8b);
   }
 `
+
+
+  /* border: solid 1.5px #181818; */
 
 export default Step2;

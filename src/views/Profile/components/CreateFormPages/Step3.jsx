@@ -21,7 +21,6 @@ const GENRES = [
   "Other"
 ];
 
-
 const Step3 = ({ 
   nftData: { title, producer, description, genre }, 
   updateState 
@@ -29,7 +28,7 @@ const Step3 = ({
   return (
     <InputContainer>
       <ArtistTop>
-        <h2>Musician Data</h2>
+        <h1>Data</h1>
         <small>*fields required</small>
       </ArtistTop>
       <FieldHeaders>
@@ -38,10 +37,11 @@ const Step3 = ({
       </FieldHeaders>
       <StyledInput
         type="text"
-        placeholder="Title"
+        placeholder="Song title"
         name="title"
         onChange={(e) => {updateState(e)}}
         value={title}
+        maxLength={50}
         required
       />
       <FieldHeaders>
@@ -73,7 +73,7 @@ const Step3 = ({
         <SubHeader>Description</SubHeader>
         <p>*</p>
       </FieldHeaders>
-      <StyledInput
+      <StyledTextArea
         type="text"
         placeholder="Description"
         name="description"
@@ -81,42 +81,87 @@ const Step3 = ({
         value={description}
         required
       />
+      <BottomSpacer />
     </InputContainer>
   )
 }
 
+const BottomSpacer = styled.div`
+  @media only screen and (max-width: 776px) {
+    height: 50px;
+    width: 100px;
+  }
+`
+
+const StyledTextArea = styled.textarea`
+  color: white;
+  background-color: #181818;
+  border: none;
+  outline: none;
+  height: 80px;
+  resize: none;
+  font-size: 18px;
+  border: 1px solid #383838;
+  border-radius: 8px;
+  padding: 5px;
+  margin-top: 5px;
+  font-family: "Compita";
+  ${props => props.noborder && css`
+    border: none;
+  `}
+  @media only screen and (max-width: 776px) {
+    background-color: transparent;
+    height: 60px;
+    padding-top: 0;
+    margin-top: -12px;
+  }
+`;
+
 const ArtistTop = styled.div`
+  padding-top: 10px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
+  h1 {
+    margin: 0;
+  }
   @media only screen and (max-width: 776px) {
-      margin-bottom: -15px;
+    margin-bottom: -15px;
+    padding-top: 20px;
   }
 `
 
 const FieldHeaders = styled.div`
+  padding: 12px 0;
   display: flex;
   flex-direction: row;
   p {
-    font-size: 18px;
+    font-size: 16px;
+    color: #383838;
+    margin: 12px 0 0px 0;
     margin-left: 3px;
-    color: #343434
+    @media only screen and (max-width: 776px) {
+      padding: 10px 0;
+    }
+  }
+  @media only screen and (max-width: 776px) {
+    margin: 15px 0px;
   }
 `
 
 const InputContainer = styled.div`
-  height: 400px;
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   color: white;
   small {
-    color: #343434;
+    opacity: 1;
+    color: #5c5c5c;
   }
   @media only screen and (max-width: 776px) {
-    width: 95%;
+    width: 90%;
     margin-left: auto;
     margin-right: auto;
   }
@@ -128,42 +173,43 @@ const InputContainer = styled.div`
   input[type=number] {
     -moz-appearance: textfield;
   }
+  @media only screen and (max-width: 776px) {
+    height: 600px;
+  }
 `;
 
 const StyledInput = styled.input`
   color: white;
-  background-color: #090909;
+  background-color: #181818;
   border: none;
   outline: none;
   height: 30px;
   font-size: 16px;
-  border-bottom: 1px solid ${(props) => props.theme.color.boxBorder};
+  border-bottom: 1px solid #383838;
   ${props => props.noborder && css`
     border: none;
   `}
   @media only screen and (max-width: 776px) {
     background-color: transparent;
     height: 20px;
-    font-size: 14px;
     margin-top: -15px;
   }
 `;
 
 const StyledSelect = styled.select`
   color: white;
-  background-color: #090909;
+  background-color: #181818;
   border: none;
   outline: none;
   height: 30px;
   font-size: 16px;
-  border-bottom: 1px solid ${(props) => props.theme.color.boxBorder};
+  border-bottom: 1px solid #383838;
   ${props => props.noborder && css`
     border: none;
   `}
   @media only screen and (max-width: 776px) {
-    background-color: transparent;
+    /* background-color: transparent; */
     height: 20px;
-    font-size: 14px;
     margin-top: -15px;
   }
 `
@@ -171,8 +217,11 @@ const StyledSelect = styled.select`
 const SubHeader = styled.h4`
   color: white;
   text-align: left;
+  margin: 12px 0 0px 0;
+  padding: 0;
   @media only screen and (max-width: 776px) {
     font-size: 16;
+    padding: 10px 0;
   }
 `
 

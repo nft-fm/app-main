@@ -200,6 +200,7 @@ router.post("/update-draft", async (req, res) => {
 router.post("/finalize", async (req, res) => {
   try {
     let newData = req.body;
+    newData.price = newData.price.toString();
     console.log("newdata", newData);
     newData.isDraft = false;
     const FlatPriceSale = process.env.REACT_APP_IS_MAINNET
@@ -227,8 +228,8 @@ router.post("/finalize", async (req, res) => {
         [
           "NFTFM_mintAndStake",
           newData.address,
-          newData.numMinted.toString(),
-          price.toString(),
+          newData.numMinted,
+          price,
           startTime,
           FlatPriceSale,
           encodedFee,
@@ -238,7 +239,7 @@ router.post("/finalize", async (req, res) => {
       res.status(200).send({
         ...signature,
         amount: newData.numMinted,
-        price: price.toString(),
+        price: price,
         address: newData.address,
         startTime: startTime,
         dur: newData.dur,

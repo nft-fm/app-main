@@ -42,6 +42,7 @@ const Step4 = ({ nftData: { price, numMinted }, updateState, usdPerEth }) => {
         value={numMinted}
         step="1"
         min="0"
+        onKeyDown={event => event.key==='.' ? event.preventDefault() : null}
         required
       />
       <PriceContainer noBorder>

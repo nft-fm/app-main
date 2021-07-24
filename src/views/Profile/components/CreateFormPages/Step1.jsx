@@ -48,7 +48,7 @@ export const Step1 = ({ setCurrentStep }) => {
 
 const Image = styled.img`
   width: 70%;
-  @media only screen and (max-width: 500px) {
+  @media only screen and (max-width: 776px) {
     width: 50%;
   }
 `
@@ -61,9 +61,11 @@ const Fixed = styled.h1`
   transform: translate(-50%, -50%);
   color: white;
   cursor: not-allowed;
-  @media only screen and (max-width: 500px) {
+  @media only screen and (max-width: 776px) {
+    text-align: center;
     left: 50%;
     top: 30%;
+    position: absolute;
   }
 `;
 
@@ -118,19 +120,18 @@ const Box = styled.div`
   background-color: #181818;
   padding-bottom: 50px;
   @media only screen and (max-width: 776px) {
-    width: calc(48% - 32px);
+    width: calc(100% - 32px);
     padding: 16px;
+    margin-bottom: 20px;
+    &:first-child {
+      margin-top: -20px;
+    }
   }
   ${props => props.disabled && css `
     opacity: 0.7;
     cursor: not-allowed;
   `}
-  @media only screen and (max-width: 500px) {
-    width: calc(100% - 32px);
-    &:first-child {
-      margin-bottom: 20px;
-    }
-  }
+
 `;
 const Outer = styled.div`
   margin-top: 60px;
@@ -140,6 +141,7 @@ const Outer = styled.div`
   flex-direction: column;
   @media only screen and (max-width: 776px) {
     width: calc(100% - 64px);
+    height: 100%;
   }
 `;
 
@@ -148,7 +150,7 @@ const SelectContainer = styled.div`
   width: 100%;
   flex-direction: row;
   justify-content: space-between;
-  @media only screen and (max-width: 500px) {
+  @media only screen and (max-width: 776px) {
     flex-direction: column;
     width: 100%;
     align-items: center;

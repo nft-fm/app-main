@@ -54,6 +54,7 @@ const Step3 = ({
         name="producer"
         onChange={(e) => {updateState(e)}}
         value={producer}
+        maxLength={50}
         required
       />
       <FieldHeaders>
@@ -91,7 +92,7 @@ const BottomSpacer = styled.div`
     height: 50px;
     width: 100px;
   }
-`
+`;
 
 const StyledTextArea = styled.textarea`
   color: white;
@@ -103,7 +104,7 @@ const StyledTextArea = styled.textarea`
   font-size: 18px;
   border: 1px solid #383838;
   border-radius: 8px;
-  padding: 5px;
+  padding: 8px;
   margin-top: 5px;
   font-family: "Compita";
   ${props => props.noborder && css`
@@ -111,7 +112,7 @@ const StyledTextArea = styled.textarea`
   `}
   @media only screen and (max-width: 776px) {
     background-color: transparent;
-    height: 60px;
+    /* height: 60px; */
     padding-top: 0;
     margin-top: -12px;
   }

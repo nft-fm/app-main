@@ -217,7 +217,7 @@ const PaginatorContainer = styled.div`
   padding: 0 20px;
   width: calc(100% - 40px);
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-top: 10px;
   z-index: 502;
   @media only screen and (max-width: 776px) {

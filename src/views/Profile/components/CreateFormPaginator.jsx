@@ -83,7 +83,16 @@ const CreateFormPaginator = ({
           imageHeight      
         });
       }
-      if (price <= 0 || numMinted <= 0) {
+      if (price <= 0 || numMinted <= 0 || !Number.isInteger(numMinted)) {
+        if (!Number.isInteger(numMinted)) {
+          return swal.fire({
+            title: "Number of NFTs must be an integer",
+            timer: 5000,
+            imageUrl: errorIcon,
+            imageWidth,
+            imageHeight      
+          });
+        }
         return swal.fire({
           title: "Price and Quantity must be greater than 0",
           timer: 5000,

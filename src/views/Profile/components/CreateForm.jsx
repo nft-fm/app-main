@@ -131,6 +131,7 @@ const CreateForm = ({ open, hide }) => {
       nftData.numMinted === 0 ||
       nftData.numMinted === "0" ||
       nftData.numMinted === "" ||
+      !Number.isInteger(nftData.numMinted) ||
       nftData.price === 0 ||
       nftData.price === "0" ||
       nftData.price === ""  ||

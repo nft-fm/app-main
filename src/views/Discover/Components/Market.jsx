@@ -1,150 +1,216 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import NftCard from "../../../components/NftCards/SaleNftCard";
 import { useAccountConsumer } from "../../../contexts/Account";
 import { ReactComponent as down_arrow } from "../../../assets/img/icons/down_arrow.svg";
 import { ReactComponent as IconEth } from "../../../assets/img/icons/ethereum.svg";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const Listen = () => {
-  const { user, account } = useAccountConsumer();
-  const [unformattedNftData, setUnformattedNftData] = useState([]);
-  const [search, setSearch] = useState("");
+  const { account } = useAccountConsumer();
   const [allNfts, setAllNfts] = useState([]);
-  const [displayedNfts, setDisplayedNfts] = useState([]);
-  const [priceOrientation, setPriceOrientation] = useState(true);
-  const formatNfts = (nftsData) => {
-    return nftsData.map((nft) => <NftCard nft={nft} />);
-  };
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [selected, setSelected] = useState("Date: High - Low");
+  const [search, setSearch] = useState("");
+  const [sort, setSort] = useState(2);
+  const limit = 30;
 
-  const getAll = () => {
-    axios.post("/api/nft-type/all", { address: account }).then((res) => {
-      setUnformattedNftData(res.data);
-      setAllNfts(res.data);
-      const formattedNfts = formatNfts(
-        res.data.sort(function (a, b) {
-          return b.price - a.price;
+  const getNftsWithParams = async (pageIncrease, searchParam, sortParam) => {
+    console.log("1", searchParam);
+    if (hasMore) {
+      console.log("fetching");
+      await axios
+        .post("/api/nft-type/getNftsWithParams", {
+          address: account,
+          limit,
+          page: page,
+          search: searchParam,
+          sort: sortParam,
         })
-      );
-      for (let i = 0; i < 5; i++) {
-        formattedNfts.push(<FillerCard />);
-      }
-      setDisplayedNfts(formattedNfts);
-    });
-  };
-
-  useEffect(() => {
-    getAll();
-  }, [user]);
-
-  //search function, sorts and sets returned NFTs to displayedNfts
-  useEffect(() => {
-    if (search != "") {
-      axios
-        .post("/api/nft-type/search", { params: search })
         .then((res) => {
-          setUnformattedNftData(res.data);
-          const formattedNfts = priceOrientation
-            ? formatNfts(
-                res.data.sort(function (a, b) {
-                  return b.price - a.price;
-                })
-              )
-            : formatNfts(
-                res.data.sort(function (a, b) {
-                  return a.price - b.price;
-                })
-              );
-          for (let i = 0; i < 5; i++) {
-            formattedNfts.push(<FillerCard />);
-          }
-          setDisplayedNfts(formattedNfts);
-        })
-        .catch((err) => console.log(err));
-    } else {
-      const formattedNfts = formatNfts(allNfts);
-      for (let i = 0; i < 5; i++) {
-        formattedNfts.push(<FillerCard />);
-      }
-      setDisplayedNfts(formattedNfts);
+          console.log(res.data);
+          setAllNfts([...allNfts, ...res.data.nfts]);
+          setPage(page + pageIncrease);
+          setHasMore(res.data.hasMore);
+        });
     }
+  };
+
+  useEffect(() => {
+    const fetchWithNoSearch = async () => {
+      setPage(0);
+      if (search === "") {
+        console.log("search", search);
+        setHasMore(true);
+        setAllNfts([]);
+        await axios
+          .post("/api/nft-type/getNftsWithParams", {
+            address: account,
+            limit,
+            page: 0,
+            search: "",
+            sort: sort,
+          })
+          .then((res) => {
+            setAllNfts(res.data.nfts);
+            setPage(page + 1);
+            setHasMore(res.data.hasMore);
+          });
+      }
+    };
+
+    fetchWithNoSearch();
   }, [search]);
 
-  console.log("allnfts", allNfts);
-  //flips the orientation of price from high to low with the .sort()
   useEffect(() => {
-    if (priceOrientation) {
-      //high to low
-      if (search === "") {
-        const everyNft = formatNfts(
-          allNfts.sort(function (a, b) {
-            return b.price - a.price;
-          })
-        );
-        for (let i = 0; i < 5; i++) {
-          everyNft.push(<FillerCard />);
-        }
-        setDisplayedNfts(everyNft);
-      } else {
-        const formattedNfts = formatNfts(
-          unformattedNftData.sort(function (a, b) {
-            return b.price - a.price;
-          })
-        );
-        for (let i = 0; i < 5; i++) {
-          formattedNfts.push(<FillerCard />);
-        }
-        setDisplayedNfts(formattedNfts);
-      }
-    }
-    if (!priceOrientation) {
-      //low to high
-      if (search === "") {
-        const everyNft = formatNfts(
-          allNfts.sort(function (a, b) {
-            return a.price - b.price;
-          })
-        );
-        for (let i = 0; i < 5; i++) {
-          everyNft.push(<FillerCard />);
-        }
-        setDisplayedNfts(everyNft);
-      } else {
-        const formattedNfts = formatNfts(
-          unformattedNftData.sort(function (a, b) {
-            return a.price - b.price;
-          })
-        );
-        for (let i = 0; i < 5; i++) {
-          formattedNfts.push(<FillerCard />);
-        }
-        setDisplayedNfts(formattedNfts);
-      }
-    }
-  }, [priceOrientation]);
+    const handleSort = async (pageIncrease, searchParam, sortParam) => {
+      setPage(0);
+      setHasMore(true);
+      setAllNfts([]);
+      console.log("sortParam", sortParam);
+      await axios
+        .post("/api/nft-type/getNftsWithParams", {
+          address: account,
+          limit,
+          page: 0,
+          search: searchParam,
+          sort: sortParam,
+        })
+        .then((res) => {
+          console.log(res.data);
+          setAllNfts(res.data.nfts);
+          setPage(1);
+          setHasMore(res.data.hasMore);
+        });
+    };
 
-  // console.log("displayed nfts", displayedNfts.length, search);
+    handleSort(1, search, sort);
+  }, [sort]);
+
+  const handleSearch = async (e, pageIncrease, searchParam, sortParam) => {
+    e.preventDefault();
+    if (search != "") {
+      setPage(0);
+      setHasMore(true);
+      console.log(search);
+      await axios
+        .post("/api/nft-type/getNftsWithParams", {
+          address: account,
+          limit,
+          page: 0,
+          search: searchParam,
+          sort: sortParam,
+        })
+        .then((res) => {
+          console.log(res.data);
+          setAllNfts(res.data.nfts);
+          setPage(page + pageIncrease);
+          setHasMore(res.data.hasMore);
+        });
+    }
+  };
+
+  const menuOptions = [
+    <MenuSpan
+      isMenuOpen={menuOpen}
+      onClick={() => {
+        setSort(0);
+        setSelected("Price: High - Low");
+        setMenuOpen(false);
+      }}
+    >
+      Price: High - Low
+    </MenuSpan>,
+    <MenuSpan
+      isMenuOpen={menuOpen}
+      onClick={() => {
+        setSort(1);
+        setSelected("Price: Low - High");
+        setMenuOpen(false);
+      }}
+    >
+      Price: Low - High
+    </MenuSpan>,
+    <MenuSpan
+      isMenuOpen={menuOpen}
+      onClick={() => {
+        setSort(2);
+        setSelected("Date: High - Low");
+        setMenuOpen(false);
+      }}
+    >
+      Date: High - Low
+    </MenuSpan>,
+    <MenuSpan
+      isMenuOpen={menuOpen}
+      onClick={() => {
+        setSort(3);
+        setSelected("Date: Low - High");
+        setMenuOpen(false);
+      }}
+    >
+      Date: Low - High
+    </MenuSpan>,
+  ];
 
   return (
     <LaunchContainer>
-      <ContainerTitlePrice
-        onClick={() => setPriceOrientation(!priceOrientation)}
-      >
-        <Eth />
-        <Arrow
-          style={priceOrientation ? { transform: "rotate(180deg)" } : null}
+      <ContainerTitleForm onSubmit={(e) => handleSearch(e, 1, search, 2)}>
+        <ContainerTitleInput
+          type="text"
+          placeholder="Search..."
+          onChange={(e) => setSearch(e.target.value)}
         />
-      </ContainerTitlePrice>
-      <ContainerTitleInput
-        type="text"
-        placeholder="Search..."
-        onChange={(e) => setSearch(e.target.value)}
-      />
+      </ContainerTitleForm>
+
+      <ContainerTitleSorting
+        onMouseEnter={() => setMenuOpen(true)}
+        onMouseLeave={() => setMenuOpen(false)}
+        isMenuOpen={menuOpen}
+      >
+        <SelectedSpan onClick={() => setMenuOpen(!menuOpen)}>
+          {selected}
+        </SelectedSpan>
+        {menuOptions.map((item, index) => {
+          return item;
+        })}
+      </ContainerTitleSorting>
+
       <ContainerOutline />
-      <NftScroll> {displayedNfts} </NftScroll>
+      <NftScroll>
+        <InfiniteScroll
+          dataLength={allNfts.length}
+          next={() => getNftsWithParams(1, search, sort)}
+          hasMore={hasMore}
+        >
+          {allNfts.map((item, index) => (
+            <NftCard nft={item} />
+          ))}
+          {!hasMore && (
+            <>
+              <FillerCard />
+              <FillerCard />
+              <FillerCard />
+              <FillerCard />
+              <FillerCard />
+            </>
+          )}
+        </InfiniteScroll>
+      </NftScroll>
     </LaunchContainer>
   );
 };
+
+const End = styled.div`
+  width: 40vw;
+  margin: auto;
+  align-items: center;
+  text-align: center;
+`;
+
 const Eth = styled(IconEth)`
   width: 18px;
   height: 18px;
@@ -166,8 +232,28 @@ const Arrow = styled(down_arrow)`
   @media only screen and (max-width: 776px) {
   }
 `;
-const ContainerTitlePrice = styled.div`
+
+const SelectedSpanMobile = styled.span`
+  text-decoration: underline;
+  margin-top: -3px;
+  @media only screen and (min-width: 776px) {
+    content: "Sort";
+  }
+`;
+const SelectedSpan = styled.span`
+  text-decoration: underline;
+  margin-top: -3px;
+  /* @media only screen and (max-width: 776px) {
+    display: none;
+  } */
+`;
+
+const MenuSpan = styled.span`
+  display: ${(props) => (props.isMenuOpen ? "block" : "none")};
+  padding-top: 5px;
   cursor: pointer;
+`;
+const ContainerTitleSorting = styled.div`
   position: absolute;
   left: 37%;
   top: -15px;
@@ -180,9 +266,39 @@ const ContainerTitlePrice = styled.div`
   border: 4px solid #383838;
   border-radius: 20px;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  height: ${(props) => props.isMenuOpen && "195px"};
+
+  @media only screen and (max-width: 1200px) {
+    left: auto;
+    right: calc(10% + 50px);
+  }
+  @media only screen and (max-width: 776px) {
+    /* left: 80vw;
+    right: auto; */
+    left: auto;
+    right: auto;
+    top: 25px;
+  }
+`;
+const ContainerTitleDate = styled.div`
+  cursor: pointer;
+  position: absolute;
+  left: 50%;
+  top: -15px;
+  height: 20px;
+  padding: 5px 8px 3px 8px;
+  font: "Compita";
+  background-color: ${(props) => props.theme.color.boxBorder};
+  font-size: ${(props) => props.theme.fontSizes.sm};
+  color: ${(props) => (props.faq ? "#3d3d3d" : props.theme.color.gray)};
+  border: 4px solid #383838;
+  border-radius: 20px;
+  display: flex;
   align-items: center;
   @media only screen and (max-width: 1200px) {
-    /* left: 70%; */
     left: auto;
     right: calc(10% + 50px);
   }
@@ -191,6 +307,7 @@ const ContainerTitlePrice = styled.div`
     right: auto;
   }
 `;
+const ContainerTitleForm = styled.form``;
 const ContainerTitleInput = styled.input`
   outline: none;
   position: absolute;
@@ -226,6 +343,32 @@ const NftScroll = styled.div`
   @media only screen and (max-width: 776px) {
     flex-direction: column;
     align-items: center;
+    margin-top: 25px;
+  }
+  & > div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-between;
+    @media only screen and (max-width: 776px) {
+      flex-direction: column;
+      align-items: center;
+      margin-top: 25px;
+    }
+    & > div {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      width: 100%;
+      justify-content: space-between;
+      overflow-x: clip !important;
+      @media only screen and (max-width: 776px) {
+        flex-direction: column;
+        align-items: center;
+        margin-top: 25px;
+      }
+    }
   }
 `;
 

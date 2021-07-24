@@ -116,12 +116,24 @@ const Listen = () => {
 
   const menuOptions = [
     <MenuSpan
+    isMenuOpen={menuOpen}
+    onClick={() => {
+      setSort(2);
+      setSelected("Date: High - Low");
+      setMenuOpen(false);
+    }}
+    selected={selected === "Date: High - Low"}
+  >
+    Recently Added
+  </MenuSpan>,
+    <MenuSpan
       isMenuOpen={menuOpen}
       onClick={() => {
         setSort(0);
         setSelected("Price: High - Low");
         setMenuOpen(false);
       }}
+      selected={selected === "Price: High - Low"}
     >
       Most Expensive
     </MenuSpan>,
@@ -132,18 +144,9 @@ const Listen = () => {
         setSelected("Price: Low - High");
         setMenuOpen(false);
       }}
+      selected={selected === "Price: Low - High"}
     >
       Cheapest
-    </MenuSpan>,
-    <MenuSpan
-      isMenuOpen={menuOpen}
-      onClick={() => {
-        setSort(2);
-        setSelected("Date: High - Low");
-        setMenuOpen(false);
-      }}
-    >
-      Recently Added
     </MenuSpan>,
     // <MenuSpan
     //   isMenuOpen={menuOpen}
@@ -248,25 +251,25 @@ const Arrow = styled(down_arrow)`
   }
 `;
 
-const SelectedSpanMobile = styled.span`
-  text-decoration: underline;
-  margin-top: -3px;
-  @media only screen and (min-width: 776px) {
-    content: "Sort";
-  }
-`;
 const SelectedSpan = styled.span`
   color: white;
   position: relative;
   width: 100%;
   padding-left: 10px;
+  cursor: pointer;
 `;
 
 const MenuSpan = styled.span`
   display: ${(props) => (props.isMenuOpen ? "block" : "none")};
-  padding-top: 5px;
+  padding-top: 10px;
   cursor: pointer;
   font-size: 1rem;
+  transition: all 0.1s ease-in-out;
+  ${props => props.selected && `text-decoration: underline;`
+  }
+  &:hover {
+    color: white;
+  }
 `;
 const ContainerTitleSorting = styled.div`
 width: 110px;
@@ -285,7 +288,7 @@ width: 110px;
   flex-direction: column;
   align-items: flex-start;
 
-  height: ${(props) => props.isMenuOpen && "90px"};
+  height: ${(props) => props.isMenuOpen && "110px"};
 
   @media only screen and (max-width: 1200px) {
     left: auto;

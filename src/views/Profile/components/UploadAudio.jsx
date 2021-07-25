@@ -1,25 +1,24 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-
 import axios from "axios";
-import lamejs from "lamejs";
 import { useAccountConsumer } from "../../../contexts/Account";
 import audioBufferToMp3 from "../../../utils/audioBufferToMp3";
-
 import upload_icon from "../../../assets/img/profile_page_assets/upload_icon.svg";
 import loading_gif from "../../../assets/img/loading.gif";
+import swal from "sweetalert2";
+import { errorIcon, imageWidth, imageHeight } from "../../../utils/swalImages";
+
 const UploadAudio = ({
-  audioFile,
-  setAudioFile,
   nftData,
   setNftData,
-  isAudioUploaded,
-  setIsAudioUploaded,
   setAudioUploadError,
-  audioUploadError,
+  isLoadingAudio,
+  setIsLoadingAudio
 }) => {
   const { account } = useAccountConsumer();
   const hiddenAudioInput = useRef(null);
+  const [audioFile, setAudioFile] = useState(null);
+  const [audioName, setAudioName] = useState("");
 
   const sliceBuffer = (audioContext, buffer, begin, end, callback) => {
     var error = null;
@@ -79,6 +78,7 @@ const UploadAudio = ({
     audioFile
   ) => {
     console.log("uploading file");
+    setIsLoadingAudio(true);
     axios
       .post("api/nft-type/uploadAudioS3", audioFormData, {
         headers: {
@@ -88,7 +88,7 @@ const UploadAudio = ({
       .then((res) => {
         console.log(res);
         if (res.status === 200) {
-          let _nftData;
+          // let _nftData;
 
           console.log("originalBUFFER", buffer);
           sliceBuffer(audioContext, buffer, 0, 15, (error, newBuffer) => {
@@ -114,16 +114,37 @@ const UploadAudio = ({
                 })
                 .then((response) => {
                   console.log(response);
-                  setNftData((currentState) => {
-                    _nftData = currentState;
-                    return currentState;
+                  // console.log("nftData audio", nftData, "_nftData", _nftData)
+                  setNftData({
+                    ...nftData,
+                    audioUrl:
+                      "https://nftfm-music.s3-us-west-1.amazonaws.com/" +
+                      account +
+                      "/" +
+                      audioName,
+                    snnipet:
+                      "https://nftfm-music.s3-us-west-1.amazonaws.com/" +
+                      account +
+                      "/snnipets/snnipet_" +
+                      audioName,
+                      dur: duration
                   });
-                  setNftData({ ..._nftData, dur: duration });
-                  setIsAudioUploaded(true);
+                  setIsLoadingAudio(false);
+                  setAudioName("")
                 })
                 .catch((error) => {
                   setAudioUploadError(true);
+                  swal.fire({
+                    imageUrl: errorIcon,
+                    imageWidth,
+                    imageHeight,
+                    timer: 5000,
+                    title: "Error",
+                    text: "Audio upload failed on the server, please try again.",
+                  });
                   console.log("snnipets upload failed", error);
+                  setIsLoadingAudio(false);
+                  setAudioName("")
                 });
             }
           });
@@ -131,6 +152,16 @@ const UploadAudio = ({
       })
       .catch((err) => {
         console.log(err);
+        setIsLoadingAudio(false);
+        setAudioName("")
+        swal.fire({
+          imageUrl: errorIcon,
+          imageWidth,
+          imageHeight,
+          timer: 5000,
+          title: "Error",
+          text: "Audio upload failed on the server, please try again.",
+        });
         setAudioUploadError(true);
       });
   };
@@ -164,7 +195,7 @@ const UploadAudio = ({
   };
 
   const handleAudio = (e) => {
-    setIsAudioUploaded(null);
+    // setIsAudioUploaded(null);
     setAudioFile(null);
     hiddenAudioInput.current.click();
   };
@@ -173,37 +204,19 @@ const UploadAudio = ({
       return;
     }
     setAudioFile(e.target.files[0]);
-    setNftData({
-      ...nftData,
-      audioUrl:
-        "https://nftfm-music.s3-us-west-1.amazonaws.com/" +
-        account +
-        "/" +
-        e.target.files[0].name,
-      snnipet:
-        "https://nftfm-music.s3-us-west-1.amazonaws.com/" +
-        account +
-        "/snnipets/snnipet_" +
-        e.target.files[0].name,
-    });
+    setAudioName(e.target.files[0].name);
   };
 
   useEffect(() => {
-    if (audioFile) {
+    if (audioFile && !isLoadingAudio && audioName !== "") {
       getFileDurAndSnnipet();
     }
-  }, [audioFile]);
+  }, [audioFile, audioName]);
 
   return (
     <>
       <MediaButton onClick={() => handleAudio()} type="button">
-        <span>Upload audio</span>
-        <span>.mp3, .flac</span>
-        {audioFile && !isAudioUploaded ? (
-          <img src={loading_gif} alt="loading" />
-        ) : (
-          <img src={upload_icon} alt="upload-file-icon" />
-        )}
+        {!isLoadingAudio ? "Choose Audio" : <img style={{width: "25px", height: "25px"}} src={loading_gif} alt="loading" />}
       </MediaButton>
       <StyledInput
         type="file"
@@ -211,8 +224,6 @@ const UploadAudio = ({
         ref={hiddenAudioInput}
         onChange={handleAudioChange}
         style={{ display: "none" }}
-        defaultValue={audioFile}
-        // required
       />
     </>
   );
@@ -233,32 +244,23 @@ const StyledInput = styled.input`
 `;
 
 const MediaButton = styled.button`
-  background-color: ${(props) => props.theme.color.box};
-  border-radius: ${(props) => props.theme.borderRadius}px;
-  color: ${(props) => props.theme.fontColor.gray};
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  border: solid 1.5px #181818;
   align-items: center;
-  border: 1px solid ${(props) => props.theme.fontColor.boxBorderColor};
-  padding: 5px;
-  cursor: pointer;
-  /* margin-top: 30px; */
-  /* position: relative; */
-  /* height: 50px; */
-  width: 40%;
-  & > img {
-    margin-top: 5px;
-    height: 20px;
-    opacity: 0.5;
-  }
-
-  @media only screen and (max-width: 776px) {
-    width: 45%;
+  text-align: center;
+  border-radius: 8px;
+  width: 120px;
+  height: 40px;
+  font-family: Compita;
+  font-size: 18px;
+  text-align: center;
+  color: #ffffff;
+  background-image: linear-gradient(to right, #262626, #383838);
+  &:hover {
+    cursor: pointer;
+    background-image: linear-gradient(to right, #333333, #8b8b8b);
   }
 `;
 
 export default UploadAudio;
-
-// @media only screen and (max-width: 776px) {
-//   margin-top: 6px;
-//   }

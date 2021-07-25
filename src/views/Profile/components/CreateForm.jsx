@@ -1,32 +1,52 @@
 import React, { useEffect, useState, useRef } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import axios from "axios";
+import moment from "moment";
 import swal from "sweetalert2";
+
 import upload_icon from "../../../assets/img/profile_page_assets/upload_icon.svg";
 import loading_gif from "../../../assets/img/loading.gif";
-// import eth_icon from "../../../assets/img/profile_page_assets/eth_icon.svg";
-// import eth_icon_white from "../../../assets/img/profile_page_assets/eth_icon_white.svg";
-// import usd_icon from "../../../assets/img/profile_page_assets/usd_icon.svg";
-// import { ReactComponent as usd_icon } from "../../../assets/img/icons/dollar.svg";
 import { ReactComponent as eth_icon } from "../../../assets/img/icons/ethereum.svg";
-// import { ReactComponent as arrow } from "../../../assets/img/icons/arrow_cropped.svg";
-// import { ReactComponent as arrow_down } from "../../../assets/img/icons/arrow_down.svg";
-import moment from "moment";
-import { errorIcon, imageWidth, imageHeight } from "../../../utils/swalImages";
-
 import x from "../../../assets/img/icons/x.svg";
-import ImagePreview from "./ImagePreview";
-import UploadAudio from "./UploadAudio";
-import { useHistory } from "react-router-dom";
+import { ReactComponent as IconX } from "../../../assets/img/icons/x.svg";
 
+import { errorIcon, successIcon, questionIcon, imageWidth, imageHeight } from "../../../utils/swalImages";
 import { useAccountConsumer } from "../../../contexts/Account";
 import { mintNFT } from "../../../web3/utils";
+
+import { Step1 } from "./CreateFormPages/Step1";
+import Step2 from "./CreateFormPages/Step2";
+import Step3 from "./CreateFormPages/Step3"
+import Step4 from "./CreateFormPages/Step4"
+import PreviewBuyModal from "./CreateFormPages/PreviewBuyModal"
+import CreateFormPaginator from "./CreateFormPaginator";
+import DemoImage from "../../Home/Components/DemoImage/DemoImage"
+
+function useWindowSize() {
+  const [windowSize, setWindowSize] = useState({
+    width: undefined,
+    height: undefined,
+  });
+  useEffect(() => {
+    function handleResize() {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    }
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  return windowSize;
+}
+
 
 const initialNftState = {
   artist: "",
   address: "",
   isDraft: true,
-  genre: "",
+  genre: "Select a genre",
   startTime: 0,
   dur: 0,
   numMinted: 0,
@@ -36,22 +56,51 @@ const initialNftState = {
   writer: "",
   imageUrl: "",
   audioUrl: "",
+  description: ""
 };
 
-const CreateForm = ({ open, hide }) => {
+const CreateForm = ({ open, hide, reset, setReset }) => {
   const { account, user, usdPerEth } = useAccountConsumer();
-  const [isLoading, setIsLoading] = useState(false);
   const [nftData, setNftData] = useState(initialNftState);
-  const [audioFile, setAudioFile] = useState(null);
-  const [audioUploadError, setAudioUploadError] = useState(false);
-  const [imageFile, setImageFile] = useState(null);
-  const [imageUploadError, setImageUploadError] = useState(false);
-  const [videoFile, setVideoFile] = useState(null);
-  const [videoUploadError, setVideoUploadError] = useState(false);
   const [curr, setCurr] = useState("ETH");
-  const [isAudioUploaded, setIsAudioUploaded] = useState(false);
-  const [isImageUploaded, setIsImageUploaded] = useState(false);
-  const [isVideoUploaded, setIsVideoUploaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingImage, setIsLoadingImage] = useState(false);
+  const [isLoadingAudio, setIsLoadingAudio] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
+  const { width, height } = useWindowSize();
+  // {! remember to clear snippet before next mint}
+
+  
+  useEffect(() => {
+    if (isLoadingAudio || isLoadingImage || isLoading) {
+      window.onbeforeunload = () => {
+        return 'Navigating away from this page may result in unsaved data. Are you sure?'
+      }
+    } else {
+      window.onbeforeunload = undefined;
+    }
+  }, [isLoadingAudio, isLoadingImage, isLoading])
+  
+  useEffect(() => {
+    if (account && !isLoading && !isLoadingImage && !isLoadingAudio && currentStep !== 1) {
+      setIsLoading(true)
+      axios
+      .post("/api/nft-type/update-and-fetch", reset ? 
+        { ...initialNftState, address: account, artist: user && user.username  ? user.username : ''} 
+        : nftData )
+      .then((res) => {
+        // console.log("success", res.data)
+        
+        setNftData(res.data);
+        setIsLoading(false);
+        setReset(false);
+      })
+      .catch(err => {
+        console.log(err)
+        setIsLoading(false)
+      });
+    }
+  }, [currentStep])
 
   useEffect(() => {
     user && user.username && setNftData({ ...nftData, artist: user.username });
@@ -64,95 +113,58 @@ const CreateForm = ({ open, hide }) => {
       .then((res) => setNftData(res.data));
   }, [account]);
 
-  useEffect(() => {
-    if (imageFile) {
-      const imageFormData = new FormData();
-      imageFormData.append("artist", account);
-      imageFormData.append("imageFile", imageFile);
-
-      axios
-        .post("/api/nft-type/uploadImageS3", imageFormData)
-        .then((res) => {
-          if (res.status === 200) {
-            setIsImageUploaded(true);
-          }
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-          setImageUploadError(true);
-        });
-    }
-  }, [imageFile]);
 
 
+  // const [videoFile, setVideoFile] = useState(null);
 
-  const hiddenVideoInput = useRef(null);
-  const handleVideo = () => {
-    setIsVideoUploaded(null);
-    setVideoFile(null);
-    hiddenVideoInput.current.click();
-  };
-  const handleVideoChange = (e) => {
-    console.log('here')
-  }
+  // const hiddenVideoInput = useRef(null);
+  // const handleVideo = () => {
+  //   setIsVideoUploaded(null);
+  //   setVideoFile(null);
+  //   hiddenVideoInput.current.click();
+  // };
+  // const handleVideoChange = (e) => {
+  //   console.log('here')
+  // }
 
 
   //this is all to handle the image
-  const hiddenImageInput = useRef(null);
-  const handleImage = () => {
-    setIsImageUploaded(null);
-    setImageFile(null);
-    hiddenImageInput.current.click();
-  };
-  const handleImageChange = (e) => {
-    if (!e.target.files[0]) {
-      return;
-    }
-    setImageFile(e.target.files[0]);
-    setNftData({
-      ...nftData,
-      imageUrl:
-        "https://nftfm-images.s3-us-west-1.amazonaws.com/" +
-        account +
-        "/" +
-        e.target.files[0].name,
-    });
-  };
 
   const isComplete = () => {
     if (
       nftData.title === "" ||
       nftData.genre === "" ||
       nftData.producer === "" ||
-      nftData.writer === "" ||
       nftData.numMinted === 0 ||
       nftData.numMinted === "0" ||
       nftData.numMinted === "" ||
+      !Number.isInteger(nftData.numMinted) ||
       nftData.price === 0 ||
       nftData.price === "0" ||
-      nftData.price === "" ||
-      !isAudioUploaded ||
-      !isImageUploaded
+      nftData.price === ""  ||
+      nftData.imageUrl === "" ||
+      nftData.audioUrl === "" ||
+      nftData.snnipet === ""
     ) {
       return false;
     } else {
       return true;
     }
   };
+
   const handleSubmit = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     console.log("DUR", nftData.dur);
     if (!isComplete()) {
       return;
     }
     let newNftData = { ...nftData, timestamp: moment().format() }; //sets timestamp to right when the /finalize route is called
-    if (curr === "USD") {
-      newNftData = {
-        ...nftData,
-        price: (nftData.price / usdPerEth).toFixed(4),
-      };
-    }
+    // if (curr === "USD") {
+    //   newNftData = {
+    //     ...nftData,
+    //     price: (nftData.price / usdPerEth).toFixed(4),
+    //   };
+    // }
     if (newNftData.artist === "") {
       newNftData = {
         ...nftData,
@@ -183,18 +195,8 @@ const CreateForm = ({ open, hide }) => {
       });
       return;
     }
-    if (!imageFile || !audioFile) {
-      console.log("ere");
-      swal.fire({
-        title: "Cannot submit without audio and image files.",
-        timer: 5000,
-        imageUrl: errorIcon,
-        imageWidth,
-        imageHeight     
-      });
-      return;
-    }
-    if (!isAudioUploaded || !isImageUploaded) {
+
+    if (!nftData.imageUrl || !nftData.audioUrl) {
       console.log("here");
       swal.fire({
         title: "Please wait for your audio and image files to be processed.",
@@ -207,9 +209,14 @@ const CreateForm = ({ open, hide }) => {
     }
 
     //run these two, store the returns in the nftData state object
-    if (!audioUploadError && !imageUploadError) {
+
+    // if (!audioUploadError && !imageUploadError) {
       setIsLoading(true);
+      setIsLoadingAudio(true);
+      setIsLoadingImage(true);
+
       // after nftData has both audio and image references, run this route
+      // console.log("newNftData", newNftData);
       axios
         .post("/api/nft-type/finalize", newNftData)
         .then((res) => {
@@ -223,20 +230,28 @@ const CreateForm = ({ open, hide }) => {
               },
               () => {
                 console.log("final");
-                setNftData(initialNftState);
-                setImageFile(null);
-                setAudioFile(null);
+                setNftData({ ...initialNftState, artist: user && user.username  ? user.username : ''})
                 setIsLoading(false);
+                setIsLoadingAudio(false);
+                setIsLoadingImage(false);
                 swal
                   .fire({
+                    imageUrl: successIcon,
+                    imageWidth,
+                    imageHeight,
+                    timer: 10000,
                     title: "NFT Minted!",
                     text: "It can take 2-3 minutes for the new NFT to appear on your profile.",
-                    timer: 10000,
                   })
-                  .then(() => hide());
+                  .then(() => {
+                    setReset(true);
+                    onCloseModal();
+                  });
               }
             ).catch((err) => {
               setIsLoading(false);
+              setIsLoadingAudio(false);
+              setIsLoadingImage(false);
               swal.fire({
                 imageUrl: errorIcon,
                 imageWidth,
@@ -248,6 +263,8 @@ const CreateForm = ({ open, hide }) => {
             console.log("MINT");
           } else {
             setIsLoading(false);
+            setIsLoadingAudio(false);
+            setIsLoadingImage(false);
             swal.fire({
               title: "Error",
               background: `#000`,
@@ -258,6 +275,8 @@ const CreateForm = ({ open, hide }) => {
         })
         .catch((err) => {
           setIsLoading(false);
+          setIsLoadingAudio(false);
+          setIsLoadingImage(false);
           swal.fire({
             title: "Error",
             background: `#000`,
@@ -265,37 +284,14 @@ const CreateForm = ({ open, hide }) => {
             text: "Nft creation failed on the server, please try again.",
           });
         });
-    } else {
-      setIsLoading(false);
-      swal.fire({
-        title: "Error uploading audio or image.",
-        text: "Please refresh the page and try again. If the issues persists, contact NFT FM.",
-        imageUrl: errorIcon,
-        imageWidth,
-        imageHeight      
-      });
     }
-  };
-
-  useEffect(() => {
-    if (nftData.price > 0) {
-      if (curr === "USD") {
-        setNftData({
-          ...nftData,
-          price: nftData.price * usdPerEth,
-        });
-      } else {
-        setNftData({
-          ...nftData,
-          price: nftData.price / usdPerEth,
-        });
-      }
-    }
-  }, [curr]);
 
   const updateState = (e) => {
     if (e.target.name === "numMinted" && Number(e.target.value) > 10000) {
       return;
+    }
+    if (e.target.name === "numMinted") {
+      return setNftData({ ...nftData, [e.target.name]: parseInt(e.target.value) });
     }
     if (e.target.name === "price") {
       let string = e.target.value.toString();
@@ -320,673 +316,219 @@ const CreateForm = ({ open, hide }) => {
     setNftData({ ...nftData, [e.target.name]: e.target.value });
   };
 
-  // const stopProp = (e) => {
-  //   e.stopPropagation();
-  // };
-  // const hideCreate = (e) => {
-  //   setNftData(initialNftState);
-  //   setImageFile(null);
-  //   setAudioFile(null);
-  // };
-
   if (!open) return false;
-  return (
-    <OpaqueFilter>
-      <FormContainer onSubmit={(e) => handleSubmit(e)}>
-        <Header>
-          <span>Create NFTs</span>
-          <X src={x} onClick={() => hide()} />
-        </Header>
-        <Main>
-          <Files>
-            <ImagePreview imageFile={imageFile} />
-          </Files>
-          <Inputs autoComplete="off">
-            <TopInputs>
-              <MediaButtons>
-                <UploadAudio
-                  audioFile={audioFile}
-                  setAudioFile={setAudioFile}
-                  nftData={nftData}
-                  setNftData={setNftData}
-                  isAudioUploaded={isAudioUploaded}
-                  setIsAudioUploaded={setIsAudioUploaded}
-                  audioUploadError={audioUploadError}
-                  setAudioUploadError={setAudioUploadError}
-                />
-                <MediaButton onClick={() => handleImage()} type="button">
-                  <span>Upload image</span>
-                  <span>.png, .jpeg, .gif</span>
-                  {imageFile && !isImageUploaded ? (
-                    <img src={loading_gif} alt="loading" />
-                  ) : (
-                    <img src={upload_icon} alt="upload-file-icon" />
-                  )}
-                </MediaButton>
-                <StyledInput
-                  type="file"
-                  accept=".jpg,.jpeg,.png,.gif"
-                  ref={hiddenImageInput}
-                  onChange={handleImageChange}
-                  style={{ display: "none" }}
-                  defaultValue={imageFile}
-                  // required
-                />
-                <MediaButton onClick={() => handleImage()} type="button">
-                  <span>Upload video</span>
-                  <span>.mp4</span>
-                  {videoFile && !isVideoUploaded ? (
-                    <img src={loading_gif} alt="loading" />
-                  ) : (
-                    <img src={upload_icon} alt="upload-file-icon" />
-                  )}
-                </MediaButton>
-                <StyledInput
-                  type="file"
-                  accept=".mp4"
-                  ref={hiddenVideoInput}
-                  onChange={handleVideoChange}
-                  style={{ display: "none" }}
-                  defaultValue={videoFile}
-                  // required
-                />
-              </MediaButtons>
-              <FileNames>
-                <span>
-                  {audioFile?.name.length > 10
-                    ? audioFile?.name.substring(0, 10) +
-                      "-" +
-                      audioFile?.name.substring(audioFile.name.lastIndexOf("."))
-                    : audioFile?.name}
-                </span>
-                <span>
-                  {imageFile?.name.length > 10
-                    ? imageFile?.name.substring(0, 10) +
-                      "-" +
-                      imageFile?.name.substring(imageFile.name.lastIndexOf("."))
-                    : imageFile?.name}
-                </span>
-              </FileNames>
-            </TopInputs>
-            <MiddleInputs>
-              <StyledInput
-                type="text"
-                placeholder="Title"
-                name="title"
-                onChange={(e) => updateState(e)}
-                value={nftData.title}
-                required
-              />
-              <StyledInput
-                type="text"
-                placeholder="Genre"
-                name="genre"
-                onChange={(e) => updateState(e)}
-                value={nftData.genre}
-                required
-              />
-              <StyledInput
-                type="text"
-                placeholder="Producer"
-                name="producer"
-                onChange={(e) => updateState(e)}
-                value={nftData.producer}
-                required
-              />
-              <StyledInput
-                type="text"
-                placeholder="Writer"
-                name="writer"
-                onChange={(e) => updateState(e)}
-                value={nftData.writer}
-                required
-              />
-            </MiddleInputs>
-            <BottomInput>
-              <StyledDivInput1>
-                <label>Total Copies</label>
-                <StyledNumberInput
-                  className="mint"
-                  type="number"
-                  name="numMinted"
-                  onChange={(e) => updateState(e)}
-                  min="0"
-                  value={nftData.numMinted === 0 ? "" : nftData.numMinted}
-                  required
-                />
-                {/* <Spinner>
-                <ArrowUp
-                  onClick={() =>
-                    setNftData({
-                      ...nftData,
-                      numMinted: Number(nftData.numMinted) + 1,
-                    })
-                  }
-                />
-                <ArrowDown
-                  onClick={() =>
-                    nftData.numMinted > 0 &&
-                    setNftData({
-                      ...nftData,
-                      numMinted: Number(nftData.numMinted) - 1,
-                    })
-                  }
-                />
-              </Spinner> */}
-              </StyledDivInput1>
-              <StyledDivInput2>
-                <label>
-                  NFT Price /ea &nbsp;
-                  <EthIcon
-                    onClick={() => setCurr("ETH")}
-                    active={curr === "ETH" ? true : false}
-                  />{" "}
-                  {/* <UsdIcon
-                  onClick={() => setCurr("USD")}
-                  active={curr === "USD" ? true : false}
-                /> */}
-                </label>
-                <StyledNumberInput
-                  className="cost"
-                  type="number"
-                  name="price"
-                  onChange={(e) => updateState(e)}
-                  min="0"
-                  max={curr === "ETH" ? "1000" : `1000 * ${usdPerEth}`}
-                  step="0.0001"
-                  value={nftData.price === 0 ? "" : nftData.price}
-                  required
-                />
-                {/* <Spinner>
-                <ArrowUp
-                  onClick={
-                    () =>
-                      setNftData({
-                        ...nftData,
-                        price: Math.round((nftData.price + 0.01) * 1e12) / 1e12,
-                      })
-                  }
-                />
-                <ArrowDown
-                  onClick={() =>
-                    nftData.price >= 0.01 &&
-                    setNftData({
-                      ...nftData,
-                      price: Math.round((nftData.price - 0.01) * 1e12) / 1e12,
-                    })
-                  }
-                />
-              </Spinner> */}
-                <span>/{curr}</span>
-                <SubText>
-                  <span>
-                    ${" "}
-                    {nftData.price &&
-                      (nftData.price * usdPerEth).toLocaleString(undefined, {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
-                  </span>
-                </SubText>
-              </StyledDivInput2>
-            </BottomInput>
-          </Inputs>
-        </Main>
-        {isLoading ? (
-          <SubmitButton
-            type="button"
-            style={{ filter: "saturate(.2)", cursor: "not-allowed" }}
-          >
-            <img src={loading_gif} alt="loading" />
-          </SubmitButton>
-        ) : (
-          <SubmitButton
-            type="submit"
-            style={
-              !isComplete()
-                ? { filter: "saturate(.2)", cursor: "not-allowed" }
-                : null
-            }
-          >
-            <span>Mint NFTs!</span>
-          </SubmitButton>
-        )}
-      </FormContainer>
-    </OpaqueFilter>
-  );
+
+  const onCloseModal = () => {
+    if (isLoadingAudio || isLoadingImage) {
+      return swal.fire({
+        title: "You are currently uploading files. Are you sure you want to leave?",
+        imageUrl: questionIcon,
+        imageWidth,
+        imageHeight,
+        showCancelButton: true     
+      }).then(res => {
+        if (!res.isDismissed) {
+          setCurrentStep(1)
+          hide();
+        }
+      });
+    }
+    setCurrentStep(1)
+    hide();
+  }
+
+  const steps = [
+    <Step2 
+      nftData={nftData} 
+      setNftData={setNftData}
+      isLoadingAudio={isLoadingAudio}
+      setIsLoadingAudio={setIsLoadingAudio}
+      isLoadingImage={isLoadingImage}
+      setIsLoadingImage={setIsLoadingImage}
+    />,
+    <Step3 nftData={nftData} updateState={updateState} />,
+    <Step4 nftData={nftData} updateState={updateState} usdPerEth={usdPerEth} />,
+    <PreviewBuyModal nft={nftData} />
+  ]
+  if (currentStep === 1) {
+    return (
+      <>
+        <SelectContainer style={{zIndex: 501}}>
+          <StyledModal currStep={currentStep} style={{background: "none", border: "none"}}>
+            <X src={x} onClick={onCloseModal} />
+            {/* need to change to toggle auction below in the future */}
+            <Step1 setCurrentStep={setCurrentStep} /> 
+          </StyledModal>
+        </SelectContainer>
+        <OpaqueFilter
+        onClick={() => width > 776 ? hide() : null} 
+        currStep={currentStep}/>
+      </> 
+    )
+  } else {
+    return(
+      <>
+        <OpaqueFilter>
+          <Step1Container>
+            <StyledModal>
+              <X src={x} onClick={onCloseModal} />
+              <LeftSide>
+                {nftData.imageUrl ? <Image src={nftData.imageUrl} alt="image" /> : <DemoImage />}
+              </LeftSide>
+            <RightSide step={currentStep}>
+              {steps[currentStep - 2]}
+            </RightSide>
+            </StyledModal>
+            <CreateFormPaginator
+              nftData={nftData} 
+              currentStep={currentStep} 
+              setCurrentStep={setCurrentStep}
+              handleSubmit={handleSubmit}
+              isLoadingAudio={isLoadingAudio}
+              isLoadingImage={isLoadingImage}
+              isLoading={isLoading}
+            />
+          </Step1Container>
+        </OpaqueFilter>
+        {isLoading && isLoadingAudio && isLoadingImage &&
+          <OpaqueFilter>
+            <Step1Container>
+              <StyledModal 
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  border: "none", 
+                  backgroundColor: "transparent",
+                  alignItems: "center"
+                }}
+              >
+                <img style={{width: "120px", height: "120px", marginBottom : "10px"}} src={loading_gif} alt="loading" />
+                <h1>Minting NFT!</h1> 
+                <p>Please do not close this page</p>
+              </StyledModal>
+            </Step1Container>
+          </OpaqueFilter>
+        }
+      </>
+    )
+  }
 };
 
-// const OpaqueFilter = styled.div`
-//   width: 100vw;
-//   height: 100vh;
-//   position: fixed;
-//   left: 50%;
-//   top: 50%;
-//   transform: translate(-50%, -50%);
-//   background-color: rgba(0, 0, 0, 0.8);
-//   z-index: 500;
-// `;
-
-const SubText = styled.div`
-  position: absolute;
-  bottom: -10px;
-  left: 0;
-  & > span {
-    width: 50%;
-    font-size: 0.8rem;
-    color: ${(props) => props.theme.color.gray};
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-    -khtml-user-select: none; /* Konqueror HTML */
-    -moz-user-select: none; /* Old versions of Firefox */
-    -ms-user-select: none; /* Internet Explorer/Edge */
-    user-select: none;
-  }
-`;
-
-const EthIcon = styled(eth_icon)`
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-  position: absolute;
-  right: -15px;
-  transition: all 0.2s;
-  & path {
-    fill: ${(props) => props.theme.color.gray};
-    ${({ active }) =>
-      active &&
-      `
-  fill: #20a4fc;
-  `}
-  }
-
-  &:hover {
-    & path {
-      filter: contrast(2);
-    }
-  }
-`;
-
-// const UsdIcon = styled(usd_icon)`
-//   width: 20px;
-//   height: 20px;
-//   cursor: pointer;
-//   position: absolute;
-//   right: -35px;
-//   transition: all 0.2s;
-//   & path {
-//     fill: ${(props) => props.theme.color.gray};
-//     ${({ active }) =>
-//       active &&
-//       `
-//       fill: #68c12f;
-// `}
-//   }
-
-//   &:hover {
-//     & path {
-//       filter: contrast(0.5);
-//     }
-//   }
-// `;
-
-// const Spinner = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   position: absolute;
-//   bottom: 15px;
-//   right: 5px;
-
-//   @media only screen and (max-width: 776px) {
-//     bottom: 5px;
-//   }
-// `;
-
-// const ArrowUp = styled(arrow)`
-//   -webkit-transform: rotate(180deg);
-//   -moz-transform: rotate(180deg);
-//   -ms-transform: rotate(180deg);
-//   -o-transform: rotate(180deg);
-//   transform: rotate(180deg);
-//   /* margin-bottom: -5px; */
-//   width: 10px;
-//   height: 10px;
-//   cursor: pointer;
-//   /* border: 1px solid red; */
-//   /* transition: all 0.2s linear; */
-//   & path {
-//     fill: ${(props) => props.theme.color.blue};
-//   }
-
-//   &:hover {
-//     & path {
-//       filter: contrast(2);
-//     }
-//   }
-// `;
-// const ArrowDown = styled(arrow)`
-//   /* margin-top: -5px; */
-//   width: 10px;
-//   height: 10px;
-//   cursor: pointer;
-//   /* border: 1px solid red; */
-//   /* transition: all 0.2s linear; */
-//   & path {
-//     fill: ${(props) => props.theme.color.blue};
-//   }
-
-//   &:hover {
-//     & path {
-//       filter: contrast(2);
-//     }
-//   }
-// `;
-const StyledInput = styled.input`
-  color: white;
-  background-color: ${(props) => props.theme.color.box};
-  border: none;
-  border-bottom: 1px solid ${(props) => props.theme.color.boxBorder};
-  outline: none;
-  margin-bottom: 5px;
-
-  @media only screen and (max-width: 776px) {
-    background-color: transparent;
-    height: 20px;
-  }
-`;
-const StyledNumberInput = styled.input`
-  width: 100%;
-  border: none;
-  color: white;
-  border-radius: 0;
-  text-align: left;
-  padding-bottom: 5px;
-  margin-top: 20px;
-  font-size: ${(props) => props.theme.fontSizes.xs};
-  background-color: ${(props) => props.theme.color.box};
-  border: none;
-  border-bottom: 2px solid ${(props) => props.theme.color.boxBorder};
-  outline: none;
-  &.mint {
-    width: 100%;
-  }
-  ::-webkit-inner-spin-button,
-  ::-webkit-outer-spin-button {
-    display: none;
-  }
-
-  @media only screen and (max-width: 776px) {
-    background-color: transparent;
-    height: 20px;
-    padding-bottom: 0;
-  }
-`;
-
-const FileNames = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  /* position: absolute; */
-  left: 0;
-  bottom: -10px;
-  margin-top: 5px;
-  height: 15px;
-  & > span {
-    /* color: ${(props) => props.theme.fontColor.gray}; */
-    color: white;
-    width: 40%;
-    font-size: 0.7rem;
-    text-align: center;
-    opacity: 0.7;
-  }
-  @media only screen and (max-width: 776px) {
-    & > span {
-      /* color: ${(props) => props.theme.fontColor.gray}; */
-      color: white;
-      width: 50%;
-      font-size: 0.7rem;
-      text-align: center;
-      opacity: 0.7;
-    }
-  }
-`;
-
-const TopInputs = styled.div`
-  width: 100%;
-  height: 30%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  position: relative;
-`;
-
-const MiddleInputs = styled.div`
-  height: 40%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  color: white;
-
-  @media only screen and (max-width: 776px) {
-    width: 95%;
-    margin-left: auto;
-    margin-right: auto;
-  }
-`;
-
-const BottomInput = styled.div`
-  height: 30%;
-  width: 100%;
-  display: flex;
-  color: white;
-  justify-content: space-between;
-
-  @media only screen and (max-width: 776px) {
-    width: 95%;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 20px;
-  }
-`;
-
-const StyledDivInput1 = styled.div`
-  width: 35%;
-  position: relative;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  & > label {
+const RightSide = styled.div`
+  ${props => props.currStep !== 6 ? css`
     display: flex;
+    flex-direction: column;
     align-items: center;
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-    -khtml-user-select: none; /* Konqueror HTML */
-    -moz-user-select: none; /* Old versions of Firefox */
-    -ms-user-select: none; /* Internet Explorer/Edge */
-    user-select: none;
-  }
-`;
-const StyledDivInput2 = styled.div`
-  width: 60%;
-  position: relative;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  & > span {
-    position: absolute;
-    bottom: 15px;
-    right: 0px;
-    color: white;
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-    -khtml-user-select: none; /* Konqueror HTML */
-    -moz-user-select: none; /* Old versions of Firefox */
-    -ms-user-select: none; /* Internet Explorer/Edge */
-    user-select: none;
+    width: calc(100% - 465px - 80px);
+    padding: 10px 40px;
     @media only screen and (max-width: 776px) {
-      bottom: 5px;
+      width: 100%;
+      height: 40vw;
     }
+  h2 {
+    color: white;
+    padding: 0;
+    margin: 0;
   }
-  & > label {
+  ` : css`
     display: flex;
-    align-items: center;
-    position: relative;
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-    -khtml-user-select: none; /* Konqueror HTML */
-    -moz-user-select: none; /* Old versions of Firefox */
-    -ms-user-select: none; /* Internet Explorer/Edge */
-    user-select: none;
-  }
-`;
-
-const SubmitButton = styled.button`
-  cursor: pointer;
-  width: 100%;
-  height: 60px;
-  color: white;
-  background-color: ${(props) => props.theme.color.blue};
-  border: none;
-  border-radius: ${(props) => props.theme.borderRadius}px;
-  font-size: 20px;
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 20px;
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Old versions of Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none;
-  & > img {
-    width: 30px;
-  }
-  @media only screen and (max-width: 776px) {
-    margin-bottom: 40px;
-    width: 95%;
-  }
-`;
-
-const MediaButton = styled.button`
-  background-color: ${(props) => props.theme.color.box};
-  border-radius: ${(props) => props.theme.borderRadius}px;
-  color: ${(props) => props.theme.fontColor.gray};
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border: 1px solid ${(props) => props.theme.fontColor.boxBorderColor};
-  padding: 5px;
-  cursor: pointer;
-  /* margin-top: 30px; */
-  /* position: relative; */
-  /* height: 50px; */
-  width: 40%;
-  & > img {
-    margin-top: 5px;
-    height: 20px;
-    opacity: 0.5;
-  }
-
-  @media only screen and (max-width: 776px) {
-    width: 45%;
-  }
-`;
-
-const MediaButtons = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-
-  @media only screen and (max-width: 776px) {
-    width: 95%;
-    margin-left: auto;
-    margin-right: auto;
-  }
-`;
-
-// const Image = styled.img`
-//   width: 100%;
-//   aspect-ratio: 1;
-//   /* height: 250px; */
-//   border-radius: 15px;
-//   border: 1px solid #707070;
-//   overflow: hidden;
-//   object-fit: cover;
-// `;
-// const ImagePreview = styled.div``;
-const Files = styled.div`
-  width: 50%;
-  /* height: 100%; */
-  display: flex;
-  flex-direction: column;
-  /* padding: 10px; */
-  position: relative;
-  @media only screen and (max-width: 776px) {
-    width: 95%;
     flex-direction: column;
     align-items: center;
-  }
+    width: calc(100% - 465px);
+    padding: 10px 30px;
+    @media only screen and (max-width: 776px) {
+      width: 90vw;
+      height: calc(100vh / 2);
+    }
+    color: white;
+  `}
 `;
 
-const Inputs = styled.div`
-  width: 50%;
-  /* height: 100%; */
+const StyledModal = styled.div`
+  border-radius: 8px;
+  border: solid 1px #181818;
+  /* width: 800px; */
+  font-size: 16px;
+  font-weight: normal;
   display: flex;
-  flex-direction: column;
-  padding: 0 0 0 20px;
+  align-items: center;
+  position: relative;
+  background-color: #181818;
+  color: white;
+
   @media only screen and (max-width: 776px) {
     width: 100%;
-    padding: 0;
-    margin-top: 20px;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+    overflow-y: scroll;
   }
 `;
-const Main = styled.div`
-  width: 100%;
-  height: calc(100% - 40px);
+
+const LeftSide = styled.div`
   display: flex;
+  width: 465px;
+  height: 465px;
+  border-radius: 18px;
+  background-color: white;
+  justify-content: center;
+  align-items: center;
   @media only screen and (max-width: 776px) {
+    width: 90vw;
+    height: 90vw;
+  }
+`
+
+const Image = styled.img`
+  width: 465px;
+  height: 465px;
+  border-radius: 16px;
+  border: 1px solid #262626;
+  background-color: #1e1e1e;
+  object-fit: cover;
+  overflow: hidden;
+  aspect-ratio: 1;
+  background-color: white;
+  visibility: ${props => props.src !== "" ? `visibile` : `hidden`};
+  @media only screen and (max-width: 776px) {
+    width: 90vw;
+    height: 90vw;
+  }
+`;
+
+const Step1Container = styled.div`
+  width: 800px;
+  align-items: space-between;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  @media only screen and (max-width: 776px) {
+    width: 90vw;
+    height: calc(100vh - ${props => props.currStep === 1 ? 0 : 40}px);
     flex-direction: column;
     align-items: center;
   }
 `;
 
-const Header = styled.div`
-  width: 100%;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 10px;
-  & > span {
-    color: white;
-    font-weight: 600;
-    font-size: ${(props) => props.theme.fontSizes.md};
-  }
-`;
-
-const FormContainer = styled.form`
-  width: 600px;
-  /* height: 600px; */
-  border-radius: ${(props) => props.theme.borderRadius}px;
-  background-color: ${(props) => props.theme.color.box};
-  border: 1px solid ${(props) => props.theme.color.boxBorder};
+const SelectContainer = styled.div`
+  width: 800px;
+  align-items: space-between;
   display: flex;
   flex-direction: column;
-  padding: 20px;
-  top: 50%;
+  position: fixed;
   left: 50%;
+  top: 50%;
   transform: translate(-50%, -50%);
-  position: absolute;
   @media only screen and (max-width: 776px) {
-    width: 95vw;
-    background-color: transparent;
-    border: none;
-    /* margin-top: 100px; */
+    width: 90%;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
   }
 `;
 
@@ -998,18 +540,31 @@ const OpaqueFilter = styled.div`
   background-color: rgba(0, 0, 0, 0.9);
   -webkit-backdrop-filter: blur(4.6px);
   backdrop-filter: blur(4.6px);
-  z-index: 10;
+  z-index: 500;
   top: 0;
 `;
 
-const X = styled.img`
-  width: 25px;
-  height: 25px;
-  cursor: pointer;
+const X = styled(IconX)`
   position: absolute;
-  top: 10px;
-  right: 10px;
+  right: 2px;
+  top: 9px;
+  width: 28px;
+  height: 28px;
+  margin: 0 4px 0 0;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  & path {
+    transition: all 0.2s ease-in-out;
+    stroke: ${(props) => props.theme.color.gray};
+    fill: ${(props) => props.theme.color.gray};
+  }
+  ${props => props.currStep === 1 && css`
+    @media only screen and (min-width: 776px) {
+      display: none;
+    }
+  `}
 `;
+
 
 export default CreateForm;
 

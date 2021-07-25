@@ -84,7 +84,17 @@ router.post("/update-and-fetch", async (req, res) => {
     const nftData = req.body
     if (!req.body.address) return res.status(400).send("No address")
     let draft = await NftType.findOne({ isDraft: true, address: req.body.address});
-    if (!draft) res.status(500).send("Unable to update NFT");
+    
+    if (!draft) {
+      // res.status(400).send("Unable to find/update NFT");
+      draft = await new NftType({
+        address: req.body.account,
+        dur: 0,
+        isDraft: true,
+      });
+      await draft.save();
+      res.send(draft);
+    }
 
     for (const key in nftData) {
       if (key in draft) draft[key] = nftData[key];
@@ -101,6 +111,19 @@ router.post("/update-and-fetch", async (req, res) => {
     res.status(500).send("no users found");
   }
 });
+
+router.get("/has-draft/:id", async (req, res) => {
+  try {
+    if (!req.params.id) res.status(400).send("No address >_<")
+    const draft = await NftType.findOne({ isDraft: true, address: req.params.id })
+    
+    console.log("hasDraft", !!draft)
+    res.send({ hasDraft: !!draft });
+  } catch(err) {
+    console.log(err)
+    res.status(500).send("Server Error");
+  }
+})
 
 router.post("/get-NFT", async (req, res) => {
   try {
@@ -180,6 +203,7 @@ const toArrayBuffer = (buf) => {
 router.post("/update-draft", async (req, res) => {
   try {
     if (!req.body.address) return res.status(400).send("No address :(((")
+    console.log("Hiiii I see you!")
     const draft = req.body;
     console.log("updating draft", req.body);
     let updatedDraft = await NftType.findByIdAndUpdate(draft._id, draft);
@@ -189,7 +213,7 @@ router.post("/update-draft", async (req, res) => {
       res.send("draft updated");
     } else {
       console.log("Failed to update draft");
-      res.status(500).json("error");
+      res.status(400).json("Cannot find existing draft");
     }
   } catch(error) {
     console.log(error);

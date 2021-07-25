@@ -58,7 +58,7 @@ const initialNftState = {
   description: ""
 };
 
-const CreateForm = ({ open, hide }) => {
+const CreateForm = ({ open, hide, reset, setReset }) => {
   const { account, user, usdPerEth } = useAccountConsumer();
   const [nftData, setNftData] = useState(initialNftState);
   const [curr, setCurr] = useState("ETH");
@@ -82,11 +82,14 @@ const CreateForm = ({ open, hide }) => {
     if (account && !isLoading && !isLoadingImage && !isLoadingAudio && currentStep !== 1) {
       setIsLoading(true)
       axios
-      .post("/api/nft-type/update-and-fetch", nftData)
+      .post("/api/nft-type/update-and-fetch", reset ? 
+      { ...initialNftState, address: account, artist: user && user.username  ? user.username : ''} : nftData )
       .then((res) => {
         // console.log("success", res.data)
-        setNftData(res.data)
-        setIsLoading(false)
+        
+        setNftData(res.data);
+        setIsLoading(false);
+        setReset(false);
       })
       .catch(err => {
         console.log(err)
@@ -100,10 +103,12 @@ const CreateForm = ({ open, hide }) => {
   }, [user]);
 
   useEffect(() => {
-    setNftData({ ...nftData, address: account });
-    axios
-      .post("/api/nft-type/get-NFT", { account: account })
-      .then((res) => setNftData(res.data));
+    if (reset) {
+      setNftData({ ...nftData, address: account });
+      axios
+        .post("/api/nft-type/get-NFT", { account: account })
+        .then((res) => setNftData(res.data));
+    }
   }, [account]);
 
 
@@ -232,12 +237,13 @@ const CreateForm = ({ open, hide }) => {
                     imageUrl: successIcon,
                     imageWidth,
                     imageHeight,
+                    timer: 10000,
                     title: "NFT Minted!",
                     text: "It can take 2-3 minutes for the new NFT to appear on your profile.",
                   })
                   .then(() => {
-                    setCurrentStep(1);
-                    hide()
+                    setReset(true);
+                    onCloseModal();
                   });
               }
             ).catch((err) => {
@@ -282,6 +288,12 @@ const CreateForm = ({ open, hide }) => {
     if (e.target.name === "numMinted" && Number(e.target.value) > 10000) {
       return;
     }
+    if (e.target.name === "numMinted") {
+      // if (e.target.value === "") {
+      //   return setNftData({ ...nftData, [e.target.name]: ""});
+      // }
+      return setNftData({ ...nftData, [e.target.name]: parseInt(e.target.value) });
+    }
     if (e.target.name === "price") {
       let string = e.target.value.toString();
       if (string.length > 8) {
@@ -315,10 +327,14 @@ const CreateForm = ({ open, hide }) => {
         imageWidth,
         imageHeight,
         showCancelButton: true     
-      }).then(res => 
-        !res.isDismissed ? hide() : null
-      );
+      }).then(res => {
+        if (!res.isDismissed) {
+          setCurrentStep(1)
+          hide();
+        }
+      });
     }
+    setCurrentStep(1)
     hide();
   }
 
@@ -345,43 +361,57 @@ const CreateForm = ({ open, hide }) => {
             <Step1 setCurrentStep={setCurrentStep} /> 
           </StyledModal>
         </SelectContainer>
-        <OpaqueFilter onClick={() => width > 776 ? hide() : null} currentStep={currentStep}/>
+        <OpaqueFilter
+        onClick={() => width > 776 ? hide() : null} 
+        currentStep={currentStep}/>
       </> 
-    )
-  } else if (isLoading) {
-    return (
-      <OpaqueFilter>
-        <Step1Container>
-          <StyledModal style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
-            <img style={{width: "70px", height: "70px"}} src={loading_gif} alt="loading" />
-            {isLoading && isLoadingAudio && isLoadingImage ? "Minting NFT! Please do not close this page" : "Loading"}        
-          </StyledModal>
-        </Step1Container>
-      </OpaqueFilter>
     )
   } else {
     return(
-      <OpaqueFilter>
-        <Step1Container>
-          <StyledModal>
-            <X src={x} onClick={onCloseModal} />
-            <LeftSide>
-              {nftData.imageUrl && <Image src={nftData.imageUrl} alt="image" />}
-            </LeftSide>
-          <RightSide step={currentStep}>
-            {steps[currentStep - 2]}
-          </RightSide>
-          </StyledModal>
-          <CreateFormPaginator
-            nftData={nftData} 
-            currentStep={currentStep} 
-            setCurrentStep={setCurrentStep}
-            handleSubmit={handleSubmit}
-            isLoadingAudio={isLoadingAudio}
-            isLoadingImage={isLoadingImage}
-          />
-        </Step1Container>
-      </OpaqueFilter>
+      <>
+        <OpaqueFilter>
+          <Step1Container>
+            <StyledModal>
+              <X src={x} onClick={onCloseModal} />
+              <LeftSide>
+                {nftData.imageUrl && <Image src={nftData.imageUrl} alt="image" />}
+              </LeftSide>
+            <RightSide step={currentStep}>
+              {steps[currentStep - 2]}
+            </RightSide>
+            </StyledModal>
+            <CreateFormPaginator
+              nftData={nftData} 
+              currentStep={currentStep} 
+              setCurrentStep={setCurrentStep}
+              handleSubmit={handleSubmit}
+              isLoadingAudio={isLoadingAudio}
+              isLoadingImage={isLoadingImage}
+              isLoading={isLoading}
+            />
+          </Step1Container>
+        </OpaqueFilter>
+        {isLoading && isLoadingAudio && isLoadingImage &&
+          <OpaqueFilter>
+            <Step1Container>
+              <StyledModal 
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  border: "none", 
+                  backgroundColor: "transparent",
+                  alignItems: "center"
+                }}
+              >
+                <img style={{width: "120px", height: "120px", marginBottom : "10px"}} src={loading_gif} alt="loading" />
+                <h1>Minting NFT!</h1> 
+                <p>Please do not close this page</p>
+              </StyledModal>
+            </Step1Container>
+          </OpaqueFilter>
+        }
+      </>
     )
   }
 };
@@ -396,8 +426,6 @@ const RightSide = styled.div`
     @media only screen and (max-width: 776px) {
       width: 100%;
       height: 40vw;
-      /* height: calc(100vh / 2); */
-      /* justify-content: space-between; */
     }
   h2 {
     color: white;
@@ -421,7 +449,7 @@ const RightSide = styled.div`
 const StyledModal = styled.div`
   border-radius: 8px;
   border: solid 1px #181818;
-  width: 800px;
+  /* width: 800px; */
   font-size: 16px;
   font-weight: normal;
   display: flex;
@@ -439,44 +467,6 @@ const StyledModal = styled.div`
     overflow-y: scroll;
   }
 `;
-// background-color: ${(props) => props.theme.bgColor};
-
-
-// const getMobileImageDimensions = () => {
-//   let height = window.innerHeight;
-//   let width = window.innerWidth;
-//   if (width > height) {
-//     return css`
-//       width: 75vh;
-//       height: 75vh;
-//     `
-//   }
-//   if (width > (height * 0.60)) {
-//     return css`
-//       width: 60vh;
-//       height: 60vh;
-//     `
-//   }
-//   return css`
-//     width: 90vw;
-//     height: 90vw;
-//   `
-// }
-
-// const getMobileModalDimensions = () => {
-//   let height = window.innerHeight;
-//   let width = window.innerWidth;
-//   if (width > height) {
-//     return css`
-//       width: 75vh;
-//     `
-//   }
-//   return (width > (height * 0.60) && height > 600) ? css`
-//     width: 60vh;
-//   ` : css`
-//     width: 90vw;
-//   `
-// }
 
 const LeftSide = styled.div`
   display: flex;

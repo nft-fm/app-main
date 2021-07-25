@@ -321,7 +321,7 @@ const Step2 = ({
         <small>
           {nftData && nftData.imageUrl && nftData.imageUrl !== "" ? nftData.imageUrl.slice(imageUrlLength, nftData.imageUrl.length) : ""}
         </small>
-        <ChooseFile onClick={() => handleImage()} type="button">
+        <ChooseFile onClick={() => !isLoadingImage ? handleImage() : null} type="button">
           {!isLoadingImage ? "Choose Image" : <img style={{width: "25px", height: "25px"}} src={loading_gif} alt="loading" />}
         </ChooseFile>
         <StyledInput
@@ -342,7 +342,7 @@ const Step2 = ({
           {nftData && nftData.audioUrl !== "" ? nftData.audioUrl.slice(audioUrlLength, nftData.audioUrl.length) : ""}
         </small>
 
-      <ChooseFile onClick={() => handleAudio()} type="button">
+      <ChooseFile onClick={() => !isLoadingAudio ? handleAudio() : null} type="button">
         {!isLoadingAudio ? "Choose Audio" : <img style={{width: "25px", height: "25px"}} src={loading_gif} alt="loading" />}
       </ChooseFile>
       <StyledInput

@@ -113,7 +113,7 @@ const StyledTextArea = styled.textarea`
   @media only screen and (max-width: 776px) {
     background-color: transparent;
     /* height: 60px; */
-    padding-top: 0;
+    /* padding-top: 0; */
     margin-top: -12px;
   }
 `;
@@ -123,18 +123,18 @@ const ArtistTop = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   h1 {
     margin: 0;
   }
   @media only screen and (max-width: 776px) {
-    margin-bottom: -15px;
+    /* margin-bottom: -px; */
     padding-top: 20px;
   }
 `
 
 const FieldHeaders = styled.div`
-  padding: 12px 0;
+  padding-top: 15px;
   display: flex;
   flex-direction: row;
   p {
@@ -143,11 +143,12 @@ const FieldHeaders = styled.div`
     margin: 12px 0 0px 0;
     margin-left: 3px;
     @media only screen and (max-width: 776px) {
-      padding: 10px 0;
+      /* padding: 10px 0; */
     }
   }
   @media only screen and (max-width: 776px) {
-    margin: 15px 0px;
+    margin: 10px 0px;
+    padding-bottom: 15px;
   }
 `
 
@@ -218,11 +219,11 @@ const StyledSelect = styled.select`
 const SubHeader = styled.h4`
   color: white;
   text-align: left;
-  margin: 12px 0 0px 0;
+  margin: 8px 0 0px 0;
   padding: 0;
   @media only screen and (max-width: 776px) {
     font-size: 16;
-    padding: 10px 0;
+    /* padding: 5px 0; */
   }
 `
 

@@ -10,6 +10,8 @@ import ProfilePic from "./components/ProfilePic";
 import ArtistNfts from "./components/ArtistNfts";
 import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
 import Error404 from "../404/404";
+import { errorIcon, successIcon, questionIcon, imageWidth, imageHeight } from "../../utils/swalImages";
+import swal from "sweetalert2";
 
 import { ReactComponent as plus_icon } from "../../assets/img/icons/plus_icon.svg";
 const Profile = () => {
@@ -18,6 +20,7 @@ const Profile = () => {
   const [username, setUsername] = useState("");
   const [profilePic, setProfilePic] = useState("");
   const [open, setOpen] = useState(false);
+  const [reset, setReset] = useState(true);
 
   useEffect(() => {
     if (user?.profilePic) {
@@ -38,6 +41,57 @@ const Profile = () => {
       })
       .then((res) => setUser(res.data));
   };
+
+  const openMintModal = async () => {
+    try {
+      const hasDraft = await axios.get(`/api/nft-type/has-draft/${account}`)
+      if (hasDraft.data.hasDraft) {
+        swal.fire({
+          title: 'You have a old draft saved!',
+          text: 'This action cannot be reverted',
+          showDenyButton: true,
+          showCloseButton: true,
+          confirmButtonText: `Continue with draft`,
+          denyButtonText: `Delete and Continue`,
+          imageUrl: questionIcon,
+          imageWidth,
+          imageHeight      
+        }).then( async res => {
+          if (res.isConfirmed) {
+            setOpen(!open)
+          } if (res.isDenied) {
+            setReset(true)
+            setOpen(!open)
+          }
+        });
+      } else {
+        swal.fire({
+          title: 'Mint a new NFT?',
+          showCloseButton: true,
+          confirmButtonText: `Yes, Create!`,
+          imageUrl: questionIcon,
+          imageWidth,
+          imageHeight      
+        }).then( async result => {
+          if (result.isConfirmed) {
+            await axios
+              .post("/api/nft-type/get-NFT", { account })
+              .then(() => setOpen(!open))
+              .catch(err => console.error("Failed to create new draft", err))
+          }
+        });
+      }
+    } catch(error) {
+      swal.fire({
+        title: 'Failed to get response from server',
+        imageUrl: errorIcon,
+        imageWidth,
+        imageHeight      
+      });
+      console.log(error)
+    }
+
+  }
 
   if (!user || (user && !user.isArtist)) return <Error404 />; //this probably needs some work
   return (
@@ -104,14 +158,19 @@ const Profile = () => {
       <CreatedNftHolder>
         <NftContainer>
           <NftContainerTitle>YOUR MUSIC</NftContainerTitle>
-          <NftContainerRight onClick={() => setOpen(!open)}>
+          <NftContainerRight onClick={() => openMintModal()}>
             <PlusIcon />
           </NftContainerRight>
           <NftContainerOutline />
           <ArtistNfts user={user} />
         </NftContainer>
       </CreatedNftHolder>
-      <CreateForm open={open} hide={() => setOpen(false)} />
+      <CreateForm 
+        reset={reset} 
+        setReset={setReset}
+        open={open}
+        hide={() => setOpen(false)} 
+      />
     </BaseView>
   );
 };

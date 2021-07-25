@@ -60,7 +60,7 @@ const MobileSpacer = styled.div`
   }
 `
 const BottomSpacer = styled.div`
-  height: 120px;
+  height: 100px;
   width: 100px;
 `
 
@@ -99,11 +99,12 @@ const ArtistTop = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   h1 {
     margin: 0;
+    padding-top: -5px;
   }
-  padding: 20px 0;
+  padding: 30px 0;
   /* @media only screen and (max-width: 776px) {
     padding: 20px 0;
   } */

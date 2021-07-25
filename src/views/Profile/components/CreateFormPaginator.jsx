@@ -6,7 +6,7 @@ import { errorIcon, warningIcon, questionIcon, imageWidth, imageHeight } from ".
 import { ReactComponent as rightArrow } from "../../../assets/img/homepage_assets/right-arrow-3.svg";
 
 const PaginatorButton = ({ children, currentStep, prev, onClick }) => 
-  <StyledAccountButton currentStep={currentStep} prev={prev} onClick={onClick}>
+  <StyledAccountButton currStep={currentStep} prev={prev} onClick={onClick}>
     {prev ? <RightArrow prev={prev} /> : null}
     <Button type="button">
       {children}
@@ -20,7 +20,8 @@ const CreateFormPaginator = ({
   handleSubmit, 
   nftData,
   isLoadingAudio,
-  isLoadingImage
+  isLoadingImage,
+  isLoading
 }) => {
   // checking for completion
   // const [step2, setStep2] = useState(false);
@@ -59,7 +60,7 @@ const CreateFormPaginator = ({
   
 
   const paginateNext = () => {
-    if (isLoadingAudio || isLoadingImage) return;
+    if (isLoadingAudio || isLoadingImage || isLoading) return;
     if (currentStep === 1 || (step2 && currentStep === 2) || 
     (step3 && currentStep === 3)) {
       return setCurrentStep(currentStep + 1);
@@ -122,17 +123,17 @@ const CreateFormPaginator = ({
   }
 
   const paginateBack = () => {
-    if (!isLoadingAudio && !isLoadingImage)
-      setCurrentStep(currentStep - 1)
+    if (!isLoadingAudio && !isLoadingImage && !isLoading)
+      setCurrentStep(currentStep - 1);
   }
 
   useEffect(() => {
     if (imageUrl !== "" && audioUrl !== "")
-      setStep2(true)
+      setStep2(true);
     if (producer !== "" && title !=="" && genre !== "Select a genre" && description !== "") 
-      setStep3(true)
+      setStep3(true);
     if (price > 0 && numMinted > 0) 
-      setStep4(true)
+      setStep4(true);
   }, [imageUrl, audioUrl, producer, title, genre, price, numMinted, description])
   
   return (
@@ -146,7 +147,7 @@ const CreateFormPaginator = ({
           data-tip 
           data-for="saleorauction" 
           step={1} 
-          currentStep={currentStep}
+          currStep={currentStep}
           onClick={() => onClickDotNavigate(1)}
           color="dodgerblue"
         />
@@ -154,7 +155,7 @@ const CreateFormPaginator = ({
           id="upload-assets" 
           data-tip data-for="upload-assets" 
           step={2} 
-          currentStep={currentStep} 
+          currStep={currentStep} 
           onClick={() => onClickDotNavigate(2)}
           completed={step2 === true}
           color="gold"
@@ -164,7 +165,7 @@ const CreateFormPaginator = ({
           data-tip 
           data-for="artist-info" 
           step={3} 
-          currentStep={currentStep} 
+          currStep={currentStep} 
           onClick={() => onClickDotNavigate(3)}
           completed={step3 === true}
           color="yellowgreen"
@@ -173,7 +174,7 @@ const CreateFormPaginator = ({
           id="sale-options"
           data-tip data-for="sale-options"
           step={4}
-          currentStep={currentStep}
+          currStep={currentStep}
           onClick={() => onClickDotNavigate(4)}
           completed={step4 === true} 
           color="tomato"
@@ -266,7 +267,7 @@ const StyledAccountButton = styled.div`
   &:hover {
     background-color: rgba(256, 256, 256, 0.2);
   }
-  ${props => (props.currentStep === 1 && props.prev) && css`
+  ${props => (props.currStep === 1 && props.prev) && css`
     visibility: hidden;
   `}
   @media only screen and (max-width: 776px) {
@@ -285,17 +286,17 @@ const Dot = styled.span`
   width: 15px;
   margin: 20px 5px;
   background-color: ${
-    props => (props.color && props.currentStep >= props.step ) || props.completed ? props.color : "#181818"
+    props => (props.color && props.currStep >= props.step ) || props.completed ? props.color : "#181818"
   };
   border-radius: 50%;
   display: inline-block;
 
-  ${props => (props.currentStep === props.step) 
+  ${props => (props.currStep === props.step) 
   && css`
     border: 2px solid white;
   `}
 
-  ${props => (props.currentStep > props.step) 
+  ${props => (props.currStep > props.step) 
   && css`
     cursor: pointer;
   `}

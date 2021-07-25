@@ -67,7 +67,9 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
   const [isLoadingAudio, setIsLoadingAudio] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const { width, height } = useWindowSize();
+  // {! remember to clear snippet before next mint}
 
+  
   useEffect(() => {
     if (isLoadingAudio || isLoadingImage || isLoading) {
       window.onbeforeunload = () => {
@@ -508,7 +510,7 @@ const Step1Container = styled.div`
   top: 50%;
   transform: translate(-50%, -50%);
   @media only screen and (max-width: 776px) {
-    width: 93vw;
+    width: 90vw;
     height: calc(100vh - ${props => props.currStep === 1 ? 0 : 40}px);
     flex-direction: column;
     align-items: center;

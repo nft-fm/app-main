@@ -14,7 +14,7 @@ const Step2 = ({
   isLoadingAudio, 
   setIsLoadingAudio,
   isLoadingImage,
-  setIsLoadingImage
+  setIsLoadingImage,
 }) => {
   const { account } = useAccountConsumer();
   const imageUrlLength = 49 + account.length
@@ -188,7 +188,6 @@ const Step2 = ({
               const snnipetFile = new File(snnipetMp3Buffer, audioFile.name, {
                 type: "audio/mpeg",
               });
-
               const snnipetFormData = new FormData();
               snnipetFormData.append("artist", account);
               snnipetFormData.append("audioFile", snnipetFile);
@@ -310,6 +309,13 @@ const Step2 = ({
     }
   }, [audioFile, audioName]);
 
+  const cleanName = (uncleanName) => {
+    if (uncleanName.length > 10)
+      return uncleanName.substring(0, 10) + "-" + uncleanName.substring(uncleanName.lastIndexOf("."))
+    return uncleanName
+  }
+    
+  
 
   return (
     <Outer>
@@ -319,7 +325,9 @@ const Step2 = ({
       <UploadContainer>
         <p>PNG, JPG, GIF, MP4</p>
         <small>
-          {nftData && nftData.imageUrl && nftData.imageUrl !== "" ? nftData.imageUrl.slice(imageUrlLength, nftData.imageUrl.length) : ""}
+          {cleanName(
+            nftData && nftData.imageUrl && nftData.imageUrl !== "" ? nftData.imageUrl.slice(imageUrlLength, nftData.imageUrl.length) : ""
+          )}
         </small>
         <ChooseFile onClick={() => !isLoadingImage ? handleImage() : null} type="button">
           {!isLoadingImage ? "Choose Image" : <img style={{width: "25px", height: "25px"}} src={loading_gif} alt="loading" />}
@@ -339,7 +347,7 @@ const Step2 = ({
       <UploadContainer>
         <p>MP3, FLAC</p>
         <small>
-          {nftData && nftData.audioUrl !== "" ? nftData.audioUrl.slice(audioUrlLength, nftData.audioUrl.length) : ""}
+          {cleanName(nftData.audioUrl.slice(audioUrlLength, nftData.audioUrl.length))}
         </small>
 
       <ChooseFile onClick={() => !isLoadingAudio ? handleAudio() : null} type="button">

@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
+import axios from "axios";
+
 // import axios from 'axios';
 import PlaySongSnippet from "../../../../components/NftModals/Components/PlaySongSnippet"
 import moment from "moment";
@@ -9,7 +11,9 @@ import { ReactComponent as IconHeart } from "../../../../assets/img/icons/heart.
 import { ReactComponent as IconShare } from "../../../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../../../assets/img/icons/cart.svg";
 
-const PreviewBuyModal = ({ nft, partialSong }) => {
+const PreviewBuyModal = ({ nft }) => {
+  const [partialSong, setPartialSong] = useState(false);
+
   const formatSongDur = (d) => {
     d = Number(d);
     var h = Math.floor(d / 3600);
@@ -21,6 +25,51 @@ const PreviewBuyModal = ({ nft, partialSong }) => {
     var sDisplay = s < 10 ? "0" + s : s;
     return hDisplay + mDisplay + sDisplay;
   };
+  const getSnnipetAWS = async (completeNft) => {
+    await axios
+      .post("/api/nft-type/getSnnipetAWS", {
+        key:
+          completeNft.address +
+          "/snnipets/" +
+          completeNft.audioUrl.split("/").slice(-1)[0],
+      })
+      .then((res) => {
+        console.log("res", res);
+        if (!res.data) {
+          getNSeconds(nft);
+        } else {
+          setPartialSong(res.data);
+        }
+      })
+      .catch((err) => {
+        console.log("ERR", err);
+      });
+  };
+
+  const getNSeconds = async (completeNft) => {
+    await axios
+      .post("/api/nft-type/getNSecondsOfSong", {
+        key:
+          completeNft.address +
+          "/" +
+          completeNft.audioUrl.split("/").slice(-1)[0],
+        nft: completeNft,
+        startTime: 30,
+      })
+      .then((res) => {
+        console.log("got snnipet");
+        const songFile = res.data.Body.data;
+
+        setPartialSong(songFile);
+      });
+  };
+
+  useEffect(() => {
+    if (!partialSong) {
+      getSnnipetAWS(nft);
+    }
+  }, [nft]);
+
   return (
     <Container>
       <CardTop>
@@ -51,7 +100,7 @@ const PreviewBuyModal = ({ nft, partialSong }) => {
         </Artist>
       </InfoContainer>
       <SnippetHolder>
-        <PlaySongSnippet partialSong={nft.snnipet} />
+        <PlaySongSnippet partialSong={partialSong} />
         <SnippetText>15 Sec Preview</SnippetText>
       </SnippetHolder>
       <TrackDetailsHolder>

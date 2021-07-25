@@ -48,7 +48,6 @@ const Profile = () => {
       if (hasDraft.data.hasDraft) {
         swal.fire({
           title: 'You have a old draft saved!',
-          text: 'This action cannot be reverted',
           showDenyButton: true,
           showCloseButton: true,
           confirmButtonText: `Continue with draft`,
@@ -60,8 +59,21 @@ const Profile = () => {
           if (res.isConfirmed) {
             setOpen(!open)
           } if (res.isDenied) {
-            setReset(true)
-            setOpen(!open)
+            swal.fire({
+              title: 'Are you sure you want to delete the draft?',
+              text: 'This action cannot be reverted',
+              showCloseButton: true,
+              confirmButtonText: `Yes! Delete it!`,
+              cancelButtonText: 'No! Go back!',
+              showCancelButton: true,
+              imageUrl: questionIcon,
+              imageWidth,
+              imageHeight      
+            }).then(res => {
+              if(res.isDismissed) return openMintModal();
+              setReset(true)
+              setOpen(!open)
+            })
           }
         });
       } else {

@@ -20,7 +20,7 @@ const Profile = () => {
   const [username, setUsername] = useState("");
   const [profilePic, setProfilePic] = useState("");
   const [open, setOpen] = useState(false);
-  const [reset, setReset] = useState(true);
+  const [reset, setReset] = useState(false);
 
   useEffect(() => {
     if (user?.profilePic) {

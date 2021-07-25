@@ -67,7 +67,7 @@ const Step3 = ({
         value={genre}
       >
         {GENRES.map(genre => 
-          <option value={genre}>{genre}</option>
+          <option key={genre} value={genre}>{genre}</option>
         )}
       </StyledSelect>
       <FieldHeaders>

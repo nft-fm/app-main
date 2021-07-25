@@ -83,7 +83,8 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
       setIsLoading(true)
       axios
       .post("/api/nft-type/update-and-fetch", reset ? 
-      { ...initialNftState, address: account, artist: user && user.username  ? user.username : ''} : nftData )
+        { ...initialNftState, address: account, artist: user && user.username  ? user.username : ''} 
+        : nftData )
       .then((res) => {
         // console.log("success", res.data)
         
@@ -103,12 +104,10 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
   }, [user]);
 
   useEffect(() => {
-    if (reset) {
-      setNftData({ ...nftData, address: account });
-      axios
-        .post("/api/nft-type/get-NFT", { account: account })
-        .then((res) => setNftData(res.data));
-    }
+    setNftData({ ...nftData, address: account });
+    axios
+      .post("/api/nft-type/get-NFT", { account: account })
+      .then((res) => setNftData(res.data));
   }, [account]);
 
 
@@ -355,15 +354,15 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
     return (
       <>
         <SelectContainer style={{zIndex: 501}}>
-          <StyledModal currentStep={currentStep} style={{background: "none", border: "none"}}>
-            <X src={x} onClick={onCloseModal} currentStep={currentStep} />
+          <StyledModal currStep={currentStep} style={{background: "none", border: "none"}}>
+            <X src={x} onClick={onCloseModal} />
             {/* need to change to toggle auction below in the future */}
             <Step1 setCurrentStep={setCurrentStep} /> 
           </StyledModal>
         </SelectContainer>
         <OpaqueFilter
         onClick={() => width > 776 ? hide() : null} 
-        currentStep={currentStep}/>
+        currStep={currentStep}/>
       </> 
     )
   } else {
@@ -417,7 +416,7 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
 };
 
 const RightSide = styled.div`
-  ${props => props.currentStep !== 6 ? css`
+  ${props => props.currStep !== 6 ? css`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -510,7 +509,7 @@ const Step1Container = styled.div`
   transform: translate(-50%, -50%);
   @media only screen and (max-width: 776px) {
     width: 93vw;
-    height: calc(100vh - ${props => props.currentStep === 1 ? 0 : 40}px);
+    height: calc(100vh - ${props => props.currStep === 1 ? 0 : 40}px);
     flex-direction: column;
     align-items: center;
   }
@@ -559,7 +558,7 @@ const X = styled(IconX)`
     stroke: ${(props) => props.theme.color.gray};
     fill: ${(props) => props.theme.color.gray};
   }
-  ${props => props.currentStep === 1 && css`
+  ${props => props.currStep === 1 && css`
     @media only screen and (min-width: 776px) {
       display: none;
     }

@@ -5,14 +5,18 @@ import swal from "sweetalert2";
 import { errorIcon, warningIcon, questionIcon, imageWidth, imageHeight } from "../../../utils/swalImages";
 import { ReactComponent as rightArrow } from "../../../assets/img/homepage_assets/right-arrow-3.svg";
 
-const PaginatorButton = ({ children, currentStep, prev, onClick }) => 
-  <StyledAccountButton currStep={currentStep} prev={prev} onClick={onClick}>
-    {prev ? <RightArrow prev={prev} /> : null}
-    <Button type="button">
-      {children}
-    </Button>
-    {!prev ? <RightArrow /> : null}
-  </StyledAccountButton>
+const PaginatorButton = ({ children, currentStep, prev, onClick }) => {
+  const previous = prev ? 1 : 0;
+  return (
+    <StyledAccountButton currStep={currentStep} prev={previous} onClick={onClick}>
+      {prev ? <RightArrow prev={previous} /> : null}
+      <Button type="button">
+        {children}
+      </Button>
+      {!prev ? <RightArrow /> : null}
+    </StyledAccountButton>
+  )
+}
 
 const CreateFormPaginator = ({ 
   currentStep,
@@ -24,12 +28,12 @@ const CreateFormPaginator = ({
   isLoading
 }) => {
   // checking for completion
-  // const [step2, setStep2] = useState(false);
-  // const [step3, setStep3] = useState(false);
-  // const [step4, setStep4] = useState(false);
-  const [step2, setStep2] = useState(true);
-  const [step3, setStep3] = useState(true);
-  const [step4, setStep4] = useState(true);
+  const [step2, setStep2] = useState(false);
+  const [step3, setStep3] = useState(false);
+  const [step4, setStep4] = useState(false);
+  // const [step2, setStep2] = useState(true);
+  // const [step3, setStep3] = useState(true);
+  // const [step4, setStep4] = useState(true);
   const { 
     imageUrl, audioUrl,
     producer, title, genre,  description,

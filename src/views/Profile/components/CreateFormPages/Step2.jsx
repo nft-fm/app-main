@@ -453,13 +453,15 @@ const ChooseFile = styled.button`
   text-align: center;
   color: #ffffff;
   font-size: 16px;
-  transition: background-image 0.5s ease;
+  transition: 0.3s;
   background-image: linear-gradient(to right, #262626, #383838);
+  opacity: 0.7;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
   border: none;
   &:hover {
     cursor: pointer;
-    background-image: linear-gradient(to right, #333333, #8b8b8b);
+    opacity: 1;
+    /* background-image: linear-gradient(to right, #333333, #8b8b8b); */
   }
 `
   /* border: solid 1.5px #181818; */

@@ -20,6 +20,7 @@ import Step3 from "./CreateFormPages/Step3"
 import Step4 from "./CreateFormPages/Step4"
 import PreviewBuyModal from "./CreateFormPages/PreviewBuyModal"
 import CreateFormPaginator from "./CreateFormPaginator";
+import DemoImage from "../../Home/Components/DemoImage/DemoImage"
 
 function useWindowSize() {
   const [windowSize, setWindowSize] = useState({
@@ -290,9 +291,6 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
       return;
     }
     if (e.target.name === "numMinted") {
-      // if (e.target.value === "") {
-      //   return setNftData({ ...nftData, [e.target.name]: ""});
-      // }
       return setNftData({ ...nftData, [e.target.name]: parseInt(e.target.value) });
     }
     if (e.target.name === "price") {
@@ -375,7 +373,7 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
             <StyledModal>
               <X src={x} onClick={onCloseModal} />
               <LeftSide>
-                {nftData.imageUrl && <Image src={nftData.imageUrl} alt="image" />}
+                {nftData.imageUrl ? <Image src={nftData.imageUrl} alt="image" /> : <DemoImage />}
               </LeftSide>
             <RightSide step={currentStep}>
               {steps[currentStep - 2]}

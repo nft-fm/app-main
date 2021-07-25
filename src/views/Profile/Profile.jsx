@@ -10,7 +10,7 @@ import ProfilePic from "./components/ProfilePic";
 import ArtistNfts from "./components/ArtistNfts";
 import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
 import Error404 from "../404/404";
-import { errorIcon, successIcon, questionIcon, imageWidth, imageHeight } from "../../utils/swalImages";
+import { errorIcon, questionIcon, imageWidth, imageHeight } from "../../utils/swalImages";
 import swal from "sweetalert2";
 
 import { ReactComponent as plus_icon } from "../../assets/img/icons/plus_icon.svg";
@@ -50,8 +50,8 @@ const Profile = () => {
           title: 'You have a old draft saved!',
           showDenyButton: true,
           showCloseButton: true,
-          confirmButtonText: `Continue with draft`,
-          denyButtonText: `Delete and Continue`,
+          confirmButtonText: `Use Draft`,
+          denyButtonText: `Delete Draft`,
           imageUrl: questionIcon,
           imageWidth,
           imageHeight      
@@ -66,7 +66,6 @@ const Profile = () => {
               showDenyButton: true,
               confirmButtonText: `Yes! Delete it!`,
               denyButtonText: 'No! Go back!',
-              // showCancelButton: true,
               imageUrl: questionIcon,
               imageWidth,
               imageHeight      

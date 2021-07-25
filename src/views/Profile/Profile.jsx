@@ -63,17 +63,24 @@ const Profile = () => {
               title: 'Are you sure you want to delete the draft?',
               text: 'This action cannot be reverted',
               showCloseButton: true,
+              showDenyButton: true,
               confirmButtonText: `Yes! Delete it!`,
-              cancelButtonText: 'No! Go back!',
-              showCancelButton: true,
+              denyButtonText: 'No! Go back!',
+              // showCancelButton: true,
               imageUrl: questionIcon,
               imageWidth,
               imageHeight      
-            }).then(res => {
-              if(res.isDismissed) return openMintModal();
-              setReset(true)
-              setOpen(!open)
-            })
+            }).then(res2 => {
+              if (res2.isConfirmed) {
+                setReset(true)
+                setOpen(!open)
+              }
+              if (res2.isDenied) {
+                return openMintModal();
+              }
+            } 
+
+            )
           }
         });
       } else {

@@ -1,28 +1,34 @@
 import React, { useState } from "react";
 import { Switch } from "react-router-dom";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import TopDisplayContainer from "../../components/TopDisplayContainer";
 import { providers } from "ethers";
 
 import { NavLink } from "react-router-dom";
 import isMobile from "../../utils/isMobile";
 import BaseView from "../../components/Page/BaseView";
-import { useWallet } from 'use-wallet';
-import axios from 'axios'
+import { useWallet } from "use-wallet";
+import axios from "axios";
 import swal from "sweetalert2";
-import { errorIcon, warningIcon, questionIcon, successIcon, infoIcon, imageWidth, imageHeight } from "../../utils/swalImages";
-
-
+import {
+  errorIcon,
+  warningIcon,
+  questionIcon,
+  successIcon,
+  infoIcon,
+  imageWidth,
+  imageHeight,
+} from "../../utils/swalImages";
 
 const RegisterArtist = () => {
-  const { account, connect } = useWallet()
+  const { account, connect } = useWallet();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [musicLinks, setMusicLinks] = useState("");
 
   const connectWallet = async () => {
     const newChainId = await window.ethereum.request({ method: "eth_chainId" });
-    if ((Number(newChainId) === process.env.REACT_APP_IS_MAINNET ? 1 : 4)) {
+    if (Number(newChainId) === process.env.REACT_APP_IS_MAINNET ? 1 : 4) {
       connect("injected");
     } else {
       swal.fire({
@@ -30,76 +36,101 @@ const RegisterArtist = () => {
         text: "You are on the wrong chain. Please connect to Ethereum Mainnet.",
         imageUrl: warningIcon,
         imageWidth,
-        imageHeight      
+        imageHeight,
       });
     }
-  }
+  };
 
   const submit = () => {
     const provider = new providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-    signer.signMessage(JSON.stringify({ name, email, account, musicLinks })).then((authorization) => {
-      axios.post('/api/user/send-artist-form', {
-        name,
-        email,
-        account,
-        musicLinks,
-        auth: authorization
-      }).then(res => {
-        swal.fire({
-          title: `Thank you for submitting. You will be receiving a follow up email in the next 1-3 days.`
-        });
-        setName("");
-        setEmail("");
-        setMusicLinks("");
-      }).catch(err => {
-        console.log("err", err.response)
-        swal.fire({
-          title: `Error: ${err.response ? err.response.status : 404}`,
-          text: `${err.response ? err.response.data : "server error"}`,
-          imageUrl: errorIcon,
-          imageWidth,
-          imageHeight
-        });
-      })
-    })
-  }
+    signer
+      .signMessage(JSON.stringify({ name, email, account, musicLinks }))
+      .then((authorization) => {
+        axios
+          .post("/api/user/send-artist-form", {
+            name,
+            email,
+            account,
+            musicLinks,
+            auth: authorization,
+          })
+          .then((res) => {
+            swal.fire({
+              title: `Thank you for submitting. You will be receiving a follow up email in the next 1-3 days.`,
+            });
+            setName("");
+            setEmail("");
+            setMusicLinks("");
+          })
+          .catch((err) => {
+            console.log("err", err.response);
+            swal.fire({
+              title: `Error: ${err.response ? err.response.status : 404}`,
+              text: `${err.response ? err.response.data : "server error"}`,
+              imageUrl: errorIcon,
+              imageWidth,
+              imageHeight,
+            });
+          });
+      });
+  };
 
   return (
     <Switch>
       <BaseView>
         <CardContainer>
-          <TopDisplayContainer />
-          <StyledTitle>Register as an Artist</StyledTitle> <ContainerOutline />
+          {/* <TopDisplayContainer /> */}
+          <StyledTitle>Register as an Artist</StyledTitle> 
+          {/* <ContainerOutline /> */}
           <Content>
             <SignatureRow>
-              <SignatureContainer >
+              <SignatureContainer>
                 Full Name:
-                <Signature name="name" onChange={(e) => setName(e.target.value)} value={name} />
+                <Signature
+                  name="name"
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Full Name"
+                  value={name}
+                />
               </SignatureContainer>
             </SignatureRow>
             <SignatureRow>
               <SignatureContainer>
                 Email:
-                <Signature name="email" onChange={(e) => setEmail(e.target.value)} value={email} />
+                <Signature
+                  name="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Email"
+                  value={email}
+                />
               </SignatureContainer>
-
             </SignatureRow>
             <SignatureRow>
               <SignatureContainer>
-                Links to Music Platforms (Soundcloud, Spotify, etc. Please separate with commas):
-                <Signature name="musicLinks" onChange={(e) => setMusicLinks(e.target.value)} value={musicLinks} />
+                Links to Music Platforms (Soundcloud, Spotify, etc. Please
+                separate with commas):
+                <Signature
+                  name="musicLinks"
+                  onChange={(e) => setMusicLinks(e.target.value)}
+                  placeholder="Links"
+                  value={musicLinks}
+                />
               </SignatureContainer>
-
             </SignatureRow>
-            {account ? <SubmitButton onClick={submit}>Submit</SubmitButton> : <SubmitButton onClick={() => connectWallet()}>Connect Wallet</SubmitButton>}
+            {account ? (
+              <SubmitButton onClick={submit}>Submit</SubmitButton>
+            ) : (
+              <SubmitButton onClick={() => connectWallet()}>
+                Connect Wallet
+              </SubmitButton>
+            )}
           </Content>
         </CardContainer>
       </BaseView>
-    </Switch >
+    </Switch>
   );
 };
-
 
 const ButtonText = styled.span`
   font-family: "Compita";
@@ -109,7 +140,7 @@ const ButtonText = styled.span`
 `;
 
 const SubmitButton = styled.button`
-  margin: 20px auto 0 auto;
+  margin: 40px auto 0 auto;
   width: 80%;
   padding: 10px 0;
   /* border: 2px solid white; */
@@ -119,7 +150,7 @@ const SubmitButton = styled.button`
   transition: all 0.2s linear;
 
   &:hover {
-    background-color: #444;
+    background-color: ${props => props.theme.color.blue};
     color: white;
     cursor: pointer;
   }
@@ -167,9 +198,9 @@ const Signature = styled.input`
   background-color: rgba(0, 0, 0, 0);
   width: 100%;
   border: none;
-  border-bottom: 2px solid white;
+  border-bottom: 2px solid ${(props) => props.theme.color.gray};
   color: white;
-  text-align: center;
+  text-align: left;
   margin: 0 8px;
   margin-bottom: 2px;
   height: 24px;
@@ -228,7 +259,7 @@ const Container = styled.div`
 const StyledTitle = styled.div`
   font-family: "Compita";
   font-size: ${(props) => props.theme.fontSizes.md};
-  margin: 60px 0 40px 0;
+  margin: 20px 0;
   font-weight: 600;
   /* letter-spacing: 3px; */
   text-align: center;
@@ -237,7 +268,7 @@ const StyledTitle = styled.div`
 
 const ContainerOutline = styled.div`
   /* border-radius: 24px 24px 0 0; */
-  border-top: 6px solid #383838;
+  border-top: 6px solid ${props => props.theme.color.gray};
   /* border-bottom: none; */
   height: 40px;
   width: 80%;
@@ -271,7 +302,7 @@ const StyledLink = styled(NavLink)`
   color: white;
   text-transform: uppercase;
   border: 1px solid ${(props) => props.theme.color.red};
-  border-radius: ${props => props.theme.borderRadius}px;
+  border-radius: ${(props) => props.theme.borderRadius}px;
   position: relative;
   padding: 12px;
   width: fit-content;
@@ -303,37 +334,50 @@ const SubText = !isMobile()
       color: white;
     `;
 
-const HeaderText = !isMobile()
-  ? styled.div`
-      font-size: 200px;
-      font-weight: normal;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: 1.07;
-      letter-spacing: normal;
-      text-align: center;
-      color: white;
-      margin-top: 14vh;
-    `
-  : styled.div`
-      font-size: 160px;
-      font-weight: normal;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: 1.07;
-      letter-spacing: normal;
-      text-align: center;
-      color: white;
-      margin-top: 12vh;
-    `;
+const HeaderText = styled.div`
+  font-size: 200px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.07;
+  letter-spacing: normal;
+  text-align: center;
+  color: white;
+  margin-top: 14vh;
+`;
 
 const CardContainer = styled.div`
+  margin-top: 80px;
+  color: white;
+  border-radius: ${(props) => props.theme.borderRadius}px;
   display: flex;
-  flex-direction: column;
-  align-content: center;
+  justify-content: center;
   align-items: center;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
+  flex-direction: column;
+  width: calc(100% - 64px);
+  padding: 32px;
+  margin-bottom: 40px;
+  border: solid 1px #262626;
+  background-color: #181818;
+  h3 {
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 25px;
+  }
+  & > span {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  @media only screen and (max-width: 776px) {
+    & > span {
+      padding-left: 0;
+      padding-right: 0;
+    }
+    h3 {
+      padding-left: 0px;
+      padding-right: 0 px;
+    }
+  }
 `;
 
 export default RegisterArtist;

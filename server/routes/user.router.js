@@ -330,14 +330,8 @@ const NodeMail = (name, email, music, account) => {
   transporter.sendMail(mail, (err, data) => {
     if (err) {
       console.log("err", err);
-      // res.json({
-      //   status: "fail",
-      // });
     } else {
       console.log("data", data);
-      // res.json({
-      //   status: "success",
-      // });
     }
   });
 };
@@ -346,7 +340,7 @@ router.post("/send-artist-form", async (req, res) => {
   try {
     console.log("/send-artist-form", req.body);
     const { name, email, account, musicLinks } = req.body;
-    NodeMail(name, email, musicLinks, account)
+    NodeMail(name, email, musicLinks, account); //sends Jackson and Quinn an email alerting them, can remove once new docusigner is found
 
     const sender = utils.verifyMessage(
       JSON.stringify({

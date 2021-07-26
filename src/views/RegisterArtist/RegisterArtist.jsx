@@ -80,9 +80,7 @@ const RegisterArtist = () => {
     <Switch>
       <BaseView>
         <CardContainer>
-          {/* <TopDisplayContainer /> */}
           <StyledTitle>Register as an Artist</StyledTitle> 
-          {/* <ContainerOutline /> */}
           <Content>
             <SignatureRow>
               <SignatureContainer>

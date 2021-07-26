@@ -47,7 +47,7 @@ const RegisterArtist = () => {
         auth: authorization
       }).then(res => {
         swal.fire({
-          title: `Thank you for submitting. Please check your email for our Artist agreement.`
+          title: `Thank you for submitting. You will be receiving a follow up email in the next 1-3 days.`
         });
         setName("");
         setEmail("");

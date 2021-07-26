@@ -94,7 +94,7 @@ const PreviewBuyModal = ({ nft }) => {
       <InfoContainer>
         <TrackName>{nft.title}</TrackName>
         <Artist
-          to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}
+          // to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}
         >
           {nft.artist}
         </Artist>
@@ -365,7 +365,7 @@ const TrackName = styled.span`
     font-size: ${(props) => props.theme.fontSizes.sm};
   }
 `;
-const Artist = styled(NavLink)`
+const Artist = styled.div`
   text-decoration: none;
   font-size: ${(props) => props.theme.fontSizes.sm};
   color: white;

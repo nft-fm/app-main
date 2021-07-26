@@ -287,16 +287,16 @@ const BuyNftModal = (props) => {
             </SnippetHolder>
             <TrackDetailsHolder>
               <span>Genre: {nft.genre}</span>
-              <span>Producer: {nft.producer}</span>
-              <span>Track Length: {formatSongDur(nft.dur)}</span>
+              {/* <span>Producer: {nft.producer}</span> */}
+              {/* <span>Track Length: {formatSongDur(nft.dur)}</span> */}
               <span>
                 Release Date: {moment(nft.timestamp).format("MMM Do YYYY")}
               </span>
             </TrackDetailsHolder>
-            {/* <DescriptionHolder>
+            <DescriptionHolder>
               <DescriptionLegend>Description</DescriptionLegend>
-              <DescriptionContent>alskhgyfawe,jkfbhv</DescriptionContent>
-            </DescriptionHolder> */}
+              <DescriptionContent>{nft.description}</DescriptionContent>
+            </DescriptionHolder>
             <PricesContainer>
               <PriceHolder>
                 <PriceItem>
@@ -361,12 +361,16 @@ const TrackDetailsHolder = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  height: 125px;
+  height: 50px;
+  margin-bottom: 10px;
   justify-content: space-around;
   color: #666;
   padding-left: 20px;
   @media only screen and (max-width: 776px) {
     height: auto;
+  }
+  & > span {
+
   }
 `;
 const ExclusiveBadge = styled(Exclusive)`
@@ -391,11 +395,21 @@ const PrereleaseBadge = styled(Prerelease)`
 `;
 
 const DescriptionHolder = styled.fieldset`
-  width: 100%;
+  width: calc(100% - 10px);
   border-radius: 8px;
   border: 1px solid ${(props) => props.theme.color.lightgray};
-  padding: 2px 0;
-  height: 100px;
+  padding: 2px 0px 0px 10px;
+  height: 60px;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 6px;
+    background: rgba(0, 0, 0, 0);
+  }
+  &::-webkit-scrollbar-thumb {
+    width: 6px;
+    border-radius: 6px;
+    background: rgb(217, 217, 217, 0.6);
+  }
   /* margin-top: 10px; */
 `;
 const DescriptionLegend = styled.legend`
@@ -404,7 +418,6 @@ const DescriptionLegend = styled.legend`
 `;
 const DescriptionContent = styled.span`
   margin-top: -10px;
-  padding: 0 10px;
 `;
 
 const SnippetHolder = styled.div`

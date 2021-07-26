@@ -369,10 +369,8 @@ const TrackDetailsHolder = styled.div`
   @media only screen and (max-width: 776px) {
     height: auto;
   }
-  & > span {
-
-  }
 `;
+
 const ExclusiveBadge = styled(Exclusive)`
   width: 20px;
   height: 20px;

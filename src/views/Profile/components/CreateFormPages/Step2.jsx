@@ -323,7 +323,7 @@ const Step2 = ({
         <Header>Visual</Header>
       </HeaderContainer>
       <UploadContainer>
-        <p>PNG, JPG, GIF, MP4</p>
+        <p>PNG, JPG, GIF</p>
         <small>
           {cleanName(
             nftData && nftData.imageUrl && nftData.imageUrl !== "" ? nftData.imageUrl.slice(imageUrlLength, nftData.imageUrl.length) : ""

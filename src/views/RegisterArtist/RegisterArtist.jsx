@@ -9,8 +9,8 @@ import isMobile from "../../utils/isMobile";
 import BaseView from "../../components/Page/BaseView";
 import { useWallet } from 'use-wallet';
 import axios from 'axios'
-import Swal from "sweetalert2";
-import { warningIcon, imageWidth, imageHeight } from "../../utils/swalImages";
+import swal from "sweetalert2";
+import { errorIcon, warningIcon, questionIcon, successIcon, infoIcon, imageWidth, imageHeight } from "../../utils/swalImages";
 
 
 
@@ -18,13 +18,14 @@ const RegisterArtist = () => {
   const { account, connect } = useWallet()
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [musicLinks, setMusicLinks] = useState("");
 
   const connectWallet = async () => {
     const newChainId = await window.ethereum.request({ method: "eth_chainId" });
     if ((Number(newChainId) === process.env.REACT_APP_IS_MAINNET ? 1 : 4)) {
       connect("injected");
     } else {
-      Swal.fire({
+      swal.fire({
         title: "Wrong Chain",
         text: "You are on the wrong chain. Please connect to Ethereum Mainnet.",
         imageUrl: warningIcon,
@@ -37,18 +38,29 @@ const RegisterArtist = () => {
   const submit = () => {
     const provider = new providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-    signer.signMessage(JSON.stringify({ name, email, account })).then((authorization) => {
+    signer.signMessage(JSON.stringify({ name, email, account, musicLinks })).then((authorization) => {
       axios.post('/api/user/send-artist-form', {
         name,
         email,
         account,
+        musicLinks,
         auth: authorization
       }).then(res => {
-        Swal.fire({
-          title: `Submitted`
+        swal.fire({
+          title: `Thank you for submitting. Please check your email for our Artist agreement.`
         });
-        setName("")
-        setEmail("")
+        setName("");
+        setEmail("");
+        setMusicLinks("");
+      }).catch(err => {
+        console.log("err", err.response)
+        swal.fire({
+          title: `Error: ${err.response ? err.response.status : 404}`,
+          text: `${err.response ? err.response.data : "server error"}`,
+          imageUrl: errorIcon,
+          imageWidth,
+          imageHeight
+        });
       })
     })
   }
@@ -70,6 +82,13 @@ const RegisterArtist = () => {
               <SignatureContainer>
                 Email:
                 <Signature name="email" onChange={(e) => setEmail(e.target.value)} value={email} />
+              </SignatureContainer>
+
+            </SignatureRow>
+            <SignatureRow>
+              <SignatureContainer>
+                Links to Music Platforms (Soundcloud, Spotify, etc. Please separate with commas):
+                <Signature name="musicLinks" onChange={(e) => setMusicLinks(e.target.value)} value={musicLinks} />
               </SignatureContainer>
 
             </SignatureRow>

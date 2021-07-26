@@ -5,6 +5,7 @@ const multer = require("multer");
 const User = require("../schemas/User.schema");
 const Suggestion = require("../schemas/Suggestion.schema");
 const NftType = require("../schemas/NftType.schema");
+const Application = require("../schemas/Application.schema");
 const { findLikes, getUserNfts } = require("../web3/server-utils");
 const sendSignRequest = require('../modules/eversign')
 const { utils } = require("ethers");
@@ -272,13 +273,27 @@ router.post("/get-public-account", async (req, res) => {
 router.post("/send-artist-form", async (req, res) => {
   try {
     console.log("/send-artist-form", req.body);
+    const {name, email, account, musicLinks} = req.body;
+
     const sender = utils.verifyMessage(
-      JSON.stringify({ name: req.body.name, email: req.body.email, account: req.body.account }),
+      JSON.stringify({ name: name, email: email, account: account, musicLinks: musicLinks }),
       req.body.auth
     );
-    if (sender !== req.body.account)
-      return res.sendStatus(403)
-    if (req.body.name && req.body.email) {
+
+    if (sender !== account)
+      return res.status(403).send("Credential error")
+    
+    let alreadyApplied = await Application.findOne({$or: [{"email": email},{"account": account}]});
+      console.log("already?", alreadyApplied);
+    if (alreadyApplied) {
+      return res.status(403).send("You have already submitted an application.")
+    }
+    let application = new Application({
+      name, email, account, musicLinks
+    })
+    await application.save();
+
+    if (name && email) {
       sendSignRequest(req.body)
       return res.sendStatus(200)
     }

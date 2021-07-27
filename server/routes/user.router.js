@@ -52,31 +52,28 @@ router.post("/update-account", async (req, res) => {
     const findDuplicateNames = await User.findOne({
       suburl: req.body.username.replace(/ /g, "").toLowerCase(),
     });
-
-    if (findDuplicateNames) {
+    if (findDuplicateNames?.address != req.body.address) {
+      //if another account (checked by address) has the same name, send error
       res.status(403).send("Duplicate name");
     } else {
-      let user = await User.findOneAndUpdate(
-        { address: req.body.address },
-        {
-          username: req.body.username,
-          suburl: req.body.username.replace(/ /g, "").toLowerCase(),
-          // email: req.body.email
-        },
-        { new: true }
-      );
-      res.send(user);
+      console.log("front end socials", req.body.aggregatedSocials);
+      let user = await User.findOne({ address: req.body.address });
+      user.username = req.body.username;
+      user.suburl = req.body.username.replace(/ /g, "").toLowerCase();
+      user.socials = req.body.aggregatedSocials;
+      await user.save();
+      console.log("updated user socials", user.socials);
+
+      if (user.username === req.body.username) {
+        res.send(user);
+      } else {
+        await NftType.updateMany(
+          { address: user.address },
+          { artist: req.body.username }
+        );
+        res.send(user);
+      }
     }
-    // const pictureColor = req.body.pictureColor ? req.body.pictureColor : "#002450";
-    // let s = { address: req.body.address, nickname: req.body.nickname, picture: req.body.picture, pictureColor }
-    // const signingAddress = web3.eth.accounts.recover(JSON.stringify(s), req.body.sig);
-    // if (req.body.address !== signingAddress) {
-    //   res.status(401).send("signature mismatch");
-    //   return
-    // }
-    // let user = await User.findOneAndUpdate({ address: req.body.address },
-    //   { nickname: req.body.nickname, picture: req.body.picture, pictureColor });
-    // res.send(user);
   } catch (error) {
     console.log(error);
     res.sendStatus(500);

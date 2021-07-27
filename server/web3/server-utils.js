@@ -7,9 +7,17 @@ const {
   getDefaultProvider,
 } = require("ethers");
 var difUtils = require("ethers").utils;
-const { TEST_NFTToken, MAIN_NFTToken, TEST_FlatPriceSale, MAIN_FlatPriceSale } = require("./constants");
+const { 
+  TEST_NFTToken,
+  MAIN_NFTToken, 
+  TEST_FlatPriceSale, 
+  MAIN_FlatPriceSale,  
+  TEST_VinylAddress, 
+  MAIN_VinylAddress 
+} = require("./constants");
 const FlatPriceSaleABI = require("./abi/FlatPriceSale.abi");
 const NFTTokenABI = require("./abi/NFTToken.abi");
+const VinylABI = require("./abi/Vinyl.abi");
 const NFTType = require("../schemas/NftType.schema");
 
 /*
@@ -112,9 +120,49 @@ const getUserNfts = async (account) => {
   // return { nftIds, numNfts };
 };
 
+const getVinylBalance = async (address) => {
+	const ethProvider = getDefaultProvider(
+    process.env.REACT_APP_IS_MAINNET ? 
+    process.env.MAIN_PROVIDER_URL :
+    process.env.RINKEBY_PROVIDER_URL
+  );
+  const vinylAddress = process.env.REACT_APP_IS_MAINNET ? MAIN_VinylAddress : TEST_VinylAddress
+	const vinylContract = new Contract(vinylAddress, VinylABI, ethProvider)
+
+	let promise = vinylContract.balanceOf(address)
+      .then(r => {
+			return {address, amount: parseFloat(utils.formatEther(r))}
+		})
+
+	let newVariable = await Promise.all([promise]).then( res => res)
+	return newVariable
+}
+
+const getVinylOwners = async (addresses) => {
+	const ethProvider = getDefaultProvider(
+    process.env.REACT_APP_IS_MAINNET ? 
+    process.env.MAIN_PROVIDER_URL :
+    process.env.RINKEBY_PROVIDER_URL
+  );
+  console.log(addresses)
+  const vinylAddress = process.env.REACT_APP_IS_MAINNET ? MAIN_VinylAddress : TEST_VinylAddress
+	const vinylContract = new Contract(vinylAddress, VinylABI, ethProvider)
+
+	let promises = addresses.map(address =>
+		vinylContract.balanceOf(address).then(r => {
+			return {address, amount: parseFloat(utils.formatEther(r))}
+		}))
+
+	let newVariable = await Promise.all([...promises]).then( res => res)
+  console.log(newVariable)
+	return newVariable
+}
+
 module.exports = {
   sign,
   getSetSale,
   findLikes,
   getUserNfts,
+  getVinylOwners,
+  getVinylBalance
 };

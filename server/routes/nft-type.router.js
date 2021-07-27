@@ -541,19 +541,22 @@ router.post("/uploadSnnipetS3", async (req, res) => {
   const singleUpload = upload.single("audioFile");
   singleUpload(req, res, async function (err) {
     console.log("singleUpload: ", req.body);
-    if (err instanceof multer.MulterError) {
-      console.log("singleUpload multer", err);
-      return res.status(500).json(err);
-    } else if (err) {
+    let draft = await NftType.findOne({ isDraft: true, address: req.body.artist });
+    if (err instanceof multer.MulterError || err) {
       console.log("singleUpload error", err);
-      return res.status(500).json(err);
-    } else {
-      // adding saving draft after uploading
-      let draft = await NftType.findOne({ isDraft: true, address: req.body.artist });
       if (draft) {
-        draft.audioUrl = req.body.audioURL
-        draft.snnipet = req.body.snnipetURL   
+        draft.audioUrl = "";
+        draft.snnipet = "";
         await draft.save()
+      }
+      return res.status(500).json(err);
+    }
+    else {
+      // adding saving draft after uploading
+      if (draft) {
+        draft.audioUrl = req.body.audioURL;
+        draft.snnipet = req.body.snnipetURL;
+        await draft.save();
       }
       return res.json({ success: true });
     }
@@ -671,17 +674,25 @@ router.post("/uploadImageS3", async (req, res) => {
   const singleUpload = upload.single("imageFile");
   singleUpload(req, res, async function (err) {
     console.log("uploadImageS3: ", req.body);
+    let draft = await NftType.findOne({ isDraft: true, address: req.body.artist });
     if (err instanceof multer.MulterError) {
       console.log("uploadImageS3 multer", err);
+      if (draft) {
+        draft.imageUrl = "";
+        await draft.save();
+      }
       return res.status(500).json(err);
     } else if (err) {
       console.log("uploadImageS3", err);
+      if (draft) {
+        draft.imageUrl = "";
+        await draft.save();
+      }
       return res.status(500).json(err);
     }
-    let draft = await NftType.findOne({ isDraft: true, address: req.body.artist });
     if (draft) {
-      draft.imageUrl = req.body.imageURL
-      await draft.save()
+      draft.imageUrl = req.body.imageURL;
+      await draft.save();
     }
     return res.status(200).send(req.file);
   });

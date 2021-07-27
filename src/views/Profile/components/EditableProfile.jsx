@@ -16,14 +16,14 @@ const EditableProfile = () => {
   const [imageFile, setImageFile] = useState(null);
   const [newPic, setNewPic] = useState(false);
   const [loading, setLoading] = useState(false);
-  const inputRef = useRef()
+  const inputRef = useRef();
 
   useEffect(() => {
     user.profilePic && setProfilePic(user.profilePic);
   }, [user]);
   useEffect(() => {
-    edit && inputRef.current.focus()
-  }, [edit])
+    edit && inputRef.current.focus();
+  }, [edit]);
 
   const saveDetails = async (e) => {
     e.preventDefault();
@@ -56,6 +56,16 @@ const EditableProfile = () => {
                 setLoading(false);
                 setEdit(false);
                 setUser(res.data);
+              })
+              .catch((err) => {
+                setLoading(false);
+                setEdit(false);
+                swal.fire({
+                  title: "Error",
+                  background: `#000`,
+                  boxShadow: `24px 24px 48px -24px #131313`,
+                  text: "That name is already in use, please try another or contact NFT FM if this is a mistake.",
+                });
               });
           }
         })
@@ -80,6 +90,16 @@ const EditableProfile = () => {
           setLoading(false);
           setEdit(false);
           setUser(res.data);
+        })
+        .catch((err) => {
+          setLoading(false);
+          setEdit(false);
+          swal.fire({
+            title: "Error",
+            background: `#000`,
+            boxShadow: `24px 24px 48px -24px #131313`,
+            text: "That name is already in use, please try another or contact NFT FM if this is a mistake.",
+          });
         });
     } else {
       setLoading(false);
@@ -94,7 +114,6 @@ const EditableProfile = () => {
     setEdit(false);
     setUsername("");
   };
-
 
   return (
     <ProfileHeading>
@@ -209,7 +228,7 @@ const EditingButtons = styled.div`
   z-index: 100;
   margin-top: -20px;
   @media only screen and (max-width: 776px) {
-      right: -60px;
+    right: -60px;
   }
 `;
 

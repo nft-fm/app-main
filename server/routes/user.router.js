@@ -49,16 +49,24 @@ router.post("/get-account", async (req, res) => {
 
 router.post("/update-account", async (req, res) => {
   try {
-    let user = await User.findOneAndUpdate(
-      { address: req.body.address },
-      {
-        username: req.body.username,
-        suburl: req.body.username.replace(/ /g, "").toLowerCase(),
-        // email: req.body.email
-      },
-      { new: true }
-    );
-    res.send(user);
+    const findDuplicateNames = await User.findOne({
+      suburl: req.body.username.replace(/ /g, "").toLowerCase(),
+    });
+
+    if (findDuplicateNames) {
+      res.status(403).send("Duplicate name");
+    } else {
+      let user = await User.findOneAndUpdate(
+        { address: req.body.address },
+        {
+          username: req.body.username,
+          suburl: req.body.username.replace(/ /g, "").toLowerCase(),
+          // email: req.body.email
+        },
+        { new: true }
+      );
+      res.send(user);
+    }
     // const pictureColor = req.body.pictureColor ? req.body.pictureColor : "#002450";
     // let s = { address: req.body.address, nickname: req.body.nickname, picture: req.body.picture, pictureColor }
     // const signingAddress = web3.eth.accounts.recover(JSON.stringify(s), req.body.sig);

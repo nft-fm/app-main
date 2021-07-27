@@ -70,6 +70,11 @@ const UserSchema = new Schema({
         type: String,
       },
     },
+    {
+      spotify: {
+        type: String
+      }
+    }
   ],
 });
 

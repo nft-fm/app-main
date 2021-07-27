@@ -29,7 +29,7 @@ const Step4 = ({ nftData: { price, numMinted }, updateState, usdPerEth }) => {
       </PriceContainer>
       <PriceContainer noBorder>
         <div/>
-        <p>{price * usdPerEth} $USD</p>
+        <p>{(price * usdPerEth).toFixed(2)} $USD</p>
       </PriceContainer>
       <MobileSpacer height={30}/>
       <SubHeader style={{marginBottom: "15px"}}>Number of NFTs</SubHeader>
@@ -47,7 +47,7 @@ const Step4 = ({ nftData: { price, numMinted }, updateState, usdPerEth }) => {
       />
       <PriceContainer noBorder>
         <div/>
-        <p>{price * usdPerEth * numMinted} $USD</p>
+        <p>{(price * usdPerEth * numMinted).toFixed(2)} $USD</p>
       </PriceContainer>
       <BottomSpacer />
     </InputContainer>

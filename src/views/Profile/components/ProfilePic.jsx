@@ -3,16 +3,23 @@ import styled from "styled-components";
 import swal from "sweetalert2";
 import { useAccountConsumer } from "../../../contexts/Account";
 
-import upload_icon from "../../../assets/img/profile_page_assets/upload_icon.svg";
+import { ReactComponent as upload_icon } from "../../../assets/img/profile_page_assets/upload_icon.svg";
 import axios from "axios";
 import Loading from "../../../assets/img/loading.gif";
 
 const ProfilePic = (props) => {
   const { account, user, setUser } = useAccountConsumer();
-  const { profilePic, setProfilePic, edit } = props;
-  const [imageFile, setImageFile] = useState(null);
-  // const [imageUploadError, setImageUploadError] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const {
+    profilePic,
+    setProfilePic,
+    edit,
+    setEdit,
+    imageFile,
+    setImageFile,
+    newPic,
+    setNewPic,
+    loading,
+  } = props;
   const hiddenImageInput = useRef(null);
 
   const handleImage = () => {
@@ -20,6 +27,7 @@ const ProfilePic = (props) => {
   };
 
   const handleImageChange = (e) => {
+    setNewPic(true);
     setImageFile(e.target.files[0]);
     const picUrl =
       "https://nftfm-profilepic.s3-us-west-1.amazonaws.com/" +
@@ -33,48 +41,12 @@ const ProfilePic = (props) => {
     });
   };
 
-  useEffect(() => {
-    if (imageFile) {
-      setLoading(true);
-      const imageFormData = new FormData();
-      imageFormData.append("user", account);
-      imageFormData.append("imageFile", imageFile);
-
-      axios
-        .post("/api/user/uploadProfilePicS3", imageFormData)
-        .then((res) => {
-          setLoading(false);
-          console.log("RES", res.data);
-          setProfilePic(res.data.location);
-          setImageFile(null);
-          props.setEdit(false);
-        })
-        .catch((err) => {
-          console.log(err);
-          setImageFile(null);
-          // setImageUploadError(true);
-          setLoading(false);
-          swal.fire({
-            title: "Error",
-            background: `#000`,
-            boxShadow: `24px 24px 48px -24px #131313`,
-            text: "Couldn't upload image, please try again.",
-          });
-        });
-    }
-  }, [imageFile, setProfilePic]);
+  const [isHovering, setIsHovering] = useState("#888");
   return (
     <ProfilePicHolder imageUrl={profilePic}>
-      {loading && edit && (
+      {loading && (
         <EditProfilePic>
-          <img src={Loading} alt="loading-gif"/>
-        </EditProfilePic>
-      )}
-      {!loading && edit && (
-        <EditProfilePic onClick={handleImage}>
-          <div>Change</div>
-          <div>Picture</div>
-          <img src={upload_icon} alt="upload-file-icon" />
+          <img src={Loading} alt="loading-gif" />
         </EditProfilePic>
       )}
       {edit && (
@@ -87,9 +59,31 @@ const ProfilePic = (props) => {
           defaultValue={imageFile !== "" ? imageFile : null}
         />
       )}
+      {/* if newpic, makes it so that the new pic is displayed while still editing profile info */}
+      {!loading && edit && newPic && <> </>}
+      {!loading && edit && !newPic && (
+        <EditProfilePic
+          onClick={handleImage}
+          onMouseEnter={() => setIsHovering("#20a4fc")}
+          onMouseLeave={() => setIsHovering("#666")}
+        >
+          <div>Change</div>
+          <div>Picture</div>
+          <Upload isHovering={isHovering} />
+        </EditProfilePic>
+      )}
     </ProfilePicHolder>
   );
 };
+
+const Upload = styled(upload_icon)`
+  margin-top: 5px;
+  width: 20px;
+  & path {
+    transition: all 0.2s ease-in-out;
+    fill: ${(props) => props.isHovering};
+  }
+`;
 
 const EditProfilePic = styled.div`
   position: absolute;
@@ -105,16 +99,6 @@ const EditProfilePic = styled.div`
   cursor: pointer;
   background-color: rgba(24, 24, 24, 0.9);
   border-radius: 75px;
-  img {
-    width: 20px;
-  }
-
-  :hover {
-    font-size: calc(${(props) => props.theme.fontSizes.xs} + 1px);
-    img {
-      width: 21px;
-    }
-  }
 `;
 
 const ProfilePicHolder = styled.div`
@@ -131,6 +115,16 @@ const ProfilePicHolder = styled.div`
   width: 100px;
   height: 100px;
   overflow: hidden;
+`;
+
+const RedBorder = styled.div`
+  border-radius: 75px;
+  width: 108px;
+  height: 108px;
+  border-width: 4px;
+  border-color: ${(props) => props.theme.color.yellow};
+
+  border-style: solid;
 `;
 
 export default ProfilePic;

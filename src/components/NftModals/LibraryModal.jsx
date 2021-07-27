@@ -286,10 +286,7 @@ const LibraryModal = ({
                 Exclusive
               </ReactToolTip>
             </BadgeHolder>
-            {/* <SnippetHolder>
-              <PlaySongSnippet partialSong={partialSong} />
-              <SnippetText>15 Sec Preview</SnippetText>
-            </SnippetHolder> */}
+
             <TrackDetailsHolder>
               <span>Genre: {nft.genre}</span>
               <span>Producer: {nft.producer}</span>

@@ -105,12 +105,16 @@ const PreviewBuyModal = ({ nft }) => {
       </SnippetHolder>
       <TrackDetailsHolder>
         <span>Genre: {nft.genre}</span>
-        <span>Producer: {nft.producer}</span>
-        <span>Track Length: {formatSongDur(nft.dur)}</span>
+        {/* <span>Producer: {nft.producer}</span> */}
+        {/* <span>Track Length: {formatSongDur(nft.dur)}</span> */}
         <span>
           Release Date: {moment(nft.timestamp).format("MMM Do YYYY")}
         </span>
       </TrackDetailsHolder>
+      <DescriptionHolder>
+              <DescriptionLegend>Description</DescriptionLegend>
+              <DescriptionContent>{nft.description}</DescriptionContent>
+            </DescriptionHolder>
       <PricesContainer>
         <PriceHolder>
           <PriceItem>
@@ -133,6 +137,7 @@ const PreviewBuyModal = ({ nft }) => {
 }
 
 const Container = styled.div`
+    color: #666;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -147,17 +152,41 @@ const TrackDetailsHolder = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  height: 125px;
+  height: 50px;
+  margin-bottom: 10px;
   justify-content: space-around;
+  color: #666;
   padding-left: 20px;
   @media only screen and (max-width: 776px) {
     height: auto;
   }
-  span {
-    color: ${(props) => props.theme.color.gray};
-  }
 `;
 
+const DescriptionHolder = styled.fieldset`
+  width: calc(100% - 10px);
+  border-radius: 8px;
+  border: 1px solid ${(props) => props.theme.color.lightgray};
+  padding: 2px 0px 0px 10px;
+  height: 60px;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 6px;
+    background: rgba(0, 0, 0, 0);
+  }
+  &::-webkit-scrollbar-thumb {
+    width: 6px;
+    border-radius: 6px;
+    background: rgb(217, 217, 217, 0.6);
+  }
+  /* margin-top: 10px; */
+`;
+const DescriptionLegend = styled.legend`
+  padding: 0 5px;
+  margin-left: 10px;
+`;
+const DescriptionContent = styled.span`
+  margin-top: -10px;
+`;
 
 const SnippetHolder = styled.div`
   display: flex;

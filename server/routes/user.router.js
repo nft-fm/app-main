@@ -5,10 +5,12 @@ const multer = require("multer");
 const User = require("../schemas/User.schema");
 const Suggestion = require("../schemas/Suggestion.schema");
 const NftType = require("../schemas/NftType.schema");
+const Application = require("../schemas/Application.schema");
 const { findLikes, getUserNfts } = require("../web3/server-utils");
-const sendSignRequest = require('../modules/eversign')
+const sendSignRequest = require("../modules/eversign");
 const { utils } = require("ethers");
-
+const nodemailer = require("nodemailer");
+const { google } = require("googleapis");
 
 router.post("/get-account", async (req, res) => {
   try {
@@ -47,16 +49,24 @@ router.post("/get-account", async (req, res) => {
 
 router.post("/update-account", async (req, res) => {
   try {
-    let user = await User.findOneAndUpdate(
-      { address: req.body.address },
-      {
-        username: req.body.username,
-        suburl: req.body.username.replace(/ /g, "").toLowerCase(),
-        // email: req.body.email
-      },
-      { new: true }
-    );
-    res.send(user);
+    const findDuplicateNames = await User.findOne({
+      suburl: req.body.username.replace(/ /g, "").toLowerCase(),
+    });
+
+    if (findDuplicateNames) {
+      res.status(403).send("Duplicate name");
+    } else {
+      let user = await User.findOneAndUpdate(
+        { address: req.body.address },
+        {
+          username: req.body.username,
+          suburl: req.body.username.replace(/ /g, "").toLowerCase(),
+          // email: req.body.email
+        },
+        { new: true }
+      );
+      res.send(user);
+    }
     // const pictureColor = req.body.pictureColor ? req.body.pictureColor : "#002450";
     // let s = { address: req.body.address, nickname: req.body.nickname, picture: req.body.picture, pictureColor }
     // const signingAddress = web3.eth.accounts.recover(JSON.stringify(s), req.body.sig);
@@ -269,22 +279,111 @@ router.post("/get-public-account", async (req, res) => {
   }
 });
 
+const NodeMail = (name, email, music, account) => {
+  const OAuth2Client = new google.auth.OAuth2(
+    process.env.OAUTH_CLIENT_ID,
+    process.env.OAUTH_CLIENT_SECRET,
+    process.env.REDIRECT_URI
+  );
+  OAuth2Client.setCredentials({
+    refresh_token: process.env.REFRESH_TOKEN,
+  });
+  let accessToken = "";
+  const getAToken = async () => {
+    accessToken = await OAuth2Client.getAccessToken();
+    return accessToken;
+  };
+  getAToken();
+
+  const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      type: "OAuth2",
+      user: process.env.EMAILL_ADDRESS,
+      pass: process.env.EMAIL_PASSWORD,
+      clientId: process.env.OAUTH_CLIENT_ID,
+      clientSecret: process.env.OAUTH_CLIENT_SECRET,
+      refreshToken: process.env.REFRESH_TOKEN,
+      accessToken: getAToken(),
+    },
+  });
+
+  transporter.verify(function (error, success) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Server is ready to take our messages");
+    }
+  });
+
+  var message = `<html>
+      <div>
+      <p>Hey! Someone applied to be an artist on NFT FM!</p>
+      <p>Name: ${name}</p>
+      <p>Email: ${email}</p>
+      <p>Music: ${music}</p>
+      <p>Account: ${account}</p>
+      </div>
+      </html>`;
+
+  var mail = {
+    from: "Jackson Felty <jackson@nftfm.io>", //sender email
+    to: "jackson@nftfm.io, quinn@nftfm.io", // receiver email
+    subject: "New Artist Application",
+    html: message,
+  };
+
+  transporter.sendMail(mail, (err, data) => {
+    if (err) {
+      console.log("err", err);
+    } else {
+      console.log("data", data);
+    }
+  });
+};
+
 router.post("/send-artist-form", async (req, res) => {
   try {
     console.log("/send-artist-form", req.body);
+    const { name, email, account, musicLinks } = req.body;
+    NodeMail(name, email, musicLinks, account); //sends Jackson and Quinn an email alerting them, can remove once new docusigner is found
+
     const sender = utils.verifyMessage(
-      JSON.stringify({ name: req.body.name, email: req.body.email, account: req.body.account }),
+      JSON.stringify({
+        name: name,
+        email: email,
+        account: account,
+        musicLinks: musicLinks,
+      }),
       req.body.auth
     );
-    if (sender !== req.body.account)
-      return res.sendStatus(403)
-    if (req.body.name && req.body.email) {
-      sendSignRequest(req.body)
-      return res.sendStatus(200)
+
+    if (sender !== account) return res.status(403).send("Credential error");
+
+    let alreadyApplied = await Application.findOne({
+      $or: [{ email: email }, { account: account }],
+    });
+    console.log("already?", alreadyApplied);
+    if (alreadyApplied) {
+      return res.status(403).send("You have already submitted an application.");
     }
-    res.sendStatus(401)
+    let application = new Application({
+      name,
+      email,
+      account,
+      musicLinks,
+    });
+    await application.save();
+
+    if (name && email) {
+      sendSignRequest(req.body);
+      return res.sendStatus(200);
+    }
+    res.sendStatus(401);
   } catch (err) {
-    console.log(err)
+    console.log(err);
     res.status(500).send(err);
   }
 });

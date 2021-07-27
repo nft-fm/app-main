@@ -4,9 +4,14 @@ const TEST_FlatPriceSale = "0x6b74AFa03BCe7EA12229708588f1701f97560784";
 const MAIN_NFTToken = "0x88d3e00ce938f1A591336131B859465b50D608B7";
 const MAIN_FlatPriceSale = "0xb46700fBE3C2ed36851A4ccFeAD109ceff32D40f";
 
+const TEST_VinylAddress = "0x79de729addde262592ef50f8ac37a92b81854c4f";
+const MAIN_VinylAddress = "0xc17b6C92BB728259ca2F76c88a4A48ac077587f7";
+
 module.exports = {
 TEST_NFTToken,
 TEST_FlatPriceSale,
 MAIN_NFTToken,
 MAIN_FlatPriceSale,
+TEST_VinylAddress,
+MAIN_VinylAddress
 }

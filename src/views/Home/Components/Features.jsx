@@ -16,34 +16,41 @@ import revenue from "../../../assets/img/homepage_assets/homepage_revenue.png"
 export const Features = ({ isLoaded, setIsLoaded }) => {
   useEffect(() => {
     Aos.init({
-      duration: 2000,
-      disable: 'mobile'
+      duration: 1000,
+      // disable: 'mobile'
     })
   }, [])
 
   return (
     <Container>
       <FeatureContainer reverse>
-        <FeaturesTextContainer data-aos="fade-right">
+        <FeaturesTextContainer
+        data-aos="fade-right"
+        data-aos-anchor-placement="top-bottom"
+        >
           <FeaturesHeader>Jam out to exclusive tunes</FeaturesHeader>
           <FeaturesDescription>
             NFTs on NFT FM aren’t just amazing pieces of visual art. They contain full-length tracks directly from the musicians. Owning these NFTs grants you the exclusive ability to stream these amazing songs at any time.
           </FeaturesDescription>
         </FeaturesTextContainer>
-        <ExclusiveImageContainer data-aos="fade-left">
+        <ExclusiveImageContainer
+        data-aos-anchor-placement="top-bottom"
+        data-aos="fade-left">
           <Exclusive  src={exclusive} alt="homepage-exclusive"/>
         </ExclusiveImageContainer>
       </FeatureContainer>
       {/* <Spacer /> */}
       <FeatureContainer
         data-aos="fade-in"
-        data-aos-anchor-placement="top-center"
-        data-aos-once="true"
+        data-aos-anchor-placement="top-bottom"
       >
-        <CarbonImageContainer data-aos="fade-right">
+        <CarbonImageContainer data-aos="fade-right"
+                data-aos-anchor-placement="top-bottom"
+        >
           <Carbon src={carbon} alt="homepage-carbon"/>
         </CarbonImageContainer>
-        <FeaturesTextContainer data-aos="fade-left"  >
+        <FeaturesTextContainer data-aos="fade-left"
+                data-aos-anchor-placement="top-bottom">
           <FeaturesHeader>Committed to Carbon Neutrality</FeaturesHeader>
           <FeaturesDescription>
             We have partnered with Offsetra to provide transparency on our commitment to carbon neutrality. Each month, donations are made to chosen ecological funds to offset the emissions generated through transactions made on our platform.
@@ -51,13 +58,11 @@ export const Features = ({ isLoaded, setIsLoaded }) => {
         </FeaturesTextContainer>
       </FeatureContainer>
       <FeatureContainer
-        reverse
         data-aos="fade-in"
-        // data-aos-anchor-placement="top-center"
-        data-aos-once="true"
+        data-aos-anchor-placement="top-bottom"
       >
         <FeaturesTextContainer
-        // data-aos-anchor-placement="bottom-bottom" 
+        data-aos-anchor-placement="top-bottom"
         data-aos="fade-right">
           <FeaturesHeader>Support Amazing Artists</FeaturesHeader>
           <FeaturesDescription>
@@ -65,7 +70,7 @@ export const Features = ({ isLoaded, setIsLoaded }) => {
           </FeaturesDescription>
         </FeaturesTextContainer>
         <FeaturesImageContainer
-          data-aos-anchor-placement="bottom-bottom"
+        data-aos-anchor-placement="top-bottom"
           data-aos="fade-left"
         >
           <Revenue src={revenue} alt="homepage-revenue"/>
@@ -73,13 +78,17 @@ export const Features = ({ isLoaded, setIsLoaded }) => {
       </FeatureContainer>
       <FeatureContainer
         data-aos="fade-in"
-        data-aos-anchor-placement="bottom-bottom"
-        data-aos-once="true">
-        <FeaturesImageContainer data-aos="fade-right"
+        data-aos-anchor-placement="top-bottom"
+        >
+        <FeaturesImageContainer
+        data-aos-anchor-placement="top-bottom"
+        data-aos="fade-right"
       >
           <Join src={airdrop} alt="homepage-airdrop"/>
         </FeaturesImageContainer>
-        <FeaturesTextContainer data-aos="fade-left">
+        <FeaturesTextContainer
+                data-aos-anchor-placement="top-bottom"
+        data-aos="fade-left">
           <FeaturesHeader>Receive Airdrops!</FeaturesHeader>
           <FeaturesDescription>
             NFTs holders on our platform get monthly airdrops of our governance token, $VINYL. 30% of the supply is being dropped to NFT holding wallets throughout our first 4 years of operation!

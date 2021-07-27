@@ -12,6 +12,7 @@ import default_pic from "../../assets/img/profile_page_assets/default_profile.pn
 import Error404 from "../404/404";
 import { errorIcon, questionIcon, imageWidth, imageHeight } from "../../utils/swalImages";
 import swal from "sweetalert2";
+import EditableProfile from "./components/EditableProfile";
 
 import { ReactComponent as plus_icon } from "../../assets/img/icons/plus_icon.svg";
 const Profile = () => {
@@ -126,51 +127,7 @@ const Profile = () => {
       )}
       <Landing>
         <Banner />
-        <ProfileHeading>
-          <Side />
-          <ProfileHolder>
-            <Cog
-              src={cog}
-              alt="edit icon"
-              onClick={account ? () => setEdit(!edit) : null}
-            />
-            <ProfilePic
-              profilePic={
-                profilePic && profilePic !== "" ? profilePic : default_pic
-              }
-              setProfilePic={setProfilePic}
-              edit={edit}
-              setEdit={setEdit}
-            />
-            <ProfileInfoHolder>
-              {edit ? (
-                <form onSubmit={(e) => saveDetails(e)}>
-                  <StyledInput
-                    type="text"
-                    placeholder="Enter Username"
-                    defaultValue={user?.username}
-                    onChange={(e) => setUsername(e.target.value)}
-                  />
-                </form>
-              ) : (
-                <Username>
-                  {user && user.username !== "" ? user.username : "No username"}
-                </Username>
-              )}
-              <Divider />
-
-              <AddressSpan>
-                {user
-                  ? user.address.substring(0, 10) +
-                    "..." +
-                    user.address.substring(user.address.length - 4)
-                  : " "}
-              </AddressSpan>
-            </ProfileInfoHolder>
-          </ProfileHolder>
-          <Side>
-          </Side>
-        </ProfileHeading>
+          <EditableProfile />
       </Landing>
 
       <CreatedNftHolder>
@@ -355,91 +312,7 @@ const IsConnected = styled.div`
 
 //Profile Stuff below here
 
-const Cog = styled.img`
-  width: 15px;
-  right: 45px;
-  position: absolute;
-  cursor: pointer;
-  :hover {
-    animation: rotation 4s infinite linear;
-  }
-  @keyframes rotation {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(359deg);
-    }
-  }
-  @media only screen and (max-width: 776px) {
-    top: 0px;
-    right: -25px;
-  }
-`;
 
-const ProfileInfoHolder = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const Side = styled.div`
-  width: calc(100% / 3);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-end;
-  & > span:nth-child(1) {
-    margin-top: 40px;
-  }
-`;
-
-const ProfileHolder = styled.div`
-  position: relative;
-  width: calc(100% / 3);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const ProfileHeading = styled.div`
-  margin-left: auto;
-  margin-right: auto;
-  display: flex;
-  height: 200px;
-  /* margin-top: 80px; */
-  color: ${(props) => props.theme.fontColor.white};
-  width: 100%;
-  justify-content: space-between;
-  @media only screen and (max-width: 776px) {
-    width: 90%;
-  }
-`;
-
-const StyledInput = styled.input`
-  background-color: ${(props) => props.theme.bgColor};
-  font-size: ${(props) => props.theme.fontSizes.sm};
-  border: none;
-  outline: none;
-  color: white;
-  opacity: 0.6;
-  text-align: center;
-`;
-
-const Username = styled.span`
-  font-size: ${(props) => props.theme.fontSizes.md};
-  white-space: nowrap;
-`;
-
-const AddressSpan = styled.span`
-  color: ${(props) => props.theme.color.gray};
-  display: flex;
-  /* align-items: center;s */
-  position: relative;
-  height: 20px;
-`;
 const Landing = styled.div`
   /* height: 450px; */
   top: 0;
@@ -453,10 +326,4 @@ const Banner = styled.div`
   height: 50px;
 `;
 
-const Divider = styled.div`
-  width: 200px;
-  height: 1px;
-  background-color: ${(props) => props.theme.fontColor.gray};
-  margin-bottom: 6px;
-`;
 export default Profile;

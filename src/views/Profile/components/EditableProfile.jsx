@@ -23,8 +23,8 @@ const EditableProfile = () => {
   const [audius, setAudius] = useState("");
   const inputRef = useRef();
 
-  console.log("user", user.socials);
-  console.log("socials", insta, twitter, spotify, audius);
+  // console.log("user", user.socials);
+  // console.log("socials", insta, twitter, spotify, audius);
 
   useEffect(() => {
     //sets all the state variables if they already exist
@@ -97,7 +97,8 @@ const EditableProfile = () => {
             text: "Couldn't upload image, please try again.",
           });
         });
-    } else if (username != "" && !newPic) {
+    } else if (!newPic && username != "") {
+      console.log('right here')
       setUser({ ...user, username: username });
       await axios
         .post("/api/user/update-account", {
@@ -111,13 +112,14 @@ const EditableProfile = () => {
           setUser(res.data);
         })
         .catch((err) => {
+          console.log(err)
           setLoading(false);
           setEdit(false);
           swal.fire({
             title: "Error",
             background: `#000`,
             boxShadow: `24px 24px 48px -24px #131313`,
-            text: "Error updating account information.",
+            text: `Error: ${err}`,
           });
         });
     } else {

@@ -361,7 +361,7 @@ const Step2 = ({
         <Header bottomHeader>Audio</Header>
       </HeaderContainer>
       <UploadContainer>
-        <p>MP3, FLAC</p>
+        <p>MP3</p>
         <small>
           {cleanName(nftData.audioUrl.slice(audioUrlLength, nftData.audioUrl.length))}
         </small>
@@ -371,7 +371,8 @@ const Step2 = ({
       </ChooseFile>
       <StyledInput
         type="file"
-        accept=".mp3,.flac,.wav"
+        // accept=".mp3,.flac,.wav"
+        accept=".mp3"
         ref={hiddenAudioInput}
         onChange={handleAudioChange}
         style={{ display: "none" }}

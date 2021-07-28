@@ -323,7 +323,7 @@ const Step2 = ({
         <Header>Visual</Header>
       </HeaderContainer>
       <UploadContainer>
-        <p>PNG, JPG, GIF, MP4</p>
+        <p>PNG, JPG, GIF</p>
         <small>
           {cleanName(
             nftData && nftData.imageUrl && nftData.imageUrl !== "" ? nftData.imageUrl.slice(imageUrlLength, nftData.imageUrl.length) : ""
@@ -345,7 +345,7 @@ const Step2 = ({
         <Header bottomHeader>Audio</Header>
       </HeaderContainer>
       <UploadContainer>
-        <p>MP3, FLAC</p>
+        <p>MP3</p>
         <small>
           {cleanName(nftData.audioUrl.slice(audioUrlLength, nftData.audioUrl.length))}
         </small>

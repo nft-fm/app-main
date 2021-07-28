@@ -8,10 +8,9 @@ import { Features } from "./Components/Features";
 import DemoImage from "./Components/DemoImage/DemoImage";
 import { ReactComponent as rightArrow } from "../../assets/img/homepage_assets/right-arrow-3.svg";
 import { errorIcon, imageWidth, imageHeight } from "../../utils/swalImages";
-
+import axios from "axios";
 
 const Listen = () => {
-
   if (
     window.location.hostname === "localhost" &&
     process.env.REACT_APP_IS_MAINNET
@@ -21,20 +20,27 @@ const Listen = () => {
       text: `🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆`,
       imageUrl: errorIcon,
       imageWidth,
-      imageHeight
+      imageHeight,
     });
   }
+  const airdrop = () => {
+    axios
+      .post("/api/airdrop/airdrop")
+      .then((res) => console.log("res", res))
+      .catch((err) => console.log(err));
+  };
 
   return (
     <Switch>
       <BaseView>
+        <button onClick={() => airdrop()}>✈️💦</button>
         <Landing />
         <Divider />
         <Features />
         <Divider />
         <DemoImage />
         <StyledHeader>Are you an artist? Launch with us!</StyledHeader>
-        <StyledAccountButton href="/register-artist" >
+        <StyledAccountButton href="/register-artist">
           Contact us!
         </StyledAccountButton>
         <DescriptionLink to="/info">

@@ -371,7 +371,8 @@ const Step2 = ({
       </ChooseFile>
       <StyledInput
         type="file"
-        accept=".mp3,.flac,.wav"
+        // accept=".mp3,.flac,.wav"
+        accept=".mp3"
         ref={hiddenAudioInput}
         onChange={handleAudioChange}
         style={{ display: "none" }}

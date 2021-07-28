@@ -28,7 +28,7 @@ const StyledContainer = styled.div`
   margin: 0 auto;
   width: ${props => props.width}px;
   max-width: 100%;
-  padding: 0 ${props => props.theme.spacing[4]}px;
+  /* padding: 0 ${props => props.theme.spacing[4]}px; */
 `
 
 export default Container

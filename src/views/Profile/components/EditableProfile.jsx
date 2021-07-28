@@ -7,6 +7,7 @@ import cog from "../../../assets/img/icons/cog.svg";
 import default_pic from "../../../assets/img/profile_page_assets/default_profile.png";
 import swal from "sweetalert2";
 import Loading from "../../../assets/img/loading.gif";
+import EditSocials from "./EditSocials";
 
 const EditableProfile = () => {
   const { account, user, setUser } = useAccountConsumer();
@@ -16,18 +17,39 @@ const EditableProfile = () => {
   const [imageFile, setImageFile] = useState(null);
   const [newPic, setNewPic] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [insta, setInsta] = useState("");
+  const [twitter, setTwitter] = useState("");
+  const [spotify, setSpotify] = useState("");
+  const [audius, setAudius] = useState("");
   const inputRef = useRef();
 
+  console.log("user", user.socials);
+  console.log("socials", insta, twitter, spotify, audius);
+
   useEffect(() => {
+    //sets all the state variables if they already exist
+    user.username && setUsername(user.username);
     user.profilePic && setProfilePic(user.profilePic);
+    user.socials[0] && setInsta(user.socials[0].insta);
+    user.socials[1] && setTwitter(user.socials[1].twitter);
+    user.socials[2] && setSpotify(user.socials[2].spotify);
+    user.socials[3] && setAudius(user.socials[3].audius);
   }, [user]);
+
   useEffect(() => {
+    //focuses the username input if edit is toggled on
     edit && inputRef.current.focus();
   }, [edit]);
 
   const saveDetails = async (e) => {
     e.preventDefault();
     setLoading(true);
+    const aggregatedSocials = [
+      { insta: insta },
+      { twitter: twitter },
+      { spotify: spotify },
+      { audius: audius },
+    ];
     if (newPic && imageFile) {
       username === ""
         ? setUser({ ...user, profilePic: profilePic })
@@ -43,31 +65,27 @@ const EditableProfile = () => {
           setNewPic(false);
           setProfilePic(res.data.location);
           setImageFile(null);
-          if (username === "") {
-            setLoading(false);
-            setEdit(false);
-          } else {
-            axios
-              .post("/api/user/update-account", {
-                address: account,
-                username: username,
-              })
-              .then((res) => {
-                setLoading(false);
-                setEdit(false);
-                setUser(res.data);
-              })
-              .catch((err) => {
-                setLoading(false);
-                setEdit(false);
-                swal.fire({
-                  title: "Error",
-                  background: `#000`,
-                  boxShadow: `24px 24px 48px -24px #131313`,
-                  text: "That name is already in use, please try another or contact NFT FM if this is a mistake.",
-                });
+          axios
+            .post("/api/user/update-account", {
+              address: user.address,
+              username: username,
+              aggregatedSocials,
+            })
+            .then((res) => {
+              setLoading(false);
+              setEdit(false);
+              setUser(res.data);
+            })
+            .catch((err) => {
+              setLoading(false);
+              setEdit(false);
+              swal.fire({
+                title: "Error",
+                background: `#000`,
+                boxShadow: `24px 24px 48px -24px #131313`,
+                text: "Error updating account information.",
               });
-          }
+            });
         })
         .catch((err) => {
           setImageFile(null);
@@ -83,8 +101,9 @@ const EditableProfile = () => {
       setUser({ ...user, username: username });
       await axios
         .post("/api/user/update-account", {
-          address: account,
+          address: user.address,
           username: username,
+          aggregatedSocials,
         })
         .then((res) => {
           setLoading(false);
@@ -98,7 +117,7 @@ const EditableProfile = () => {
             title: "Error",
             background: `#000`,
             boxShadow: `24px 24px 48px -24px #131313`,
-            text: "That name is already in use, please try another or contact NFT FM if this is a mistake.",
+            text: "Error updating account information.",
           });
         });
     } else {
@@ -112,11 +131,30 @@ const EditableProfile = () => {
   const cancelEdits = () => {
     setLoading(false);
     setEdit(false);
-    setUsername("");
+    setUsername(user.username);
+    user.profilePic && setProfilePic(user.profilePic);
+    user.socials[0] && setInsta(user.socials[0].insta);
+    user.socials[1] && setTwitter(user.socials[1].twitter);
+    user.socials[2] && setSpotify(user.socials[2].spotify);
+    user.socials[3] && setAudius(user.socials[3].audius);
   };
+
+  const [editSM, setEditSM] = useState(false);
 
   return (
     <ProfileHeading>
+      <EditSocials
+        editSM={editSM}
+        setEditSM={setEditSM}
+        insta={insta}
+        setInsta={setInsta}
+        twitter={twitter}
+        setTwitter={setTwitter}
+        audius={audius}
+        setAudius={setAudius}
+        spotify={spotify}
+        setSpotify={setSpotify}
+      />
       <Side />
       <ProfileHolder
       // onKeyDown={(e) => e.key === "Escape" && setEdit(false)}
@@ -159,15 +197,13 @@ const EditableProfile = () => {
               <StyledInput
                 type="text"
                 placeholder="Enter Username"
-                defaultValue={user?.username}
+                value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 ref={inputRef}
               />
             </form>
           ) : (
-            <Username>
-              {user && user.username !== "" ? user.username : "No username"}
-            </Username>
+            <Username>{username === "" ? "No username" : username}</Username>
           )}
           <Divider />
 
@@ -180,10 +216,73 @@ const EditableProfile = () => {
           </AddressSpan>
         </ProfileInfoHolder>
       </ProfileHolder>
-      <Side />
+      <Side>
+        <EditSMButton edit={edit} onClick={() => setEditSM(true)}>
+          Edit Socials
+        </EditSMButton>
+      </Side>
     </ProfileHeading>
   );
 };
+
+const EditSMButton = styled.button`
+  display: ${(props) => (props.edit ? "flex" : "none")};
+  width: 140px;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid ${(props) => props.theme.color.red};
+  font-size: ${(props) => props.theme.fontSizes.xs};
+  height: 32px;
+  border-radius: 20px;
+  font-family: "Compita";
+  color: white;
+  background-color: #181818;
+  margin-bottom: 20px;
+  margin-right: 80px;
+  padding: 10px;
+  &:hover {
+    background-color: rgba(256, 256, 256, 0.2);
+  }
+  @media only screen and (max-width: 776px) {
+    margin-right: auto;
+    margin-left: auto;
+  }
+`;
+const SocialRow = styled.div`
+  width: 100%;
+  display: ${(props) => (props.edit ? "flex" : "none")};
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 15px;
+  & > span {
+    align-self: flex-end;
+    padding-bottom: 7px;
+    width: 72px;
+  }
+
+  @media only screen and (max-width: 1337px) {
+    flex-direction: column;
+  }
+`;
+const SocialsInput = styled.input`
+  background-color: rgba(0, 0, 0, 0);
+  width: calc(100% - 72px);
+  border: none;
+  border-bottom: 2px solid ${(props) => props.theme.color.gray};
+  color: white;
+  text-align: left;
+  margin: 0 8px;
+  margin-bottom: 2px;
+  height: 24px;
+  font-size: 16px;
+
+  &:focus {
+    outline: none;
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+`;
 
 const CheckButton = styled.div`
   display: flex;
@@ -225,7 +324,7 @@ const EditingButtons = styled.div`
   position: absolute;
   right: 20px;
   top: 20px;
-  z-index: 100;
+  /* z-index: 10; */
   margin-top: -20px;
   @media only screen and (max-width: 776px) {
     right: -60px;
@@ -243,10 +342,10 @@ const Side = styled.div`
   width: calc(100% / 3);
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-end;
-  & > span:nth-child(1) {
-    margin-top: 40px;
+  justify-content: flex-end;
+  align-items: center;
+  @media only screen and (max-width: 776px) {
+    width: 100%;
   }
 `;
 
@@ -255,8 +354,8 @@ const ProfileHolder = styled.div`
   width: calc(100% / 3);
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   :focus {
     outline: none;
   }
@@ -266,6 +365,7 @@ const ProfileHeading = styled.div`
   margin-left: auto;
   margin-right: auto;
   display: flex;
+  /* flex-direction: row-reverse; */
   height: 200px;
   /* margin-top: 80px; */
   color: ${(props) => props.theme.fontColor.white};
@@ -273,6 +373,8 @@ const ProfileHeading = styled.div`
   justify-content: space-between;
   @media only screen and (max-width: 776px) {
     width: 90%;
+    flex-direction: column;
+    align-items: center;
   }
 `;
 

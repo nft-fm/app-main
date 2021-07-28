@@ -54,28 +54,7 @@ const UserSchema = new Schema({
       },
     },
   ],
-  socials: [
-    {
-      insta: {
-        type: String,
-      },
-    },
-    {
-      twitter: {
-        type: String,
-      },
-    },
-    {
-      audius: {
-        type: String,
-      },
-    },
-    {
-      spotify: {
-        type: String
-      }
-    }
-  ],
+  socials: [],
 });
 
 module.exports = User = mongoose.model("user", UserSchema);

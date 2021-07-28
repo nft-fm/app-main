@@ -10,6 +10,7 @@ import default_pic from "../../assets/img/profile_page_assets/default_profile.pn
 import { ReactComponent as IconTwitter } from "../../assets/img/icons/social_twitter.svg";
 import Instagram from "../../assets/img/icons/social_instagram.png";
 import Audius from "../../assets/img/icons/social_audius.png";
+import Spotify from "../../assets/img/icons/social_spotify.png";
 // import { ReactComponent as IconInstagram } from "../../assets/img/icons/social_instagram.svg";
 const Artist = () => {
   const [edit, setEdit] = useState(false);
@@ -92,6 +93,17 @@ const Artist = () => {
               </IconContainer>
             );
           }
+          if (social.spotify) {
+            return (
+              <IconContainer
+                href={social.spotify}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <SpotifyIcon src={Spotify} alt="instagram icon" />
+              </IconContainer>
+            );
+          }
           if (social.audius) {
             return (
               <IconContainer
@@ -115,6 +127,12 @@ const Artist = () => {
     </BaseView>
   );
 };
+
+const SpotifyIcon = styled.img`
+  height: 17px;
+  width: 17px;
+  filter: invert(1);
+`;
 
 const InstaIcon = styled.img`
   height: 17px;

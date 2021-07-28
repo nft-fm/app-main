@@ -3,6 +3,7 @@ import { black, white } from "./colors";
 const theme = {
   borderRadius: 4,
   bgColor: "#090909",
+  fontFamily: "Compita",
   fontColor: {
     white,
     gray: "#5c5c5c",

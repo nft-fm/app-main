@@ -19,9 +19,11 @@ const checkVinylOwners = async () => {
     const users = await User.find()
     let owners = await getVinylOwners(users.map(user => user.address))
     let newOwners = new VinylOwners({ owners: owners.filter(user => user.amount > 0) })
+    // console.log("New Owners", newOwners)
     await newOwners.save()
     let ownersMap = new Map()
     newOwners.owners.map(user => ownersMap.set(user.address, user.amount))
+    // console.log("ownersMap", ownersMap)
     return ownersMap
   } catch (error) {
     throw error
@@ -44,6 +46,7 @@ router.get('/get-one/:id', async (req, res) => {
 // router.get('/get-all', async (req, res) => {
 //   try {
 //     let owners = await checkVinylOwners()
+//     console.log(owners, "owners")
 //     res.send(owners)
 //   } catch (error) {
 //     console.log(error);

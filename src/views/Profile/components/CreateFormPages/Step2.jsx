@@ -96,6 +96,10 @@ const Step2 = ({
           setIsLoadingImage(false);
           setImageFile(null);
           console.log(err);
+          setNftData({
+            ...nftData,
+            imageUrl: ""
+          })
           swal.fire({
             imageUrl: errorIcon,
             imageWidth,
@@ -237,6 +241,12 @@ const Step2 = ({
                     title: "Error",
                     text: "Audio upload failed on the server, please try again.",
                   });
+                  setNftData({
+                    ...nftData,
+                    audioUrl: "",
+                    snnipet: "",
+                    dur: 0
+                  });
                   console.log("snnipets upload failed", error);
                   setIsLoadingAudio(false);
                   setAudioName("")
@@ -247,8 +257,14 @@ const Step2 = ({
       })
       .catch((err) => {
         console.log(err);
-        setIsLoadingAudio(false);
         setAudioName("")
+        setNftData({
+          ...nftData,
+          audioUrl: "",
+          snnipet: "",
+          dur: 0
+        });
+        setIsLoadingAudio(false);
         swal.fire({
           imageUrl: errorIcon,
           imageWidth,

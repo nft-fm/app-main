@@ -10,10 +10,20 @@ import ProfilePic from "./components/ProfilePic";
 import ArtistNfts from "./components/ArtistNfts";
 import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
 import Error404 from "../404/404";
-import { errorIcon, questionIcon, imageWidth, imageHeight } from "../../utils/swalImages";
+import {
+  errorIcon,
+  questionIcon,
+  imageWidth,
+  imageHeight,
+} from "../../utils/swalImages";
 import swal from "sweetalert2";
-
+import EditableProfile from "./components/EditableProfile";
 import { ReactComponent as plus_icon } from "../../assets/img/icons/plus_icon.svg";
+import { ReactComponent as IconTwitter } from "../../assets/img/icons/social_twitter.svg";
+import Instagram from "../../assets/img/icons/social_instagram.png";
+import Audius from "../../assets/img/icons/social_audius.png";
+import Spotify from "../../assets/img/icons/social_spotify.png";
+
 const Profile = () => {
   const { account, connect, user, setUser } = useAccountConsumer();
   const [edit, setEdit] = useState(false);
@@ -44,72 +54,78 @@ const Profile = () => {
 
   const openMintModal = async () => {
     try {
-      const hasDraft = await axios.get(`/api/nft-type/has-draft/${account}`)
+      const hasDraft = await axios.get(`/api/nft-type/has-draft/${account}`);
       if (hasDraft.data.hasDraft) {
-        swal.fire({
-          title: 'You have a old draft saved!',
-          showDenyButton: true,
-          showCloseButton: true,
-          confirmButtonText: `Use Draft`,
-          denyButtonText: `Delete Draft`,
-          imageUrl: questionIcon,
-          imageWidth,
-          imageHeight      
-        }).then( async res => {
-          if (res.isConfirmed) {
-            setOpen(!open)
-          } if (res.isDenied) {
-            swal.fire({
-              title: 'Are you sure you want to delete the draft?',
-              text: 'This action cannot be reverted',
-              showCloseButton: true,
-              showDenyButton: true,
-              confirmButtonText: `Yes! Delete it!`,
-              denyButtonText: 'No! Go back!',
-              imageUrl: questionIcon,
-              imageWidth,
-              imageHeight      
-            }).then(res2 => {
-              if (res2.isConfirmed) {
-                setReset(true)
-                setOpen(!open)
-              }
-              if (res2.isDenied) {
-                return openMintModal();
-              }
-            } 
-
-            )
-          }
-        });
+        swal
+          .fire({
+            title: "You have a old draft saved!",
+            showDenyButton: true,
+            showCloseButton: true,
+            confirmButtonText: `Use Draft`,
+            denyButtonText: `Delete Draft`,
+            imageUrl: questionIcon,
+            imageWidth,
+            imageHeight,
+          })
+          .then(async (res) => {
+            if (res.isConfirmed) {
+              setOpen(!open);
+            }
+            if (res.isDenied) {
+              swal
+                .fire({
+                  title: "Are you sure you want to delete the draft?",
+                  text: "This action cannot be reverted",
+                  showCloseButton: true,
+                  showDenyButton: true,
+                  confirmButtonText: `Yes! Delete it!`,
+                  denyButtonText: "No! Go back!",
+                  imageUrl: questionIcon,
+                  imageWidth,
+                  imageHeight,
+                })
+                .then((res2) => {
+                  if (res2.isConfirmed) {
+                    setReset(true);
+                    setOpen(!open);
+                  }
+                  if (res2.isDenied) {
+                    return openMintModal();
+                  }
+                });
+            }
+          });
       } else {
-        swal.fire({
-          title: 'Mint a new NFT?',
-          showCloseButton: true,
-          confirmButtonText: `Yes, Create!`,
-          imageUrl: questionIcon,
-          imageWidth,
-          imageHeight      
-        }).then( async result => {
-          if (result.isConfirmed) {
-            await axios
-              .post("/api/nft-type/get-NFT", { account })
-              .then(() => setOpen(!open))
-              .catch(err => console.error("Failed to create new draft", err))
-          }
-        });
+        swal
+          .fire({
+            title: "Mint a new NFT?",
+            showCloseButton: true,
+            confirmButtonText: `Yes, Create!`,
+            imageUrl: questionIcon,
+            imageWidth,
+            imageHeight,
+          })
+          .then(async (result) => {
+            if (result.isConfirmed) {
+              await axios
+                .post("/api/nft-type/get-NFT", { account })
+                .then(() => setOpen(!open))
+                .catch((err) =>
+                  console.error("Failed to create new draft", err)
+                );
+            }
+          });
       }
-    } catch(error) {
+    } catch (error) {
       swal.fire({
-        title: 'Failed to get response from server',
+        title: "Failed to get response from server",
         imageUrl: errorIcon,
         imageWidth,
-        imageHeight      
+        imageHeight,
       });
-      console.log(error)
+      console.log(error);
     }
-
-  }
+  };
 
   if (!user || (user && !user.isArtist)) return <Error404 />; //this probably needs some work
   return (
@@ -126,52 +142,58 @@ const Profile = () => {
       )}
       <Landing>
         <Banner />
-        <ProfileHeading>
-          <Side />
-          <ProfileHolder>
-            <Cog
-              src={cog}
-              alt="edit icon"
-              onClick={account ? () => setEdit(!edit) : null}
-            />
-            <ProfilePic
-              profilePic={
-                profilePic && profilePic !== "" ? profilePic : default_pic
-              }
-              setProfilePic={setProfilePic}
-              edit={edit}
-              setEdit={setEdit}
-            />
-            <ProfileInfoHolder>
-              {edit ? (
-                <form onSubmit={(e) => saveDetails(e)}>
-                  <StyledInput
-                    type="text"
-                    placeholder="Enter Username"
-                    defaultValue={user?.username}
-                    onChange={(e) => setUsername(e.target.value)}
-                  />
-                </form>
-              ) : (
-                <Username>
-                  {user && user.username !== "" ? user.username : "No username"}
-                </Username>
-              )}
-              <Divider />
-
-              <AddressSpan>
-                {user
-                  ? user.address.substring(0, 10) +
-                    "..." +
-                    user.address.substring(user.address.length - 4)
-                  : " "}
-              </AddressSpan>
-            </ProfileInfoHolder>
-          </ProfileHolder>
-          <Side>
-          </Side>
-        </ProfileHeading>
+        <EditableProfile />
       </Landing>
+
+      <SocialsBar>
+        {user.socials.map((social) => {
+          // console.log(social);
+          if (social.twitter) {
+            return (
+              <IconContainer
+                href={social.twitter}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Twitter />
+              </IconContainer>
+            );
+          }
+          if (social.insta) {
+            return (
+              <IconContainer
+                href={social.insta}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <InstaIcon src={Instagram} alt="instagram icon" />
+              </IconContainer>
+            );
+          }
+          if (social.spotify) {
+            return (
+              <IconContainer
+                href={social.spotify}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <SpotifyIcon src={Spotify} alt="instagram icon" />
+              </IconContainer>
+            );
+          }
+          if (social.audius) {
+            return (
+              <IconContainer
+                href={social.audius}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <AudiusIcon src={Audius} alt="instagram icon" />
+              </IconContainer>
+            );
+          }
+        })}
+      </SocialsBar>
 
       <CreatedNftHolder>
         <NftContainer>
@@ -183,15 +205,71 @@ const Profile = () => {
           <ArtistNfts user={user} />
         </NftContainer>
       </CreatedNftHolder>
-      <CreateForm 
-        reset={reset} 
+      <CreateForm
+        reset={reset}
         setReset={setReset}
         open={open}
-        hide={() => setOpen(false)} 
+        hide={() => setOpen(false)}
       />
     </BaseView>
   );
 };
+
+const SpotifyIcon = styled.img`
+  height: 17px;
+  width: 17px;
+  filter: invert(1);
+`;
+
+const InstaIcon = styled.img`
+  height: 17px;
+  width: 17px;
+  filter: invert(1);
+`;
+const AudiusIcon = styled.img`
+  height: 17px;
+  width: 17px;
+`;
+
+const Twitter = styled(IconTwitter)`
+  width: 17px;
+  height: 17px;
+  & path {
+    transition: all 0.2s ease-in-out;
+    fill: white;
+  }
+`;
+const IconContainer = styled.a`
+  cursor: pointer;
+  margin: 0 8px;
+  border: solid 1px ${(props) => props.theme.color.boxBorder};
+  border-radius: 25px;
+  background-color: ${(props) => props.theme.color.box};
+  width: 25px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    background-color: ${(props) => props.theme.color.boxBorder};
+    border: solid 1px #383838;
+  }
+`;
+const SocialsBar = styled.div`
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-bottom: -10px;
+  @media only screen and (max-width: 776px) {
+    /* flex-direction: column; */
+    width: 100%;
+    justify-content: center;
+    margin-top: 10px;
+  }
+`;
 
 const PlusIcon = styled(plus_icon)`
   width: 17px;
@@ -355,91 +433,6 @@ const IsConnected = styled.div`
 
 //Profile Stuff below here
 
-const Cog = styled.img`
-  width: 15px;
-  right: 45px;
-  position: absolute;
-  cursor: pointer;
-  :hover {
-    animation: rotation 4s infinite linear;
-  }
-  @keyframes rotation {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(359deg);
-    }
-  }
-  @media only screen and (max-width: 776px) {
-    top: 0px;
-    right: -25px;
-  }
-`;
-
-const ProfileInfoHolder = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const Side = styled.div`
-  width: calc(100% / 3);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-end;
-  & > span:nth-child(1) {
-    margin-top: 40px;
-  }
-`;
-
-const ProfileHolder = styled.div`
-  position: relative;
-  width: calc(100% / 3);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const ProfileHeading = styled.div`
-  margin-left: auto;
-  margin-right: auto;
-  display: flex;
-  height: 200px;
-  /* margin-top: 80px; */
-  color: ${(props) => props.theme.fontColor.white};
-  width: 100%;
-  justify-content: space-between;
-  @media only screen and (max-width: 776px) {
-    width: 90%;
-  }
-`;
-
-const StyledInput = styled.input`
-  background-color: ${(props) => props.theme.bgColor};
-  font-size: ${(props) => props.theme.fontSizes.sm};
-  border: none;
-  outline: none;
-  color: white;
-  opacity: 0.6;
-  text-align: center;
-`;
-
-const Username = styled.span`
-  font-size: ${(props) => props.theme.fontSizes.md};
-  white-space: nowrap;
-`;
-
-const AddressSpan = styled.span`
-  color: ${(props) => props.theme.color.gray};
-  display: flex;
-  /* align-items: center;s */
-  position: relative;
-  height: 20px;
-`;
 const Landing = styled.div`
   /* height: 450px; */
   top: 0;
@@ -453,10 +446,4 @@ const Banner = styled.div`
   height: 50px;
 `;
 
-const Divider = styled.div`
-  width: 200px;
-  height: 1px;
-  background-color: ${(props) => props.theme.fontColor.gray};
-  margin-bottom: 6px;
-`;
 export default Profile;

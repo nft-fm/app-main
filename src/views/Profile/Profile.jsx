@@ -144,7 +144,6 @@ const Profile = () => {
         <Banner />
         <EditableProfile />
       </Landing>
-
       <SocialsBar>
         {user.socials.map((social) => {
           // console.log(social);
@@ -194,7 +193,6 @@ const Profile = () => {
           }
         })}
       </SocialsBar>
-
       <CreatedNftHolder>
         <NftContainer>
           <NftContainerTitle>YOUR MUSIC</NftContainerTitle>

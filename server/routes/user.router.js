@@ -49,11 +49,13 @@ router.post("/get-account", async (req, res) => {
 
 router.post("/update-account", async (req, res) => {
   try {
-    const findDuplicateNames = await User.findOne({
+    console.log('update account route', req.body)
+    const findDuplicateName = await User.findOne({
       suburl: req.body.username.replace(/ /g, "").toLowerCase(),
     });
-    if (findDuplicateNames?.address != req.body.address) {
+    if (findDuplicateName && findDuplicateName.address.toLowerCase() != req.body.address.toLowerCase()) {
       //if another account (checked by address) has the same name, send error
+      console.log('ERROR DUPE')
       res.status(403).send("Duplicate name");
     } else {
       console.log("front end socials", req.body.aggregatedSocials);
@@ -76,7 +78,7 @@ router.post("/update-account", async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.sendStatus(500);
+    res.status(500).send(error);
   }
 });
 

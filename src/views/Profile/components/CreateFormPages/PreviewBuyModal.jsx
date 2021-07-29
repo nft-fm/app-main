@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
-
-// import axios from 'axios';
 import PlaySongSnippet from "../../../../components/NftModals/Components/PlaySongSnippet"
 import moment from "moment";
 import { ReactComponent as IconEth } from "../../../../assets/img/icons/ethereum.svg";
 import { ReactComponent as IconHeart } from "../../../../assets/img/icons/heart.svg";
 import { ReactComponent as IconShare } from "../../../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../../../assets/img/icons/cart.svg";
+
+import Ticker from "../../../../components/Ticker/"
 
 const PreviewBuyModal = ({ nft }) => {
   const [partialSong, setPartialSong] = useState(false);
@@ -25,6 +25,7 @@ const PreviewBuyModal = ({ nft }) => {
     var sDisplay = s < 10 ? "0" + s : s;
     return hDisplay + mDisplay + sDisplay;
   };
+
   const getSnnipetAWS = async (completeNft) => {
     await axios
       .post("/api/nft-type/getSnnipetAWS", {
@@ -92,10 +93,17 @@ const PreviewBuyModal = ({ nft }) => {
       </CardTop>
       <BadgeHolder />
       <InfoContainer>
-        <TrackName>{nft.title}</TrackName>
-        <Artist
-          // to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}
-        >
+        {nft.title.length > 20 ?
+          <Ticker>
+            <TrackName>
+              {nft.title}
+            </TrackName>
+          </Ticker>
+          : <TrackName>
+            {nft.title}
+          </TrackName>
+        }     
+        <Artist>
           {nft.artist}
         </Artist>
       </InfoContainer>

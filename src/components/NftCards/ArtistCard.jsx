@@ -85,8 +85,12 @@ const NftCard = (props) => {
         alt="image"
         onClick={() => setIsOpen(!isOpen)}
       />
-      <TrackName>{nft.title}</TrackName>
-      <Artist>{nft.artist}</Artist>
+      <TrackName>
+        {nft.title.length > 20 ? nft.title.slice(0,20) + '...' : nft.title}
+      </TrackName>
+      <Artist>
+        {nft.artist.length > 20 ? nft.artist.slice(0,20) + '...' : nft.artist}
+      </Artist>
       <CostFields>
         <CostEth>
           {nft?.price?.toLocaleString(undefined, {

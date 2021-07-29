@@ -26,6 +26,7 @@ import moment from "moment";
 import { NavLink } from "react-router-dom";
 import ReactPlayer from "react-player";
 import { errorIcon, warningIcon, imageWidth, imageHeight } from "../../utils/swalImages";
+import Ticker from "../../components/Ticker"
 
 const BuyNftModal = (props) => {
   const {
@@ -273,11 +274,20 @@ const BuyNftModal = (props) => {
               </ReactToolTip>
             </BadgeHolder>
             <InfoContainer>
-              <TrackName>{nft.title}</TrackName>
+              {nft.title.length > 20 ?
+                <Ticker>
+                  <TrackName>
+                    {nft.title}
+                  </TrackName>
+                </Ticker>
+                : <TrackName>
+                  {nft.title}
+                </TrackName>
+              }            
               <Artist
                 to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}
               >
-                {nft.artist}
+                {nft.artist.length > 20 ? nft.artist.slice(0,20) + '...' : nft.artist}
               </Artist>
             </InfoContainer>
             <SnippetHolder>

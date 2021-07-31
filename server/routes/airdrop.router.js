@@ -111,9 +111,9 @@ router.post("/getNftIds", async (req, res) => {
   }
 });
 
-router.post("/getHolders", async (req, res) => {
+router.post("/getHoldersFromDB", async (req, res) => {
   try {
-    console.log("getHolders hit");
+    console.log("getHoldersFromDB hit");
     const holders = await Airdrop.find({});
     console.log(holders);
     res.status(200).send(holders);

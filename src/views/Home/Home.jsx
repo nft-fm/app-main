@@ -8,7 +8,6 @@ import { Features } from "./Components/Features";
 import DemoImage from "./Components/DemoImage/DemoImage";
 import { ReactComponent as rightArrow } from "../../assets/img/homepage_assets/right-arrow-3.svg";
 import { errorIcon, imageWidth, imageHeight } from "../../utils/swalImages";
-import axios from "axios";
 
 const Listen = () => {
   if (
@@ -23,17 +22,10 @@ const Listen = () => {
       imageHeight,
     });
   }
-  const airdrop = () => {
-    axios
-      .post("/api/airdrop/airdrop")
-      .then((res) => console.log("res", res))
-      .catch((err) => console.log(err));
-  };
 
   return (
     <Switch>
       <BaseView>
-        <button onClick={() => airdrop()}>✈️💦</button>
         <Landing />
         <Divider />
         <Features />

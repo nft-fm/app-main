@@ -3,6 +3,9 @@ const Schema = mongoose.Schema;
 
 const AirdropSchema = new Schema({
   batch: {
+    type: Number,
+  },
+  date: {
     type: Date,
     default: Date.now(),
   },

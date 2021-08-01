@@ -1,45 +1,28 @@
 import axios from "axios";
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import styled from "styled-components";
-import { useAccountConsumer } from "../../../contexts/Account";
-
-const MakeBatches = ({ nftIds, setMakeBatches }) => {
-  const index = useRef(1);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (index.current <= nftIds[nftIds.length - 1]) {
-        axios
-          .post("/api/airdrop/airdrop", { nftId: index.current })
-          .then((res) => {
-            console.log(res.data);
-            index.current++;
-          })
-          .catch((err) => console.log(err));
-      } else {
-        return () => clearInterval(interval);
-      }
-    }, 10000);
-  }, [nftIds]);
-  return <div>Making batches...</div>;
-};
 
 const Airdrop = () => {
   const [nftIds, setNftIds] = useState([]);
-  const [makeBatches, setMakeBatches] = useState(false);
   const [holders, setHolders] = useState({ addresses: [], quantities: []});
+  const [nextBatchNum, setNextBatchNum] = useState(null);
+  const [parseBatch, setParseBatch] = useState(0);
 
-  const getAllNftIds = async () => {
-    await axios.post("/api/airdrop/getNftIds").then((res) => {
+  useEffect(() => {
+    axios.get("/api/airdrop/nextBatchNum").then((res) => {
+      console.log("next batch", res.data);
+      if (res.data.batchNum) {
+        setNextBatchNum(res.data.batchNum);
+      }
+    })
+    axios.post("/api/airdrop/getNftIds").then((res) => {
       console.log(res);
       setNftIds(res.data.sort());
     });
-  };
-  useEffect(() => {
-    getAllNftIds();
   }, []);
+
   const parseHolders = async () => {
-    await axios.post("/api/airdrop/getHoldersFromDB").then((res) => {
+    await axios.post("/api/airdrop/getHoldersFromDB", {batch: parseBatch}).then((res) => {
       let arr = [];
       for (let i = 0; i < res.data.length; i++) {
         arr.push(...res.data[i].holders);
@@ -50,7 +33,7 @@ const Airdrop = () => {
       //if it does, remove it from the array and add quantity to original element's quantity
       arr.map((initialElement, index) => {
         for (let i = 0; i < arr.length; i++) {
-          if (arr[i] != arr[index]) {
+          if (arr[i] !== arr[index]) {
             if (initialElement.address === arr[i].address) {
               console.log(initialElement, arr[i]);
               arr[index].quantity = arr[index].quantity + arr[i].quantity;
@@ -70,22 +53,53 @@ const Airdrop = () => {
       setHolders({addresses: holderAdresses, quantities: holderQuantities});
     });
   };
+
+  const pullHoldersFromOpensea = async () => {
+    const timer = ms => new Promise(res => setTimeout(res, ms))
+
+    console.log("pull");
+      for (let index = 0; index < nftIds.length; index++) {
+        axios
+        .post("/api/airdrop/getHoldersFromOpenSea", { nftId: index, batch: nextBatchNum })
+        .then((res) => {
+          console.log("fetched", index, "\n", res.data);
+        })
+        .catch((err) => console.log(err));
+        await timer(3000); 
+  }}
+
+
   //commented out the make batches function, need to add restriction to that route if the month's airdrop has already been done
   return (
     <Container>
+        {(nftIds && nextBatchNum) &&
+        <Contained>
+          <div>
+            Next Batch (to fetch): {nextBatchNum}
+          </div>
+          <button onClick={() => pullHoldersFromOpensea()}>
+          Fetch New Batch {nextBatchNum} (pulls from opensea)
+        </button>
+        </Contained>
+        }
+        <br/>
+        <Contained>
+        <button onClick={() => parseHolders(parseBatch)}>Parse Batch</button>
+        <input
+          value={parseBatch}
+          onChange={e =>setParseBatch(e.target.value)}
+        ></input>
+      </Contained>
+      <br/>
+      <Contained>
+
       <span>Nft Ids:</span>
       <NftIdsHolder>
         {nftIds.map((item) => (
           <NftIdSpan>{item}</NftIdSpan>
-        ))}
-        {/* <button onClick={() => nftIds.length > 0 && setMakeBatches(true)}>
-          Click me to make airdrop batches!
-        </button> */}
-        <button onClick={() => parseHolders()}>Parse Holders</button>
-        {makeBatches && (
-          <MakeBatches nftIds={nftIds} setMakeBatches={setMakeBatches} />
-        )}
+          ))}
       </NftIdsHolder>
+        </Contained>
       {holders.addresses.length > 0 && (
         <HolderContainer>
           <LeftSide>
@@ -104,7 +118,11 @@ const Airdrop = () => {
       )}
     </Container>
   );
-};
+}
+
+const Contained = styled.div`
+`
+
 const HolderContainer = styled.div`
   width: 1000px;
   display: flex;

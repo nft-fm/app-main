@@ -40,9 +40,9 @@ const ItemOwnersList_data_ttWlh = `{
     }
   }`;
 
-router.post("/airdrop", async (req, res) => {
+router.post("/getHoldersFromOpenSea", async (req, res) => {
   try {
-    console.log("/airdrop hit", req.body);
+    console.log("/getHoldersFromOpenSea hit", req.body);
     let allNftHolders = [];
 
     await axios({
@@ -68,7 +68,7 @@ router.post("/airdrop", async (req, res) => {
         console.log(res.data.data.archetype.asset.assetOwners.edges);
         res.data.data.archetype.asset.assetOwners.edges.map((item) => {
           if (
-            item.node.owner.address !=
+            item.node.owner.address !==
             "0xb46700fbe3c2ed36851a4ccfead109ceff32d40f"
           ) {
             allNftHolders.push({
@@ -89,6 +89,7 @@ router.post("/airdrop", async (req, res) => {
     const airdrop = new Airdrop({
       nftId: req.body.nftId,
       holders: allNftHolders,
+      batch: req.body.batch
     });
     await airdrop.save();
     // }
@@ -111,10 +112,22 @@ router.post("/getNftIds", async (req, res) => {
   }
 });
 
+router.get("/nextBatchNum", async (req, res) => {
+  try {
+    console.log("getNftIds hit");
+    const airdrop = await Airdrop.findOne().sort('-batch');
+    console.log("next batch", airdrop);
+    res.send({batchNum: airdrop.batch + 1});
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+
 router.post("/getHoldersFromDB", async (req, res) => {
   try {
-    console.log("getHoldersFromDB hit");
-    const holders = await Airdrop.find({});
+    console.log("getHoldersFromDB hit", req.body);
+    const holders = await Airdrop.find({batch: req.body.batch});
     console.log(holders);
     res.status(200).send(holders);
   } catch (err) {

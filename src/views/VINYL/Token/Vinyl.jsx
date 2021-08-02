@@ -8,7 +8,6 @@ import { FAQ } from "./Components/FAQ/FAQ";
 import record from "../../../assets/img/record_player_disk.png";
 import logo from "../../../assets/img/logos/logo.png";
 import Tokenomics from "./Components/Tokenomics";
-import Airdrops from "./Components/Airdrops";
 import VinylLinks from "./Components/VinylLinks";
 
 const Vinyl = () => {

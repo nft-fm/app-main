@@ -4,7 +4,7 @@ import { BaseView } from "../../../components/Page/BaseView";
 import styled from "styled-components";
 import AddNewPoll from './AddNewPoll'
 import { useAccountConsumer } from "../../../contexts/Account";
-
+import Airdrop from "./Airdrop"
 import Error404 from "../../404"
 const GovPolls = () => {
   const { user, isAdmin } = useAccountConsumer();
@@ -26,6 +26,7 @@ const GovPolls = () => {
         </ButtonGroup>
         <Spacer />
         <AddNewPoll />
+        <Airdrop />
         {/* <FAQ /> */}
       </Container>
     </BaseView>

@@ -72,7 +72,7 @@ const NftTypeSchema = new Schema({
   },
   description: {
     type: String,
-    default: ""
+    default: "",
   },
   badges: [
     {
@@ -96,7 +96,6 @@ const NftTypeSchema = new Schema({
       },
     },
   ],
-
   likes: [
     {
       type: String,

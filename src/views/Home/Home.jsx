@@ -9,9 +9,7 @@ import DemoImage from "./Components/DemoImage/DemoImage";
 import { ReactComponent as rightArrow } from "../../assets/img/homepage_assets/right-arrow-3.svg";
 import { errorIcon, imageWidth, imageHeight } from "../../utils/swalImages";
 
-
 const Listen = () => {
-
   if (
     window.location.hostname === "localhost" &&
     process.env.REACT_APP_IS_MAINNET
@@ -21,7 +19,7 @@ const Listen = () => {
       text: `🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆`,
       imageUrl: errorIcon,
       imageWidth,
-      imageHeight
+      imageHeight,
     });
   }
 
@@ -34,7 +32,7 @@ const Listen = () => {
         <Divider />
         <DemoImage />
         <StyledHeader>Are you an artist? Launch with us!</StyledHeader>
-        <StyledAccountButton href="/register-artist" >
+        <StyledAccountButton href="/register-artist">
           Contact us!
         </StyledAccountButton>
         <DescriptionLink to="/info">

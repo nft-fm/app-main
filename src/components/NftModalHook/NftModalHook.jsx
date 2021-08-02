@@ -25,8 +25,13 @@ import { ReactComponent as Exclusive } from "../../assets/img/Badges/exclusive.s
 import moment from "moment";
 import { NavLink } from "react-router-dom";
 import ReactPlayer from "react-player";
-import { errorIcon, warningIcon, imageWidth, imageHeight } from "../../utils/swalImages";
-import Ticker from "../../components/Ticker"
+import {
+  errorIcon,
+  warningIcon,
+  imageWidth,
+  imageHeight,
+} from "../../utils/swalImages";
+import Ticker from "../../components/Ticker";
 
 const BuyNftModal = (props) => {
   const {
@@ -47,7 +52,7 @@ const BuyNftModal = (props) => {
   const [isBought, setIsBought] = useState(false);
   const { account, connect, usdPerEth, getUser } = useAccountConsumer();
   const { setNftCallback } = usePlaylistConsumer();
-  
+
   const stopProp = (e) => {
     e.stopPropagation();
   };
@@ -56,40 +61,56 @@ const BuyNftModal = (props) => {
     setIsLoading(true);
     await getEthBalance(async (balance) => {
       if (parseFloat(balance) >= nft.price) {
-        await buyNFT(
-          { nftID: id, amount: 1, saleId: nft.nftId, price: String(nft.price) },
-          () => {
-            console.log("pending");
-          },
-          () => {
-            axios
-              .post("/api/nft-type/purchase", { id: id, address: account })
-              .then((res) => {
-                setTimeout(function () {
+        Swal.fire({
+          title:
+            "Attempting to purchase, please do not close or refresh during this process.",
+          showConfirmButton: false,
+          timer: 3000,
+        }).then(async () => {
+          await buyNFT(
+            {
+              nftID: id,
+              amount: 1,
+              saleId: nft.nftId,
+              price: String(nft.price),
+            },
+            () => {
+              console.log("pending");
+            },
+            () => {
+              axios
+                .post("/api/nft-type/purchase", { id: id, address: account })
+                .then((res) => {
+                  setTimeout(function () {
+                    setIsLoading(false);
+                    setIsBought(true);
+                    getUser();
+                  }, 1000);
+                  Swal.fire({
+                    title: "Succesful purchase!",
+                    html: `<div>View in your library (can take a moment to appear)<div>`,
+                  });
+                })
+                .catch((err) => {
+                  console.error(err.status, err.message, err.error);
+                  Swal.fire(
+                    `Error: ${err.response ? err.response.status : 404}`,
+                    `${err.response ? err.response.data : "server error"}`,
+                    "error"
+                  );
                   setIsLoading(false);
-                  setIsBought(true);
-                  getUser();
-                }, 1000);
-              })
-              .catch((err) => {
-                console.error(err.status, err.message, err.error);
-                Swal.fire(
-                  `Error: ${err.response ? err.response.status : 404}`,
-                  `${err.response ? err.response.data : "server error"}`,
-                  "error"
-                );
-                setIsLoading(false);
-                console.log(err);
-              });
-          }
-        ).catch((err) => {
-          console.log(err);
-          swal.fire({
-            imageUrl: errorIcon,
-            imageWidth,
-            imageHeight,            
-            title: "Couldn't complete sale!",
-            text: "Please try again",
+                  console.log(err);
+                });
+            }
+          ).catch((err) => {
+            console.log(err);
+            swal.fire({
+              imageUrl: errorIcon,
+              imageWidth,
+              imageHeight,
+              title: "Couldn't complete sale!",
+              text: "Please try again",
+            });
           });
         });
       } else {
@@ -101,7 +122,7 @@ const BuyNftModal = (props) => {
           )}`,
           imageUrl: errorIcon,
           imageWidth,
-          imageHeight        
+          imageHeight,
         });
         return;
       }
@@ -153,7 +174,7 @@ const BuyNftModal = (props) => {
         text: "You are on the wrong chain. Please connect to Ethereum Mainnet.",
         imageUrl: warningIcon,
         imageWidth,
-        imageHeight
+        imageHeight,
       });
     }
   };
@@ -169,34 +190,13 @@ const BuyNftModal = (props) => {
     var sDisplay = s < 10 ? "0" + s : s;
     return hDisplay + mDisplay + sDisplay;
   };
-
   if (!open) return null;
   return (
-    <OpaqueFilter onClick={(e) => hide(e)}>
+    <OpaqueFilter onClick={(e) => !isLoading && hide(e)}>
       <Container onClick={(e) => stopProp(e)}>
         <StyledModal>
-          <X onClick={(e) => hide(e)} />
-          {/* if videoUrl exists, render video instead of image */}
-          {/* {nft.videoUrl ? (
-            <ReactPlayer
-              url={nft.videoUrl}
-              controls="true"
-              onStart="false"
-              playing={false}
-              loop="true"
-              width="500px"
-              height="500px"
-              style={{ marginTop: "auto", marginBottom: "auto" }}
-              onContextMenu={e => e.preventDefault()}
-              config={{ file: { 
-                attributes: {
-                  controlsList: 'nodownload'
-                }
-              }}}
-            />
-          ) : ( */}
-            <Image src={nft.imageUrl} alt="image" />
-          {/* )} */}
+          <X onClick={(e) => !isLoading && hide(e)} />
+          <Image src={nft.imageUrl} alt="image" />
           <RightSide>
             <CardTop>
               <Side>
@@ -274,20 +274,19 @@ const BuyNftModal = (props) => {
               </ReactToolTip>
             </BadgeHolder>
             <InfoContainer>
-              {nft.title.length > 18 ?
+              {nft.title.length > 18 ? (
                 <Ticker>
-                  <TrackName>
-                    {nft.title}
-                  </TrackName>
+                  <TrackName>{nft.title}</TrackName>
                 </Ticker>
-                : <TrackName>
-                  {nft.title}
-                </TrackName>
-              }            
+              ) : (
+                <TrackName>{nft.title}</TrackName>
+              )}
               <Artist
                 to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}
               >
-                {nft.artist.length > 20 ? nft.artist.slice(0,20) + '...' : nft.artist}
+                {nft.artist.length > 20
+                  ? nft.artist.slice(0, 20) + "..."
+                  : nft.artist}
               </Artist>
             </InfoContainer>
             <SnippetHolder>
@@ -691,6 +690,11 @@ const Image = styled.img`
   background-color: #1e1e1e;
   object-fit: cover;
   overflow: hidden;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
   /* margin-bottom: 16px; */
   @media only screen and (max-width: 776px) {
     width: 90vw;

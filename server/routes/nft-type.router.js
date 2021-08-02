@@ -81,10 +81,13 @@ router.post("/artist-nfts", async (req, res) => {
 
 router.post("/update-and-fetch", async (req, res) => {
   try {
-    const nftData = req.body
-    if (!req.body.address) return res.status(400).send("No address")
-    let draft = await NftType.findOne({ isDraft: true, address: req.body.address});
-    
+    const nftData = req.body;
+    if (!req.body.address) return res.status(400).send("No address");
+    let draft = await NftType.findOne({
+      isDraft: true,
+      address: req.body.address,
+    });
+
     if (!draft) {
       // res.status(400).send("Unable to find/update NFT");
       draft = await new NftType({
@@ -100,7 +103,7 @@ router.post("/update-and-fetch", async (req, res) => {
       if (key in draft) draft[key] = nftData[key];
     }
 
-    if (draft.address && draft.artist === '') {
+    if (draft.address && draft.artist === "") {
       let user = await User.findOne({ address: req.body.address });
       draft.artist = user.username;
     }
@@ -114,16 +117,19 @@ router.post("/update-and-fetch", async (req, res) => {
 
 router.get("/has-draft/:id", async (req, res) => {
   try {
-    if (!req.params.id) res.status(400).send("No address >_<")
-    const draft = await NftType.findOne({ isDraft: true, address: req.params.id })
-    
-    console.log("hasDraft", !!draft)
+    if (!req.params.id) res.status(400).send("No address >_<");
+    const draft = await NftType.findOne({
+      isDraft: true,
+      address: req.params.id,
+    });
+
+    console.log("hasDraft", !!draft);
     res.send({ hasDraft: !!draft });
-  } catch(err) {
-    console.log(err)
+  } catch (err) {
+    console.log(err);
     res.status(500).send("Server Error");
   }
-})
+});
 
 router.post("/get-NFT", async (req, res) => {
   try {
@@ -142,8 +148,8 @@ router.post("/get-NFT", async (req, res) => {
         await newNft.save();
         res.send(newNft);
       } else {
-        console.log("fetched draft")
-        console.log(nft)
+        console.log("fetched draft");
+        console.log(nft);
         res.send(nft);
       }
     }
@@ -202,8 +208,8 @@ const toArrayBuffer = (buf) => {
 
 router.post("/update-draft", async (req, res) => {
   try {
-    if (!req.body.address) return res.status(400).send("No address :(((")
-    console.log("Hiiii I see you!")
+    if (!req.body.address) return res.status(400).send("No address :(((");
+    console.log("Hiiii I see you!");
     const draft = req.body;
     console.log("updating draft", req.body);
     let updatedDraft = await NftType.findByIdAndUpdate(draft._id, draft);
@@ -215,11 +221,11 @@ router.post("/update-draft", async (req, res) => {
       console.log("Failed to update draft");
       res.status(400).json("Cannot find existing draft");
     }
-  } catch(error) {
+  } catch (error) {
     console.log(error);
     res.status(500).send("server error");
   }
-})
+});
 
 router.post("/finalize", async (req, res) => {
   try {
@@ -487,7 +493,7 @@ router.post("/getNftsWithParams", async (req, res) => {
       .sort(getSortParam())
       .skip(req.body.page * req.body.limit)
       .limit(req.body.limit);
-      console.log(nftTypes.length === req.body.limit)
+    console.log(nftTypes.length === req.body.limit);
     res.send({
       nfts: findLikes(nftTypes, req.body.address),
       hasMore: nftTypes.length === req.body.limit,
@@ -541,17 +547,19 @@ router.post("/uploadSnnipetS3", async (req, res) => {
   const singleUpload = upload.single("audioFile");
   singleUpload(req, res, async function (err) {
     console.log("singleUpload: ", req.body);
-    let draft = await NftType.findOne({ isDraft: true, address: req.body.artist });
+    let draft = await NftType.findOne({
+      isDraft: true,
+      address: req.body.artist,
+    });
     if (err instanceof multer.MulterError || err) {
       console.log("singleUpload error", err);
       if (draft) {
         draft.audioUrl = "";
         draft.snnipet = "";
-        await draft.save()
+        await draft.save();
       }
       return res.status(500).json(err);
-    }
-    else {
+    } else {
       // adding saving draft after uploading
       if (draft) {
         draft.audioUrl = req.body.audioURL;
@@ -674,7 +682,10 @@ router.post("/uploadImageS3", async (req, res) => {
   const singleUpload = upload.single("imageFile");
   singleUpload(req, res, async function (err) {
     console.log("uploadImageS3: ", req.body);
-    let draft = await NftType.findOne({ isDraft: true, address: req.body.artist });
+    let draft = await NftType.findOne({
+      isDraft: true,
+      address: req.body.artist,
+    });
     if (err instanceof multer.MulterError) {
       console.log("uploadImageS3 multer", err);
       if (draft) {
@@ -865,6 +876,7 @@ router.post("/getSongList", async (req, res) => {
 //this will change dramatically with the introduction of smart contracts
 router.post("/purchase", async (req, res) => {
   try {
+    console.log("purchase hit", req.body);
     let nft = await NftType.findOne({ _id: req.body.id });
     if (!nft) {
       res.status(500).send("No NFT found");
@@ -874,15 +886,25 @@ router.post("/purchase", async (req, res) => {
       res.status(500).send("Out of Stock");
       return;
     }
-    let user = await User.findOne({ address: req.body.address });
+    let user = await User.findOneAndUpdate(
+      { address: req.body.address },
+      {
+        $push: { nfts: { nft: nft._id, quantity: 1 } },
+      },
+      { new: true }
+    );
+    // let user = await User.findOne({ address: req.body.address });
     if (!user) {
       res.status(500).send("No user found");
       return;
     }
     console.log("mid", user, nft);
 
-    user.nfts.push({ nft: nft._id, quantity: 1 });
-    await user.save();
+    // user.nfts.push({ nft: nft._id, quantity: 1 });
+
+    // user.markModified("nfts");
+
+    // await user.save();
     nft.numSold++;
     await nft.save();
     console.log("end?", user, nft);

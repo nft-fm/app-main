@@ -1,5 +1,5 @@
 import { Contract, utils, providers } from "ethers";
-import { NFTToken, FlatPriceSale, VinylAddress, TokenSaleAddress
+import { NftAddress, FlatPriceSale, VinylAddress, TokenSaleAddress, AirdropAddress
 	// Auction
  } from "./constants"
  import Swal from "sweetalert2";
@@ -7,6 +7,7 @@ import NFTTokenABI from "./abi/NFTToken.abi.js";
 import FlatPriceSaleABI from "./abi/FlatPriceSale.abi.js";
 import VinylABI from "./abi/Vinyl.abi";
 import TokenSaleABI from "./abi/TokenSale.abi.js"
+import AirdropABI from "./abi/Airdrop.abi.js";
 // import BigNumber from "bignumber.js";
 
 
@@ -72,7 +73,7 @@ export const getSetSale = async (nftId, callback) => {
 export const mintNFT = async (data, pendingCallback, finalCallback) => {
 	const { provider } = await require()
 	const signer = provider.getSigner();
-	let contract = new Contract(NFTToken, NFTTokenABI, signer);
+	let contract = new Contract(NftAddress, NFTTokenABI, signer);
 
 	let result = await contract.mintAndStake(data.amount, data.price, data.startTime, FlatPriceSale, data.encodedFee, data.databaseID, parseInt(data.v), data.r, data.s)
 		.then(res => {
@@ -86,7 +87,7 @@ export const mintNFT = async (data, pendingCallback, finalCallback) => {
 // export const auctionNFT = async (data, pendingCallback, finalCallback) => {
 // 	const { provider, walletAddress } = await require()
 // 	const signer = provider.getSigner();
-// 	let contract = new Contract(NFTToken, NFTTokenABI, signer);
+// 	let contract = new Contract(NftAddress, NFTTokenABI, signer);
 
 // 	let result = await contract.mintAndStake(data.amount, data.price, data.startTime, Auction, data.encodedArgs, data.databaseID, parseInt(data.v), data.r, data.s)
 // 		.then(res => {
@@ -122,6 +123,13 @@ export const buyNFT = async (data, pendingCallback, finalCallback) => {
 
 	finalCallback(result)
 }
+
+export const airdrop = async (wallets, amounts, callback) => {
+	const { provider, walletAddress } = await require();
+	const signer = provider.getSigner();
+	const contract = new Contract(AirdropAddress, AirdropABI, signer);
+	contract.airdrop(VinylAddress, wallets, amounts).then(() => callback())
+};
 
 export const buyPresale = async (amount, callback) => {
   const { provider } = await require()

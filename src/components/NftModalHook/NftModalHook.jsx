@@ -274,7 +274,7 @@ const BuyNftModal = (props) => {
               </ReactToolTip>
             </BadgeHolder>
             <InfoContainer>
-              {nft.title.length > 20 ?
+              {nft.title.length > 18 ?
                 <Ticker>
                   <TrackName>
                     {nft.title}

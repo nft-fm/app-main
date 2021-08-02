@@ -223,7 +223,7 @@ const LibraryModal = ({
             </CardTop>
             <TitleAndPlayButton>
               <InfoContainer>
-              {nft.title.length > 20 ?
+              {nft.title.length > 18 ?
                 <Ticker>
                   <TrackName>
                     {nft.title}

@@ -85,8 +85,12 @@ const NftCard = (props) => {
       />
       <BottomWrapper>
         <Bottom>
-          <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>{nft.title}</TrackName>
-          <Artist>{nft.artist}</Artist>
+          <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>
+            {nft.title.length > 15 ? nft.title.slice(0,15) + '...' : nft.title}
+          </TrackName>
+          <Artist>
+            {nft.artist.length > 20 ? nft.artist.slice(0,20) + '...' : nft.artist}
+          </Artist>
         </Bottom>
         <PlayButton src={PlayIcon} onClick={() => setNftCallback(nft)} />
       </BottomWrapper>

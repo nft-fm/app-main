@@ -155,10 +155,10 @@ const NftCard = (props) => {
         onLoad={() => setImageLoaded(true)}
       />
       <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>
-        {nft.title}
+        {nft.title.length > 20 ? nft.title.slice(0,20) + '...' : nft.title}
       </TrackName>
       <Artist to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}>
-        {nft.artist}
+        {nft.artist.length > 20 ? nft.artist.slice(0,20) + '...' : nft.artist}
       </Artist>
       <BottomSection>
         <BadgeHolder>

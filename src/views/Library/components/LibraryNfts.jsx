@@ -60,7 +60,7 @@ const Library = ({ user }) => {
         {nfts && !noNfts ?
           <NftScroll> {nfts} </NftScroll>
           : noNfts && account ?  <StyledTitle>It seems like you don't have any NFTs yet</StyledTitle>
-          : account ? <img style={{ width: "40px" }} src={loading} /> : <p></p>}
+          : account ? <img style={{ width: "40px" }} src={loading} alt="loading" /> : <p></p>}
       </LaunchContainer>
     </Landing>
   );

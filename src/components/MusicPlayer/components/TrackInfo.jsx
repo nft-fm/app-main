@@ -6,8 +6,12 @@ const TrackInfo = ({nft}) => {
       <TrackInfoWrapper>
       <Image src={nft.imageUrl} />
       <TitleAndArtistSection>
-        <Title>{`${nft.title}`}</Title>
-        <Artist>{`${nft.artist}`}</Artist>
+        <Title>
+          {nft.title.length > 15 ? nft.title.slice(0,15) + '...' : nft.title}
+        </Title>
+        <Artist>
+          {nft.artist.length > 15 ? nft.artist.slice(0,15) + '...' : nft.artist}
+        </Artist>
       </TitleAndArtistSection>
     </TrackInfoWrapper>
   )

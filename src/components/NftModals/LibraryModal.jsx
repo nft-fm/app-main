@@ -26,6 +26,7 @@ import moment from "moment";
 import { NavLink } from "react-router-dom";
 import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.svg";
 import { errorIcon, warningIcon, imageWidth, imageHeight } from "../../utils/swalImages";
+import Ticker from "../../components/Ticker"
 
 const LibraryModal = ({
   open,
@@ -222,11 +223,20 @@ const LibraryModal = ({
             </CardTop>
             <TitleAndPlayButton>
               <InfoContainer>
-                <TrackName>{nft.title}</TrackName>
-                <Artist
+              {nft.title.length > 18 ?
+                <Ticker>
+                  <TrackName>
+                    {nft.title}
+                  </TrackName>
+                </Ticker>
+                : <TrackName>
+                  {nft.title}
+                </TrackName>
+              }                  
+              <Artist
                   to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}
                 >
-                  {nft.artist}
+                {nft.artist.length > 20 ? nft.artist.slice(0,20) + '...' : nft.artist}
                 </Artist>
               </InfoContainer>
               <PlayButtonMobile

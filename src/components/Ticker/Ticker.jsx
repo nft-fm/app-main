@@ -14,7 +14,7 @@ const Ticker = ({
     const partOneIntervalId = setInterval(() => {
       setPartOneComplete(true);
       clearInterval(partOneIntervalId);
-    }, 1500);
+    }, 1000);
   } else if (!partTwoComplete) {
     const partTwoIntervalId = setInterval(() => {
       setPartTwoComplete(true);
@@ -107,7 +107,7 @@ const Container = styled.div`
       animation: ticker2;
       -webkit-animation-timing-function: linear;
       animation-timing-function: linear;
-      animation-delay: 1.5s;
+      animation-delay: 1s;
       animation-duration: ${props => props.duration}s;
       ${props => ((props.part1 && props.part2) || !props.part1) && css`
         display: none;
@@ -119,7 +119,7 @@ const Container = styled.div`
       white-space: nowrap;
       padding-right: 50%;
       box-sizing: content-box;
-      animation-delay: 1s;
+      animation-delay: 0s;
       -webkit-animation-iteration-count: infinite; 
               animation-iteration-count: infinite;
       -webkit-animation-timing-function: linear;

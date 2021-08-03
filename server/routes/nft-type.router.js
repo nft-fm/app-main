@@ -886,25 +886,16 @@ router.post("/purchase", async (req, res) => {
       res.status(500).send("Out of Stock");
       return;
     }
-    let user = await User.findOneAndUpdate(
-      { address: req.body.address },
-      {
-        $push: { nfts: { nft: nft._id, quantity: 1 } },
-      },
-      { new: true }
-    );
-    // let user = await User.findOne({ address: req.body.address });
+    let user = await User.findOne({ address: req.body.address });
     if (!user) {
       res.status(500).send("No user found");
       return;
     }
     console.log("mid", user, nft);
 
-    // user.nfts.push({ nft: nft._id, quantity: 1 });
+    user.nfts.push({ nft: nft._id, quantity: 1 });
 
-    // user.markModified("nfts");
-
-    // await user.save();
+    await user.save();
     nft.numSold++;
     await nft.save();
     console.log("end?", user, nft);

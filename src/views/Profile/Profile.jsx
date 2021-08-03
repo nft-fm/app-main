@@ -86,6 +86,7 @@ const Profile = () => {
                 })
                 .then((res2) => {
                   if (res2.isConfirmed) {
+                    // adding axios to delete the draft from the DB and create a new one
                     setReset(true);
                     setOpen(!open);
                   }

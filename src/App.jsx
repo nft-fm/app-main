@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import ReactGA from "react-ga";
-import Cookies from 'universal-cookie';
+import { createBrowserHistory } from "history";
+import Cookies from "universal-cookie";
 import { ThemeProvider } from "styled-components";
 import { UseWalletProvider } from "use-wallet";
 import styled from "styled-components";
@@ -33,18 +34,27 @@ import theme from "./theme";
 
 if (window.location.hostname !== "localhost") console.log = function () {};
 
-const cookies = new Cookies()
+const cookies = new Cookies();
 const App = () => {
-  const [useGA, setUseGA] = useState(false);
-  const enableGoogleAnalytics = () => {
-    const trackingId = "G-XZJLL15HL0";
-    ReactGA.initialize(trackingId);
-    ReactGA.pageview("/");
-  };
-  useEffect(() => {
-    if (useGA) enableGoogleAnalytics();
-    else if (cookies.get("allowGoogleAnalytics") === "true") setUseGA(true);
-  }, [useGA]);
+  // const [useGA, setUseGA] = useState(false);
+  // const enableGoogleAnalytics = () => {
+  //   const trackingId = "G-XZJLL15HL0";
+  //   ReactGA.initialize(trackingId);
+  //   ReactGA.pageview("/");
+  // };
+  // useEffect(() => {
+  //   if (useGA) enableGoogleAnalytics();
+  //   else if (cookies.get("allowGoogleAnalytics") === "true") setUseGA(true);
+  // }, [useGA]);
+  const trackingID = "G-XZJLL15HL0";
+  ReactGA.initialize(trackingID)
+  ReactGA.set({ userId: '12345' })
+
+  const history = createBrowserHistory();
+  history.listen((location) => {
+    ReactGA.set({ page: location.pathname });
+    ReactGA.pageview(location.pathname);
+  });
 
   useEffect(() => {
     preloadImage(recordPlayer);

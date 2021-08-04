@@ -49,32 +49,33 @@ router.post("/get-account", async (req, res) => {
 
 router.post("/update-account", async (req, res) => {
   try {
-    console.log('update account route', req.body)
     const findDuplicateName = await User.findOne({
       suburl: req.body.username.replace(/ /g, "").toLowerCase(),
     });
-    if (findDuplicateName && findDuplicateName.address.toLowerCase() != req.body.address.toLowerCase()) {
+    if (
+      findDuplicateName &&
+      findDuplicateName.address.toLowerCase() != req.body.address.toLowerCase()
+    ) {
       //if another account (checked by address) has the same name, send error
-      console.log('ERROR DUPE')
       res.status(403).send("Duplicate name");
     } else {
       console.log("front end socials", req.body.aggregatedSocials);
       let user = await User.findOne({ address: req.body.address });
+      console.log("updated user socials", user.socials);
+
+      if (user.username != req.body.username) {
+        const updateNfts = await NftType.updateMany(
+          { address: user.address },
+          { artist: req.body.username }
+        );
+      }
+
       user.username = req.body.username;
       user.suburl = req.body.username.replace(/ /g, "").toLowerCase();
       user.socials = req.body.aggregatedSocials;
       await user.save();
-      console.log("updated user socials", user.socials);
 
-      if (user.username === req.body.username) {
-        res.send(user);
-      } else {
-        await NftType.updateMany(
-          { address: user.address },
-          { artist: req.body.username }
-        );
-        res.send(user);
-      }
+      res.send(user);
     }
   } catch (error) {
     console.log(error);

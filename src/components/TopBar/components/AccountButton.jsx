@@ -23,13 +23,13 @@ const AccountButton = (props) => {
     connect("injected");
   };
 
-  // if (account) {
-  //   ReactGA.set({
-  //     userId: account,
-  //     // any data that is relevant to the user session
-  //     // that you would like to track with google analytics
-  //   });
-  // }
+  if (account) {
+    ReactGA.set({
+      userId: account,
+      // any data that is relevant to the user session
+      // that you would like to track with google analytics
+    });
+  }
 
   const getChain = async () => {
     const newChainId = await window.ethereum.request({ method: "eth_chainId" });

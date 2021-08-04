@@ -84,9 +84,8 @@ const Profile = () => {
                   imageWidth,
                   imageHeight,
                 })
-                .then((res2) => {
+                .then(async (res2) => {
                   if (res2.isConfirmed) {
-                    // adding axios to delete the draft from the DB and create a new one
                     setReset(true);
                     setOpen(!open);
                   }

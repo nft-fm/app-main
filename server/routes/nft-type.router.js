@@ -237,8 +237,9 @@ router.post("/finalize", async (req, res) => {
       ? MAIN_FlatPriceSale
       : TEST_FlatPriceSale;
     console.log("im here");
-    let updateNFT = await NftType.findByIdAndUpdate(newData._id, newData);
-    if (updateNFT) {
+    // let updateNFT = await NftType.findByIdAndUpdate(newData._id, newData);
+    let findNFT = await NftType.findById(newData._id);
+    if (findNFT) {
       const startTime = 0;
       // const price = BigNumber.from(newData.price.mul(constants.WeiPerEther));
       const price = utils.parseUnits(newData.price);
@@ -284,6 +285,17 @@ router.post("/finalize", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).send("server error");
+  }
+});
+
+router.post("/notDraftAnymore", async (req, res) => {
+  try {
+    let updateNFT = await NftType.findByIdAndUpdate(req.body._id, {
+      isDraft: false,
+    });
+    res.status(200).send('Success!')
+  } catch (err) {
+    res.send(err);
   }
 });
 

@@ -154,11 +154,12 @@ const NftCard = (props) => {
         onClick={() => setIsModalOpen(!isModalOpen)}
         onLoad={() => setImageLoaded(true)}
       />
+      <RedeemButton>Click me!</RedeemButton>
       <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>
-        {nft.title.length > 20 ? nft.title.slice(0,20) + '...' : nft.title}
+        {nft.title.length > 20 ? nft.title.slice(0, 20) + "..." : nft.title}
       </TrackName>
       <Artist to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}>
-        {nft.artist.length > 20 ? nft.artist.slice(0,20) + '...' : nft.artist}
+        {nft.artist.length > 20 ? nft.artist.slice(0, 20) + "..." : nft.artist}
       </Artist>
       <BottomSection>
         <BadgeHolder>
@@ -234,6 +235,20 @@ const NftCard = (props) => {
     </Container>
   );
 };
+
+const RedeemButton = styled.button`
+  position: absolute;
+  background-color: ${(props) => props.theme.color.box};
+  color: ${(props) => props.theme.color.blue};
+  padding: 5px 10px;
+  top: 210px;
+  left: 25px;
+  border-radius: 10px;
+  border: 2px solid ${(props) => props.theme.color.red};
+  /* &:hover {
+
+  } */
+`;
 
 const ExclusiveBadge = styled(Exclusive)`
   width: 15px;
@@ -354,6 +369,7 @@ const Container = styled.div`
   flex-direction: column;
   width: 200px;
   margin-bottom: 20px;
+  position: relative;
   /* margin-left: 5px;
   margin-right: 5px; */
 `;

@@ -121,6 +121,16 @@ const NftTypeSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  isRedeemable: {
+    type: Boolean,
+  },
+  redeemedBy: [
+    {
+      address: {
+        type: String,
+      },
+    },
+  ],
 });
 
 module.exports = NftType = mongoose.model("type", NftTypeSchema);

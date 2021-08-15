@@ -19,6 +19,7 @@ router.post("/get-account", async (req, res) => {
     if (!user) {
       user = new User({
         address: req.body.address,
+        isArtist: process.env.PRODUCTION ? false : true,
       });
       await user.save();
     }

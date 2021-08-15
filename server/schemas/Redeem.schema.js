@@ -2,17 +2,38 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const RedeemSchema = new Schema({
-  nftId: {
-    type: Number,
-    required: true,
-  },
-  shipping: {
+  address: {
     type: String,
-    required: true,
   },
   quantity: {
     type: Number,
-    default: 1,
+  },
+  email: {
+    type: String,
+  },
+  first: {
+    type: String,
+  },
+  last: {
+    type: String,
+  },
+  home: {
+    type: String,
+  },
+  apt: {
+    type: String,
+  },
+  city: {
+    type: String,
+  },
+  country: {
+    type: String,
+  },
+  state: {
+    type: String,
+  },
+  zip: {
+    type: Number,
   },
 });
 

@@ -20,6 +20,7 @@ import RegisterArtist from "./views/RegisterArtist";
 import RegisterArtistComplete from "./views/RegisterArtist/Complete";
 
 import Info from "./views/Info";
+import Redeem from "./views/Redeem"
 import TermsOfService from "./views/FooterLinks/TermsOfService";
 import PrivacyPolicy from "./views/FooterLinks/PrivacyPolicy";
 
@@ -68,6 +69,9 @@ const App = () => {
           <Switch>
             <Route path="/library" exact>
               <Library />
+            </Route>
+            <Route path="/redeem/">
+              <Redeem />
             </Route>
             <Route path="/profile">
               <Profile />

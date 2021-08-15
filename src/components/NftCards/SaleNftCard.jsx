@@ -15,6 +15,7 @@ import { ReactComponent as Founder } from "../../assets/img/Badges/founder.svg";
 import { ReactComponent as Premium } from "../../assets/img/Badges/premium.svg";
 import { ReactComponent as Prerelease } from "../../assets/img/Badges/prerelease.svg";
 import { ReactComponent as Exclusive } from "../../assets/img/Badges/exclusive.svg";
+import { ReactComponent as Merch } from "../../assets/img/icons/merch-present.svg";
 
 import ReactToolTip from "react-tooltip";
 
@@ -154,7 +155,12 @@ const NftCard = (props) => {
         onClick={() => setIsModalOpen(!isModalOpen)}
         onLoad={() => setImageLoaded(true)}
       />
-      <RedeemButton>Click me!</RedeemButton>
+      {/* {nft.isRedeemable && ( */}
+        <RedeemButton to={`/redeem/${nft.nftId}`}>
+          Merch!
+          <MerchIcon />
+        </RedeemButton>
+      {/* )} */}
       <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>
         {nft.title.length > 20 ? nft.title.slice(0, 20) + "..." : nft.title}
       </TrackName>
@@ -236,18 +242,45 @@ const NftCard = (props) => {
   );
 };
 
-const RedeemButton = styled.button`
+/* background-image: linear-gradient(104deg, #262626, #383838); */
+const RedeemButton = styled(NavLink)`
+  text-decoration: none;
   position: absolute;
-  background-color: ${(props) => props.theme.color.box};
-  color: ${(props) => props.theme.color.blue};
+  cursor: pointer;
+  color: ${(props) => props.theme.color.white};
   padding: 5px 10px;
-  top: 210px;
-  left: 25px;
-  border-radius: 10px;
+  top: 205px;
+  left: 20px;
   border: 2px solid ${(props) => props.theme.color.red};
-  /* &:hover {
+  border-radius: 15px;
+  background-color: ${(props) => props.theme.color.box};
+  :hover {
+    animation: wiggle 100ms;
+  }
+  @keyframes wiggle {
+    0% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(-5deg);
+    }
+    50% {
+      transform: rotate(0deg);
+    }
+    75% {
+      transform: rotate(5deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+`;
 
-  } */
+const MerchIcon = styled(Merch)`
+  width: 15px;
+  height: 15px;
+  padding-left: 5px;
+  margin-bottom: -1px;
 `;
 
 const ExclusiveBadge = styled(Exclusive)`

@@ -293,7 +293,7 @@ router.post("/notDraftAnymore", async (req, res) => {
     let updateNFT = await NftType.findByIdAndUpdate(req.body._id, {
       isDraft: false,
     });
-    res.status(200).send('Success!')
+    res.status(200).send("Success!");
   } catch (err) {
     res.send(err);
   }
@@ -885,7 +885,6 @@ router.post("/getSongList", async (req, res) => {
   });
 });
 
-//this will change dramatically with the introduction of smart contracts
 router.post("/purchase", async (req, res) => {
   try {
     console.log("purchase hit", req.body);
@@ -908,6 +907,13 @@ router.post("/purchase", async (req, res) => {
     user.nfts.push({ nft: nft._id, quantity: 1 });
 
     await user.save();
+
+    // if (nft.isRedeemable) {
+    //   nft.isReedemedBy
+    //     ? nft.isRedeemedBy.push(user.address)
+    //     : (nft.isRedeemedBy = [user.address]);
+    // }
+
     nft.numSold++;
     await nft.save();
     console.log("end?", user, nft);

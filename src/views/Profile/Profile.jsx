@@ -84,7 +84,7 @@ const Profile = () => {
                   imageWidth,
                   imageHeight,
                 })
-                .then((res2) => {
+                .then(async (res2) => {
                   if (res2.isConfirmed) {
                     setReset(true);
                     setOpen(!open);

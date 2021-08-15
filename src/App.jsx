@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import ReactGA from "react-ga";
+import { createBrowserHistory } from "history";
+import Cookies from "universal-cookie";
 import { ThemeProvider } from "styled-components";
 import { UseWalletProvider } from "use-wallet";
 import styled from "styled-components";
@@ -14,15 +13,15 @@ import Discover from "./views/Discover";
 import Profile from "./views/Profile";
 import Artist from "./views/Artist";
 import Error404 from "./views/404";
-import Community from "./views/VINYL/Community"
+import Community from "./views/VINYL/Community";
 import Token from "./views/VINYL/Token";
 import GovPolls from "./views/VINYL/GovPolls";
-import RegisterArtist from './views/RegisterArtist'
-import RegisterArtistComplete from './views/RegisterArtist/Complete'
+import RegisterArtist from "./views/RegisterArtist";
+import RegisterArtistComplete from "./views/RegisterArtist/Complete";
 
 import Info from "./views/Info";
-import TermsOfService from "./views/FooterLinks/TermsOfService"
-import PrivacyPolicy from "./views/FooterLinks/PrivacyPolicy"
+import TermsOfService from "./views/FooterLinks/TermsOfService";
+import PrivacyPolicy from "./views/FooterLinks/PrivacyPolicy";
 
 import { AccountProvider } from "./contexts/Account";
 import { PlaylistProvider } from "./contexts/Playlist/Playlist";
@@ -35,7 +34,28 @@ import theme from "./theme";
 
 if (window.location.hostname !== "localhost") console.log = function () {};
 
+const cookies = new Cookies();
 const App = () => {
+  // const [useGA, setUseGA] = useState(false);
+  // const enableGoogleAnalytics = () => {
+  //   const trackingId = "G-XZJLL15HL0";
+  //   ReactGA.initialize(trackingId);
+  //   ReactGA.pageview("/");
+  // };
+  // useEffect(() => {
+  //   if (useGA) enableGoogleAnalytics();
+  //   else if (cookies.get("allowGoogleAnalytics") === "true") setUseGA(true);
+  // }, [useGA]);
+  const trackingID = "G-XZJLL15HL0";
+  ReactGA.initialize(trackingID)
+  ReactGA.set({ userId: '12345' })
+
+  const history = createBrowserHistory();
+  history.listen((location) => {
+    ReactGA.set({ page: location.pathname });
+    ReactGA.pageview(location.pathname);
+  });
+
   useEffect(() => {
     preloadImage(recordPlayer);
     preloadImage(recordPlayerSpin);
@@ -64,8 +84,8 @@ const App = () => {
             <Route path="/token">
               <Token />
             </Route>
-            <Route path='/gov-polls'>
-              <GovPolls/>
+            <Route path="/gov-polls">
+              <GovPolls />
             </Route>
             <Route path="/termsofservice">
               <TermsOfService />
@@ -79,10 +99,10 @@ const App = () => {
             <Route path="/register-artist-complete">
               <RegisterArtistComplete />
             </Route>
-            <Route path="/info" >
+            <Route path="/info">
               <Info />
             </Route>
-            <Route path="/" >
+            <Route path="/">
               <Listen />
             </Route>
             <Route path="/*">
@@ -100,7 +120,7 @@ const Providers = ({ children }) => {
     <ThemeProvider theme={theme}>
       {/* change the ChainId below here for the preffered network when testing, 1 main 3 ropsten 42 kovan */}
       <UseWalletProvider
-        chainId={ process.env.REACT_APP_IS_MAINNET ? 1 : 4}
+        chainId={process.env.REACT_APP_IS_MAINNET ? 1 : 4}
         connectors={{
           walletconnect: { rpcUrl: "https://mainnet.eth.aragon.network/" },
         }}

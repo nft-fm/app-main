@@ -23,9 +23,6 @@ const EditableProfile = () => {
   const [audius, setAudius] = useState("");
   const inputRef = useRef();
 
-  // console.log("user", user.socials);
-  // console.log("socials", insta, twitter, spotify, audius);
-
   useEffect(() => {
     //sets all the state variables if they already exist
     user.username && setUsername(user.username);
@@ -98,7 +95,6 @@ const EditableProfile = () => {
           });
         });
     } else if (!newPic && username != "") {
-      console.log('right here')
       setUser({ ...user, username: username });
       await axios
         .post("/api/user/update-account", {
@@ -112,7 +108,7 @@ const EditableProfile = () => {
           setUser(res.data);
         })
         .catch((err) => {
-          console.log(err)
+          console.log(err);
           setLoading(false);
           setEdit(false);
           swal.fire({
@@ -158,10 +154,7 @@ const EditableProfile = () => {
         setSpotify={setSpotify}
       />
       <Side />
-      <ProfileHolder
-      // onKeyDown={(e) => e.key === "Escape" && setEdit(false)}
-      // tabIndex="-1"
-      >
+      <ProfileHolder>
         <Cog
           src={cog}
           alt="edit icon"

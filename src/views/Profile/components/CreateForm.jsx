@@ -10,17 +10,23 @@ import { ReactComponent as eth_icon } from "../../../assets/img/icons/ethereum.s
 import x from "../../../assets/img/icons/x.svg";
 import { ReactComponent as IconX } from "../../../assets/img/icons/x.svg";
 
-import { errorIcon, successIcon, questionIcon, imageWidth, imageHeight } from "../../../utils/swalImages";
+import {
+  errorIcon,
+  successIcon,
+  questionIcon,
+  imageWidth,
+  imageHeight,
+} from "../../../utils/swalImages";
 import { useAccountConsumer } from "../../../contexts/Account";
 import { mintNFT } from "../../../web3/utils";
 
 import { Step1 } from "./CreateFormPages/Step1";
 import Step2 from "./CreateFormPages/Step2";
-import Step3 from "./CreateFormPages/Step3"
-import Step4 from "./CreateFormPages/Step4"
-import PreviewBuyModal from "./CreateFormPages/PreviewBuyModal"
+import Step3 from "./CreateFormPages/Step3";
+import Step4 from "./CreateFormPages/Step4";
+import PreviewBuyModal from "./CreateFormPages/PreviewBuyModal";
 import CreateFormPaginator from "./CreateFormPaginator";
-import DemoImage from "../../Home/Components/DemoImage/DemoImage"
+import DemoImage from "../../Home/Components/DemoImage/DemoImage";
 
 function useWindowSize() {
   const [windowSize, setWindowSize] = useState({
@@ -41,7 +47,6 @@ function useWindowSize() {
   return windowSize;
 }
 
-
 const initialNftState = {
   artist: "",
   address: "",
@@ -56,7 +61,7 @@ const initialNftState = {
   writer: "",
   imageUrl: "",
   audioUrl: "",
-  description: ""
+  description: "",
 };
 
 const CreateForm = ({ open, hide, reset, setReset }) => {
@@ -70,37 +75,49 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
   const { width, height } = useWindowSize();
   // {! remember to clear snippet before next mint}
 
-  
   useEffect(() => {
     if (isLoadingAudio || isLoadingImage || isLoading) {
       window.onbeforeunload = () => {
-        return 'Navigating away from this page may result in unsaved data. Are you sure?'
-      }
+        return "Navigating away from this page may result in unsaved data. Are you sure?";
+      };
     } else {
       window.onbeforeunload = undefined;
     }
-  }, [isLoadingAudio, isLoadingImage, isLoading])
-  
+  }, [isLoadingAudio, isLoadingImage, isLoading]);
+
   useEffect(() => {
-    if (account && !isLoading && !isLoadingImage && !isLoadingAudio && currentStep !== 1) {
-      setIsLoading(true)
+    if (
+      account &&
+      !isLoading &&
+      !isLoadingImage &&
+      !isLoadingAudio &&
+      currentStep !== 1
+    ) {
+      setIsLoading(true);
       axios
-      .post("/api/nft-type/update-and-fetch", reset ? 
-        { ...initialNftState, address: account, artist: user && user.username  ? user.username : ''} 
-        : nftData )
-      .then((res) => {
-        // console.log("success", res.data)
-        
-        setNftData(res.data);
-        setIsLoading(false);
-        setReset(false);
-      })
-      .catch(err => {
-        console.log(err)
-        setIsLoading(false)
-      });
+        .post(
+          "/api/nft-type/update-and-fetch",
+          reset
+            ? {
+                ...initialNftState,
+                address: account,
+                artist: user && user.username ? user.username : "",
+              }
+            : nftData
+        )
+        .then((res) => {
+          // console.log("success", res.data)
+
+          setNftData(res.data);
+          setIsLoading(false);
+          setReset(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setIsLoading(false);
+        });
     }
-  }, [currentStep])
+  }, [currentStep]);
 
   useEffect(() => {
     user && user.username && setNftData({ ...nftData, artist: user.username });
@@ -113,8 +130,6 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
       .then((res) => setNftData(res.data));
   }, [account]);
 
-
-
   // const [videoFile, setVideoFile] = useState(null);
 
   // const hiddenVideoInput = useRef(null);
@@ -126,7 +141,6 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
   // const handleVideoChange = (e) => {
   //   console.log('here')
   // }
-
 
   //this is all to handle the image
 
@@ -141,7 +155,7 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
       !Number.isInteger(nftData.numMinted) ||
       nftData.price === 0 ||
       nftData.price === "0" ||
-      nftData.price === ""  ||
+      nftData.price === "" ||
       nftData.imageUrl === "" ||
       nftData.audioUrl === "" ||
       nftData.snnipet === ""
@@ -180,7 +194,7 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
         timer: 5000,
         imageUrl: errorIcon,
         imageWidth,
-        imageHeight      
+        imageHeight,
       });
       return;
     }
@@ -191,7 +205,7 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
         timer: 5000,
         imageUrl: errorIcon,
         imageWidth,
-        imageHeight      
+        imageHeight,
       });
       return;
     }
@@ -203,7 +217,7 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
         timer: 5000,
         imageUrl: errorIcon,
         imageWidth,
-        imageHeight      
+        imageHeight,
       });
       return;
     }
@@ -211,69 +225,77 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
     //run these two, store the returns in the nftData state object
 
     // if (!audioUploadError && !imageUploadError) {
-      setIsLoading(true);
-      setIsLoadingAudio(true);
-      setIsLoadingImage(true);
+    setIsLoading(true);
+    setIsLoadingAudio(true);
+    setIsLoadingImage(true);
 
-      // after nftData has both audio and image references, run this route
-      // console.log("newNftData", newNftData);
-      axios
-        .post("/api/nft-type/finalize", newNftData)
-        .then((res) => {
-          console.log("finalize res", res);
-          if (res.status === 200) {
-            mintNFT(
-              res.data,
-              () => {
-                console.log("pending...");
-                setIsLoading(true);
-              },
-              () => {
-                console.log("final");
-                setNftData({ ...initialNftState, artist: user && user.username  ? user.username : ''})
-                setIsLoading(false);
-                setIsLoadingAudio(false);
-                setIsLoadingImage(false);
-                swal
-                  .fire({
-                    imageUrl: successIcon,
-                    imageWidth,
-                    imageHeight,
-                    timer: 10000,
-                    title: "NFT Minted!",
-                    text: "It can take 2-3 minutes for the new NFT to appear on your profile.",
-                  })
-                  .then(() => {
-                    setReset(true);
-                    onCloseModal();
-                  });
-              }
-            ).catch((err) => {
-              setIsLoading(false);
-              setIsLoadingAudio(false);
-              setIsLoadingImage(false);
-              swal.fire({
-                imageUrl: errorIcon,
-                imageWidth,
-                imageHeight,
-                title: "Couldn't create NFT!",
-                text: "Please try again",
-              });
-            });
-            console.log("MINT");
-          } else {
+    // after nftData has both audio and image references, run this route
+    // console.log("newNftData", newNftData);
+    axios
+      .post("/api/nft-type/finalize", newNftData)
+      .then((res) => {
+        console.log("finalize res", res);
+        if (res.status === 200) {
+          mintNFT(
+            res.data,
+            () => {
+              console.log("pending...");
+              setIsLoading(true);
+            },
+            () => {
+              console.log("final");
+              axios
+                .post("/api/nft-type/notDraftAnymore", newNftData)
+                .then((res) => {
+                  if (res.status === 200) {
+                    setNftData({
+                      ...initialNftState,
+                      artist: user && user.username ? user.username : "",
+                    });
+                    setIsLoading(false);
+                    setIsLoadingAudio(false);
+                    setIsLoadingImage(false);
+                    swal
+                      .fire({
+                        imageUrl: successIcon,
+                        imageWidth,
+                        imageHeight,
+                        timer: 10000,
+                        title: "NFT Minted!",
+                        text: "It can take 2-3 minutes for the new NFT to appear on your profile.",
+                      })
+                      .then(() => {
+                        setReset(true);
+                        onCloseModal();
+                      });
+                  } else {
+                    setIsLoading(false);
+                    setIsLoadingAudio(false);
+                    setIsLoadingImage(false);
+                    swal.fire({
+                      title: "Error",
+                      background: `#000`,
+                      boxShadow: `24px 24px 48px -24px #131313`,
+                      text: "Nft creation failed on the server, please try again.",
+                    });
+                  }
+                });
+            }
+          ).catch((err) => {
+            console.log("ERROR", err);
             setIsLoading(false);
             setIsLoadingAudio(false);
             setIsLoadingImage(false);
             swal.fire({
-              title: "Error",
-              background: `#000`,
-              boxShadow: `24px 24px 48px -24px #131313`,
-              text: "Nft creation failed here, please try again.",
+              imageUrl: errorIcon,
+              imageWidth,
+              imageHeight,
+              title: "Couldn't create NFT!",
+              text: "Please try again",
             });
-          }
-        })
-        .catch((err) => {
+          });
+          console.log("MINT");
+        } else {
           setIsLoading(false);
           setIsLoadingAudio(false);
           setIsLoadingImage(false);
@@ -281,17 +303,32 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
             title: "Error",
             background: `#000`,
             boxShadow: `24px 24px 48px -24px #131313`,
-            text: "Nft creation failed on the server, please try again.",
+            text: "Nft creation on the server, please try again.",
           });
+        }
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        setIsLoadingAudio(false);
+        setIsLoadingImage(false);
+        swal.fire({
+          title: "Error",
+          background: `#000`,
+          boxShadow: `24px 24px 48px -24px #131313`,
+          text: "Nft creation failed on the server, please try again.",
         });
-    }
+      });
+  };
 
   const updateState = (e) => {
     if (e.target.name === "numMinted" && Number(e.target.value) > 10000) {
       return;
     }
     if (e.target.name === "numMinted") {
-      return setNftData({ ...nftData, [e.target.name]: parseInt(e.target.value) });
+      return setNftData({
+        ...nftData,
+        [e.target.name]: parseInt(e.target.value),
+      });
     }
     if (e.target.name === "price") {
       let string = e.target.value.toString();
@@ -320,26 +357,29 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
 
   const onCloseModal = () => {
     if (isLoadingAudio || isLoadingImage) {
-      return swal.fire({
-        title: "You are currently uploading files. Are you sure you want to leave?",
-        imageUrl: questionIcon,
-        imageWidth,
-        imageHeight,
-        showCancelButton: true     
-      }).then(res => {
-        if (!res.isDismissed) {
-          setCurrentStep(1)
-          hide();
-        }
-      });
+      return swal
+        .fire({
+          title:
+            "You are currently uploading files. Are you sure you want to leave?",
+          imageUrl: questionIcon,
+          imageWidth,
+          imageHeight,
+          showCancelButton: true,
+        })
+        .then((res) => {
+          if (!res.isDismissed) {
+            setCurrentStep(1);
+            hide();
+          }
+        });
     }
-    setCurrentStep(1)
+    setCurrentStep(1);
     hide();
-  }
+  };
 
   const steps = [
-    <Step2 
-      nftData={nftData} 
+    <Step2
+      nftData={nftData}
       setNftData={setNftData}
       isLoadingAudio={isLoadingAudio}
       setIsLoadingAudio={setIsLoadingAudio}
@@ -348,40 +388,46 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
     />,
     <Step3 nftData={nftData} updateState={updateState} />,
     <Step4 nftData={nftData} updateState={updateState} usdPerEth={usdPerEth} />,
-    <PreviewBuyModal nft={nftData} />
-  ]
+    <PreviewBuyModal nft={nftData} />,
+  ];
   if (currentStep === 1) {
     return (
       <>
-        <SelectContainer style={{zIndex: 501}}>
-          <StyledModal currStep={currentStep} style={{background: "none", border: "none"}}>
+        <SelectContainer style={{ zIndex: 501 }}>
+          <StyledModal
+            currStep={currentStep}
+            style={{ background: "none", border: "none" }}
+          >
             <X src={x} onClick={onCloseModal} />
             {/* need to change to toggle auction below in the future */}
-            <Step1 setCurrentStep={setCurrentStep} /> 
+            <Step1 setCurrentStep={setCurrentStep} />
           </StyledModal>
         </SelectContainer>
         <OpaqueFilter
-        onClick={() => width > 776 ? hide() : null} 
-        currStep={currentStep}/>
-      </> 
-    )
+          onClick={() => (width > 776 ? hide() : null)}
+          currStep={currentStep}
+        />
+      </>
+    );
   } else {
-    return(
+    return (
       <>
         <OpaqueFilter>
           <Step1Container>
             <StyledModal>
               <X src={x} onClick={onCloseModal} />
               <LeftSide>
-                {nftData.imageUrl ? <Image src={nftData.imageUrl} alt="image" /> : <DemoImage />}
+                {nftData.imageUrl ? (
+                  <Image src={nftData.imageUrl} alt="image" />
+                ) : (
+                  <DemoImage />
+                )}
               </LeftSide>
-            <RightSide step={currentStep}>
-              {steps[currentStep - 2]}
-            </RightSide>
+              <RightSide step={currentStep}>{steps[currentStep - 2]}</RightSide>
             </StyledModal>
             <CreateFormPaginator
-              nftData={nftData} 
-              currentStep={currentStep} 
+              nftData={nftData}
+              currentStep={currentStep}
               setCurrentStep={setCurrentStep}
               handleSubmit={handleSubmit}
               isLoadingAudio={isLoadingAudio}
@@ -390,59 +436,70 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
             />
           </Step1Container>
         </OpaqueFilter>
-        {isLoading && isLoadingAudio && isLoadingImage &&
+        {isLoading && isLoadingAudio && isLoadingImage && (
           <OpaqueFilter>
             <Step1Container>
-              <StyledModal 
+              <StyledModal
                 style={{
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "center",
-                  border: "none", 
+                  border: "none",
                   backgroundColor: "transparent",
-                  alignItems: "center"
+                  alignItems: "center",
                 }}
               >
-                <img style={{width: "120px", height: "120px", marginBottom : "10px"}} src={loading_gif} alt="loading" />
-                <h1>Minting NFT!</h1> 
+                <img
+                  style={{
+                    width: "120px",
+                    height: "120px",
+                    marginBottom: "10px",
+                  }}
+                  src={loading_gif}
+                  alt="loading"
+                />
+                <h1>Minting NFT!</h1>
                 <p>Please do not close this page</p>
               </StyledModal>
             </Step1Container>
           </OpaqueFilter>
-        }
+        )}
       </>
-    )
+    );
   }
 };
 
 const RightSide = styled.div`
-  ${props => props.currStep !== 6 ? css`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: calc(100% - 465px - 80px);
-    padding: 10px 40px;
-    @media only screen and (max-width: 776px) {
-      width: 100%;
-      height: 40vw;
-    }
-  h2 {
-    color: white;
-    padding: 0;
-    margin: 0;
-  }
-  ` : css`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: calc(100% - 465px);
-    padding: 10px 30px;
-    @media only screen and (max-width: 776px) {
-      width: 90vw;
-      height: calc(100vh / 2);
-    }
-    color: white;
-  `}
+  ${(props) =>
+    props.currStep !== 6
+      ? css`
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: calc(100% - 465px - 80px);
+          padding: 10px 40px;
+          @media only screen and (max-width: 776px) {
+            width: 100%;
+            height: 40vw;
+          }
+          h2 {
+            color: white;
+            padding: 0;
+            margin: 0;
+          }
+        `
+      : css`
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: calc(100% - 465px);
+          padding: 10px 30px;
+          @media only screen and (max-width: 776px) {
+            width: 90vw;
+            height: calc(100vh / 2);
+          }
+          color: white;
+        `}
 `;
 
 const StyledModal = styled.div`
@@ -479,7 +536,7 @@ const LeftSide = styled.div`
     width: 90vw;
     height: 90vw;
   }
-`
+`;
 
 const Image = styled.img`
   width: 465px;
@@ -491,7 +548,7 @@ const Image = styled.img`
   overflow: hidden;
   aspect-ratio: 1;
   background-color: white;
-  visibility: ${props => props.src !== "" ? `visibile` : `hidden`};
+  visibility: ${(props) => (props.src !== "" ? `visibile` : `hidden`)};
   @media only screen and (max-width: 776px) {
     width: 90vw;
     height: 90vw;
@@ -509,7 +566,7 @@ const Step1Container = styled.div`
   transform: translate(-50%, -50%);
   @media only screen and (max-width: 776px) {
     width: 90vw;
-    height: calc(100vh - ${props => props.currStep === 1 ? 0 : 40}px);
+    height: calc(100vh - ${(props) => (props.currStep === 1 ? 0 : 40)}px);
     flex-direction: column;
     align-items: center;
   }
@@ -558,13 +615,14 @@ const X = styled(IconX)`
     stroke: ${(props) => props.theme.color.gray};
     fill: ${(props) => props.theme.color.gray};
   }
-  ${props => props.currStep === 1 && css`
-    @media only screen and (min-width: 776px) {
-      display: none;
-    }
-  `}
+  ${(props) =>
+    props.currStep === 1 &&
+    css`
+      @media only screen and (min-width: 776px) {
+        display: none;
+      }
+    `}
 `;
-
 
 export default CreateForm;
 

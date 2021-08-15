@@ -1,5 +1,4 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const app = express();
@@ -16,13 +15,14 @@ const sessionMiddleware = require("./middleware/session-middleware");
 const path = require("path");
 const adminPollRouter = require("./routes/admin-poll.router");
 const vinylOwnerRouter = require("./routes/vinyl-owner.router");
+const Mixpanel = require('mixpanel');
 const { listenForMint } = require("./web3/mint-listener");
 
 const PORT = process.env.PORT || 5000;
 
+//ensures https is used
 function ensureSecure(req, res, next) {
   if (req.headers["x-forwarded-proto"] === "https") {
-    // OK, continue
     return next();
   }
   res.redirect("https://" + req.hostname + req.url);

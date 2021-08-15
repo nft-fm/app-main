@@ -300,7 +300,7 @@ const NodeMail = (name, email, music, account) => {
     secure: true,
     auth: {
       type: "OAuth2",
-      user: process.env.EMAILL_ADDRESS,
+      user: process.env.EMAIL_ADDRESS,
       pass: process.env.EMAIL_PASSWORD,
       clientId: process.env.OAUTH_CLIENT_ID,
       clientSecret: process.env.OAUTH_CLIENT_SECRET,

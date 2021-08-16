@@ -1,20 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import NftModalHook from "./NftModalHook";
-import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
-import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
-import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
-// import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import axios from "axios";
 import ShareModal from "../SMShareModal/SMShareModal";
-import { NavLink } from "react-router-dom";
-import { ReactComponent as Founder } from "../../assets/img/Badges/founder.svg";
-import { ReactComponent as Premium } from "../../assets/img/Badges/premium.svg";
-import { ReactComponent as Prerelease } from "../../assets/img/Badges/prerelease.svg";
-import { ReactComponent as Exclusive } from "../../assets/img/Badges/exclusive.svg";
-
-import ReactToolTip from "react-tooltip";
 
 const NftCard = (props) => {
   const { usdPerEth, user, account } = useAccountConsumer();

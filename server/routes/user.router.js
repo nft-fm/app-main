@@ -1,9 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const BigNumber = require("bignumber.js");
 const multer = require("multer");
 const User = require("../schemas/User.schema");
-const Suggestion = require("../schemas/Suggestion.schema");
 const NftType = require("../schemas/NftType.schema");
 const Application = require("../schemas/Application.schema");
 const { findLikes, getUserNfts } = require("../web3/server-utils");
@@ -11,6 +9,7 @@ const sendSignRequest = require("../modules/eversign");
 const { utils } = require("ethers");
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
+const {trackNewUser, trackLogin, trackPageview} = require("../modules/mixpanel");
 
 router.post("/get-account", async (req, res) => {
   try {
@@ -22,7 +21,10 @@ router.post("/get-account", async (req, res) => {
         isArtist: process.env.PRODUCTION ? false : true,
       });
       await user.save();
+      console.log("tracking new user:", req.body.address)
+      trackNewUser({address: req.body.address, ip: req.body.ip});
     }
+    trackLogin({address: req.body.address, ip: req.body.ip});
 
     //This overwrites the user's database nfts with the nfts attributed to the user in the smart contract
     //handles when user's buy/sell nfts off platform
@@ -42,6 +44,16 @@ router.post("/get-account", async (req, res) => {
     }
 
     res.send(user);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("server error");
+  }
+});
+
+router.post("/track-pageview", async (req, res) => {
+  try {
+    console.log("pageview ping")
+    trackPageview(req.body)
   } catch (error) {
     console.log(error);
     res.status(500).send("server error");

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import ReactGA from "react-ga";
+import { BrowserRouter as Router, Route, Switch, useLocation } from "react-router-dom";
+import axios from "axios";
 import { createBrowserHistory } from "history";
 import Cookies from "universal-cookie";
 import { ThemeProvider } from "styled-components";
@@ -18,12 +18,11 @@ import Token from "./views/VINYL/Token";
 import GovPolls from "./views/VINYL/GovPolls";
 import RegisterArtist from "./views/RegisterArtist";
 import RegisterArtistComplete from "./views/RegisterArtist/Complete";
-
 import Info from "./views/Info";
 import TermsOfService from "./views/FooterLinks/TermsOfService";
 import PrivacyPolicy from "./views/FooterLinks/PrivacyPolicy";
 
-import { AccountProvider } from "./contexts/Account";
+import { AccountProvider, useAccountConsumer } from "./contexts/Account";
 import { PlaylistProvider } from "./contexts/Playlist/Playlist";
 
 import preloadImage from "./utils/preloadImg";
@@ -35,37 +34,29 @@ import theme from "./theme";
 if (window.location.hostname !== "localhost") console.log = function () {};
 
 const cookies = new Cookies();
-const App = () => {
-  // const [useGA, setUseGA] = useState(false);
-  // const enableGoogleAnalytics = () => {
-  //   const trackingId = "G-XZJLL15HL0";
-  //   ReactGA.initialize(trackingId);
-  //   ReactGA.pageview("/");
-  // };
-  // useEffect(() => {
-  //   if (useGA) enableGoogleAnalytics();
-  //   else if (cookies.get("allowGoogleAnalytics") === "true") setUseGA(true);
-  // }, [useGA]);
-  const trackingID = "G-XZJLL15HL0";
-  ReactGA.initialize(trackingID)
-  ReactGA.set({ userId: '12345' })
 
-  const history = createBrowserHistory();
-  history.listen((location) => {
-    ReactGA.set({ page: location.pathname });
-    ReactGA.pageview(location.pathname);
-  });
+const Switches = () => {
+
+  const location = useLocation();
+  const { account , fetchIp } = useAccountConsumer();
 
   useEffect(() => {
-    preloadImage(recordPlayer);
-    preloadImage(recordPlayerSpin);
-  }, []);
+    async function trackPageView() {
+      const ip = await fetchIp();
+      console.log("fetching ip", ip);
+      axios.post(`/api/user/track-pageview`, {
+        address: account,
+        ip,
+        page: location.pathname.substring(1)
+      });
+      console.log("new location", location);
+    }
+    trackPageView();
+  }, [location])
 
-  return (
-    <Providers>
-      <StyledCanvas>
-        <Router>
-          <Switch>
+  return(
+    <>
+     <Switch>
             <Route path="/library" exact>
               <Library />
             </Route>
@@ -109,6 +100,27 @@ const App = () => {
               <Error404 />
             </Route>
           </Switch>
+    </>
+  )
+}
+
+const App = () => {
+  // const history = createBrowserHistory();
+  // history.listen((location) => {
+  //   ReactGA.set({ page: location.pathname });
+  //   ReactGA.pageview(location.pathname);
+  // });
+
+  useEffect(() => {
+    preloadImage(recordPlayer);
+    preloadImage(recordPlayerSpin);
+  }, []);
+
+  return (
+    <Providers>
+      <StyledCanvas>
+        <Router>
+          <Switches/>
         </Router>
       </StyledCanvas>
     </Providers>

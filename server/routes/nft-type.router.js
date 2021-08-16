@@ -1,7 +1,5 @@
 const { BigNumber, constants, utils } = require("ethers");
-const { AnalyticsExportDestination } = require("@aws-sdk/client-s3");
 const express = require("express");
-const { flushSync } = require("react-dom");
 const router = express.Router();
 const NftType = require("../schemas/NftType.schema");
 const multer = require("multer");
@@ -10,7 +8,8 @@ const User = require("../schemas/User.schema");
 const { MAIN_FlatPriceSale, TEST_FlatPriceSale } = require("../web3/constants");
 const { sign, getSetSale, findLikes } = require("../web3/server-utils");
 const { listenForMint } = require("../web3/mint-listener");
-const { ObjectId } = require("mongodb");
+const {trackNftPurchase} = require("../modules/mixpanel");
+
 // const findLikes = (nfts, account) => {
 //   for (let i = 0; i < nfts.length; i++) {
 //     const likes = nfts[i]._doc.likes;
@@ -266,7 +265,6 @@ router.post("/finalize", async (req, res) => {
           encodedFee,
         ]
       );
-      console.log("it");
       res.status(200).send({
         ...signature,
         amount: newData.numMinted,
@@ -910,6 +908,13 @@ router.post("/purchase", async (req, res) => {
     await user.save();
     nft.numSold++;
     await nft.save();
+
+    trackNftPurchase({
+      address: req.body.address,
+      ipAddress:"ip Address",
+      artistAddress: nft.address,
+      nftId: nft.nftId,
+      nftPrice: nft.price});
     console.log("end?", user, nft);
     res.status(200).send("Success!");
   } catch (err) {

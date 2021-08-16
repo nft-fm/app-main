@@ -21,10 +21,8 @@ import { ReactComponent as Founder } from "../../assets/img/Badges/founder.svg";
 import { ReactComponent as Premium } from "../../assets/img/Badges/premium.svg";
 import { ReactComponent as Prerelease } from "../../assets/img/Badges/prerelease.svg";
 import { ReactComponent as Exclusive } from "../../assets/img/Badges/exclusive.svg";
-
 import moment from "moment";
 import { NavLink } from "react-router-dom";
-import ReactPlayer from "react-player";
 import {
   errorIcon,
   warningIcon,
@@ -50,7 +48,7 @@ const BuyNftModal = (props) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isBought, setIsBought] = useState(false);
-  const { account, connect, usdPerEth, getUser } = useAccountConsumer();
+  const { account, connect, usdPerEth, getUser, ip } = useAccountConsumer();
   const { setNftCallback } = usePlaylistConsumer();
 
   const stopProp = (e) => {
@@ -79,7 +77,7 @@ const BuyNftModal = (props) => {
             },
             () => {
               axios
-                .post("/api/nft-type/purchase", { id: id, address: account })
+                .post("/api/nft-type/purchase", { id: id, address: account, ip })
                 .then((res) => {
                   setTimeout(function () {
                     setIsLoading(false);

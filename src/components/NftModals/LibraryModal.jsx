@@ -25,7 +25,6 @@ import ReactPlayer from "react-player";
 import moment from "moment";
 import { NavLink } from "react-router-dom";
 import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.svg";
-import { errorIcon, warningIcon, imageWidth, imageHeight } from "../../utils/swalImages";
 import Ticker from "../../components/Ticker"
 
 const LibraryModal = ({
@@ -49,66 +48,6 @@ const LibraryModal = ({
     e.stopPropagation();
   };
 
-  const purchase = async (id) => {
-    setIsLoading(true);
-    await getEthBalance(async (balance) => {
-      if (parseFloat(balance) >= nft.price) {
-        await buyNFT(
-          { nftID: id, amount: 1, saleId: nft.nftId, price: String(nft.price) },
-          () => {
-            console.log("pending");
-          },
-          () => {
-            axios
-              .post("/api/nft-type/purchase", { id: id, address: account })
-              .then((res) => {
-                setTimeout(function () {
-                  setIsLoading(false);
-                  setIsBought(true);
-                  getUser();
-                }, 1000);
-              })
-              .catch((err) => {
-                console.error(err.status, err.message, err.error);
-                Swal.fire(
-                  `Error: ${err.response ? err.response.status : 404}`,
-                  `${err.response ? err.response.data : "server error"}`,
-                  "error"
-                );
-                setIsLoading(false);
-                console.log(err);
-              });
-          }
-        ).catch((err) => {
-          console.log(err);
-          swal.fire({
-            imageUrl: errorIcon,
-            imageWidth,
-            imageHeight,            
-            title: "Couldn't complete sale!",
-            text: "Please try again",
-          });
-        });
-      } else {
-        setIsLoading(false);
-        swal.fire({
-          title: `Not Enough ETH`,
-          text: `in wallet address: ...${account.substring(
-            account.length - 4
-          )}`,
-          imageUrl: errorIcon,
-          imageWidth,
-          imageHeight
-        });
-        return;
-      }
-    });
-  };
-
-  const playSong = () => {
-    // hide();
-    setNftCallback(nft);
-  };
 
   const like = async () => {
     if (account) {
@@ -139,21 +78,6 @@ const LibraryModal = ({
   //   console.log("chainId", Number(newChainId));
   //   return Number(newChainId);
   // }
-
-  const connectWallet = async () => {
-    const newChainId = await window.ethereum.request({ method: "eth_chainId" });
-    if (Number(newChainId) === process.env.REACT_APP_IS_MAINNET ? 1 : 4) {
-      connect("injected");
-    } else {
-      swal.fire({
-        title: "Wrong Chain",
-        text: "You are on the wrong chain. Please connect to Ethereum Mainnet.",
-        imageUrl: warningIcon,
-        imageWidth,
-        imageHeight
-      });
-    }
-  };
 
   const formatSongDur = (d) => {
     d = Number(d);

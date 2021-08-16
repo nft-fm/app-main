@@ -29,15 +29,6 @@ const BuyNftModal = ({
   };
   console.log("nft", nft);
 
-  // const purchase = (id) => {
-  //   axios
-  //     .post("/api/nft-type/purchase", { id: id, address: account })
-  //     .then((res) => {
-  //       console.log("purchase res", res);
-  //     })
-  //     .catch((err) => console.log(err));
-  // };
-
   const like = async () => {
     if (account) {
       setLikeCount(liked ? likeCount - 1 : likeCount + 1)

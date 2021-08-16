@@ -9,27 +9,27 @@ import RedeemForm from "./Components/RedeemForm";
 
 const Redeem = () => {
   const { user, account } = useAccountConsumer();
+  const [ownsRedeemable, setOwnsRedeemable] = useState(false);
 
-  const [nft, setNft] = useState();
   useEffect(() => {
-    if (window.location.pathname.length > 7) {
-      console.log(window.location.pathname.slice(8));
+    //check if user owns a redeemable NFT
+    if (user?.nfts.length > 0) {
       axios
-        .post("/api/nft-type/get-one", {
-          id: window.location.pathname.slice(8),
-          address: account,
-        })
-        .then((res) => {
-          console.log("res", res);
-          setNft(res.data);
-        });
+        .post("/api/nft-type/checkRedeemable", user.nfts)
+        .then((res) => res.status === 200 && setOwnsRedeemable(true));
     }
-  }, []);
+  }, [user]);
 
   return (
     <Switch>
       <BaseView>
-        <RedeemForm />
+        {!ownsRedeemable ? (
+          <div style={{ color: "white" }}>
+            You need to own this NFT to redeem the merchendise!
+          </div>
+        ) : (
+          <RedeemForm />
+        )}
       </BaseView>
     </Switch>
   );

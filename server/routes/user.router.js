@@ -12,7 +12,6 @@ const sendSignRequest = require("../modules/eversign");
 const { utils } = require("ethers");
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
-const { default: Redeem } = require("../../src/views/Redeem");
 
 router.post("/get-account", async (req, res) => {
   try {
@@ -392,15 +391,13 @@ router.post("/send-artist-form", async (req, res) => {
 
 router.post("/shipping", async (req, res) => {
   try {
-    console.log("shipping hit", req.body);
     let alreadyRedeemed = await Redeem.find({ address: req.body.address });
-
-    if (!alreadyRedeemed) {
-      let newRedeem = new Redeem({
+    if (!alreadyRedeemed.address) {
+      alreadyRedeemed = new Redeem({
         address: req.body.address,
         quantity: 1,
         email: req.body.email,
-        firstL: req.body.first,
+        first: req.body.first,
         last: req.body.last,
         home: req.body.home,
         apt: req.body.apt,
@@ -409,7 +406,26 @@ router.post("/shipping", async (req, res) => {
         state: req.body.state,
         zip: req.body.zip,
       });
+      await alreadyRedeemed.save();
+    } else {
+      alreadyRedeemed.quantity++;
+      await alreadyRedeemed.save();
     }
+
+    res.status(200).send('Shipping updated!');
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
+router.post("/updateRedeemers", async (req, res) => {
+  try {
+    let nft = await NftType.findOneAndUpdate(
+      { nftId: req.body.nftId },
+      { $push: { redeemedBy: req.body.address } },
+      { new: true }
+    );
+    res.status(200).send('Redeemers updated!');
   } catch (err) {
     res.status(500).send(err);
   }

@@ -126,9 +126,9 @@ const NftTypeSchema = new Schema({
   },
   redeemedBy: [
     {
-      address: {
+      // address: {
         type: String,
-      },
+      // },
     },
   ],
 });

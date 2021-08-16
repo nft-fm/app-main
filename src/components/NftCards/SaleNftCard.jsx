@@ -15,7 +15,7 @@ import { ReactComponent as Founder } from "../../assets/img/Badges/founder.svg";
 import { ReactComponent as Premium } from "../../assets/img/Badges/premium.svg";
 import { ReactComponent as Prerelease } from "../../assets/img/Badges/prerelease.svg";
 import { ReactComponent as Exclusive } from "../../assets/img/Badges/exclusive.svg";
-import { ReactComponent as Merch } from "../../assets/img/icons/merch-present.svg";
+import { ReactComponent as GiftIcon } from "../../assets/img/icons/rewards-gift.svg";
 
 import ReactToolTip from "react-tooltip";
 
@@ -155,12 +155,14 @@ const NftCard = (props) => {
         onClick={() => setIsModalOpen(!isModalOpen)}
         onLoad={() => setImageLoaded(true)}
       />
-      {/* {nft.isRedeemable && ( */}
-        <RedeemButton to={`/redeem/${nft.nftId}`}>
-          Merch!
-          <MerchIcon />
-        </RedeemButton>
-      {/* )} */}
+      {nft.isRedeemable && (
+        <RedeemButtonBackground>
+          <RedeemButton>
+            {/* Merch */}
+            <MerchIcon />
+          </RedeemButton>
+        </RedeemButtonBackground>
+      )}
       <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>
         {nft.title.length > 20 ? nft.title.slice(0, 20) + "..." : nft.title}
       </TrackName>
@@ -243,17 +245,27 @@ const NftCard = (props) => {
 };
 
 /* background-image: linear-gradient(104deg, #262626, #383838); */
-const RedeemButton = styled(NavLink)`
+const RedeemButton = styled.div`
   text-decoration: none;
-  position: absolute;
-  cursor: pointer;
+  /* cursor: pointer; */
   color: ${(props) => props.theme.color.white};
-  padding: 5px 10px;
+  /* border: 2px solid linear-gradient(to right, #fde404, #fa423e);
+  border-radius: 15px; */
+  background-color: ${(props) => props.theme.color.box};
+  border-radius: 7px;
+  padding: 3px 8px;
+`;
+
+const RedeemButtonBackground = styled.div`
+  position: absolute;
+  padding: 2px;
   top: 205px;
   left: 20px;
-  border: 2px solid ${(props) => props.theme.color.red};
-  border-radius: 15px;
-  background-color: ${(props) => props.theme.color.box};
+  background-image: linear-gradient(to right, #fde404, #fa423e);
+
+  /* cursor: pointer; */
+  text-decoration: none;
+  border-radius: 7px;
   :hover {
     animation: wiggle 100ms;
   }
@@ -276,11 +288,15 @@ const RedeemButton = styled(NavLink)`
   }
 `;
 
-const MerchIcon = styled(Merch)`
+const MerchIcon = styled(GiftIcon)`
   width: 15px;
   height: 15px;
-  padding-left: 5px;
-  margin-bottom: -1px;
+  /* padding-left: 5px; */
+  /* margin-bottom: -1px; */
+  margin-top: 3px;
+  & path {
+    fill: ${(props) => props.theme.color.red};
+  }
 `;
 
 const ExclusiveBadge = styled(Exclusive)`

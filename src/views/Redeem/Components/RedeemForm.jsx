@@ -35,7 +35,7 @@ const RedeemForm = () => {
     first != "" &&
     last != "" &&
     home != "" &&
-    apt != "" &&
+    // apt != "" &&
     city != "" &&
     country != "" &&
     state != "" &&
@@ -63,6 +63,10 @@ const RedeemForm = () => {
       .post("/api/user/shipping", formData)
       .then((res) => {
         console.log(res);
+        if (res.status === 200) {
+          axios.post('/api/user/updateRedeemers', {address: account, nftId: 65})
+          .then(res => console.log(res)) //CHANGE THIS TO SAQI's NFT ID!!!!!!!!
+        }
       })
       .catch((err) => console.log(err));
   };

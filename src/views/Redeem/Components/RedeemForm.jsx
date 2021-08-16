@@ -64,8 +64,9 @@ const RedeemForm = () => {
       .then((res) => {
         console.log(res);
         if (res.status === 200) {
-          axios.post('/api/user/updateRedeemers', {address: account, nftId: 65})
-          .then(res => console.log(res)) //CHANGE THIS TO SAQI's NFT ID!!!!!!!!
+          axios
+            .post("/api/user/updateRedeemers", { address: account, nftId: 65 })
+            .then((res) => console.log(res)); //CHANGE THIS TO SAQI's NFT ID!!!!!!!!
         }
       })
       .catch((err) => console.log(err));
@@ -170,7 +171,12 @@ const Container = styled.form`
   border-radius: 15px;
   background-color: ${(props) => props.theme.color.box};
   border: 2px solid ${(props) => props.theme.color.boxBorder};
+  margin-top: 100px;
   /* padding: 36px 0 40px; */
+  @media only screen and (max-width: 776px) {
+    margin: 50px 0;
+    border-radius: 0px;
+  }
 `;
 
 const Header = styled.div`
@@ -181,6 +187,9 @@ const Header = styled.div`
     color: white;
     font-size: ${(props) => props.theme.fontSizes.lg};
   }
+  @media only screen and (max-width: 776px) {
+    width: 100%;
+  }
 `;
 
 const EmailContainer = styled.div`
@@ -189,6 +198,9 @@ const EmailContainer = styled.div`
   padding: 0px 20px 20px;
   & > div {
     margin-bottom: 20px;
+  }
+  @media only screen and (max-width: 776px) {
+    width: 100%;
   }
 `;
 
@@ -206,6 +218,10 @@ const InputBoxSmall = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 20px;
+
+  @media only screen and (max-width: 776px) {
+    width: calc(100% - 40px);
+  }
 `;
 const InputBoxMedium = styled.div`
   width: calc(50% - 40px);
@@ -215,6 +231,9 @@ const InputBoxMedium = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 20px;
+  @media only screen and (max-width: 776px) {
+    width: calc(100% - 40px);
+  }
 `;
 const InputBoxLarge = styled.div`
   width: calc(100% - 40px);

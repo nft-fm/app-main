@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import ReactGA from "react-ga";
 import styled from "styled-components";
 import { useWallet } from "use-wallet";
 import useModal from "../../../hooks/useModal";

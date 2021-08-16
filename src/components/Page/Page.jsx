@@ -6,18 +6,53 @@ import { Nav } from "../TopBar/components/Nav";
 import { usePlaylistConsumer } from "../../contexts/Playlist";
 import { useAccountConsumer } from "../../contexts/Account";
 import axios from "axios";
+import swal from "sweetalert2";
+import { useHistory } from "react-router-dom";
 
 const Page = ({ children }) => {
   const { isOpen } = usePlaylistConsumer();
   const { user, account } = useAccountConsumer();
   const [ownsRedeemable, setOwnsRedeemable] = useState(false);
-  console.log('ownsRedeemable', ownsRedeemable)
+  console.log("ownsRedeemable", ownsRedeemable);
+  const history = useHistory();
+
   useEffect(() => {
     //check if user owns a redeemable NFT
-    if (user?.nfts.length > 0) {
+    if (
+      user?.nfts.length > 0 &&
+      window.location.pathname.slice(window.location.pathname.length - 7) !=
+        "/redeem"
+    ) {
       axios
-        .post("/api/nft-type/checkRedeemable", user.nfts)
-        .then((res) => res.status === 200 && setOwnsRedeemable(true));
+        .post("/api/nft-type/checkRedeemable", user)
+        .then((res) => {
+          console.log(res);
+          if (res.status === 200 && !ownsRedeemable) {
+            setOwnsRedeemable(true);
+
+            for (let i = 0; i < res.data.redeemedBy.length; i++) {
+              if (res.data.redeemedBy[i] === user.address) {
+                return;
+              }
+            }
+
+            swal
+              .fire({
+                title: "Redeem Merch!",
+                text: "You own an NFT with redeemable merch! Click this button to go to the redemption portal",
+                confirmButtonText: "Redeem!",
+              })
+              .then((res) => {
+                if (res.isConfirmed) {
+                  history.push("/redeem");
+                  // return <Redirect to="/redeem" />
+                }
+              });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }, [user]);
 

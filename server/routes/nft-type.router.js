@@ -908,7 +908,6 @@ router.post("/purchase", async (req, res) => {
 
     await user.save();
 
-
     nft.numSold++;
     await nft.save();
     console.log("end?", user, nft);
@@ -964,24 +963,36 @@ router.post("/search", async (req, res) => {
 router.post("/checkRedeemable", async (req, res) => {
   try {
     console.log("/checkredeem hit");
-    const usersNfts = req.body;
+    const usersNfts = req.body.nfts;
     let userNftIds = [];
     for (let i = 0; i < usersNfts.length; i++) {
       userNftIds.push(usersNfts[i].nft);
     }
-    //does the user own a redeemable NFT and has he redeemed it yet?
+    //does the user own a redeemable NFT?
     let userOwnsRedeemable = await NftType.find({
       _id: { $in: userNftIds },
       isRedeemable: true,
     });
-    
+
     //add logic here if user has already redeemed their NFT
 
     console.log("this", userOwnsRedeemable);
-    if (userOwnsRedeemable) {
-      res.status(200).send("User owns a redeemable NFT and has not redeemed it!");
+    if (userOwnsRedeemable[0]) {
+      // console.log('shit')
+      //   for (let i = 0; i < userOwnsRedeemable[0].redeemedBy.length; i++) {
+      //     if (userOwnsRedeemable[0].redeemedBy[i] === user.address) {
+      //       console.log('that')
+      //       res.status(404).send("User has already redeemed this NFT");
+      //       return;
+      //     }
+      //   } 
+      
+
+      console.log('there')
+      res.status(200).send(userOwnsRedeemable[0]);
     } else {
-      res.status(404).send("User does not own a redeemable NFT or has already redeemed it.");
+      console.log('here')
+      res.status(404).send("User does not own a redeemable NFT.");
     }
   } catch (err) {
     res.status(500).send(err);

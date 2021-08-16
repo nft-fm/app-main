@@ -4,6 +4,7 @@ import BaseView from "../../components/Page/BaseView";
 import styled from "styled-components";
 import { useAccountConsumer } from "../../contexts/Account";
 import axios from "axios";
+import FourOhFour from "../../views/404";
 
 import RedeemForm from "./Components/RedeemForm";
 
@@ -15,22 +16,21 @@ const Redeem = () => {
     //check if user owns a redeemable NFT
     if (user?.nfts.length > 0) {
       axios
-        .post("/api/nft-type/checkRedeemable", user.nfts)
-        .then((res) => res.status === 200 && setOwnsRedeemable(true));
+        .post("/api/nft-type/checkRedeemable", user)
+        .then((res) => {
+          console.log(res);
+          res.status === 200 && setOwnsRedeemable(true);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }, [user]);
 
   return (
     <Switch>
-      <BaseView>
-        {!ownsRedeemable ? (
-          <div style={{ color: "white" }}>
-            You need to own this NFT to redeem the merchendise!
-          </div>
-        ) : (
-          <RedeemForm />
-        )}
-      </BaseView>
+      {!ownsRedeemable && <FourOhFour />}
+      <BaseView>{ownsRedeemable && <RedeemForm />}</BaseView>
     </Switch>
   );
 };

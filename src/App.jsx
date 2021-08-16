@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import ReactGA from "react-ga";
+import { BrowserRouter as Router, Route, Switch, } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import Cookies from "universal-cookie";
 import { ThemeProvider } from "styled-components";
@@ -37,25 +36,6 @@ if (window.location.hostname !== "localhost") console.log = function () {};
 
 const cookies = new Cookies();
 const App = () => {
-  // const [useGA, setUseGA] = useState(false);
-  // const enableGoogleAnalytics = () => {
-  //   const trackingId = "G-XZJLL15HL0";
-  //   ReactGA.initialize(trackingId);
-  //   ReactGA.pageview("/");
-  // };
-  // useEffect(() => {
-  //   if (useGA) enableGoogleAnalytics();
-  //   else if (cookies.get("allowGoogleAnalytics") === "true") setUseGA(true);
-  // }, [useGA]);
-  const trackingID = "G-XZJLL15HL0";
-  ReactGA.initialize(trackingID)
-  ReactGA.set({ userId: '12345' })
-
-  const history = createBrowserHistory();
-  history.listen((location) => {
-    ReactGA.set({ page: location.pathname });
-    ReactGA.pageview(location.pathname);
-  });
 
   useEffect(() => {
     preloadImage(recordPlayer);
@@ -70,7 +50,7 @@ const App = () => {
             <Route path="/library" exact>
               <Library />
             </Route>
-            <Route path="/redeem/">
+            <Route path="/redeem" exact>
               <Redeem />
             </Route>
             <Route path="/profile">

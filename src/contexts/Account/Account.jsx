@@ -49,7 +49,7 @@ export const AccountProvider = ({ children }) => {
       .then((res) => setUsdPerEth(res.data.ethereum.usd));
   };
   const fetchIp = async () => {
-    return await axios.get("http://ipv4.icanhazip.com/").then(res => {
+    return await axios.get("https://ipv4.icanhazip.com/").then(res => {
       const ip = res.data.substring(0, res.data.length - 1);
       console.log("\n\n\nip:", ip);
       setIp(ip);

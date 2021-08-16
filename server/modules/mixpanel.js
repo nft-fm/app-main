@@ -47,7 +47,7 @@ console.log("tracking pageview", props);
   mixpanel.track('pageview', {
     distinct_id: address ? address : null,
     ip,
-    page,
+    page: page === "" ? "home" : page,
     isLoggedIn: address ? true : false,
   });
 }

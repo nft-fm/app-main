@@ -4,6 +4,7 @@ const multer = require("multer");
 const User = require("../schemas/User.schema");
 const NftType = require("../schemas/NftType.schema");
 const Application = require("../schemas/Application.schema");
+const Redeem = require("../schemas/Redeem.schema");
 const { findLikes, getUserNfts } = require("../web3/server-utils");
 const sendSignRequest = require("../modules/eversign");
 const { utils } = require("ethers");
@@ -397,6 +398,48 @@ router.post("/send-artist-form", async (req, res) => {
     res.sendStatus(401);
   } catch (err) {
     console.log(err);
+    res.status(500).send(err);
+  }
+});
+
+router.post("/shipping", async (req, res) => {
+  try {
+    let alreadyRedeemed = await Redeem.find({ address: req.body.address });
+    if (!alreadyRedeemed.address) {
+      alreadyRedeemed = new Redeem({
+        address: req.body.address,
+        quantity: 1,
+        email: req.body.email,
+        first: req.body.first,
+        last: req.body.last,
+        home: req.body.home,
+        apt: req.body.apt,
+        city: req.body.city,
+        country: req.body.country,
+        state: req.body.state,
+        zip: req.body.zip,
+      });
+      await alreadyRedeemed.save();
+    } else {
+      alreadyRedeemed.quantity++;
+      await alreadyRedeemed.save();
+    }
+
+    res.status(200).send('Shipping updated!');
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
+router.post("/updateRedeemers", async (req, res) => {
+  try {
+    let nft = await NftType.findOneAndUpdate(
+      { nftId: req.body.nftId },
+      { $push: { redeemedBy: req.body.address } },
+      { new: true }
+    );
+    res.status(200).send('Redeemers updated!');
+  } catch (err) {
     res.status(500).send(err);
   }
 });

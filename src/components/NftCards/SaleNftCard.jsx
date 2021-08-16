@@ -15,6 +15,7 @@ import { ReactComponent as Founder } from "../../assets/img/Badges/founder.svg";
 import { ReactComponent as Premium } from "../../assets/img/Badges/premium.svg";
 import { ReactComponent as Prerelease } from "../../assets/img/Badges/prerelease.svg";
 import { ReactComponent as Exclusive } from "../../assets/img/Badges/exclusive.svg";
+import { ReactComponent as GiftIcon } from "../../assets/img/icons/rewards-gift.svg";
 
 import ReactToolTip from "react-tooltip";
 
@@ -154,11 +155,19 @@ const NftCard = (props) => {
         onClick={() => setIsModalOpen(!isModalOpen)}
         onLoad={() => setImageLoaded(true)}
       />
+      {nft.isRedeemable && (
+        <RedeemButtonBackground>
+          <RedeemButton>
+            {/* Merch */}
+            <MerchIcon />
+          </RedeemButton>
+        </RedeemButtonBackground>
+      )}
       <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>
-        {nft.title.length > 20 ? nft.title.slice(0,20) + '...' : nft.title}
+        {nft.title.length > 20 ? nft.title.slice(0, 20) + "..." : nft.title}
       </TrackName>
       <Artist to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}>
-        {nft.artist.length > 20 ? nft.artist.slice(0,20) + '...' : nft.artist}
+        {nft.artist.length > 20 ? nft.artist.slice(0, 20) + "..." : nft.artist}
       </Artist>
       <BottomSection>
         <BadgeHolder>
@@ -234,6 +243,61 @@ const NftCard = (props) => {
     </Container>
   );
 };
+
+/* background-image: linear-gradient(104deg, #262626, #383838); */
+const RedeemButton = styled.div`
+  text-decoration: none;
+  /* cursor: pointer; */
+  color: ${(props) => props.theme.color.white};
+  /* border: 2px solid linear-gradient(to right, #fde404, #fa423e);
+  border-radius: 15px; */
+  background-color: ${(props) => props.theme.color.box};
+  border-radius: 7px;
+  padding: 3px 8px;
+`;
+
+const RedeemButtonBackground = styled.div`
+  position: absolute;
+  padding: 2px;
+  top: 205px;
+  left: 20px;
+  background-image: linear-gradient(to right, #fde404, #fa423e);
+
+  /* cursor: pointer; */
+  text-decoration: none;
+  border-radius: 7px;
+  :hover {
+    animation: wiggle 100ms;
+  }
+  @keyframes wiggle {
+    0% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(-5deg);
+    }
+    50% {
+      transform: rotate(0deg);
+    }
+    75% {
+      transform: rotate(5deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+`;
+
+const MerchIcon = styled(GiftIcon)`
+  width: 15px;
+  height: 15px;
+  /* padding-left: 5px; */
+  /* margin-bottom: -1px; */
+  margin-top: 3px;
+  & path {
+    fill: ${(props) => props.theme.color.red};
+  }
+`;
 
 const ExclusiveBadge = styled(Exclusive)`
   width: 15px;
@@ -354,6 +418,7 @@ const Container = styled.div`
   flex-direction: column;
   width: 200px;
   margin-bottom: 20px;
+  position: relative;
   /* margin-left: 5px;
   margin-right: 5px; */
 `;

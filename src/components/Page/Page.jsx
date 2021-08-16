@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Footer } from "../Footer/Footer";
 import TopBar from "../TopBar";
 import { Nav } from "../TopBar/components/Nav";
 import { usePlaylistConsumer } from "../../contexts/Playlist";
+import { useAccountConsumer } from "../../contexts/Account";
+import axios from "axios";
+import swal from "sweetalert2";
+import { useHistory } from "react-router-dom";
 
 const Page = ({ children }) => {
   const { isOpen } = usePlaylistConsumer();
+
   return (
     <StyledPage>
       <Aesthetics>
@@ -24,50 +29,49 @@ const Page = ({ children }) => {
         <Push />
       </StyledMain>
       <Footer />
-      {isOpen ? <Spacer/> : ''}
+      {isOpen ? <Spacer /> : ""}
     </StyledPage>
-  )
-}
+  );
+};
 
 const Spacer = styled.div`
   height: 60px;
-`
-
+`;
 
 const Aesthetics4 = styled.div`
-width: 100%;
-height: 20px;
-position: relative;
-background-color: ${props => props.theme.color.red};
-`
+  width: 100%;
+  height: 20px;
+  position: relative;
+  background-color: ${(props) => props.theme.color.red};
+`;
 
 const Aesthetics3 = styled.div`
-width: 100%;
-position: relative;
-height: 20px;
-background-color: ${props => props.theme.color.green};
-`
+  width: 100%;
+  position: relative;
+  height: 20px;
+  background-color: ${(props) => props.theme.color.green};
+`;
 
 const Aesthetics2 = styled.div`
-width: 100%;
-height: 20px;
-position: relative;
-background-color: ${props => props.theme.color.yellow};
-`
+  width: 100%;
+  height: 20px;
+  position: relative;
+  background-color: ${(props) => props.theme.color.yellow};
+`;
 
 const Aesthetics1 = styled.div`
-width: 100%;
-height: 20px;
-background-color: ${props => props.theme.color.blue};
-position: relative;
-`
+  width: 100%;
+  height: 20px;
+  background-color: ${(props) => props.theme.color.blue};
+  position: relative;
+`;
 
 const Aesthetics = styled.div`
-width: 40vw;
-position: absolute;
-right: 0;
-transform: rotate(0.6turn) translate(-70px, 100px);
-`
+  width: 40vw;
+  position: absolute;
+  right: 0;
+  transform: rotate(0.6turn) translate(-70px, 100px);
+`;
 
 const NavContainer = styled.div`
   display: none;
@@ -78,12 +82,12 @@ const NavContainer = styled.div`
     justify-content: center;
     padding: 12px 0 0 0px;
   }
-`
+`;
 
 const StyledPage = styled.div`
   height: 100vh;
   margin: 0;
-/* background-color: ${props => props.theme.bgColor}; */
+  /* background-color: ${(props) => props.theme.bgColor}; */
 `;
 
 const StyledMain = styled.div`
@@ -108,14 +112,13 @@ const StyledMain = styled.div`
   @media only screen and (max-width: 776px) {
     width: 100%;
   }
-`
+`;
 
 const Push = styled.div`
   height: 120px;
   /* @media only screen and (max-width: 991px) {
     height: 170px;
  } */
-`
+`;
 
 export default Page;
-

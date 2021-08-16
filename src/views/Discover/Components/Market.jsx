@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import axios from "axios";
 import NftCard from "../../../components/NftCards/SaleNftCard";
 import { useAccountConsumer } from "../../../contexts/Account";

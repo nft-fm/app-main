@@ -1,12 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../schemas/User.schema");
 const NftType = require("../schemas/NftType.schema");
 const Airdrop = require("../schemas/Airdrop.schema");
-const { utils } = require("ethers");
 const axios = require("axios");
-const { resolve } = require("path");
-const moment = require("moment");
 
 const queryUrl = `https://api.opensea.io/graphql/`;
 const ItemOwnersList_data_ttWlh = `{

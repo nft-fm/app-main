@@ -3,11 +3,12 @@ const mixpanelToken = process.env.PRODUCTION ? process.env.MAIN_MIXPANEL_TOKEN :
 const mixpanel = Mixpanel.init(mixpanelToken, {protocol: 'https'});
 
 const trackNftPurchase = (props) => {
-  const {address, ipAddress, artistAddress, nftId, nftPrice} = props;
+  const {address, ip, artistAddress, nftId, nftPrice} = props;
   console.log("tracking purchase", props);
   mixpanel.track('nft purchase', {
     distinct_id: address,
-    ipAddress,
+    ip,
+    ipAddress: ip,
     artistAddress,
     nftId,
     nftPrice,
@@ -21,10 +22,12 @@ console.log("tracking login", props);
 mixpanel.track('user signup', {
     distinct_id: address,
     ip,
+    ipAddress: ip,
   })
   mixpanel.people.set(address, {
     $created: (new Date()).toISOString(),
     address,
+    ipAddress: ip,
     // visits: 0,
     // purchases: 0,
     // ethSpent: 0,
@@ -38,6 +41,7 @@ console.log("tracking login", props);
 mixpanel.track('login', {
     distinct_id: address,
     ip,
+    ipAddress: ip,
   })
 }
 
@@ -47,6 +51,7 @@ console.log("tracking pageview", props);
   mixpanel.track('pageview', {
     distinct_id: address ? address : null,
     ip,
+    ipAddress: ip,
     page: page === "" ? "home" : page,
     isLoggedIn: address ? true : false,
   });
@@ -60,11 +65,12 @@ const trackArtistApplication = () => {
   
 }
 
-const trackNftView = (address, ipAddress, nftId, artistAddress) => {
+const trackNftView = (address, ip, nftId, artistAddress) => {
   mixpanel.track('nft view', {
     distinct_id: address ? address : null,
     isLoggedIn: address ? true : false,
-    ipAddress,
+    ip,
+    ipAddress: ip,
     nftId,
     artistAddress,
   });

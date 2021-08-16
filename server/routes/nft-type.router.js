@@ -911,7 +911,7 @@ router.post("/purchase", async (req, res) => {
 
     trackNftPurchase({
       address: req.body.address,
-      ipAddress:"ip Address",
+      ip: req.body.ip,
       artistAddress: nft.address,
       nftId: nft.nftId,
       nftPrice: nft.price});

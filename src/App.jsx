@@ -38,6 +38,7 @@ import recordPlayer from "./assets/img/record_player.png";
 import recordPlayerSpin from "./assets/img/record_player_spin.png";
 import isMobile from "./utils/isMobile";
 import theme from "./theme";
+import { fetchJson } from "ethers/lib/utils";
 
 if (window.location.hostname !== "localhost") console.log = function () {};
 
@@ -45,16 +46,16 @@ const cookies = new Cookies();
 
 const Switches = () => {
   const location = useLocation();
-  const { account, fetchIp, user } = useAccountConsumer();
+  const { account , fetchIp, ip } = useAccountConsumer();
 
   useEffect(() => {
     async function trackPageView() {
-      const ip = await fetchIp();
-      console.log("fetching ip", ip);
+      let myIp = ip ? ip : await fetchIp();
+      console.log("fetching ip", myIp);
       axios.post(`/api/user/track-pageview`, {
         address: account,
-        ip,
-        page: location.pathname.substring(1),
+        ip: myIp,
+        page: location.pathname.substring(1)
       });
       console.log("new location", location);
     }

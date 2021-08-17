@@ -973,26 +973,14 @@ router.post("/checkRedeemable", async (req, res) => {
     for (let i = 0; i < usersNfts.length; i++) {
       userNftIds.push(usersNfts[i].nft);
     }
-    //does the user own a redeemable NFT?
+    
     let userOwnsRedeemable = await NftType.find({
       _id: { $in: userNftIds },
       isRedeemable: true,
     });
 
-    //add logic here if user has already redeemed their NFT
-
     console.log("this", userOwnsRedeemable);
     if (userOwnsRedeemable[0]) {
-      // console.log('shit')
-      //   for (let i = 0; i < userOwnsRedeemable[0].redeemedBy.length; i++) {
-      //     if (userOwnsRedeemable[0].redeemedBy[i] === user.address) {
-      //       console.log('that')
-      //       res.status(404).send("User has already redeemed this NFT");
-      //       return;
-      //     }
-      //   } 
-      
-
       console.log('there')
       res.status(200).send(userOwnsRedeemable[0]);
     } else {

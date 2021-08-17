@@ -46,7 +46,7 @@ const cookies = new Cookies();
 
 const Switches = () => {
   const location = useLocation();
-  const { account , fetchIp, ip, user } = useAccountConsumer();
+  const { account, fetchIp, ip, user } = useAccountConsumer();
 
   useEffect(() => {
     async function trackPageView() {
@@ -55,7 +55,7 @@ const Switches = () => {
       axios.post(`/api/user/track-pageview`, {
         address: account,
         ip: myIp,
-        page: location.pathname.substring(1)
+        page: location.pathname.substring(1),
       });
       console.log("new location", location);
     }

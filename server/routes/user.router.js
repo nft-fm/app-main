@@ -10,7 +10,11 @@ const sendSignRequest = require("../modules/eversign");
 const { utils } = require("ethers");
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
-const {trackNewUser, trackLogin, trackPageview} = require("../modules/mixpanel");
+const {
+  trackNewUser,
+  trackLogin,
+  trackPageview,
+} = require("../modules/mixpanel");
 
 router.post("/get-account", async (req, res) => {
   try {
@@ -22,10 +26,10 @@ router.post("/get-account", async (req, res) => {
         isArtist: process.env.PRODUCTION ? false : true,
       });
       await user.save();
-      console.log("tracking new user:", req.body.address)
-      trackNewUser({address: req.body.address, ip: req.body.ip});
+      console.log("tracking new user:", req.body.address);
+      trackNewUser({ address: req.body.address, ip: req.body.ip });
     }
-    trackLogin({address: req.body.address, ip: req.body.ip});
+    trackLogin({ address: req.body.address, ip: req.body.ip });
 
     //This overwrites the user's database nfts with the nfts attributed to the user in the smart contract
     //handles when user's buy/sell nfts off platform
@@ -53,8 +57,8 @@ router.post("/get-account", async (req, res) => {
 
 router.post("/track-pageview", async (req, res) => {
   try {
-    console.log("pageview ping")
-    trackPageview(req.body)
+    console.log("pageview ping");
+    trackPageview(req.body);
   } catch (error) {
     console.log(error);
     res.status(500).send("server error");
@@ -425,20 +429,88 @@ router.post("/shipping", async (req, res) => {
       await alreadyRedeemed.save();
     }
 
-    res.status(200).send('Shipping updated!');
+    res.status(200).send("Shipping updated!");
   } catch (err) {
     res.status(500).send(err);
   }
 });
 
+const newRedeemer = (address) => {
+  const OAuth2Client = new google.auth.OAuth2(
+    process.env.OAUTH_CLIENT_ID,
+    process.env.OAUTH_CLIENT_SECRET,
+    process.env.REDIRECT_URI
+  );
+  OAuth2Client.setCredentials({
+    refresh_token: process.env.REFRESH_TOKEN,
+  });
+  let accessToken = "";
+  const getAToken = async () => {
+    accessToken = await OAuth2Client.getAccessToken();
+    console.log("accessToken", accessToken.token);
+    return accessToken;
+  };
+  getAToken();
+
+  const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      type: "OAuth2",
+      user: process.env.EMAIL_ADDRESS,
+      pass: process.env.EMAIL_PASSWORD,
+      clientId: process.env.OAUTH_CLIENT_ID,
+      clientSecret: process.env.OAUTH_CLIENT_SECRET,
+      refreshToken: process.env.REFRESH_TOKEN,
+      accessToken: getAToken(),
+    },
+  });
+
+  transporter.verify(function (error, success) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log(success);
+      console.log("Server is ready to take our messages");
+    }
+  });
+
+  var message = `<html>
+      <div>
+      <p>Hey! Someone entered their shipping information!</p>
+      <p>Address: ${address}</p>
+      </div>
+      </html>`;
+
+  var mail = {
+    from: "Jackson Felty <jackson@nftfm.io>", //sender email
+    to: "jackson@nftfm.io, quinn@nftfm.io", // receiver email
+    subject: "Merch Redemption",
+    html: message,
+  };
+
+  transporter.sendMail(mail, (err, data) => {
+    if (err) {
+      console.log("err", err);
+    } else {
+      console.log("data", data);
+    }
+  });
+};
+
 router.post("/updateRedeemers", async (req, res) => {
   try {
+    console.log("here");
     let nft = await NftType.findOneAndUpdate(
       { nftId: req.body.nftId },
       { $push: { redeemedBy: req.body.address } },
       { new: true }
     );
-    res.status(200).send('Redeemers updated!');
+
+    newRedeemer(req.body.address);
+
+    res.status(200).send("Redeemers updated!");
   } catch (err) {
     res.status(500).send(err);
   }

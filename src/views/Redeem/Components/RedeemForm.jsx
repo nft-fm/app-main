@@ -6,7 +6,7 @@ import { ReactComponent as GiftIcon } from "../../../assets/img/icons/rewards-gi
 import axios from "axios";
 
 const RedeemForm = (props) => {
-  const { setFormSubmitted } = props;
+  const { setFormSubmitted, alreadyRedeemed } = props;
 
   const { user, account } = useAccountConsumer();
 
@@ -68,96 +68,162 @@ const RedeemForm = (props) => {
         console.log(res);
         if (res.status === 200) {
           axios
-            .post("/api/user/updateRedeemers", { address: account, nftId: 65 }) //CHANGE THIS TO SAQI's NFT ID!!!!!!!!
+            .post("/api/user/updateRedeemers", { address: account, nftId: 67 }) //CHANGE THIS TO SAQI's NFT ID!!!!!!!!
             .then((res) => {
               console.log(res);
-              setFormSubmitted(true);
+              if (res.status === 200) {
+                setFormSubmitted(true);
+              }
             });
         }
       })
       .catch((err) => console.log(err));
   };
 
+  console.log("reddem form", alreadyRedeemed);
+
   return (
-    <Container onSubmit={(e) => handleSubmit(e)}>
+    <Container onSubmit={(e) => !alreadyRedeemed && handleSubmit(e)}>
       <Header>
         <span>Contact Information</span>
       </Header>
       <EmailContainer>
-        <InputBoxMedium onClick={() => emailRef.current.focus()}>
+        <InputBoxMedium
+          onClick={() => !alreadyRedeemed && emailRef.current.focus()}
+        >
           <InputLabel>Email</InputLabel>
-          <StyledInput
-            type="text"
-            onChange={(e) => setEmail(e.target.value)}
-            ref={emailRef}
-          />
+          {alreadyRedeemed ? (
+            <StyledInput disabled />
+          ) : (
+            <StyledInput
+              type="text"
+              onChange={(e) => setEmail(e.target.value)}
+              ref={emailRef}
+            />
+          )}
         </InputBoxMedium>
         <ShippingHeader>Shipping Address</ShippingHeader>
       </EmailContainer>
       <ShippingForm>
-        <InputBoxMedium onClick={() => firstRef.current.focus()}>
+        <InputBoxMedium
+          onClick={() => !alreadyRedeemed && firstRef.current.focus()}
+        >
           <InputLabel>First Name</InputLabel>
-          <StyledInput
-            type="text"
-            onChange={(e) => setFirst(e.target.value)}
-            ref={firstRef}
-          />
+
+          {alreadyRedeemed ? (
+            <StyledInput disabled />
+          ) : (
+            <StyledInput
+              type="text"
+              onChange={(e) => setFirst(e.target.value)}
+              ref={firstRef}
+            />
+          )}
         </InputBoxMedium>
-        <InputBoxMedium onClick={() => lastRef.current.focus()}>
+        <InputBoxMedium
+          onClick={() => !alreadyRedeemed && lastRef.current.focus()}
+        >
           <InputLabel>Last Name</InputLabel>
-          <StyledInput
-            type="text"
-            onChange={(e) => setLast(e.target.value)}
-            ref={lastRef}
-          />
+
+          {alreadyRedeemed ? (
+            <StyledInput disabled />
+          ) : (
+            <StyledInput
+              type="text"
+              onChange={(e) => setLast(e.target.value)}
+              ref={lastRef}
+            />
+          )}
         </InputBoxMedium>
-        <InputBoxLarge onClick={() => homeRef.current.focus()}>
+        <InputBoxLarge
+          onClick={() => !alreadyRedeemed && homeRef.current.focus()}
+        >
           <InputLabel>Address</InputLabel>
-          <StyledInput
-            type="text"
-            onChange={(e) => setHome(e.target.value)}
-            ref={homeRef}
-          />
+
+          {alreadyRedeemed ? (
+            <StyledInput disabled />
+          ) : (
+            <StyledInput
+              type="text"
+              onChange={(e) => setHome(e.target.value)}
+              ref={homeRef}
+            />
+          )}
         </InputBoxLarge>
-        <InputBoxMedium onClick={() => aptRef.current.focus()}>
+        <InputBoxMedium
+          onClick={() => !alreadyRedeemed && aptRef.current.focus()}
+        >
           <InputLabel>Apt/Suite/etc. (Optional)</InputLabel>
-          <StyledInput
-            type="text"
-            onChange={(e) => setApt(e.target.value)}
-            ref={aptRef}
-          />
+
+          {alreadyRedeemed ? (
+            <StyledInput disabled />
+          ) : (
+            <StyledInput
+              type="text"
+              onChange={(e) => setApt(e.target.value)}
+              ref={aptRef}
+            />
+          )}
         </InputBoxMedium>
-        <InputBoxMedium onClick={() => cityRef.current.focus()}>
+        <InputBoxMedium
+          onClick={() => !alreadyRedeemed && cityRef.current.focus()}
+        >
           <InputLabel>City</InputLabel>
-          <StyledInput
-            type="text"
-            onChange={(e) => setCity(e.target.value)}
-            ref={cityRef}
-          />
+
+          {alreadyRedeemed ? (
+            <StyledInput disabled />
+          ) : (
+            <StyledInput
+              type="text"
+              onChange={(e) => setCity(e.target.value)}
+              ref={cityRef}
+            />
+          )}
         </InputBoxMedium>
-        <InputBoxSmall onClick={() => countryRef.current.focus()}>
+        <InputBoxSmall
+          onClick={() => !alreadyRedeemed && countryRef.current.focus()}
+        >
           <InputLabel>Country/Region</InputLabel>
-          <StyledInput
-            type="text"
-            onChange={(e) => setCountry(e.target.value)}
-            ref={countryRef}
-          />
+
+          {alreadyRedeemed ? (
+            <StyledInput disabled />
+          ) : (
+            <StyledInput
+              type="text"
+              onChange={(e) => setCountry(e.target.value)}
+              ref={countryRef}
+            />
+          )}
         </InputBoxSmall>
-        <InputBoxSmall onClick={() => stateRef.current.focus()}>
+        <InputBoxSmall
+          onClick={() => !alreadyRedeemed && stateRef.current.focus()}
+        >
           <InputLabel>State</InputLabel>
-          <StyledInput
-            type="text"
-            onChange={(e) => setState(e.target.value)}
-            ref={stateRef}
-          />
+
+          {alreadyRedeemed ? (
+            <StyledInput disabled />
+          ) : (
+            <StyledInput
+              type="text"
+              onChange={(e) => setState(e.target.value)}
+              ref={stateRef}
+            />
+          )}
         </InputBoxSmall>
-        <InputBoxSmall onClick={() => zipRef.current.focus()}>
+        <InputBoxSmall
+          onClick={() => !alreadyRedeemed && zipRef.current.focus()}
+        >
           <InputLabel>ZIP code</InputLabel>
-          <StyledInput
-            type="text"
-            onChange={(e) => setZip(e.target.value)}
-            ref={zipRef}
-          />
+
+          {alreadyRedeemed ? (
+            <StyledInput disabled />
+          ) : (
+            <StyledInput
+              type="text"
+              onChange={(e) => setZip(e.target.value)}
+              ref={zipRef}
+            />
+          )}
         </InputBoxSmall>
       </ShippingForm>
       <RedeemSection>

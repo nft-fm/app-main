@@ -7,10 +7,11 @@ import axios from "axios";
 import FourOhFour from "../../views/404";
 
 import RedeemForm from "./Components/RedeemForm";
+import Redemption from "./Components/Redemption";
 
 const Redeem = () => {
   const { user, account } = useAccountConsumer();
-  const [alreadyRedeemed, setAlreadyRedeemed] = useState(false)
+  const [alreadyRedeemed, setAlreadyRedeemed] = useState(false);
   const [ownsRedeemable, setOwnsRedeemable] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
 
@@ -22,15 +23,14 @@ const Redeem = () => {
         .then((res) => {
           console.log(res);
           if (res.status === 200) {
-            
-            for (let i = 0; i < res.data.redeemedBy.length; i++) {
-              if (res.data.redeemedBy[i] === user.address) {
-                setAlreadyRedeemed(true)
-                return;
-              }
+            setOwnsRedeemable(true);
+          }
+
+          for (let i = 0; i < res.data.redeemedBy.length; i++) {
+            if (res.data.redeemedBy[i] === user.address) {
+              setAlreadyRedeemed(true);
             }
-            
-            setOwnsRedeemable(true)};
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -38,13 +38,28 @@ const Redeem = () => {
     }
   }, [user]);
 
+  console.log(
+    "already, owns, form",
+    alreadyRedeemed,
+    ownsRedeemable,
+    formSubmitted
+  );
+
   return (
     <Switch>
       {!ownsRedeemable && !alreadyRedeemed && <FourOhFour />}
       <BaseView>
-        {alreadyRedeemed && <div style={{color: 'white'}}>You have already submitted your information</div>}
-        {ownsRedeemable && !formSubmitted && <RedeemForm setFormSubmitted={setFormSubmitted} />}
-        {formSubmitted && <div style={{color: 'white'}}>YAY YOU SUBMITTED YOUR ADDRESSSSSSS</div>}
+        {/* {alreadyRedeemed && <div style={{color: 'white'}}>You have already submitted your information</div>} */}
+        {(ownsRedeemable && !formSubmitted && !alreadyRedeemed) &&
+        // ||
+          // (!alreadyRedeemed && (
+            <RedeemForm
+              setFormSubmitted={setFormSubmitted}
+              alreadyRedeemed={alreadyRedeemed}
+            />
+          // ))
+          }
+        {(formSubmitted || alreadyRedeemed) && <Redemption />}
       </BaseView>
     </Switch>
   );

@@ -46,7 +46,7 @@ const cookies = new Cookies();
 
 const Switches = () => {
   const location = useLocation();
-  const { account , fetchIp, ip } = useAccountConsumer();
+  const { account , fetchIp, ip, user } = useAccountConsumer();
 
   useEffect(() => {
     async function trackPageView() {

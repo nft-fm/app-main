@@ -11,119 +11,120 @@ import { useAccountConsumer } from "../../../contexts/Account";
 import LoadingFeatured from "../../../components/NftCards/LoadingFeatured";
 import NftModalHook from "../../../components/NftModalHook";
 import ShareModal from "../../../components/SMShareModal/SMShareModal";
+import saQiBanner from "../../../assets/img/homepage_assets/saqi_banner.png";
 
 const Listen = () => {
   const { user, account } = useAccountConsumer();
-  const [nfts, setNfts] = useState(<LoadingFeatured />);
+  // const [nfts, setNfts] = useState(<LoadingFeatured />);
   // const [hasNfts, setHasNfts] = useState(false);
 
-  const [nftFromUrl, setNftFromUrl] = useState(null);
-  const [isUrlModalOpen, setIsUrlModalOpen] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [rawNftData, setRawNftData] = useState(null);
+  // const [nftFromUrl, setNftFromUrl] = useState(null);
+  // const [isUrlModalOpen, setIsUrlModalOpen] = useState(false);
+  // const [isLoaded, setIsLoaded] = useState(false);
+  // const [rawNftData, setRawNftData] = useState(null);
 
-  const formatNfts = (nftsData) => {
-    return nftsData.map((nft) => {
-      return <NftCard nft={nft} />;
-    });
-  };
+  // const formatNfts = (nftsData) => {
+  //   return nftsData.map((nft) => {
+  //     return <NftCard nft={nft} />;
+  //   });
+  // };
 
-  const getFeatured = () => {
-    axios.post("/api/nft-type/featured", { address: account }).then((res) => {
-      setRawNftData(res.data);
-      const formattedNfts = formatNfts(res.data);
-      setTimeout(function () {
-        formattedNfts.push(<FillerCard />);
-        setNfts(formattedNfts);
-        // setHasNfts(true);
-        setIsLoaded(true);
-      }, 300);
-    });
-  };
+  // const getFeatured = () => {
+  //   axios.post("/api/nft-type/featured", { address: account }).then((res) => {
+  //     setRawNftData(res.data);
+  //     const formattedNfts = formatNfts(res.data);
+  //     setTimeout(function () {
+  //       formattedNfts.push(<FillerCard />);
+  //       setNfts(formattedNfts);
+  //       // setHasNfts(true);
+  //       setIsLoaded(true);
+  //     }, 300);
+  //   });
+  // };
 
-  const hide = () => {
-    setIsUrlModalOpen(false);
-  };
+  // const hide = () => {
+  //   setIsUrlModalOpen(false);
+  // };
 
-  useEffect(() => {
-    getFeatured();
-  }, [user]);
+  // useEffect(() => {
+  //   getFeatured();
+  // }, [user]);
 
-  const [partialSong, setPartialSong] = useState(false);
+  // const [partialSong, setPartialSong] = useState(false);
 
-  const getSnnipetAWS = async (completeNft) => {
-    await axios
-    .post("/api/nft-type/getSnnipetAWS", {
-      key:
-        completeNft.address +
-        "/snnipets/" +
-        completeNft.audioUrl.split("/").slice(-1)[0]
-    })
-    .then((res) => {
-      if (!res.data) {
-        getNSeconds(completeNft);
-      } else {
-        setPartialSong(res.data);
-      }
-    })
-    .catch(err => { 
-      console.log("ERR", err)
-    })
-  };
+  // const getSnnipetAWS = async (completeNft) => {
+  //   await axios
+  //   .post("/api/nft-type/getSnnipetAWS", {
+  //     key:
+  //       completeNft.address +
+  //       "/snnipets/" +
+  //       completeNft.audioUrl.split("/").slice(-1)[0]
+  //   })
+  //   .then((res) => {
+  //     if (!res.data) {
+  //       getNSeconds(completeNft);
+  //     } else {
+  //       setPartialSong(res.data);
+  //     }
+  //   })
+  //   .catch(err => {
+  //     console.log("ERR", err)
+  //   })
+  // };
 
-  const getNSeconds = async (completeNft) => {
-    await axios
-      .post("/api/nft-type/getNSecondsOfSong", {
-        key:
-          completeNft.address +
-          "/" +
-          completeNft.audioUrl.split("/").slice(-1)[0],
-        nft: completeNft,
-        startTime: 30
-      })
-      .then((res) => {
-        console.log("got snnipet");
-        const songFile = res.data.Body.data;
-      
-        setPartialSong(songFile);
-      });
-  };
+  // const getNSeconds = async (completeNft) => {
+  //   await axios
+  //     .post("/api/nft-type/getNSecondsOfSong", {
+  //       key:
+  //         completeNft.address +
+  //         "/" +
+  //         completeNft.audioUrl.split("/").slice(-1)[0],
+  //       nft: completeNft,
+  //       startTime: 30
+  //     })
+  //     .then((res) => {
+  //       console.log("got snnipet");
+  //       const songFile = res.data.Body.data;
 
-  useEffect(() => {
-    if (window.location.pathname.length > 1 && isLoaded) {
-      let nftTitle = ""
-      let trackUrl = window.location.pathname.split("/").pop()
-      if (trackUrl === "touch_id") nftTitle = "TOUCH IDv2"
-      if (trackUrl === "sex_kazoo") nftTitle = "Sex Kazoo 2 "
-      if (trackUrl === "lowkey") nftTitle = "Lowkey"
-      if (trackUrl === "here_for_a_reason") nftTitle = "here for a reason"
-      for (let i = 0; i < rawNftData.length; i++) {
-        console.log(rawNftData[i]);
-        if (nftTitle === rawNftData[i].title) {
-          setNftFromUrl(rawNftData[i]);
-          setIsUrlModalOpen(true);
-          getSnnipetAWS(rawNftData[i]);
-        }
-      }
-    }
-  }, [isLoaded]);
+  //       setPartialSong(songFile);
+  //     });
+  // };
 
-  const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(0);
-  const [isShareOpen, setIsShareOpen] = useState(false);
-  const [shareCount, setShareCount] = useState({count: 0 })
+  // useEffect(() => {
+  //   if (window.location.pathname.length > 1 && isLoaded) {
+  //     let nftTitle = ""
+  //     let trackUrl = window.location.pathname.split("/").pop()
+  //     if (trackUrl === "touch_id") nftTitle = "TOUCH IDv2"
+  //     if (trackUrl === "sex_kazoo") nftTitle = "Sex Kazoo 2 "
+  //     if (trackUrl === "lowkey") nftTitle = "Lowkey"
+  //     if (trackUrl === "here_for_a_reason") nftTitle = "here for a reason"
+  //     for (let i = 0; i < rawNftData.length; i++) {
+  //       console.log(rawNftData[i]);
+  //       if (nftTitle === rawNftData[i].title) {
+  //         setNftFromUrl(rawNftData[i]);
+  //         setIsUrlModalOpen(true);
+  //         getSnnipetAWS(rawNftData[i]);
+  //       }
+  //     }
+  //   }
+  // }, [isLoaded]);
 
-  useEffect(() => {
-    if (nftFromUrl) {
-    setShareCount({ count: nftFromUrl.shareCount });
-      setLikeCount(nftFromUrl.likeCount);
-      setLiked(nftFromUrl.liked);
-    }
-    // getSnnipet(props.nft);
-  }, [nftFromUrl]);
+  // const [liked, setLiked] = useState(false);
+  // const [likeCount, setLikeCount] = useState(0);
+  // const [isShareOpen, setIsShareOpen] = useState(false);
+  // const [shareCount, setShareCount] = useState({count: 0 })
+
+  // useEffect(() => {
+  //   if (nftFromUrl) {
+  //   setShareCount({ count: nftFromUrl.shareCount });
+  //     setLikeCount(nftFromUrl.likeCount);
+  //     setLiked(nftFromUrl.liked);
+  //   }
+  //   // getSnnipet(props.nft);
+  // }, [nftFromUrl]);
   return (
     <Landing>
-      <ShareModal
+      {/* <ShareModal
         open={isShareOpen}
         hide={() => setIsShareOpen(!isShareOpen)}
         updateShareCount={() => setShareCount({ count: shareCount.count + 1 })}
@@ -141,15 +142,15 @@ const Listen = () => {
           setLikeCount={setLikeCount}
           setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
         />
-      )}
+      )} */}
       <LandingTitle>
         <Logo src={logo} />
         <StyledTitle>NFT FM</StyledTitle>
-        <NftFmTagline>Tune in to your favorite artists.</NftFmTagline>
+        {/* <NftFmTagline>NFT FM presents</NftFmTagline> */}
       </LandingTitle>
       <LaunchContainer>
-        <ContainerTitle>
-          PROUD TO
+        {/* <ContainerTitle>
+          NFT FM PRESENTS
           <ContainerTitleTextContainer>
             <ContainerTitleText
               style={{ color: "#20a4fc" }}
@@ -165,8 +166,9 @@ const Listen = () => {
             >{`ARTISTS`}</ContainerTitleText>
           </ContainerTitleTextContainer>
         </ContainerTitle>
-        <ContainerOutline />
-        <NftScroll> {nfts} </NftScroll>
+        <ContainerOutline /> */}
+        <Banner src={saQiBanner} alt="saQi Banner" /> {/* add in mobile version */}
+        {/* <NftScroll> {nfts} </NftScroll> */}
       </LaunchContainer>
       <SocialsBar>
         <IconContainer
@@ -205,6 +207,13 @@ const Listen = () => {
     </Landing>
   );
 };
+
+const Banner = styled.img`
+  border-radius: 15px;
+  @media only screen and (max-width: 776px) {
+    width: 100vw;
+  }
+`;
 
 const ContainerTitleTextContainer = styled.div`
   @media only screen and (max-width: 776px) {

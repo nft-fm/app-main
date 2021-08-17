@@ -55,10 +55,11 @@ router.post("/get-account", async (req, res) => {
   }
 });
 
-router.post("/track-pageview", async (req, res) => {
+router.get("/track-pageview", async (req, res) => {
   try {
-    console.log("pageview ping");
-    trackPageview(req.body);
+    let ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress || null;
+    console.log("pageview ping", req.body);
+    trackPageview(address, page, ip);
   } catch (error) {
     console.log(error);
     res.status(500).send("server error");

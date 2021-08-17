@@ -54,6 +54,11 @@ const Profile = () => {
 
   const openMintModal = async () => {
     try {
+      if (user.username === "") {
+        swal.fire('You ned to set a username first!')
+        return
+      }
+
       const hasDraft = await axios.get(`/api/nft-type/has-draft/${account}`);
       if (hasDraft.data.hasDraft) {
         swal

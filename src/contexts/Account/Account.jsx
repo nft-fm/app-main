@@ -89,7 +89,7 @@ export const AccountProvider = ({ children }) => {
       console.log("getting chain");
       getChain();
     }
-    // fetchIp();
+    fetchIp();
     fetchUsdPerEth();
     if (!oneSecToLoadMetaMask) {
       setTimeout(() => {

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 import { ReactComponent as IconX } from "../../assets/img/icons/x.svg";
 import logo from "../../assets/img/logos/logo_tiny.png";
 import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
@@ -51,6 +52,7 @@ const BuyNftModal = (props) => {
   const { account, connect, usdPerEth, getUser, ip } = useAccountConsumer();
   const { setNftCallback } = usePlaylistConsumer();
 
+  const history = useHistory();
   const stopProp = (e) => {
     e.stopPropagation();
   };
@@ -77,17 +79,33 @@ const BuyNftModal = (props) => {
             },
             () => {
               axios
-                .post("/api/nft-type/purchase", { id: id, address: account, ip })
+                .post("/api/nft-type/purchase", {
+                  id: id,
+                  address: account,
+                  ip,
+                })
                 .then((res) => {
                   setTimeout(function () {
                     setIsLoading(false);
                     setIsBought(true);
                     getUser();
                   }, 1000);
-                  Swal.fire({
-                    title: "Succesful purchase!",
-                    html: `<div>View in your library (can take a moment to appear)<div>`,
-                  });
+                  if (nft.isRedeemable) {
+                    Swal.fire({
+                      title: "Redeem Merch!",
+                      text: "You just bought an NFT with redeemable merch! Click this button to go to the redemption portal",
+                      confirmButtonText: "Redeem!",
+                    }).then((res) => {
+                      if (res.isConfirmed) {
+                        history.push("/redeem");
+                      }
+                    });
+                  } else {
+                    Swal.fire({
+                      title: "Succesful purchase!",
+                      html: `<div>View in your library (can take a moment to appear)<div>`,
+                    });
+                  }
                 })
                 .catch((err) => {
                   console.error(err.status, err.message, err.error);
@@ -102,6 +120,7 @@ const BuyNftModal = (props) => {
             }
           ).catch((err) => {
             console.log(err);
+            setIsLoading(false);
             swal.fire({
               imageUrl: errorIcon,
               imageWidth,

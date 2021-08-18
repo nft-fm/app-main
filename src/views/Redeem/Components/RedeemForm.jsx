@@ -68,7 +68,7 @@ const RedeemForm = (props) => {
         console.log(res);
         if (res.status === 200) {
           axios
-            .post("/api/user/updateRedeemers", { address: account, nftId: 67 }) //CHANGE THIS TO SAQI's NFT ID!!!!!!!!
+            .post("/api/user/updateRedeemers", { address: account, nftId: 16 }) //CHANGE THIS TO SAQI's NFT ID!!!!!!!!
             .then((res) => {
               console.log(res);
               if (res.status === 200) {

@@ -56,7 +56,6 @@ console.log("tracking pageview", props);
     isLoggedIn: address ? true : false,
   });
 }
-
 const trackNftMint = () => {
 
 }

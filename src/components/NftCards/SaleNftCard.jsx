@@ -421,6 +421,9 @@ const Container = styled.div`
   position: relative;
   /* margin-left: 5px;
   margin-right: 5px; */
+  /* :hover {
+    box-shadow: 3px 2px 2px ${(props) => props.theme.color.gray};
+  } */
 `;
 
 const Image = styled.img`

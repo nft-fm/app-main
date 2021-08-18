@@ -48,12 +48,19 @@ const Switches = () => {
   const location = useLocation();
   const { account, fetchIp, ip, user } = useAccountConsumer();
 
-  // useEffect(() => {
-  //     axios.get(`/api/user/track-pageview`, {
-  //       address: account,
-  //       page: location.pathname.substring(1),
-  //     });
-  // }, [location, ip]);
+  useEffect(() => {
+    async function trackPageView() {
+      let myIp = ip ? ip : await fetchIp();
+      console.log("fetching ip", myIp);
+      axios.post(`/api/user/track-pageview`, {
+        address: account,
+        ip: myIp,
+        page: location.pathname.substring(1),
+      });
+      console.log("new location", location);
+    }
+    trackPageView();
+  }, [location]);
 
   const [ownsRedeemable, setOwnsRedeemable] = useState(false);
   console.log("ownsRedeemable", ownsRedeemable);

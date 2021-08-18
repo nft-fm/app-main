@@ -8,7 +8,7 @@ const User = require("../schemas/User.schema");
 const { MAIN_FlatPriceSale, TEST_FlatPriceSale } = require("../web3/constants");
 const { sign, getSetSale, findLikes } = require("../web3/server-utils");
 const { listenForMint } = require("../web3/mint-listener");
-const {trackNftPurchase} = require("../modules/mixpanel");
+const { trackNftPurchase } = require("../modules/mixpanel");
 
 // const findLikes = (nfts, account) => {
 //   for (let i = 0; i < nfts.length; i++) {
@@ -914,7 +914,8 @@ router.post("/purchase", async (req, res) => {
       ip: req.body.ip,
       artistAddress: nft.address,
       nftId: nft.nftId,
-      nftPrice: nft.price});
+      nftPrice: nft.price,
+    });
     console.log("end?", user, nft);
     res.status(200).send("Success!");
   } catch (err) {
@@ -973,7 +974,7 @@ router.post("/checkRedeemable", async (req, res) => {
     for (let i = 0; i < usersNfts.length; i++) {
       userNftIds.push(usersNfts[i].nft);
     }
-    
+
     let userOwnsRedeemable = await NftType.find({
       _id: { $in: userNftIds },
       isRedeemable: true,
@@ -981,14 +982,26 @@ router.post("/checkRedeemable", async (req, res) => {
 
     console.log("this", userOwnsRedeemable);
     if (userOwnsRedeemable[0]) {
-      console.log('there')
+      console.log("there");
       res.status(200).send(userOwnsRedeemable[0]);
     } else {
-      console.log('here')
+      console.log("here");
       res.status(404).send("User does not own a redeemable NFT.");
     }
   } catch (err) {
     res.status(500).send(err);
+  }
+});
+
+router.post("/updateSaQi", async (req, res) => {
+  try {
+    console.log('updatesaqi hit')
+    await NftType.findOneAndUpdate(
+      { title: "Say Your Prayer" },
+      { isDraft: false }
+    );
+  } catch (err) {
+    console.log(err);
   }
 });
 

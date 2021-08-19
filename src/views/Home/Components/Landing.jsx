@@ -11,11 +11,11 @@ import CountDown from "./CountDown";
 import axios from "axios";
 
 const Listen = () => {
-  const [timedOut, setTimedOut] = useState(false);
+  // const [timedOut, setTimedOut] = useState(false);
 
-  useEffect(() => {
-    timedOut && axios.post("/api/nft-type/updateSaQi");
-  }, [timedOut]);
+  // useEffect(() => {
+  //   timedOut && axios.post("/api/nft-type/updateSaQi");
+  // }, [timedOut]);
 
   return (
     <Landing>
@@ -24,7 +24,7 @@ const Listen = () => {
         <StyledTitle>NFT FM</StyledTitle>
       </LandingTitle>
       <LaunchContainer>
-        {!timedOut && <CountDown setTimedOut={setTimedOut} />}
+        {/* {!timedOut && <CountDown setTimedOut={setTimedOut} />} */}
         <DesktopBanner src={saQiBannerDesktop} alt="saQi Banner" />
         <MobileDescription>
           <MobileBanner src={saQiBannerMobile} alt="saQi Banner" />

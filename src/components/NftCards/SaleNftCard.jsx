@@ -109,7 +109,7 @@ const NftCard = (props) => {
     return null;
   }
   return (
-    <Container>
+    <Container open={isModalOpen}>
       <ShareModal
         open={isShareOpen}
         hide={() => setIsShareOpen(!isShareOpen)}
@@ -156,7 +156,7 @@ const NftCard = (props) => {
         onLoad={() => setImageLoaded(true)}
       />
       {nft.isRedeemable && (
-        <RedeemButtonBackground>
+        <RedeemButtonBackground onClick={() => setIsModalOpen(!isModalOpen)}>
           <RedeemButton>
             {/* Merch */}
             <MerchIcon />
@@ -228,6 +228,20 @@ const NftCard = (props) => {
                 </>
               );
             }
+            if (badge.redeem) {
+              return (
+                <>
+                  <MerchBadge
+                    className="merchBadge"
+                    data-tip
+                    data-for="merchTip"
+                  />
+                  <ReactToolTip id="merchTip" place="top" effect="solid">
+                    Merch
+                  </ReactToolTip>
+                </>
+              );
+            }
           })}
         </BadgeHolder>
         <CostEth>
@@ -263,7 +277,7 @@ const RedeemButtonBackground = styled.div`
   left: 20px;
   background-image: linear-gradient(to right, #fde404, #fa423e);
 
-  /* cursor: pointer; */
+  cursor: pointer;
   text-decoration: none;
   border-radius: 7px;
   :hover {
@@ -291,9 +305,18 @@ const RedeemButtonBackground = styled.div`
 const MerchIcon = styled(GiftIcon)`
   width: 15px;
   height: 15px;
-  /* padding-left: 5px; */
-  /* margin-bottom: -1px; */
   margin-top: 3px;
+  & path {
+    fill: ${(props) => props.theme.color.red};
+  }
+`;
+
+const MerchBadge = styled(GiftIcon)`
+  width: 12px;
+  height: 12px;
+  padding: 1px;
+  border: 1px solid ${(props) => props.theme.color.blue};
+  border-radius: 50%;
   & path {
     fill: ${(props) => props.theme.color.red};
   }
@@ -419,11 +442,9 @@ const Container = styled.div`
   width: 200px;
   margin-bottom: 20px;
   position: relative;
-  /* margin-left: 5px;
-  margin-right: 5px; */
-  /* :hover {
-    box-shadow: 3px 2px 2px ${(props) => props.theme.color.gray};
-  } */
+  :hover {
+    transform: ${(props) => !props.open && "translateY(-0.15em)"};
+  }
 `;
 
 const Image = styled.img`

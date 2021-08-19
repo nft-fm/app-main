@@ -22,6 +22,7 @@ import { ReactComponent as Founder } from "../../assets/img/Badges/founder.svg";
 import { ReactComponent as Premium } from "../../assets/img/Badges/premium.svg";
 import { ReactComponent as Prerelease } from "../../assets/img/Badges/prerelease.svg";
 import { ReactComponent as Exclusive } from "../../assets/img/Badges/exclusive.svg";
+import { ReactComponent as GiftIcon } from "../../assets/img/icons/rewards-gift.svg";
 import moment from "moment";
 import { NavLink } from "react-router-dom";
 import {
@@ -276,6 +277,20 @@ const BuyNftModal = (props) => {
                     />
                   );
                 }
+                if (badge.redeem) {
+                  return (
+                    <>
+                      <MerchBadge
+                        className="merchBadge"
+                        data-tip
+                        data-for="merchTip"
+                      />
+                      <ReactToolTip id="merchTip" place="top" effect="solid">
+                        Merch
+                      </ReactToolTip>
+                    </>
+                  );
+                }
               })}
               <ReactToolTip id="founderBadge" place="top" effect="solid">
                 Founder
@@ -289,6 +304,9 @@ const BuyNftModal = (props) => {
               <ReactToolTip id="exclusiveBadge" place="top" effect="solid">
                 Exclusive
               </ReactToolTip>
+                  <ReactToolTip id="merchTip" place="top" effect="solid">
+                    Merch
+                  </ReactToolTip>
             </BadgeHolder>
             <InfoContainer>
               {nft.title.length > 18 ? (
@@ -394,6 +412,17 @@ const TrackDetailsHolder = styled.div`
   padding-left: 20px;
   @media only screen and (max-width: 776px) {
     height: auto;
+  }
+`;
+
+const MerchBadge = styled(GiftIcon)`
+  width: 16px;
+  height: 16px;
+  padding: 1px;
+  border: 1px solid ${(props) => props.theme.color.blue};
+  border-radius: 50%;
+  & path {
+    fill: ${(props) => props.theme.color.red};
   }
 `;
 

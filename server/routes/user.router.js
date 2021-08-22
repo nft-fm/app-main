@@ -55,7 +55,7 @@ router.post("/get-account", async (req, res) => {
   }
 });
 
-router.get("/track-pageview", async (req, res) => {
+router.post("/track-pageview", async (req, res) => {
   try {
     // let ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress || null;
     console.log("pageview ping");

@@ -116,16 +116,16 @@ const Listen = () => {
 
   const menuOptions = [
     <MenuSpan
-    isMenuOpen={menuOpen}
-    onClick={() => {
-      setSort(2);
-      setSelected("Date: High - Low");
-      setMenuOpen(false);
-    }}
-    selected={selected === "Date: High - Low"}
-  >
-    Recently Added
-  </MenuSpan>,
+      isMenuOpen={menuOpen}
+      onClick={() => {
+        setSort(2);
+        setSelected("Date: High - Low");
+        setMenuOpen(false);
+      }}
+      selected={selected === "Date: High - Low"}
+    >
+      Recently Added
+    </MenuSpan>,
     <MenuSpan
       isMenuOpen={menuOpen}
       onClick={() => {
@@ -209,11 +209,10 @@ const Listen = () => {
   );
 };
 
-
 const DownArrow = styled(down_arrow)`
-position: absolute;
+  position: absolute;
   right: 15px;
-  top:5px;
+  top: 5px;
   width: 15px;
   height: 15px;
   cursor: pointer;
@@ -265,14 +264,13 @@ const MenuSpan = styled.span`
   cursor: pointer;
   font-size: 1rem;
   transition: all 0.1s ease-in-out;
-  ${props => props.selected && `text-decoration: underline;`
-  }
+  ${(props) => props.selected && `text-decoration: underline;`}
   &:hover {
     color: white;
   }
 `;
 const ContainerTitleSorting = styled.div`
-width: 110px;
+  width: 110px;
   position: absolute;
   right: calc(10% + 50px);
   top: -15px;
@@ -289,6 +287,7 @@ width: 110px;
   align-items: flex-start;
 
   height: ${(props) => props.isMenuOpen && "110px"};
+  z-index: 2;
 
   @media only screen and (max-width: 1200px) {
     left: auto;
@@ -327,8 +326,8 @@ const ContainerTitleDate = styled.div`
   }
 `;
 const ContainerTitleForm = styled.form`
-position: absolute;
-top: -15px;
+  position: absolute;
+  top: -15px;
   left: calc(10% + 50px);
   @media only screen and (max-width: 776px) {
     left: auto;
@@ -385,6 +384,7 @@ const NftScroll = styled.div`
       width: 100%;
       justify-content: space-between;
       overflow-x: clip !important;
+      overflow-y: visible !important;
       @media only screen and (max-width: 776px) {
         flex-direction: column;
         align-items: center;

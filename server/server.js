@@ -63,6 +63,8 @@ app.use("/api/vinyl-owner", vinylOwnerRouter);
 app.use("/api/admin-poll", adminPollRouter);
 app.use("/api/airdrop", airRouter);
 
+app.set('trust proxy', true)
+
 app.get("/*", function (req, res) {
   res.sendFile(path.join(__dirname, "../build/index.html"), function (err) {
     if (err) {

@@ -911,7 +911,7 @@ router.post("/purchase", async (req, res) => {
 
     trackNftPurchase({
       address: req.body.address,
-      ip: req.body.ip,
+      ip: req.ip,
       artistAddress: nft.address,
       nftId: nft.nftId,
       nftPrice: nft.price,
@@ -1007,8 +1007,16 @@ router.post("/updateSaQi", async (req, res) => {
 
 router.post("/trackNftView", async (req, res) => {
   try {
-    console.log("trackNftView hit", req.body);
-    trackNftView(req.body);
+    console.log("nft View hit", req.body);
+    const payload = {
+      address: req.body.account,
+      nftId: req.body.nftId,
+      artistAddress: req.body.artistAddress,
+      artist: req.body.artist,
+      title: req.body.title,
+      ip: req.ip
+    }
+    trackNftView(payload);
   } catch (err) {
     res.status(500).send(err);
   }

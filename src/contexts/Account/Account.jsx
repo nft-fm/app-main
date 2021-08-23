@@ -39,7 +39,6 @@ export const AccountProvider = ({ children }) => {
   const [currChainId, setCurrChainId] = useState(false);
   const [usdPerEth, setUsdPerEth] = useState(0);
   const [oneSecToLoadMetaMask, setOneSecToLoadMetaMask] = useState(false);
-  const [ip, setIp] = useState(null);
 
   const fetchUsdPerEth = async () => {
     await axios
@@ -48,17 +47,10 @@ export const AccountProvider = ({ children }) => {
       )
       .then((res) => setUsdPerEth(res.data.ethereum.usd));
   };
-  const fetchIp = async () => {
-    return await axios.get("https://ipv4.icanhazip.com/").then(res => {
-      const ip = res.data.substring(0, res.data.length - 1);
-      console.log("\n\n\nip:", ip);
-      setIp(ip);
-      return(ip);
-    })}
 
   const getUser = async () => {
     await axios
-      .post(`/api/user/get-account`, { address: account, ip })
+      .post(`/api/user/get-account`, { address: account})
       .then((res) => {
         setUser(res.data);
         axios
@@ -89,7 +81,6 @@ export const AccountProvider = ({ children }) => {
       console.log("getting chain");
       getChain();
     }
-    fetchIp();
     fetchUsdPerEth();
     if (!oneSecToLoadMetaMask) {
       setTimeout(() => {
@@ -129,8 +120,6 @@ export const AccountProvider = ({ children }) => {
         currChainId,
         setCurrChainId,
         usdPerEth,
-        ip,
-        fetchIp,
       }}
     >
       {/* {oneSecToLoadMetaMask && !currChainId && <NoChainModal />}

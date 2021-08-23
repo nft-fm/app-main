@@ -48,7 +48,7 @@ const BuyNftModal = (props) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isBought, setIsBought] = useState(false);
-  const { account, connect, usdPerEth, getUser, ip } = useAccountConsumer();
+  const { account, connect, getUser } = useAccountConsumer();
   const { setNftCallback } = usePlaylistConsumer();
   const history = useHistory();
 
@@ -59,7 +59,6 @@ const BuyNftModal = (props) => {
           address: account,
           nftId: nft.nftId,
           artistAddress: nft.address,
-          ip: ip,
           artist: nft.artist,
           title: nft.title,
         })
@@ -97,7 +96,6 @@ const BuyNftModal = (props) => {
                 .post("/api/nft-type/purchase", {
                   id: id,
                   address: account,
-                  ip,
                 })
                 .then((res) => {
                   setTimeout(function () {

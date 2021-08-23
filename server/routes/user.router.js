@@ -27,9 +27,9 @@ router.post("/get-account", async (req, res) => {
       });
       await user.save();
       console.log("tracking new user:", req.body.address);
-      trackNewUser({ address: req.body.address, ip: req.body.ip });
+      trackNewUser({ address: req.body.address, ip: req.ip });
     }
-    trackLogin({ address: req.body.address, ip: req.body.ip });
+    trackLogin({ address: req.body.address, ip: req.ip });
 
     //This overwrites the user's database nfts with the nfts attributed to the user in the smart contract
     //handles when user's buy/sell nfts off platform
@@ -57,9 +57,12 @@ router.post("/get-account", async (req, res) => {
 
 router.post("/track-pageview", async (req, res) => {
   try {
-    // let ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress || null;
     console.log("pageview ping");
-    trackPageview(req.body);
+    trackPageview({
+      address: req.body.account,
+      ip: req.ip,
+      page: req.body.page,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send("server error");

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import logo from "../../../assets/img/logos/logo.png";
+import { NavLink } from "react-router-dom";
 import { ReactComponent as IconDiscord } from "../../../assets/img/icons/social_discord.svg";
 import { ReactComponent as IconMedium } from "../../../assets/img/icons/social_medium.svg";
 import { ReactComponent as IconTelegram } from "../../../assets/img/icons/social_telegram.svg";
@@ -25,7 +26,9 @@ const Listen = () => {
       </LandingTitle>
       <LaunchContainer>
         {/* {!timedOut && <CountDown setTimedOut={setTimedOut} />} */}
-        <DesktopBanner src={saQiBannerDesktop} alt="saQi Banner" />
+        <NavLink to="/market/16">
+          <DesktopBanner src={saQiBannerDesktop} alt="saQi Banner" />
+        </NavLink>
         <MobileDescription>
           <MobileBanner src={saQiBannerMobile} alt="saQi Banner" />
           <span>Portion of the proceeds go to natives affected by Covid</span>

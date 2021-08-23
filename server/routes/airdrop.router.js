@@ -3,7 +3,6 @@ const router = express.Router();
 const NftType = require("../schemas/NftType.schema");
 const Airdrop = require("../schemas/Airdrop.schema");
 const axios = require("axios");
-
 const queryUrl = `https://api.opensea.io/graphql/`;
 const ItemOwnersList_data_ttWlh = `{
     archetype(archetype: $archetype) {

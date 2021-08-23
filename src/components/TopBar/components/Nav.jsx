@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-
 import { useAccountConsumer } from "../../../contexts/Account";
 import { useWallet } from "use-wallet";
 import { getVinylBalance } from "../../../web3/utils";
 import { ReactComponent as IconDown } from "../../../assets/img/icons/down_arrow.svg";
+
 export const Nav = () => {
   const { user } = useAccountConsumer();
-
   const { account } = useWallet();
   const [hasVinyl, setHasVinyl] = useState(false);
   useEffect(() => {

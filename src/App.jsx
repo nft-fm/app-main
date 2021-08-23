@@ -28,7 +28,6 @@ import Info from "./views/Info";
 import Redeem from "./views/Redeem";
 import TermsOfService from "./views/FooterLinks/TermsOfService";
 import PrivacyPolicy from "./views/FooterLinks/PrivacyPolicy";
-
 import { AccountProvider, useAccountConsumer } from "./contexts/Account";
 import { PlaylistProvider } from "./contexts/Playlist/Playlist";
 import swal from "sweetalert2";
@@ -38,25 +37,24 @@ import recordPlayer from "./assets/img/record_player.png";
 import recordPlayerSpin from "./assets/img/record_player_spin.png";
 import isMobile from "./utils/isMobile";
 import theme from "./theme";
-import { fetchJson } from "ethers/lib/utils";
 
 if (window.location.hostname !== "localhost") console.log = function () {};
-
-const cookies = new Cookies();
 
 const Switches = () => {
   const location = useLocation();
   const { account, user } = useAccountConsumer();
 
   useEffect(() => {
-    async function trackPageView() {
       axios.post(`/api/user/track-pageview`, {
         address: account,
         page: location.pathname.substring(1),
-      });
+      }).then((res) => {
+        console.log("successful pageview track", res);
+      })
+      .catch((err) => {
+        console.log("pageview fail", err);
+      })
       console.log("new location", location);
-    }
-    trackPageView();
   }, [location]);
 
   const [ownsRedeemable, setOwnsRedeemable] = useState(false);

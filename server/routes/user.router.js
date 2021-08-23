@@ -63,6 +63,7 @@ router.post("/track-pageview", async (req, res) => {
       ip: req.ip,
       page: req.body.page,
     });
+    res.send("success");
   } catch (error) {
     console.log(error);
     res.status(500).send("server error");

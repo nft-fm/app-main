@@ -8,16 +8,8 @@ import { ReactComponent as IconTelegram } from "../../../assets/img/icons/social
 import { ReactComponent as IconTwitter } from "../../../assets/img/icons/social_twitter.svg";
 import saQiBannerDesktop from "../../../assets/img/homepage_assets/saqi_banner.png";
 import saQiBannerMobile from "../../../assets/img/homepage_assets/saqi_banner_mobile.jpeg";
-import CountDown from "./CountDown";
-import axios from "axios";
 
 const Listen = () => {
-  // const [timedOut, setTimedOut] = useState(false);
-
-  // useEffect(() => {
-  //   timedOut && axios.post("/api/nft-type/updateSaQi");
-  // }, [timedOut]);
-
   return (
     <Landing>
       <LandingTitle>
@@ -25,7 +17,6 @@ const Listen = () => {
         <StyledTitle>NFT FM</StyledTitle>
       </LandingTitle>
       <LaunchContainer>
-        {/* {!timedOut && <CountDown setTimedOut={setTimedOut} />} */}
         <NavLink to="/market/16">
           <DesktopBanner src={saQiBannerDesktop} alt="saQi Banner" />
         </NavLink>

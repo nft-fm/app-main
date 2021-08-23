@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
@@ -46,14 +46,28 @@ const BuyNftModal = (props) => {
     setIsShareOpen,
   } = props;
 
-  // console.log("buynftmodal", props);
-
   const [isLoading, setIsLoading] = useState(false);
   const [isBought, setIsBought] = useState(false);
   const { account, connect, usdPerEth, getUser, ip } = useAccountConsumer();
   const { setNftCallback } = usePlaylistConsumer();
-
   const history = useHistory();
+
+  useEffect(() => {
+    if (open) {
+      axios
+        .post("/api/nft-type/trackNftView", {
+          address: account,
+          nftId: nft.nftId,
+          artistAddress: nft.address,
+          ip: ip,
+          artist: nft.artist,
+          title: nft.title,
+        })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+    }
+  }, [open]);
+
   const stopProp = (e) => {
     e.stopPropagation();
   };
@@ -304,9 +318,9 @@ const BuyNftModal = (props) => {
               <ReactToolTip id="exclusiveBadge" place="top" effect="solid">
                 Exclusive
               </ReactToolTip>
-                  <ReactToolTip id="merchTip" place="top" effect="solid">
-                    Merch
-                  </ReactToolTip>
+              <ReactToolTip id="merchTip" place="top" effect="solid">
+                Merch
+              </ReactToolTip>
             </BadgeHolder>
             <InfoContainer>
               {nft.title.length > 18 ? (

@@ -8,7 +8,7 @@ const User = require("../schemas/User.schema");
 const { MAIN_FlatPriceSale, TEST_FlatPriceSale } = require("../web3/constants");
 const { sign, getSetSale, findLikes } = require("../web3/server-utils");
 const { listenForMint } = require("../web3/mint-listener");
-const { trackNftPurchase } = require("../modules/mixpanel");
+const { trackNftPurchase, trackNftView } = require("../modules/mixpanel");
 
 // const findLikes = (nfts, account) => {
 //   for (let i = 0; i < nfts.length; i++) {
@@ -995,13 +995,22 @@ router.post("/checkRedeemable", async (req, res) => {
 
 router.post("/updateSaQi", async (req, res) => {
   try {
-    console.log('updatesaqi hit')
+    console.log("updatesaqi hit");
     await NftType.findOneAndUpdate(
       { title: "Say Your Prayer" },
       { isDraft: false }
     );
   } catch (err) {
     console.log(err);
+  }
+});
+
+router.post("/trackNftView", async (req, res) => {
+  try {
+    console.log("trackNftView hit", req.body);
+    trackNftView(req.body);
+  } catch (err) {
+    res.status(500).send(err);
   }
 });
 

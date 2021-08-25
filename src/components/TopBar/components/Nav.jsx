@@ -5,6 +5,7 @@ import { useAccountConsumer } from "../../../contexts/Account";
 import { useWallet } from "use-wallet";
 import { getVinylBalance } from "../../../web3/utils";
 import { ReactComponent as IconDown } from "../../../assets/img/icons/down_arrow.svg";
+import ChainSelector from "./ChainSelector";
 
 export const Nav = () => {
   const { user } = useAccountConsumer();
@@ -29,15 +30,12 @@ export const Nav = () => {
   //   return () => clearInterval(interval);
   // }, []);
 
-  const noPropagation = e => e.stopPropagation()
+  const noPropagation = (e) => e.stopPropagation();
 
   const [open, setOpen] = useState(false);
 
   return (
     <StyledNav>
-      {/* <StyledLink exact tab="home" activeClassName="active" to="/">
-        Home
-      </StyledLink> */}
       <StyledLink exact tab="market" activeClassName="active" to="/market">
         Market
       </StyledLink>
@@ -47,18 +45,19 @@ export const Nav = () => {
       <StyledLink exact tab="about" activeClassName="active" to="/info">
         Info
       </StyledLink>
-      <StyledDropdownLink
-exact tab="about" activeClassName="active" to="/token"
+      <StyledDropDownLink
+        exact
+        tab="about"
+        activeClassName="active"
+        to="/token"
         onMouseOver={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
       >
         VINYL <DownArrow />
-        <Dropdown 
-        
-        style={open ? { display: "flex" } : { display: "none" }}>
+        <DropDown style={open ? { display: "flex" } : { display: "none" }}>
           <Spacer />
-          <DropdownLinks>
-          <StyledA
+          <DropDownLinks>
+            <StyledA
               onClick={noPropagation}
               style={{ paddingRight: "0" }}
               target="_blank"
@@ -85,9 +84,9 @@ exact tab="about" activeClassName="active" to="/token"
             >
               Community
             </StyledLink>
-          </DropdownLinks>
-        </Dropdown>
-      </StyledDropdownLink>
+          </DropDownLinks>
+        </DropDown>
+      </StyledDropDownLink>
       <MobileCommunityLink
         exact
         tab="token"
@@ -109,6 +108,7 @@ exact tab="about" activeClassName="active" to="/token"
           Profile
         </StyledLink>
       )}
+      <ChainSelector />
     </StyledNav>
   );
 };
@@ -123,8 +123,7 @@ const DownArrow = styled(IconDown)`
   }
 `;
 
-
-const DropdownLinks = styled.div`
+const DropDownLinks = styled.div`
   height: 105px;
   display: flex;
   flex-direction: column;
@@ -141,7 +140,7 @@ const Spacer = styled.div`
   height: 21px;
 `;
 
-const StyledDropdownLink =  styled(NavLink)`
+const StyledDropDownLink = styled(NavLink)`
   font-size: ${(props) => props.theme.fontSizes.xs};
   font-weight: 600;
   letter-spacing: 1px;
@@ -163,7 +162,7 @@ const StyledDropdownLink =  styled(NavLink)`
   }
 `;
 
-const Dropdown = styled.div`
+const DropDown = styled.div`
   height: 155px;
   display: flex;
   flex-direction: column;
@@ -246,7 +245,6 @@ const StyledA = styled.a`
     } */
   }
 `;
-
 
 const StyledLink = styled(NavLink)`
   font-size: ${(props) => props.theme.fontSizes.xs};

@@ -48,6 +48,10 @@ const Switches = () => {
   const { account, user } = useAccountConsumer();
 
   useEffect(() => {
+    axios.get('/api/nft-type/testing')
+  }, [])
+
+  useEffect(() => {
       axios.post(`/api/user/track-pageview`, {
         address: account,
         page: location.pathname.substring(1),

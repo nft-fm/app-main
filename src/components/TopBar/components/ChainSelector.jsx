@@ -8,6 +8,8 @@ import { ReactComponent as IconDown } from "../../../assets/img/icons/down_arrow
 import { ReactComponent as BinanceIcon } from "../../../assets/img/icons/binance-logo.svg";
 
 import { ReactComponent as EthIcon } from "../../../assets/img/icons/ethereum.svg";
+import ReactToolTip from "react-tooltip";
+import switchNetwork from "../../../utils/switchNetwork";
 
 const ChainSelector = () => {
   const { user } = useAccountConsumer();
@@ -16,7 +18,29 @@ const ChainSelector = () => {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(0);
 
-  console.log("open", open);
+  useEffect(() => {
+    console.log("here");
+    if (window.ethereum.chainId === ("0x4" || "0x1")) setSelected(0);
+    // if (window.ethereum.chainId === ("0x38" || "0x61")) {
+    //   console.log("here");
+    //   setSelected(1);
+    // }
+    if (window.ethereum.chainId === "0x61") {
+      console.log("here");
+      setSelected(1);
+    }
+  }, [window.ethereum]);
+
+  console.log(
+    window.ethereum.chainId,
+    typeof window.ethereum.chainId,
+    selected
+  );
+
+  const switchChain = async (chain) => {
+    await switchNetwork(chain);
+    // window.location.reload();
+  };
 
   const chooseChain = (val) => {
     let chainIcon = <Eth />;
@@ -39,10 +63,32 @@ const ChainSelector = () => {
     >
       {chooseChain(selected)}
       <DropDown open={open}>
+        <Spacer />
         <DropDownLinks>
-          <Spacer />
-          <Eth onClick={() => setSelected(0)} />
-          <Binance onClick={() => setSelected(1)} />
+          <Eth
+            onClick={() => {
+              setSelected(0);
+              switchChain("ETH");
+              setOpen(false);
+            }}
+            data-tip
+            data-for="Ethereum"
+          />
+          <ReactToolTip id="Ethereum" place="right" effect="solid">
+            Ethereum
+          </ReactToolTip>
+          <Binance
+            onClick={() => {
+              setSelected(1);
+              switchChain("BSC");
+              setOpen(false);
+            }}
+            data-tip
+            data-for="Binance"
+          />
+          <ReactToolTip id="Binance" place="right" effect="solid">
+            Binance
+          </ReactToolTip>
         </DropDownLinks>
       </DropDown>
     </ChainHolder>
@@ -53,6 +99,7 @@ const Binance = styled(BinanceIcon)`
   cursor: pointer;
   width: 18px;
   height: 18px;
+  z-index: 1;
   /* & path {
     fill: ${(props) => props.theme.color.white};
   } */
@@ -61,6 +108,7 @@ const Eth = styled(EthIcon)`
   cursor: pointer;
   width: 18px;
   height: 18px;
+  z-index: 1;
   & path {
     fill: ${(props) => props.theme.color.white};
   }
@@ -77,19 +125,25 @@ const DownArrow = styled(IconDown)`
 `;
 
 const DropDownLinks = styled.div`
-  height: 105px;
+  height: 60px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  /* background-color: #121212; */
+  align-items: center;
   background-color: rgb(18, 18, 18, 0.2);
   border-bottom: 1px solid #232323;
   border-left: 1px solid #232323;
   border-right: 1px solid #232323;
+  width: 100%;
+
+  @media only screen and (max-width: 776px) {
+    background-color: #121212;
+  }
 `;
 
 const Spacer = styled.div`
-  height: 21px;
+  height: 120px;
+  z-index: -1;
 `;
 const DropDown = styled.div`
   display: ${(props) => (props.open ? "flex" : "none")};
@@ -97,9 +151,8 @@ const DropDown = styled.div`
   justify-content: flex-end;
   align-items: center;
   position: absolute;
-  height: 160px;
+  /* top: 60px; */
   width: 30px;
-  /* top: 40px; */
 `;
 
 const ChainHolder = styled.nav`
@@ -108,8 +161,7 @@ const ChainHolder = styled.nav`
   justify-content: center;
   align-items: center;
   display: flex;
-  width: 20px;
-  position: relative;
+  width: 30px;
 `;
 
 export default ChainSelector;

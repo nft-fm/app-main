@@ -5,6 +5,7 @@ import useModal from "../../../hooks/useModal";
 import isMobile from "../../../utils/isMobile";
 import InstallMetamaskModal from "../../InstallMetamaskModal";
 import ChangeChainModal from "../../ChangeChainModal";
+import ChainSelector from "./ChainSelector";
 
 const AccountButton = (props) => {
   const [currChainId, setCurrChainId] = useState(null);
@@ -42,6 +43,8 @@ const AccountButton = (props) => {
   }, []);
 
   return (
+    <>
+    <ChainSelector />
     <StyledAccountButton>
       {!account ? (
         <Button onClick={handleUnlockClick}>Connect</Button>
@@ -65,6 +68,7 @@ const AccountButton = (props) => {
         </StyledA>
       )}
     </StyledAccountButton>
+    </>
   );
 };
 

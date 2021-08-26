@@ -108,7 +108,7 @@ export const Nav = () => {
           Profile
         </StyledLink>
       )}
-      <ChainSelector />
+      {/* <ChainSelector /> */}
     </StyledNav>
   );
 };

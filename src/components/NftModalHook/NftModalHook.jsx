@@ -382,7 +382,10 @@ const BuyNftModal = (props) => {
                     <Loading src={PlayIcon} />
                   </BuyButton>
                 ) : (
-                  <BuyButton onClick={() => purchase(nft._id)}>
+                  <BuyButton
+                    onClick={() => purchase(nft._id)}
+                    className="buyButton"
+                  >
                     <ButtonText>Purchase</ButtonText>
                   </BuyButton>
                 )
@@ -729,7 +732,6 @@ const StyledModal = styled.div`
   display: flex;
   justify-content: space-between;
   position: relative;
-
   @media only screen and (max-width: 776px) {
     width: 90vw;
     height: 95vh;
@@ -831,6 +833,10 @@ const BuyButton = styled.button`
   &:hover {
     background-color: ${(props) => props.theme.color.boxBorder};
     border: 1px solid #383838;
+  }
+
+  &.buyButton {
+    background-color: ${(props) => props.theme.color.green};
   }
 `;
 

@@ -38,17 +38,13 @@ const NftTypeSchema = new Schema({
     type: Number,
     default: 0,
   },
-  startTime: {
+  startTime: { //this is for future implementation of snippet start times
     type: Number,
     default: 0,
   },
   dur: {
     type: Number,
     required: true,
-  },
-  snnipet: {
-    type: Array,
-    default: [],
   },
   address: {
     type: String,
@@ -126,9 +122,7 @@ const NftTypeSchema = new Schema({
   },
   redeemedBy: [
     {
-      // address: {
-        type: String,
-      // },
+      type: String,
     },
   ],
 });

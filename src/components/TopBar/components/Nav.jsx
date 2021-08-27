@@ -24,9 +24,9 @@ export const Nav = () => {
 
   return (
     <StyledNav>
-      <StyledLink exact tab="home" activeClassName="active" to="/">
+      {/* <StyledLink exact tab="home" activeClassName="active" to="/">
         Home
-      </StyledLink>
+      </StyledLink> */}
       <StyledLink exact tab="market" activeClassName="active" to="/market">
         Market
       </StyledLink>

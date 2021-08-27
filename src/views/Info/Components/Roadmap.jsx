@@ -59,7 +59,7 @@ const Roadmap = () => {
             <LaunchFeatureRow>
               <LaunchFeatureText>Streamlined Artist Uploading</LaunchFeatureText>
               <FillerLine />
-              <Checkmark src={grayCheckMark} />
+              <Checkmark src={greenCheckMark} />
             </LaunchFeatureRow>
           </LaunchFeatureList>
         </LaunchFeaturesBox>

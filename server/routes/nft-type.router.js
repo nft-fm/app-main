@@ -9,6 +9,9 @@ const { MAIN_FlatPriceSale, TEST_FlatPriceSale } = require("../web3/constants");
 const { sign, getSetSale, findLikes } = require("../web3/server-utils");
 const { listenForMint } = require("../web3/mint-listener");
 const { trackNftPurchase, trackNftView } = require("../modules/mixpanel");
+const {
+  GetPrincipalTagAttributeMapCommand,
+} = require("@aws-sdk/client-cognito-identity");
 
 // const findLikes = (nfts, account) => {
 //   for (let i = 0; i < nfts.length; i++) {
@@ -1014,9 +1017,54 @@ router.post("/trackNftView", async (req, res) => {
       artistAddress: req.body.artistAddress,
       artist: req.body.artist,
       title: req.body.title,
-      ip: req.ip
-    }
+      ip: req.ip,
+    };
     trackNftView(payload);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
+router.get("/testing", async (req, res) => {
+  try {
+    const nft = await NftType.findOne({ nftId: 4 });
+    console.log("testing", nft);
+
+    let attributes = [
+      {
+        trait_type: "Artist",
+        value: nft.artist,
+      },
+      {
+        trait_type: "Genre",
+        value: nft.genre,
+      },
+    ];
+    nft.badges.map((badge) => {
+      console.log("badge", badge);
+      if (badge.founder) {
+        console.log("blop");
+        attributes.push({
+          trait_type: "Badge",
+          value: "Founder NFT",
+        });
+      }
+      if (badge.premium) {
+        console.log("bloop");
+        attributes.push({
+          trait_type: "Badge",
+          value: "Premium NFT",
+        });
+      }
+      if (badge.prerelease) {
+        console.log("bloop");
+        attributes.push({
+          trait_type: "Badge",
+          value: "Prerelease NFT",
+        });
+      }
+      console.log("attributes", attributes);
+    });
   } catch (err) {
     res.status(500).send(err);
   }

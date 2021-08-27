@@ -4,7 +4,6 @@ import NftModalHook from "../NftModalHook/NftModalHook";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
-// import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import loading from "../../assets/img/loading.gif";
 import axios from "axios";
@@ -20,7 +19,7 @@ import { ReactComponent as GiftIcon } from "../../assets/img/icons/rewards-gift.
 import ReactToolTip from "react-tooltip";
 
 const NftCard = (props) => {
-  const { usdPerEth, user, account } = useAccountConsumer();
+  const { user, account } = useAccountConsumer();
   const [nft, setNft] = useState(null);
 
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -39,6 +38,9 @@ const NftCard = (props) => {
   };
 
   const getSnnipetAWS = async (completeNft) => {
+    console.log(completeNft.address +
+      "/snnipets/" +
+      completeNft.audioUrl.split("/").slice(-1)[0])
     await axios
       .post("/api/nft-type/getSnnipetAWS", {
         key:
@@ -258,13 +260,9 @@ const NftCard = (props) => {
   );
 };
 
-/* background-image: linear-gradient(104deg, #262626, #383838); */
 const RedeemButton = styled.div`
   text-decoration: none;
-  /* cursor: pointer; */
   color: ${(props) => props.theme.color.white};
-  /* border: 2px solid linear-gradient(to right, #fde404, #fa423e);
-  border-radius: 15px; */
   background-color: ${(props) => props.theme.color.box};
   border-radius: 7px;
   padding: 3px 8px;

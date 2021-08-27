@@ -18,17 +18,6 @@ export const Nav = () => {
     }
   }, [account]);
 
-  // const presaleTime = 1622134800000;
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     if (moment().isAfter(presaleTime)) {
-  //       setIsPresaleTime(true);
-  //     }
-  //   }, 600);
-  //   return () => clearInterval(interval);
-  // }, []);
-
   const noPropagation = e => e.stopPropagation()
 
   const [open, setOpen] = useState(false);

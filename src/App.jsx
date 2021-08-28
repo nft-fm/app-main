@@ -128,9 +128,9 @@ const Switches = () => {
         <Route path="/community">
           <Community />
         </Route>
-        <Route path="/token">
+        {/* <Route path="/token">
           <Token />
-        </Route>
+        </Route> */}
         <Route path="/gov-polls">
           <GovPolls />
         </Route>

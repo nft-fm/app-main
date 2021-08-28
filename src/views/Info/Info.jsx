@@ -3,7 +3,7 @@ import { Switch, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import BaseView from "../../components/Page/BaseView";
 import { FAQ } from "./Components/FAQ/FAQ";
-import Tokenomics from "./Components/Tokenomics";
+// import Tokenomics from "./Components/Tokenomics";
 import Team from "./Components/Team";
 import RoadMap from "./Components/Roadmap";
 // import send from "../../assets/img/homepage_assets/homepage_send.png"
@@ -107,8 +107,8 @@ const Info = () => {
           <ContainerOutline />
           <FAQ />
         </LaunchContainer>
-        <div id="tokenomicsRef"/>
-        <Tokenomics/>
+        {/* <div id="tokenomicsRef"/>
+        <Tokenomics/> */}
         <div id="teamsRef"/>
         <Team />
       </BaseView>

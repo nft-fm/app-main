@@ -6,6 +6,7 @@ import { useWallet } from "use-wallet";
 import { getVinylBalance } from "../../../web3/utils";
 import { ReactComponent as IconDown } from "../../../assets/img/icons/down_arrow.svg";
 import ChainSelector from "./ChainSelector";
+import DiscoDoge from "../../../assets/img/logos/discodoge_icon.png"
 
 export const Nav = () => {
   const { user } = useAccountConsumer();
@@ -45,7 +46,7 @@ export const Nav = () => {
       <StyledLink exact tab="about" activeClassName="active" to="/info">
         Info
       </StyledLink>
-      <StyledDropDownLink
+      {/* <StyledDropDownLink
         exact
         tab="about"
         activeClassName="active"
@@ -102,7 +103,7 @@ export const Nav = () => {
         to="/community"
       >
         Community
-      </MobileCommunityLink>
+      </MobileCommunityLink> */}
       {user?.isArtist && (
         <StyledLink exact tab="profile" activeClassName="active" to="/profile">
           Profile

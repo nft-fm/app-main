@@ -122,7 +122,7 @@ const Switches = () => {
         <Route path="/market">
           <Discover />
         </Route>
-        <Route path="/community">
+        {/* <Route path="/community">
           <Community />
         </Route>
         <Route path="/token">
@@ -130,7 +130,7 @@ const Switches = () => {
         </Route>
         <Route path="/gov-polls">
           <GovPolls />
-        </Route>
+        </Route> */}
         <Route path="/termsofservice">
           <TermsOfService />
         </Route>

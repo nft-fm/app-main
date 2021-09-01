@@ -1020,6 +1020,7 @@ router.post("/trackNftView", async (req, res) => {
       ip: req.ip,
     };
     trackNftView(payload);
+    res.status(200);
   } catch (err) {
     res.status(500).send(err);
   }

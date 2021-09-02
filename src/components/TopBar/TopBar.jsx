@@ -38,6 +38,7 @@ const NavContainer = styled.div`
 const NavRight = styled.div`
   display: flex;
   z-index: 20;
+  align-items: center;
 `;
 
 const StyledTopBar = styled.div`

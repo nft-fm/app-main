@@ -7,8 +7,6 @@ import {
   useHistory,
 } from "react-router-dom";
 import axios from "axios";
-import { createBrowserHistory } from "history";
-import Cookies from "universal-cookie";
 import { ThemeProvider } from "styled-components";
 import { UseWalletProvider } from "use-wallet";
 import styled from "styled-components";
@@ -31,7 +29,6 @@ import PrivacyPolicy from "./views/FooterLinks/PrivacyPolicy";
 import { AccountProvider, useAccountConsumer } from "./contexts/Account";
 import { PlaylistProvider } from "./contexts/Playlist/Playlist";
 import swal from "sweetalert2";
-
 import preloadImage from "./utils/preloadImg";
 import recordPlayer from "./assets/img/record_player.png";
 import recordPlayerSpin from "./assets/img/record_player_spin.png";
@@ -125,7 +122,7 @@ const Switches = () => {
         <Route path="/market">
           <Discover />
         </Route>
-        <Route path="/community">
+        {/* <Route path="/community">
           <Community />
         </Route>
         {/* <Route path="/token">
@@ -133,7 +130,7 @@ const Switches = () => {
         </Route> */}
         <Route path="/gov-polls">
           <GovPolls />
-        </Route>
+        </Route> */}
         <Route path="/termsofservice">
           <TermsOfService />
         </Route>
@@ -161,11 +158,6 @@ const Switches = () => {
 };
 
 const App = () => {
-  // const history = createBrowserHistory();
-  // history.listen((location) => {
-  //   ReactGA.set({ page: location.pathname });
-  //   ReactGA.pageview(location.pathname);
-  // });
 
   useEffect(() => {
     preloadImage(recordPlayer);

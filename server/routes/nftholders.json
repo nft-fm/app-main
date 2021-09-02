@@ -1,0 +1,915 @@
+[
+  {
+  "data": {
+    "archetype": {
+      "asset": {
+        "assetOwners": {
+          "edges": [
+            {
+              "node": {
+                "quantity": "18",
+                "owner": {
+                  "address": "0xb46700fbe3c2ed36851a4ccfead109ceff32d40f"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x62ac6912dc5b9df44302edf0df8dace4be55ea23"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x3545ec790d20d994d2219c080eb4ba04569b5d22"
+                }
+              }
+            }
+          ],
+          "pageInfo": {
+            "endCursor": "YXJyYXljb25uZWN0aW9uOjI=",
+            "hasNextPage": false
+          }
+        },
+        "id": "QXNzZXRUeXBlOjI1NTIxMDA4"
+      }
+    }
+  }
+},
+{
+  "data": {
+    "archetype": {
+      "asset": {
+        "assetOwners": {
+          "edges": [
+            {
+              "node": {
+                "quantity": "18",
+                "owner": {
+                  "address": "0xb46700fbe3c2ed36851a4ccfead109ceff32d40f"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x5842ae8c5ff0bc4dab1c456a412413222d9885f0"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x08103e240b6be73e29319d9b9dbe9268e32a0b02"
+                }
+              }
+            }
+          ],
+          "pageInfo": {
+            "endCursor": "YXJyYXljb25uZWN0aW9uOjI=",
+            "hasNextPage": false
+          }
+        },
+        "id": "QXNzZXRUeXBlOjI1NTIxNDQ4"
+      }
+    }
+  }
+},
+{
+  "data": {
+    "archetype": {
+      "asset": {
+        "assetOwners": {
+          "edges": [
+            {
+              "node": {
+                "quantity": "19",
+                "owner": {
+                  "address": "0xb46700fbe3c2ed36851a4ccfead109ceff32d40f"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x86039b86c46bc6d87fccf93bb3240c276ff37cb5"
+                }
+              }
+            }
+          ],
+          "pageInfo": {
+            "endCursor": "YXJyYXljb25uZWN0aW9uOjE=",
+            "hasNextPage": false
+          }
+        },
+        "id": "QXNzZXRUeXBlOjI1NTIxNTMz"
+      }
+    }
+  }
+},
+{
+  "data": {
+    "archetype": {
+      "asset": {
+        "assetOwners": {
+          "edges": [
+            {
+              "node": {
+                "quantity": "14",
+                "owner": {
+                  "address": "0xb46700fbe3c2ed36851a4ccfead109ceff32d40f"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "5",
+                "owner": {
+                  "address": "0x8cd70fd4610273a63adbc21e2f7ae4d67aca2a83"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xb9afb68de4e1f89aca813ca75d87bd86a1a17aa3"
+                }
+              }
+            }
+          ],
+          "pageInfo": {
+            "endCursor": "YXJyYXljb25uZWN0aW9uOjI=",
+            "hasNextPage": false
+          }
+        },
+        "id": "QXNzZXRUeXBlOjI1NTIxNjY0"
+      }
+    }
+  }
+},
+{
+  "data": {
+    "archetype": {
+      "asset": {
+        "assetOwners": {
+          "edges": [
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xf18cb228f8ea1f25329e016ba85b7f7600ebe9ff"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x75d5ced39b418d5e25f4a05db87fcc8bceed7e66"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xb46638bf5509fe9b81a69875aec18aab00160eb7"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xed95dbbc066fd0a28038145f58f2c5944a185a69"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x0221c3cdb3dc4ffddb0564227d205b7f0cbac1cf"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x1c3f06edc01b4c7fee6e67e4e9d65da316ffd643"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x323dbae75c3201b2c843afae89dc26f8a38e17fb"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xf5f36ade12262d11f28975f41f610966d2c3af1c"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x6de8d00a0eb6831839241d6ca87784760a4575c8"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x12b87bb0fe164021de6da81b8f0a0c4837431352"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x1f872b8d0fded04f8d50641431ae06e138ca0bbd"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x85e604fab6a37fc89783eee9a23a0c57518c81db"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x5842ae8c5ff0bc4dab1c456a412413222d9885f0"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x82cb2305388c853ecfe9ea83a1604acf58466659"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x67d3467b2b1bdf4fbe6aeb2acccacff8d1ae7e14"
+                }
+              }
+            }
+          ],
+          "pageInfo": {
+            "endCursor": "YXJyYXljb25uZWN0aW9uOjE0",
+            "hasNextPage": false
+          }
+        },
+        "id": "QXNzZXRUeXBlOjI2NTQ1ODIz"
+      }
+    }
+  }
+},
+{
+  "data": {
+    "archetype": {
+      "asset": {
+        "assetOwners": {
+          "edges": [
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x5842ae8c5ff0bc4dab1c456a412413222d9885f0"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x4ba879e1b44b90627f0a4da655fa6a1bf30606e4"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x12b87bb0fe164021de6da81b8f0a0c4837431352"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x85e604fab6a37fc89783eee9a23a0c57518c81db"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xe340638f4f2bb23ee72e16abd612809df2a8624e"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x72523a8c1fbc036c298c2e2c07003eb0bd508717"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xd59d273960de3a064b5c2b3ad535be2683bc4ca3"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x0052a2d76dd59d85c55c3baa03c2fd0245e4a9da"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xc1c867b03625dcbfb0ae9a163904f86903e37eb2"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xb9afb68de4e1f89aca813ca75d87bd86a1a17aa3"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xd8f3676a7567842295170b3f6ae4bd466a878374"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xc3a7018b0b4200858cd6370885fa3f11cc42f30f"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x179b007a989b8f29d90bee1aaf6715e6b33a13d4"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xe5ccb38568fdec44b738ea352cad0cc93b7189f6"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x0c4d835e890f6c1eae58e8331871c6e82d62a79c"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xb1256d6b31e4ae87da1d56e5890c66be7f1c038e"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xce05b224275232d1b3aeb0bc6a6fa63ad7bd9d17"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xad7be1b3df9fcc9b822c10746fd4ab912577d589"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xf5dddeb1b6c1a4a3b04daee4251bb1194ad94c64"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xb9857c59406105f49b6682da8a55ca2d93c32c00"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xdfdffbf91c4edb455ae76331f337692c7d211d46"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x5be2539baa7622865fdc401ba26adb636d78f5bf"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x0915ac3e02429e68e5863eb656323dbddccbebac"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x176578bf964b1c41bf715ff296065f113ce99298"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x0941ae5a513cc77c99df2b8f9f35281003d49510"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x886497a1c17a850a5d614ab30bdc708f8a7fea40"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x277bd96843b57693d33b5994a7eb4a9a99de6a85"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x88dedfde992eddb95b4cd28041be64818e81dd99"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x051a4a5a4f07a85e031452d60618f8f50e78a2a7"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x6844cf42c9953a06bb93ea2d5ca725e8c7cd8561"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x48cbbebea738ffd9f2032ceeeac415467c2c1e92"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x323dbae75c3201b2c843afae89dc26f8a38e17fb"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xaa830e46283248d31b1a53fb7475af4d8710e6f0"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xf18cb228f8ea1f25329e016ba85b7f7600ebe9ff"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x75d5ced39b418d5e25f4a05db87fcc8bceed7e66"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xb46638bf5509fe9b81a69875aec18aab00160eb7"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xed95dbbc066fd0a28038145f58f2c5944a185a69"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x0221c3cdb3dc4ffddb0564227d205b7f0cbac1cf"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x802fb4d3059f69d9a59f6158ae6fde5896d23b2e"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xefe87810685145c986962461c625679ab6af60a6"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xf3907a01d515af5dd33e8249c9c9eefdbad993ea"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x8af4df3a7cd51a0fd8b385f32e3ece829e20f2f1"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xa4a700b4531f49be5ed72169ed99b50feb85a818"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x1c3f06edc01b4c7fee6e67e4e9d65da316ffd643"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x087a37bef1c7d6df095d82932a7caac330ff697a"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x64a302b702951c8106d4b4d3033c75d0bed3b138"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x08103e240b6be73e29319d9b9dbe9268e32a0b02"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x1f872b8d0fded04f8d50641431ae06e138ca0bbd"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xf5f36ade12262d11f28975f41f610966d2c3af1c"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x6de8d00a0eb6831839241d6ca87784760a4575c8"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x82cb2305388c853ecfe9ea83a1604acf58466659"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x08a5c8fe3bcc9352f031e8158a47df143b35e288"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x5a45dcbaba4d3e6dd2b0147f6fb22b42b9673bca"
+                }
+              }
+            }
+          ],
+          "pageInfo": {
+            "endCursor": "YXJyYXljb25uZWN0aW9uOjUy",
+            "hasNextPage": false
+          }
+        },
+        "id": "QXNzZXRUeXBlOjI2NTQ3MjYy"
+      }
+    }
+  }
+},
+{
+  "data": {
+    "archetype": {
+      "asset": {
+        "assetOwners": {
+          "edges": [
+            {
+              "node": {
+                "quantity": "13",
+                "owner": {
+                  "address": "0xb46700fbe3c2ed36851a4ccfead109ceff32d40f"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "4",
+                "owner": {
+                  "address": "0x8cd70fd4610273a63adbc21e2f7ae4d67aca2a83"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x5842ae8c5ff0bc4dab1c456a412413222d9885f0"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xb9857c59406105f49b6682da8a55ca2d93c32c00"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x08103e240b6be73e29319d9b9dbe9268e32a0b02"
+                }
+              }
+            }
+          ],
+          "pageInfo": {
+            "endCursor": "YXJyYXljb25uZWN0aW9uOjQ=",
+            "hasNextPage": false
+          }
+        },
+        "id": "QXNzZXRUeXBlOjI2NTgxOTk5"
+      }
+    }
+  }
+},
+{
+  "data": {
+    "archetype": {
+      "asset": {
+        "assetOwners": {
+          "edges": [
+            {
+              "node": {
+                "quantity": "992",
+                "owner": {
+                  "address": "0xb46700fbe3c2ed36851a4ccfead109ceff32d40f"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x8cd70fd4610273a63adbc21e2f7ae4d67aca2a83"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x5842ae8c5ff0bc4dab1c456a412413222d9885f0"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xe6f7ffc5dcedc6fe25bf424a271cf548b6178fa0"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x82cb2305388c853ecfe9ea83a1604acf58466659"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xb9857c59406105f49b6682da8a55ca2d93c32c00"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x5751151ac6574feda714035dedb030d944b1b128"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0x18c6a47aca1c6a237e53ed2fc3a8fb392c97169b"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xe805f14fe6e080f08b30d4d2319df17c7dc545eb"
+                }
+              }
+            }
+          ],
+          "pageInfo": {
+            "endCursor": "YXJyYXljb25uZWN0aW9uOjg=",
+            "hasNextPage": false
+          }
+        },
+        "id": "QXNzZXRUeXBlOjMxNTE4MDcx"
+      }
+    }
+  }
+},
+{
+  "data": {
+    "archetype": {
+      "asset": {
+        "assetOwners": {
+          "edges": [
+            {
+              "node": {
+                "quantity": "419",
+                "owner": {
+                  "address": "0xb46700fbe3c2ed36851a4ccfead109ceff32d40f"
+                }
+              }
+            },
+            {
+              "node": {
+                "quantity": "1",
+                "owner": {
+                  "address": "0xb9857c59406105f49b6682da8a55ca2d93c32c00"
+                }
+              }
+            }
+          ],
+          "pageInfo": {
+            "endCursor": "YXJyYXljb25uZWN0aW9uOjE=",
+            "hasNextPage": false
+          }
+        },
+        "id": "QXNzZXRUeXBlOjM3MTQ1NTA2"
+      }
+    }
+  }
+}
+]

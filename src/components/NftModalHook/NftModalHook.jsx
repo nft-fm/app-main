@@ -701,6 +701,7 @@ const CardTitle = styled.div`
 `;
 
 const OpaqueFilter = styled.div`
+cursor: default;
   width: 100vw;
   height: 100vh;
   position: fixed;

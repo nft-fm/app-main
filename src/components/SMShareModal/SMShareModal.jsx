@@ -119,6 +119,7 @@ const X = styled(IconX)`
 `;
 
 const OpaqueFilter = styled.div`
+cursor: default;
   width: 100vw;
   height: 100vh;
   position: fixed;

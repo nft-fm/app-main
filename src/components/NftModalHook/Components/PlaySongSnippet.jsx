@@ -97,14 +97,28 @@ const PlaySongSnippet = (props) => {
       <AudioProgressBar time={time} skipTo={skipTo} />
       {isLoading ? (
         <Loading src={loading} />
-      ) : isPlaying ? (
-        <PauseButton onClick={stopSong} />
+      ) :
+      
+      <PlayButton aria-label="play button">
+
+      {isPlaying ? (
+        <PauseSVG onClick={stopSong} />
       ) : (
-        <PlayButton onClick={playSong} />
+        <PlaySVG onClick={playSong} />
       )}
+      </PlayButton>
+      }
     </Wrapper>
   );
 };
+
+const PlayButton = styled.button`
+background-color: transparent;
+padding: 0px;
+border: none;
+width: min-content;
+height: min-content;
+`
 
 const Wrapper = styled.div`
   display: flex;
@@ -123,7 +137,7 @@ const Loading = styled.img`
   margin-top: 10px;
 `;
 
-const PauseButton = styled(PauseIcon)`
+const PauseSVG = styled(PauseIcon)`
   width: 30px;
   height: 30px;
   cursor: pointer;
@@ -133,7 +147,7 @@ const PauseButton = styled(PauseIcon)`
   margin-top: 10px;
 `;
 
-const PlayButton = styled(PlayIcon)`
+const PlaySVG = styled(PlayIcon)`
   width: 30px;
   height: 30px;
   cursor: pointer;

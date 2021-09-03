@@ -110,9 +110,16 @@ const NftCard = (props) => {
   if (!nft) {
     return null;
   }
+
   return (
-    <Container open={isModalOpen}>
+    <Container
+    onClick={() => setIsModalOpen(!isModalOpen)}
+      role="button"
+      aria-pressed="false"
+      tabindex="0"
+    open={isModalOpen || isShareOpen}>
       <ShareModal
+        onClick={(e) => e.stopPropagation()}
         open={isShareOpen}
         hide={() => setIsShareOpen(!isShareOpen)}
         updateShareCount={() => setShareCount({ count: shareCount.count + 1 })}
@@ -154,7 +161,6 @@ const NftCard = (props) => {
         src={nft.imageUrl}
         style={imageLoaded ? {} : { display: "none" }}
         alt="image"
-        onClick={() => setIsModalOpen(!isModalOpen)}
         onLoad={() => setImageLoaded(true)}
       />
       {nft.isRedeemable && (
@@ -440,6 +446,11 @@ const Container = styled.div`
   width: 200px;
   margin-bottom: 20px;
   position: relative;
+  transition: all 0.1s ease-in-out;
+  cursor: pointer;
+  :focus {
+    border: 1px solid white;
+  }
   :hover {
     transform: ${(props) => !props.open && "translateY(-0.15em)"};
   }
@@ -473,6 +484,9 @@ const Artist = styled(NavLink)`
   margin-bottom: 12px;
   text-decoration: none;
   /* cursor: pointer; */
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 export default NftCard;

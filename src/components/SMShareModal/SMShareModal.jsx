@@ -19,9 +19,7 @@ const SMShareModal = ({
 }) => {
 
   if (!open) return null;
-  const stopProp = (e) => {
-    e.stopPropagation();
-  };
+
   const url = `https://www.nftfm.io/market/${nft.nftId}`;
   const message = `Check out this amazing NFT of ${nft.artist}'s song, ${nft.title}!\nAvailable only at: `;
 
@@ -31,9 +29,14 @@ const SMShareModal = ({
     hide();
   };
 
+  const hideModal = (e) => {
+    e.stopPropagation();
+    hide();
+  }
+
   return (
-    <OpaqueFilter onClick={(e) => hide()}>
-      <Container onClick={(e) => stopProp(e)}>
+    <OpaqueFilter onClick={(e) => hideModal(e)}>
+      <Container onClick={e => e.stopPropagation()}>
         <StyledModal>
           <X onClick={(e) => hide(e)} />
           <span>

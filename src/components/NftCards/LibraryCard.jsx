@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-// import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
-// import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../assets/img/icons/coins.svg";
 import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.svg";
 import { useAccountConsumer } from "../../contexts/Account";
@@ -40,8 +38,12 @@ const NftCard = (props) => {
     setLiked(props.nft.liked);
   }, [props.nft, user]);
 
+  const stopProp = (e) => {
+    e.stopPropagation();
+  }
+
   return (
-    <Container>
+    <Container onClick={() => setIsModalOpen(!isModalOpen)} >
       <ShareModal
         open={isShareOpen}
         hide={() => setIsShareOpen(!isShareOpen)}
@@ -56,6 +58,7 @@ const NftCard = (props) => {
         likeCount={likeCount}
         setLikeCount={setLikeCount}
         setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
+        
       />
       <CardTop>
         <LikeShare
@@ -80,7 +83,6 @@ const NftCard = (props) => {
       <Image
         src={nft.imageUrl}
         alt="image"
-        onClick={() => setIsModalOpen(!isModalOpen)}
       // onClick={() => setIsOpen(!isOpen)}
       />
       <BottomWrapper>

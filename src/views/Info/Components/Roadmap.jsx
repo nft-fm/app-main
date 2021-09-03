@@ -91,8 +91,6 @@ const Roadmap = () => {
             </LaunchFeatureRow>
           </LaunchFeatureList>
         </LaunchFeaturesBox>
-
-
         <LaunchFeaturesBox>
           <LaunchFeaturesHeader>Q1 2022</LaunchFeaturesHeader>
           <LaunchFeatureList>

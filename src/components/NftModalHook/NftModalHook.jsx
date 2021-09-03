@@ -184,15 +184,6 @@ const BuyNftModal = (props) => {
     hide();
   };
 
-  // const [currChainId, setCurrChainId] = useState(null);
-
-  // const getChain = async () => {
-  //   console.log('here')
-  //   const newChainId = await window.ethereum.request({ method: 'eth_chainId' });
-  //   setCurrChainId(Number(newChainId));
-  //   console.log("chainId", Number(newChainId));
-  //   return Number(newChainId);
-  // }
 
   const connectWallet = async () => {
     const newChainId = await window.ethereum.request({ method: "eth_chainId" });
@@ -231,15 +222,20 @@ const BuyNftModal = (props) => {
             <CardTop>
               <Side>
                 <IconArea>
-                  {liked ? (
-                    <LikedHeart onClick={() => like()} />
-                  ) : (
-                    <Heart onClick={() => like()} />
-                  )}
+        <LikeButton onClick={() => like()} aria-pressed={liked} aria-label="like button">
+        {liked ? (
+          <LikedHeart aria-hidden="true"/>
+        ) : (
+          <Heart aria-hidden="true"/>
+        )}
+        </LikeButton>
                   {likeCount}
                 </IconArea>
                 <IconArea>
+        <ShareButton onClick={() => share()} aria-label="share button">
+
                   <Share onClick={() => share()} />
+                  </ShareButton>
                   {nft.shareCount}
                 </IconArea>
               </Side>
@@ -415,6 +411,24 @@ const BuyNftModal = (props) => {
     </OpaqueFilter>
   );
 };
+
+const LikeButton = styled.button`
+background-color: transparent;
+padding: 0px;
+border: none;
+width: min-content;
+height: min-content;
+margin: 0px 4px 0 0;
+`
+
+const ShareButton = styled.button`
+background-color: transparent;
+padding: 0px;
+border: none;
+width: min-content;
+height: min-content;
+margin: 0px 4px 0 0;
+`
 
 const TrackDetailsHolder = styled.div`
   width: 100%;
@@ -612,7 +626,6 @@ const Cart = styled(IconCart)`
 const Share = styled(IconShare)`
   width: 19px;
   height: 19px;
-  margin: 0 4px 0 0;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   & path {
@@ -629,7 +642,6 @@ const Share = styled(IconShare)`
 const Heart = styled(IconHeart)`
   width: 24px;
   height: 24px;
-  margin: -3px 4px 0 0;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   & path {

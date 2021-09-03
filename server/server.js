@@ -16,7 +16,7 @@ const path = require("path");
 const adminPollRouter = require("./routes/admin-poll.router");
 const vinylOwnerRouter = require("./routes/vinyl-owner.router");
 const Mixpanel = require('mixpanel');
-const { listenForMint } = require("./web3/mint-listener");
+const { listenForMintEth, listenForMintBsc } = require("./web3/mint-listener");
 
 const PORT = process.env.PORT || 5000;
 
@@ -46,7 +46,8 @@ app.use(function (req, res, next) {
 
 dotenv.config();
 connectDB();
-listenForMint();
+// listenForMintEth();
+listenForMintBsc();
 
 
 app.use(cookieParser());

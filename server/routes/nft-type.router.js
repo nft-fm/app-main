@@ -5,13 +5,15 @@ const NftType = require("../schemas/NftType.schema");
 const multer = require("multer");
 const AWS = require("aws-sdk");
 const User = require("../schemas/User.schema");
-const { MAIN_FlatPriceSale, TEST_FlatPriceSale } = require("../web3/constants");
+const {
+  MAIN_FlatPriceSale,
+  TEST_FlatPriceSale,
+  TEST_BSC_FlatPriceSale,
+  MAIN_BSC_FlatPriceSale,
+} = require("../web3/constants");
 const { sign, getSetSale, findLikes } = require("../web3/server-utils");
 const { listenForMint } = require("../web3/mint-listener");
 const { trackNftPurchase, trackNftView } = require("../modules/mixpanel");
-const {
-  GetPrincipalTagAttributeMapCommand,
-} = require("@aws-sdk/client-cognito-identity");
 
 // const findLikes = (nfts, account) => {
 //   for (let i = 0; i < nfts.length; i++) {
@@ -235,11 +237,17 @@ router.post("/finalize", async (req, res) => {
     newData.price = newData.price.toString();
     console.log("newdata", newData);
     newData.isDraft = false;
-    const FlatPriceSale = process.env.REACT_APP_IS_MAINNET
-      ? MAIN_FlatPriceSale
-      : TEST_FlatPriceSale;
+    let NFT_FlatPriceSale;
+    if (newData.chain === "ETH") {
+      NFT_FlatPriceSale = MAIN_FlatPriceSale;
+    } else if (newData.chain === "ETH_test") {
+      NFT_FlatPriceSale = TEST_FlatPriceSale;
+    } else if (newData.chain === "BSC") {
+      NFT_FlatPriceSale = MAIN_BSC_FlatPriceSale;
+    } else if (newData.chain === "BSC_test") {
+      NFT_FlatPriceSale = TEST_BSC_FlatPriceSale;
+    }
     console.log("im here");
-    // let updateNFT = await NftType.findByIdAndUpdate(newData._id, newData);
     let findNFT = await NftType.findById(newData._id);
     if (findNFT) {
       const startTime = 0;
@@ -264,7 +272,7 @@ router.post("/finalize", async (req, res) => {
           newData.numMinted,
           price,
           startTime,
-          FlatPriceSale,
+          NFT_FlatPriceSale,
           encodedFee,
         ]
       );
@@ -275,7 +283,7 @@ router.post("/finalize", async (req, res) => {
         address: newData.address,
         startTime: startTime,
         dur: newData.dur,
-        saleAddress: FlatPriceSale,
+        saleAddress: NFT_FlatPriceSale,
         databaseID: newData._id,
         encodedFee: encodedFee,
       });

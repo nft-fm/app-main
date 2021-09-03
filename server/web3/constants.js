@@ -7,11 +7,21 @@ const MAIN_FlatPriceSale = "0xb46700fBE3C2ed36851A4ccFeAD109ceff32D40f";
 const TEST_VinylAddress = "0x79de729addde262592ef50f8ac37a92b81854c4f";
 const MAIN_VinylAddress = "0xc17b6C92BB728259ca2F76c88a4A48ac077587f7";
 
+const TEST_BSC_NFTToken = "0x71231555F136435270b095744277e7204757F12e";
+const TEST_BSC_FlatPriceSale = "0xeb641B6557E66a4FD73d463f904A3712bEA054f5";
+
+const MAIN_BSC_NFTToken = "0x71231555F136435270b095744277e7204757F12e";
+const MAIN_BSC_FlatPriceSale = "0xeb641B6557E66a4FD73d463f904A3712bEA054f5";
+
 module.exports = {
-TEST_NFTToken,
-TEST_FlatPriceSale,
-MAIN_NFTToken,
-MAIN_FlatPriceSale,
-TEST_VinylAddress,
-MAIN_VinylAddress
-}
+  TEST_NFTToken,
+  TEST_FlatPriceSale,
+  MAIN_NFTToken,
+  MAIN_FlatPriceSale,
+  TEST_VinylAddress,
+  MAIN_VinylAddress,
+  TEST_BSC_NFTToken,
+  TEST_BSC_FlatPriceSale,
+  MAIN_BSC_NFTToken,
+  MAIN_BSC_FlatPriceSale,
+};

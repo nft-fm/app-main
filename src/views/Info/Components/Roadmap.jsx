@@ -106,7 +106,11 @@ const Roadmap = () => {
               <FillerLine />
               <Checkmark src={grayCheckMark} />
             </LaunchFeatureRow>
-
+            <LaunchFeatureRow>
+              <LaunchFeatureText>Much More TBA Soon!</LaunchFeatureText>
+              <FillerLine />
+              <Checkmark src={grayCheckMark} />
+            </LaunchFeatureRow>
           </LaunchFeatureList>
         </LaunchFeaturesBox>
       </LaunchFeaturesContainer>

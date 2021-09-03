@@ -99,12 +99,12 @@ const PlaySongSnippet = (props) => {
         <Loading src={loading} />
       ) :
       
-      <PlayButton aria-label="play button">
+      <PlayButton aria-label="play button" onClick={isPlaying ? stopSong : playSong} >
 
       {isPlaying ? (
-        <PauseSVG onClick={stopSong} />
+        <PauseSVG />
       ) : (
-        <PlaySVG onClick={playSong} />
+        <PlaySVG />
       )}
       </PlayButton>
       }

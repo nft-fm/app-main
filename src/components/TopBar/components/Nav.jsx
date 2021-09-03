@@ -8,11 +8,11 @@ import { ReactComponent as IconDown } from "../../../assets/img/icons/down_arrow
 import DiscoDoge from "../../../assets/img/logos/PNG_icon1.png";
 
 export const Nav = () => {
-  const { user } = useAccountConsumer();
+  const { user, currChainId } = useAccountConsumer();
   const { account } = useWallet();
   const [hasVinyl, setHasVinyl] = useState(false);
   useEffect(() => {
-    if (account) {
+    if (account && (currChainId === 1 || currChainId === 4)) {
       getVinylBalance(
         (res) => Number(res.vinyl[0]) > 0 && setHasVinyl(res.vinyl[0])
       );

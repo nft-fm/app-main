@@ -4,6 +4,7 @@ import NftModalHook from "../NftModalHook/NftModalHook";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
+import { ReactComponent as IconBinance } from "../../assets/img/icons/binance-logo.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import loading from "../../assets/img/loading.gif";
 import axios from "axios";
@@ -253,7 +254,8 @@ const NftCard = (props) => {
                 maximumFractionDigits: 6,
               })
             : nft.price}
-          <Eth />
+          {nft.chain === "ETH" || nft.chain === "ETH_test" && <Eth />}
+          {nft.chain === "BSC" || nft.chain === "BSC_test" && <Bsc />}
         </CostEth>
       </BottomSection>
     </Container>
@@ -357,6 +359,14 @@ const Usd = styled(IconUsd)`
   & path {
     fill: ${(props) => props.theme.color.gray};
   }
+`;
+
+const Bsc = styled(IconBinance)`
+  width: 18px;
+  height: 18px;
+  /* & path {
+    fill: ${(props) => props.theme.color.white};
+  } */
 `;
 
 const Eth = styled(IconEth)`

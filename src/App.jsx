@@ -32,8 +32,8 @@ import swal from "sweetalert2";
 import preloadImage from "./utils/preloadImg";
 import recordPlayer from "./assets/img/record_player.png";
 import recordPlayerSpin from "./assets/img/record_player_spin.png";
-import saQiBanner from "./assets/img/homepage_assets/saqi_banner.png"
-import saQiBannerMobile from "./assets/img/homepage_assets/saqi_banner_mobile.jpeg"
+import saQiBanner from "./assets/img/homepage_assets/saqi_banner.png";
+import saQiBannerMobile from "./assets/img/homepage_assets/saqi_banner_mobile.jpeg";
 
 import isMobile from "./utils/isMobile";
 import theme from "./theme";
@@ -42,23 +42,25 @@ if (window.location.hostname !== "localhost") console.log = function () {};
 
 const Switches = () => {
   const location = useLocation();
-  const { account, user } = useAccountConsumer();
+  const { account, user, currChainId } = useAccountConsumer();
+console.log('curchain', currChainId)
+  useEffect(() => {
+    axios.get("/api/nft-type/testing");
+  }, []);
 
   useEffect(() => {
-    axios.get('/api/nft-type/testing')
-  }, [])
-
-  useEffect(() => {
-      axios.post(`/api/user/track-pageview`, {
+    axios
+      .post(`/api/user/track-pageview`, {
         address: account,
         page: location.pathname.substring(1),
-      }).then((res) => {
+      })
+      .then((res) => {
         console.log("successful pageview track", res);
       })
       .catch((err) => {
         console.log("pageview fail", err);
-      })
-      console.log("new location", location);
+      });
+    console.log("new location", location);
   }, [location]);
 
   const [ownsRedeemable, setOwnsRedeemable] = useState(false);
@@ -130,7 +132,8 @@ const Switches = () => {
         </Route> */}
         <Route path="/gov-polls">
           <GovPolls />
-        </Route> */}
+        </Route>{" "}
+        */}
         <Route path="/termsofservice">
           <TermsOfService />
         </Route>
@@ -158,12 +161,11 @@ const Switches = () => {
 };
 
 const App = () => {
-
   useEffect(() => {
     preloadImage(recordPlayer);
     preloadImage(recordPlayerSpin);
-    preloadImage(saQiBanner)
-    preloadImage(saQiBannerMobile)
+    preloadImage(saQiBanner);
+    preloadImage(saQiBannerMobile);
   }, []);
 
   return (
@@ -178,11 +180,25 @@ const App = () => {
 };
 
 const Providers = ({ children }) => {
+  const [currChainId, setCurrChainId] = useState(null);
+
+  const getChain = async () => {
+    const newChainId = await window.ethereum.request({ method: "eth_chainId" });
+    setCurrChainId(Number(newChainId));
+    return Number(newChainId);
+  };
+
+  useEffect(() => {
+    getChain();
+  }, []);
+
+
   return (
     <ThemeProvider theme={theme}>
       {/* change the ChainId below here for the preffered network when testing, 1 main 3 ropsten 42 kovan */}
       <UseWalletProvider
-        chainId={process.env.REACT_APP_IS_MAINNET ? 1 : 4}
+        chainId={currChainId}
+        // chainId={process.env.REACT_APP_IS_MAINNET ? 1 : 97}
         connectors={{
           walletconnect: { rpcUrl: "https://mainnet.eth.aragon.network/" },
         }}

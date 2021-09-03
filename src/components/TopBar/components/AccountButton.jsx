@@ -6,20 +6,20 @@ import isMobile from "../../../utils/isMobile";
 import InstallMetamaskModal from "../../InstallMetamaskModal";
 import ChangeChainModal from "../../ChangeChainModal";
 import ChainSelector from "./ChainSelector";
+import { useAccountConsumer } from "../../../contexts/Account";
 
 const AccountButton = (props) => {
-  const [currChainId, setCurrChainId] = useState(null);
+  const { currChainId } = useAccountConsumer();
   const { account, connect } = useWallet();
   const [onPresentInstallMetamask] = useModal(<InstallMetamaskModal />);
   const [onPresentChangeChain] = useModal(<ChangeChainModal />);
-
   const handleUnlockClick = () => {
     if (!window.ethereum) {
       onPresentInstallMetamask();
       return;
     }
 
-    if (currChainId !== 4) onPresentChangeChain();
+    // if (currChainId !== 4) onPresentChangeChain();
     connect("injected");
   };
 
@@ -31,43 +31,32 @@ const AccountButton = (props) => {
   //   });
   // }
 
-  const getChain = async () => {
-    const newChainId = await window.ethereum.request({ method: "eth_chainId" });
-    setCurrChainId(Number(newChainId));
-    console.log("chainId", Number(newChainId));
-    return Number(newChainId);
-  };
-
-  useEffect(() => {
-    getChain();
-  }, []);
-
   return (
     <>
-    <ChainSelector />
-    <StyledAccountButton>
-      {!account ? (
-        <Button onClick={handleUnlockClick}>Connect</Button>
-      ) : isMobile() ? (
-        <StyledA
-          href={`https://etherscan.io/address/${account}`}
-          target={`_blank`}
-          style={{ marginLeft: "-5px" }}
-        >
-          <div>{account.substring(0, 6)}</div>
-          <div>{"..." + account.substring(account.length - 4)}</div>
-        </StyledA>
-      ) : (
-        <StyledA
-          href={`https://etherscan.io/address/${account}`}
-          target={`_blank`}
-        >
-          {account.substring(0, 6) +
-            "..." +
-            account.substring(account.length - 4)}
-        </StyledA>
-      )}
-    </StyledAccountButton>
+      <ChainSelector />
+      <StyledAccountButton>
+        {!account ? (
+          <Button onClick={handleUnlockClick}>Connect</Button>
+        ) : isMobile() ? (
+          <StyledA
+            href={`https://etherscan.io/address/${account}`}
+            target={`_blank`}
+            style={{ marginLeft: "-5px" }}
+          >
+            <div>{account.substring(0, 6)}</div>
+            <div>{"..." + account.substring(account.length - 4)}</div>
+          </StyledA>
+        ) : (
+          <StyledA
+            href={`https://etherscan.io/address/${account}`}
+            target={`_blank`}
+          >
+            {account.substring(0, 6) +
+              "..." +
+              account.substring(account.length - 4)}
+          </StyledA>
+        )}
+      </StyledAccountButton>
     </>
   );
 };

@@ -6,6 +6,9 @@ const NftTypeSchema = new Schema({
   nftId: {
     type: Number,
   },
+  chain: {
+    type: String,
+  },
   title: {
     type: String,
     default: "",

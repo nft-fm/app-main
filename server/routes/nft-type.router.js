@@ -912,13 +912,15 @@ router.post("/purchase", async (req, res) => {
     nft.numSold++;
     await nft.save();
 
-    trackNftPurchase({
-      address: req.body.address,
-      ip: req.ip,
-      artistAddress: nft.address,
-      nftId: nft.nftId,
-      nftPrice: nft.price,
-    });
+    if (process.env.PRODUCTION) {
+      trackNftPurchase({
+        address: req.body.address,
+        ip: req.ip,
+        artistAddress: nft.address,
+        nftId: nft.nftId,
+        nftPrice: nft.price,
+      });
+    }
     console.log("end?", user, nft);
     res.status(200).send("Success!");
   } catch (err) {
@@ -1019,7 +1021,9 @@ router.post("/trackNftView", async (req, res) => {
       title: req.body.title,
       ip: req.ip,
     };
-    trackNftView(payload);
+    if (process.env.PRODUCTION) {
+      trackNftView(payload);
+    }
     res.status(200);
   } catch (err) {
     res.status(500).send(err);

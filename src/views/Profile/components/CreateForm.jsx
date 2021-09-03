@@ -65,7 +65,7 @@ const initialNftState = {
 };
 
 const CreateForm = ({ open, hide, reset, setReset }) => {
-  const { account, user, usdPerEth } = useAccountConsumer();
+  const { account, user, usdPerEth, currChainId } = useAccountConsumer();
   const [nftData, setNftData] = useState(initialNftState);
   const [curr, setCurr] = useState("ETH");
   const [isLoading, setIsLoading] = useState(false);
@@ -173,18 +173,34 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
       return;
     }
     let newNftData = { ...nftData, timestamp: moment().format() }; //sets timestamp to right when the /finalize route is called
-    // if (curr === "USD") {
-    //   newNftData = {
-    //     ...nftData,
-    //     price: (nftData.price / usdPerEth).toFixed(4),
-    //   };
-    // }
+    if (currChainId === 1) {
+      newNftData = { ...nftData, chain: "ETH" };
+    } else if (currChainId === 4) {
+      newNftData = { ...nftData, chain: "ETH_test" };
+    } else if (currChainId === 56) {
+      newNftData = { ...nftData, chain: "BSC" };
+    } else if (currChainId === 97) {
+      newNftData = { ...nftData, chain: "BSC_test" };
+    } else if (!currChainId) {
+      swal.fire({
+        title: "Not connected to a blockchain!",
+        text: "Please connect your wallet to the Ethereum or Binance chain to mint an NFT.",
+      });
+      onCloseModal();
+      return;
+    }
+
     if (newNftData.artist === "") {
       newNftData = {
         ...nftData,
         artist: user.username,
       };
     }
+
+    axios
+      .post("/api/nft-type/update-draft", newNftData)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
 
     //Input validation below here
     if (nftData.numMinted === "0" || nftData.numMinted === 0) {

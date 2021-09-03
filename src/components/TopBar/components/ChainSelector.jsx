@@ -5,9 +5,9 @@ import { useAccountConsumer } from "../../../contexts/Account";
 import { useWallet } from "use-wallet";
 import { getVinylBalance } from "../../../web3/utils";
 import { ReactComponent as IconDown } from "../../../assets/img/icons/down_arrow.svg";
-import { ReactComponent as BinanceIcon } from "../../../assets/img/icons/binance-logo.svg";
+import { ReactComponent as IconBinance } from "../../../assets/img/icons/binance-logo.svg";
 
-import { ReactComponent as EthIcon } from "../../../assets/img/icons/ethereum.svg";
+import { ReactComponent as IconEth } from "../../../assets/img/icons/ethereum.svg";
 import ReactToolTip from "react-tooltip";
 import switchNetwork from "../../../utils/switchNetwork";
 
@@ -95,7 +95,7 @@ const ChainSelector = () => {
   );
 };
 
-const Binance = styled(BinanceIcon)`
+const Binance = styled(IconBinance)`
   cursor: pointer;
   width: 18px;
   height: 18px;
@@ -104,7 +104,7 @@ const Binance = styled(BinanceIcon)`
     fill: ${(props) => props.theme.color.white};
   } */
 `;
-const Eth = styled(EthIcon)`
+const Eth = styled(IconEth)`
   cursor: pointer;
   width: 18px;
   height: 18px;

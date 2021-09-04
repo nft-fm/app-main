@@ -67,7 +67,7 @@ const NftCard = (props) => {
           setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
         />
         <Side>
-          {(nft.chain === "ETH" || nft.chain === "ETH_test") && (
+          {(nft.chain === "ETH") && (
             <IconArea
               href={`https://opensea.io/assets/0x88d3e00ce938f1a591336131b859465b50d608b7/${nft.nftId}`}
               target="_blank"
@@ -77,7 +77,7 @@ const NftCard = (props) => {
               <Cart />
             </IconArea>
           )}
-          {/* {(nft.chain === "BSC" || nft.chain === "BSC_test") && (
+          {/* {(nft.chain === "BSC") && (
             <IconArea
               href={''}
             >

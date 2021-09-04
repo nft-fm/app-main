@@ -228,12 +228,10 @@ router.post("/finalize", async (req, res) => {
     let NFT_FlatPriceSale;
     if (newData.chain === "ETH") {
       NFT_FlatPriceSale = MAIN_FlatPriceSale;
-    } else if (newData.chain === "ETH_test") {
-      NFT_FlatPriceSale = TEST_FlatPriceSale;
     } else if (newData.chain === "BSC") {
       NFT_FlatPriceSale = MAIN_BSC_FlatPriceSale;
-    } else if (newData.chain === "BSC_test") {
-      NFT_FlatPriceSale = TEST_BSC_FlatPriceSale;
+    } else {
+      console.error("CHAIN ERROR CHAIN ERROR")
     }
     let findNFT = await NftType.findById(newData._id);
     if (findNFT) {
@@ -1002,7 +1000,7 @@ router.post("/trackNftView", async (req, res) => {
     if (process.env.PRODUCTION) {
       trackNftView(payload);
     }
-    res.status(200);
+    res.status(200).send("success");
   } catch (err) {
     res.status(500).send(err);
   }

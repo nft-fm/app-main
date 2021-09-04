@@ -93,7 +93,6 @@ const getUserNftsETH = async (account) => {
   const NFTToken = process.env.REACT_APP_IS_MAINNET
     ? MAIN_NFTToken
     : TEST_NFTToken;
-  const Chain = process.env.REACT_APP_IS_MAINNET ? "ETH" : "ETH_test";
   let provider = new providers.WebSocketProvider(PROVIDER_URL);
   let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
   const contract = new Contract(NFTToken, NFTTokenABI, walletWithProvider);
@@ -113,7 +112,7 @@ const getUserNftsETH = async (account) => {
     nftIdsAndQuantities.push({
       id: utils.formatEther(userNfts[0][i]) * 10e17,
       quantity: utils.formatEther(userNfts[1][i]) * 10e17,
-      chain: Chain,
+      chain: "ETH",
     });
   }
   return nftIdsAndQuantities;
@@ -126,7 +125,6 @@ const getUserNftsBSC = async (account) => {
   const NFTToken = process.env.REACT_APP_IS_MAINNET
     ? MAIN_BSC_NFTToken
     : TEST_BSC_NFTToken;
-  const Chain = process.env.REACT_APP_IS_MAINNET ? "BSC" : "BSC_test";
   let provider = new providers.WebSocketProvider(PROVIDER_URL);
   let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
   const contract = new Contract(NFTToken, NFTTokenABI, walletWithProvider);
@@ -138,7 +136,7 @@ const getUserNftsBSC = async (account) => {
     nftIdsAndQuantities.push({
       id: utils.formatEther(userNfts[0][i]) * 10e17,
       quantity: utils.formatEther(userNfts[1][i]) * 10e17,
-      chain: Chain,
+      chain: "BSC",
     });
   }
   return nftIdsAndQuantities;

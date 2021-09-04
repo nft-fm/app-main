@@ -72,19 +72,20 @@ const BuyNftModal = (props) => {
   };
 
   const purchase = async (id) => {
-    console.log('begin purchase function', id)
+    console.log('begin purchase function', id, nft)
+
+    // if ((nft.chain === "ETH" && currChainId ) || )
+
     setIsLoading(true);
-    // {!} fix to getBsc balance
     // {!} simplify the below
     await getEthBalance(async (balance) => {
       if (parseFloat(balance) >= nft.price) {
         Swal.fire({
           title:
-            "Purchasing, please do not close or refresh during this process.",
+            "Purchasing, please do not leave this page.",
           showConfirmButton: false,
           timer: 3000,
         }).then(async () => {
-          console.log('buyNft call happens NOW')
           await buyNFT(
             {
               nftID: id,
@@ -93,7 +94,6 @@ const BuyNftModal = (props) => {
               price: String(nft.price),
             },
             () => {
-              console.log('buyNft call happens NOW')
               axios
                 .post("/api/nft-type/purchase", {
                   id: id,
@@ -222,6 +222,9 @@ const BuyNftModal = (props) => {
     var sDisplay = s < 10 ? "0" + s : s;
     return hDisplay + mDisplay + sDisplay;
   };
+
+
+
   if (!open) return null;
   return (
     <OpaqueFilter onClick={(e) => !isLoading && hide(e)}>
@@ -373,7 +376,6 @@ const BuyNftModal = (props) => {
             </PricesContainer>
             {!account ? (
               <BuyButton onClick={() => connectWallet()}>
-                {/* <MetaMask src={IconMetamask} /> */}
                 <ButtonText>Connect Wallet</ButtonText>
               </BuyButton>
             ) : nft.numSold !== nft.numMinted ? (

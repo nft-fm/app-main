@@ -248,8 +248,8 @@ const NftCard = (props) => {
                 maximumFractionDigits: 6,
               })
             : nft.price}
-          {nft.chain === "ETH" || nft.chain === "ETH_test" && <Eth />}
-          {nft.chain === "BSC" || nft.chain === "BSC_test" && <Bsc />}
+          {nft.chain === "ETH" && <Eth />}
+          {nft.chain === "BSC" && <Bsc />}
         </CostEth>
       </BottomSection>
     </Container>

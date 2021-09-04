@@ -358,6 +358,7 @@ const Usd = styled(IconUsd)`
 const Bsc = styled(IconBinance)`
   width: 18px;
   height: 18px;
+  margin: -2px 0 0 4px;
   /* & path {
     fill: ${(props) => props.theme.color.white};
   } */
@@ -367,7 +368,6 @@ const Eth = styled(IconEth)`
   width: 18px;
   height: 18px;
   margin: -2px 0 0 4px;
-  transition: all 0.2s ease-in-out;
   & path {
     fill: ${(props) => props.theme.color.white};
   }

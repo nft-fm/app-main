@@ -43,10 +43,6 @@ if (window.location.hostname !== "localhost") console.log = function () {};
 const Switches = () => {
   const location = useLocation();
   const { account, user, currChainId } = useAccountConsumer();
-console.log('curchain', currChainId)
-  useEffect(() => {
-    axios.get("/api/nft-type/testing");
-  }, []);
 
   useEffect(() => {
     axios

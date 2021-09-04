@@ -18,23 +18,6 @@ const {
 const FlatPriceSaleABI = require("./abi/FlatPriceSale.abi");
 const NFTTokenABI = require("./abi/NFTToken.abi");
 const VinylABI = require("./abi/Vinyl.abi");
-const NFTType = require("../schemas/NftType.schema");
-
-/*
-const sign = (address, amount, price, startTime, saleAddress) => {
-	console.log("signing", address, amount, price, startTime, saleAddress)
-	let data = utils.defaultAbiCoder.encode(
-		["address", "uint256", "uint256", "uint256", "address"],
-		[String(address), BigNumber.from(amount), BigNumber.from(price), BigNumber.from(startTime), String(saleAddress)]
-	);
-
-	const hash = utils.keccak256(utils.hexlify(data));
-	console.log("key", process.env.OWNER_KEY);
-	const signer = new utils.SigningKey(process.env.OWNER_KEY);
-	const { r, s, v } = signer.signDigest(hash);
-	return { r, s, v };
-};
-*/
 
 const sign = (types, values) => {
   console.log("signing", ...values);
@@ -103,16 +86,8 @@ const getUserNfts = async (account) => {
   const contract = new Contract(NFTToken, NFTTokenABI, walletWithProvider);
 
   let userNfts = await contract.getFullBalance(account);
-  // let nftIds = [];
-  // let numNfts = [];
-  // userNfts[0].map((nft) => {
-  //   nftIds.push(utils.formatEther(nft) * 10e17);
-  // });
-  // userNfts[1].map((nft) => {
-  //   numNfts.push(utils.formatEther(nft) * 10e17);
-  // });
 
-  let nftIdsAndQuantities = []
+  let nftIdsAndQuantities = [];
   for (let i = 0; i < userNfts[0].length; i++) {
     nftIdsAndQuantities.push({id: utils.formatEther(userNfts[0][i]) * 10e17, quantity: utils.formatEther(userNfts[1][i]) * 10e17})
   }

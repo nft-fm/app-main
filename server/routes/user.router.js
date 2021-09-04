@@ -26,7 +26,6 @@ router.post("/get-account", async (req, res) => {
         isArtist: process.env.PRODUCTION ? false : true,
       });
       await user.save();
-      console.log("tracking new user:", req.body.address);
       if (process.env.PRODUCTION) {
         trackNewUser({ address: req.body.address, ip: req.ip });
       }

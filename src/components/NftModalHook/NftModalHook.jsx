@@ -73,11 +73,13 @@ const BuyNftModal = (props) => {
 
   const purchase = async (id) => {
     setIsLoading(true);
+    // {!} fix to getBsc balance
+    // {!} simplify the below
     await getEthBalance(async (balance) => {
       if (parseFloat(balance) >= nft.price) {
         Swal.fire({
           title:
-            "Attempting to purchase, please do not close or refresh during this process.",
+            "Purchasing, please do not close or refresh during this process.",
           showConfirmButton: false,
           timer: 3000,
         }).then(async () => {

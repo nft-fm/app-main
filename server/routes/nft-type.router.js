@@ -943,6 +943,7 @@ router.post("/newShare", async (req, res) => {
     const getNft = await NftType.findOne({ nftId: req.body.nftId });
     getNft.shareCount++;
     await getNft.save();
+    res.sendStatus("success");
   } catch (err) {
     res.status(500).send(err);
   }
@@ -950,9 +951,7 @@ router.post("/newShare", async (req, res) => {
 
 router.post("/get-by-nftId", async (req, res) => {
   try {
-    console.log("2");
     const getNft = await NftType.findOne({ nftId: req.body.nftId });
-    console.log("3");
     res.status(200).send(findLikes(getNft, req.body.address));
   } catch (err) {
     res.status(500).send(err);

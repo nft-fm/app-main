@@ -67,29 +67,41 @@ const NftCard = (props) => {
           setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
         />
         <Side>
-          <IconArea
-            href={`https://opensea.io/assets/0x88d3e00ce938f1a591336131b859465b50d608b7/${nft.nftId}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Trade
-            <Cart />
-          </IconArea>
+          {(nft.chain === "ETH" || nft.chain === "ETH_test") && (
+            <IconArea
+              href={`https://opensea.io/assets/0x88d3e00ce938f1a591336131b859465b50d608b7/${nft.nftId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Trade
+              <Cart />
+            </IconArea>
+          )}
+          {/* {(nft.chain === "BSC" || nft.chain === "BSC_test") && (
+            <IconArea
+              href={''}
+            >
+              BSC
+              <Cart />
+            </IconArea>
+          )} */}
         </Side>
       </CardTop>
       <Image
         src={nft.imageUrl}
         alt="image"
         onClick={() => setIsModalOpen(!isModalOpen)}
-      // onClick={() => setIsOpen(!isOpen)}
+        // onClick={() => setIsOpen(!isOpen)}
       />
       <BottomWrapper>
         <Bottom>
           <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>
-            {nft.title.length > 15 ? nft.title.slice(0,15) + '...' : nft.title}
+            {nft.title.length > 15 ? nft.title.slice(0, 15) + "..." : nft.title}
           </TrackName>
           <Artist>
-            {nft.artist.length > 20 ? nft.artist.slice(0,20) + '...' : nft.artist}
+            {nft.artist.length > 20
+              ? nft.artist.slice(0, 20) + "..."
+              : nft.artist}
           </Artist>
         </Bottom>
         <PlayButton src={PlayIcon} onClick={() => setNftCallback(nft)} />
@@ -299,7 +311,7 @@ const IconArea = styled.a`
     transition: all 0.2s ease-in-out;
     color: #20a4fc;
     & svg > path {
-    transition: all 0.2s ease-in-out;
+      transition: all 0.2s ease-in-out;
       fill: #20a4fc;
     }
   }

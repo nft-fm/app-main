@@ -12,7 +12,7 @@ const {
   MAIN_BSC_FlatPriceSale,
 } = require("../web3/constants");
 const { sign, getSetSale, findLikes } = require("../web3/server-utils");
-const { listenForMint } = require("../web3/mint-listener");
+const { listenForMintEth, listenForMintBsc } = require("../web3/mint-listener");
 const { trackNftPurchase, trackNftView } = require("../modules/mixpanel");
 
 // const findLikes = (nfts, account) => {
@@ -254,7 +254,8 @@ router.post("/finalize", async (req, res) => {
       // const price = BigNumber.from(newData.price.mul(constants.WeiPerEther));
       const price = utils.parseUnits(newData.price);
       const encodedFee = utils.defaultAbiCoder.encode(["uint32"], [5]); // fee is hardcoded to 5% atm
-      listenForMint();
+      listenForMintEth();
+      listenForMintBsc();
 
       const signature = sign(
         [

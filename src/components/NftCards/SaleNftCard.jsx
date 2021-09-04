@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import NftModalHook from "../NftModalHook/NftModalHook";
-import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
-import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
 import { ReactComponent as IconBinance } from "../../assets/img/icons/binance-logo.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import loading from "../../assets/img/loading.gif";
@@ -248,8 +246,7 @@ const NftCard = (props) => {
                 maximumFractionDigits: 6,
               })
             : nft.price}
-          {nft.chain === "ETH" && <Eth />}
-          {nft.chain === "BSC" && <Bsc />}
+          {nft.chain === "ETH" ? <Eth /> : <Bsc/>}
         </CostEth>
       </BottomSection>
     </Container>
@@ -345,23 +342,10 @@ const PrereleaseBadge = styled(Prerelease)`
   padding: 0 5px;
 `;
 
-const Usd = styled(IconUsd)`
-  width: 18px;
-  height: 18px;
-  margin: -2px 0 0 8px;
-  transition: all 0.2s ease-in-out;
-  & path {
-    fill: ${(props) => props.theme.color.gray};
-  }
-`;
-
 const Bsc = styled(IconBinance)`
   width: 18px;
   height: 18px;
   margin: -2px 0 0 4px;
-  /* & path {
-    fill: ${(props) => props.theme.color.white};
-  } */
 `;
 
 const Eth = styled(IconEth)`
@@ -373,12 +357,6 @@ const Eth = styled(IconEth)`
   }
 `;
 
-const CostUsd = styled.span`
-  display: flex;
-  color: white;
-  color: ${(props) => props.theme.color.gray};
-`;
-
 const CostEth = styled.span`
   display: flex;
   color: white;
@@ -388,23 +366,6 @@ const BottomSection = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
-`;
-
-const Cart = styled(IconCart)`
-  width: 20px;
-  height: 20px;
-  margin: -2px 0 0 8px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  & path {
-    transition: all 0.2s ease-in-out;
-    fill: ${(props) => props.theme.color.gray};
-  }
-  &:hover {
-    & path {
-      fill: #20a4fc;
-    }
-  }
 `;
 
 const Side = styled.div`

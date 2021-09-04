@@ -62,7 +62,7 @@ const BuyNftModal = (props) => {
           artist: nft.artist,
           title: nft.title,
         })
-        .then((res) => console.log(res))
+        .then()
         .catch((err) => console.log(err));
     }
   }, [open]);

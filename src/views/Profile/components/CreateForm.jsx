@@ -65,7 +65,8 @@ const initialNftState = {
 };
 
 const CreateForm = ({ open, hide, reset, setReset }) => {
-  const { account, user, usdPerEth, currChainId } = useAccountConsumer();
+  const { account, user, usdPerEth, usdPerBnb, currChainId } =
+    useAccountConsumer();
   const [nftData, setNftData] = useState(initialNftState);
   const [curr, setCurr] = useState("ETH");
   const [isLoading, setIsLoading] = useState(false);
@@ -175,7 +176,7 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
     let newNftData = { ...nftData, timestamp: moment().format() }; //sets timestamp to right when the /finalize route is called
     if (currChainId === 1 || currChainId === 4) {
       newNftData = { ...nftData, chain: "ETH" };
-    }  else if (currChainId === 56 || currChainId === 97) {
+    } else if (currChainId === 56 || currChainId === 97) {
       newNftData = { ...nftData, chain: "BSC" };
     } else if (!currChainId) {
       swal.fire({
@@ -399,8 +400,15 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
       setIsLoadingImage={setIsLoadingImage}
     />,
     <Step3 nftData={nftData} updateState={updateState} />,
-    <Step4 nftData={nftData} updateState={updateState} usdPerEth={usdPerEth} />,
-    <PreviewBuyModal nft={nftData} />,
+    <Step4
+      nftData={nftData}
+      updateState={updateState}
+      usdPerEth={usdPerEth}
+      usdPerBnb={usdPerBnb}
+      currChainId={currChainId}
+    />,
+    <PreviewBuyModal nft={nftData} 
+    currChainId={currChainId}/>,
   ];
   if (currentStep === 1) {
     return (
@@ -445,6 +453,7 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
               isLoadingAudio={isLoadingAudio}
               isLoadingImage={isLoadingImage}
               isLoading={isLoading}
+              currChainId={currChainId}
             />
           </Step1Container>
         </OpaqueFilter>

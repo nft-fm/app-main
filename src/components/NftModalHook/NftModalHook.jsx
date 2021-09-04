@@ -254,7 +254,9 @@ const BuyNftModal = (props) => {
               </Side>
             </CardTop>
             <BadgeHolder>
-              {nft.badges?.map((badge) => {
+              {
+              // {!} refactor badges into independent component
+              nft.badges?.map((badge) => {
                 if (badge.founder) {
                   return (
                     <FounderBadge

@@ -38,14 +38,20 @@ export const AccountProvider = ({ children }) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [currChainId, setCurrChainId] = useState(false);
   const [usdPerEth, setUsdPerEth] = useState(0);
+  const [usdPerBnb, setUsdPerBnb] = useState(0);
   const [oneSecToLoadMetaMask, setOneSecToLoadMetaMask] = useState(false);
 
-  const fetchUsdPerEth = async () => {
+  const fetchUsdPerEthandBsc = async () => {
     await axios
       .get(
         "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=USD"
       )
       .then((res) => setUsdPerEth(res.data.ethereum.usd));
+    await axios
+      .get(
+        "https://api.coingecko.com/api/v3/simple/price?ids=binancecoin&vs_currencies=USD"
+      )
+      .then((res) => setUsdPerBnb(res.data.binancecoin.usd));
   };
 
   const getUser = async () => {
@@ -80,7 +86,7 @@ export const AccountProvider = ({ children }) => {
     if (window.ethereum) {
       getChain();
     }
-    fetchUsdPerEth();
+    fetchUsdPerEthandBsc();
     if (!oneSecToLoadMetaMask) {
       setTimeout(() => {
         setOneSecToLoadMetaMask(true);
@@ -119,6 +125,7 @@ export const AccountProvider = ({ children }) => {
         currChainId,
         setCurrChainId,
         usdPerEth,
+        usdPerBnb,
       }}
     >
       {/* {oneSecToLoadMetaMask && !currChainId && <NoChainModal />}

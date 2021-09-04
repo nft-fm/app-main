@@ -32,6 +32,7 @@ import {
   imageHeight,
 } from "../../utils/swalImages";
 import Ticker from "../../components/Ticker";
+import { ReactComponent as IconBinance } from "../../assets/img/icons/binance-logo.svg";
 
 const BuyNftModal = (props) => {
   const {
@@ -382,7 +383,7 @@ const BuyNftModal = (props) => {
                     : "--"}{" "}
                 </PriceItem>
                 &nbsp;
-                <Eth />
+                {nft.chain === "ETH" ? <Eth /> : <Bsc/>}
               </PriceHolder>
             </PricesContainer>
             {!account ? (
@@ -432,6 +433,22 @@ const BuyNftModal = (props) => {
     </OpaqueFilter>
   );
 };
+
+
+const Bsc = styled(IconBinance)`
+  width: 18px;
+  height: 18px;
+  margin: -2px 0 0 4px;
+`;
+
+const Eth = styled(IconEth)`
+  width: 18px;
+  height: 18px;
+  margin: -2px 0 0 4px;
+  & path {
+    fill: ${(props) => props.theme.color.white};
+  }
+`;
 
 const TrackDetailsHolder = styled.div`
   width: 100%;
@@ -540,22 +557,6 @@ const ButtonText = styled.span`
   color: white;
 `;
 
-const MetaMask = styled.img`
-  width: 32px;
-  height: auto;
-`;
-
-const Divider = styled.div`
-  margin: 5px 0;
-  width: 100%;
-  height: 1px;
-  background-color: ${(props) => props.theme.color.gray};
-`;
-
-const AvailableItem = styled.div`
-  font-size: 0.8rem;
-  color: ${(props) => props.theme.color.lightgray};
-`;
 
 const PricesContainer = styled.div`
   width: 100%;
@@ -574,13 +575,6 @@ const PriceHolder = styled.div`
   background-color: ${(props) => props.theme.bgColor};
   margin-top: -8px;
   padding: 0 10px;
-`;
-const Eth = styled(IconEth)`
-  width: 18px;
-  height: 18px;
-  & path {
-    fill: ${(props) => props.theme.color.white};
-  }
 `;
 
 const PriceItem = styled.span`

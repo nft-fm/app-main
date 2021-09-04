@@ -50,11 +50,12 @@ export const AccountProvider = ({ children }) => {
 
   const getUser = async () => {
     await axios
-      .post(`/api/user/get-account`, { address: account})
+      .post(`/api/user/get-account`, { address: account })
       .then((res) => {
         setUser(res.data);
         axios
-          .post(`/api/gov/verify-admin`, { address: account }).then(res => {
+          .post(`/api/gov/verify-admin`, { address: account })
+          .then((res) => {
             setIsAdmin(res.data);
           })
           .catch((err) => {
@@ -72,13 +73,11 @@ export const AccountProvider = ({ children }) => {
 
   const getChain = async () => {
     const newChainId = await window.ethereum.request({ method: "eth_chainId" });
-    console.log("new chain", Number(newChainId));
     setCurrChainId(Number(newChainId));
   };
 
   useEffect(() => {
     if (window.ethereum) {
-      console.log("getting chain");
       getChain();
     }
     fetchUsdPerEth();

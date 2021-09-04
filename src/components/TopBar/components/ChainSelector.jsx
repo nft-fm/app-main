@@ -19,27 +19,21 @@ const ChainSelector = () => {
   const [selected, setSelected] = useState(0);
 
   useEffect(() => {
-    console.log("here");
-    if (window.ethereum.chainId === ("0x4" || "0x1")) setSelected(0);
-    // if (window.ethereum.chainId === ("0x38" || "0x61")) {
-    //   console.log("here");
-    //   setSelected(1);
-    // }
-    if (window.ethereum.chainId === "0x61") {
-      console.log("here");
+    if (
+      window.ethereum.chainId === "0x4" ||
+      window.ethereum.chainId === "0x1"
+    ) {
+      setSelected(0);
+    }
+    if (
+      window.ethereum.chainId === "0x61" ||
+      window.ethereum.chainId === "0x38"
+    ) {
       setSelected(1);
     }
   }, [window.ethereum]);
-
-  console.log(
-    window.ethereum.chainId,
-    typeof window.ethereum.chainId,
-    selected
-  );
-
   const switchChain = async (chain) => {
     await switchNetwork(chain);
-    // window.location.reload();
   };
 
   const chooseChain = (val) => {
@@ -100,9 +94,6 @@ const Binance = styled(IconBinance)`
   width: 18px;
   height: 18px;
   z-index: 1;
-  /* & path {
-    fill: ${(props) => props.theme.color.white};
-  } */
 `;
 const Eth = styled(IconEth)`
   cursor: pointer;
@@ -111,16 +102,6 @@ const Eth = styled(IconEth)`
   z-index: 1;
   & path {
     fill: ${(props) => props.theme.color.white};
-  }
-`;
-
-const DownArrow = styled(IconDown)`
-  /* margin-top: 1px; */
-  width: 10px;
-  height: 10px;
-  & path {
-    transition: all 0.2s ease-in-out;
-    fill: ${(props) => props.theme.color.lightgray};
   }
 `;
 
@@ -151,7 +132,6 @@ const DropDown = styled.div`
   justify-content: flex-end;
   align-items: center;
   position: absolute;
-  /* top: 60px; */
   width: 30px;
 `;
 

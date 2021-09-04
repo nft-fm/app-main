@@ -18,7 +18,6 @@ const Artist = () => {
   const [open, setOpen] = useState(false);
   const [userInfo, setUserInfo] = useState();
   const [userNfts, setUserNfts] = useState();
-  console.log("userInfo", userInfo);
   useEffect(() => {
     if (userInfo?.profilePic) {
       setProfilePic(userInfo.profilePic);
@@ -70,7 +69,6 @@ const Artist = () => {
 
       <SocialsBar>
         {userInfo?.socials.map((social) => {
-          console.log(social);
           if (social.twitter) {
             return (
               <IconContainer

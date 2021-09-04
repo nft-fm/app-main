@@ -27,7 +27,6 @@ const BuyNftModal = ({
   const stopProp = (e) => {
     e.stopPropagation();
   };
-  console.log("nft", nft);
 
   const like = async () => {
     if (account) {
@@ -45,7 +44,6 @@ const BuyNftModal = ({
     setIsShareOpen();
     hide();
   };
-  console.log('nftprice', nft.title, nft.price)
 
   return (
     <OpaqueFilter onClick={(e) => hide(e)}>

@@ -51,16 +51,12 @@ const Switches = () => {
         page: location.pathname.substring(1),
       })
       .then((res) => {
-        console.log("successful pageview track", res);
       })
       .catch((err) => {
-        console.log("pageview fail", err);
       });
-    console.log("new location", location);
   }, [location]);
 
   const [ownsRedeemable, setOwnsRedeemable] = useState(false);
-  console.log("ownsRedeemable", ownsRedeemable);
   const history = useHistory();
 
   useEffect(() => {
@@ -73,7 +69,6 @@ const Switches = () => {
       axios
         .post("/api/nft-type/checkRedeemable", user)
         .then((res) => {
-          console.log(res);
           if (res.status === 200 && !ownsRedeemable) {
             setOwnsRedeemable(true);
 
@@ -128,8 +123,7 @@ const Switches = () => {
         </Route> */}
         <Route path="/gov-polls">
           <GovPolls />
-        </Route>{" "}
-        */}
+        </Route>
         <Route path="/termsofservice">
           <TermsOfService />
         </Route>

@@ -62,7 +62,7 @@ const BuyNftModal = (props) => {
           artist: nft.artist,
           title: nft.title,
         })
-        .then((res) => console.log(res))
+        .then()
         .catch((err) => console.log(err));
     }
   }, [open]);
@@ -72,6 +72,7 @@ const BuyNftModal = (props) => {
   };
 
   const purchase = async (id) => {
+    console.log('begin purchase function', id)
     setIsLoading(true);
     // {!} fix to getBsc balance
     // {!} simplify the below
@@ -83,6 +84,7 @@ const BuyNftModal = (props) => {
           showConfirmButton: false,
           timer: 3000,
         }).then(async () => {
+          console.log('buyNft call happens NOW')
           await buyNFT(
             {
               nftID: id,
@@ -91,9 +93,7 @@ const BuyNftModal = (props) => {
               price: String(nft.price),
             },
             () => {
-              console.log("pending");
-            },
-            () => {
+              console.log('buyNft call happens NOW')
               axios
                 .post("/api/nft-type/purchase", {
                   id: id,

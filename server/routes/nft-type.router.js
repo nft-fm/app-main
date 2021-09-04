@@ -238,7 +238,7 @@ router.post("/finalize", async (req, res) => {
       const startTime = 0;
       // const price = BigNumber.from(newData.price.mul(constants.WeiPerEther));
       const price = utils.parseUnits(newData.price);
-      const encodedFee = utils.defaultAbiCoder.encode(["uint32"], [5]); // fee is hardcoded to 5% atm
+      const encodedFee = utils.defaultAbiCoder.encode(["uint32"], [10]); // fee is hardcoded to 5% atm
       listenForMintEth();
       listenForMintBsc();
 

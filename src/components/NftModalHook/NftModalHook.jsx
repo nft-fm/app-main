@@ -48,7 +48,7 @@ const BuyNftModal = (props) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isBought, setIsBought] = useState(false);
-  const { account, connect, getUser } = useAccountConsumer();
+  const { account, connect, getUser, currChainId } = useAccountConsumer();
   const { setNftCallback } = usePlaylistConsumer();
   const history = useHistory();
 
@@ -74,7 +74,18 @@ const BuyNftModal = (props) => {
   const purchase = async (id) => {
     console.log('begin purchase function', id, nft)
 
-    // if ((nft.chain === "ETH" && currChainId ) || )
+    if ((nft.chain === "ETH" && (currChainId !== 1 && currChainId !== 4))
+    || (nft.chain === "BSC" && (currChainId !== 56 && currChainId !== 97))) {
+      console.log("currchainId", nft.chain, currChainId);
+      swal.fire({
+        title: `Wrong Chain`,
+        text: `You must be on the ${nft.chain} blockchain to purchase this NFT. You can change chains in the navbar.`,
+        imageUrl: errorIcon,
+        imageWidth,
+        imageHeight,
+      });
+      return;
+    }
 
     setIsLoading(true);
     // {!} simplify the below

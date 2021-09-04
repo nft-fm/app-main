@@ -5,7 +5,11 @@ const User = require("../schemas/User.schema");
 const NftType = require("../schemas/NftType.schema");
 const Application = require("../schemas/Application.schema");
 const Redeem = require("../schemas/Redeem.schema");
-const { findLikes, getUserNfts } = require("../web3/server-utils");
+const {
+  findLikes,
+  getUserNftsETH,
+  getUserNftsBSC,
+} = require("../web3/server-utils");
 const sendSignRequest = require("../modules/eversign");
 const { utils } = require("ethers");
 const nodemailer = require("nodemailer");
@@ -37,13 +41,18 @@ router.post("/get-account", async (req, res) => {
 
     //This overwrites the user's database nfts with the nfts attributed to the user in the smart contract
     //handles when user's buy/sell nfts off platform
-    let nfts = await getUserNfts(user.address);
-    console.log("nfts", nfts);
-    if (nfts) {
+    let ethUserNfts = await getUserNftsETH(user.address);
+    let bscUserNfts = await getUserNftsBSC(user.address);
+    let bothChainsNft = [...ethUserNfts, ...bscUserNfts];
+    console.log("bothChainsNft", bothChainsNft);
+    if (bothChainsNft) {
       user.nfts = [];
-      for (let nft of nfts) {
+      for (let nft of bothChainsNft) {
         if (nft.quantity > 0) {
-          let usersNft = await NftType.findOne({ nftId: nft.id });
+          let usersNft = await NftType.findOne({
+            nftId: nft.id,
+            chain: nft.chain,
+          });
           if (usersNft) {
             user.nfts.push({ nft: usersNft._id, quantity: nft.quantity });
           }

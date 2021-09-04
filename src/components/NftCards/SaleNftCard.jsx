@@ -39,9 +39,6 @@ const NftCard = (props) => {
   };
 
   const getSnnipetAWS = async (completeNft) => {
-    console.log(completeNft.address +
-      "/snnipets/" +
-      completeNft.audioUrl.split("/").slice(-1)[0])
     await axios
       .post("/api/nft-type/getSnnipetAWS", {
         key:
@@ -50,7 +47,6 @@ const NftCard = (props) => {
           completeNft.audioUrl.split("/").slice(-1)[0],
       })
       .then((res) => {
-        console.log("res", res);
         if (!res.data) {
           getNSeconds(props.nft);
         } else {
@@ -73,7 +69,6 @@ const NftCard = (props) => {
         startTime: 30,
       })
       .then((res) => {
-        console.log("got snnipet");
         const songFile = res.data.Body.data;
 
         setPartialSong(songFile);
@@ -81,7 +76,6 @@ const NftCard = (props) => {
   };
 
   useEffect(() => {
-    console.log("im here", basicLoaded);
     if (basicLoaded) {
       setLikesLoading(true);
     }

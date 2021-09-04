@@ -72,6 +72,7 @@ const BuyNftModal = (props) => {
   };
 
   const purchase = async (id) => {
+    console.log('begin purchase function', id)
     setIsLoading(true);
     await getEthBalance(async (balance) => {
       if (parseFloat(balance) >= nft.price) {
@@ -81,6 +82,7 @@ const BuyNftModal = (props) => {
           showConfirmButton: false,
           timer: 3000,
         }).then(async () => {
+          console.log('buyNft call happens NOW')
           await buyNFT(
             {
               nftID: id,
@@ -89,9 +91,7 @@ const BuyNftModal = (props) => {
               price: String(nft.price),
             },
             () => {
-              console.log("pending");
-            },
-            () => {
+              console.log('buyNft call happens NOW')
               axios
                 .post("/api/nft-type/purchase", {
                   id: id,

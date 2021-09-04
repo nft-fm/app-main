@@ -141,7 +141,7 @@ export const getVinylBalance = async (callback) => {
   });
 };
 
-export const buyNFT = async (data, pendingCallback, finalCallback) => {
+export const buyNFT = async (data, finalCallback) => {
   const { provider } = await require();
   const signer = provider.getSigner();
   let contract = new Contract(chooseFlatPriceSale(), FlatPriceSaleABI, signer);
@@ -156,7 +156,7 @@ export const buyNFT = async (data, pendingCallback, finalCallback) => {
   let result = await contract
     .buyNFT(data.saleId, data.amount, { value: utils.parseUnits(data.price) })
     .then((res) => {
-      pendingCallback();
+      console.log('pending purchase', res)
       return res.wait();
     });
 

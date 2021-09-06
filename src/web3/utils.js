@@ -19,6 +19,7 @@ import AirdropABI from "./abi/Airdrop.abi.js";
 
 const chooseNftAddress = async () => {
   const newChainId = await window.ethereum.request({ method: "eth_chainId" });
+  console.log("chooseNftAddress", Number(newChainId));
   if (Number(newChainId) === 1 || Number(newChainId) === 4) {
     return NftAddress;
   } else if (Number(newChainId) === 56 || Number(newChainId) === 97) {
@@ -90,10 +91,13 @@ export const getSetSale = async (nftId, callback) => {
   });
 };
 
-export const mintNFT = async (data, pendingCallback, finalCallback) => {
+export const mintNFT = async (data, finalCallback) => {
   const { provider } = await require();
+  console.log('insider Minter')
   const signer = provider.getSigner();
+  console.log('insider signer', signer)
   let contract = new Contract(chooseNftAddress(), NFTTokenABI, signer);
+  console.log('insider signer', chooseFlatPriceSale())
 
   let result = await contract
     .mintAndStake(
@@ -108,7 +112,7 @@ export const mintNFT = async (data, pendingCallback, finalCallback) => {
       data.s
     )
     .then((res) => {
-      pendingCallback();
+      console.log('pending')
       return res.wait();
     });
 
@@ -156,7 +160,7 @@ export const buyNFT = async (data, finalCallback) => {
   let result = await contract
     .buyNFT(data.saleId, data.amount, { value: utils.parseUnits(data.price) })
     .then((res) => {
-      console.log('pending purchase', res)
+      console.log("pending purchase", res);
       return res.wait();
     });
 

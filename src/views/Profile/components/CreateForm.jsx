@@ -249,12 +249,9 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
       .then((res) => {
         console.log("finalize res", res);
         if (res.status === 200) {
+          setIsLoading(true);
           mintNFT(
             res.data,
-            () => {
-              console.log("pending...");
-              setIsLoading(true);
-            },
             () => {
               console.log("final");
               axios
@@ -304,7 +301,7 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
               imageWidth,
               imageHeight,
               title: "Couldn't create NFT!",
-              text: "Please try again",
+              text: "Make sure you are on the current chain and try again",
             });
           });
           console.log("MINT");

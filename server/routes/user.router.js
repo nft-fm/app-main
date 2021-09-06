@@ -43,7 +43,6 @@ router.post("/get-account", async (req, res) => {
     let ethUserNfts = await getUserNftsETH(user.address);
     let bscUserNfts = await getUserNftsBSC(user.address);
     let bothChainsNft = [...ethUserNfts, ...bscUserNfts];
-    console.log("bothChainsNft", bothChainsNft);
     if (bothChainsNft) {
       user.nfts = [];
       for (let nft of bothChainsNft) {

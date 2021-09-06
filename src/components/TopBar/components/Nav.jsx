@@ -34,14 +34,14 @@ export const Nav = () => {
       <StyledLink exact tab="about" activeClassName="active" to="/info">
         Info
       </StyledLink>
-      <StyledHRef href="https://www.discodoge.io" target="_blank">
-        <Disco src={DiscoDoge} alt="Disco Doge" />
-      </StyledHRef>
       {user?.isArtist && (
         <StyledLink exact tab="profile" activeClassName="active" to="/profile">
           Profile
         </StyledLink>
       )}
+      <StyledHRef href="https://www.discodoge.io" target="_blank">
+        <Disco src={DiscoDoge} alt="Disco Doge" />
+      </StyledHRef>
       {/* <ChainSelector /> */}
     </StyledNav>
   );

@@ -12,26 +12,20 @@ import ReactToolTip from "react-tooltip";
 import switchNetwork from "../../../utils/switchNetwork";
 
 const ChainSelector = () => {
-  const { user } = useAccountConsumer();
+  const { user, currChainId } = useAccountConsumer();
   const { account } = useWallet();
 
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(0);
 
   useEffect(() => {
-    if (
-      window.ethereum.chainId === "0x4" ||
-      window.ethereum.chainId === "0x1"
-    ) {
+    if (currChainId === 1 || currChainId === 4) {
       setSelected(0);
     }
-    if (
-      window.ethereum.chainId === "0x61" ||
-      window.ethereum.chainId === "0x38"
-    ) {
+    if (currChainId === 56 || currChainId === 97) {
       setSelected(1);
     }
-  }, [window.ethereum]);
+  }, [currChainId]);
   const switchChain = async (chain) => {
     await switchNetwork(chain);
   };
@@ -142,6 +136,7 @@ const ChainHolder = styled.nav`
   align-items: center;
   display: flex;
   width: 30px;
+  padding-right: 5px;
 `;
 
 export default ChainSelector;

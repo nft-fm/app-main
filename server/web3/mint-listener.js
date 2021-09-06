@@ -43,11 +43,14 @@ const listenForMintBsc = async () => {
   const PROVIDER_URL = process.env.REACT_APP_IS_MAINNET
     ? process.env.BSC_PROVIDER_URL
     : process.env.BSCTEST_PROVIDER_URL;
+
+  console.log("PROVIDER_URL", PROVIDER_URL);
   let provider = new providers.WebSocketProvider(PROVIDER_URL);
   let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
   const contract = new Contract(NFTToken, NFTTokenABI, walletWithProvider);
 
   contract.on("MintAndStake", async (data) => {
+    console.log('in HERE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
     let filter = contract.filters.MintAndStake(data);
     let event = await contract.queryFilter(filter);
 

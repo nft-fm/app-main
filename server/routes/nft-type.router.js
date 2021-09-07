@@ -11,7 +11,7 @@ const {
   TEST_BSC_FlatPriceSale,
   MAIN_BSC_FlatPriceSale,
 } = require("../web3/constants");
-const { sign, getSetSale, findLikes } = require("../web3/server-utils");
+const { sign, findLikes } = require("../web3/server-utils");
 const { listenForMintEth, listenForMintBsc } = require("../web3/mint-listener");
 const { trackNftPurchase, trackNftView } = require("../modules/mixpanel");
 
@@ -43,31 +43,6 @@ const getBucket = () => {
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   });
 };
-
-const findRemainingInfo = async (nft) => {
-  const extraInfo = await getSetSale(nft.nftId);
-  // console.log("remaining info", extraInfo, nft);
-  let newNft = {
-    ...nft,
-    price: utils.formatEther(extraInfo.price),
-    quantity: extraInfo.quantity,
-    sold: extraInfo.sold,
-  };
-  // console.log("3", newNft);
-
-  return newNft;
-};
-
-router.post("/full-nft-info", async (req, res) => {
-  try {
-    const fullInfo = await findRemainingInfo(req.body.nft).catch((err) =>
-      console.log(err)
-    );
-    res.send(fullInfo);
-  } catch (err) {
-    res.status(500).send(err);
-  }
-});
 
 router.post("/artist-nfts", async (req, res) => {
   try {
@@ -227,9 +202,9 @@ router.post("/finalize", async (req, res) => {
     newData.isDraft = false;
     let NFT_FlatPriceSale;
     if (newData.chain === "ETH") {
-      NFT_FlatPriceSale = MAIN_FlatPriceSale;
+      NFT_FlatPriceSale = process.env.REACT_APP_IS_MAINNET ? MAIN_FlatPriceSale : TEST_FlatPriceSale;
     } else if (newData.chain === "BSC") {
-      NFT_FlatPriceSale = MAIN_BSC_FlatPriceSale;
+      NFT_FlatPriceSale = process.env.REACT_APP_IS_MAINNET ? MAIN_BSC_FlatPriceSale : TEST_BSC_FlatPriceSale;
     } else {
       console.error("CHAIN ERROR CHAIN ERROR")
     }

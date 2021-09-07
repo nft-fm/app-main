@@ -29,7 +29,7 @@ function ensureSecure(req, res, next) {
 }
 
 if (process.env.PRODUCTION) {
-  app.all("*", ensureSecure);
+  // app.all("*", ensureSecure);
 }
 
 app.use(cors());
@@ -46,7 +46,7 @@ app.use(function (req, res, next) {
 
 dotenv.config();
 connectDB();
-// listenForMintEth();
+listenForMintEth();
 listenForMintBsc();
 
 

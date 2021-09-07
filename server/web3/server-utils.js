@@ -9,15 +9,11 @@ const {
 var difUtils = require("ethers").utils;
 const {
   TEST_NFTToken,
-  TEST_FlatPriceSale,
   MAIN_NFTToken,
-  MAIN_FlatPriceSale,
   TEST_VinylAddress,
   MAIN_VinylAddress,
   TEST_BSC_NFTToken,
-  TEST_BSC_FlatPriceSale,
   MAIN_BSC_NFTToken,
-  MAIN_BSC_FlatPriceSale,
 } = require("./constants");
 const FlatPriceSaleABI = require("./abi/FlatPriceSale.abi");
 const NFTTokenABI = require("./abi/NFTToken.abi");
@@ -26,34 +22,31 @@ const VinylABI = require("./abi/Vinyl.abi");
 const sign = (types, values) => {
   console.log("signing", ...values);
   let data = utils.defaultAbiCoder.encode(types, values);
-  console.log("abi encoded:");
-  console.log(data);
 
   const hash = utils.keccak256(utils.hexlify(data));
-  console.log("key", process.env.OWNER_KEY);
   const signer = new utils.SigningKey(process.env.OWNER_KEY);
   const { r, s, v } = signer.signDigest(hash);
   return { r, s, v };
 };
 
-const getSetSale = async (nftId, callback) => {
-  const PROVIDER_URL = process.env.REACT_APP_IS_MAINNET
-    ? process.env.MAIN_PROVIDER_URL
-    : process.env.RINKEBY_PROVIDER_URL;
-  const FlatPriceSale = process.env.REACT_APP_IS_MAINNET
-    ? MAIN_FlatPriceSale
-    : TEST_FlatPriceSale;
-  let provider = new providers.WebSocketProvider(PROVIDER_URL);
-  let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
-  const contract = new Contract(
-    FlatPriceSale,
-    FlatPriceSaleABI,
-    walletWithProvider
-  );
-  const r = await contract.sets(nftId);
+// const getSetSale = async (nftId, callback) => {
+//   const PROVIDER_URL = process.env.REACT_APP_IS_MAINNET
+//     ? process.env.MAIN_PROVIDER_URL
+//     : process.env.RINKEBY_PROVIDER_URL;
+//   const FlatPriceSale = process.env.REACT_APP_IS_MAINNET
+//     ? MAIN_FlatPriceSale
+//     : TEST_FlatPriceSale;
+//   let provider = new providers.WebSocketProvider(PROVIDER_URL);
+//   let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
+//   const contract = new Contract(
+//     FlatPriceSale,
+//     FlatPriceSaleABI,
+//     walletWithProvider
+//   );
+//   const r = await contract.sets(nftId);
 
-  return r;
-};
+//   return r;
+// };
 
 const findLikes = (nfts, account) => {
   for (let i = 0; i < nfts.length; i++) {
@@ -187,7 +180,7 @@ const getVinylOwners = async (addresses) => {
 
 module.exports = {
   sign,
-  getSetSale,
+  // getSetSale,
   findLikes,
   getUserNftsETH,
   getUserNftsBSC,

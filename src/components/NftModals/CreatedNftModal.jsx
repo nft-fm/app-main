@@ -6,11 +6,7 @@ import logo from "../../assets/img/logos/logo_tiny.png";
 import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
 import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
-import { ReactComponent as IconBinance } from "../../assets/img/icons/binance-logo.svg";
 import { useAccountConsumer } from "../../contexts/Account";
-// import { getSetSale } from "../../web3/utils";
-
-import { ReactComponent as eth_icon } from "../../assets/img/icons/ethereum.svg";
 import Swal from "sweetalert2";
 const BuyNftModal = ({
   open,

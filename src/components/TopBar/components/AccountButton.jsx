@@ -1,18 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { useWallet } from "use-wallet";
 import useModal from "../../../hooks/useModal";
 import isMobile from "../../../utils/isMobile";
 import InstallMetamaskModal from "../../InstallMetamaskModal";
-import ChangeChainModal from "../../ChangeChainModal";
 import ChainSelector from "./ChainSelector";
-import { useAccountConsumer } from "../../../contexts/Account";
 
 const AccountButton = (props) => {
-  const { currChainId } = useAccountConsumer();
   const { account, connect } = useWallet();
   const [onPresentInstallMetamask] = useModal(<InstallMetamaskModal />);
-  const [onPresentChangeChain] = useModal(<ChangeChainModal />);
   const handleUnlockClick = () => {
     if (!window.ethereum) {
       onPresentInstallMetamask();

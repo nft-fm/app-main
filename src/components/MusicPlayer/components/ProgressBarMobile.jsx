@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 
 const AudioProgressBar = (props) => {
   const [filled, setFilled] = useState(0);
   const [bounds, setBounds] = useState();
   const [isDragging, setIsDragging] = useState(false);
-  const [startDragging, setStartDraggging] = useState(0);
   const invisibleBar = useRef(null);
   const toogle = useRef(null);
 
@@ -13,7 +12,6 @@ const AudioProgressBar = (props) => {
     e.stopPropagation();
     e.preventDefault();
     setIsDragging(true);
-    setStartDraggging(e.clientX);
   };
 
   const handleToogleMove = (e) => {
@@ -97,7 +95,6 @@ const AudioProgressBar = (props) => {
   }
 };
 
-
 const InvisibleBar = styled.div`
   position: absolute;
   z-index: 100;
@@ -106,7 +103,7 @@ const InvisibleBar = styled.div`
   top: -6px;
   left: 0;
   border-radius: 50px;
-cursor: pointer;
+  cursor: pointer;
 `;
 
 const Toogle = styled.div`

@@ -100,7 +100,6 @@ const NftCard = (props) => {
           })}
           {nft?.chain === "ETH" && <Eth />}
           {nft?.chain === "BSC" && <Bnb />}
-          
         </CostEth>
         {usdPerEth && usdPerBnb && nft.price !== "..." && nft.chain === "ETH" && (
           <CostUsd>
@@ -124,16 +123,6 @@ const NftCard = (props) => {
     </Container>
   );
 };
-
-const Usd = styled(IconUsd)`
-  width: 18px;
-  height: 18px;
-  margin: -2px 0 0 8px;
-  & path {
-    fill: ${(props) => props.theme.color.gray};
-  }
-`;
-
 const Bnb = styled(IconBinance)`
   width: 18px;
   height: 18px;

@@ -5,7 +5,6 @@ import swal from "sweetalert2";
 import {
   errorIcon,
   warningIcon,
-  questionIcon,
   imageWidth,
   imageHeight,
 } from "../../../utils/swalImages";
@@ -36,13 +35,9 @@ const CreateFormPaginator = ({
   isLoading,
   currChainId,
 }) => {
-  // checking for completion
   const [step2, setStep2] = useState(false);
   const [step3, setStep3] = useState(false);
   const [step4, setStep4] = useState(false);
-  // const [step2, setStep2] = useState(true);
-  // const [step3, setStep3] = useState(true);
-  // const [step4, setStep4] = useState(true);
   const {
     imageUrl,
     audioUrl,

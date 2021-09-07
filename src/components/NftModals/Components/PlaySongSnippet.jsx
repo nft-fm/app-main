@@ -6,7 +6,6 @@ import { ReactComponent as PauseIcon } from "../../../assets/img/icons/listen_pa
 import loading from "../../../assets/img/loading.gif";
 
 import { useRef } from "react";
-import { usePlaylistConsumer } from "../../../contexts/Playlist";
 
 import AudioProgressBar from "./ProgressBar";
 window.AudioContext = window.AudioContext || window.webkitAudioContext;

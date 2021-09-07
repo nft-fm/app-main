@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Switch, NavLink } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Switch } from "react-router-dom";
 import BaseView from "../../components/Page/BaseView";
-import styled from "styled-components";
 import { useAccountConsumer } from "../../contexts/Account";
 import axios from "axios";
 import FourOhFour from "../../views/404";
@@ -10,7 +9,7 @@ import RedeemForm from "./Components/RedeemForm";
 import Redemption from "./Components/Redemption";
 
 const Redeem = () => {
-  const { user, account } = useAccountConsumer();
+  const { user } = useAccountConsumer();
   const [alreadyRedeemed, setAlreadyRedeemed] = useState(false);
   const [ownsRedeemable, setOwnsRedeemable] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);

@@ -6,7 +6,7 @@ import axios from "axios";
 const PlaylistContext = createContext();
 
 export const PlaylistProvider = ({ children }) => {
-  const { user, account } = useAccountConsumer();
+  const { account } = useAccountConsumer();
 
   const [nfts, setNfts] = useState([]);
   const [selectedNft, setSelectedNft] = useState();
@@ -48,7 +48,7 @@ export const PlaylistProvider = ({ children }) => {
       setNfts(_nfts);
     }
     if (!index || index < 0) setIndex(0);
-    const newIndex = index === nfts.length - 1 ? 0 : index + 1;
+    // const newIndex = index === nfts.length - 1 ? 0 : index + 1;
     //setSelectedNft(nfts[newIndex]);
     //setIndex(newIndex);
   };
@@ -60,7 +60,7 @@ export const PlaylistProvider = ({ children }) => {
       setNfts(_nfts);
     }
     if (!index || index < 0) setIndex(0);
-    const newIndex = index == 0 ? nfts.length - 1 : index - 1;
+    // const newIndex = index === 0 ? nfts.length - 1 : index - 1;
     //setSelectedNft(nfts[newIndex]);
     //setIndex(newIndex);
   };

@@ -1,15 +1,11 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import axios from "axios";
 import moment from "moment";
 import swal from "sweetalert2";
-
-import upload_icon from "../../../assets/img/profile_page_assets/upload_icon.svg";
 import loading_gif from "../../../assets/img/loading.gif";
-import { ReactComponent as eth_icon } from "../../../assets/img/icons/ethereum.svg";
 import x from "../../../assets/img/icons/x.svg";
 import { ReactComponent as IconX } from "../../../assets/img/icons/x.svg";
-
 import {
   errorIcon,
   successIcon,
@@ -19,7 +15,6 @@ import {
 } from "../../../utils/swalImages";
 import { useAccountConsumer } from "../../../contexts/Account";
 import { mintNFT } from "../../../web3/utils";
-
 import { Step1 } from "./CreateFormPages/Step1";
 import Step2 from "./CreateFormPages/Step2";
 import Step3 from "./CreateFormPages/Step3";
@@ -68,12 +63,11 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
   const { account, user, usdPerEth, usdPerBnb, currChainId } =
     useAccountConsumer();
   const [nftData, setNftData] = useState(initialNftState);
-  const [curr, setCurr] = useState("ETH");
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingImage, setIsLoadingImage] = useState(false);
   const [isLoadingAudio, setIsLoadingAudio] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
-  const { width, height } = useWindowSize();
+  const { width } = useWindowSize();
   // {! remember to clear snippet before next mint}
 
   useEffect(() => {
@@ -111,7 +105,7 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
           setIsLoading(false);
           setReset(false);
         })
-        .catch((err) => {
+        .catch(() => {
           setIsLoading(false);
         });
     }
@@ -330,20 +324,9 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
       if (string.length > 8) {
         return;
       }
-      if (curr === "ETH" && Number(e.target.value) > 1000) {
-        return;
-      }
-      if (curr === "USD" && Number(e.target.value) > 1000 * usdPerEth) {
-        return;
-      }
     }
     if (e.target.name === "price") {
-      curr === "ETH"
-        ? setNftData({ ...nftData, [e.target.name]: Number(e.target.value) })
-        : setNftData({
-            ...nftData,
-            [e.target.name]: Number(e.target.value / usdPerEth),
-          });
+      setNftData({ ...nftData, [e.target.name]: Number(e.target.value) });
     }
     setNftData({ ...nftData, [e.target.name]: e.target.value });
   };
@@ -627,7 +610,3 @@ const X = styled(IconX)`
 `;
 
 export default CreateForm;
-
-// @media only screen and (max-width: 776px) {
-//   margin-top: 6px;
-//   }

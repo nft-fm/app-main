@@ -1,14 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { Footer } from "../Footer/Footer";
 import TopBar from "../TopBar";
 import { Nav } from "../TopBar/components/Nav";
 import { usePlaylistConsumer } from "../../contexts/Playlist";
-import { useAccountConsumer } from "../../contexts/Account";
-import axios from "axios";
-import swal from "sweetalert2";
-import { useHistory } from "react-router-dom";
-
 const Page = ({ children }) => {
   const { isOpen } = usePlaylistConsumer();
 

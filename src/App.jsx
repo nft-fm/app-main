@@ -17,8 +17,6 @@ import Discover from "./views/Discover";
 import Profile from "./views/Profile";
 import Artist from "./views/Artist";
 import Error404 from "./views/404";
-import Community from "./views/VINYL/Community";
-import Token from "./views/VINYL/Token";
 import GovPolls from "./views/VINYL/GovPolls";
 import RegisterArtist from "./views/RegisterArtist";
 import RegisterArtistComplete from "./views/RegisterArtist/Complete";
@@ -42,17 +40,16 @@ if (window.location.hostname !== "localhost") console.log = function () {};
 
 const Switches = () => {
   const location = useLocation();
-  const { account, user, currChainId } = useAccountConsumer();
+  const { account, user } = useAccountConsumer();
 
   useEffect(() => {
-      axios.post(`/api/user/track-pageview`, {
+    axios
+      .post(`/api/user/track-pageview`, {
         address: account,
         page: location.pathname.substring(1),
       })
-      .then((res) => {
-      })
-      .catch((err) => {
-      });
+      .then((res) => {})
+      .catch((err) => {});
   }, [location]);
 
   const [ownsRedeemable, setOwnsRedeemable] = useState(false);
@@ -62,7 +59,7 @@ const Switches = () => {
     //check if user owns a redeemable NFT
     if (
       user?.nfts.length > 0 &&
-      window.location.pathname.slice(window.location.pathname.length - 7) !=
+      window.location.pathname.slice(window.location.pathname.length - 7) !==
         "/redeem"
     ) {
       axios
@@ -180,7 +177,6 @@ const Providers = ({ children }) => {
   useEffect(() => {
     getChain();
   }, []);
-
 
   return (
     <ThemeProvider theme={theme}>

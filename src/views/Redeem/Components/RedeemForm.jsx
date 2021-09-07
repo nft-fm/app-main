@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Switch, NavLink } from "react-router-dom";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import { useAccountConsumer } from "../../../contexts/Account";
 import { ReactComponent as GiftIcon } from "../../../assets/img/icons/rewards-gift.svg";
@@ -8,7 +7,7 @@ import axios from "axios";
 const RedeemForm = (props) => {
   const { setFormSubmitted, alreadyRedeemed } = props;
 
-  const { user, account } = useAccountConsumer();
+  const { account } = useAccountConsumer();
 
   const [email, setEmail] = useState("");
   const [first, setFirst] = useState("");
@@ -33,15 +32,14 @@ const RedeemForm = (props) => {
   const [complete, setComplete] = useState(false);
 
   if (
-    email != "" &&
-    first != "" &&
-    last != "" &&
-    home != "" &&
-    // apt != "" &&
-    city != "" &&
-    country != "" &&
-    state != "" &&
-    zip != "" &&
+    email !== "" &&
+    first !== "" &&
+    last !== "" &&
+    home !== "" &&
+    city !== "" &&
+    country !== "" &&
+    state !== "" &&
+    zip !== "" &&
     !complete
   ) {
     setComplete(true);

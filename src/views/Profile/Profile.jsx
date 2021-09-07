@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import BaseView from "../../components/Page/BaseView";
 import { useAccountConsumer } from "../../contexts/Account";
 import CreateForm from "./components/CreateForm";
 import IconMetamask from "../../assets/img/icons/metamask_icon.png";
-import cog from "../../assets/img/icons/cog.svg";
-import ProfilePic from "./components/ProfilePic";
 import ArtistNfts from "./components/ArtistNfts";
-import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
 import Error404 from "../404/404";
 import {
   errorIcon,
@@ -25,38 +22,15 @@ import Audius from "../../assets/img/icons/social_audius.png";
 import Spotify from "../../assets/img/icons/social_spotify.png";
 
 const Profile = () => {
-  const { account, connect, user, setUser } = useAccountConsumer();
-  const [edit, setEdit] = useState(false);
-  const [username, setUsername] = useState("");
-  const [profilePic, setProfilePic] = useState("");
+  const { account, connect, user } = useAccountConsumer();
   const [open, setOpen] = useState(false);
   const [reset, setReset] = useState(false);
-
-  useEffect(() => {
-    if (user?.profilePic) {
-      setProfilePic(user.profilePic);
-    }
-  }, [user]);
-
-  const saveDetails = (e) => {
-    e.preventDefault();
-    setEdit(false);
-    setUser({ ...user, username: username });
-    axios
-      .post("/api/user/update-account", {
-        address: account,
-        username: username,
-        profilePic: profilePic,
-        // email: email,
-      })
-      .then((res) => setUser(res.data));
-  };
 
   const openMintModal = async () => {
     try {
       if (user.username === "") {
-        swal.fire('You ned to set a username first!')
-        return
+        swal.fire("You ned to set a username first!");
+        return;
       }
 
       const hasDraft = await axios.get(`/api/nft-type/has-draft/${account}`);

@@ -1,7 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Switch, NavLink } from "react-router-dom";
+import React from "react";
 import styled from "styled-components";
-import axios from "axios";
 import RedemptionGif from "../../../assets/img/redemption.gif";
 
 const Redemption = () => {
@@ -9,9 +7,7 @@ const Redemption = () => {
     <Container>
       <Header>We're on it!</Header>
       <RedeemGif src={RedemptionGif} alt="Thank you for redeeming your NFT!" />
-      <TextSection>
-        Thank you for your purchase!
-      </TextSection>
+      <TextSection>Thank you for your purchase!</TextSection>
     </Container>
   );
 };

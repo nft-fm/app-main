@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import isMobile from "../../../utils/isMobile";
 
@@ -370,10 +370,6 @@ const SubHolder = styled.div`
   @media only screen and (max-width: 776px) {
     height: auto;
   }
-`;
-
-const MiniSpacer = styled.div`
-  height: 51px;
 `;
 
 export default Tokenomics;

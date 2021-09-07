@@ -1,22 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { ReactComponent as IconX } from "../../assets/img/icons/x.svg";
-import logo from "../../assets/img/logos/logo_tiny.png";
 import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
 import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
-import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
-// import PlayIcon from "../../assets/img/icons/listen_play.svg";
 import { useAccountConsumer } from "../../contexts/Account";
-import IconMetamask from "../../assets/img/icons/metamask_icon.png";
-import loading from "../../assets/img/loading.gif";
 import Swal from "sweetalert2";
 import { usePlaylistConsumer } from "../../contexts/Playlist";
-import { buyNFT, getEthBalance } from "../../web3/utils";
-import swal from "sweetalert2";
 import ReactToolTip from "react-tooltip";
-import PlaySongSnippet from "./Components/PlaySongSnippet";
-import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as Founder } from "../../assets/img/Badges/founder.svg";
 import { ReactComponent as Premium } from "../../assets/img/Badges/premium.svg";
 import { ReactComponent as Prerelease } from "../../assets/img/Badges/prerelease.svg";
@@ -29,20 +20,15 @@ import Ticker from "../../components/Ticker";
 
 const LibraryModal = ({
   open,
-  children,
   hide,
-  onClose,
   nft,
-  partialSong,
   liked,
   setLiked,
   likeCount,
   setLikeCount,
   setIsShareOpen,
 }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isBought, setIsBought] = useState(false);
-  const { account, connect, usdPerEth, getUser } = useAccountConsumer();
+  const { account } = useAccountConsumer();
   const { setNftCallback } = usePlaylistConsumer();
   const stopProp = (e) => {
     e.stopPropagation();
@@ -86,10 +72,6 @@ const LibraryModal = ({
       <Container onClick={(e) => stopProp(e)}>
         <StyledModal>
           <X onClick={(e) => hide(e)} />
-          {/* <CardTitle>
-            <Logo src={logo} />
-            Buy NFT
-          </CardTitle> */}
           {nft.videoUrl ? (
             <ReactPlayer
               url={nft.videoUrl}
@@ -354,96 +336,6 @@ const PrereleaseBadge = styled(Prerelease)`
   padding: 0 10px;
 `;
 
-const DescriptionHolder = styled.fieldset`
-  width: 100%;
-  border-radius: 8px;
-  border: 1px solid ${(props) => props.theme.color.lightgray};
-  padding: 2px 0;
-  height: 100px;
-  /* margin-top: 10px; */
-`;
-const DescriptionLegend = styled.legend`
-  padding: 0 5px;
-  margin-left: 10px;
-`;
-const DescriptionContent = styled.span`
-  margin-top: -10px;
-  padding: 0 10px;
-`;
-
-const SnippetHolder = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 10px, 0;
-  width: 100%;
-  margin-top: 10px;
-`;
-
-const SnippetText = styled.span`
-  /* position: absolute; */
-  font-size: ${(props) => props.theme.fontSizes.xxs};
-  margin-top: -5px;
-  margin-bottom: 10px;
-`;
-
-const Loading = styled.img`
-  width: 17px;
-  height: auto;
-`;
-
-const ButtonText = styled.span`
-  font-family: "Compita";
-  font-size: ${(props) => props.theme.fontSizes.xs};
-  font-weight: 600;
-  color: white;
-`;
-
-const MetaMask = styled.img`
-  width: 32px;
-  height: auto;
-`;
-
-const Divider = styled.div`
-  margin: 5px 0;
-  width: 100%;
-  height: 1px;
-  background-color: ${(props) => props.theme.color.gray};
-`;
-
-const AvailableItem = styled.div`
-  font-size: 0.8rem;
-  color: ${(props) => props.theme.color.lightgray};
-`;
-
-const PricesContainer = styled.div`
-  width: 100%;
-  height: 1px;
-  border-top: 1px solid ${(props) => props.theme.color.gray};
-  display: flex;
-  justify-content: center;
-  /* margin-left: 10%; */
-  margin: 30px 0;
-`;
-const PriceHolder = styled.div`
-  display: flex;
-  background-color: ${(props) => props.theme.bgColor};
-  margin-top: -8px;
-  padding: 0 10px;
-`;
-const Eth = styled(IconEth)`
-  width: 18px;
-  height: 18px;
-  & path {
-    fill: ${(props) => props.theme.color.white};
-  }
-`;
-
-const PriceItem = styled.span`
-  font-size: ${(props) => props.theme.fontSizes.xs};
-  color: white;
-`;
-
 const X = styled(IconX)`
   position: absolute;
   right: 2px;
@@ -470,18 +362,6 @@ const LikedHeart = styled(IconHeart)`
     stroke: ${(props) => props.theme.color.pink};
   }
 `;
-
-const Cart = styled(IconCart)`
-  width: 24px;
-  height: 24px;
-  margin: -2px 0 0 8px;
-  transition: all 0.2s ease-in-out;
-  & path {
-    transition: all 0.2s ease-in-out;
-    fill: ${(props) => props.theme.color.gray};
-  }
-`;
-
 const Share = styled(IconShare)`
   width: 19px;
   height: 19px;
@@ -541,24 +421,6 @@ const CardTop = styled.div`
   justify-content: space-between;
   font-weight: 600;
   font-family: "Compita";
-`;
-
-const Logo = styled.img`
-  width: 20px;
-  margin-right: 8px;
-  height: auto;
-`;
-
-const CardTitle = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "Compita";
-  font-weight: 600;
-  color: white;
-  font-size: ${(props) => props.theme.fontSizes.sm};
-  margin-bottom: 12px;
 `;
 
 const OpaqueFilter = styled.div`
@@ -670,32 +532,6 @@ const Artist = styled(NavLink)`
   font-size: ${(props) => props.theme.fontSizes.sm};
   color: white;
   /* margin-bottom: 12px; */
-`;
-
-const Row = styled.div`
-  width: 90%;
-  display: flex;
-  justify-content: space-between;
-`;
-
-const BuyButton = styled.button`
-  width: 150px;
-  /* height: 64px; */
-  cursor: pointer;
-  transition: all 0.1s ease-in-out;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
-  border: 1px solid ${(props) => props.theme.color.boxBorder};
-  border-radius: 8px;
-  background-color: ${(props) => props.theme.color.box};
-  /* margin-bottom: 20px; */
-  padding: 10px 20px;
-  &:hover {
-    background-color: ${(props) => props.theme.color.boxBorder};
-    border: 1px solid #383838;
-  }
 `;
 
 export default LibraryModal;

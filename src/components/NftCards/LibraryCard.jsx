@@ -32,10 +32,6 @@ const NftCard = (props) => {
     setLiked(props.nft.liked);
   }, [props.nft, user]);
 
-  const stopProp = (e) => {
-    e.stopPropagation();
-  }
-
   return (
     <Container onClick={() => setIsModalOpen(!isModalOpen)} >
       <ShareModal

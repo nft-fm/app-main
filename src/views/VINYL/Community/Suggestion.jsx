@@ -5,12 +5,10 @@ import styled from "styled-components";
 import swal from "sweetalert2";
 import { useWallet } from "use-wallet";
 import { require, getVinylBalance } from "../../../web3/utils";
-import { errorIcon, warningIcon, questionIcon, successIcon, infoIcon, imageWidth, imageHeight } from "../../../utils/swalImages";
-
-// import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import { errorIcon, warningIcon, imageWidth, imageHeight } from "../../../utils/swalImages";
 
 const Suggestion = ({ fetchSuggestions, suggestions, isDesktop, hasVinyl }) => {
-  const [exploitPrevent, setExploitPrevent] = useState(false);
+  // const [exploitPrevent, setExploitPrevent] = useState(false);
   const [votes, setVotes] = useState(0);
   const { account } = useWallet();
 
@@ -51,14 +49,14 @@ const Suggestion = ({ fetchSuggestions, suggestions, isDesktop, hasVinyl }) => {
     }
 
     const castVote = async (voteAmount) => {
-      if (exploitPrevent) {
-        swal.fire({
-          title: `Error`,
-          text: `Wait to vote sdfjil.`,
-          icon: "error",
-        });
-        return;
-      }
+      // if (exploitPrevent) {
+      //   swal.fire({
+      //     title: `Error`,
+      //     text: `Wait to vote sdfjil.`,
+      //     icon: "error",
+      //   });
+      //   return;
+      // }
       const { provider } = await require();
       const signer = provider.getSigner();
       const sig = await signer.signMessage(

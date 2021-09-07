@@ -141,30 +141,6 @@ const BuyNftModal = ({
     </OpaqueFilter>
   );
 };
-
-const BnbIcon = styled(IconBinance)`
-  width: 15px;
-  height: 15px;
-  cursor: pointer;
-  /* position: absolute; */
-  /* right: -12px; */
-  margin-right: 3px;
-  transition: all 0.2s;
-  margin-top: 2px;
-`;
-
-const EthIcon = styled(eth_icon)`
-  width: 15px;
-  height: 15px;
-  cursor: pointer;
-  /* position: absolute; */
-  /* right: -12px; */
-  margin-right: 3px;
-  transition: all 0.2s;
-  & path {
-    fill: white;
-  }
-`;
 const X = styled(IconX)`
   position: absolute;
   right: 2px;

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React from "react";
 import styled, { css } from "styled-components";
 
 // https://en.wikipedia.org/wiki/Music_genre#Major_music_genres
@@ -18,12 +18,12 @@ const GENRES = [
   "Soul music and R&B",
   "Polka",
   "Traditional/Folk",
-  "Other"
+  "Other",
 ];
 
-const Step3 = ({ 
-  nftData: { title, producer, description, genre }, 
-  updateState 
+const Step3 = ({
+  nftData: { title, producer, description, genre },
+  updateState,
 }) => {
   return (
     <InputContainer>
@@ -39,7 +39,9 @@ const Step3 = ({
         type="text"
         placeholder="Song title"
         name="title"
-        onChange={(e) => {updateState(e)}}
+        onChange={(e) => {
+          updateState(e);
+        }}
         value={title}
         maxLength={50}
         required
@@ -47,12 +49,14 @@ const Step3 = ({
       <FieldHeaders>
         <SubHeader>Producer</SubHeader>
         <p>*</p>
-      </FieldHeaders>      
+      </FieldHeaders>
       <StyledInput
         type="text"
         placeholder="Producer"
         name="producer"
-        onChange={(e) => {updateState(e)}}
+        onChange={(e) => {
+          updateState(e);
+        }}
         value={producer}
         maxLength={50}
         required
@@ -61,14 +65,18 @@ const Step3 = ({
         <SubHeader>Genre</SubHeader>
         <p>*</p>
       </FieldHeaders>
-      <StyledSelect 
+      <StyledSelect
         name="genre"
-        onChange={(e) => {updateState(e)}}
+        onChange={(e) => {
+          updateState(e);
+        }}
         value={genre}
       >
-        {GENRES.map(genre => 
-          <option key={genre} value={genre}>{genre}</option>
-        )}
+        {GENRES.map((genre) => (
+          <option key={genre} value={genre}>
+            {genre}
+          </option>
+        ))}
       </StyledSelect>
       <FieldHeaders>
         <SubHeader>Description</SubHeader>
@@ -78,14 +86,16 @@ const Step3 = ({
         type="text"
         placeholder="Description"
         name="description"
-        onChange={(e) => {updateState(e)}}
+        onChange={(e) => {
+          updateState(e);
+        }}
         value={description}
         required
       />
       <BottomSpacer />
     </InputContainer>
-  )
-}
+  );
+};
 
 const BottomSpacer = styled.div`
   @media only screen and (max-width: 776px) {
@@ -107,9 +117,11 @@ const StyledTextArea = styled.textarea`
   padding: 8px;
   margin-top: 5px;
   font-family: "Compita";
-  ${props => props.noborder && css`
-    border: none;
-  `}
+  ${(props) =>
+    props.noborder &&
+    css`
+      border: none;
+    `}
   @media only screen and (max-width: 776px) {
     background-color: transparent;
     /* height: 60px; */
@@ -131,7 +143,7 @@ const ArtistTop = styled.div`
     /* margin-bottom: -px; */
     padding-top: 20px;
   }
-`
+`;
 
 const FieldHeaders = styled.div`
   padding-top: 15px;
@@ -150,7 +162,7 @@ const FieldHeaders = styled.div`
     margin: 10px 0px;
     padding-bottom: 15px;
   }
-`
+`;
 
 const InputContainer = styled.div`
   width: 100%;
@@ -172,7 +184,7 @@ const InputContainer = styled.div`
     -webkit-appearance: none;
     margin: 0;
   }
-  input[type=number] {
+  input[type="number"] {
     -moz-appearance: textfield;
   }
   @media only screen and (max-width: 776px) {
@@ -188,9 +200,11 @@ const StyledInput = styled.input`
   height: 30px;
   font-size: 16px;
   border-bottom: 1px solid #383838;
-  ${props => props.noborder && css`
-    border: none;
-  `}
+  ${(props) =>
+    props.noborder &&
+    css`
+      border: none;
+    `}
   @media only screen and (max-width: 776px) {
     background-color: transparent;
     height: 20px;
@@ -206,15 +220,17 @@ const StyledSelect = styled.select`
   height: 30px;
   font-size: 16px;
   border-bottom: 1px solid #383838;
-  ${props => props.noborder && css`
-    border: none;
-  `}
+  ${(props) =>
+    props.noborder &&
+    css`
+      border: none;
+    `}
   @media only screen and (max-width: 776px) {
     /* background-color: transparent; */
     height: 20px;
     margin-top: -15px;
   }
-`
+`;
 
 const SubHeader = styled.h4`
   color: white;
@@ -225,6 +241,6 @@ const SubHeader = styled.h4`
     font-size: 16;
     /* padding: 5px 0; */
   }
-`
+`;
 
 export default Step3;

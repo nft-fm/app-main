@@ -1,10 +1,8 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
-import swal from "sweetalert2";
 import { useAccountConsumer } from "../../../contexts/Account";
 
 import { ReactComponent as upload_icon } from "../../../assets/img/profile_page_assets/upload_icon.svg";
-import axios from "axios";
 import Loading from "../../../assets/img/loading.gif";
 
 const ProfilePic = (props) => {
@@ -13,7 +11,6 @@ const ProfilePic = (props) => {
     profilePic,
     setProfilePic,
     edit,
-    setEdit,
     imageFile,
     setImageFile,
     newPic,
@@ -115,16 +112,6 @@ const ProfilePicHolder = styled.div`
   width: 100px;
   height: 100px;
   overflow: hidden;
-`;
-
-const RedBorder = styled.div`
-  border-radius: 75px;
-  width: 108px;
-  height: 108px;
-  border-width: 4px;
-  border-color: ${(props) => props.theme.color.yellow};
-
-  border-style: solid;
 `;
 
 export default ProfilePic;

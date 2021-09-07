@@ -1,10 +1,9 @@
-import React, { useEffect, useState, useRef } from "react";
-import styled, { keyframes } from "styled-components";
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
 import axios from "axios";
 import NftCard from "../../../components/NftCards/SaleNftCard";
 import { useAccountConsumer } from "../../../contexts/Account";
 import { ReactComponent as down_arrow } from "../../../assets/img/icons/down_arrow.svg";
-import { ReactComponent as IconEth } from "../../../assets/img/icons/ethereum.svg";
 import InfiniteScroll from "react-infinite-scroll-component";
 // import { ReactComponent as down_arrow } from "../../../assets/img/icons/down_arrow.svg";
 
@@ -87,7 +86,7 @@ const Listen = () => {
 
   const handleSearch = async (e, pageIncrease, searchParam, sortParam) => {
     e.preventDefault();
-    if (search != "") {
+    if (search !== "") {
       setPage(0);
       setHasMore(true);
       await axios
@@ -213,35 +212,6 @@ const DownArrow = styled(down_arrow)`
   }
 `;
 
-const End = styled.div`
-  width: 40vw;
-  margin: auto;
-  align-items: center;
-  text-align: center;
-`;
-
-const Eth = styled(IconEth)`
-  width: 18px;
-  height: 18px;
-  & path {
-    fill: ${(props) => props.theme.color.white};
-  }
-`;
-
-const Arrow = styled(down_arrow)`
-  width: 15px;
-  height: 15px;
-  cursor: pointer;
-  transition: all 0.2s linear;
-  margin-left: 7px;
-  margin-top: -3px;
-  & path {
-    fill: ${(props) => props.theme.color.gray};
-  }
-  @media only screen and (max-width: 776px) {
-  }
-`;
-
 const SelectedSpan = styled.span`
   color: white;
   position: relative;
@@ -291,30 +261,6 @@ const ContainerTitleSorting = styled.div`
     left: auto;
     right: auto;
     top: 25px;
-  }
-`;
-const ContainerTitleDate = styled.div`
-  cursor: pointer;
-  position: absolute;
-  left: 50%;
-  top: -15px;
-  height: 20px;
-  padding: 5px 8px 3px 8px;
-  font: "Compita";
-  background-color: ${(props) => props.theme.color.boxBorder};
-  font-size: ${(props) => props.theme.fontSizes.sm};
-  color: ${(props) => (props.faq ? "#3d3d3d" : props.theme.color.gray)};
-  border: 4px solid #383838;
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  @media only screen and (max-width: 1200px) {
-    left: auto;
-    right: calc(10% + 50px);
-  }
-  @media only screen and (max-width: 776px) {
-    left: 80vw;
-    right: auto;
   }
 `;
 const ContainerTitleForm = styled.form`
@@ -394,44 +340,6 @@ const LaunchContainer = styled.div`
   align-items: center;
   margin-bottom: 40px;
 `;
-
-const ContainerTitleLeft = styled.div`
-  position: absolute;
-  font-weight: 600;
-  left: calc(10% + 50px);
-  top: -17px;
-  padding: 5px 8px 3px 8px;
-  font: "Compita";
-  background-color: ${(props) => props.theme.color.boxBorder};
-  font-size: ${(props) => props.theme.fontSizes.sm};
-  color: ${(props) => (props.faq ? "#3d3d3d" : props.theme.color.gray)};
-  border: 4px solid #383838;
-  border-radius: 20px;
-  display: flex;
-  @media only screen and (max-width: 776px) {
-    left: auto;
-    margin-left: auto;
-    margin-right: auto;
-  }
-`;
-// const ContainerTitle = styled.span`
-//   position: absolute;
-//   font-weight: 600;
-//   left: calc(10% + 50px);
-//   top: -4px;
-//   padding: 0 12px;
-//   font: "Compita";
-//   background-color: ${(props) => props.theme.bgColor};
-//   font-size: ${(props) => props.theme.fontSizes.xs};
-//   color: ${(props) => props.theme.color.gray};
-//   display: flex;
-//   flex-direction: row;
-//   display: flex;
-//   align-items: center;
-//   @media only screen and (max-width: 776px) {
-//     left: auto;
-//   }
-// `;
 
 const ContainerOutline = styled.div`
   border-radius: 24px 24px 0 0;

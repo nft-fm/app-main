@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { useAccountConsumer } from "../../../contexts/Account";
-import { useWallet } from "use-wallet";
-import { getVinylBalance } from "../../../web3/utils";
-import { ReactComponent as IconDown } from "../../../assets/img/icons/down_arrow.svg";
 import { ReactComponent as IconBinance } from "../../../assets/img/icons/binance-logo.svg";
 
 import { ReactComponent as IconEth } from "../../../assets/img/icons/ethereum.svg";
@@ -12,8 +8,7 @@ import ReactToolTip from "react-tooltip";
 import switchNetwork from "../../../utils/switchNetwork";
 
 const ChainSelector = () => {
-  const { user, currChainId } = useAccountConsumer();
-  const { account } = useWallet();
+  const { currChainId } = useAccountConsumer();
 
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(0);

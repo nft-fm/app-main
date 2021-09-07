@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import logo from "../../../assets/img/logos/logo.png";
 import { NavLink } from "react-router-dom";
@@ -97,17 +97,6 @@ const DesktopBanner = styled.img`
   }
 `;
 
-const ContainerTitleTextContainer = styled.div`
-  @media only screen and (max-width: 776px) {
-    margin-top: 6px;
-  }
-`;
-
-const FillerCard = styled.div`
-  width: 226px;
-  height: 0px;
-`;
-
 const Discord = styled(IconDiscord)`
   margin-top: 1px;
   width: 19px;
@@ -153,10 +142,6 @@ const IconText = styled.span`
   margin: 1px 0 0 12px;
   font-weight: 600;
   letter-spacing: 1px;
-`;
-
-const ContainerTitleText = styled.span`
-  padding-left: 6px;
 `;
 
 const LandingTitle = styled.div`
@@ -221,19 +206,6 @@ const SocialsBar = styled.div`
   }
 `;
 
-const NftScroll = styled.div`
-  justify-content: center;
-  display: flex;
-  flex-flow: row wrap;
-  width: 100%;
-  justify-content: space-between;
-  @media only screen and (max-width: 776px) {
-    flex-direction: column;
-    width: 100%;
-    align-items: center;
-  }
-`;
-
 const LaunchContainer = styled.div`
   position: relative;
   width: 100%;
@@ -245,43 +217,6 @@ const LaunchContainer = styled.div`
     width: 976px;
   }
 `;
-
-const ContainerTitle = styled.span`
-  position: absolute;
-  font-weight: 600;
-  left: calc(10% + 50px);
-  top: -4px;
-  padding: 0 12px;
-  font: "Compita";
-  background-color: ${(props) => props.theme.bgColor};
-  font-size: ${(props) => props.theme.fontSizes.xs};
-  color: ${(props) => props.theme.color.gray};
-  display: flex;
-  flex-direction: row;
-  display: flex;
-  align-items: center;
-  @media only screen and (max-width: 776px) {
-    position: relative;
-    flex-direction: column;
-    left: auto;
-    right: auto;
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
-`;
-const ContainerOutline = styled.div`
-  border-radius: 24px 24px 0 0;
-  border: 6px solid #383838;
-  border-bottom: none;
-  height: 40px;
-  width: 80%;
-  display: flex;
-  flex-direction: row;
-  @media only screen and (max-width: 776px) {
-    display: none;
-  }
-`;
-
 const Logo = styled.img`
   width: 100px;
   height: 153.84px;
@@ -296,13 +231,4 @@ const StyledTitle = styled.div`
   letter-spacing: 3px;
   color: white;
 `;
-
-const NftFmTagline = styled.div`
-  padding-bottom: 20px;
-  font-size: large;
-  color: white;
-  text-align: center;
-  white-space: wrap;
-`;
-
 export default Listen;

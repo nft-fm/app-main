@@ -60,10 +60,10 @@ export const require = async (statement, error) => {
     throw error;
   }
   if (!provider) {
-    throw "provider not found";
+    throw new Error("provider not found");
   }
   if (!walletAddress) {
-    throw "userWallet not found";
+    throw new Error("userWallet not found");
   }
   return { provider, walletAddress };
 };
@@ -148,7 +148,7 @@ export const buyNFT = async (data, finalCallback) => {
 };
 
 export const airdrop = async (wallets, amounts, callback) => {
-  const { provider, walletAddress } = await require();
+  const { provider } = await require();
   const signer = provider.getSigner();
   const contract = new Contract(AirdropAddress, AirdropABI, signer);
   contract.airdrop(VinylAddress, wallets, amounts).then(() => callback());

@@ -1,11 +1,9 @@
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import swal from "sweetalert2";
 import { useWallet } from "use-wallet";
-import useModal from "../../../hooks/useModal";
-import isMobile from "../../../utils/isMobile";
 import { require, getVinylBalance } from "../../../web3/utils";
 import { BaseView } from "../../../components/Page/BaseView";
 // import RulesModal from "./RulesModal";
@@ -45,7 +43,7 @@ const Community = () => {
       text: `🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆`,
       imageUrl: errorIcon,
       imageWidth,
-      imageHeight    
+      imageHeight,
     });
   }
 
@@ -93,7 +91,7 @@ const Community = () => {
         text: `You cannot submit proposals without $VINYL.`,
         imageUrl: errorIcon,
         imageWidth,
-        imageHeight      
+        imageHeight,
       });
     }
     if (!newSuggestion) {
@@ -125,7 +123,7 @@ const Community = () => {
           text: `${err.response ? err.response.data : "server error"}`,
           imageUrl: errorIcon,
           imageWidth,
-          imageHeight       
+          imageHeight,
         });
       });
   };
@@ -151,10 +149,8 @@ const Community = () => {
         <LaunchContainer>
           <ContainerOutline />
           <ContainerTitle>
-            <span>
-            PROPOSE
-            </span>
-            </ContainerTitle>
+            <span>PROPOSE</span>
+          </ContainerTitle>
           <GovContainer id="Gov">
             <SuggestionContainer>
               {newSuggestion ? (
@@ -254,10 +250,6 @@ const Community = () => {
     </BaseView>
   );
 };
-
-const Fat = styled.div`
-flex: 1;
-`
 
 const LaunchContainer = styled.div`
   position: relative;
@@ -563,34 +555,6 @@ const Pagination = styled.div`
   .pagination > li:last-child > span {
     // padding: 0px!important;
   }
-`;
-
-const ApproveButton = styled.button`
-  width: 100%;
-  padding: 10px 0;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: all 0.2s linear;
-  &:hover {
-    background-color: #444;
-    color: white;
-    cursor: pointer;
-  }
-`;
-
-const ApproveContainer = styled.div`
-  max-width: 80vw;
-  border: 2px solid rgba(256, 256, 256, 0.5);
-  border-radius: 2px;
-  background-color: rgba(256, 256, 256, 0.2);
-  color: white;
-  width: 400px;
-  padding: 10px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin: auto;
 `;
 
 const Container = styled.div`

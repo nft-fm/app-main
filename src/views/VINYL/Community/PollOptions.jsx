@@ -1,19 +1,11 @@
-
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled, { css } from "styled-components";
-import isMobile from "../../../utils/isMobile";
-import { require, getVinylBalance } from "../../../web3/utils";
 import { useWallet } from "use-wallet";
 
 const getColor = (index) => {
-  const colors = [
-    'gold',
-    'yellowgreen',
-    'tomato',
-    'dodgerblue',
-  ]
-  return colors[index % 4]
-}
+  const colors = ["gold", "yellowgreen", "tomato", "dodgerblue"];
+  return colors[index % 4];
+};
 
 const ResultsBar = ({ percentage, index }) => (
   <FullWidth>
@@ -24,74 +16,71 @@ const ResultsBar = ({ percentage, index }) => (
       }}
     />
   </FullWidth>
-)
+);
 
-export const PollResults = ({ poll, votes, submitVote }) => {
-  const { account } = useWallet();
-
+export const PollResults = ({ poll, votes }) => {
   if (votes && poll.alreadyVoted === true) {
     let grandTotal = 0;
-    poll.options.forEach(option => grandTotal += option.totalVotes)
-    grandTotal += (grandTotal === 0) ? 1 : 0;
+    poll.options.forEach((option) => (grandTotal += option.totalVotes));
+    grandTotal += grandTotal === 0 ? 1 : 0;
 
     return (
       <Results>
         <tbody>
-        {poll.options.map((option, index) => {
-          const percentage = option.totalVotes / grandTotal * 100;
-          
-          return <Result key={index - 1}>
-            <OptionStats>
-                <OptionText>{option.message}</OptionText>
-            </OptionStats>
-            <ResultsBar percentage={percentage} index={index}/>
-            <PercentageText>({percentage.toFixed(2)}%)</PercentageText>
-          </Result>
-        })}
+          {poll.options.map((option, index) => {
+            const percentage = (option.totalVotes / grandTotal) * 100;
+
+            return (
+              <Result key={index - 1}>
+                <OptionStats>
+                  <OptionText>{option.message}</OptionText>
+                </OptionStats>
+                <ResultsBar percentage={percentage} index={index} />
+                <PercentageText>({percentage.toFixed(2)}%)</PercentageText>
+              </Result>
+            );
+          })}
         </tbody>
       </Results>
-    )
+    );
   }
-  return null
-}
+  return null;
+};
 
 export const PollOptions = ({ poll, votes, submitVote }) => {
-  const { account } = useWallet();
-
   if (votes && poll.alreadyVoted === true) {
-    return null
+    return null;
   }
 
-  const length = poll.options.length
+  const length = poll.options.length;
   return (
     <ButtonGroup length={length}>
       {poll.options.map((option, index) =>
-        votes > 0 && poll.alreadyVoted === false ? 
-        <Button
-          key={option._id}
-          borderColor={getColor(index)}
-          onClick={e => submitVote(e, option._id)}
-          length={length}
-        > {option.message}
-        </Button>
-          :
-        <Button 
-          key={option._id}
-          borderColor={getColor(index)}
-          disabled
-          length={length}
-          onClick={e => submitVote(e, option._id)}
-        >
-          {option.message}
-        </Button>
+        votes > 0 && poll.alreadyVoted === false ? (
+          <Button
+            key={option._id}
+            borderColor={getColor(index)}
+            onClick={(e) => submitVote(e, option._id)}
+            length={length}
+          >
+            {" "}
+            {option.message}
+          </Button>
+        ) : (
+          <Button
+            key={option._id}
+            borderColor={getColor(index)}
+            disabled
+            length={length}
+            onClick={(e) => submitVote(e, option._id)}
+          >
+            {option.message}
+          </Button>
+        )
       )}
     </ButtonGroup>
-  )
-}
-
-const Spacer = styled.div`
-  height: 800px;
-`
+  );
+};
 
 const OptionText = styled.div`
   font-size: 18px;
@@ -99,7 +88,7 @@ const OptionText = styled.div`
   @media only screen and (max-width: 776px) {
     font-size: 14px;
   }
-`
+`;
 
 const PercentageText = styled.td`
   display: flex;
@@ -110,7 +99,7 @@ const PercentageText = styled.td`
   @media only screen and (max-width: 776px) {
     font-size: 14px;
   }
-`
+`;
 
 const OptionStats = styled.td`
   display: flex;
@@ -121,13 +110,13 @@ const OptionStats = styled.td`
   justify-content: center;
   align-items: center;
   text-align: center;
-`
+`;
 
 const Result = styled.tr`
   display: flex;
   flex-direction: row;
   width: 100%;
-`
+`;
 
 const Results = styled.table`
   display: flex;
@@ -144,8 +133,7 @@ const Results = styled.table`
   tr{
     padding: 5px 0px;
   }
-`
-
+`;
 
 const ButtonGroup = styled.div`
   margin-top: 30px;
@@ -167,21 +155,21 @@ const ButtonGroup = styled.div`
   }
 
   ${({ length }) =>
-    (length > 3) && css`
+    length > 3 &&
+    css`
       flex-direction: column;
       justify-content: center;
       align-items: center;
-    `
-  }
-`
+    `}
+`;
 
 const Button = styled.button`
-  cursor: ${props => props.disabled ? "not-allowed" : "pointer"};
-  cursor: ${props => props.disabled ? "white" : "black"};
+  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
+  cursor: ${(props) => (props.disabled ? "white" : "black")};
   display: flex;
   border: none;
   border-radius: ${(props) => props.theme.borderRadius}px;
-  border: solid 1px  ${(props) => props.borderColor};
+  border: solid 1px ${(props) => props.borderColor};
   font-size: 16px;
   -webkit-transition: all 0.2s linear;
   transition: all 0.2s linear;
@@ -208,7 +196,6 @@ const Button = styled.button`
   }
 `;
 
-
 const FullWidth = styled.td`
   width: 100%;
   display: flex;
@@ -221,4 +208,4 @@ const FullWidth = styled.td`
 
 const ColoredBar = styled.div`
   height: 100%;
-`
+`;

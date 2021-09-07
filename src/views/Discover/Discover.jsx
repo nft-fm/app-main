@@ -1,24 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Switch } from "react-router-dom";
 import BaseView from "../../components/Page/BaseView";
 import Market from "./Components/Market";
 import styled from "styled-components";
-import NftModalHook from "../../components/NftModalHook";
 import LinkedNftModal from "../../components/NftModalHook/LinkedNftModal";
-import axios from "axios";
-import { useAccountConsumer } from "../../contexts/Account";
 
 const Listen = () => {
   return (
     <Switch>
       <BaseView>
-        {/*  pathname && nftmocdalhook */}
-        <LinkedNftModal/>
-
-        {/* {nft && <NftModalHook hide={hide} nft={nft} open={isOpen} />} */}
+        <LinkedNftModal />
         <Container>
           <StyledTitle>MARKETPLACE</StyledTitle>
-          {/* <Trending /> */}
           <Market />
         </Container>
       </BaseView>

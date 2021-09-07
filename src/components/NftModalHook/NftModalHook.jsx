@@ -3,13 +3,10 @@ import styled from "styled-components";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { ReactComponent as IconX } from "../../assets/img/icons/x.svg";
-import logo from "../../assets/img/logos/logo_tiny.png";
 import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
 import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
-import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import PlayIcon from "../../assets/img/icons/listen_play.svg";
 import { useAccountConsumer } from "../../contexts/Account";
-import IconMetamask from "../../assets/img/icons/metamask_icon.png";
 import loading from "../../assets/img/loading.gif";
 import Swal from "sweetalert2";
 import { usePlaylistConsumer } from "../../contexts/Playlist";
@@ -209,17 +206,18 @@ const BuyNftModal = (props) => {
     }
   };
 
-  const formatSongDur = (d) => {
-    d = Number(d);
-    var h = Math.floor(d / 3600);
-    var m = Math.floor((d % 3600) / 60);
-    var s = Math.floor((d % 3600) % 60);
+  //add in to the nft modal
+  // const formatSongDur = (d) => {
+  //   d = Number(d);
+  //   var h = Math.floor(d / 3600);
+  //   var m = Math.floor((d % 3600) / 60);
+  //   var s = Math.floor((d % 3600) % 60);
 
-    var hDisplay = h > 0 ? h + ":" : "";
-    var mDisplay = m > 0 ? m + ":" : "0:";
-    var sDisplay = s < 10 ? "0" + s : s;
-    return hDisplay + mDisplay + sDisplay;
-  };
+  //   var hDisplay = h > 0 ? h + ":" : "";
+  //   var mDisplay = m > 0 ? m + ":" : "0:";
+  //   var sDisplay = s < 10 ? "0" + s : s;
+  //   return hDisplay + mDisplay + sDisplay;
+  // };
 
   if (!open) return null;
   return (
@@ -621,17 +619,6 @@ const LikedHeart = styled(IconHeart)`
   }
 `;
 
-const Cart = styled(IconCart)`
-  width: 24px;
-  height: 24px;
-  margin: -2px 0 0 8px;
-  transition: all 0.2s ease-in-out;
-  & path {
-    transition: all 0.2s ease-in-out;
-    fill: ${(props) => props.theme.color.gray};
-  }
-`;
-
 const Share = styled(IconShare)`
   width: 19px;
   height: 19px;
@@ -690,25 +677,6 @@ const CardTop = styled.div`
   font-weight: 600;
   font-family: "Compita";
 `;
-
-const Logo = styled.img`
-  width: 20px;
-  margin-right: 8px;
-  height: auto;
-`;
-
-const CardTitle = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "Compita";
-  font-weight: 600;
-  color: white;
-  font-size: ${(props) => props.theme.fontSizes.sm};
-  margin-bottom: 12px;
-`;
-
 const OpaqueFilter = styled.div`
   cursor: default;
   width: 100vw;
@@ -830,12 +798,6 @@ const Artist = styled(NavLink)`
   @media only screen and (max-width: 776px) {
     margin-bottom: 0px;
   }
-`;
-
-const Row = styled.div`
-  width: 90%;
-  display: flex;
-  justify-content: space-between;
 `;
 
 const BuyButton = styled.button`

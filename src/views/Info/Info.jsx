@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Switch, NavLink } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Switch } from "react-router-dom";
 import styled from "styled-components";
 import BaseView from "../../components/Page/BaseView";
 import { FAQ } from "./Components/FAQ/FAQ";

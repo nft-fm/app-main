@@ -1,9 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
+import React from "react";
 import styled from "styled-components";
-import { useAccountConsumer } from "../../../contexts/Account";
 import ModalSm from "../../../components/Modal/Modalsm";
 import Modal from "../../../components/Modal/Modal";
-import CloseModal from "../../../components/Modal/CloseModal";
 import ModalTitle from "../../../components/ModalTitle";
 
 const EditSocials = ({
@@ -18,7 +16,6 @@ const EditSocials = ({
   audius,
   setAudius,
 }) => {
-
   return (
     <Wrapper editSM={editSM}>
       <Modal>

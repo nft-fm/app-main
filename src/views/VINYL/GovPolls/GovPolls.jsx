@@ -1,19 +1,17 @@
-import axios from "axios";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { BaseView } from "../../../components/Page/BaseView";
 import styled from "styled-components";
-import AddNewPoll from './AddNewPoll'
+import AddNewPoll from "./AddNewPoll";
 import { useAccountConsumer } from "../../../contexts/Account";
-import Airdrop from "./Airdrop"
-import Error404 from "../../404"
+import Airdrop from "./Airdrop";
+import Error404 from "../../404";
 const GovPolls = () => {
-  const { user, isAdmin } = useAccountConsumer();
+  const { isAdmin } = useAccountConsumer();
 
-  useEffect(() => {
-  }, [])
+  useEffect(() => {}, []);
 
   if (!isAdmin) {
-    return <Error404 />
+    return <Error404 />;
   }
 
   return (
@@ -30,18 +28,18 @@ const GovPolls = () => {
         {/* <FAQ /> */}
       </Container>
     </BaseView>
-  )
-}
+  );
+};
 
 const Spacer = styled.div`
   height: 20px;
-`
+`;
 
 const ButtonGroup = styled.div`
-  display:flex;
+  display: flex;
   width: 80%;
   flex-direction: row;
-`
+`;
 
 const StyledButton = styled.button`
   width: 45%;
@@ -66,7 +64,7 @@ const StyledButton = styled.button`
   line-height: 1;
   transition: all 0.1s linear 0s;
   color: white;
-`
+`;
 
 const Container = styled.div`
   width: 100%;
@@ -82,4 +80,4 @@ const Container = styled.div`
   color: white;
 `;
 
-export default GovPolls
+export default GovPolls;

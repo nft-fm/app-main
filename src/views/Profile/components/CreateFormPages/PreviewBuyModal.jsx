@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { NavLink } from "react-router-dom";
 import axios from "axios";
 import PlaySongSnippet from "../../../../components/NftModals/Components/PlaySongSnippet";
 import moment from "moment";
 import { ReactComponent as IconEth } from "../../../../assets/img/icons/ethereum.svg";
 import { ReactComponent as IconHeart } from "../../../../assets/img/icons/heart.svg";
 import { ReactComponent as IconShare } from "../../../../assets/img/icons/share.svg";
-import { ReactComponent as IconCart } from "../../../../assets/img/icons/cart.svg";
 import { ReactComponent as IconBinance } from "../../../../assets/img/icons/binance-logo.svg";
 
 import Ticker from "../../../../components/Ticker/";
@@ -15,17 +13,18 @@ import Ticker from "../../../../components/Ticker/";
 const PreviewBuyModal = ({ nft, currChainId }) => {
   const [partialSong, setPartialSong] = useState(false);
 
-  const formatSongDur = (d) => {
-    d = Number(d);
-    var h = Math.floor(d / 3600);
-    var m = Math.floor((d % 3600) / 60);
-    var s = Math.floor((d % 3600) % 60);
+  //add for song duration
+  // const formatSongDur = (d) => {
+  //   d = Number(d);
+  //   var h = Math.floor(d / 3600);
+  //   var m = Math.floor((d % 3600) / 60);
+  //   var s = Math.floor((d % 3600) % 60);
 
-    var hDisplay = h > 0 ? h + ":" : "";
-    var mDisplay = m > 0 ? m + ":" : "0:";
-    var sDisplay = s < 10 ? "0" + s : s;
-    return hDisplay + mDisplay + sDisplay;
-  };
+  //   var hDisplay = h > 0 ? h + ":" : "";
+  //   var mDisplay = m > 0 ? m + ":" : "0:";
+  //   var sDisplay = s < 10 ? "0" + s : s;
+  //   return hDisplay + mDisplay + sDisplay;
+  // };
 
   const getSnnipetAWS = async (completeNft) => {
     await axios
@@ -217,11 +216,6 @@ const SnippetText = styled.span`
   color: white;
 `;
 
-const Loading = styled.img`
-  width: 17px;
-  height: auto;
-`;
-
 const ButtonText = styled.span`
   font-family: "Compita";
   font-size: ${(props) => props.theme.fontSizes.xs};
@@ -258,17 +252,6 @@ const Eth = styled(IconEth)`
 const PriceItem = styled.span`
   font-size: ${(props) => props.theme.fontSizes.xs};
   color: white;
-`;
-
-const Cart = styled(IconCart)`
-  width: 24px;
-  height: 24px;
-  margin: -2px 0 0 8px;
-  transition: all 0.2s ease-in-out;
-  & path {
-    transition: all 0.2s ease-in-out;
-    fill: ${(props) => props.theme.color.gray};
-  }
 `;
 
 const Share = styled(IconShare)`

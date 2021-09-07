@@ -1,12 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import styled, { css } from "styled-components";
 
 /* https://codepen.io/mojo-funk/pen/xxRyxPz */
-const Ticker = ({
-  duration = 7.5,
-  children,
-  height = 30
-}) => {
+const Ticker = ({ duration = 7.5, children, height = 30 }) => {
   const [partOneComplete, setPartOneComplete] = useState(false);
   const [partTwoComplete, setPartTwoComplete] = useState(false);
 
@@ -22,31 +18,26 @@ const Ticker = ({
     }, 8000);
   }
   return (
-    <Container duration={duration} height={height}
+    <Container
+      duration={duration}
+      height={height}
       part1={partOneComplete}
       part2={partTwoComplete}
     >
-        <div className="ticker-wrap">
-          <div className="ticker1">
-            <div className="ticker__item">
-              {children}
-            </div>
-          </div>
-          <div className="ticker2">
-            <div className="ticker__item">
-              {children}
-            </div>
-          </div>
-          <div className="ticker3">
-            <div className="ticker__item">
-              {children}
-            </div>
-          </div>
+      <div className="ticker-wrap">
+        <div className="ticker1">
+          <div className="ticker__item">{children}</div>
         </div>
+        <div className="ticker2">
+          <div className="ticker__item">{children}</div>
+        </div>
+        <div className="ticker3">
+          <div className="ticker__item">{children}</div>
+        </div>
+      </div>
     </Container>
-  )
-}
-
+  );
+};
 
 const Container = styled.div`
   width: 250px;
@@ -67,7 +58,7 @@ const Container = styled.div`
       visibility: none;
     }
   }
-  
+
   @keyframes ticker3 {
     0% {
       -webkit-transform: translate3d(50%, 0, 0);
@@ -94,9 +85,11 @@ const Container = styled.div`
     .ticker1 {
       display: inline-block;
       box-sizing: content-box;
-      ${props => props.part1 && css`
-        display: none;
-      `}
+      ${(props) =>
+        props.part1 &&
+        css`
+          display: none;
+        `}
     }
 
     .ticker2 {
@@ -108,10 +101,12 @@ const Container = styled.div`
       -webkit-animation-timing-function: linear;
       animation-timing-function: linear;
       animation-delay: 1s;
-      animation-duration: ${props => props.duration}s;
-      ${props => ((props.part1 && props.part2) || !props.part1) && css`
-        display: none;
-      `}
+      animation-duration: ${(props) => props.duration}s;
+      ${(props) =>
+        ((props.part1 && props.part2) || !props.part1) &&
+        css`
+          display: none;
+        `}
     }
 
     .ticker3 {
@@ -120,20 +115,22 @@ const Container = styled.div`
       padding-right: 50%;
       box-sizing: content-box;
       animation-delay: 0s;
-      -webkit-animation-iteration-count: infinite; 
-              animation-iteration-count: infinite;
+      -webkit-animation-iteration-count: infinite;
+      animation-iteration-count: infinite;
       -webkit-animation-timing-function: linear;
-              animation-timing-function: linear;
-    -webkit-animation-name: ticker3;
-            animation-name: ticker3;
-      -webkit-animation-duration: ${props => props.duration}s;
-              animation-duration: ${props => props.duration}s;
+      animation-timing-function: linear;
+      -webkit-animation-name: ticker3;
+      animation-name: ticker3;
+      -webkit-animation-duration: ${(props) => props.duration}s;
+      animation-duration: ${(props) => props.duration}s;
       visibility: hidden;
-      ${props => !props.part2 && css`
-        display: none;
-      `}
+      ${(props) =>
+        !props.part2 &&
+        css`
+          display: none;
+        `}
     }
   }
-`
+`;
 
 export default Ticker;

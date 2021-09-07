@@ -94,7 +94,7 @@ const EditableProfile = () => {
             text: "Couldn't upload image, please try again.",
           });
         });
-    } else if (!newPic && username != "") {
+    } else if (!newPic && username !== "") {
       setUser({ ...user, username: username });
       await axios
         .post("/api/user/update-account", {
@@ -243,39 +243,6 @@ const EditSMButton = styled.button`
   @media only screen and (max-width: 776px) {
     margin-right: auto;
     margin-left: auto;
-  }
-`;
-const SocialRow = styled.div`
-  width: 100%;
-  display: ${(props) => (props.edit ? "flex" : "none")};
-  flex-direction: row;
-  justify-content: space-between;
-  margin-top: 15px;
-  & > span {
-    align-self: flex-end;
-    padding-bottom: 7px;
-    width: 72px;
-  }
-
-  @media only screen and (max-width: 1337px) {
-    flex-direction: column;
-  }
-`;
-const SocialsInput = styled.input`
-  background-color: rgba(0, 0, 0, 0);
-  width: calc(100% - 72px);
-  border: none;
-  border-bottom: 2px solid ${(props) => props.theme.color.gray};
-  color: white;
-  text-align: left;
-  margin: 0 8px;
-  margin-bottom: 2px;
-  height: 24px;
-  font-size: 16px;
-
-  &:focus {
-    outline: none;
-    background-color: rgba(0, 0, 0, 0.2);
   }
 `;
 

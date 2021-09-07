@@ -6,7 +6,7 @@ import axios from "axios";
 import ShareModal from "../SMShareModal/SMShareModal";
 
 const NftCard = (props) => {
-  const { usdPerEth, user, account } = useAccountConsumer();
+  const { account } = useAccountConsumer();
   const [nft, setNft] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
@@ -19,7 +19,6 @@ const NftCard = (props) => {
   const hide = () => {
     setIsModalOpen(false);
   };
-
 
   const getSnnipetAWS = async (completeNft) => {
     await axios
@@ -60,15 +59,19 @@ const NftCard = (props) => {
 
   useEffect(() => {
     if (window.location.pathname.length > 7) {
-      axios.post("/api/nft-type/get-one", { id: window.location.pathname.slice(8), address: account })
-      .then((res) => {
-         setNft(res.data);
-        setShareCount({ count: res.data.shareCount });
-        setLikeCount(res.data.likeCount);
-        setLiked(res.data.liked);
-        getSnnipetAWS(res.data);
-        setIsModalOpen(true);
-      })
+      axios
+        .post("/api/nft-type/get-one", {
+          id: window.location.pathname.slice(8),
+          address: account,
+        })
+        .then((res) => {
+          setNft(res.data);
+          setShareCount({ count: res.data.shareCount });
+          setLikeCount(res.data.likeCount);
+          setLiked(res.data.liked);
+          getSnnipetAWS(res.data);
+          setIsModalOpen(true);
+        });
     }
   }, []);
 
@@ -98,7 +101,6 @@ const NftCard = (props) => {
   );
 };
 
-const Container = styled.div`
-`;
+const Container = styled.div``;
 
 export default NftCard;

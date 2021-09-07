@@ -619,7 +619,11 @@ const PrivacyPolicy = () => {
           electronically, you can contact us directly at:
           <br />
           <br />
-          <a href="mailto:support@nftfm.io" target="_blank">
+          <a
+            href="mailto:support@nftfm.io"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             support@nftfm.io
           </a>
         </SectionContent>

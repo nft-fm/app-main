@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import { Switch } from "react-router-dom";
-import styled, { css } from "styled-components";
-import TopDisplayContainer from "../../components/TopDisplayContainer";
+import styled from "styled-components";
 import { providers } from "ethers";
-
-import { NavLink } from "react-router-dom";
-import isMobile from "../../utils/isMobile";
 import BaseView from "../../components/Page/BaseView";
 import { useWallet } from "use-wallet";
 import axios from "axios";
@@ -13,9 +9,6 @@ import swal from "sweetalert2";
 import {
   errorIcon,
   warningIcon,
-  questionIcon,
-  successIcon,
-  infoIcon,
   imageWidth,
   imageHeight,
 } from "../../utils/swalImages";
@@ -80,7 +73,7 @@ const RegisterArtist = () => {
     <Switch>
       <BaseView>
         <CardContainer>
-          <StyledTitle>Register as an Artist</StyledTitle> 
+          <StyledTitle>Register as an Artist</StyledTitle>
           <Content>
             <SignatureRow>
               <SignatureContainer>
@@ -130,13 +123,6 @@ const RegisterArtist = () => {
   );
 };
 
-const ButtonText = styled.span`
-  font-family: "Compita";
-  font-size: ${(props) => props.theme.fontSizes.xs};
-  font-weight: 600;
-  color: white;
-`;
-
 const SubmitButton = styled.button`
   margin: 40px auto 0 auto;
   width: 80%;
@@ -148,7 +134,7 @@ const SubmitButton = styled.button`
   transition: all 0.2s linear;
 
   &:hover {
-    background-color: ${props => props.theme.color.blue};
+    background-color: ${(props) => props.theme.color.blue};
     color: white;
     cursor: pointer;
   }
@@ -161,16 +147,6 @@ const Content = styled.div`
   padding: 20px;
   padding-top: 0px;
   color: white;
-`;
-
-const Divider = styled.div`
-  height: 1px;
-  width: 100%;
-  background-color: rgba(256, 256, 256, 0.6);
-  -webkit-align-self: center;
-  -ms-flex-item-align: center;
-  align-self: center;
-  margin: 5px 0 20px 0;
 `;
 
 const SignatureRow = styled.div`
@@ -210,50 +186,6 @@ const Signature = styled.input`
   }
 `;
 
-const Upload = styled.input`
-  background-color: rgba(0, 0, 0, 0);
-  width: 100%;
-  border: none;
-  margin: 5px;
-  height: 24px;
-  font-size: 16px;
-
-  &:focus {
-    outline: none;
-    background-color: rgba(0, 0, 0, 0.2);
-  }
-`;
-
-const BulletPoint = styled.span`
-  margin-bottom: 5px;
-  text-align: left;
-  font-size: 16px;
-`;
-
-const Title = styled.h3`
-  margin: 5px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-`;
-
-const Container = styled.div`
-  margin-top: 3vh;
-  width: 50%;
-  border: 1px solid #2d2d34;
-  border-radius: 5px;
-  background-color: #17171a;
-  align-items: center;
-  font-size: 20px;
-  display: flex;
-  flex-direction: column;
-  padding-bottom: 20px;
-  box-sizing: border-box;
-  @media only screen and (max-width: 767px) {
-    width: 100%;
-  }
-`;
-
 const StyledTitle = styled.div`
   font-family: "Compita";
   font-size: ${(props) => props.theme.fontSizes.md};
@@ -262,86 +194,6 @@ const StyledTitle = styled.div`
   /* letter-spacing: 3px; */
   text-align: center;
   color: white;
-`;
-
-const ContainerOutline = styled.div`
-  /* border-radius: 24px 24px 0 0; */
-  border-top: 6px solid ${props => props.theme.color.gray};
-  /* border-bottom: none; */
-  height: 40px;
-  width: 80%;
-  display: flex;
-  flex-direction: row;
-
-  @media only screen and (max-width: 776px) {
-    width: 100%;
-  }
-`;
-
-const StyledLinkContainer = styled.div`
-  margin-top: 2vh;
-  height: 70px;
-  width: 1000px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const StyledLink = styled(NavLink)`
-  font-size: 30px;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1;
-  text-decoration: none;
-  letter-spacing: normal;
-  display: flex;
-  align-items: center;
-  transition: all 0.2s ease-in-out;
-  color: white;
-  text-transform: uppercase;
-  border: 1px solid ${(props) => props.theme.color.red};
-  border-radius: ${(props) => props.theme.borderRadius}px;
-  position: relative;
-  padding: 12px;
-  width: fit-content;
-  background-color: #181818;
-  &:hover {
-    background-color: rgba(256, 256, 256, 0.2);
-    background-size: 12px, 100%;
-    font-size: 32px;
-  }
-`;
-
-const SubText = !isMobile()
-  ? styled.div`
-      font-size: 60px;
-      font-weight: normal;
-      font-stretch: normal;
-      font-style: normal;
-      letter-spacing: normal;
-      text-align: center;
-      color: white;
-    `
-  : styled.div`
-      font-size: 40px;
-      font-weight: normal;
-      font-stretch: normal;
-      font-style: normal;
-      letter-spacing: normal;
-      text-align: center;
-      color: white;
-    `;
-
-const HeaderText = styled.div`
-  font-size: 200px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.07;
-  letter-spacing: normal;
-  text-align: center;
-  color: white;
-  margin-top: 14vh;
 `;
 
 const CardContainer = styled.div`

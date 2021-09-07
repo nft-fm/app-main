@@ -1,7 +1,5 @@
-import React, { useState, useRef } from "react";
+import React from "react";
 import styled, { css } from "styled-components";
-import { ReactComponent as usd_icon } from "../../../../assets/img/icons/dollar.svg";
-import { ReactComponent as eth_icon } from "../../../../assets/img/icons/ethereum.svg";
 
 // const Step4 = ({ nftData: { price, numMinted, }, updateState, usdPerEth }) => {
 const Step4 = ({ nftData, updateState, usdPerEth, usdPerBnb, currChainId }) => {
@@ -99,32 +97,6 @@ const BottomSpacer = styled.div`
 const IconContainer = styled.div`
   display: flex;
   flex-direction: row;
-`;
-
-const UsdIcon = styled(usd_icon)`
-  width: 20px;
-  height: 20px;
-  & path {
-    fill: ${(props) => props.theme.color.gray};
-    ${({ active }) =>
-      active &&
-      `
-      fill: #68c12f;
-      `}
-  }
-`;
-
-const EthIcon = styled(eth_icon)`
-  width: 20px;
-  height: 20px;
-  & path {
-    fill: ${(props) => props.theme.color.blue};
-    ${({ active }) =>
-      active &&
-      `
-      fill: #20a4fc;
-    `}
-  }
 `;
 
 const ArtistTop = styled.div`

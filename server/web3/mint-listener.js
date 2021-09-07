@@ -54,16 +54,13 @@ const listenForMintBsc = async () => {
 
     console.log('in HERE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~', data);
     let filter = contract.filters.MintAndStake(data);
-    console.log('filter:', filter);
     let event = await contract.queryFilter(filter, blockNum - 4000, blockNum).then((r) => {
-      console.log("event1", r)
       return r;
     })
     .catch((r) => {
       console.log("owch", r);
     })
     ;
-    console.log('event2', event[0]);
     console.log("mint and stake listened", event[0]);
     await NftType.findByIdAndUpdate(event[0].args.databaseID.toString(), {
       isMinted: true,

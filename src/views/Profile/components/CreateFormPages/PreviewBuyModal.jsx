@@ -2,16 +2,17 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
-import PlaySongSnippet from "../../../../components/NftModals/Components/PlaySongSnippet"
+import PlaySongSnippet from "../../../../components/NftModals/Components/PlaySongSnippet";
 import moment from "moment";
 import { ReactComponent as IconEth } from "../../../../assets/img/icons/ethereum.svg";
 import { ReactComponent as IconHeart } from "../../../../assets/img/icons/heart.svg";
 import { ReactComponent as IconShare } from "../../../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../../../assets/img/icons/cart.svg";
+import { ReactComponent as IconBinance } from "../../../../assets/img/icons/binance-logo.svg";
 
-import Ticker from "../../../../components/Ticker/"
+import Ticker from "../../../../components/Ticker/";
 
-const PreviewBuyModal = ({ nft }) => {
+const PreviewBuyModal = ({ nft, currChainId }) => {
   const [partialSong, setPartialSong] = useState(false);
 
   const formatSongDur = (d) => {
@@ -76,11 +77,10 @@ const PreviewBuyModal = ({ nft }) => {
       <CardTop>
         <Side>
           <IconArea>
-            <Heart/>
+            <Heart />
           </IconArea>
           <IconArea>
-            <Share/>
-            0
+            <Share />0
           </IconArea>
         </Side>
         <Side>
@@ -93,19 +93,14 @@ const PreviewBuyModal = ({ nft }) => {
       </CardTop>
       <BadgeHolder />
       <InfoContainer>
-        {nft.title.length > 18 ?
+        {nft.title.length > 18 ? (
           <Ticker>
-            <TrackName>
-              {nft.title}
-            </TrackName>
+            <TrackName>{nft.title}</TrackName>
           </Ticker>
-          : <TrackName>
-            {nft.title}
-          </TrackName>
-        }     
-        <Artist>
-          {nft.artist}
-        </Artist>
+        ) : (
+          <TrackName>{nft.title}</TrackName>
+        )}
+        <Artist>{nft.artist}</Artist>
       </InfoContainer>
       <SnippetHolder>
         <PlaySongSnippet partialSong={partialSong} />
@@ -115,14 +110,12 @@ const PreviewBuyModal = ({ nft }) => {
         <span>Genre: {nft.genre}</span>
         {/* <span>Producer: {nft.producer}</span> */}
         {/* <span>Track Length: {formatSongDur(nft.dur)}</span> */}
-        <span>
-          Release Date: {moment(nft.timestamp).format("MMM Do YYYY")}
-        </span>
+        <span>Release Date: {moment(nft.timestamp).format("MMM Do YYYY")}</span>
       </TrackDetailsHolder>
       <DescriptionHolder>
-              <DescriptionLegend>Description</DescriptionLegend>
-              <DescriptionContent>{nft.description}</DescriptionContent>
-            </DescriptionHolder>
+        <DescriptionLegend>Description</DescriptionLegend>
+        <DescriptionContent>{nft.description}</DescriptionContent>
+      </DescriptionHolder>
       <PricesContainer>
         <PriceHolder>
           <PriceItem>
@@ -134,18 +127,27 @@ const PreviewBuyModal = ({ nft }) => {
               : "--"}{" "}
           </PriceItem>
           &nbsp;
-          <Eth />
+          {(currChainId === 1 || currChainId === 4) && <Eth />}
+          {(currChainId === 56 || currChainId === 97) && <Bsc />}
         </PriceHolder>
       </PricesContainer>
       <BuyButton>
         <ButtonText>Purchase</ButtonText>
       </BuyButton>
     </Container>
-  )
-}
+  );
+};
 
+const Bsc = styled(IconBinance)`
+  width: 18px;
+  height: 18px;
+  margin: -2px 0 0 4px;
+  /* & path {
+    fill: ${(props) => props.theme.color.white};
+  } */
+`;
 const Container = styled.div`
-    color: #666;
+  color: #666;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -154,7 +156,7 @@ const Container = styled.div`
   @media only screen and (max-width: 776px) {
     height: 700px;
   }
-`
+`;
 
 const TrackDetailsHolder = styled.div`
   width: 100%;

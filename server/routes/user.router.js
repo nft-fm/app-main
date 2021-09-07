@@ -5,7 +5,11 @@ const User = require("../schemas/User.schema");
 const NftType = require("../schemas/NftType.schema");
 const Application = require("../schemas/Application.schema");
 const Redeem = require("../schemas/Redeem.schema");
-const { findLikes, getUserNfts } = require("../web3/server-utils");
+const {
+  findLikes,
+  getUserNftsETH,
+  getUserNftsBSC,
+} = require("../web3/server-utils");
 const sendSignRequest = require("../modules/eversign");
 const { utils } = require("ethers");
 const nodemailer = require("nodemailer");
@@ -26,20 +30,27 @@ router.post("/get-account", async (req, res) => {
         isArtist: process.env.PRODUCTION ? false : true,
       });
       await user.save();
-      console.log("tracking new user:", req.body.address);
-      trackNewUser({ address: req.body.address, ip: req.ip });
+      if (process.env.PRODUCTION) {
+        trackNewUser({ address: req.body.address, ip: req.ip });
+      }
     }
-    trackLogin({ address: req.body.address, ip: req.ip });
+    if (process.env.PRODUCTION) {
+      trackLogin({ address: req.body.address, ip: req.ip });
+    }
 
     //This overwrites the user's database nfts with the nfts attributed to the user in the smart contract
     //handles when user's buy/sell nfts off platform
-    let nfts = await getUserNfts(user.address);
-    console.log("nfts", nfts);
-    if (nfts) {
+    let ethUserNfts = await getUserNftsETH(user.address);
+    let bscUserNfts = await getUserNftsBSC(user.address);
+    let bothChainsNft = [...ethUserNfts, ...bscUserNfts];
+    if (bothChainsNft) {
       user.nfts = [];
-      for (let nft of nfts) {
+      for (let nft of bothChainsNft) {
         if (nft.quantity > 0) {
-          let usersNft = await NftType.findOne({ nftId: nft.id });
+          let usersNft = await NftType.findOne({
+            nftId: nft.id,
+            chain: nft.chain,
+          });
           if (usersNft) {
             user.nfts.push({ nft: usersNft._id, quantity: nft.quantity });
           }
@@ -58,12 +69,14 @@ router.post("/get-account", async (req, res) => {
 router.post("/track-pageview", async (req, res) => {
   try {
     console.log("pageview ping");
-    trackPageview({
-      address: req.body.account,
-      ip: req.ip,
-      page: req.body.page,
-    });
-    res.send("success");
+    if (process.env.PRODUCTION) {
+      trackPageview({
+        address: req.body.account,
+        ip: req.ip,
+        page: req.body.page,
+      });
+    }
+    res.status(200).send("success");
   } catch (error) {
     console.log(error);
     res.status(500).send("server error");

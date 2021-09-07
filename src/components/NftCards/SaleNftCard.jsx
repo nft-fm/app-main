@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import NftModalHook from "../NftModalHook/NftModalHook";
-import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
-import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
+import { ReactComponent as IconBinance } from "../../assets/img/icons/binance-logo.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import loading from "../../assets/img/loading.gif";
 import axios from "axios";
@@ -38,9 +37,6 @@ const NftCard = (props) => {
   };
 
   const getSnnipetAWS = async (completeNft) => {
-    console.log(completeNft.address +
-      "/snnipets/" +
-      completeNft.audioUrl.split("/").slice(-1)[0])
     await axios
       .post("/api/nft-type/getSnnipetAWS", {
         key:
@@ -49,7 +45,6 @@ const NftCard = (props) => {
           completeNft.audioUrl.split("/").slice(-1)[0],
       })
       .then((res) => {
-        console.log("res", res);
         if (!res.data) {
           getNSeconds(props.nft);
         } else {
@@ -72,7 +67,6 @@ const NftCard = (props) => {
         startTime: 30,
       })
       .then((res) => {
-        console.log("got snnipet");
         const songFile = res.data.Body.data;
 
         setPartialSong(songFile);
@@ -80,7 +74,6 @@ const NftCard = (props) => {
   };
 
   useEffect(() => {
-    console.log("im here", basicLoaded);
     if (basicLoaded) {
       setLikesLoading(true);
     }
@@ -259,7 +252,7 @@ const NftCard = (props) => {
                 maximumFractionDigits: 6,
               })
             : nft.price}
-          <Eth />
+          {nft.chain === "ETH" ? <Eth /> : <Bsc/>}
         </CostEth>
       </BottomSection>
     </Container>
@@ -355,30 +348,19 @@ const PrereleaseBadge = styled(Prerelease)`
   padding: 0 5px;
 `;
 
-const Usd = styled(IconUsd)`
+const Bsc = styled(IconBinance)`
   width: 18px;
   height: 18px;
-  margin: -2px 0 0 8px;
-  transition: all 0.2s ease-in-out;
-  & path {
-    fill: ${(props) => props.theme.color.gray};
-  }
+  margin: -2px 0 0 4px;
 `;
 
 const Eth = styled(IconEth)`
   width: 18px;
   height: 18px;
   margin: -2px 0 0 4px;
-  transition: all 0.2s ease-in-out;
   & path {
     fill: ${(props) => props.theme.color.white};
   }
-`;
-
-const CostUsd = styled.span`
-  display: flex;
-  color: white;
-  color: ${(props) => props.theme.color.gray};
 `;
 
 const CostEth = styled.span`
@@ -390,23 +372,6 @@ const BottomSection = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
-`;
-
-const Cart = styled(IconCart)`
-  width: 20px;
-  height: 20px;
-  margin: -2px 0 0 8px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  & path {
-    transition: all 0.2s ease-in-out;
-    fill: ${(props) => props.theme.color.gray};
-  }
-  &:hover {
-    & path {
-      fill: #20a4fc;
-    }
-  }
 `;
 
 const Side = styled.div`

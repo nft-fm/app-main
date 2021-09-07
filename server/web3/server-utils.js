@@ -7,62 +7,46 @@ const {
   getDefaultProvider,
 } = require("ethers");
 var difUtils = require("ethers").utils;
-const { 
+const {
   TEST_NFTToken,
-  MAIN_NFTToken, 
-  TEST_FlatPriceSale, 
-  MAIN_FlatPriceSale,  
-  TEST_VinylAddress, 
-  MAIN_VinylAddress 
+  MAIN_NFTToken,
+  TEST_VinylAddress,
+  MAIN_VinylAddress,
+  TEST_BSC_NFTToken,
+  MAIN_BSC_NFTToken,
 } = require("./constants");
 const FlatPriceSaleABI = require("./abi/FlatPriceSale.abi");
 const NFTTokenABI = require("./abi/NFTToken.abi");
 const VinylABI = require("./abi/Vinyl.abi");
-const NFTType = require("../schemas/NftType.schema");
-
-/*
-const sign = (address, amount, price, startTime, saleAddress) => {
-	console.log("signing", address, amount, price, startTime, saleAddress)
-	let data = utils.defaultAbiCoder.encode(
-		["address", "uint256", "uint256", "uint256", "address"],
-		[String(address), BigNumber.from(amount), BigNumber.from(price), BigNumber.from(startTime), String(saleAddress)]
-	);
-
-	const hash = utils.keccak256(utils.hexlify(data));
-	console.log("key", process.env.OWNER_KEY);
-	const signer = new utils.SigningKey(process.env.OWNER_KEY);
-	const { r, s, v } = signer.signDigest(hash);
-	return { r, s, v };
-};
-*/
 
 const sign = (types, values) => {
   console.log("signing", ...values);
   let data = utils.defaultAbiCoder.encode(types, values);
-  console.log("abi encoded:");
-  console.log(data);
 
   const hash = utils.keccak256(utils.hexlify(data));
-  console.log("key", process.env.OWNER_KEY);
   const signer = new utils.SigningKey(process.env.OWNER_KEY);
   const { r, s, v } = signer.signDigest(hash);
   return { r, s, v };
 };
 
-const getSetSale = async (nftId, callback) => {
-  const PROVIDER_URL = process.env.REACT_APP_IS_MAINNET ? process.env.MAIN_PROVIDER_URL : process.env.RINKEBY_PROVIDER_URL;
-  const FlatPriceSale = process.env.REACT_APP_IS_MAINNET ? MAIN_FlatPriceSale : TEST_FlatPriceSale;
-  let provider = new providers.WebSocketProvider(PROVIDER_URL);
-  let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
-  const contract = new Contract(
-    FlatPriceSale,
-    FlatPriceSaleABI,
-    walletWithProvider
-  );
-  const r = await contract.sets(nftId);
+// const getSetSale = async (nftId, callback) => {
+//   const PROVIDER_URL = process.env.REACT_APP_IS_MAINNET
+//     ? process.env.MAIN_PROVIDER_URL
+//     : process.env.RINKEBY_PROVIDER_URL;
+//   const FlatPriceSale = process.env.REACT_APP_IS_MAINNET
+//     ? MAIN_FlatPriceSale
+//     : TEST_FlatPriceSale;
+//   let provider = new providers.WebSocketProvider(PROVIDER_URL);
+//   let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
+//   const contract = new Contract(
+//     FlatPriceSale,
+//     FlatPriceSaleABI,
+//     walletWithProvider
+//   );
+//   const r = await contract.sets(nftId);
 
-  return r;
-};
+//   return r;
+// };
 
 const findLikes = (nfts, account) => {
   for (let i = 0; i < nfts.length; i++) {
@@ -95,9 +79,13 @@ const findLikes = (nfts, account) => {
   return nfts;
 };
 
-const getUserNfts = async (account) => {
-  const PROVIDER_URL = process.env.REACT_APP_IS_MAINNET ? process.env.MAIN_PROVIDER_URL : process.env.RINKEBY_PROVIDER_URL;
-	const NFTToken = process.env.REACT_APP_IS_MAINNET ? MAIN_NFTToken : TEST_NFTToken;
+const getUserNftsETH = async (account) => {
+  const PROVIDER_URL = process.env.REACT_APP_IS_MAINNET
+    ? process.env.MAIN_PROVIDER_URL
+    : process.env.RINKEBY_PROVIDER_URL;
+  const NFTToken = process.env.REACT_APP_IS_MAINNET
+    ? MAIN_NFTToken
+    : TEST_NFTToken;
   let provider = new providers.WebSocketProvider(PROVIDER_URL);
   let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
   const contract = new Contract(NFTToken, NFTTokenABI, walletWithProvider);
@@ -112,57 +100,90 @@ const getUserNfts = async (account) => {
   //   numNfts.push(utils.formatEther(nft) * 10e17);
   // });
 
-  let nftIdsAndQuantities = []
+  let nftIdsAndQuantities = [];
   for (let i = 0; i < userNfts[0].length; i++) {
-    nftIdsAndQuantities.push({id: utils.formatEther(userNfts[0][i]) * 10e17, quantity: utils.formatEther(userNfts[1][i]) * 10e17})
+    nftIdsAndQuantities.push({
+      id: utils.formatEther(userNfts[0][i]) * 10e17,
+      quantity: utils.formatEther(userNfts[1][i]) * 10e17,
+      chain: "ETH",
+    });
+  }
+  return nftIdsAndQuantities;
+  // return { nftIds, numNfts };
+};
+const getUserNftsBSC = async (account) => {
+  const PROVIDER_URL = process.env.REACT_APP_IS_MAINNET
+    ? process.env.BSC_PROVIDER_URL
+    : process.env.BSCTEST_PROVIDER_URL;
+  const NFTToken = process.env.REACT_APP_IS_MAINNET
+    ? MAIN_BSC_NFTToken
+    : TEST_BSC_NFTToken;
+  let provider = new providers.WebSocketProvider(PROVIDER_URL);
+  let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
+  const contract = new Contract(NFTToken, NFTTokenABI, walletWithProvider);
+
+  let userNfts = await contract.getFullBalance(account);
+
+  let nftIdsAndQuantities = [];
+  for (let i = 0; i < userNfts[0].length; i++) {
+    nftIdsAndQuantities.push({
+      id: utils.formatEther(userNfts[0][i]) * 10e17,
+      quantity: utils.formatEther(userNfts[1][i]) * 10e17,
+      chain: "BSC",
+    });
   }
   return nftIdsAndQuantities;
   // return { nftIds, numNfts };
 };
 
 const getVinylBalance = async (address) => {
-	const ethProvider = getDefaultProvider(
-    process.env.REACT_APP_IS_MAINNET ? 
-    process.env.MAIN_PROVIDER_URL :
-    process.env.RINKEBY_PROVIDER_URL
+  const ethProvider = getDefaultProvider(
+    process.env.REACT_APP_IS_MAINNET
+      ? process.env.MAIN_PROVIDER_URL
+      : process.env.RINKEBY_PROVIDER_URL
   );
-  const vinylAddress = process.env.REACT_APP_IS_MAINNET ? MAIN_VinylAddress : TEST_VinylAddress
-	const vinylContract = new Contract(vinylAddress, VinylABI, ethProvider)
+  const vinylAddress = process.env.REACT_APP_IS_MAINNET
+    ? MAIN_VinylAddress
+    : TEST_VinylAddress;
+  const vinylContract = new Contract(vinylAddress, VinylABI, ethProvider);
 
-	let promise = vinylContract.balanceOf(address)
-      .then(r => {
-			return {address, amount: parseFloat(utils.formatEther(r))}
-		})
+  let promise = vinylContract.balanceOf(address).then((r) => {
+    return { address, amount: parseFloat(utils.formatEther(r)) };
+  });
 
-	let newVariable = await Promise.all([promise]).then( res => res)
-	return newVariable
-}
+  let newVariable = await Promise.all([promise]).then((res) => res);
+  return newVariable;
+};
 
 const getVinylOwners = async (addresses) => {
-	const ethProvider = getDefaultProvider(
-    process.env.REACT_APP_IS_MAINNET ? 
-    process.env.MAIN_PROVIDER_URL :
-    process.env.RINKEBY_PROVIDER_URL
+  const ethProvider = getDefaultProvider(
+    process.env.REACT_APP_IS_MAINNET
+      ? process.env.MAIN_PROVIDER_URL
+      : process.env.RINKEBY_PROVIDER_URL
   );
-  console.log(addresses)
-  const vinylAddress = process.env.REACT_APP_IS_MAINNET ? MAIN_VinylAddress : TEST_VinylAddress
-	const vinylContract = new Contract(vinylAddress, VinylABI, ethProvider)
+  console.log(addresses);
+  const vinylAddress = process.env.REACT_APP_IS_MAINNET
+    ? MAIN_VinylAddress
+    : TEST_VinylAddress;
+  const vinylContract = new Contract(vinylAddress, VinylABI, ethProvider);
 
-	let promises = addresses.map(address =>
-		vinylContract.balanceOf(address).then(r => {
-			return {address, amount: parseFloat(utils.formatEther(r))}
-		}))
+  let promises = addresses.map((address) =>
+    vinylContract.balanceOf(address).then((r) => {
+      return { address, amount: parseFloat(utils.formatEther(r)) };
+    })
+  );
 
-	let newVariable = await Promise.all([...promises]).then( res => res)
-  console.log(newVariable)
-	return newVariable
-}
+  let newVariable = await Promise.all([...promises]).then((res) => res);
+  console.log(newVariable);
+  return newVariable;
+};
 
 module.exports = {
   sign,
-  getSetSale,
+  // getSetSale,
   findLikes,
-  getUserNfts,
+  getUserNftsETH,
+  getUserNftsBSC,
   getVinylOwners,
-  getVinylBalance
+  getVinylBalance,
 };

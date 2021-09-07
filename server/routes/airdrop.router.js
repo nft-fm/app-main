@@ -97,7 +97,6 @@ router.post("/getHoldersFromOpenSea", async (req, res) => {
 
 router.post("/getNftIds", async (req, res) => {
   try {
-    console.log("getNftIds hit");
     let nftIds = [];
     const nfts = await NftType.find({ nftId: { $exists: true } });
     nfts.map(({ nftId }) => nftIds.push(nftId));
@@ -109,9 +108,7 @@ router.post("/getNftIds", async (req, res) => {
 
 router.get("/nextBatchNum", async (req, res) => {
   try {
-    console.log("getNftIds hit");
     const airdrop = await Airdrop.findOne().sort('-batch');
-    console.log("next batch", airdrop);
     res.send({batchNum: airdrop.batch + 1});
   } catch (err) {
     res.send(err);
@@ -121,9 +118,7 @@ router.get("/nextBatchNum", async (req, res) => {
 
 router.post("/getHoldersFromDB", async (req, res) => {
   try {
-    console.log("getHoldersFromDB hit", req.body);
     const holders = await Airdrop.find({batch: req.body.batch});
-    console.log(holders);
     res.status(200).send(holders);
   } catch (err) {
     res.send(err);

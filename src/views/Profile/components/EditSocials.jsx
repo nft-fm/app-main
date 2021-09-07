@@ -18,7 +18,6 @@ const EditSocials = ({
   audius,
   setAudius,
 }) => {
-  console.log("here");
 
   return (
     <Wrapper editSM={editSM}>

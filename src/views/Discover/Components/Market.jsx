@@ -20,9 +20,7 @@ const Listen = () => {
   const limit = 30;
 
   const getNftsWithParams = async (pageIncrease, searchParam, sortParam) => {
-    console.log("1", searchParam);
     if (hasMore) {
-      console.log("fetching");
       await axios
         .post("/api/nft-type/getNftsWithParams", {
           address: account,
@@ -32,7 +30,6 @@ const Listen = () => {
           sort: sortParam,
         })
         .then((res) => {
-          console.log(res.data);
           setAllNfts([...allNfts, ...res.data.nfts]);
           setPage(page + pageIncrease);
           setHasMore(res.data.hasMore);
@@ -44,7 +41,6 @@ const Listen = () => {
     const fetchWithNoSearch = async () => {
       setPage(0);
       if (search === "") {
-        console.log("search", search);
         setHasMore(true);
         setAllNfts([]);
         await axios
@@ -71,7 +67,6 @@ const Listen = () => {
       setPage(0);
       setHasMore(true);
       setAllNfts([]);
-      console.log("sortParam", sortParam);
       await axios
         .post("/api/nft-type/getNftsWithParams", {
           address: account,
@@ -81,7 +76,6 @@ const Listen = () => {
           sort: sortParam,
         })
         .then((res) => {
-          console.log(res.data);
           setAllNfts(res.data.nfts);
           setPage(1);
           setHasMore(res.data.hasMore);
@@ -96,7 +90,6 @@ const Listen = () => {
     if (search != "") {
       setPage(0);
       setHasMore(true);
-      console.log(search);
       await axios
         .post("/api/nft-type/getNftsWithParams", {
           address: account,
@@ -106,7 +99,6 @@ const Listen = () => {
           sort: sortParam,
         })
         .then((res) => {
-          console.log(res.data);
           setAllNfts(res.data.nfts);
           setPage(page + pageIncrease);
           setHasMore(res.data.hasMore);

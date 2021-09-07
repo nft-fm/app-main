@@ -1,68 +1,100 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef } from "react";
 import styled, { css } from "styled-components";
 import { ReactComponent as usd_icon } from "../../../../assets/img/icons/dollar.svg";
 import { ReactComponent as eth_icon } from "../../../../assets/img/icons/ethereum.svg";
 
-const Step4 = ({ nftData: { price, numMinted }, updateState, usdPerEth }) => {
+// const Step4 = ({ nftData: { price, numMinted, }, updateState, usdPerEth }) => {
+const Step4 = ({ nftData, updateState, usdPerEth, usdPerBnb, currChainId }) => {
   return (
     <InputContainer>
       <ArtistTop>
         <h1>Data</h1>
         <IconContainer>
-          <EthIcon/>
-          <UsdIcon/>
+          {/* <EthIcon />
+          <UsdIcon /> */}
         </IconContainer>
       </ArtistTop>
-      <SubHeader style={{marginBottom: "15px"}}>Price</SubHeader>
+      <SubHeader style={{ marginBottom: "15px" }}>Price</SubHeader>
       <PriceContainer>
         <StyledInput
           type="number"
           placeholder="Price"
           name="price"
-          onChange={(e) => {updateState(e)}}
-          value={price}
+          onChange={(e) => {
+            updateState(e);
+          }}
+          value={nftData.price}
           noborder
           min="0"
           required
         />
-        <p style ={{ padding: 0, margin: 0, paddingBottom: "3px", fontSize: "18px"}}>ETH</p>
+        <p
+          style={{
+            padding: 0,
+            margin: 0,
+            paddingBottom: "3px",
+            fontSize: "18px",
+          }}
+        >
+          {currChainId === 1 || (currChainId === 4 && "ETH")}
+          {currChainId === 56 || (currChainId === 97 && "BNB")}
+        </p>
       </PriceContainer>
       <PriceContainer noBorder>
-        <div/>
-        <p>{(price * usdPerEth).toFixed(2)} $USD</p>
+        <div />
+
+        {(currChainId === 1 || currChainId === 4) && (
+          <p>{(nftData.price * usdPerEth).toFixed(2)} $USD</p>
+        )}
+        {(currChainId === 56 || currChainId === 97) && (
+          <p>{(nftData.price * usdPerBnb).toFixed(2)} $USD</p>
+        )}
       </PriceContainer>
-      <MobileSpacer height={30}/>
-      <SubHeader style={{marginBottom: "15px"}}>Number of NFTs</SubHeader>
-      <MobileSpacer height={5}/>
+      <MobileSpacer height={30} />
+      <SubHeader style={{ marginBottom: "15px" }}>Number of NFTs</SubHeader>
+      <MobileSpacer height={5} />
       <StyledInput
         type="number"
         placeholder="Quantity"
         name="numMinted"
-        onChange={(e) => {updateState(e)}}
-        value={numMinted}
+        onChange={(e) => {
+          updateState(e);
+        }}
+        value={nftData.numMinted}
         step="1"
         min="0"
-        onKeyDown={event => event.key==='.' ? event.preventDefault() : null}
+        onKeyDown={(event) =>
+          event.key === "." ? event.preventDefault() : null
+        }
         required
       />
       <PriceContainer noBorder>
-        <div/>
-        <p>{(price * usdPerEth * numMinted).toFixed(2)} $USD</p>
+        <div />
+        {(currChainId === 1 || currChainId === 4) && (
+          <p>
+            {(nftData.price * usdPerEth * nftData.numMinted).toFixed(2)} $USD
+          </p>
+        )}
+        {(currChainId === 56 || currChainId === 97) && (
+          <p>
+            {(nftData.price * usdPerBnb * nftData.numMinted).toFixed(2)} $USD
+          </p>
+        )}
       </PriceContainer>
       <BottomSpacer />
     </InputContainer>
-  )
-}
+  );
+};
 
 const MobileSpacer = styled.div`
   @media only screen and (max-width: 776px) {
-    height: ${props => props.height}px;
+    height: ${(props) => props.height}px;
   }
-`
+`;
 const BottomSpacer = styled.div`
   height: 100px;
   width: 100px;
-`
+`;
 
 const IconContainer = styled.div`
   display: flex;
@@ -108,7 +140,7 @@ const ArtistTop = styled.div`
   /* @media only screen and (max-width: 776px) {
     padding: 20px 0;
   } */
-`
+`;
 
 const PriceContainer = styled.div`
   display: flex;
@@ -116,9 +148,11 @@ const PriceContainer = styled.div`
   align-items: flex-end;
   color: #5c5c5c;
   justify-content: space-between;
-  ${props => props.noBorder && css`
-    border: none;
-  `}
+  ${(props) =>
+    props.noBorder &&
+    css`
+      border: none;
+    `}
   p {
     @media only screen and (min-width: 776px) {
       margin: 0;
@@ -130,7 +164,6 @@ const PriceContainer = styled.div`
     height: 40px;
   }
 `;
-
 
 const InputContainer = styled.div`
   width: 100%;
@@ -153,7 +186,7 @@ const InputContainer = styled.div`
     -webkit-appearance: none;
     margin: 0;
   }
-  input[type=number] {
+  input[type="number"] {
     -moz-appearance: textfield;
   }
   @media only screen and (max-width: 776px) {
@@ -169,9 +202,11 @@ const StyledInput = styled.input`
   height: 30px;
   font-size: 18px;
   border-bottom: 1px solid #383838;
-  ${props => props.noborder && css`
-    border: none;
-  `}
+  ${(props) =>
+    props.noborder &&
+    css`
+      border: none;
+    `}
   @media only screen and (max-width: 776px) {
     background-color: transparent;
   }

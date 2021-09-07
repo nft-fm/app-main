@@ -32,6 +32,7 @@ import {
   imageHeight,
 } from "../../utils/swalImages";
 import Ticker from "../../components/Ticker";
+import { ReactComponent as IconBinance } from "../../assets/img/icons/binance-logo.svg";
 
 const BuyNftModal = (props) => {
   const {
@@ -48,7 +49,7 @@ const BuyNftModal = (props) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isBought, setIsBought] = useState(false);
-  const { account, connect, getUser } = useAccountConsumer();
+  const { account, connect, getUser, currChainId } = useAccountConsumer();
   const { setNftCallback } = usePlaylistConsumer();
   const history = useHistory();
 
@@ -62,7 +63,7 @@ const BuyNftModal = (props) => {
           artist: nft.artist,
           title: nft.title,
         })
-        .then((res) => console.log(res))
+        .then()
         .catch((err) => console.log(err));
     }
   }, [open]);
@@ -72,12 +73,28 @@ const BuyNftModal = (props) => {
   };
 
   const purchase = async (id) => {
+    console.log('begin purchase function', id, nft)
+
+    if ((nft.chain === "ETH" && (currChainId !== 1 && currChainId !== 4))
+    || (nft.chain === "BSC" && (currChainId !== 56 && currChainId !== 97))) {
+      console.log("currchainId", nft.chain, currChainId);
+      swal.fire({
+        title: `Wrong Chain`,
+        text: `You must be on the ${nft.chain} blockchain to purchase this NFT. You can change chains in the navbar.`,
+        imageUrl: errorIcon,
+        imageWidth,
+        imageHeight,
+      });
+      return;
+    }
+
     setIsLoading(true);
+    // {!} simplify the below
     await getEthBalance(async (balance) => {
       if (parseFloat(balance) >= nft.price) {
         Swal.fire({
           title:
-            "Attempting to purchase, please do not close or refresh during this process.",
+            "Purchasing, please do not leave this page.",
           showConfirmButton: false,
           timer: 3000,
         }).then(async () => {
@@ -87,9 +104,6 @@ const BuyNftModal = (props) => {
               amount: 1,
               saleId: nft.nftId,
               price: String(nft.price),
-            },
-            () => {
-              console.log("pending");
             },
             () => {
               axios
@@ -211,6 +225,9 @@ const BuyNftModal = (props) => {
     var sDisplay = s < 10 ? "0" + s : s;
     return hDisplay + mDisplay + sDisplay;
   };
+
+
+
   if (!open) return null;
   return (
     <OpaqueFilter onClick={(e) => !isLoading && hide(e)}>
@@ -248,7 +265,9 @@ const BuyNftModal = (props) => {
               </Side>
             </CardTop>
             <BadgeHolder>
-              {nft.badges?.map((badge) => {
+              {
+              // {!} refactor badges into independent component
+              nft.badges?.map((badge) => {
                 if (badge.founder) {
                   return (
                     <FounderBadge
@@ -360,12 +379,11 @@ const BuyNftModal = (props) => {
                     : "--"}{" "}
                 </PriceItem>
                 &nbsp;
-                <Eth />
+                {nft.chain === "ETH" ? <Eth /> : <Bsc/>}
               </PriceHolder>
             </PricesContainer>
             {!account ? (
               <BuyButton onClick={() => connectWallet()}>
-                {/* <MetaMask src={IconMetamask} /> */}
                 <ButtonText>Connect Wallet</ButtonText>
               </BuyButton>
             ) : nft.numSold !== nft.numMinted ? (
@@ -429,6 +447,21 @@ width: min-content;
 height: min-content;
 margin: 0px 4px 0 0;
 `
+
+const Bsc = styled(IconBinance)`
+  width: 18px;
+  height: 18px;
+  margin: -2px 0 0 4px;
+`;
+
+const Eth = styled(IconEth)`
+  width: 18px;
+  height: 18px;
+  margin: -2px 0 0 4px;
+  & path {
+    fill: ${(props) => props.theme.color.white};
+  }
+`;
 
 const TrackDetailsHolder = styled.div`
   width: 100%;
@@ -537,22 +570,6 @@ const ButtonText = styled.span`
   color: white;
 `;
 
-const MetaMask = styled.img`
-  width: 32px;
-  height: auto;
-`;
-
-const Divider = styled.div`
-  margin: 5px 0;
-  width: 100%;
-  height: 1px;
-  background-color: ${(props) => props.theme.color.gray};
-`;
-
-const AvailableItem = styled.div`
-  font-size: 0.8rem;
-  color: ${(props) => props.theme.color.lightgray};
-`;
 
 const PricesContainer = styled.div`
   width: 100%;
@@ -571,13 +588,6 @@ const PriceHolder = styled.div`
   background-color: ${(props) => props.theme.bgColor};
   margin-top: -8px;
   padding: 0 10px;
-`;
-const Eth = styled(IconEth)`
-  width: 18px;
-  height: 18px;
-  & path {
-    fill: ${(props) => props.theme.color.white};
-  }
 `;
 
 const PriceItem = styled.span`

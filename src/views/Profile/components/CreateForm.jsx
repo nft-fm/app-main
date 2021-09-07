@@ -65,7 +65,8 @@ const initialNftState = {
 };
 
 const CreateForm = ({ open, hide, reset, setReset }) => {
-  const { account, user, usdPerEth } = useAccountConsumer();
+  const { account, user, usdPerEth, usdPerBnb, currChainId } =
+    useAccountConsumer();
   const [nftData, setNftData] = useState(initialNftState);
   const [curr, setCurr] = useState("ETH");
   const [isLoading, setIsLoading] = useState(false);
@@ -173,18 +174,30 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
       return;
     }
     let newNftData = { ...nftData, timestamp: moment().format() }; //sets timestamp to right when the /finalize route is called
-    // if (curr === "USD") {
-    //   newNftData = {
-    //     ...nftData,
-    //     price: (nftData.price / usdPerEth).toFixed(4),
-    //   };
-    // }
+    if (currChainId === 1 || currChainId === 4) {
+      newNftData = { ...nftData, chain: "ETH" };
+    } else if (currChainId === 56 || currChainId === 97) {
+      newNftData = { ...nftData, chain: "BSC" };
+    } else if (!currChainId) {
+      swal.fire({
+        title: "Not connected to a blockchain!",
+        text: "Please connect your wallet to the Ethereum or Binance chain to mint an NFT.",
+      });
+      onCloseModal();
+      return;
+    }
+
     if (newNftData.artist === "") {
       newNftData = {
         ...nftData,
         artist: user.username,
       };
     }
+
+    axios
+      .post("/api/nft-type/update-draft", newNftData)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
 
     //Input validation below here
     if (nftData.numMinted === "0" || nftData.numMinted === 0) {
@@ -236,12 +249,9 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
       .then((res) => {
         console.log("finalize res", res);
         if (res.status === 200) {
+          setIsLoading(true);
           mintNFT(
             res.data,
-            () => {
-              console.log("pending...");
-              setIsLoading(true);
-            },
             () => {
               console.log("final");
               axios
@@ -291,7 +301,7 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
               imageWidth,
               imageHeight,
               title: "Couldn't create NFT!",
-              text: "Please try again",
+              text: "Make sure you are on the current chain and try again",
             });
           });
           console.log("MINT");
@@ -387,8 +397,15 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
       setIsLoadingImage={setIsLoadingImage}
     />,
     <Step3 nftData={nftData} updateState={updateState} />,
-    <Step4 nftData={nftData} updateState={updateState} usdPerEth={usdPerEth} />,
-    <PreviewBuyModal nft={nftData} />,
+    <Step4
+      nftData={nftData}
+      updateState={updateState}
+      usdPerEth={usdPerEth}
+      usdPerBnb={usdPerBnb}
+      currChainId={currChainId}
+    />,
+    <PreviewBuyModal nft={nftData} 
+    currChainId={currChainId}/>,
   ];
   if (currentStep === 1) {
     return (
@@ -433,6 +450,7 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
               isLoadingAudio={isLoadingAudio}
               isLoadingImage={isLoadingImage}
               isLoading={isLoading}
+              currChainId={currChainId}
             />
           </Step1Container>
         </OpaqueFilter>

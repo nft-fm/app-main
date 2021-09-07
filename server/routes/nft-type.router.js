@@ -5,13 +5,15 @@ const NftType = require("../schemas/NftType.schema");
 const multer = require("multer");
 const AWS = require("aws-sdk");
 const User = require("../schemas/User.schema");
-const { MAIN_FlatPriceSale, TEST_FlatPriceSale } = require("../web3/constants");
-const { sign, getSetSale, findLikes } = require("../web3/server-utils");
-const { listenForMint } = require("../web3/mint-listener");
-const { trackNftPurchase, trackNftView } = require("../modules/mixpanel");
 const {
-  GetPrincipalTagAttributeMapCommand,
-} = require("@aws-sdk/client-cognito-identity");
+  MAIN_FlatPriceSale,
+  TEST_FlatPriceSale,
+  TEST_BSC_FlatPriceSale,
+  MAIN_BSC_FlatPriceSale,
+} = require("../web3/constants");
+const { sign, findLikes } = require("../web3/server-utils");
+const { listenForMintEth, listenForMintBsc } = require("../web3/mint-listener");
+const { trackNftPurchase, trackNftView } = require("../modules/mixpanel");
 
 // const findLikes = (nfts, account) => {
 //   for (let i = 0; i < nfts.length; i++) {
@@ -41,31 +43,6 @@ const getBucket = () => {
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   });
 };
-
-const findRemainingInfo = async (nft) => {
-  const extraInfo = await getSetSale(nft.nftId);
-  // console.log("remaining info", extraInfo, nft);
-  let newNft = {
-    ...nft,
-    price: utils.formatEther(extraInfo.price),
-    quantity: extraInfo.quantity,
-    sold: extraInfo.sold,
-  };
-  // console.log("3", newNft);
-
-  return newNft;
-};
-
-router.post("/full-nft-info", async (req, res) => {
-  try {
-    const fullInfo = await findRemainingInfo(req.body.nft).catch((err) =>
-      console.log(err)
-    );
-    res.send(fullInfo);
-  } catch (err) {
-    res.status(500).send(err);
-  }
-});
 
 router.post("/artist-nfts", async (req, res) => {
   try {
@@ -125,7 +102,6 @@ router.get("/has-draft/:id", async (req, res) => {
       address: req.params.id,
     });
 
-    console.log("hasDraft", !!draft);
     res.send({ hasDraft: !!draft });
   } catch (err) {
     console.log(err);
@@ -141,7 +117,6 @@ router.post("/get-NFT", async (req, res) => {
         isDraft: true,
       });
       if (!nft) {
-        console.log("CREATED DRAFT");
         const newNft = await new NftType({
           address: req.body.account,
           dur: 0,
@@ -150,8 +125,6 @@ router.post("/get-NFT", async (req, res) => {
         await newNft.save();
         res.send(newNft);
       } else {
-        console.log("fetched draft");
-        console.log(nft);
         res.send(nft);
       }
     }
@@ -165,13 +138,11 @@ router.post("/get-user-nfts", async (req, res) => {
   try {
     let ids = [];
     //if user owns > 1 copy of the same nft, this whole chain of logic will get the same nft as many times as they own it
-    console.log("here nfts", req.body.nfts);
     if (!req.body.nfts || !req.body.nfts.length) {
       res.send("no nfts!");
       return;
     }
     for (nft of req.body.nfts) {
-      console.log("nft", nft);
       if (nft.quantity > 1) {
         for (let i = 0; i < nft.quantity; i++) {
           ids.push(nft.nft);
@@ -188,7 +159,6 @@ router.post("/get-user-nfts", async (req, res) => {
         },
         { snnipet: 0 }
       );
-      console.log("got nft", getNft);
       gottenNfts.push(getNft);
     }
 
@@ -211,16 +181,12 @@ const toArrayBuffer = (buf) => {
 router.post("/update-draft", async (req, res) => {
   try {
     if (!req.body.address) return res.status(400).send("No address :(((");
-    console.log("Hiiii I see you!");
     const draft = req.body;
-    console.log("updating draft", req.body);
     let updatedDraft = await NftType.findByIdAndUpdate(draft._id, draft);
 
     if (updatedDraft) {
-      console.log(`Updated Draft: ${updatedDraft}`);
       res.send("draft updated");
     } else {
-      console.log("Failed to update draft");
       res.status(400).json("Cannot find existing draft");
     }
   } catch (error) {
@@ -233,20 +199,23 @@ router.post("/finalize", async (req, res) => {
   try {
     let newData = req.body;
     newData.price = newData.price.toString();
-    console.log("newdata", newData);
     newData.isDraft = false;
-    const FlatPriceSale = process.env.REACT_APP_IS_MAINNET
-      ? MAIN_FlatPriceSale
-      : TEST_FlatPriceSale;
-    console.log("im here");
-    // let updateNFT = await NftType.findByIdAndUpdate(newData._id, newData);
+    let NFT_FlatPriceSale;
+    if (newData.chain === "ETH") {
+      NFT_FlatPriceSale = process.env.REACT_APP_IS_MAINNET ? MAIN_FlatPriceSale : TEST_FlatPriceSale;
+    } else if (newData.chain === "BSC") {
+      NFT_FlatPriceSale = process.env.REACT_APP_IS_MAINNET ? MAIN_BSC_FlatPriceSale : TEST_BSC_FlatPriceSale;
+    } else {
+      console.error("CHAIN ERROR CHAIN ERROR")
+    }
     let findNFT = await NftType.findById(newData._id);
     if (findNFT) {
       const startTime = 0;
       // const price = BigNumber.from(newData.price.mul(constants.WeiPerEther));
       const price = utils.parseUnits(newData.price);
-      const encodedFee = utils.defaultAbiCoder.encode(["uint32"], [5]); // fee is hardcoded to 5% atm
-      listenForMint();
+      const encodedFee = utils.defaultAbiCoder.encode(["uint32"], [10]); // fee is hardcoded to 5% atm
+      listenForMintEth();
+      listenForMintBsc();
 
       const signature = sign(
         [
@@ -264,7 +233,7 @@ router.post("/finalize", async (req, res) => {
           newData.numMinted,
           price,
           startTime,
-          FlatPriceSale,
+          NFT_FlatPriceSale,
           encodedFee,
         ]
       );
@@ -275,7 +244,7 @@ router.post("/finalize", async (req, res) => {
         address: newData.address,
         startTime: startTime,
         dur: newData.dur,
-        saleAddress: FlatPriceSale,
+        saleAddress: NFT_FlatPriceSale,
         databaseID: newData._id,
         encodedFee: encodedFee,
       });
@@ -358,12 +327,8 @@ router.post("/get-one", async (req, res) => {
   try {
     let { id, address } = req.body;
     let nftType = await NftType.findOne({ nftId: id });
-    console.log("getone hit", id, nftType);
-
-    console.log("nftType", nftType);
 
     if (nftType) {
-      console.log();
       res.send({ ...nftType.toObject(), likeCount: nftType.likes.length });
     } else {
       res.status(404).send("NFT not found");
@@ -376,7 +341,6 @@ router.post("/get-one", async (req, res) => {
 
 router.post("/getSnnipet", async (req, res) => {
   try {
-    console.log("getting snnipet");
     let nftType = await NftType.findOne(
       {
         // isFeatured: true,
@@ -386,8 +350,6 @@ router.post("/getSnnipet", async (req, res) => {
       },
       { snnipet: 1 }
     );
-
-    console.log("got it", nftType);
     res.send(nftType);
   } catch (error) {
     console.log(error);
@@ -467,19 +429,16 @@ router.post("/get-many", async (req, res) => {
 });
 
 router.post("/countNfts", async (req, res) => {
-  console.log("/countNfts hit");
   let countNfts = await NftType.countDocuments({
     isDraft: false,
     isMinted: true,
   });
-  console.log("here", countNfts);
   res.send({ count: countNfts });
   // res.sendStatus(200).json({countNfts});
 });
 
 router.post("/getNftsWithParams", async (req, res) => {
   try {
-    console.log("getting nfts", req.body);
     const getSortParam = () => {
       if (req.body.sort === 0) {
         return { price: -1 };
@@ -506,7 +465,6 @@ router.post("/getNftsWithParams", async (req, res) => {
       .sort(getSortParam())
       .skip(req.body.page * req.body.limit)
       .limit(req.body.limit);
-    console.log(nftTypes.length === req.body.limit);
     res.send({
       nfts: findLikes(nftTypes, req.body.address),
       hasMore: nftTypes.length === req.body.limit,
@@ -518,7 +476,6 @@ router.post("/getNftsWithParams", async (req, res) => {
 });
 
 router.post("/getSnnipetAWS", async (req, res) => {
-  console.log("GETTING SNNIPET", req.body.key);
   const s3 = getBucket();
 
   const params = { Bucket: "nftfm-music", Key: req.body.key, Expires: 60 * 5 };
@@ -559,13 +516,11 @@ router.post("/uploadSnnipetS3", async (req, res) => {
 
   const singleUpload = upload.single("audioFile");
   singleUpload(req, res, async function (err) {
-    console.log("singleUpload: ", req.body);
     let draft = await NftType.findOne({
       isDraft: true,
       address: req.body.artist,
     });
     if (err instanceof multer.MulterError || err) {
-      console.log("singleUpload error", err);
       if (draft) {
         draft.audioUrl = "";
         draft.snnipet = "";
@@ -585,7 +540,6 @@ router.post("/uploadSnnipetS3", async (req, res) => {
 });
 
 router.post("/uploadAudioS3", async (req, res) => {
-  console.log("im here");
   try {
     var AWS = require("aws-sdk");
     AWS.config.region = "us-west-2";
@@ -617,7 +571,6 @@ router.post("/uploadAudioS3", async (req, res) => {
     });
     const singleUpload = upload.single("audioFile");
     singleUpload(req, res, function (err) {
-      console.log("singleUpload: ", req.body);
       if (err instanceof multer.MulterError) {
         console.log("singleUpload multer", err);
         return res.status(500).json(err);
@@ -637,7 +590,6 @@ router.post("/uploadAudioS3", async (req, res) => {
 //send audio file to private bucket
 router.post("/handleAudio", async (req, res) => {
   try {
-    console.log("/handleAudio hit");
     let storage = multer.diskStorage({
       destination: function (req, file, cb) {
         cb(null, "public");
@@ -912,13 +864,15 @@ router.post("/purchase", async (req, res) => {
     nft.numSold++;
     await nft.save();
 
-    trackNftPurchase({
-      address: req.body.address,
-      ip: req.ip,
-      artistAddress: nft.address,
-      nftId: nft.nftId,
-      nftPrice: nft.price,
-    });
+    if (process.env.PRODUCTION) {
+      trackNftPurchase({
+        address: req.body.address,
+        ip: req.ip,
+        artistAddress: nft.address,
+        nftId: nft.nftId,
+        nftPrice: nft.price,
+      });
+    }
     console.log("end?", user, nft);
     res.status(200).send("Success!");
   } catch (err) {
@@ -932,6 +886,7 @@ router.post("/newShare", async (req, res) => {
     const getNft = await NftType.findOne({ nftId: req.body.nftId });
     getNft.shareCount++;
     await getNft.save();
+    res.sendStatus("success");
   } catch (err) {
     res.status(500).send(err);
   }
@@ -939,9 +894,7 @@ router.post("/newShare", async (req, res) => {
 
 router.post("/get-by-nftId", async (req, res) => {
   try {
-    console.log("2");
     const getNft = await NftType.findOne({ nftId: req.body.nftId });
-    console.log("3");
     res.status(200).send(findLikes(getNft, req.body.address));
   } catch (err) {
     res.status(500).send(err);
@@ -1019,8 +972,10 @@ router.post("/trackNftView", async (req, res) => {
       title: req.body.title,
       ip: req.ip,
     };
-    trackNftView(payload);
-    res.send("success");
+    if (process.env.PRODUCTION) {
+      trackNftView(payload);
+    }
+    res.status(200).send("success");
   } catch (err) {
     res.status(500).send(err);
   }

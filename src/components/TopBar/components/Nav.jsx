@@ -8,11 +8,11 @@ import { ReactComponent as IconDown } from "../../../assets/img/icons/down_arrow
 import DiscoDoge from "../../../assets/img/logos/PNG_icon1.png";
 
 export const Nav = () => {
-  const { user } = useAccountConsumer();
+  const { user, currChainId } = useAccountConsumer();
   const { account } = useWallet();
   const [hasVinyl, setHasVinyl] = useState(false);
   useEffect(() => {
-    if (account) {
+    if (account && (currChainId === 1 || currChainId === 4)) {
       getVinylBalance(
         (res) => Number(res.vinyl[0]) > 0 && setHasVinyl(res.vinyl[0])
       );
@@ -25,9 +25,6 @@ export const Nav = () => {
 
   return (
     <StyledNav>
-      {/* <StyledLink exact tab="home" activeClassName="active" to="/">
-        Home
-      </StyledLink> */}
       <StyledLink exact tab="market" activeClassName="active" to="/market">
         Market
       </StyledLink>
@@ -37,14 +34,15 @@ export const Nav = () => {
       <StyledLink exact tab="about" activeClassName="active" to="/info">
         Info
       </StyledLink>
-      <StyledHRef href="https://www.discodoge.io" target="_blank">
-        <Disco src={DiscoDoge} alt="Disco Doge" />
-      </StyledHRef>
       {user?.isArtist && (
         <StyledLink exact tab="profile" activeClassName="active" to="/profile">
           Profile
         </StyledLink>
       )}
+      {/* <StyledHRef href="https://www.discodoge.io" target="_blank">
+        <Disco src={DiscoDoge} alt="Disco Doge" />
+      </StyledHRef> */}
+      {/* <ChainSelector /> */}
     </StyledNav>
   );
 };
@@ -102,7 +100,7 @@ const StyledDropdownLink = styled(NavLink)`
   }
 `;
 
-const Dropdown = styled.div`
+const DropDown = styled.div`
   height: 155px;
   display: flex;
   flex-direction: column;

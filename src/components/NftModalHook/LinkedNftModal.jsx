@@ -20,7 +20,6 @@ const NftCard = (props) => {
     setIsModalOpen(false);
   };
 
-  console.log("nftModalData", props);
 
   const getSnnipetAWS = async (completeNft) => {
     await axios
@@ -31,7 +30,6 @@ const NftCard = (props) => {
           completeNft.audioUrl.split("/").slice(-1)[0],
       })
       .then((res) => {
-        console.log("res", res);
         if (!res.data) {
           getNSeconds(nft);
         } else {
@@ -54,7 +52,6 @@ const NftCard = (props) => {
         startTime: 30,
       })
       .then((res) => {
-        console.log("got snnipet");
         const songFile = res.data.Body.data;
 
         setPartialSong(songFile);
@@ -65,8 +62,7 @@ const NftCard = (props) => {
     if (window.location.pathname.length > 7) {
       axios.post("/api/nft-type/get-one", { id: window.location.pathname.slice(8), address: account })
       .then((res) => {
-        console.log("res modal @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@22", res);
-        setNft(res.data);
+         setNft(res.data);
         setShareCount({ count: res.data.shareCount });
         setLikeCount(res.data.likeCount);
         setLiked(res.data.liked);

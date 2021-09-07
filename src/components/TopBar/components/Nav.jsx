@@ -39,9 +39,9 @@ export const Nav = () => {
           Profile
         </StyledLink>
       )}
-      <StyledHRef href="https://www.discodoge.io" target="_blank">
+      {/* <StyledHRef href="https://www.discodoge.io" target="_blank">
         <Disco src={DiscoDoge} alt="Disco Doge" />
-      </StyledHRef>
+      </StyledHRef> */}
       {/* <ChainSelector /> */}
     </StyledNav>
   );

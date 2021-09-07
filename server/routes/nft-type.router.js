@@ -949,17 +949,6 @@ router.post("/checkRedeemable", async (req, res) => {
   }
 });
 
-router.post("/updateSaQi", async (req, res) => {
-  try {
-    console.log("updatesaqi hit");
-    await NftType.findOneAndUpdate(
-      { title: "Say Your Prayer" },
-      { isDraft: false }
-    );
-  } catch (err) {
-    console.log(err);
-  }
-});
 
 router.post("/trackNftView", async (req, res) => {
   try {

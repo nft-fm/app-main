@@ -19,7 +19,6 @@ import AirdropABI from "./abi/Airdrop.abi.js";
 
 const chooseNftAddress = async () => {
   const newChainId = await window.ethereum.request({ method: "eth_chainId" });
-  console.log("chooseNftAddress", Number(newChainId));
   if (Number(newChainId) === 1 || Number(newChainId) === 4) {
     return NftAddress;
   } else if (Number(newChainId) === 56 || Number(newChainId) === 97) {
@@ -40,7 +39,6 @@ export const getEthBalance = async (callback) => {
   let walletAddress = window.ethereum.selectedAddress;
   provider = new providers.Web3Provider(window.ethereum);
   let balance = await provider.getBalance(walletAddress);
-  console.log("balance", utils.formatEther(balance._hex));
   return callback(utils.formatEther(balance._hex));
 };
 
@@ -58,19 +56,13 @@ export const require = async (statement, error) => {
   provider = new providers.Web3Provider(window.ethereum);
   walletAddress = window.ethereum.selectedAddress;
   // }
-  // console.log("provider:\n", provider);
   if (!statement && error) {
-    console.log(error);
     throw error;
   }
   if (!provider) {
-    console.log("provider not found");
-    console.log(provider);
     throw "provider not found";
   }
   if (!walletAddress) {
-    console.log("userWallet not found");
-    console.log(walletAddress);
     throw "userWallet not found";
   }
   return { provider, walletAddress };
@@ -93,11 +85,8 @@ export const getSetSale = async (nftId, callback) => {
 
 export const mintNFT = async (data, finalCallback) => {
   const { provider } = await require();
-  console.log('insider Minter')
   const signer = provider.getSigner();
-  console.log('insider signer', signer)
   let contract = new Contract(chooseNftAddress(), NFTTokenABI, signer);
-  console.log('insider signer', chooseFlatPriceSale())
 
   let result = await contract
     .mintAndStake(
@@ -112,7 +101,6 @@ export const mintNFT = async (data, finalCallback) => {
       data.s
     )
     .then((res) => {
-      console.log('pending')
       return res.wait();
     });
 
@@ -150,17 +138,9 @@ export const buyNFT = async (data, finalCallback) => {
   const signer = provider.getSigner();
   let contract = new Contract(chooseFlatPriceSale(), FlatPriceSaleABI, signer);
 
-  console.log(
-    "pricceee",
-    data.price,
-    utils.parseUnits(data.price),
-    data.amount
-  );
-
   let result = await contract
     .buyNFT(data.saleId, data.amount, { value: utils.parseUnits(data.price) })
     .then((res) => {
-      console.log("pending purchase", res);
       return res.wait();
     });
 
@@ -184,7 +164,6 @@ export const buyPresale = async (amount, callback) => {
     callback(null);
     return;
   }
-  console.log(amount); //may be a big number and if so need to change this stuff
 
   const buy = await contract.buy(amount, {
     value: price.mul(amount),

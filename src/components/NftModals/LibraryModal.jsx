@@ -25,7 +25,7 @@ import ReactPlayer from "react-player";
 import moment from "moment";
 import { NavLink } from "react-router-dom";
 import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.svg";
-import Ticker from "../../components/Ticker"
+import Ticker from "../../components/Ticker";
 
 const LibraryModal = ({
   open,
@@ -48,7 +48,6 @@ const LibraryModal = ({
     e.stopPropagation();
   };
 
-
   const like = async () => {
     if (account) {
       setLikeCount(liked ? likeCount - 1 : likeCount + 1);
@@ -68,16 +67,6 @@ const LibraryModal = ({
     setIsShareOpen();
     hide();
   };
-
-  // const [currChainId, setCurrChainId] = useState(null);
-
-  // const getChain = async () => {
-  //   console.log('here')
-  //   const newChainId = await window.ethereum.request({ method: 'eth_chainId' });
-  //   setCurrChainId(Number(newChainId));
-  //   console.log("chainId", Number(newChainId));
-  //   return Number(newChainId);
-  // }
 
   const formatSongDur = (d) => {
     d = Number(d);
@@ -111,12 +100,14 @@ const LibraryModal = ({
               width="500px"
               height="500px"
               style={{ marginTop: "auto", marginBottom: "auto" }}
-              onContextMenu={e => e.preventDefault()}
-              config={{ file: { 
-                attributes: {
-                  controlsList: 'nodownload'
-                }
-              }}}
+              onContextMenu={(e) => e.preventDefault()}
+              config={{
+                file: {
+                  attributes: {
+                    controlsList: "nodownload",
+                  },
+                },
+              }}
             />
           ) : (
             <Image src={nft.imageUrl} alt="image" />
@@ -147,20 +138,19 @@ const LibraryModal = ({
             </CardTop>
             <TitleAndPlayButton>
               <InfoContainer>
-              {nft.title.length > 18 ?
-                <Ticker>
-                  <TrackName>
-                    {nft.title}
-                  </TrackName>
-                </Ticker>
-                : <TrackName>
-                  {nft.title}
-                </TrackName>
-              }                  
-              <Artist
+                {nft.title.length > 18 ? (
+                  <Ticker>
+                    <TrackName>{nft.title}</TrackName>
+                  </Ticker>
+                ) : (
+                  <TrackName>{nft.title}</TrackName>
+                )}
+                <Artist
                   to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}
                 >
-                {nft.artist.length > 20 ? nft.artist.slice(0,20) + '...' : nft.artist}
+                  {nft.artist.length > 20
+                    ? nft.artist.slice(0, 20) + "..."
+                    : nft.artist}
                 </Artist>
               </InfoContainer>
               <PlayButtonMobile

@@ -36,16 +36,13 @@ const PreviewBuyModal = ({ nft, currChainId }) => {
           completeNft.audioUrl.split("/").slice(-1)[0],
       })
       .then((res) => {
-        console.log("res", res);
         if (!res.data) {
           getNSeconds(nft);
         } else {
           setPartialSong(res.data);
         }
       })
-      .catch((err) => {
-        console.log("ERR", err);
-      });
+      .catch((err) => {});
   };
 
   const getNSeconds = async (completeNft) => {
@@ -59,7 +56,6 @@ const PreviewBuyModal = ({ nft, currChainId }) => {
         startTime: 30,
       })
       .then((res) => {
-        console.log("got snnipet");
         const songFile = res.data.Body.data;
 
         setPartialSong(songFile);

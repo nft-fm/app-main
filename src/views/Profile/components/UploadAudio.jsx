@@ -26,8 +26,6 @@ const UploadAudio = ({
     var duration = buffer.duration;
     var channels = buffer.numberOfChannels;
     var rate = buffer.sampleRate;
-
-    console.log("channels", channels);
     if (typeof end === "function") {
       callback = end;
       end = duration;
@@ -77,7 +75,6 @@ const UploadAudio = ({
     audioContext,
     audioFile
   ) => {
-    console.log("uploading file");
     setIsLoadingAudio(true);
     axios
       .post("api/nft-type/uploadAudioS3", audioFormData, {
@@ -86,16 +83,12 @@ const UploadAudio = ({
         },
       })
       .then((res) => {
-        console.log(res);
         if (res.status === 200) {
           // let _nftData;
-
-          console.log("originalBUFFER", buffer);
           sliceBuffer(audioContext, buffer, 0, 15, (error, newBuffer) => {
             if (error) {
               console.log(error);
             } else {
-              console.log("NEW BUFFER", newBuffer);
               const snnipetMp3Buffer = audioBufferToMp3(newBuffer);
 
               const snnipetFile = new File(snnipetMp3Buffer, audioFile.name, {
@@ -113,8 +106,6 @@ const UploadAudio = ({
                   },
                 })
                 .then((response) => {
-                  console.log(response);
-                  // console.log("nftData audio", nftData, "_nftData", _nftData)
                   setNftData({
                     ...nftData,
                     audioUrl:
@@ -142,7 +133,6 @@ const UploadAudio = ({
                     title: "Error",
                     text: "Audio upload failed on the server, please try again.",
                   });
-                  console.log("snnipets upload failed", error);
                   setIsLoadingAudio(false);
                   setAudioName("")
                 });
@@ -151,7 +141,6 @@ const UploadAudio = ({
         }
       })
       .catch((err) => {
-        console.log(err);
         setIsLoadingAudio(false);
         setAudioName("")
         swal.fire({

@@ -89,7 +89,6 @@ router.post("/update-and-fetch", async (req, res) => {
     await draft.save();
     res.send(draft);
   } catch (error) {
-    console.log("Update/fetch error", error);
     res.status(500).send("no users found");
   }
 });
@@ -104,7 +103,6 @@ router.get("/has-draft/:id", async (req, res) => {
 
     res.send({ hasDraft: !!draft });
   } catch (err) {
-    console.log(err);
     res.status(500).send("Server Error");
   }
 });
@@ -129,7 +127,6 @@ router.post("/get-NFT", async (req, res) => {
       }
     }
   } catch (error) {
-    console.log("fetchNFT error", error);
     res.status(500).send("no users found");
   }
 });
@@ -164,7 +161,6 @@ router.post("/get-user-nfts", async (req, res) => {
 
     res.status(200).send(findLikes(gottenNfts, req.body.address));
   } catch (error) {
-    console.log(error);
     res.status(500).send("server error");
   }
 });
@@ -190,7 +186,6 @@ router.post("/update-draft", async (req, res) => {
       res.status(400).json("Cannot find existing draft");
     }
   } catch (error) {
-    console.log(error);
     res.status(500).send("server error");
   }
 });
@@ -249,11 +244,9 @@ router.post("/finalize", async (req, res) => {
         encodedFee: encodedFee,
       });
     } else {
-      console.log("no nft");
       res.status(500).json("error");
     }
   } catch (error) {
-    console.log(error);
     res.status(500).send("server error");
   }
 });
@@ -334,7 +327,6 @@ router.post("/get-one", async (req, res) => {
       res.status(404).send("NFT not found");
     }
   } catch (error) {
-    console.log(error);
     res.status(500).send("server error");
   }
 });
@@ -352,7 +344,6 @@ router.post("/getSnnipet", async (req, res) => {
     );
     res.send(nftType);
   } catch (error) {
-    console.log(error);
     res.status(500).send("server error");
   }
 });
@@ -370,7 +361,6 @@ router.post("/featured", async (req, res) => {
 
     res.send(findLikes(nftTypes, req.body.address));
   } catch (error) {
-    console.log(error);
     res.status(500).send("server error");
   }
 });
@@ -470,7 +460,6 @@ router.post("/getNftsWithParams", async (req, res) => {
       hasMore: nftTypes.length === req.body.limit,
     });
   } catch (error) {
-    console.log(error);
     res.status(500).send("server error");
   }
 });
@@ -572,17 +561,14 @@ router.post("/uploadAudioS3", async (req, res) => {
     const singleUpload = upload.single("audioFile");
     singleUpload(req, res, function (err) {
       if (err instanceof multer.MulterError) {
-        console.log("singleUpload multer", err);
         return res.status(500).json(err);
       } else if (err) {
-        console.log("singleUpload error", err);
         return res.status(500).json(err);
       } else {
         return res.json({ success: true });
       }
     });
   } catch (err) {
-    console.log(err);
     res.status(500).json(err);
   }
 });
@@ -601,16 +587,13 @@ router.post("/handleAudio", async (req, res) => {
     let upload = multer({ storage: storage }).single("audioFile");
     upload(req, res, function (err) {
       if (err instanceof multer.MulterError) {
-        console.log("handleAudio multer", err);
         return res.status(500).json(err);
       } else if (err) {
-        console.log("handleAudio", err);
         return res.status(500).json(err);
       }
       return res.status(200).send(req.file);
     });
   } catch (err) {
-    console.log(err);
     res.status(500).send("server error");
   }
 });
@@ -646,20 +629,17 @@ router.post("/uploadImageS3", async (req, res) => {
   });
   const singleUpload = upload.single("imageFile");
   singleUpload(req, res, async function (err) {
-    console.log("uploadImageS3: ", req.body);
     let draft = await NftType.findOne({
       isDraft: true,
       address: req.body.artist,
     });
     if (err instanceof multer.MulterError) {
-      console.log("uploadImageS3 multer", err);
       if (draft) {
         draft.imageUrl = "";
         await draft.save();
       }
       return res.status(500).json(err);
     } else if (err) {
-      console.log("uploadImageS3", err);
       if (draft) {
         draft.imageUrl = "";
         await draft.save();
@@ -689,24 +669,20 @@ router.post("/handleImage", async (req, res) => {
 
     upload(req, res, function (err) {
       if (err instanceof multer.MulterError) {
-        console.log("handleImage multer", err);
         return res.status(500).json(err);
       } else if (err) {
-        console.log("handleImage", err);
         return res.status(500).json(err);
       }
       // uploadToS3Bucket("nftfm-image", req, res);
       return res.status(200).send(req.file);
     });
   } catch (err) {
-    console.log(err);
     res.status(500).send("server error");
   }
 });
 
 router.post("/getNSecondsOfSong", async (req, res) => {
   const _start = new Date();
-  console.log("getting n seconds");
 
   if (req.body.nft) {
     const s3 = getBucket();
@@ -715,7 +691,6 @@ router.post("/getNSecondsOfSong", async (req, res) => {
       .promise()
       .then((res) => res.ContentLength)
       .catch((err) => {
-        console.log(err);
         res.status(500).send("Couldnt retrieve nSec of music");
       });
 
@@ -724,12 +699,6 @@ router.post("/getNSecondsOfSong", async (req, res) => {
       : 0;
     const nSec = req.body.nSec || 15;
     const partialBytes = (songFullSize * nSec) / req.body.nft.dur + startTime;
-    console.log("partial bytes", partialBytes.toFixed(0));
-    console.log(req.body.nft);
-    console.log("startTime", startTime.toFixed(0));
-    console.log(
-      "bytes=" + startTime.toFixed(0) + "-" + partialBytes.toFixed(0)
-    );
     s3.getObject(
       {
         Bucket: "nftfm-music",
@@ -741,11 +710,6 @@ router.post("/getNSecondsOfSong", async (req, res) => {
           console.log("Failed to retrieve an object: " + error);
         } else {
           const _end = new Date();
-
-          console.log(
-            "Operation took " + (_end.getTime() - _start.getTime()) + " msec"
-          );
-          console.log("LOADED " + data.ContentLength + " bytes");
           res.status(200).send(data);
         }
       }
@@ -754,7 +718,6 @@ router.post("/getNSecondsOfSong", async (req, res) => {
 });
 
 router.post("/getPartialSong", async (req, res) => {
-  console.log("getting partial");
   const s3 = getBucket();
   const songFullSize = await s3
     .headObject({ Key: req.body.key, Bucket: "nftfm-music" })
@@ -762,12 +725,10 @@ router.post("/getPartialSong", async (req, res) => {
     .then((res) => res.ContentLength)
     .catch((err) => console.log("err", err));
 
-  console.log("SongFullSize", songFullSize);
 
   let partialBytes = req.body.howManySec
     ? req.body.howManySec
     : (songFullSize / 20).toFixed(0);
-  console.log("partial bytes", partialBytes);
   s3.getObject(
     {
       Bucket: "nftfm-music",
@@ -776,10 +737,8 @@ router.post("/getPartialSong", async (req, res) => {
     },
     function (error, data) {
       if (error != null) {
-        console.log("Failed to retrieve an object: " + error);
         res.status(500).send("Couldnt retrieve nSec of music");
       } else {
-        console.log("LOADED " + data.ContentLength + " bytes");
         res.status(200).send(data);
       }
     }
@@ -804,13 +763,10 @@ router.post("/getSong", async (req, res) => {
     { Bucket: "nftfm-music", Key: req.body.key },
     function (error, data) {
       const end = Date.now();
-      console.log(end - start);
       if (error != null) {
-        console.log("Failed to retrieve an object: " + error);
         res.status(500).send("Couldnt retrieve song of music");
         return;
       } else {
-        console.log("Loaded " + data.ContentLength + " bytes");
         res.status(200).send(data); // successful response
       }
     }
@@ -819,7 +775,6 @@ router.post("/getSong", async (req, res) => {
 
 router.post("/getSongList", async (req, res) => {
   const account = req.body.account;
-  console.log("account: ", account);
   const params = {
     Bucket: "nftfm-music",
     Prefix: account,
@@ -840,7 +795,6 @@ router.post("/getSongList", async (req, res) => {
 
 router.post("/purchase", async (req, res) => {
   try {
-    console.log("purchase hit", req.body);
     let nft = await NftType.findOne({ _id: req.body.id });
     if (!nft) {
       res.status(500).send("No NFT found");
@@ -855,7 +809,6 @@ router.post("/purchase", async (req, res) => {
       res.status(500).send("No user found");
       return;
     }
-    console.log("mid", user, nft);
 
     user.nfts.push({ nft: nft._id, quantity: 1 });
 
@@ -873,10 +826,8 @@ router.post("/purchase", async (req, res) => {
         nftPrice: nft.price,
       });
     }
-    console.log("end?", user, nft);
     res.status(200).send("Success!");
   } catch (err) {
-    console.log("err", err);
     res.status(500).send(err);
   }
 });
@@ -924,7 +875,6 @@ router.post("/search", async (req, res) => {
 
 router.post("/checkRedeemable", async (req, res) => {
   try {
-    console.log("/checkredeem hit");
     const usersNfts = req.body.nfts;
     let userNftIds = [];
     for (let i = 0; i < usersNfts.length; i++) {
@@ -936,12 +886,9 @@ router.post("/checkRedeemable", async (req, res) => {
       isRedeemable: true,
     });
 
-    console.log("this", userOwnsRedeemable);
     if (userOwnsRedeemable[0]) {
-      console.log("there");
       res.status(200).send(userOwnsRedeemable[0]);
     } else {
-      console.log("here");
       res.status(404).send("User does not own a redeemable NFT.");
     }
   } catch (err) {
@@ -952,7 +899,6 @@ router.post("/checkRedeemable", async (req, res) => {
 
 router.post("/trackNftView", async (req, res) => {
   try {
-    console.log("nft View hit", req.body);
     const payload = {
       address: req.body.account,
       nftId: req.body.nftId,
@@ -973,7 +919,6 @@ router.post("/trackNftView", async (req, res) => {
 router.get("/testing", async (req, res) => {
   try {
     const nft = await NftType.findOne({ nftId: 4 });
-    console.log("testing", nft);
 
     let attributes = [
       {
@@ -986,29 +931,24 @@ router.get("/testing", async (req, res) => {
       },
     ];
     nft.badges.map((badge) => {
-      console.log("badge", badge);
       if (badge.founder) {
-        console.log("blop");
         attributes.push({
           trait_type: "Badge",
           value: "Founder NFT",
         });
       }
       if (badge.premium) {
-        console.log("bloop");
         attributes.push({
           trait_type: "Badge",
           value: "Premium NFT",
         });
       }
       if (badge.prerelease) {
-        console.log("bloop");
         attributes.push({
           trait_type: "Badge",
           value: "Prerelease NFT",
         });
       }
-      console.log("attributes", attributes);
     });
   } catch (err) {
     res.status(500).send(err);

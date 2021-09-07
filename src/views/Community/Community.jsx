@@ -31,7 +31,6 @@ const Community = () => {
         sort,
       })
       .then((res) => {
-        console.log("suggestions", res.data);
         setSuggestions(res.data.suggestions);
         setUserAlreadySuggested(res.data.userAlreadySuggested);
         setTotalPages(res.data.totalPages);
@@ -80,13 +79,12 @@ const Community = () => {
         fetchSuggestions();
       })
       .catch((err) => {
-        console.log(err.response);
         swal.fire({
           title: `Error: ${err.response ? err.response.status : 404}`,
           text: `${err.response ? err.response.data : "server error"}`,
           imageUrl: errorIcon,
           imageWidth,
-          imageHeight
+          imageHeight,
         });
       });
   };

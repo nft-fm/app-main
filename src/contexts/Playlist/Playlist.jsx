@@ -27,14 +27,12 @@ export const PlaylistProvider = ({ children }) => {
     let next_nft = _nfts[nextIndex];
     let prev_nft = _nfts[prevIndex];
     if (next_nft && !next_nft.buffer) {
-      console.log("fetching next");
       const next_song = await axios.post("api/nft-type/getSong", {
         key: next_nft.address + "/" + next_nft.audioUrl.split("/").slice(-1)[0],
       });
       _nfts[nextIndex] = { ..._nfts[nextIndex], buffer: next_song };
     }
     if (prev_nft && !prev_nft.buffer) {
-      console.log("fetching prev");
       const prev_song = await axios.post("api/nft-type/getSong", {
         key: prev_nft.address + "/" + prev_nft.audioUrl.split("/").slice(-1)[0],
       });
@@ -51,7 +49,6 @@ export const PlaylistProvider = ({ children }) => {
     }
     if (!index || index < 0) setIndex(0);
     const newIndex = index === nfts.length - 1 ? 0 : index + 1;
-    console.log("nEW INDEX", newIndex);
     //setSelectedNft(nfts[newIndex]);
     //setIndex(newIndex);
   };
@@ -69,23 +66,18 @@ export const PlaylistProvider = ({ children }) => {
   };
 
   const setNftsCallback = (_nfts) => {
-    console.log("set nfts callback");
     setNfts(_nfts);
   };
 
   const setNftCallback = (_nft) => {
-    console.log("setting nft callback");
     if (selectedNft) {
-      console.log("set with selecting");
       setSelectedNft(false);
       const timer = setTimeout(() => {
-        console.log("timer out");
         setSelectedNft(_nft);
         setIndex(nfts.indexOf(_nft));
         clearTimeout(timer);
       }, 10);
     } else if (_nft) {
-      console.log("set not selected");
       setSelectedNft(_nft);
       setIndex(nfts.indexOf(_nft));
       setIsOpen(true);
@@ -93,18 +85,13 @@ export const PlaylistProvider = ({ children }) => {
   };
 
   const exitPlayer = () => {
-    console.log("exit player");
     setIsOpen(false);
     const timer = setTimeout(() => {
-      console.log("exit player time out");
       setSelectedNft(null);
       clearTimeout(timer);
     }, animTime * 1000);
   };
 
-  useEffect(() => {
-    console.log("selected nft changed", selectedNft);
-  }, [selectedNft]);
   useEffect(() => {
     setNfts([]);
     setSelectedNft();

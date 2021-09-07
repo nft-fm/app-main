@@ -54,10 +54,8 @@ async function switchNetwork(network) {
     });
 
     if (!errors) {
-      console.log("All good!");
       return;
     } else {
-      console.log("Your loss!");
       return;
     }
   } catch (error) {

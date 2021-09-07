@@ -149,7 +149,6 @@ router.post('/vote', async (req, res) => {
 
     if (!voteAmount) return res.status(400).send("You do not have any $VINYL to vote with")
     if (!optionId || !address) {
-      console.log("something went wrong", optionId, address)
       return res.status(401).send("Something went wrong")
     } 
     const user = await User.findOne({ address })

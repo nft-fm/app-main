@@ -100,7 +100,7 @@ const MusicPlayer = (props) => {
 
       setStartTime(_bufferSrc.context.currentTime);
       /*props.setCurrentBuffer(songFile);*/
-    })
+    });
 
     return _bufferSrc;
   };
@@ -115,7 +115,6 @@ const MusicPlayer = (props) => {
       audioContextRef.current
     )
       audioContextRef.current.resume();
-    console.log("STARTED PARTIAL SONG");
     /*Prepare callback for when buffer finishes and checks if full song is loaded
     If not, the old buffer will be paused*/
     _bufferSrc.onended = (e) => {
@@ -141,15 +140,15 @@ const MusicPlayer = (props) => {
         (fullFile) => {
           prepareRemainingSong(fullFile, _bufferSrc);
           /*props.setCurrentBuffer(fullFile);*/
-        }, (e) => {
+        },
+        (e) => {
           Swal.fire({
             title: "Sorry, something went wrong loading the music",
             text: "Please reload the page",
             imageUrl: errorIcon,
             imageWidth,
-            imageHeight          
+            imageHeight,
           });
-          console.log("Error: ", e.err);
         }
       );
     /*props.fetchPrevNext();*/
@@ -157,7 +156,6 @@ const MusicPlayer = (props) => {
 
   const startRemainingSong = (data) => {
     if (fullBufferSrc && fullBufferSrc.current) {
-      console.log("STARTING REMAINING SONG");
       let fullBuffer = fullBufferSrc.current;
       fullBuffer.connect(volumeRef.current);
       fullBuffer.start(0, data.currentTarget.buffer.duration);
@@ -170,7 +168,6 @@ const MusicPlayer = (props) => {
   };
 
   const prepareRemainingSong = async (songFile, partial) => {
-    console.log("PREPARE REMAINING SONG");
     const fullTime = partial.buffer.duration;
     const abSong = toArrayBuffer(songFile.data.Body.data);
     const _bufferSrc = audioContextRef.current.createBufferSource();
@@ -197,11 +194,8 @@ const MusicPlayer = (props) => {
       /*Verify If audio already reached end of preloaded buffer
       Else the new buffer will only start by the event set in the partialBuffer*/
       if (_isLoading || _counter > fullTime) {
-        console.log("WILL START REMAINING SONG");
         /*If we got buffer right when the buffer stopped we need to protect It against trying to restart buffer*/
-        partialBufferSrc.current.onended = () => {
-          console.log("HAHA");
-        };
+        partialBufferSrc.current.onended = () => {};
         setSongFullyLoaded(true);
         _bufferSrc.connect(volumeRef.current);
         _bufferSrc.start(0, _counter);
@@ -211,8 +205,8 @@ const MusicPlayer = (props) => {
       }
       /*props.fetchPrevNext();
       props.setCurrentBuffer(songFile);*/
-    })
-  }
+    });
+  };
 
   const startSong = async (songFile) => {
     const _bufferSrc = await startNewContext(songFile);
@@ -236,7 +230,6 @@ const MusicPlayer = (props) => {
   };
 
   const stopSong = () => {
-    console.log("STOP SONG");
     setIsPlaying(false);
     if (audioContextRef.current.suspend) {
       audioContextRef.current.suspend();
@@ -244,7 +237,6 @@ const MusicPlayer = (props) => {
   };
 
   const skipToFullBuffer = async (time) => {
-    console.log("skip to full buffer");
     const currentTime = partialBufferSrc.current.context.currentTime;
     /*Bellow, when we stop the buffer, we start the full buffer,
     because of that is necessary to stop and disconnect also the new one*/
@@ -281,9 +273,7 @@ const MusicPlayer = (props) => {
 
     /*Verify if already has full buffer not loaded yet*/
     if (fullBufferSrc && fullBufferSrc.current && !songFullyLoaded) {
-      partialBufferSrc.current.onended = () => {
-        console.log("HAHA");
-      };
+      partialBufferSrc.current.onended = () => {};
       skipToFullBuffer(time);
     } else if (
       !fullBufferSrc.current &&
@@ -303,8 +293,6 @@ const MusicPlayer = (props) => {
       setIsLoading(true);
     } else if (bufferSrcRef.current) {
       /*If doesnt have full song yet, will skip to the end of the song (what will run the onEnd event callback from the partialBuffer)*/
-      console.log("IS FULLY LOADED OR WANTS A PART ALREADY LOADED");
-      console.log("bufferSrcRef", bufferSrcRef);
       bufferSrcRef.current.stop();
       bufferSrcRef.current.disconnect();
 
@@ -362,11 +350,19 @@ const MusicPlayer = (props) => {
         bufferSrcRef.current.stop();
         bufferSrcRef.current.disconnect();
       }
-      axios.post("api/nft-type/getPartialSong", { key: nft.address + "/" + nft.audioUrl.split('/').slice(-1)[0] })
-          .then((songFile) => {
-              startPartialSong(songFile);
-      }, (e) => { console.log("Error: ", e.err); })
-    }
+      axios
+        .post("api/nft-type/getPartialSong", {
+          key: nft.address + "/" + nft.audioUrl.split("/").slice(-1)[0],
+        })
+        .then(
+          (songFile) => {
+            startPartialSong(songFile);
+          },
+          (e) => {
+            console.log("Error: ", e.err);
+          }
+        );
+    };
     setCounter(0);
     if (!nft.buffer) {
       getPartialSong();

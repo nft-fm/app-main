@@ -90,12 +90,10 @@ const Step2 = ({
             )
             setImageName("");
           }
-          console.log(res);
         })
         .catch((err) => {
           setIsLoadingImage(false);
           setImageFile(null);
-          console.log(err);
           setNftData({
             ...nftData,
             imageUrl: ""
@@ -119,8 +117,6 @@ const Step2 = ({
     var duration = buffer.duration;
     var channels = buffer.numberOfChannels;
     var rate = buffer.sampleRate;
-
-    console.log("channels", channels);
     if (typeof end === "function") {
       callback = end;
       end = duration;
@@ -170,7 +166,6 @@ const Step2 = ({
     audioContext,
     audioFile
   ) => {
-    console.log("uploading file");
     setIsLoadingAudio(true);
     axios
       .post("api/nft-type/uploadAudioS3", audioFormData, {
@@ -179,14 +174,11 @@ const Step2 = ({
         },
       })
       .then((res) => {
-        console.log(res);
         if (res.status === 200) {
-          console.log("originalBUFFER", buffer);
           sliceBuffer(audioContext, buffer, 0, 15, (error, newBuffer) => {
             if (error) {
               console.log(error);
             } else {
-              console.log("NEW BUFFER", newBuffer);
               const snnipetMp3Buffer = audioBufferToMp3(newBuffer);
 
               const snnipetFile = new File(snnipetMp3Buffer, audioFile.name, {
@@ -216,7 +208,6 @@ const Step2 = ({
                   },
                 })
                 .then((response) => {
-                  console.log(response);
                   setTempAudioData({
                     audioUrl:
                       "https://nftfm-music.s3-us-west-1.amazonaws.com/" +
@@ -247,7 +238,6 @@ const Step2 = ({
                     snnipet: "",
                     dur: 0
                   });
-                  console.log("snnipets upload failed", error);
                   setIsLoadingAudio(false);
                   setAudioName("")
                 });
@@ -256,7 +246,6 @@ const Step2 = ({
         }
       })
       .catch((err) => {
-        console.log(err);
         setAudioName("")
         setNftData({
           ...nftData,

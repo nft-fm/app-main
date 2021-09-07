@@ -17,11 +17,9 @@ class CountDown extends React.Component {
   }
 
   componentDidMount() {
-    console.log("this.props", this.props);
     // let diffTime = 1621357200 - moment.utc();
     let diffTime = this.props.launchDate - moment.utc();
     let duration = moment.duration(diffTime);
-    console.log("duration", duration);
     setInterval(() => {
       duration = moment.duration(duration - 1000);
       this.setState({

@@ -73,11 +73,10 @@ const BuyNftModal = (props) => {
   };
 
   const purchase = async (id) => {
-    console.log('begin purchase function', id, nft)
-
-    if ((nft.chain === "ETH" && (currChainId !== 1 && currChainId !== 4))
-    || (nft.chain === "BSC" && (currChainId !== 56 && currChainId !== 97))) {
-      console.log("currchainId", nft.chain, currChainId);
+    if (
+      (nft.chain === "ETH" && currChainId !== 1 && currChainId !== 4) ||
+      (nft.chain === "BSC" && currChainId !== 56 && currChainId !== 97)
+    ) {
       swal.fire({
         title: `Wrong Chain`,
         text: `You must be on the ${nft.chain} blockchain to purchase this NFT. You can change chains in the navbar.`,
@@ -93,8 +92,7 @@ const BuyNftModal = (props) => {
     await getEthBalance(async (balance) => {
       if (parseFloat(balance) >= nft.price) {
         Swal.fire({
-          title:
-            "Purchasing, please do not leave this page.",
+          title: "Purchasing, please do not leave this page.",
           showConfirmButton: false,
           timer: 3000,
         }).then(async () => {
@@ -142,11 +140,9 @@ const BuyNftModal = (props) => {
                     "error"
                   );
                   setIsLoading(false);
-                  console.log(err);
                 });
             }
           ).catch((err) => {
-            console.log(err);
             setIsLoading(false);
             swal.fire({
               imageUrl: errorIcon,
@@ -198,7 +194,6 @@ const BuyNftModal = (props) => {
     hide();
   };
 
-
   const connectWallet = async () => {
     const newChainId = await window.ethereum.request({ method: "eth_chainId" });
     if (Number(newChainId) === process.env.REACT_APP_IS_MAINNET ? 1 : 4) {
@@ -226,8 +221,6 @@ const BuyNftModal = (props) => {
     return hDisplay + mDisplay + sDisplay;
   };
 
-
-
   if (!open) return null;
   return (
     <OpaqueFilter onClick={(e) => !isLoading && hide(e)}>
@@ -239,19 +232,25 @@ const BuyNftModal = (props) => {
             <CardTop>
               <Side>
                 <IconArea>
-        <LikeButton onClick={() => like()} aria-pressed={liked} aria-label="like button">
-        {liked ? (
-          <LikedHeart aria-hidden="true"/>
-        ) : (
-          <Heart aria-hidden="true"/>
-        )}
-        </LikeButton>
+                  <LikeButton
+                    onClick={() => like()}
+                    aria-pressed={liked}
+                    aria-label="like button"
+                  >
+                    {liked ? (
+                      <LikedHeart aria-hidden="true" />
+                    ) : (
+                      <Heart aria-hidden="true" />
+                    )}
+                  </LikeButton>
                   {likeCount}
                 </IconArea>
                 <IconArea>
-        <ShareButton onClick={() => share()} aria-label="share button">
-
-                  <Share onClick={() => share()} />
+                  <ShareButton
+                    onClick={() => share()}
+                    aria-label="share button"
+                  >
+                    <Share onClick={() => share()} />
                   </ShareButton>
                   {nft.shareCount}
                 </IconArea>
@@ -266,59 +265,60 @@ const BuyNftModal = (props) => {
             </CardTop>
             <BadgeHolder>
               {
-              // {!} refactor badges into independent component
-              nft.badges?.map((badge) => {
-                if (badge.founder) {
-                  return (
-                    <FounderBadge
-                      key={badge}
-                      data-tip
-                      data-for="founderBadge"
-                    />
-                  );
-                }
-                if (badge.premium) {
-                  return (
-                    <PremiumBadge
-                      key={badge}
-                      data-tip
-                      data-for="premiumBadge"
-                    />
-                  );
-                }
-                if (badge.prerelease) {
-                  return (
-                    <PrereleaseBadge
-                      key={badge}
-                      data-tip
-                      data-for="prereleaseBadge"
-                    />
-                  );
-                }
-                if (badge.exclusive) {
-                  return (
-                    <ExclusiveBadge
-                      key={badge}
-                      data-tip
-                      data-for="exclusiveBadge"
-                    />
-                  );
-                }
-                if (badge.redeem) {
-                  return (
-                    <>
-                      <MerchBadge
-                        className="merchBadge"
+                // {!} refactor badges into independent component
+                nft.badges?.map((badge) => {
+                  if (badge.founder) {
+                    return (
+                      <FounderBadge
+                        key={badge}
                         data-tip
-                        data-for="merchTip"
+                        data-for="founderBadge"
                       />
-                      <ReactToolTip id="merchTip" place="top" effect="solid">
-                        Merch
-                      </ReactToolTip>
-                    </>
-                  );
-                }
-              })}
+                    );
+                  }
+                  if (badge.premium) {
+                    return (
+                      <PremiumBadge
+                        key={badge}
+                        data-tip
+                        data-for="premiumBadge"
+                      />
+                    );
+                  }
+                  if (badge.prerelease) {
+                    return (
+                      <PrereleaseBadge
+                        key={badge}
+                        data-tip
+                        data-for="prereleaseBadge"
+                      />
+                    );
+                  }
+                  if (badge.exclusive) {
+                    return (
+                      <ExclusiveBadge
+                        key={badge}
+                        data-tip
+                        data-for="exclusiveBadge"
+                      />
+                    );
+                  }
+                  if (badge.redeem) {
+                    return (
+                      <>
+                        <MerchBadge
+                          className="merchBadge"
+                          data-tip
+                          data-for="merchTip"
+                        />
+                        <ReactToolTip id="merchTip" place="top" effect="solid">
+                          Merch
+                        </ReactToolTip>
+                      </>
+                    );
+                  }
+                })
+              }
               <ReactToolTip id="founderBadge" place="top" effect="solid">
                 Founder
               </ReactToolTip>
@@ -379,7 +379,7 @@ const BuyNftModal = (props) => {
                     : "--"}{" "}
                 </PriceItem>
                 &nbsp;
-                {nft.chain === "ETH" ? <Eth /> : <Bsc/>}
+                {nft.chain === "ETH" ? <Eth /> : <Bsc />}
               </PriceHolder>
             </PricesContainer>
             {!account ? (
@@ -431,22 +431,22 @@ const BuyNftModal = (props) => {
 };
 
 const LikeButton = styled.button`
-background-color: transparent;
-padding: 0px;
-border: none;
-width: min-content;
-height: min-content;
-margin: 0px 4px 0 0;
-`
+  background-color: transparent;
+  padding: 0px;
+  border: none;
+  width: min-content;
+  height: min-content;
+  margin: 0px 4px 0 0;
+`;
 
 const ShareButton = styled.button`
-background-color: transparent;
-padding: 0px;
-border: none;
-width: min-content;
-height: min-content;
-margin: 0px 4px 0 0;
-`
+  background-color: transparent;
+  padding: 0px;
+  border: none;
+  width: min-content;
+  height: min-content;
+  margin: 0px 4px 0 0;
+`;
 
 const Bsc = styled(IconBinance)`
   width: 18px;
@@ -569,7 +569,6 @@ const ButtonText = styled.span`
   font-weight: 600;
   color: white;
 `;
-
 
 const PricesContainer = styled.div`
   width: 100%;
@@ -711,7 +710,7 @@ const CardTitle = styled.div`
 `;
 
 const OpaqueFilter = styled.div`
-cursor: default;
+  cursor: default;
   width: 100vw;
   height: 100vh;
   position: fixed;

@@ -22,7 +22,6 @@ const {
 
 router.post("/get-account", async (req, res) => {
   try {
-    console.log("get-account hit", req.body);
     let user = await User.findOne({ address: req.body.address });
     if (!user) {
       user = new User({
@@ -61,14 +60,12 @@ router.post("/get-account", async (req, res) => {
 
     res.send(user);
   } catch (error) {
-    console.log(error);
     res.status(500).send("server error");
   }
 });
 
 router.post("/track-pageview", async (req, res) => {
   try {
-    console.log("pageview ping");
     if (process.env.PRODUCTION) {
       trackPageview({
         address: req.body.account,
@@ -78,7 +75,6 @@ router.post("/track-pageview", async (req, res) => {
     }
     res.status(200).send("success");
   } catch (error) {
-    console.log(error);
     res.status(500).send("server error");
   }
 });
@@ -95,9 +91,7 @@ router.post("/update-account", async (req, res) => {
       //if another account (checked by address) has the same name, send error
       res.status(403).send("Duplicate name");
     } else {
-      console.log("front end socials", req.body.aggregatedSocials);
       let user = await User.findOne({ address: req.body.address });
-      console.log("updated user socials", user.socials);
 
       if (user.username != req.body.username) {
         const updateNfts = await NftType.updateMany(
@@ -114,7 +108,6 @@ router.post("/update-account", async (req, res) => {
       res.send(user);
     }
   } catch (error) {
-    console.log(error);
     res.status(500).send(error);
   }
 });
@@ -145,7 +138,6 @@ router.post("/like-nft", async (req, res) => {
       }
     );
   } catch (error) {
-    console.log(error);
     res.sendStatus(500);
   }
 });
@@ -154,7 +146,6 @@ router.post("/like-nft", async (req, res) => {
 //check if folder for user exists, if not create one
 //attach policy allowing them to access folder
 router.post("/getNftFolder/:address", async (req, res) => {
-  console.log(req.body);
   const address = req.params.address;
   var AWS = require("aws-sdk");
   AWS.config.region = "us-west-2";
@@ -185,9 +176,7 @@ router.post("/getNftFolder/:address", async (req, res) => {
     s3Client.upload(createFolderParams, function (err, data) {
       if (err) {
         res.status(400).send("error creating folder: ", err);
-        console.log("Error creating the folder: ", err);
       } else {
-        console.log("Successfully created a folder on S3");
         res.status(200).send("created folder!");
       }
     });
@@ -246,10 +235,8 @@ router.post("/uploadNft/:address", async (req, res) => {
   const run = async () => {
     // Add the required 'Key' parameter using the 'path' module.
     uploadParams.Key = address + "/" + path.basename(file);
-    console.log("uploadParams: ", uploadParams);
     try {
       const data = await s3.send(new PutObjectCommand(uploadParams));
-      console.log("Success", data);
     } catch (err) {
       console.log("Error", err);
     }
@@ -283,12 +270,9 @@ router.post("/uploadProfilePicS3", async (req, res) => {
   });
   const singleUpload = upload.single("imageFile");
   singleUpload(req, res, function (err) {
-    console.log("uploadImageS3: ", req.body);
     if (err instanceof multer.MulterError) {
-      console.log("uploadImageS3 multer", err);
       return res.status(500).json(err);
     } else if (err) {
-      console.log("uploadImageS3", err);
       return res.status(500).json(err);
     }
     User.findOneAndUpdate(
@@ -302,7 +286,6 @@ router.post("/uploadProfilePicS3", async (req, res) => {
 
 router.post("/get-public-account", async (req, res) => {
   try {
-    console.log("/get public account hit", req.body);
     const getUser = await User.findOne({ suburl: req.body.suburl });
     const getNfts = await NftType.find({
       address: getUser.address,
@@ -382,7 +365,6 @@ const NodeMail = (name, email, music, account) => {
 
 router.post("/send-artist-form", async (req, res) => {
   try {
-    console.log("/send-artist-form", req.body);
     const { name, email, account, musicLinks } = req.body;
     NodeMail(name, email, musicLinks, account); //sends Jackson and Quinn an email alerting them, can remove once new docusigner is found
 
@@ -401,7 +383,6 @@ router.post("/send-artist-form", async (req, res) => {
     let alreadyApplied = await Application.findOne({
       $or: [{ email: email }, { account: account }],
     });
-    console.log("already?", alreadyApplied);
     if (alreadyApplied) {
       return res.status(403).send("You have already submitted an application.");
     }
@@ -419,7 +400,6 @@ router.post("/send-artist-form", async (req, res) => {
     }
     res.sendStatus(401);
   } catch (err) {
-    console.log(err);
     res.status(500).send(err);
   }
 });
@@ -465,7 +445,6 @@ const newRedeemer = (address) => {
   let accessToken = "";
   const getAToken = async () => {
     accessToken = await OAuth2Client.getAccessToken();
-    console.log("accessToken", accessToken.token);
     return accessToken;
   };
   getAToken();
@@ -519,7 +498,6 @@ const newRedeemer = (address) => {
 
 router.post("/updateRedeemers", async (req, res) => {
   try {
-    console.log("here");
     let nft = await NftType.findOneAndUpdate(
       { nftId: req.body.nftId },
       { $push: { redeemedBy: req.body.address } },

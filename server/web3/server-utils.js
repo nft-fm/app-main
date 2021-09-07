@@ -20,7 +20,6 @@ const NFTTokenABI = require("./abi/NFTToken.abi");
 const VinylABI = require("./abi/Vinyl.abi");
 
 const sign = (types, values) => {
-  console.log("signing", ...values);
   let data = utils.defaultAbiCoder.encode(types, values);
 
   const hash = utils.keccak256(utils.hexlify(data));
@@ -66,16 +65,7 @@ const findLikes = (nfts, account) => {
         liked: false,
       };
     }
-    // const extraInfo = await getSetSale(nfts[i].nftId)
-    // console.log("EXTRA INFO", extraInfo)
-    // nfts[i] = {
-    //   ...nfts[i],
-    //   price: extraInfo.price,
-    //   quantity: extraInfo.quantity,
-    //   sold: extraInfo.sold
-    // }
   }
-  // console.log("NFTS", nfts);
   return nfts;
 };
 
@@ -161,7 +151,6 @@ const getVinylOwners = async (addresses) => {
       ? process.env.MAIN_PROVIDER_URL
       : process.env.RINKEBY_PROVIDER_URL
   );
-  console.log(addresses);
   const vinylAddress = process.env.REACT_APP_IS_MAINNET
     ? MAIN_VinylAddress
     : TEST_VinylAddress;
@@ -174,7 +163,6 @@ const getVinylOwners = async (addresses) => {
   );
 
   let newVariable = await Promise.all([...promises]).then((res) => res);
-  console.log(newVariable);
   return newVariable;
 };
 

@@ -21,7 +21,6 @@ const Redeem = () => {
       axios
         .post("/api/nft-type/checkRedeemable", user)
         .then((res) => {
-          console.log(res);
           if (res.status === 200) {
             setOwnsRedeemable(true);
           }
@@ -37,28 +36,22 @@ const Redeem = () => {
         });
     }
   }, [user]);
-
-  console.log(
-    "already, owns, form",
-    alreadyRedeemed,
-    ownsRedeemable,
-    formSubmitted
-  );
-
   return (
     <Switch>
       {!ownsRedeemable && !alreadyRedeemed && <FourOhFour />}
       <BaseView>
         {/* {alreadyRedeemed && <div style={{color: 'white'}}>You have already submitted your information</div>} */}
-        {(ownsRedeemable && !formSubmitted && !alreadyRedeemed) &&
-        // ||
-          // (!alreadyRedeemed && (
+        {
+          ownsRedeemable && !formSubmitted && !alreadyRedeemed && (
+            // ||
+            // (!alreadyRedeemed && (
             <RedeemForm
               setFormSubmitted={setFormSubmitted}
               alreadyRedeemed={alreadyRedeemed}
             />
+          )
           // ))
-          }
+        }
         {(formSubmitted || alreadyRedeemed) && <Redemption />}
       </BaseView>
     </Switch>

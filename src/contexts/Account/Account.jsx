@@ -79,7 +79,6 @@ export const AccountProvider = ({ children }) => {
 
   const getChain = async () => {
     const newChainId = await window.ethereum.request({ method: "eth_chainId" });
-    console.log("currChainId", Number(newChainId));
     setCurrChainId(Number(newChainId));
   };
 

@@ -23,12 +23,6 @@ const NftCard = (props) => {
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
 
-  // const show = () => setIsOpen(true);
-  // const hide = (e) => {
-  //   setIsOpen(false);
-  //   console.log("isOpen", isOpen);
-  // };
-
   const hide = () => {
     setIsModalOpen(false);
   };

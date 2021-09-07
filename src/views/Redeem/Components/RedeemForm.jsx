@@ -31,7 +31,6 @@ const RedeemForm = (props) => {
   const zipRef = useRef(null);
 
   const [complete, setComplete] = useState(false);
-  console.log("compltete", complete);
 
   if (
     email != "" &&
@@ -65,12 +64,10 @@ const RedeemForm = (props) => {
     axios
       .post("/api/user/shipping", formData)
       .then((res) => {
-        console.log(res);
         if (res.status === 200) {
           axios
             .post("/api/user/updateRedeemers", { address: account, nftId: 16 }) //CHANGE THIS TO SAQI's NFT ID!!!!!!!!
             .then((res) => {
-              console.log(res);
               if (res.status === 200) {
                 setFormSubmitted(true);
               }
@@ -79,8 +76,6 @@ const RedeemForm = (props) => {
       })
       .catch((err) => console.log(err));
   };
-
-  console.log("reddem form", alreadyRedeemed);
 
   return (
     <Container onSubmit={(e) => !alreadyRedeemed && handleSubmit(e)}>

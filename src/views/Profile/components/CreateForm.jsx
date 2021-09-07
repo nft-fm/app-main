@@ -107,14 +107,11 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
             : nftData
         )
         .then((res) => {
-          // console.log("success", res.data)
-
           setNftData(res.data);
           setIsLoading(false);
           setReset(false);
         })
         .catch((err) => {
-          console.log(err);
           setIsLoading(false);
         });
     }
@@ -169,7 +166,6 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
 
   const handleSubmit = (e) => {
     // e.preventDefault();
-    console.log("DUR", nftData.dur);
     if (!isComplete()) {
       return;
     }
@@ -201,7 +197,6 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
 
     //Input validation below here
     if (nftData.numMinted === "0" || nftData.numMinted === 0) {
-      console.log("e");
       swal.fire({
         title: "Created amount cannot be 0.",
         timer: 5000,
@@ -212,7 +207,6 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
       return;
     }
     if (Number(nftData.price) === 0) {
-      console.log("re");
       swal.fire({
         title: "Total Copies or NFT Price cannot be 0.",
         timer: 5000,
@@ -224,7 +218,6 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
     }
 
     if (!nftData.imageUrl || !nftData.audioUrl) {
-      console.log("here");
       swal.fire({
         title: "Please wait for your audio and image files to be processed.",
         timer: 5000,
@@ -243,56 +236,49 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
     setIsLoadingImage(true);
 
     // after nftData has both audio and image references, run this route
-    // console.log("newNftData", newNftData);
     axios
       .post("/api/nft-type/finalize", newNftData)
       .then((res) => {
-        console.log("finalize res", res);
         if (res.status === 200) {
           setIsLoading(true);
-          mintNFT(
-            res.data,
-            () => {
-              console.log("final");
-              axios
-                .post("/api/nft-type/notDraftAnymore", newNftData)
-                .then((res) => {
-                  if (res.status === 200) {
-                    setNftData({
-                      ...initialNftState,
-                      artist: user && user.username ? user.username : "",
+          mintNFT(res.data, () => {
+            axios
+              .post("/api/nft-type/notDraftAnymore", newNftData)
+              .then((res) => {
+                if (res.status === 200) {
+                  setNftData({
+                    ...initialNftState,
+                    artist: user && user.username ? user.username : "",
+                  });
+                  setIsLoading(false);
+                  setIsLoadingAudio(false);
+                  setIsLoadingImage(false);
+                  swal
+                    .fire({
+                      imageUrl: successIcon,
+                      imageWidth,
+                      imageHeight,
+                      timer: 10000,
+                      title: "NFT Minted!",
+                      text: "It can take 2-3 minutes for the new NFT to appear on your profile.",
+                    })
+                    .then(() => {
+                      setReset(true);
+                      onCloseModal();
                     });
-                    setIsLoading(false);
-                    setIsLoadingAudio(false);
-                    setIsLoadingImage(false);
-                    swal
-                      .fire({
-                        imageUrl: successIcon,
-                        imageWidth,
-                        imageHeight,
-                        timer: 10000,
-                        title: "NFT Minted!",
-                        text: "It can take 2-3 minutes for the new NFT to appear on your profile.",
-                      })
-                      .then(() => {
-                        setReset(true);
-                        onCloseModal();
-                      });
-                  } else {
-                    setIsLoading(false);
-                    setIsLoadingAudio(false);
-                    setIsLoadingImage(false);
-                    swal.fire({
-                      title: "Error",
-                      background: `#000`,
-                      boxShadow: `24px 24px 48px -24px #131313`,
-                      text: "Nft creation failed on the server, please try again.",
-                    });
-                  }
-                });
-            }
-          ).catch((err) => {
-            console.log("ERROR", err);
+                } else {
+                  setIsLoading(false);
+                  setIsLoadingAudio(false);
+                  setIsLoadingImage(false);
+                  swal.fire({
+                    title: "Error",
+                    background: `#000`,
+                    boxShadow: `24px 24px 48px -24px #131313`,
+                    text: "Nft creation failed on the server, please try again.",
+                  });
+                }
+              });
+          }).catch((err) => {
             setIsLoading(false);
             setIsLoadingAudio(false);
             setIsLoadingImage(false);
@@ -304,7 +290,6 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
               text: "Make sure you are on the current chain and try again",
             });
           });
-          console.log("MINT");
         } else {
           setIsLoading(false);
           setIsLoadingAudio(false);
@@ -404,8 +389,7 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
       usdPerBnb={usdPerBnb}
       currChainId={currChainId}
     />,
-    <PreviewBuyModal nft={nftData} 
-    currChainId={currChainId}/>,
+    <PreviewBuyModal nft={nftData} currChainId={currChainId} />,
   ];
   if (currentStep === 1) {
     return (

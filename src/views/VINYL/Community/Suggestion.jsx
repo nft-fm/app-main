@@ -76,7 +76,6 @@ const Suggestion = ({ fetchSuggestions, suggestions, isDesktop, hasVinyl }) => {
           sig,
         })
         .then((res) => {
-          console.log("user", res.data);
           fetchSuggestions();
         })
         .catch((err) => {

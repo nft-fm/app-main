@@ -163,6 +163,17 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
     if (!isComplete()) {
       return;
     }
+
+    if (
+      window.location.hostname === "localhost" &&
+      (currChainId === 1 || currChainId === 56)
+    ) {
+      swal.fire({
+        title: "Localhost and Mainnet === bad",
+      });
+      return;
+    }
+
     let newNftData = { ...nftData, timestamp: moment().format() }; //sets timestamp to right when the /finalize route is called
     if (currChainId === 1 || currChainId === 4) {
       newNftData = { ...nftData, chain: "ETH" };

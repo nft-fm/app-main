@@ -416,9 +416,9 @@ const Container = styled.div`
   :focus {
     border: 1px solid white;
   }
-  :hover {
+  /* :hover {
     transform: ${(props) => !props.open && "translateY(-0.15em)"};
-  }
+  } */
 `;
 
 const Image = styled.img`

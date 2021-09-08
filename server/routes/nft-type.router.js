@@ -197,11 +197,15 @@ router.post("/finalize", async (req, res) => {
     newData.isDraft = false;
     let NFT_FlatPriceSale;
     if (newData.chain === "ETH") {
-      NFT_FlatPriceSale = process.env.REACT_APP_IS_MAINNET ? MAIN_FlatPriceSale : TEST_FlatPriceSale;
+      NFT_FlatPriceSale = process.env.REACT_APP_IS_MAINNET
+        ? MAIN_FlatPriceSale
+        : TEST_FlatPriceSale;
     } else if (newData.chain === "BSC") {
-      NFT_FlatPriceSale = process.env.REACT_APP_IS_MAINNET ? MAIN_BSC_FlatPriceSale : TEST_BSC_FlatPriceSale;
+      NFT_FlatPriceSale = process.env.REACT_APP_IS_MAINNET
+        ? MAIN_BSC_FlatPriceSale
+        : TEST_BSC_FlatPriceSale;
     } else {
-      console.error("CHAIN ERROR CHAIN ERROR")
+      console.error("CHAIN ERROR CHAIN ERROR");
     }
     let findNFT = await NftType.findById(newData._id);
     if (findNFT) {
@@ -255,6 +259,7 @@ router.post("/notDraftAnymore", async (req, res) => {
   try {
     let updateNFT = await NftType.findByIdAndUpdate(req.body._id, {
       isDraft: false,
+      timestamp: new Date(),
     });
     res.status(200).send("Success!");
   } catch (err) {
@@ -725,7 +730,6 @@ router.post("/getPartialSong", async (req, res) => {
     .then((res) => res.ContentLength)
     .catch((err) => console.log("err", err));
 
-
   let partialBytes = req.body.howManySec
     ? req.body.howManySec
     : (songFullSize / 20).toFixed(0);
@@ -895,7 +899,6 @@ router.post("/checkRedeemable", async (req, res) => {
     res.status(500).send(err);
   }
 });
-
 
 router.post("/trackNftView", async (req, res) => {
   try {

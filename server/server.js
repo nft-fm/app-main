@@ -15,7 +15,7 @@ const sessionMiddleware = require("./middleware/session-middleware");
 const path = require("path");
 const adminPollRouter = require("./routes/admin-poll.router");
 const vinylOwnerRouter = require("./routes/vinyl-owner.router");
-const Mixpanel = require('mixpanel');
+const Mixpanel = require("mixpanel");
 const { listenForMintEth, listenForMintBsc } = require("./web3/mint-listener");
 
 const PORT = process.env.PORT || 5000;
@@ -49,7 +49,6 @@ connectDB();
 listenForMintEth();
 listenForMintBsc();
 
-
 app.use(cookieParser());
 app.use(sessionMiddleware);
 app.use(express.static("build"));
@@ -64,7 +63,7 @@ app.use("/api/vinyl-owner", vinylOwnerRouter);
 app.use("/api/admin-poll", adminPollRouter);
 app.use("/api/airdrop", airRouter);
 
-app.set('trust proxy', true)
+app.set("trust proxy", true);
 
 app.get("/*", function (req, res) {
   res.sendFile(path.join(__dirname, "../build/index.html"), function (err) {

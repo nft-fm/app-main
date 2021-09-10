@@ -59,9 +59,17 @@ const NftCard = (props) => {
 
   useEffect(() => {
     if (window.location.pathname.length > 7) {
+      console.log(
+        "in here!",
+        window.location.pathname.slice(8, 11),
+        window.location.pathname.slice(12)
+      );
+      const chain = window.location.pathname.slice(8, 11).toUpperCase();
+      const nftId = window.location.pathname.slice(12);
       axios
         .post("/api/nft-type/get-one", {
-          id: window.location.pathname.slice(8),
+          chain: chain,
+          id: nftId,
           address: account,
         })
         .then((res) => {

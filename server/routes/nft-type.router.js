@@ -323,8 +323,8 @@ router.post("/notDraftAnymore", async (req, res) => {
 
 router.post("/get-one", async (req, res) => {
   try {
-    let { id, address } = req.body;
-    let nftType = await NftType.findOne({ nftId: id });
+    let { id, address, chain } = req.body;
+    let nftType = await NftType.findOne({ nftId: id, chain: chain });
 
     if (nftType) {
       res.send({ ...nftType.toObject(), likeCount: nftType.likes.length });

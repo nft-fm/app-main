@@ -59,13 +59,19 @@ const NftCard = (props) => {
 
   useEffect(() => {
     if (window.location.pathname.length > 7) {
-      console.log(
-        "in here!",
-        window.location.pathname.slice(8, 11),
-        window.location.pathname.slice(12)
-      );
-      const chain = window.location.pathname.slice(8, 11).toUpperCase();
-      const nftId = window.location.pathname.slice(12);
+      let chain;
+      let nftId;
+      if (
+        window.location.pathname.slice(8, 11).toUpperCase() !== "BSC" &&
+        window.location.pathname.slice(8, 11).toUpperCase() !== "ETH"
+      ) {
+        chain = "ETH";
+        nftId = window.location.pathname.slice(8);
+      } else {
+        chain = window.location.pathname.slice(8, 11).toUpperCase();
+        nftId = window.location.pathname.slice(12);
+      }
+      console.log(chain, nftId);
       axios
         .post("/api/nft-type/get-one", {
           chain: chain,

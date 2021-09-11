@@ -46,10 +46,11 @@ const Info = () => {
               <h3>FAQ</h3>
               <section>We answer your questions</section>
             </InfoSubContainer>
-            <InfoSubContainer onClick={() => handleClick("tokenomicsRef")}>
+            <InfoSubContainer>
+            {/* <InfoSubContainer onClick={() => handleClick("tokenomicsRef")}> */}
               <LinkImage src={tokenomics} alt="tokenomics" />
               <h3>Tokenomics</h3>
-              <section>How we use our token $VINYL</section>
+              <section>Coming Soon</section>
             </InfoSubContainer>
           </MobileInfo>
           <MobileInfo childs={1}>
@@ -111,7 +112,7 @@ const Info = () => {
           <FAQ />
         </LaunchContainer>
         <div id="tokenomicsRef" />
-        <Tokenomics />
+        {/* <Tokenomics /> */}
         <div id="teamsRef" />
         <Team />
       </BaseView>

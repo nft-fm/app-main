@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import BaseView from "../../components/Page/BaseView";
-import CreateForm from "../Profile/components/CreateForm";
 import PublicProfilePic from "./Components/PublicProfilePic";
 import PublicArtistNfts from "./Components/PublicArtistNfts";
 import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
@@ -10,14 +9,12 @@ import default_pic from "../../assets/img/profile_page_assets/default_profile.pn
 import { ReactComponent as IconTwitter } from "../../assets/img/icons/social_twitter.svg";
 import Instagram from "../../assets/img/icons/social_instagram.png";
 import Audius from "../../assets/img/icons/social_audius.png";
-// import { ReactComponent as IconInstagram } from "../../assets/img/icons/social_instagram.svg";
+import Spotify from "../../assets/img/icons/social_spotify.png";
 const Artist = () => {
   const [edit, setEdit] = useState(false);
   const [profilePic, setProfilePic] = useState("");
-  const [open, setOpen] = useState(false);
   const [userInfo, setUserInfo] = useState();
   const [userNfts, setUserNfts] = useState();
-  console.log("userInfo", userInfo);
   useEffect(() => {
     if (userInfo?.profilePic) {
       setProfilePic(userInfo.profilePic);
@@ -69,7 +66,6 @@ const Artist = () => {
 
       <SocialsBar>
         {userInfo?.socials.map((social) => {
-          console.log(social);
           if (social.twitter) {
             return (
               <IconContainer
@@ -89,6 +85,17 @@ const Artist = () => {
                 rel="noopener noreferrer"
               >
                 <InstaIcon src={Instagram} alt="instagram icon" />
+              </IconContainer>
+            );
+          }
+          if (social.spotify) {
+            return (
+              <IconContainer
+                href={social.spotify}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <SpotifyIcon src={Spotify} alt="instagram icon" />
               </IconContainer>
             );
           }
@@ -116,6 +123,12 @@ const Artist = () => {
   );
 };
 
+const SpotifyIcon = styled.img`
+  height: 17px;
+  width: 17px;
+  filter: invert(1);
+`;
+
 const InstaIcon = styled.img`
   height: 17px;
   width: 17px;
@@ -135,12 +148,6 @@ const Twitter = styled(IconTwitter)`
     transition: all 0.2s ease-in-out;
     fill: white;
   }
-`;
-
-const IconText = styled.span`
-  margin: 1px 0 0 12px;
-  font-weight: 600;
-  letter-spacing: 1px;
 `;
 
 const IconContainer = styled.a`

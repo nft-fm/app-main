@@ -1,55 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Switch } from "react-router-dom";
 import BaseView from "../../components/Page/BaseView";
 import Market from "./Components/Market";
 import styled from "styled-components";
-import NftModalHook from "../../components/NftModalHook";
-import axios from "axios";
-import { useAccountConsumer } from "../../contexts/Account";
+import LinkedNftModal from "../../components/NftModalHook/LinkedNftModal";
 
-const initialNftState = {
-  artist: "",
-  address: "",
-  isDraft: true,
-  genre: "",
-  numMinted: 0,
-  price: 0,
-  producer: "",
-  title: "",
-  writer: "",
-  imageUrl: "",
-  audioUrl: "",
-  startTime: "",
-  endTime: "",
-  bidIncrementPercent: "",
-};
 const Listen = () => {
-  const [nft, setNft] = useState(initialNftState);
-  const [isOpen, setIsOpen] = useState(true);
-  const { account} = useAccountConsumer();
-  useEffect(() => {
-    if (window.location.pathname.length > 10) {
-      axios.post("/api/nft-type/get-one", { id: window.location.pathname.slice(10), address: account })
-      .then((res) => {
-        console.log("res", res);
-        setNft(res.data);
-      })
-    }
-  }, []);
-
-  const hide = (e) => {
-    setIsOpen(false);
-    console.log("isOpen", isOpen);
-  };
-
   return (
     <Switch>
       <BaseView>
-        {/*  pathname && nftmocdalhook */}
-        {nft != initialNftState && <NftModalHook hide={hide} nft={nft} open={isOpen} />}
+        <LinkedNftModal />
         <Container>
           <StyledTitle>MARKETPLACE</StyledTitle>
-          {/* <Trending /> */}
           <Market />
         </Container>
       </BaseView>

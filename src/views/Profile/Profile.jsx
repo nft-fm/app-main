@@ -1,42 +1,169 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import BaseView from "../../components/Page/BaseView";
 import { useAccountConsumer } from "../../contexts/Account";
 import CreateForm from "./components/CreateForm";
 import IconMetamask from "../../assets/img/icons/metamask_icon.png";
-import cog from "../../assets/img/icons/cog.svg";
-import ProfilePic from "./components/ProfilePic";
 import ArtistNfts from "./components/ArtistNfts";
-import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
 import Error404 from "../404/404";
-
+import {
+  errorIcon,
+  questionIcon,
+  imageWidth,
+  imageHeight,
+} from "../../utils/swalImages";
+import swal from "sweetalert2";
+import EditableProfile from "./components/EditableProfile";
 import { ReactComponent as plus_icon } from "../../assets/img/icons/plus_icon.svg";
+import { ReactComponent as IconTwitter } from "../../assets/img/icons/social_twitter.svg";
+import Instagram from "../../assets/img/icons/social_instagram.png";
+import Audius from "../../assets/img/icons/social_audius.png";
+import Spotify from "../../assets/img/icons/social_spotify.png";
+import { providers } from "ethers";
+
 const Profile = () => {
-  const { account, connect, user, setUser } = useAccountConsumer();
-  const [edit, setEdit] = useState(false);
-  const [username, setUsername] = useState("");
-  const [profilePic, setProfilePic] = useState("");
+  const { account, connect, user } = useAccountConsumer();
   const [open, setOpen] = useState(false);
+  const [reset, setReset] = useState(false);
+  const [userSigned, setUserSigned] = useState(false);
+  const openMintModal = async () => {
+    try {
+      if (user.username === "") {
+        swal.fire("You ned to set a username first!");
+        return;
+      }
 
-  useEffect(() => {
-    if (user?.profilePic) {
-      setProfilePic(user.profilePic);
+      const hasDraft = await axios.get(`/api/nft-type/has-draft/${account}`);
+      if (hasDraft.data.hasDraft) {
+        swal
+          .fire({
+            title: "You have a old draft saved!",
+            showDenyButton: true,
+            showCloseButton: true,
+            confirmButtonText: `Use Draft`,
+            denyButtonText: `Delete Draft`,
+            imageUrl: questionIcon,
+            imageWidth,
+            imageHeight,
+          })
+          .then(async (res) => {
+            if (res.isConfirmed) {
+              setOpen(!open);
+            }
+            if (res.isDenied) {
+              swal
+                .fire({
+                  title: "Are you sure you want to delete the draft?",
+                  text: "This action cannot be reverted",
+                  showCloseButton: true,
+                  showDenyButton: true,
+                  confirmButtonText: `Yes! Delete it!`,
+                  denyButtonText: "No! Go back!",
+                  imageUrl: questionIcon,
+                  imageWidth,
+                  imageHeight,
+                })
+                .then(async (res2) => {
+                  if (res2.isConfirmed) {
+                    setReset(true);
+                    setOpen(!open);
+                  }
+                  if (res2.isDenied) {
+                    return openMintModal();
+                  }
+                });
+            }
+          });
+      } else {
+        swal
+          .fire({
+            title: "Mint a new NFT?",
+            showCloseButton: true,
+            confirmButtonText: `Yes, Create!`,
+            imageUrl: questionIcon,
+            imageWidth,
+            imageHeight,
+          })
+          .then(async (result) => {
+            if (result.isConfirmed) {
+              await axios
+                .post("/api/nft-type/get-NFT", { account })
+                .then(() => setOpen(!open))
+                .catch((err) =>
+                  console.error("Failed to create new draft", err)
+                );
+            }
+          });
+      }
+    } catch (error) {
+      swal.fire({
+        title: "Failed to get response from server",
+        imageUrl: errorIcon,
+        imageWidth,
+        imageHeight,
+      });
+      console.log(error);
     }
-  }, [user]);
+  };
 
-  const saveDetails = (e) => {
-    e.preventDefault();
-    setEdit(false);
-    setUser({ ...user, username: username });
-    axios
-      .post("/api/user/update-account", {
-        address: account,
-        username: username,
-        profilePic: profilePic,
-        // email: email,
-      })
-      .then((res) => setUser(res.data));
+  const openCreateForm = async () => {
+    if (user.isLegacyArtist && !user.confirmedFeeIncrease && !userSigned) {
+      swal
+        .fire({
+          title: `NFT FM's terms have changed.`,
+          html: `<span>In order to mint new NFTs you need to agree to the new fee on initial sales, which is now 10%.
+          Your previously minted NFTs will not be affected, this only applies to new NFTs.
+          Read more about this <a href="https://nft-fm.medium.com/whats-coming-up-for-nft-fm-eddbfc5587eb" target="_blank" rel="noopener noreferrer">here</a>.</span>`,
+          showDenyButton: true,
+          showCloseButton: true,
+          confirmButtonText: `Agree to Terms`,
+        })
+        .then(async (res) => {
+          if (res.isConfirmed) {
+            const provider = new providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+
+            signer
+              .signMessage(JSON.stringify({ account }))
+              .then((authorization) => {
+                axios
+                  .post("/api/user/signNewFee", {
+                    account,
+                    auth: authorization,
+                  })
+                  .then(() => {
+                    swal
+                      .fire({
+                        title:
+                          "Thank you, you may now proceed to minting new NFTs.",
+                        timer: 3000,
+                      })
+                      .then(() => {
+                        setUserSigned(true);
+                        openMintModal();
+                      });
+                  })
+                  .catch((err) => {
+                    console.log("err", err.response);
+                    swal.fire({
+                      title: `Error: ${
+                        err.response ? err.response.status : 404
+                      }`,
+                      text: `${
+                        err.response ? err.response.data : "server error"
+                      }`,
+                      imageUrl: errorIcon,
+                      imageWidth,
+                      imageHeight,
+                    });
+                  });
+              });
+          }
+        });
+    } else {
+      openMintModal();
+    }
   };
 
   if (!user || (user && !user.isArtist)) return <Error404 />; //this probably needs some work
@@ -52,92 +179,134 @@ const Profile = () => {
           </GetConnected>
         </IsConnected>
       )}
-      {/* {user && !user?.username && (
-      <IsConnected>
-        <GetConnectedNav>
-          <span>Head to the Library page and set a username. Then you can start making NFT's!</span>
-          <ConnectNavLink to="/library">
-            <ButtonTextNav>Library</ButtonTextNav>
-          </ConnectNavLink>
-        </GetConnectedNav>
-      </IsConnected>
-    )} */}
       <Landing>
         <Banner />
-        <ProfileHeading>
-          <Side />
-          <ProfileHolder>
-            <Cog
-              src={cog}
-              alt="edit icon"
-              onClick={account ? () => setEdit(!edit) : null}
-            />
-            <ProfilePic
-              profilePic={
-                profilePic && profilePic !== "" ? profilePic : default_pic
-              }
-              setProfilePic={setProfilePic}
-              edit={edit}
-              setEdit={setEdit}
-            />
-            <ProfileInfoHolder>
-              {edit ? (
-                <form onSubmit={(e) => saveDetails(e)}>
-                  <StyledInput
-                    type="text"
-                    placeholder="Enter Username"
-                    defaultValue={user?.username}
-                    onChange={(e) => setUsername(e.target.value)}
-                  />
-                </form>
-              ) : (
-                <Username>
-                  {user && user.username !== "" ? user.username : "No username"}
-                </Username>
-              )}
-              <Divider />
-
-              <AddressSpan>
-                {user
-                  ? user.address.substring(0, 10) +
-                    "..." +
-                    user.address.substring(user.address.length - 4)
-                  : " "}
-                {/* {user && (
-                <CopyButton
-                  onClick={() => {
-                    navigator.clipboard.writeText(user.address);
-                  }}
-                />
-              )} */}
-              </AddressSpan>
-            </ProfileInfoHolder>
-          </ProfileHolder>
-          <Side>
-            {/* <SideSpan>
-            12 <BlueSpan>/NFTs</BlueSpan>
-          </SideSpan>
-          <SideSpan>
-            8 <BlueSpan>Traded</BlueSpan>
-          </SideSpan> */}
-          </Side>
-        </ProfileHeading>
+        <EditableProfile />
       </Landing>
-
+      <SocialsBar>
+        {user.socials.map((social) => {
+          // console.log(social);
+          if (social.twitter) {
+            return (
+              <IconContainer
+                href={social.twitter}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Twitter />
+              </IconContainer>
+            );
+          }
+          if (social.insta) {
+            return (
+              <IconContainer
+                href={social.insta}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <InstaIcon src={Instagram} alt="instagram icon" />
+              </IconContainer>
+            );
+          }
+          if (social.spotify) {
+            return (
+              <IconContainer
+                href={social.spotify}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <SpotifyIcon src={Spotify} alt="instagram icon" />
+              </IconContainer>
+            );
+          }
+          if (social.audius) {
+            return (
+              <IconContainer
+                href={social.audius}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <AudiusIcon src={Audius} alt="instagram icon" />
+              </IconContainer>
+            );
+          }
+        })}
+      </SocialsBar>
       <CreatedNftHolder>
         <NftContainer>
           <NftContainerTitle>YOUR MUSIC</NftContainerTitle>
-          <NftContainerRight onClick={() => setOpen(!open)}>
+          <NftContainerRight onClick={() => openCreateForm()}>
             <PlusIcon />
           </NftContainerRight>
           <NftContainerOutline />
           <ArtistNfts user={user} />
         </NftContainer>
       </CreatedNftHolder>
-      <CreateForm open={open} hide={() => setOpen(false)} />
+      <CreateForm
+        reset={reset}
+        setReset={setReset}
+        open={open}
+        hide={() => setOpen(false)}
+      />
     </BaseView>
   );
 };
+
+const SpotifyIcon = styled.img`
+  height: 17px;
+  width: 17px;
+  filter: invert(1);
+`;
+
+const InstaIcon = styled.img`
+  height: 17px;
+  width: 17px;
+  filter: invert(1);
+`;
+const AudiusIcon = styled.img`
+  height: 17px;
+  width: 17px;
+`;
+
+const Twitter = styled(IconTwitter)`
+  width: 17px;
+  height: 17px;
+  & path {
+    transition: all 0.2s ease-in-out;
+    fill: white;
+  }
+`;
+const IconContainer = styled.a`
+  cursor: pointer;
+  margin: 0 8px;
+  border: solid 1px ${(props) => props.theme.color.boxBorder};
+  border-radius: 25px;
+  background-color: ${(props) => props.theme.color.box};
+  width: 25px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    background-color: ${(props) => props.theme.color.boxBorder};
+    border: solid 1px #383838;
+  }
+`;
+const SocialsBar = styled.div`
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-bottom: -10px;
+  @media only screen and (max-width: 776px) {
+    /* flex-direction: column; */
+    width: 100%;
+    justify-content: center;
+    margin-top: 10px;
+  }
+`;
 
 const PlusIcon = styled(plus_icon)`
   width: 17px;
@@ -301,91 +470,6 @@ const IsConnected = styled.div`
 
 //Profile Stuff below here
 
-const Cog = styled.img`
-  width: 15px;
-  right: 45px;
-  position: absolute;
-  cursor: pointer;
-  :hover {
-    animation: rotation 4s infinite linear;
-  }
-  @keyframes rotation {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(359deg);
-    }
-  }
-  @media only screen and (max-width: 776px) {
-    top: 0px;
-    right: -25px;
-  }
-`;
-
-const ProfileInfoHolder = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const Side = styled.div`
-  width: calc(100% / 3);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-end;
-  & > span:nth-child(1) {
-    margin-top: 40px;
-  }
-`;
-
-const ProfileHolder = styled.div`
-  position: relative;
-  width: calc(100% / 3);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const ProfileHeading = styled.div`
-  margin-left: auto;
-  margin-right: auto;
-  display: flex;
-  height: 200px;
-  /* margin-top: 80px; */
-  color: ${(props) => props.theme.fontColor.white};
-  width: 100%;
-  justify-content: space-between;
-  @media only screen and (max-width: 776px) {
-    width: 90%;
-  }
-`;
-
-const StyledInput = styled.input`
-  background-color: ${(props) => props.theme.bgColor};
-  font-size: ${(props) => props.theme.fontSizes.sm};
-  border: none;
-  outline: none;
-  color: white;
-  opacity: 0.6;
-  text-align: center;
-`;
-
-const Username = styled.span`
-  font-size: ${(props) => props.theme.fontSizes.md};
-  white-space: nowrap;
-`;
-
-const AddressSpan = styled.span`
-  color: ${(props) => props.theme.color.gray};
-  display: flex;
-  /* align-items: center;s */
-  position: relative;
-  height: 20px;
-`;
 const Landing = styled.div`
   /* height: 450px; */
   top: 0;
@@ -399,10 +483,4 @@ const Banner = styled.div`
   height: 50px;
 `;
 
-const Divider = styled.div`
-  width: 200px;
-  height: 1px;
-  background-color: ${(props) => props.theme.fontColor.gray};
-  margin-bottom: 6px;
-`;
 export default Profile;

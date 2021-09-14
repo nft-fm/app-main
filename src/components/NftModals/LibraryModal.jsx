@@ -1,105 +1,37 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { ReactComponent as IconX } from "../../assets/img/icons/x.svg";
-import logo from "../../assets/img/logos/logo_tiny.png";
 import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
 import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
-import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
-// import PlayIcon from "../../assets/img/icons/listen_play.svg";
 import { useAccountConsumer } from "../../contexts/Account";
-import IconMetamask from "../../assets/img/icons/metamask_icon.png";
-import loading from "../../assets/img/loading.gif";
 import Swal from "sweetalert2";
 import { usePlaylistConsumer } from "../../contexts/Playlist";
-import { buyNFT, getEthBalance } from "../../web3/utils";
-import swal from "sweetalert2";
 import ReactToolTip from "react-tooltip";
-import PlaySongSnippet from "./Components/PlaySongSnippet";
-import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as Founder } from "../../assets/img/Badges/founder.svg";
 import { ReactComponent as Premium } from "../../assets/img/Badges/premium.svg";
 import { ReactComponent as Prerelease } from "../../assets/img/Badges/prerelease.svg";
+import { ReactComponent as Exclusive } from "../../assets/img/Badges/exclusive.svg";
+import ReactPlayer from "react-player";
 import moment from "moment";
 import { NavLink } from "react-router-dom";
 import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.svg";
+import Ticker from "../../components/Ticker";
 
 const LibraryModal = ({
   open,
-  children,
   hide,
-  onClose,
   nft,
-  partialSong,
   liked,
   setLiked,
   likeCount,
   setLikeCount,
   setIsShareOpen,
 }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isBought, setIsBought] = useState(false);
-  const { account, connect, usdPerEth, getUser } = useAccountConsumer();
+  const { account } = useAccountConsumer();
   const { setNftCallback } = usePlaylistConsumer();
   const stopProp = (e) => {
     e.stopPropagation();
-  };
-
-  const purchase = async (id) => {
-    setIsLoading(true);
-    await getEthBalance(async (balance) => {
-      if (parseFloat(balance) >= nft.price) {
-        await buyNFT(
-          { nftID: id, amount: 1, saleId: nft.nftId, price: String(nft.price) },
-          () => {
-            console.log("pending");
-          },
-          () => {
-            axios
-              .post("/api/nft-type/purchase", { id: id, address: account })
-              .then((res) => {
-                setTimeout(function () {
-                  setIsLoading(false);
-                  setIsBought(true);
-                  getUser();
-                }, 1000);
-              })
-              .catch((err) => {
-                console.error(err.status, err.message, err.error);
-                Swal.fire(
-                  `Error: ${err.response ? err.response.status : 404}`,
-                  `${err.response ? err.response.data : "server error"}`,
-                  "error"
-                );
-                setIsLoading(false);
-                console.log(err);
-              });
-          }
-        ).catch((err) => {
-          console.log(err);
-          swal.fire({
-            icon: "error",
-            title: "Couldn't complete sale!",
-            text: "Please try again",
-          });
-        });
-      } else {
-        setIsLoading(false);
-        swal.fire({
-          title: `Not Enough ETH`,
-          text: `in wallet address: ...${account.substring(
-            account.length - 4
-          )}`,
-          icon: "error",
-        });
-        return;
-      }
-    });
-  };
-
-  const playSong = () => {
-    // hide();
-    setNftCallback(nft);
   };
 
   const like = async () => {
@@ -122,29 +54,6 @@ const LibraryModal = ({
     hide();
   };
 
-  // const [currChainId, setCurrChainId] = useState(null);
-
-  // const getChain = async () => {
-  //   console.log('here')
-  //   const newChainId = await window.ethereum.request({ method: 'eth_chainId' });
-  //   setCurrChainId(Number(newChainId));
-  //   console.log("chainId", Number(newChainId));
-  //   return Number(newChainId);
-  // }
-
-  const connectWallet = async () => {
-    const newChainId = await window.ethereum.request({ method: "eth_chainId" });
-    if (Number(newChainId) === process.env.REACT_APP_IS_MAINNET ? 1 : 4) {
-      connect("injected");
-    } else {
-      swal.fire({
-        title: "Wrong Chain",
-        text: "You are on the wrong chain. Please connect to Ethereum Mainnet.",
-        icon: "warning",
-      });
-    }
-  };
-
   const formatSongDur = (d) => {
     d = Number(d);
     var h = Math.floor(d / 3600);
@@ -163,11 +72,28 @@ const LibraryModal = ({
       <Container onClick={(e) => stopProp(e)}>
         <StyledModal>
           <X onClick={(e) => hide(e)} />
-          {/* <CardTitle>
-            <Logo src={logo} />
-            Buy NFT
-          </CardTitle> */}
-          <Image src={nft.imageUrl} alt="image" />
+          {nft.videoUrl ? (
+            <ReactPlayer
+              url={nft.videoUrl}
+              controls="true"
+              onStart="false"
+              playing={false}
+              loop="true"
+              width="500px"
+              height="500px"
+              style={{ marginTop: "auto", marginBottom: "auto" }}
+              onContextMenu={(e) => e.preventDefault()}
+              config={{
+                file: {
+                  attributes: {
+                    controlsList: "nodownload",
+                  },
+                },
+              }}
+            />
+          ) : (
+            <Image src={nft.imageUrl} alt="image" />
+          )}
           <RightSide>
             <CardTop>
               <Side>
@@ -194,11 +120,19 @@ const LibraryModal = ({
             </CardTop>
             <TitleAndPlayButton>
               <InfoContainer>
-                <TrackName>{nft.title}</TrackName>
+                {nft.title.length > 18 ? (
+                  <Ticker>
+                    <TrackName>{nft.title}</TrackName>
+                  </Ticker>
+                ) : (
+                  <TrackName>{nft.title}</TrackName>
+                )}
                 <Artist
                   to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}
                 >
-                  {nft.artist}
+                  {nft.artist.length > 20
+                    ? nft.artist.slice(0, 20) + "..."
+                    : nft.artist}
                 </Artist>
               </InfoContainer>
               <PlayButtonMobile
@@ -235,6 +169,15 @@ const LibraryModal = ({
                     />
                   );
                 }
+                if (badge.exclusive) {
+                  return (
+                    <ExclusiveBadge
+                      key={badge}
+                      data-tip
+                      data-for="exclusiveBadge"
+                    />
+                  );
+                }
               })}
               <ReactToolTip id="founderBadge" place="top" effect="solid">
                 Founder
@@ -245,11 +188,11 @@ const LibraryModal = ({
               <ReactToolTip id="prereleaseBadge" place="top" effect="solid">
                 Prerelease
               </ReactToolTip>
+              <ReactToolTip id="exclusiveBadge" place="top" effect="solid">
+                Exclusive
+              </ReactToolTip>
             </BadgeHolder>
-            {/* <SnippetHolder>
-              <PlaySongSnippet partialSong={partialSong} />
-              <SnippetText>15 Sec Preview</SnippetText>
-            </SnippetHolder> */}
+
             <TrackDetailsHolder>
               <span>Genre: {nft.genre}</span>
               <span>Producer: {nft.producer}</span>
@@ -372,7 +315,11 @@ const TrackDetailsHolder = styled.div`
     height: auto;
   }
 `;
-
+const ExclusiveBadge = styled(Exclusive)`
+  width: 30px;
+  height: 30px;
+  padding: 0 10px;
+`;
 const FounderBadge = styled(Founder)`
   width: 30px;
   height: 30px;
@@ -387,96 +334,6 @@ const PrereleaseBadge = styled(Prerelease)`
   width: 30px;
   height: 30px;
   padding: 0 10px;
-`;
-
-const DescriptionHolder = styled.fieldset`
-  width: 100%;
-  border-radius: 8px;
-  border: 1px solid ${(props) => props.theme.color.lightgray};
-  padding: 2px 0;
-  height: 100px;
-  /* margin-top: 10px; */
-`;
-const DescriptionLegend = styled.legend`
-  padding: 0 5px;
-  margin-left: 10px;
-`;
-const DescriptionContent = styled.span`
-  margin-top: -10px;
-  padding: 0 10px;
-`;
-
-const SnippetHolder = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 10px, 0;
-  width: 100%;
-  margin-top: 10px;
-`;
-
-const SnippetText = styled.span`
-  /* position: absolute; */
-  font-size: ${(props) => props.theme.fontSizes.xxs};
-  margin-top: -5px;
-  margin-bottom: 10px;
-`;
-
-const Loading = styled.img`
-  width: 17px;
-  height: auto;
-`;
-
-const ButtonText = styled.span`
-  font-family: "Compita";
-  font-size: ${(props) => props.theme.fontSizes.xs};
-  font-weight: 600;
-  color: white;
-`;
-
-const MetaMask = styled.img`
-  width: 32px;
-  height: auto;
-`;
-
-const Divider = styled.div`
-  margin: 5px 0;
-  width: 100%;
-  height: 1px;
-  background-color: ${(props) => props.theme.color.gray};
-`;
-
-const AvailableItem = styled.div`
-  font-size: 0.8rem;
-  color: ${(props) => props.theme.color.lightgray};
-`;
-
-const PricesContainer = styled.div`
-  width: 100%;
-  height: 1px;
-  border-top: 1px solid ${(props) => props.theme.color.gray};
-  display: flex;
-  justify-content: center;
-  /* margin-left: 10%; */
-  margin: 30px 0;
-`;
-const PriceHolder = styled.div`
-  display: flex;
-  background-color: ${(props) => props.theme.bgColor};
-  margin-top: -8px;
-  padding: 0 10px;
-`;
-const Eth = styled(IconEth)`
-  width: 18px;
-  height: 18px;
-  & path {
-    fill: ${(props) => props.theme.color.white};
-  }
-`;
-
-const PriceItem = styled.span`
-  font-size: ${(props) => props.theme.fontSizes.xs};
-  color: white;
 `;
 
 const X = styled(IconX)`
@@ -505,18 +362,6 @@ const LikedHeart = styled(IconHeart)`
     stroke: ${(props) => props.theme.color.pink};
   }
 `;
-
-const Cart = styled(IconCart)`
-  width: 24px;
-  height: 24px;
-  margin: -2px 0 0 8px;
-  transition: all 0.2s ease-in-out;
-  & path {
-    transition: all 0.2s ease-in-out;
-    fill: ${(props) => props.theme.color.gray};
-  }
-`;
-
 const Share = styled(IconShare)`
   width: 19px;
   height: 19px;
@@ -576,24 +421,6 @@ const CardTop = styled.div`
   justify-content: space-between;
   font-weight: 600;
   font-family: "Compita";
-`;
-
-const Logo = styled.img`
-  width: 20px;
-  margin-right: 8px;
-  height: auto;
-`;
-
-const CardTitle = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "Compita";
-  font-weight: 600;
-  color: white;
-  font-size: ${(props) => props.theme.fontSizes.sm};
-  margin-bottom: 12px;
 `;
 
 const OpaqueFilter = styled.div`
@@ -705,32 +532,6 @@ const Artist = styled(NavLink)`
   font-size: ${(props) => props.theme.fontSizes.sm};
   color: white;
   /* margin-bottom: 12px; */
-`;
-
-const Row = styled.div`
-  width: 90%;
-  display: flex;
-  justify-content: space-between;
-`;
-
-const BuyButton = styled.button`
-  width: 150px;
-  /* height: 64px; */
-  cursor: pointer;
-  transition: all 0.1s ease-in-out;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
-  border: 1px solid ${(props) => props.theme.color.boxBorder};
-  border-radius: 8px;
-  background-color: ${(props) => props.theme.color.box};
-  /* margin-bottom: 20px; */
-  padding: 10px 20px;
-  &:hover {
-    background-color: ${(props) => props.theme.color.boxBorder};
-    border: 1px solid #383838;
-  }
 `;
 
 export default LibraryModal;

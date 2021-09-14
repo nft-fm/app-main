@@ -5,6 +5,7 @@ import { useAccountConsumer } from "../../contexts/Account";
 import IconMetamask from "../../assets/img/icons/metamask_icon.png";
 import Library from "./components/LibraryNfts";
 import swal from "sweetalert2";
+import { warningIcon, imageWidth, imageHeight } from "../../utils/swalImages";
 
 const Profile = () => {
   const { account, connect, user } = useAccountConsumer();
@@ -16,9 +17,10 @@ const Profile = () => {
     } else {
       swal.fire({
         title: "Wrong Chain",
-        text:
-          "You are on the wrong chain. Please connect to Ethereum Mainnet.",
-        icon: "warning",
+        text: "You are on the wrong chain. Please connect to Ethereum Mainnet.",
+        imageUrl: warningIcon,
+        imageWidth,
+        imageHeight      
       });
     }
   }

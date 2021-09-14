@@ -24,7 +24,7 @@ export const Question = (props) => {
           {props.question}
 
         </QuestionText>
-        <LockIcon style={active ? { transform: 'rotate(180deg)' } : null} />
+        <DownArrow style={active ? { transform: 'rotate(180deg)' } : null} />
         {/* <Toggle>
           <ExpandMoreIcon src={demoImage}style={active ? { transform: 'rotate(180deg)' } : null} />
         </Toggle> */}
@@ -45,7 +45,7 @@ const QuestionText = styled.h2`
   font-weight: 400;
 `
 
-const LockIcon = styled(down_arrow)`
+const DownArrow = styled(down_arrow)`
   /* float: right; */
   /* top: 80%;
 left: 90%; */

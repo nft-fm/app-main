@@ -10,6 +10,7 @@ import { require, getVinylBalance } from "../../web3/utils";
 import { BaseView } from "../../components/Page/BaseView";
 import RulesModal from "./RulesModal";
 import Suggestion from "./Suggestion";
+import { errorIcon, imageWidth, imageHeight } from "../../../utils/swalImages";
 
 const Community = () => {
   const [suggestions, setSuggestions] = useState([]);
@@ -30,7 +31,6 @@ const Community = () => {
         sort,
       })
       .then((res) => {
-        console.log("suggestions", res.data);
         setSuggestions(res.data.suggestions);
         setUserAlreadySuggested(res.data.userAlreadySuggested);
         setTotalPages(res.data.totalPages);
@@ -79,11 +79,12 @@ const Community = () => {
         fetchSuggestions();
       })
       .catch((err) => {
-        console.log(err.response);
         swal.fire({
           title: `Error: ${err.response ? err.response.status : 404}`,
           text: `${err.response ? err.response.data : "server error"}`,
-          icon: "error",
+          imageUrl: errorIcon,
+          imageWidth,
+          imageHeight,
         });
       });
   };

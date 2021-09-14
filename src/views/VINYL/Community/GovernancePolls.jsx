@@ -1,43 +1,46 @@
 import axios from "axios";
-import moment from "moment";
 import React, { useEffect, useState, useCallback } from "react";
 import styled, { css } from "styled-components";
 import swal from "sweetalert2";
 import { useWallet } from "use-wallet";
-import { PollOptions, PollResults } from "./PollOptions"
-// import isMobile from "../../../utils/isMobile";
+import { PollOptions, PollResults } from "./PollOptions";
 import { require, getVinylBalance } from "../../../web3/utils";
-import Loading from "../../../assets/img/loading.gif";
-
+import {
+  errorIcon,
+  successIcon,
+  imageWidth,
+  imageHeight,
+} from "../../../utils/swalImages";
 
 const Community = ({ poll, setPoll, hasVinyl, getConnectedFam }) => {
   const { account } = useWallet();
   const [votes, setVotes] = useState(1);
-  // const [poll, setPoll] = useState([]);
   const [alreadyVoted, setAlreadyVoted] = useState(true);
 
   const fetchPoll = useCallback(() => {
     axios
       .post(`/api/admin-poll/current`, {
-        address: account
+        address: account,
       })
       .then((res) => {
         setPoll(res.data);
-        setAlreadyVoted(res.data.alreadyVoted)
+        setAlreadyVoted(res.data.alreadyVoted);
       })
       .catch((err) => {
         console.log(err);
-        setPoll([])
+        setPoll([]);
       });
   }, [account]);
-  
+
   const submitVote = async (e, optionId) => {
     e.preventDefault();
     if (!hasVinyl) {
       return swal.fire({
         title: `Error`,
         text: `You cannot vote without $VINYL.`,
-        icon: "error",
+        imageUrl: errorIcon,
+        imageWidth,
+        imageHeight,
       });
     }
     const { provider } = await require();
@@ -46,7 +49,7 @@ const Community = ({ poll, setPoll, hasVinyl, getConnectedFam }) => {
       JSON.stringify({
         address: account,
         optionId,
-        voteAmount: votes
+        voteAmount: votes,
       })
     );
     axios
@@ -54,14 +57,16 @@ const Community = ({ poll, setPoll, hasVinyl, getConnectedFam }) => {
         address: account,
         optionId,
         sig,
-        voteAmount: votes
+        voteAmount: votes,
       })
-      .then((res) => {
+      .then(() => {
         fetchPoll();
         swal.fire({
           title: `You have successfully voted`,
           // text: `You have succesfully voted`,
-          icon: "success",
+          imageUrl: successIcon,
+          imageWidth,
+          imageHeight,
         });
       })
       .catch((err) => {
@@ -69,7 +74,9 @@ const Community = ({ poll, setPoll, hasVinyl, getConnectedFam }) => {
         swal.fire({
           title: `Error: ${err.response ? err.response.status : 404}`,
           text: `${err.response ? err.response.data : "server error"}`,
-          icon: "error",
+          imageUrl: errorIcon,
+          imageWidth,
+          imageHeight,
         });
       });
   };
@@ -77,44 +84,37 @@ const Community = ({ poll, setPoll, hasVinyl, getConnectedFam }) => {
   useEffect(() => {
     fetchPoll();
     if (account) {
-      getVinylBalance((res) => Number(res.vinyl[0]) > 0 && setVotes(Number(res.vinyl[0])))
+      getVinylBalance(
+        (res) => Number(res.vinyl[0]) > 0 && setVotes(Number(res.vinyl[0]))
+      );
     }
   }, [account, fetchPoll]);
 
-  if (!poll.question) return null
+  if (!poll.question) return null;
 
   return (
     <LaunchContainer>
-          <ContainerTitle>
-            <span>
-            VOTE
-            </span>
-            </ContainerTitle>
+      <ContainerTitle>
+        <span>VOTE</span>
+      </ContainerTitle>
       <ContainerOutline />
       <UtilityContainer>
         <ComicTitle>NFT FM TEAM</ComicTitle>
         <PollContainer>
           <SuggestionBody>
             <SuggestionText>{poll.question}</SuggestionText>
-          </SuggestionBody> 
-          <PollResults
-            poll={poll}
-            votes={votes}
-            submitVote={submitVote}
-          />
+          </SuggestionBody>
+          <PollResults poll={poll} votes={votes} submitVote={submitVote} />
         </PollContainer>
       </UtilityContainer>
-        <PollsContainer>
-        {account ? 
-          <PollOptions 
-            poll={poll}
-            votes={votes}
-            submitVote={submitVote}
-          /> :
+      <PollsContainer>
+        {account ? (
+          <PollOptions poll={poll} votes={votes} submitVote={submitVote} />
+        ) : (
           <Button onClick={getConnectedFam}>Connect Wallet</Button>
-        }
-        </PollsContainer> 
-    <ContainerOutline alreadyVoted={alreadyVoted} reverse/>
+        )}
+      </PollsContainer>
+      <ContainerOutline alreadyVoted={alreadyVoted} reverse />
     </LaunchContainer>
   );
 };
@@ -153,7 +153,8 @@ const ContainerOutline = styled.div`
   display: flex;
 
   ${({ reverse }) =>
-    reverse && css`
+    reverse &&
+    css`
       border-radius: 0 0 24px 24px;
       height: 60px;
       border-top: none;
@@ -161,8 +162,7 @@ const ContainerOutline = styled.div`
       @media only screen and (max-width: 776px) {
         display: none;
       }
-    `
-  }
+    `}
 `;
 
 const ContainerTitle = styled.div`
@@ -179,7 +179,6 @@ const ContainerTitle = styled.div`
   border-radius: 20px;
   display: flex;
 `;
-
 
 const PollsContainer = styled.span`
   position: absolute;
@@ -230,7 +229,7 @@ const UtilityContainer = styled.div`
   width: calc(100% - 32px);
   padding: 16px;
   border-radius: ${(props) => props.theme.borderRadius}px;
-  border: solid 1px  ${(props) => props.theme.color.blue};
+  border: solid 1px ${(props) => props.theme.color.blue};
   background-color: #1d1d21;
   padding-bottom: 50px;
   @media only screen and (max-width: 776px) {
@@ -252,7 +251,7 @@ const ComicTitle = styled.div`
   letter-spacing: 1px;
   font-weight: normal;
   font-weight: 600;
-`
+`;
 
 const SuggestionText = styled.div`
   font-family: "Compita";
@@ -296,31 +295,5 @@ const PollContainer = styled(SingleSuggestion)`
   align-items: center;
   display: flex;
   flex-direction: column;
-`
-
-
-const ButtonGroup = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  justify-content: space-around;
-  @media only screen and (max-width: 776px) {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-`
-
-const Icon = styled.svg`
-  width: 20px;
-  height: 20px;
-  stroke: white;
-  cursor: pointer;
-  transition: all 0.2s linear;
-  margin-left: 10px;
-  &:hover {
-    stroke: #ffcb46;
-  }
 `;
-
 export default Community;

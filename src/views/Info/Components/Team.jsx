@@ -1,11 +1,7 @@
 import React from "react";
-import { Switch } from "react-router-dom";
 import styled from "styled-components";
-import logo from "../../../assets/img/logos/logo.png";
 import jackson from "../../../assets/team_headshots/jackson.jpeg";
 import quinn from "../../../assets/team_headshots/quinn.png";
-import james from "../../../assets/team_headshots/james.jpeg";
-import ben from "../../../assets/team_headshots/ben.jpg";
 import TeamMember from "./TeamMember";
 
 const Team = () => {
@@ -34,9 +30,9 @@ const Team = () => {
 };
 
 const Title = styled.h1`
-margin-top: 80px;
-color: white;
-`
+  margin-top: 80px;
+  color: white;
+`;
 const TeamSection = styled.div`
   width: 60%;
   display: flex;

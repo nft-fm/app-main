@@ -4,12 +4,13 @@ import CreatedNftModal from "../NftModals/CreatedNftModal";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
+import { ReactComponent as IconBinance } from "../../assets/img/icons/binance-logo.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import ShareModal from "../SMShareModal/CreatedShareModal";
 import LikeShare from "./LikeShare";
 
 const NftCard = (props) => {
-  const { usdPerEth, user } = useAccountConsumer();
+  const { usdPerEth, usdPerBnb, user } = useAccountConsumer();
   const [nft, setNft] = useState({
     address: "",
     artist: "",
@@ -29,8 +30,8 @@ const NftCard = (props) => {
   const [liked, setLiked] = useState(props.nft.liked);
   const [likeCount, setLikeCount] = useState(props.nft.likeCount);
   const [isShareOpen, setIsShareOpen] = useState(false);
-  const [shareCount, setShareCount] = useState({count: 0 })
-  // const show = () => setIsOpen(true);
+  const [shareCount, setShareCount] = useState({ count: 0 });
+
   const hide = (e) => {
     setIsOpen(false);
   };
@@ -39,7 +40,7 @@ const NftCard = (props) => {
     setNft({
       ...props.nft,
     });
-    setShareCount({count: props.nft.shareCount});
+    setShareCount({ count: props.nft.shareCount });
     setLikeCount(props.nft.likeCount);
     setLiked(props.nft.liked);
   }, [props.nft, user]);
@@ -85,45 +86,53 @@ const NftCard = (props) => {
         alt="image"
         onClick={() => setIsOpen(!isOpen)}
       />
-      <TrackName>{nft.title}</TrackName>
-      <Artist>{nft.artist}</Artist>
+      <TrackName>
+        {nft.title.length > 20 ? nft.title.slice(0, 20) + "..." : nft.title}
+      </TrackName>
+      <Artist>
+        {nft.artist.length > 20 ? nft.artist.slice(0, 20) + "..." : nft.artist}
+      </Artist>
       <CostFields>
         <CostEth>
           {nft?.price?.toLocaleString(undefined, {
             minimumFractionDigits: 3,
             maximumFractionDigits: 3,
           })}
-          <Eth />
+          {nft?.chain === "ETH" && <Eth />}
+          {nft?.chain === "BSC" && <Bnb />}
         </CostEth>
-        <CostUsd>
-          {usdPerEth && nft.price !== "..."
-            ? (usdPerEth * nft.price).toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })
-            : "..."}
-          <Usd />
-        </CostUsd>
+        {usdPerEth && usdPerBnb && nft.price !== "..." && nft.chain === "ETH" && (
+          <CostUsd>
+            $
+            {(usdPerEth * nft.price).toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </CostUsd>
+        )}
+        {usdPerEth && usdPerBnb && nft.price !== "..." && nft.chain === "BSC" && (
+          <CostUsd>
+            $
+            {(usdPerBnb * nft.price).toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </CostUsd>
+        )}
       </CostFields>
     </Container>
   );
 };
-
-const Usd = styled(IconUsd)`
+const Bnb = styled(IconBinance)`
   width: 18px;
   height: 18px;
-  margin: -2px 0 0 8px;
-  transition: all 0.2s ease-in-out;
-  & path {
-    fill: ${(props) => props.theme.color.gray};
-  }
+  margin: -2px 0 0 4px;
 `;
 
 const Eth = styled(IconEth)`
   width: 18px;
   height: 18px;
   margin: -2px 0 0 4px;
-  transition: all 0.2s ease-in-out;
   & path {
     fill: ${(props) => props.theme.color.white};
   }

@@ -7,9 +7,6 @@ import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
 import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { useAccountConsumer } from "../../contexts/Account";
-// import { getSetSale } from "../../web3/utils";
-
-import { ReactComponent as eth_icon } from "../../assets/img/icons/ethereum.svg";
 import Swal from "sweetalert2";
 const BuyNftModal = ({
   open,
@@ -21,40 +18,32 @@ const BuyNftModal = ({
   setLikeCount,
   setIsShareOpen,
 }) => {
-  const { account, usdPerEth } = useAccountConsumer();
+  const { account, usdPerEth, usdPerBnb } = useAccountConsumer();
 
   if (!open) return null;
   const stopProp = (e) => {
     e.stopPropagation();
   };
-  console.log("nft", nft);
-
-  // const purchase = (id) => {
-  //   axios
-  //     .post("/api/nft-type/purchase", { id: id, address: account })
-  //     .then((res) => {
-  //       console.log("purchase res", res);
-  //     })
-  //     .catch((err) => console.log(err));
-  // };
 
   const like = async () => {
     if (account) {
-      setLikeCount(liked ? likeCount - 1 : likeCount + 1)
+      setLikeCount(liked ? likeCount - 1 : likeCount + 1);
       setLiked(!liked);
-      await axios.post(`api/user/like-nft`, { address: account, nft: nft._id })
-        .catch(err => { console.log(err) })
+      await axios
+        .post(`api/user/like-nft`, { address: account, nft: nft._id })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
       hide();
       Swal.fire("Connect a wallet");
     }
-  }
+  };
 
   const share = () => {
     setIsShareOpen();
     hide();
   };
-  console.log('nftprice', nft.title, nft.price)
 
   return (
     <OpaqueFilter onClick={(e) => hide(e)}>
@@ -67,10 +56,11 @@ const BuyNftModal = ({
           <CardTop>
             <Side>
               <IconArea>
-                {liked ?
-                  <LikedHeart onClick={() => like()} /> :
+                {liked ? (
+                  <LikedHeart onClick={() => like()} />
+                ) : (
                   <Heart onClick={() => like()} />
-                }
+                )}
                 {likeCount}
               </IconArea>
               <IconArea>
@@ -97,23 +87,48 @@ const BuyNftModal = ({
               <TableRow className="header">
                 <th>Earnings</th>
               </TableRow>
-              <TableRow>
-                <td>ETH</td>
-                <td><EthIcon
-                />{parseFloat(nft.numSold * nft.price)}</td>
-              </TableRow>
+              {nft.chain === "ETH" && (
+                <TableRow>
+                  <td>ETH</td>
+                  <td>
+                    {/* <EthIcon /> */}
+                    {parseFloat(nft.numSold * nft.price)}
+                  </td>
+                </TableRow>
+              )}
+              {nft.chain === "BSC" && (
+                <TableRow>
+                  <td>BNB</td>
+                  <td>
+                    {/* <BnbIcon /> */}
+                    {parseFloat(nft.numSold * nft.price)}
+                  </td>
+                </TableRow>
+              )}
               <TableRow>
                 <td>USD</td>
-                <td>
-                  ${" "}
-                  {parseFloat(nft.numSold * nft.price * usdPerEth).toLocaleString(
-                    undefined,
-                    {
+                {nft.chain === "ETH" && (
+                  <td>
+                    ${" "}
+                    {parseFloat(
+                      nft.numSold * nft.price * usdPerEth
+                    ).toLocaleString(undefined, {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
-                    }
-                  )}
-                </td>
+                    })}
+                  </td>
+                )}
+                {nft.chain === "BSC" && (
+                  <td>
+                    ${" "}
+                    {parseFloat(
+                      nft.numSold * nft.price * usdPerBnb
+                    ).toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </td>
+                )}
               </TableRow>
             </StyledTable>
           </StatsContainer>
@@ -122,19 +137,6 @@ const BuyNftModal = ({
     </OpaqueFilter>
   );
 };
-
-const EthIcon = styled(eth_icon)`
-  width: 15px;
-  height: 15px;
-  cursor: pointer;
-  /* position: absolute; */
-  /* right: -12px; */
-  margin-right: 3px;
-  transition: all 0.2s;
-  & path {
-    fill: white;
-  }
-`;
 const X = styled(IconX)`
   position: absolute;
   right: 2px;
@@ -192,7 +194,7 @@ const LikedHeart = styled(IconHeart)`
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   & path {
-    stroke: ${props => props.theme.color.pink};
+    stroke: ${(props) => props.theme.color.pink};
   }
 `;
 
@@ -331,9 +333,8 @@ const TableRow = styled.table`
   justify-content: space-between;
   &.header {
     justify-content: center;
-    border-bottom: 1px solid ${props => props.theme.color.gray};
+    border-bottom: 1px solid ${(props) => props.theme.color.gray};
     margin-bottom: 5px;
-    
   }
 `;
 const TrackName = styled.span`

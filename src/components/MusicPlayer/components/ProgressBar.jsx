@@ -33,14 +33,11 @@ const AudioProgressBar = (props) => {
   }
 
   const changePosition = (e) => {
-    console.log("changing position");
     let position =  (e.clientX - bounds.left) / bounds.width;
     props.skipTo(position * props.dur);
   }
 
   const checkForToogle = (e) => {
-    console.log("clientx", e.clientX);
-    console.log("x", toogle.current.getBoundingClientRect())
     if (!isDragging) {
       const toogleBounds = toogle.current.getBoundingClientRect();
 
@@ -53,7 +50,6 @@ const AudioProgressBar = (props) => {
 
   const checkForDrag = (e) => {
     if (isDragging) {
-      console.log("checking for drag")
       handleToogleMove(e);
     }
   }

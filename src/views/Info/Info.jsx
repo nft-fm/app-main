@@ -1,29 +1,28 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Switch, NavLink } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Switch } from "react-router-dom";
 import styled from "styled-components";
 import BaseView from "../../components/Page/BaseView";
-import Swal from "sweetalert2";
 import { FAQ } from "./Components/FAQ/FAQ";
 import Tokenomics from "./Components/Tokenomics";
 import Team from "./Components/Team";
 import RoadMap from "./Components/Roadmap";
-import send from "../../assets/img/homepage_assets/homepage_send.png"
+// import send from "../../assets/img/homepage_assets/homepage_send.png"
 
-import faq from "../../assets/img/litepaper_assets/faq.png"
-import litepaper from "../../assets/img/litepaper_assets/litepaper.png"
-import roadmap from "../../assets/img/litepaper_assets/roadmap.png"
-import team from "../../assets/img/litepaper_assets/team.png"
-import tokenomics from "../../assets/img/litepaper_assets/tokenomics.png"
+import faq from "../../assets/img/litepaper_assets/faq.png";
+import litepaper from "../../assets/img/litepaper_assets/litepaper.png";
+import roadmap from "../../assets/img/litepaper_assets/roadmap.png";
+import team from "../../assets/img/litepaper_assets/team.png";
+import tokenomics from "../../assets/img/litepaper_assets/tokenomics.png";
 
 const Info = () => {
   useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleClick = (ref) => {
     const element = document.getElementById(ref);
     element.scrollIntoView({ behavior: "smooth" });
-  }
+  };
   return (
     <Switch>
       <BaseView>
@@ -31,37 +30,41 @@ const Info = () => {
         <InfoContainer>
           <MobileInfo childs={2}>
             <InfoSubContainer onClick={() => handleClick("litepaperRef")}>
-              <LinkImage src={litepaper} alt="litepaper"/> 
+              <LinkImage src={litepaper} alt="litepaper" />
               <h3>Litepaper</h3>
               <section>In depth review of NFT FM</section>
             </InfoSubContainer>
             <InfoSubContainer onClick={() => handleClick("roadmapRef")}>
-              <LinkImage src={roadmap} alt="roadmap"/>
+              <LinkImage src={roadmap} alt="roadmap" />
               <h3>Roadmap</h3>
               <section>Keep track of where the project is going</section>
             </InfoSubContainer>
           </MobileInfo>
           <MobileInfo childs={2}>
-          <InfoSubContainer onClick={() => handleClick("faqRef")}>
-            <LinkImage src={faq} alt="faq"/>
-            <h3>FAQ</h3>
-            <section>We answer your questions</section>
-          </InfoSubContainer>
-          <InfoSubContainer onClick={() => handleClick("tokenomicsRef")}>
-            <LinkImage src={tokenomics} alt="tokenomics"/>
-            <h3>Tokenomics</h3>
-            <section>How we use our token $VINYL</section>
-          </InfoSubContainer>
+            <InfoSubContainer onClick={() => handleClick("faqRef")}>
+              <LinkImage src={faq} alt="faq" />
+              <h3>FAQ</h3>
+              <section>We answer your questions</section>
+            </InfoSubContainer>
+            <InfoSubContainer>
+            {/* <InfoSubContainer onClick={() => handleClick("tokenomicsRef")}> */}
+              <LinkImage src={tokenomics} alt="tokenomics" />
+              <h3>Tokenomics</h3>
+              <section>Coming Soon</section>
+            </InfoSubContainer>
           </MobileInfo>
           <MobileInfo childs={1}>
-          <InfoSubContainer onClick={() => handleClick("teamsRef")}>
-            <LinkImage src={team} alt="team"/>
-            <h3>Team</h3>
-            <section>Meet the NFT FM Team</section>
-          </InfoSubContainer>
+            <InfoSubContainer onClick={() => handleClick("teamsRef")}>
+              <LinkImage src={team} alt="team" />
+              <h3>Team</h3>
+              <section>Meet the NFT FM Team</section>
+            </InfoSubContainer>
           </MobileInfo>
         </InfoContainer>
-        <div style={{marginTop: "-19px", marginBottom: "31px"}} id="litepaperRef"/>
+        <div
+          style={{ marginTop: "-19px", marginBottom: "31px" }}
+          id="litepaperRef"
+        />
         <ProjectSummary>
           <h3>NFT FM is the first Audiocentric NFT marketplace.</h3>
           <br />
@@ -98,9 +101,9 @@ const Info = () => {
             <Button>Litepaper</Button>
           </StyledAccountButton>
         </ProjectSummary>
-        <div id="roadmapRef"/>
-        <RoadMap/>
-        <div id="faqRef"/>
+        <div id="roadmapRef" />
+        <RoadMap />
+        <div id="faqRef" />
         <LaunchContainer>
           <ContainerTitle faq>
             <b className="first">F</b>requently<b>A</b>sked<b>Q</b>uestions
@@ -108,9 +111,9 @@ const Info = () => {
           <ContainerOutline />
           <FAQ />
         </LaunchContainer>
-        <div id="tokenomicsRef"/>
-        <Tokenomics/>
-        <div id="teamsRef"/>
+        <div id="tokenomicsRef" />
+        {/* <Tokenomics /> */}
+        <div id="teamsRef" />
         <Team />
       </BaseView>
     </Switch>
@@ -118,11 +121,11 @@ const Info = () => {
 };
 
 const LinkImage = styled.img`
-transition: all 0.2s ease-in-out;
-&:hover {
-  filter: brightness(110%) contrast(105%) saturate(110%);
-}
-`
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    filter: brightness(110%) contrast(105%) saturate(110%);
+  }
+`;
 
 const Header1 = styled.h1`
   margin-top: 100px;
@@ -134,7 +137,7 @@ const Header1 = styled.h1`
     margin-top: 50px;
     font-size: 2.3rem;
   }
-`
+`;
 
 const InfoContainer = styled.div`
   display: flex;
@@ -152,9 +155,7 @@ const InfoContainer = styled.div`
     justify-content: center;
     align-items: center;
   }
-
-
-`
+`;
 
 const InfoSubContainer = styled.div`
   cursor: pointer;
@@ -172,7 +173,7 @@ const InfoSubContainer = styled.div`
     margin-left: auto;
     margin-right: auto;
     width: 80%;
-  } 
+  }
   h3 {
     color: white;
     text-align: center;
@@ -180,12 +181,12 @@ const InfoSubContainer = styled.div`
   section {
     color: #888888;
     text-align: center;
-      height: 52px;
+    height: 52px;
     @media only screen and (max-width: 776px) {
       height: 70px;
     }
   }
-`
+`;
 
 const MobileInfo = styled.div`
   display: flex;
@@ -193,11 +194,11 @@ const MobileInfo = styled.div`
   align-content: space-around;
   flex-direction: row;
   @media only screen and (max-width: 500px) {
-    width: ${({childs}) => childs * 50}%;
+    width: ${({ childs }) => childs * 50}%;
     display: flex;
     flex-direction: row;
   }
-`
+`;
 
 const ProjectSummary = styled.div`
   margin-top: 80px;
@@ -228,7 +229,7 @@ const ProjectSummary = styled.div`
     }
     h3 {
       padding-left: 0px;
-      padding-right: 0  px;
+      padding-right: 0 px;
     }
   }
 `;
@@ -289,7 +290,7 @@ const LaunchContainer = styled.div`
 
   @media only screen and (max-width: 776px) {
     margin-top: 80px;
-  }  /* margin-bottom: 40px; */
+  } /* margin-bottom: 40px; */
 `;
 
 const ContainerTitle = styled.span`

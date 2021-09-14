@@ -1,32 +1,55 @@
 const express = require("express");
 const router = express.Router();
-const BigNumber = require("bignumber.js");
 const multer = require("multer");
 const User = require("../schemas/User.schema");
-const Suggestion = require("../schemas/Suggestion.schema");
 const NftType = require("../schemas/NftType.schema");
-const { findLikes, getUserNfts } = require("../web3/server-utils");
+const Application = require("../schemas/Application.schema");
+const Redeem = require("../schemas/Redeem.schema");
+const {
+  findLikes,
+  getUserNftsETH,
+  getUserNftsBSC,
+} = require("../web3/server-utils");
+const sendSignRequest = require("../modules/eversign");
+const { utils } = require("ethers");
+const nodemailer = require("nodemailer");
+const { google } = require("googleapis");
+const {
+  trackNewUser,
+  trackLogin,
+  trackPageview,
+} = require("../modules/mixpanel");
 
 router.post("/get-account", async (req, res) => {
   try {
-    console.log("get-account hit", req.body);
     let user = await User.findOne({ address: req.body.address });
     if (!user) {
       user = new User({
         address: req.body.address,
+        isArtist: process.env.PRODUCTION ? false : true,
       });
       await user.save();
+      if (process.env.PRODUCTION) {
+        trackNewUser({ address: req.body.address, ip: req.ip });
+      }
+    }
+    if (process.env.PRODUCTION) {
+      trackLogin({ address: req.body.address, ip: req.ip });
     }
 
     //This overwrites the user's database nfts with the nfts attributed to the user in the smart contract
     //handles when user's buy/sell nfts off platform
-    let nfts = await getUserNfts(user.address);
-    console.log("nfts", nfts);
-    if (nfts) {
+    let ethUserNfts = await getUserNftsETH(user.address);
+    let bscUserNfts = await getUserNftsBSC(user.address);
+    let bothChainsNft = [...ethUserNfts, ...bscUserNfts];
+    if (bothChainsNft) {
       user.nfts = [];
-      for (let nft of nfts) {
+      for (let nft of bothChainsNft) {
         if (nft.quantity > 0) {
-          let usersNft = await NftType.findOne({ nftId: nft.id });
+          let usersNft = await NftType.findOne({
+            nftId: nft.id,
+            chain: nft.chain,
+          });
           if (usersNft) {
             user.nfts.push({ nft: usersNft._id, quantity: nft.quantity });
           }
@@ -37,36 +60,55 @@ router.post("/get-account", async (req, res) => {
 
     res.send(user);
   } catch (error) {
-    console.log(error);
+    res.status(500).send("server error");
+  }
+});
+
+router.post("/track-pageview", async (req, res) => {
+  try {
+    if (process.env.PRODUCTION) {
+      trackPageview({
+        address: req.body.account,
+        ip: req.ip,
+        page: req.body.page,
+      });
+    }
+    res.status(200).send("success");
+  } catch (error) {
     res.status(500).send("server error");
   }
 });
 
 router.post("/update-account", async (req, res) => {
   try {
-    let user = await User.findOneAndUpdate(
-      { address: req.body.address },
-      {
-        username: req.body.username,
-        suburl: req.body.username.replace(/ /g, "").toLowerCase(),
-        // email: req.body.email
-      },
-      { new: true }
-    );
-    res.send(user);
-    // const pictureColor = req.body.pictureColor ? req.body.pictureColor : "#002450";
-    // let s = { address: req.body.address, nickname: req.body.nickname, picture: req.body.picture, pictureColor }
-    // const signingAddress = web3.eth.accounts.recover(JSON.stringify(s), req.body.sig);
-    // if (req.body.address !== signingAddress) {
-    //   res.status(401).send("signature mismatch");
-    //   return
-    // }
-    // let user = await User.findOneAndUpdate({ address: req.body.address },
-    //   { nickname: req.body.nickname, picture: req.body.picture, pictureColor });
-    // res.send(user);
+    const findDuplicateName = await User.findOne({
+      suburl: req.body.username.replace(/ /g, "").toLowerCase(),
+    });
+    if (
+      findDuplicateName &&
+      findDuplicateName.address.toLowerCase() != req.body.address.toLowerCase()
+    ) {
+      //if another account (checked by address) has the same name, send error
+      res.status(403).send("Duplicate name");
+    } else {
+      let user = await User.findOne({ address: req.body.address });
+
+      if (user.username != req.body.username) {
+        const updateNfts = await NftType.updateMany(
+          { address: user.address },
+          { artist: req.body.username }
+        );
+      }
+
+      user.username = req.body.username;
+      user.suburl = req.body.username.replace(/ /g, "").toLowerCase();
+      user.socials = req.body.aggregatedSocials;
+      await user.save();
+
+      res.send(user);
+    }
   } catch (error) {
-    console.log(error);
-    res.sendStatus(500);
+    res.status(500).send(error);
   }
 });
 
@@ -96,7 +138,6 @@ router.post("/like-nft", async (req, res) => {
       }
     );
   } catch (error) {
-    console.log(error);
     res.sendStatus(500);
   }
 });
@@ -105,7 +146,6 @@ router.post("/like-nft", async (req, res) => {
 //check if folder for user exists, if not create one
 //attach policy allowing them to access folder
 router.post("/getNftFolder/:address", async (req, res) => {
-  console.log(req.body);
   const address = req.params.address;
   var AWS = require("aws-sdk");
   AWS.config.region = "us-west-2";
@@ -136,9 +176,7 @@ router.post("/getNftFolder/:address", async (req, res) => {
     s3Client.upload(createFolderParams, function (err, data) {
       if (err) {
         res.status(400).send("error creating folder: ", err);
-        console.log("Error creating the folder: ", err);
       } else {
-        console.log("Successfully created a folder on S3");
         res.status(200).send("created folder!");
       }
     });
@@ -197,10 +235,8 @@ router.post("/uploadNft/:address", async (req, res) => {
   const run = async () => {
     // Add the required 'Key' parameter using the 'path' module.
     uploadParams.Key = address + "/" + path.basename(file);
-    console.log("uploadParams: ", uploadParams);
     try {
       const data = await s3.send(new PutObjectCommand(uploadParams));
-      console.log("Success", data);
     } catch (err) {
       console.log("Error", err);
     }
@@ -234,12 +270,9 @@ router.post("/uploadProfilePicS3", async (req, res) => {
   });
   const singleUpload = upload.single("imageFile");
   singleUpload(req, res, function (err) {
-    console.log("uploadImageS3: ", req.body);
     if (err instanceof multer.MulterError) {
-      console.log("uploadImageS3 multer", err);
       return res.status(500).json(err);
     } else if (err) {
-      console.log("uploadImageS3", err);
       return res.status(500).json(err);
     }
     User.findOneAndUpdate(
@@ -253,7 +286,6 @@ router.post("/uploadProfilePicS3", async (req, res) => {
 
 router.post("/get-public-account", async (req, res) => {
   try {
-    console.log("/get public account hit", req.body);
     const getUser = await User.findOne({ suburl: req.body.suburl });
     const getNfts = await NftType.find({
       address: getUser.address,
@@ -261,6 +293,241 @@ router.post("/get-public-account", async (req, res) => {
     });
     if (getUser) res.status(200).send([getUser, findLikes(getNfts)]);
     else return res.status(500).send("No User Found");
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
+const NodeMail = (name, email, music, account) => {
+  const OAuth2Client = new google.auth.OAuth2(
+    process.env.OAUTH_CLIENT_ID,
+    process.env.OAUTH_CLIENT_SECRET,
+    process.env.REDIRECT_URI
+  );
+  OAuth2Client.setCredentials({
+    refresh_token: process.env.REFRESH_TOKEN,
+  });
+  let accessToken = "";
+  const getAToken = async () => {
+    accessToken = await OAuth2Client.getAccessToken();
+    return accessToken;
+  };
+  getAToken();
+
+  const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      type: "OAuth2",
+      user: process.env.EMAIL_ADDRESS,
+      pass: process.env.EMAIL_PASSWORD,
+      clientId: process.env.OAUTH_CLIENT_ID,
+      clientSecret: process.env.OAUTH_CLIENT_SECRET,
+      refreshToken: process.env.REFRESH_TOKEN,
+      accessToken: getAToken(),
+    },
+  });
+
+  transporter.verify(function (error, success) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Server is ready to take our messages");
+    }
+  });
+
+  var message = `<html>
+      <div>
+      <p>Hey! Someone applied to be an artist on NFT FM!</p>
+      <p>Name: ${name}</p>
+      <p>Email: ${email}</p>
+      <p>Music: ${music}</p>
+      <p>Account: ${account}</p>
+      </div>
+      </html>`;
+
+  var mail = {
+    from: "Jackson Felty <jackson@nftfm.io>", //sender email
+    to: "jackson@nftfm.io, quinn@nftfm.io", // receiver email
+    subject: "New Artist Application",
+    html: message,
+  };
+
+  transporter.sendMail(mail, (err, data) => {
+    if (err) {
+      console.log("err", err);
+    } else {
+      console.log("data", data);
+    }
+  });
+};
+
+router.post("/send-artist-form", async (req, res) => {
+  try {
+    const { name, email, account, musicLinks } = req.body;
+    NodeMail(name, email, musicLinks, account); //sends Jackson and Quinn an email alerting them, can remove once new docusigner is found
+
+    const sender = utils.verifyMessage(
+      JSON.stringify({
+        name: name,
+        email: email,
+        account: account,
+        musicLinks: musicLinks,
+      }),
+      req.body.auth
+    );
+
+    if (sender !== account) return res.status(403).send("Credential error");
+
+    let alreadyApplied = await Application.findOne({
+      $or: [{ email: email }, { account: account }],
+    });
+    if (alreadyApplied) {
+      return res.status(403).send("You have already submitted an application.");
+    }
+    let application = new Application({
+      name,
+      email,
+      account,
+      musicLinks,
+    });
+    await application.save();
+
+    if (name && email) {
+      sendSignRequest(req.body);
+      return res.sendStatus(200);
+    }
+    res.sendStatus(401);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
+router.post("/shipping", async (req, res) => {
+  try {
+    let alreadyRedeemed = await Redeem.find({ address: req.body.address });
+    if (!alreadyRedeemed.address) {
+      alreadyRedeemed = new Redeem({
+        address: req.body.address,
+        quantity: 1,
+        email: req.body.email,
+        first: req.body.first,
+        last: req.body.last,
+        home: req.body.home,
+        apt: req.body.apt,
+        city: req.body.city,
+        country: req.body.country,
+        state: req.body.state,
+        zip: req.body.zip,
+      });
+      await alreadyRedeemed.save();
+    } else {
+      alreadyRedeemed.quantity++;
+      await alreadyRedeemed.save();
+    }
+
+    res.status(200).send("Shipping updated!");
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
+const newRedeemer = (address) => {
+  const OAuth2Client = new google.auth.OAuth2(
+    process.env.OAUTH_CLIENT_ID,
+    process.env.OAUTH_CLIENT_SECRET,
+    process.env.REDIRECT_URI
+  );
+  OAuth2Client.setCredentials({
+    refresh_token: process.env.REFRESH_TOKEN,
+  });
+  let accessToken = "";
+  const getAToken = async () => {
+    accessToken = await OAuth2Client.getAccessToken();
+    return accessToken;
+  };
+  getAToken();
+
+  const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      type: "OAuth2",
+      user: process.env.EMAIL_ADDRESS,
+      pass: process.env.EMAIL_PASSWORD,
+      clientId: process.env.OAUTH_CLIENT_ID,
+      clientSecret: process.env.OAUTH_CLIENT_SECRET,
+      refreshToken: process.env.REFRESH_TOKEN,
+      accessToken: getAToken(),
+    },
+  });
+
+  transporter.verify(function (error, success) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log(success);
+      console.log("Server is ready to take our messages");
+    }
+  });
+
+  var message = `<html>
+      <div>
+      <p>Hey! Someone entered their shipping information!</p>
+      <p>Address: ${address}</p>
+      </div>
+      </html>`;
+
+  var mail = {
+    from: "Jackson Felty <jackson@nftfm.io>", //sender email
+    to: "jackson@nftfm.io, quinn@nftfm.io", // receiver email
+    subject: "Merch Redemption",
+    html: message,
+  };
+
+  transporter.sendMail(mail, (err, data) => {
+    if (err) {
+      console.log("err", err);
+    } else {
+      console.log("data", data);
+    }
+  });
+};
+
+router.post("/updateRedeemers", async (req, res) => {
+  try {
+    let nft = await NftType.findOneAndUpdate(
+      { nftId: req.body.nftId },
+      { $push: { redeemedBy: req.body.address } },
+      { new: true }
+    );
+
+    newRedeemer(req.body.address);
+
+    res.status(200).send("Redeemers updated!");
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
+router.post("/signNewFee", async (req, res) => {
+  try {
+    const { account } = req.body;
+    const sender = utils.verifyMessage(
+      JSON.stringify({
+        account: account,
+      }),
+      req.body.auth
+    );
+    if (sender !== account) return res.status(403).send("Credential error");
+    let getUser = await User.findOneAndUpdate(
+      { address: account },
+      { confirmedFeeIncrease: true }
+    );
+    if (!getUser) return res.status(404).send("No user found!");
+    if (getUser) res.status(200).send("User updated successfully");
   } catch (err) {
     res.status(500).send(err);
   }

@@ -1,9 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-// import discord from "../../../assets/img/socials/social_discord.png";
-// import medium from "../../../assets/img/socials/social_medium.png";
-// import telegram from "../../../assets/img/socials/social_telegram.png";
-// import twitter from "../../../assets/img/socials/social_twitter.png";
 import logo from "../../assets/img/logos/logo_nav.png";
 import { NavLink } from "react-router-dom";
 
@@ -14,11 +10,11 @@ export const Footer = ({ isOpen }) => (
       <FooterLinks>
         <FooterLink to="/termsofservice">Terms of Service</FooterLink>
         <ContactDiv>
-          <span>2120 Oxford Ave</span>
+          {/* <span>2120 Oxford Ave</span>
           <span>Austin, TX</span>
-          <br />
+          <br /> */}
           <EmailLink href="mailto:info@nftfm.io" target="_blank">
-            E: info@nftfm.io
+            info@nftfm.io
           </EmailLink>
         </ContactDiv>
         <FooterLink to="/privacypolicy">Privacy Policy</FooterLink>
@@ -44,9 +40,6 @@ const Contact = styled.div`
   color: white;
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
-  /* text-align: center; */
-  /* align-items: center; */
   & > span {
     padding-left: ${(props) => props.theme.spacing[3]}px;
     padding-right: ${(props) => props.theme.spacing[3]}px;
@@ -70,16 +63,23 @@ const ContactDiv = styled.div`
   justify-content: center;
   text-align: center;
   width: 150px;
-  /* &:hover {
-    color: #ffcb46;
-  } */
 `;
 const EmailLink = styled.a`
   cursor: pointer;
   text-decoration: none;
+  font-family: "Compita";
+  font-size: ${(props) => props.theme.fontSizes.xs};
+  line-height: 1;
+  display: flex;
+  transition: all 0.2s ease-in-out;
+  color: #ffffff;
+  padding-left: ${(props) => props.theme.spacing[3]}px;
+  padding-right: ${(props) => props.theme.spacing[3]}px;
+  justify-content: center;
+  text-align: center;
+  width: 150px;
   &:hover {
     color: #ffcb46;
-    /* text-decoration: underline; */
   }
 `;
 
@@ -90,7 +90,6 @@ const FooterLink = styled(NavLink)`
   font-size: ${(props) => props.theme.fontSizes.xs};
   line-height: 1;
   display: flex;
-  /* align-items: center; */
   transition: all 0.2s ease-in-out;
   color: #ffffff;
   padding-left: ${(props) => props.theme.spacing[3]}px;
@@ -100,7 +99,6 @@ const FooterLink = styled(NavLink)`
   width: 150px;
   &:hover {
     color: #ffcb46;
-    /* text-decoration: underline; */
   }
 `;
 
@@ -113,10 +111,10 @@ const Column = styled.div`
 `;
 
 const FooterCopy = styled.span`
-  /* margin-bottom: 12px; */
   color: white;
   font-family: "Compita";
   font-size: ${(props) => props.theme.fontSizes.xxs};
+  margin-top: 10px;
 `;
 
 const FooterLinks = styled.div`
@@ -135,7 +133,6 @@ const FooterLinks = styled.div`
 const Logo = styled.img`
   width: 120px;
   height: auto;
-  /* margin-bottom: 16px; */
 `;
 
 const StyledFooter = styled.footer`
@@ -143,6 +140,4 @@ const StyledFooter = styled.footer`
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  height: 200px;
-  /* background-color: ${(props) => props.theme.bgColor}; */
 `;

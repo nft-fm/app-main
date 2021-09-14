@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-// import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
-// import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../assets/img/icons/coins.svg";
 import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.svg";
 import { useAccountConsumer } from "../../contexts/Account";
@@ -13,6 +11,7 @@ import LibraryModal from "../NftModals/LibraryModal";
 import { ReactComponent as Founder } from "../../assets/img/Badges/founder.svg";
 import { ReactComponent as Premium } from "../../assets/img/Badges/premium.svg";
 import { ReactComponent as Prerelease } from "../../assets/img/Badges/prerelease.svg";
+import { ReactComponent as Exclusive } from "../../assets/img/Badges/exclusive.svg";
 
 import ReactToolTip from "react-tooltip";
 const NftCard = (props) => {
@@ -24,12 +23,6 @@ const NftCard = (props) => {
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
 
-  // const show = () => setIsOpen(true);
-  // const hide = (e) => {
-  //   setIsOpen(false);
-  //   console.log("isOpen", isOpen);
-  // };
-
   const hide = () => {
     setIsModalOpen(false);
   };
@@ -40,7 +33,7 @@ const NftCard = (props) => {
   }, [props.nft, user]);
 
   return (
-    <Container>
+    <Container onClick={() => setIsModalOpen(!isModalOpen)} >
       <ShareModal
         open={isShareOpen}
         hide={() => setIsShareOpen(!isShareOpen)}
@@ -55,6 +48,7 @@ const NftCard = (props) => {
         likeCount={likeCount}
         setLikeCount={setLikeCount}
         setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
+        
       />
       <CardTop>
         <LikeShare
@@ -66,26 +60,41 @@ const NftCard = (props) => {
           setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
         />
         <Side>
-          <IconArea
-            href={`https://opensea.io/assets/0x88d3e00ce938f1a591336131b859465b50d608b7/${nft.nftId}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Trade
-            <Cart />
-          </IconArea>
+          {(nft.chain === "ETH") && (
+            <IconArea
+              href={`https://opensea.io/assets/0x88d3e00ce938f1a591336131b859465b50d608b7/${nft.nftId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Trade
+              <Cart />
+            </IconArea>
+          )}
+          {/* {(nft.chain === "BSC") && (
+            <IconArea
+              href={''}
+            >
+              BSC
+              <Cart />
+            </IconArea>
+          )} */}
         </Side>
       </CardTop>
       <Image
         src={nft.imageUrl}
         alt="image"
-        onClick={() => setIsModalOpen(!isModalOpen)}
       // onClick={() => setIsOpen(!isOpen)}
       />
       <BottomWrapper>
         <Bottom>
-          <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>{nft.title}</TrackName>
-          <Artist>{nft.artist}</Artist>
+          <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>
+            {nft.title.length > 15 ? nft.title.slice(0, 15) + "..." : nft.title}
+          </TrackName>
+          <Artist>
+            {nft.artist.length > 20
+              ? nft.artist.slice(0, 20) + "..."
+              : nft.artist}
+          </Artist>
         </Bottom>
         <PlayButton src={PlayIcon} onClick={() => setNftCallback(nft)} />
       </BottomWrapper>
@@ -134,13 +143,31 @@ const NftCard = (props) => {
                 </>
               );
             }
+            if (badge.exclusive) {
+              return (
+                <>
+                  <ExclusiveBadge
+                    className="exclusiveBadge"
+                    data-tip
+                    data-for="exclusiveTip"
+                  />
+                  <ReactToolTip id="exclusiveTip" place="top" effect="solid">
+                    Exclusive
+                  </ReactToolTip>
+                </>
+              );
+            }
           })}
         </BadgeHolder>
       </BottomSection>
     </Container>
   );
 };
-
+const ExclusiveBadge = styled(Exclusive)`
+  width: 15px;
+  height: 15px;
+  padding: 0 5px;
+`;
 const FounderBadge = styled(Founder)`
   width: 15px;
   height: 15px;
@@ -276,7 +303,7 @@ const IconArea = styled.a`
     transition: all 0.2s ease-in-out;
     color: #20a4fc;
     & svg > path {
-    transition: all 0.2s ease-in-out;
+      transition: all 0.2s ease-in-out;
       fill: #20a4fc;
     }
   }

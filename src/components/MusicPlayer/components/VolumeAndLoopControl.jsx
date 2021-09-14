@@ -14,7 +14,6 @@ const VolumeAndLoopControl = (props) => {
   const toogle = useRef(null);
 
   const startToogle = (e) => {
-    console.log("START")
     e.stopPropagation()
     e.preventDefault()
     setIsDragging(true);
@@ -23,7 +22,6 @@ const VolumeAndLoopControl = (props) => {
   const handleToogleMove = (e) => {
     if (isDragging) {
       const _bounds = invisibleBar.current.getBoundingClientRect()
-      console.log("those", _bounds);
       let position =  (_bounds.bottom - e.clientY) / _bounds.height;
       setFilled(position * 100);
     }
@@ -46,8 +44,6 @@ const VolumeAndLoopControl = (props) => {
   }
 
   const checkForToogle = (e) => {
-    console.log("clienty", e.clientY);
-    console.log("y", toogle.current.getBoundingClientRect())
     if (!isDragging) {
       const toogleBounds = toogle.current.getBoundingClientRect();
 

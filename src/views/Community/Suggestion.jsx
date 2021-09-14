@@ -10,13 +10,12 @@ const Community = ({ fetchSuggestions, suggestions }) => {
   // const [exploitPrevent, setExploitPrevent] = useState(false);
   const [votes, setVotes] = useState(1);
   const { account } = useWallet();
-  console.log('votes', votes)
   useEffect(() => {
-    getVinylBalance((res) => Number(res.vinyl[0]) > 0 && setVotes(Number(res.vinyl[0])))
+    getVinylBalance(
+      (res) => Number(res.vinyl[0]) > 0 && setVotes(Number(res.vinyl[0]))
+    );
     // setVotes(1);
   }, [account]);
-
-  console.log('votes', votes)
 
   const newStyledSuggestions = suggestions.map((suggestion, index) => {
     let votesColor = "white";
@@ -54,7 +53,6 @@ const Community = ({ fetchSuggestions, suggestions }) => {
           sig,
         })
         .then((res) => {
-          console.log("user", res.data);
           fetchSuggestions();
         })
         .catch((err) => {
@@ -92,8 +90,8 @@ const Community = ({ fetchSuggestions, suggestions }) => {
             <SuggestionVotes>
               <SuggestedUserInfo>
                 {suggestion.address.substring(0, 6) +
-                    "..." +
-                    suggestion.address.substring(suggestion.address.length - 4)}
+                  "..." +
+                  suggestion.address.substring(suggestion.address.length - 4)}
               </SuggestedUserInfo>
               {suggestion.totalVotes !== 0 && (
                 <ColorVotes style={{ color: votesColor }}>
@@ -117,7 +115,7 @@ const Community = ({ fetchSuggestions, suggestions }) => {
 const SuggestedUserInfo = styled.div`
   display: flex;
   align-items: center;
-  color: ${props => props.theme.color.lightgray};
+  color: ${(props) => props.theme.color.lightgray};
   font-family: "Compita";
 `;
 
@@ -129,7 +127,7 @@ const SingleTop = styled.div`
 `;
 
 const ColorVotes = styled.div`
-font-family: "Compita";
+  font-family: "Compita";
   font-size: 14px;
   letter-spacing: 0.5px;
   font-stretch: normal;
@@ -141,7 +139,7 @@ font-family: "Compita";
 `;
 
 const SuggestionVotes = styled.div`
-font-family: "Compita";
+  font-family: "Compita";
   font-size: 14px;
   letter-spacing: 0.5px;
   font-stretch: normal;
@@ -153,7 +151,7 @@ font-family: "Compita";
 `;
 
 const SuggestionText = styled.div`
-font-family: "Compita";
+  font-family: "Compita";
   font-size: 16px;
   font-stretch: normal;
   text-align: left;

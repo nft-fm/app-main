@@ -1,172 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import axios from "axios";
-import NftCard from "../../../components/NftCards/SaleNftCard";
 import logo from "../../../assets/img/logos/logo.png";
+import { NavLink } from "react-router-dom";
 import { ReactComponent as IconDiscord } from "../../../assets/img/icons/social_discord.svg";
 import { ReactComponent as IconMedium } from "../../../assets/img/icons/social_medium.svg";
 import { ReactComponent as IconTelegram } from "../../../assets/img/icons/social_telegram.svg";
 import { ReactComponent as IconTwitter } from "../../../assets/img/icons/social_twitter.svg";
-import { useAccountConsumer } from "../../../contexts/Account";
-import LoadingFeatured from "../../../components/NftCards/LoadingFeatured";
-import NftModalHook from "../../../components/NftModalHook";
-import ShareModal from "../../../components/SMShareModal/SMShareModal";
+import saQiBannerDesktop from "../../../assets/img/homepage_assets/saqi_banner.png";
+import saQiBannerMobile from "../../../assets/img/homepage_assets/saqi_banner_mobile.jpeg";
 
 const Listen = () => {
-  const { user, account } = useAccountConsumer();
-  const [nfts, setNfts] = useState(<LoadingFeatured />);
-  // const [hasNfts, setHasNfts] = useState(false);
-
-  const [nftFromUrl, setNftFromUrl] = useState(null);
-  const [isUrlModalOpen, setIsUrlModalOpen] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [rawNftData, setRawNftData] = useState(null);
-
-  const formatNfts = (nftsData) => {
-    return nftsData.map((nft) => {
-      return <NftCard nft={nft} />;
-    });
-  };
-
-  const getFeatured = () => {
-    axios.post("/api/nft-type/featured", { address: account }).then((res) => {
-      setRawNftData(res.data);
-      const formattedNfts = formatNfts(res.data);
-      setTimeout(function () {
-        formattedNfts.push(<FillerCard />);
-        setNfts(formattedNfts);
-        // setHasNfts(true);
-        setIsLoaded(true);
-      }, 300);
-    });
-  };
-
-  const hide = () => {
-    setIsUrlModalOpen(false);
-  };
-
-  useEffect(() => {
-    getFeatured();
-  }, [user]);
-
-  const [partialSong, setPartialSong] = useState(false);
-
-  const getSnnipetAWS = async (completeNft) => {
-    await axios
-    .post("/api/nft-type/getSnnipetAWS", {
-      key:
-        completeNft.address +
-        "/snnipets/" +
-        completeNft.audioUrl.split("/").slice(-1)[0]
-    })
-    .then((res) => {
-      if (!res.data) {
-        getNSeconds(completeNft);
-      } else {
-        setPartialSong(res.data);
-      }
-    })
-    .catch(err => { 
-      console.log("ERR", err)
-    })
-  };
-
-  const getNSeconds = async (completeNft) => {
-    await axios
-      .post("/api/nft-type/getNSecondsOfSong", {
-        key:
-          completeNft.address +
-          "/" +
-          completeNft.audioUrl.split("/").slice(-1)[0],
-        nft: completeNft,
-        startTime: 30
-      })
-      .then((res) => {
-        console.log("got snnipet");
-        const songFile = res.data.Body.data;
-      
-        setPartialSong(songFile);
-      });
-  };
-
-  useEffect(() => {
-    if (window.location.pathname.length > 1 && isLoaded) {
-      let nftTitle = ""
-      let trackUrl = window.location.pathname.split("/").pop()
-      if (trackUrl === "touch_id") nftTitle = "TOUCH IDv2"
-      if (trackUrl === "sex_kazoo") nftTitle = "Sex Kazoo 2 "
-      if (trackUrl === "lowkey") nftTitle = "Lowkey"
-      if (trackUrl === "here_for_a_reason") nftTitle = "here for a reason"
-      for (let i = 0; i < rawNftData.length; i++) {
-        console.log(rawNftData[i]);
-        if (nftTitle === rawNftData[i].title) {
-          setNftFromUrl(rawNftData[i]);
-          setIsUrlModalOpen(true);
-          getSnnipetAWS(rawNftData[i]);
-        }
-      }
-    }
-  }, [isLoaded]);
-
-  const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(0);
-  const [isShareOpen, setIsShareOpen] = useState(false);
-  const [shareCount, setShareCount] = useState({count: 0 })
-
-  useEffect(() => {
-    if (nftFromUrl) {
-    setShareCount({ count: nftFromUrl.shareCount });
-      setLikeCount(nftFromUrl.likeCount);
-      setLiked(nftFromUrl.liked);
-    }
-    // getSnnipet(props.nft);
-  }, [nftFromUrl]);
   return (
     <Landing>
-      <ShareModal
-        open={isShareOpen}
-        hide={() => setIsShareOpen(!isShareOpen)}
-        updateShareCount={() => setShareCount({ count: shareCount.count + 1 })}
-        nft={nftFromUrl}
-      />
-      {nftFromUrl && (
-        <NftModalHook
-          nft={nftFromUrl}
-          open={isUrlModalOpen}
-          hide={() => hide()}
-          partialSong={partialSong}
-          liked={liked}
-          setLiked={setLiked}
-          likeCount={likeCount}
-          setLikeCount={setLikeCount}
-          setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
-        />
-      )}
       <LandingTitle>
         <Logo src={logo} />
         <StyledTitle>NFT FM</StyledTitle>
-        <NftFmTagline>Tune in to your favorite artists.</NftFmTagline>
       </LandingTitle>
       <LaunchContainer>
-        <ContainerTitle>
-          PROUD TO
-          <ContainerTitleTextContainer>
-            <ContainerTitleText
-              style={{ color: "#20a4fc" }}
-            >{`LAUNCH`}</ContainerTitleText>
-            <ContainerTitleText
-              style={{ color: "#fde404" }}
-            >{`ALONGSIDE`}</ContainerTitleText>
-            <ContainerTitleText
-              style={{ color: "#68c12f" }}
-            >{`AMAZING`}</ContainerTitleText>
-            <ContainerTitleText
-              style={{ color: "#fa423e" }}
-            >{`ARTISTS`}</ContainerTitleText>
-          </ContainerTitleTextContainer>
-        </ContainerTitle>
-        <ContainerOutline />
-        <NftScroll> {nfts} </NftScroll>
+        <NavLink to="/market/16">
+          <DesktopBanner src={saQiBannerDesktop} alt="saQi Banner" />
+        </NavLink>
+        <MobileDescription>
+          <MobileBanner src={saQiBannerMobile} alt="saQi Banner" />
+          <span>Portion of the proceeds go to natives affected by Covid</span>
+          <span>Artwork by Autumn Sky</span>
+        </MobileDescription>
       </LaunchContainer>
       <SocialsBar>
         <IconContainer
@@ -206,15 +64,37 @@ const Listen = () => {
   );
 };
 
-const ContainerTitleTextContainer = styled.div`
-  @media only screen and (max-width: 776px) {
-    margin-top: 6px;
+const MobileDescription = styled.div`
+  background-color: ${(props) => props.theme.color.box};
+  border: 2px solid ${(props) => props.theme.color.boxBorder};
+  /* padding: 20px 0; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  & > span {
+    color: white;
+    text-align: center;
+    padding: 20px;
+    font-size: ${(props) => props.theme.fontSizes.sm};
+  }
+  @media only screen and (min-width: 776px) {
+    display: none;
   }
 `;
 
-const FillerCard = styled.div`
-  width: 226px;
-  height: 0px;
+const MobileBanner = styled.img`
+  width: 100vw;
+  aspect-ratio: 1;
+  @media only screen and (min-width: 776px) {
+    display: none;
+  }
+`;
+
+const DesktopBanner = styled.img`
+  border-radius: 15px;
+  @media only screen and (max-width: 776px) {
+    display: none;
+  }
 `;
 
 const Discord = styled(IconDiscord)`
@@ -262,10 +142,6 @@ const IconText = styled.span`
   margin: 1px 0 0 12px;
   font-weight: 600;
   letter-spacing: 1px;
-`;
-
-const ContainerTitleText = styled.span`
-  padding-left: 6px;
 `;
 
 const LandingTitle = styled.div`
@@ -330,19 +206,6 @@ const SocialsBar = styled.div`
   }
 `;
 
-const NftScroll = styled.div`
-  justify-content: center;
-  display: flex;
-  flex-flow: row wrap;
-  width: 100%;
-  justify-content: space-between;
-  @media only screen and (max-width: 776px) {
-    flex-direction: column;
-    width: 100%;
-    align-items: center;
-  }
-`;
-
 const LaunchContainer = styled.div`
   position: relative;
   width: 100%;
@@ -354,43 +217,6 @@ const LaunchContainer = styled.div`
     width: 976px;
   }
 `;
-
-const ContainerTitle = styled.span`
-  position: absolute;
-  font-weight: 600;
-  left: calc(10% + 50px);
-  top: -4px;
-  padding: 0 12px;
-  font: "Compita";
-  background-color: ${(props) => props.theme.bgColor};
-  font-size: ${(props) => props.theme.fontSizes.xs};
-  color: ${(props) => props.theme.color.gray};
-  display: flex;
-  flex-direction: row;
-  display: flex;
-  align-items: center;
-  @media only screen and (max-width: 776px) {
-    position: relative;
-    flex-direction: column;
-    left: auto;
-    right: auto;
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
-`;
-const ContainerOutline = styled.div`
-  border-radius: 24px 24px 0 0;
-  border: 6px solid #383838;
-  border-bottom: none;
-  height: 40px;
-  width: 80%;
-  display: flex;
-  flex-direction: row;
-  @media only screen and (max-width: 776px) {
-    display: none;
-  }
-`;
-
 const Logo = styled.img`
   width: 100px;
   height: 153.84px;
@@ -405,13 +231,4 @@ const StyledTitle = styled.div`
   letter-spacing: 3px;
   color: white;
 `;
-
-const NftFmTagline = styled.div`
-  padding-bottom: 20px;
-  font-size: large;
-  color: white;
-  text-align: center;
-  white-space: wrap;
-`;
-
 export default Listen;

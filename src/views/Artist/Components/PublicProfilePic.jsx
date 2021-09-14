@@ -43,13 +43,11 @@ const PublicProfilePic = (props) => {
         .post("/api/user/uploadProfilePicS3", imageFormData)
         .then((res) => {
           setLoading(false);
-          console.log("RES", res.data);
           setProfilePic(res.data.location);
           setImageFile(null);
           props.setEdit(false);
         })
         .catch((err) => {
-          console.log(err);
           setImageFile(null);
           // setImageUploadError(true);
           setLoading(false);

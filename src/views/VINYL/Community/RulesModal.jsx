@@ -7,7 +7,7 @@ import ModalTitle from "../../../components/ModalTitle";
 const BetRulesModal = () => {
   return (
     <Modalmd>
-      <Container onKeyDown={() => console.log('booj')}>
+      <Container>
         <Image src={logo} alt="logo" />
         <Space />
         <ModalTitle text="Help suggest what we should do next!" />
@@ -15,9 +15,7 @@ const BetRulesModal = () => {
           <ModalContent>
             {/* You must have BDT or ETH-BDT-LP staked to participate in community governance. The more you have staked, the more voting power you wield. */}
           </ModalContent>
-          <ModalContent>
-            You can make one proposal every 24 hours.
-          </ModalContent>
+          <ModalContent>You can make one proposal every 24 hours.</ModalContent>
         </ModalSpacer>
       </Container>
     </Modalmd>

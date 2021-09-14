@@ -1,11 +1,6 @@
 import lamejs from "lamejs";
 
 function wavToMp3(channels, sampleRate, left, right) {
-    console.log("channels", channels);
-    console.log("sampleRate", sampleRate);
-    console.log("left", left);
-    console.log("right", right);
-
     var buffer = [];
     var mp3enc = new lamejs.Mp3Encoder(channels, sampleRate, 128);
     var remaining = left.length;
@@ -36,7 +31,6 @@ function wavToMp3(channels, sampleRate, left, right) {
     var bUrl = window.URL.createObjectURL(mp3Blob);
    
     // send the download link to the console
-    console.log('mp3 download:', bUrl);
     return buffer;
 }
 

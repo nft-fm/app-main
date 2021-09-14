@@ -1,113 +1,153 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 import { ReactComponent as IconX } from "../../assets/img/icons/x.svg";
-import logo from "../../assets/img/logos/logo_tiny.png";
 import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
 import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
-import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import PlayIcon from "../../assets/img/icons/listen_play.svg";
 import { useAccountConsumer } from "../../contexts/Account";
-import IconMetamask from "../../assets/img/icons/metamask_icon.png";
 import loading from "../../assets/img/loading.gif";
 import Swal from "sweetalert2";
 import { usePlaylistConsumer } from "../../contexts/Playlist";
 import { buyNFT, getEthBalance } from "../../web3/utils";
 import swal from "sweetalert2";
-import PlaySongSnippet from "../NftModals/Components/PlaySongSnippet";
+import ReactToolTip from "react-tooltip";
+import PlaySongSnippet from "./Components/PlaySongSnippet";
 import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as Founder } from "../../assets/img/Badges/founder.svg";
 import { ReactComponent as Premium } from "../../assets/img/Badges/premium.svg";
 import { ReactComponent as Prerelease } from "../../assets/img/Badges/prerelease.svg";
-import ReactToolTip from "react-tooltip";
+import { ReactComponent as Exclusive } from "../../assets/img/Badges/exclusive.svg";
+import { ReactComponent as GiftIcon } from "../../assets/img/icons/rewards-gift.svg";
 import moment from "moment";
 import { NavLink } from "react-router-dom";
-const initialNftState = {
-  artist: "",
-  address: "",
-  isDraft: true,
-  genre: "",
-  numMinted: 0,
-  price: 0,
-  producer: "",
-  title: "",
-  writer: "",
-  imageUrl: "",
-  audioUrl: "",
-  startTime: "",
-  endTime: "",
-  bidIncrementPercent: "",
-};
-const NftModalHook = ({
-  open,
-  children,
-  hide,
-  onClose,
-  nft,
-  partialSong,
-  liked,
-  setLiked,
-  likeCount,
-  setLikeCount,
-  setIsShareOpen,
-  id,
-}) => {
-  // const [nft, setNft] = useState(initialNftState);
+import {
+  errorIcon,
+  warningIcon,
+  imageWidth,
+  imageHeight,
+} from "../../utils/swalImages";
+import Ticker from "../../components/Ticker";
+import { ReactComponent as IconBinance } from "../../assets/img/icons/binance-logo.svg";
+
+const BuyNftModal = (props) => {
+  const {
+    open,
+    hide,
+    nft,
+    partialSong,
+    liked,
+    setLiked,
+    likeCount,
+    setLikeCount,
+    setIsShareOpen,
+  } = props;
+
   const [isLoading, setIsLoading] = useState(false);
   const [isBought, setIsBought] = useState(false);
-  const { account, connect, usdPerEth, getUser } = useAccountConsumer();
+  const { account, connect, getUser, currChainId } = useAccountConsumer();
   const { setNftCallback } = usePlaylistConsumer();
+  const history = useHistory();
 
-  // useEffect(() => {
-  //   axios
-  //     .post("/api/nft-type/get-one", { id: id, address: account })
-  //     .then((res) => {
-  //       console.log("res", res);
-  //       setNft(res.data);
-  //     })
-  //     .catch(err => hide()) 
-  // }, [id]);
+  useEffect(() => {
+    if (open) {
+      axios
+        .post("/api/nft-type/trackNftView", {
+          address: account,
+          nftId: nft.nftId,
+          artistAddress: nft.address,
+          artist: nft.artist,
+          title: nft.title,
+        })
+        .then()
+        .catch((err) => console.log(err));
+    }
+  }, [open]);
 
   const stopProp = (e) => {
     e.stopPropagation();
   };
 
   const purchase = async (id) => {
+    if (
+      (nft.chain === "ETH" && currChainId !== 1 && currChainId !== 4) ||
+      (nft.chain === "BSC" && currChainId !== 56 && currChainId !== 97)
+    ) {
+      swal.fire({
+        title: `Wrong Chain`,
+        text: `You must be on the ${nft.chain} blockchain to purchase this NFT. You can change chains in the navbar.`,
+        imageUrl: errorIcon,
+        imageWidth,
+        imageHeight,
+      });
+      return;
+    }
+
     setIsLoading(true);
+    // {!} simplify the below
     await getEthBalance(async (balance) => {
       if (parseFloat(balance) >= nft.price) {
-        await buyNFT(
-          { nftID: id, amount: 1, saleId: nft.nftId, price: String(nft.price) },
-          () => {
-            console.log("pending");
-          },
-          () => {
-            axios
-              .post("/api/nft-type/purchase", { id: id, address: account })
-              .then((res) => {
-                setTimeout(function () {
+        Swal.fire({
+          title: "Purchasing, please do not leave this page.",
+          showConfirmButton: false,
+          timer: 3000,
+        }).then(async () => {
+          await buyNFT(
+            {
+              nftID: id,
+              amount: 1,
+              saleId: nft.nftId,
+              price: String(nft.price),
+            },
+            () => {
+              axios
+                .post("/api/nft-type/purchase", {
+                  id: id,
+                  address: account,
+                })
+                .then((res) => {
+                  setTimeout(function () {
+                    setIsLoading(false);
+                    setIsBought(true);
+                    getUser();
+                  }, 1000);
+                  if (nft.isRedeemable) {
+                    Swal.fire({
+                      title: "Redeem Merch!",
+                      text: "You just bought an NFT with redeemable merch! Click this button to go to the redemption portal",
+                      confirmButtonText: "Redeem!",
+                    }).then((res) => {
+                      if (res.isConfirmed) {
+                        history.push("/redeem");
+                      }
+                    });
+                  } else {
+                    Swal.fire({
+                      title: "Succesful purchase!",
+                      html: `<div>View in your library (can take a moment to appear)<div>`,
+                    });
+                  }
+                })
+                .catch((err) => {
+                  console.error(err.status, err.message, err.error);
+                  Swal.fire(
+                    `Error: ${err.response ? err.response.status : 404}`,
+                    `${err.response ? err.response.data : "server error"}`,
+                    "error"
+                  );
                   setIsLoading(false);
-                  setIsBought(true);
-                  getUser();
-                }, 1000);
-              })
-              .catch((err) => {
-                console.error(err.status, err.message, err.error);
-                Swal.fire(
-                  `Error: ${err.response ? err.response.status : 404}`,
-                  `${err.response ? err.response.data : "server error"}`,
-                  "error"
-                );
-                setIsLoading(false);
-                console.log(err);
-              });
-          }
-        ).catch((err) => {
-          console.log(err);
-          swal.fire({
-            icon: "error",
-            title: "Couldn't complete sale!",
-            text: "Please try again",
+                });
+            }
+          ).catch((err) => {
+            setIsLoading(false);
+            swal.fire({
+              imageUrl: errorIcon,
+              imageWidth,
+              imageHeight,
+              title: "Couldn't complete sale!",
+              text: "Please try again",
+            });
           });
         });
       } else {
@@ -117,7 +157,9 @@ const NftModalHook = ({
           text: `in wallet address: ...${account.substring(
             account.length - 4
           )}`,
-          icon: "error",
+          imageUrl: errorIcon,
+          imageWidth,
+          imageHeight,
         });
         return;
       }
@@ -149,16 +191,6 @@ const NftModalHook = ({
     hide();
   };
 
-  // const [currChainId, setCurrChainId] = useState(null);
-
-  // const getChain = async () => {
-  //   console.log('here')
-  //   const newChainId = await window.ethereum.request({ method: 'eth_chainId' });
-  //   setCurrChainId(Number(newChainId));
-  //   console.log("chainId", Number(newChainId));
-  //   return Number(newChainId);
-  // }
-
   const connectWallet = async () => {
     const newChainId = await window.ethereum.request({ method: "eth_chainId" });
     if (Number(newChainId) === process.env.REACT_APP_IS_MAINNET ? 1 : 4) {
@@ -167,47 +199,57 @@ const NftModalHook = ({
       swal.fire({
         title: "Wrong Chain",
         text: "You are on the wrong chain. Please connect to Ethereum Mainnet.",
-        icon: "warning",
+        imageUrl: warningIcon,
+        imageWidth,
+        imageHeight,
       });
     }
   };
 
-  const formatSongDur = (d) => {
-    d = Number(d);
-    var h = Math.floor(d / 3600);
-    var m = Math.floor((d % 3600) / 60);
-    var s = Math.floor((d % 3600) % 60);
+  //add in to the nft modal
+  // const formatSongDur = (d) => {
+  //   d = Number(d);
+  //   var h = Math.floor(d / 3600);
+  //   var m = Math.floor((d % 3600) / 60);
+  //   var s = Math.floor((d % 3600) % 60);
 
-    var hDisplay = h > 0 ? h + ":" : "";
-    var mDisplay = m > 0 ? m + ":" : "0:";
-    var sDisplay = s < 10 ? "0" + s : s;
-    return hDisplay + mDisplay + sDisplay;
-  };
+  //   var hDisplay = h > 0 ? h + ":" : "";
+  //   var mDisplay = m > 0 ? m + ":" : "0:";
+  //   var sDisplay = s < 10 ? "0" + s : s;
+  //   return hDisplay + mDisplay + sDisplay;
+  // };
 
   if (!open) return null;
   return (
-    <OpaqueFilter onClick={(e) => hide(e)}>
+    <OpaqueFilter onClick={(e) => !isLoading && hide(e)}>
       <Container onClick={(e) => stopProp(e)}>
         <StyledModal>
-          <X onClick={(e) => hide(e)} />
-          {/* <CardTitle>
-              <Logo src={logo} />
-              Buy NFT
-            </CardTitle> */}
+          <X onClick={(e) => !isLoading && hide(e)} />
           <Image src={nft.imageUrl} alt="image" />
           <RightSide>
             <CardTop>
               <Side>
                 <IconArea>
-                  {liked ? (
-                    <LikedHeart onClick={() => like()} />
-                  ) : (
-                    <Heart onClick={() => like()} />
-                  )}
+                  <LikeButton
+                    onClick={() => like()}
+                    aria-pressed={liked}
+                    aria-label="like button"
+                  >
+                    {liked ? (
+                      <LikedHeart aria-hidden="true" />
+                    ) : (
+                      <Heart aria-hidden="true" />
+                    )}
+                  </LikeButton>
                   {likeCount}
                 </IconArea>
                 <IconArea>
-                  <Share onClick={() => share()} />
+                  <ShareButton
+                    onClick={() => share()}
+                    aria-label="share button"
+                  >
+                    <Share onClick={() => share()} />
+                  </ShareButton>
                   {nft.shareCount}
                 </IconArea>
               </Side>
@@ -220,35 +262,61 @@ const NftModalHook = ({
               </Side>
             </CardTop>
             <BadgeHolder>
-              {nft.badges?.map((badge) => {
-                if (badge.founder) {
-                  return (
-                    <FounderBadge
-                      key={badge}
-                      data-tip
-                      data-for="founderBadge"
-                    />
-                  );
-                }
-                if (badge.premium) {
-                  return (
-                    <PremiumBadge
-                      key={badge}
-                      data-tip
-                      data-for="premiumBadge"
-                    />
-                  );
-                }
-                if (badge.prerelease) {
-                  return (
-                    <PrereleaseBadge
-                      key={badge}
-                      data-tip
-                      data-for="prereleaseBadge"
-                    />
-                  );
-                }
-              })}
+              {
+                // {!} refactor badges into independent component
+                nft.badges?.map((badge) => {
+                  if (badge.founder) {
+                    return (
+                      <FounderBadge
+                        key={badge}
+                        data-tip
+                        data-for="founderBadge"
+                      />
+                    );
+                  }
+                  if (badge.premium) {
+                    return (
+                      <PremiumBadge
+                        key={badge}
+                        data-tip
+                        data-for="premiumBadge"
+                      />
+                    );
+                  }
+                  if (badge.prerelease) {
+                    return (
+                      <PrereleaseBadge
+                        key={badge}
+                        data-tip
+                        data-for="prereleaseBadge"
+                      />
+                    );
+                  }
+                  if (badge.exclusive) {
+                    return (
+                      <ExclusiveBadge
+                        key={badge}
+                        data-tip
+                        data-for="exclusiveBadge"
+                      />
+                    );
+                  }
+                  if (badge.redeem) {
+                    return (
+                      <>
+                        <MerchBadge
+                          className="merchBadge"
+                          data-tip
+                          data-for="merchTip"
+                        />
+                        <ReactToolTip id="merchTip" place="top" effect="solid">
+                          Merch
+                        </ReactToolTip>
+                      </>
+                    );
+                  }
+                })
+              }
               <ReactToolTip id="founderBadge" place="top" effect="solid">
                 Founder
               </ReactToolTip>
@@ -258,13 +326,27 @@ const NftModalHook = ({
               <ReactToolTip id="prereleaseBadge" place="top" effect="solid">
                 Prerelease
               </ReactToolTip>
+              <ReactToolTip id="exclusiveBadge" place="top" effect="solid">
+                Exclusive
+              </ReactToolTip>
+              <ReactToolTip id="merchTip" place="top" effect="solid">
+                Merch
+              </ReactToolTip>
             </BadgeHolder>
             <InfoContainer>
-              <TrackName>{nft.title}</TrackName>
+              {nft.title.length > 18 ? (
+                <Ticker>
+                  <TrackName>{nft.title}</TrackName>
+                </Ticker>
+              ) : (
+                <TrackName>{nft.title}</TrackName>
+              )}
               <Artist
                 to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}
               >
-                {nft.artist}
+                {nft.artist.length > 20
+                  ? nft.artist.slice(0, 20) + "..."
+                  : nft.artist}
               </Artist>
             </InfoContainer>
             <SnippetHolder>
@@ -274,16 +356,16 @@ const NftModalHook = ({
             </SnippetHolder>
             <TrackDetailsHolder>
               <span>Genre: {nft.genre}</span>
-              <span>Producer: {nft.producer}</span>
-              <span>Track Length: {formatSongDur(nft.dur)}</span>
+              {/* <span>Producer: {nft.producer}</span> */}
+              {/* <span>Track Length: {formatSongDur(nft.dur)}</span> */}
               <span>
                 Release Date: {moment(nft.timestamp).format("MMM Do YYYY")}
               </span>
             </TrackDetailsHolder>
-            {/* <DescriptionHolder>
-                <DescriptionLegend>Description</DescriptionLegend>
-                <DescriptionContent>alskhgyfawe,jkfbhv</DescriptionContent>
-              </DescriptionHolder> */}
+            <DescriptionHolder>
+              <DescriptionLegend>Description</DescriptionLegend>
+              <DescriptionContent>{nft.description}</DescriptionContent>
+            </DescriptionHolder>
             <PricesContainer>
               <PriceHolder>
                 <PriceItem>
@@ -295,12 +377,11 @@ const NftModalHook = ({
                     : "--"}{" "}
                 </PriceItem>
                 &nbsp;
-                <Eth />
+                {nft.chain === "ETH" ? <Eth /> : <Bsc />}
               </PriceHolder>
             </PricesContainer>
             {!account ? (
               <BuyButton onClick={() => connectWallet()}>
-                {/* <MetaMask src={IconMetamask} /> */}
                 <ButtonText>Connect Wallet</ButtonText>
               </BuyButton>
             ) : nft.numSold !== nft.numMinted ? (
@@ -313,7 +394,10 @@ const NftModalHook = ({
                     <Loading src={PlayIcon} />
                   </BuyButton>
                 ) : (
-                  <BuyButton onClick={() => purchase(nft._id)}>
+                  <BuyButton
+                    onClick={() => purchase(nft._id)}
+                    className="buyButton"
+                  >
                     <ButtonText>Purchase</ButtonText>
                   </BuyButton>
                 )
@@ -341,136 +425,72 @@ const NftModalHook = ({
         </StyledModal>
       </Container>
     </OpaqueFilter>
-    // <OpaqueFilter onClick={(e) => hide(e)}>
-    //   <Container onClick={(e) => stopProp(e)}>
-    //     <StyledModal>
-    //       <X onClick={(e) => hide(e)} />
-    //       <CardTitle>
-    //         <Logo src={logo} />
-    //         Buy NFT
-    //       </CardTitle>
-    //       <CardTop>
-    //         <Side>
-    //           <IconArea>
-    //             {liked ? (
-    //               <LikedHeart onClick={() => like()} />
-    //             ) : (
-    //               <Heart onClick={() => like()} />
-    //             )}
-    //             {likeCount}
-    //           </IconArea>
-    //           <IconArea>
-    //             <Share onClick={() => share()} />
-    //             {nft.shareCount}
-    //           </IconArea>
-    //         </Side>
-    //         <Side>
-    //           <IconArea>
-    //             {nft.numSold}
-    //             <span style={{ margin: "0 1px" }}>/</span>
-    //             {nft.numMinted}
-    //             <Cart />
-    //           </IconArea>
-    //         </Side>
-    //       </CardTop>
-    //       <Image src={nft.imageUrl} alt="image" />
-    //       {!isBought && <PlaySongSnippet partialSong={partialSong} />}
-    //       <SnippetText>15 Sec Preview</SnippetText>
-    //       <InfoContainer>
-    //         <TrackName>{nft.title}</TrackName>
-    //         <Artist>{nft.artist}</Artist>
-    //       </InfoContainer>
-    //       <PricesContainer>
-    //         <Row>
-    //           <PriceItem>Price:</PriceItem>
-    //           <PriceItem>
-    //             {" "}
-    //             {nft.price
-    //               ? parseFloat(nft.price).toLocaleString(undefined, {
-    //                   minimumFractionDigits: 0,
-    //                   maximumFractionDigits: 6,
-    //                 })
-    //               : "--"}{" "}
-    //             &nbsp; ETH
-    //           </PriceItem>
-    //         </Row>
-    //         <Divider />
-    //         <Row>
-    //           <AvailableItem>Price:</AvailableItem>
-    //           <AvailableItem>
-    //             {" "}
-    //             {usdPerEth
-    //               ? parseFloat(usdPerEth * nft.price).toLocaleString(
-    //                   undefined,
-    //                   {
-    //                     minimumFractionDigits: 2,
-    //                     maximumFractionDigits: 2,
-    //                   }
-    //                 )
-    //               : "..."}{" "}
-    //             &nbsp; USD
-    //           </AvailableItem>
-    //         </Row>
-    //       </PricesContainer>
-    //       {!account ? (
-    //         <BuyButton onClick={() => connectWallet()}>
-    //           {/* <BuyButton onClick={() => connect("injected")}> */}
-    //           <MetaMask src={IconMetamask} />
-    //           <ButtonText>Connect Wallet</ButtonText>
-    //         </BuyButton>
-    //       ) : nft.numSold !== nft.numMinted ? (
-    //         !isLoading ? (
-    //           isBought ? (
-    //             <BuyButton
-    //               style={{ backgroundColor: "#bbb" }}
-    //               onClick={() => playSong()}
-    //             >
-    //               <Loading src={PlayIcon} />
-    //             </BuyButton>
-    //           ) : (
-    //             <BuyButton onClick={() => purchase(nft._id)}>
-    //               <ButtonText>Buy</ButtonText>
-    //             </BuyButton>
-    //           )
-    //         ) : (
-    //           <BuyButton
-    //             style={{
-    //               backgroundColor: "#262626",
-    //               border: "1px solid #383838",
-    //             }}
-    //           >
-    //             <Loading src={loading} />
-    //           </BuyButton>
-    //         )
-    //       ) : (
-    //         <BuyButton
-    //           style={{
-    //             backgroundColor: "#262626",
-    //             border: "1px solid #383838",
-    //           }}
-    //         >
-    //           <ButtonText>Sold Out!</ButtonText>
-    //         </BuyButton>
-    //       )}
-    //     </StyledModal>
-    //   </Container>
-    // </OpaqueFilter>
   );
 };
 
+const LikeButton = styled.button`
+  background-color: transparent;
+  padding: 0px;
+  border: none;
+  width: min-content;
+  height: min-content;
+  margin: 0px 4px 0 0;
+`;
+
+const ShareButton = styled.button`
+  background-color: transparent;
+  padding: 0px;
+  border: none;
+  width: min-content;
+  height: min-content;
+  margin: 0px 4px 0 0;
+`;
+
+const Bsc = styled(IconBinance)`
+  width: 18px;
+  height: 18px;
+  margin: -2px 0 0 4px;
+`;
+
+const Eth = styled(IconEth)`
+  width: 18px;
+  height: 18px;
+  margin: -2px 0 0 4px;
+  & path {
+    fill: ${(props) => props.theme.color.white};
+  }
+`;
+
 const TrackDetailsHolder = styled.div`
-  color: ${(props) => props.theme.color.gray};
   width: 100%;
   display: flex;
   flex-direction: column;
-  height: 125px;
+  height: 50px;
+  margin-bottom: 10px;
   justify-content: space-around;
+  color: #666;
   padding-left: 20px;
   @media only screen and (max-width: 776px) {
     height: auto;
   }
 `;
 
+const MerchBadge = styled(GiftIcon)`
+  width: 16px;
+  height: 16px;
+  padding: 1px;
+  border: 1px solid ${(props) => props.theme.color.blue};
+  border-radius: 50%;
+  & path {
+    fill: ${(props) => props.theme.color.red};
+  }
+`;
+
+const ExclusiveBadge = styled(Exclusive)`
+  width: 20px;
+  height: 20px;
+  padding: 0 5px;
+`;
 const FounderBadge = styled(Founder)`
   width: 20px;
   height: 20px;
@@ -488,11 +508,21 @@ const PrereleaseBadge = styled(Prerelease)`
 `;
 
 const DescriptionHolder = styled.fieldset`
-  width: 100%;
+  width: calc(100% - 10px);
   border-radius: 8px;
   border: 1px solid ${(props) => props.theme.color.lightgray};
-  padding: 2px 0;
-  height: 100px;
+  padding: 2px 0px 0px 10px;
+  height: 60px;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 6px;
+    background: rgba(0, 0, 0, 0);
+  }
+  &::-webkit-scrollbar-thumb {
+    width: 6px;
+    border-radius: 6px;
+    background: rgb(217, 217, 217, 0.6);
+  }
   /* margin-top: 10px; */
 `;
 const DescriptionLegend = styled.legend`
@@ -501,7 +531,6 @@ const DescriptionLegend = styled.legend`
 `;
 const DescriptionContent = styled.span`
   margin-top: -10px;
-  padding: 0 10px;
 `;
 
 const SnippetHolder = styled.div`
@@ -521,7 +550,7 @@ const SnippetText = styled.span`
   font-size: ${(props) => props.theme.fontSizes.xxs};
   margin-top: -5px;
   margin-bottom: 10px;
-  color: ${(props) => props.theme.color.gray};
+  color: #666;
   @media only screen and (max-width: 776px) {
     margin-bottom: 0;
   }
@@ -537,23 +566,6 @@ const ButtonText = styled.span`
   font-size: ${(props) => props.theme.fontSizes.xs};
   font-weight: 600;
   color: white;
-`;
-
-const MetaMask = styled.img`
-  width: 32px;
-  height: auto;
-`;
-
-const Divider = styled.div`
-  margin: 5px 0;
-  width: 100%;
-  height: 1px;
-  background-color: ${(props) => props.theme.color.gray};
-`;
-
-const AvailableItem = styled.div`
-  font-size: 0.8rem;
-  color: ${(props) => props.theme.color.lightgray};
 `;
 
 const PricesContainer = styled.div`
@@ -573,13 +585,6 @@ const PriceHolder = styled.div`
   background-color: ${(props) => props.theme.bgColor};
   margin-top: -8px;
   padding: 0 10px;
-`;
-const Eth = styled(IconEth)`
-  width: 18px;
-  height: 18px;
-  & path {
-    fill: ${(props) => props.theme.color.white};
-  }
 `;
 
 const PriceItem = styled.span`
@@ -614,21 +619,9 @@ const LikedHeart = styled(IconHeart)`
   }
 `;
 
-const Cart = styled(IconCart)`
-  width: 24px;
-  height: 24px;
-  margin: -2px 0 0 8px;
-  transition: all 0.2s ease-in-out;
-  & path {
-    transition: all 0.2s ease-in-out;
-    fill: ${(props) => props.theme.color.gray};
-  }
-`;
-
 const Share = styled(IconShare)`
   width: 19px;
   height: 19px;
-  margin: 0 4px 0 0;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   & path {
@@ -645,7 +638,6 @@ const Share = styled(IconShare)`
 const Heart = styled(IconHeart)`
   width: 24px;
   height: 24px;
-  margin: -3px 4px 0 0;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   & path {
@@ -674,7 +666,6 @@ const IconArea = styled.div`
   font-size: 14px;
   height: 100%;
   align-items: center;
-  color: ${(props) => props.theme.color.gray};
 `;
 
 const CardTop = styled.div`
@@ -686,26 +677,8 @@ const CardTop = styled.div`
   font-weight: 600;
   font-family: "Compita";
 `;
-
-const Logo = styled.img`
-  width: 20px;
-  margin-right: 8px;
-  height: auto;
-`;
-
-const CardTitle = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "Compita";
-  font-weight: 600;
-  color: white;
-  font-size: ${(props) => props.theme.fontSizes.sm};
-  margin-bottom: 12px;
-`;
-
 const OpaqueFilter = styled.div`
+  cursor: default;
   width: 100vw;
   height: 100vh;
   position: fixed;
@@ -724,6 +697,7 @@ const Container = styled.div`
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  color: #666;
 `;
 
 const RightSide = styled.div`
@@ -748,7 +722,6 @@ const StyledModal = styled.div`
   display: flex;
   justify-content: space-between;
   position: relative;
-
   @media only screen and (max-width: 776px) {
     width: 90vw;
     height: 95vh;
@@ -767,6 +740,11 @@ const Image = styled.img`
   background-color: #1e1e1e;
   object-fit: cover;
   overflow: hidden;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
   /* margin-bottom: 16px; */
   @media only screen and (max-width: 776px) {
     width: 90vw;
@@ -822,12 +800,6 @@ const Artist = styled(NavLink)`
   }
 `;
 
-const Row = styled.div`
-  width: 90%;
-  display: flex;
-  justify-content: space-between;
-`;
-
 const BuyButton = styled.button`
   width: 150px;
   /* height: 64px; */
@@ -846,6 +818,10 @@ const BuyButton = styled.button`
     background-color: ${(props) => props.theme.color.boxBorder};
     border: 1px solid #383838;
   }
+
+  &.buyButton {
+    background-color: ${(props) => props.theme.color.green};
+  }
 `;
 
-export default NftModalHook;
+export default BuyNftModal;

@@ -9,8 +9,9 @@ import loading from "../../assets/img/loading.gif";
 
 const LikeShare = (props) => {
   const { account } = useAccountConsumer();
-  const { nft, liked, setLiked, likeCount, isLoading, setLikeCount, shareCount } = props;
-  const like = async () => {
+  const { nft, liked, setLiked, likeCount, isLoading, setLikeCount } = props;
+  const like = async (e) => {
+    e.stopPropagation();
     if (account) {
       setLikeCount(liked ? likeCount - 1 : likeCount + 1);
       setLiked(!liked);
@@ -25,39 +26,67 @@ const LikeShare = (props) => {
     }
   };
 
-  const share = () => {
+  const share = (e) => {
+    e.stopPropagation();
     props.setIsShareOpen();
   };
-  
+
   return (
     <Side>
       <IconArea>
-        {isLoading ? 
-        <img src={loading}/> :
-        liked ? (
-          <LikedHeart onClick={() => like()} />
+        {isLoading ? (
+          <img src={loading} alt="likes loading" />
         ) : (
-          <Heart onClick={() => like()} />
+          <LikeButton
+            onClick={(e) => like(e)}
+            aria-pressed={liked}
+            aria-label="like button"
+          >
+            {liked ? (
+              <LikedHeart aria-hidden="true" />
+            ) : (
+              <Heart aria-hidden="true" />
+            )}
+          </LikeButton>
         )}
         {likeCount}
       </IconArea>
-      <Spacer/>
+      <Spacer />
       <IconArea>
-        <Share onClick={() => share()} />
-        {shareCount?.count ? shareCount.count : nft.shareCount}
+        <ShareButton onClick={(e) => share(e)} aria-label="share button">
+          <Share aria-hidden="true" />
+        </ShareButton>
+        {/* {shareCount?.count ? shareCount.count : nft.shareCount} */}
       </IconArea>
     </Side>
   );
 };
 
+const ShareButton = styled.button`
+  background-color: transparent;
+  padding: 0px;
+  border: none;
+  width: min-content;
+  height: min-content;
+  margin: 0px 4px 0 0;
+`;
+
+const LikeButton = styled.button`
+  background-color: transparent;
+  padding: 0px;
+  border: none;
+  width: min-content;
+  height: min-content;
+  margin: 0px 4px 0 0;
+`;
+
 const Spacer = styled.div`
-width: 8px;
-`
+  width: 8px;
+`;
 
 const Share = styled(IconShare)`
-  width: 16px;
-  height: 16px;
-  margin: 0 4px 0 0;
+  width: 17px;
+  height: 17px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   & path {
@@ -74,7 +103,6 @@ const Share = styled(IconShare)`
 const LikedHeart = styled(IconHeart)`
   width: 20px;
   height: 20px;
-  margin: -3px 4px 0 0;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   & path {
@@ -85,7 +113,6 @@ const LikedHeart = styled(IconHeart)`
 const Heart = styled(IconHeart)`
   width: 20px;
   height: 20px;
-  margin: -3px 4px 0 0;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   & path {

@@ -6,9 +6,8 @@ import Landing from "./Components/Landing";
 import Swal from "sweetalert2";
 import { Features } from "./Components/Features";
 import DemoImage from "./Components/DemoImage/DemoImage";
-import send from "../../assets/img/homepage_assets/homepage_send.png";
-// import send from "../../assets/img/homepage_assets/homepage_send.png"
 import { ReactComponent as rightArrow } from "../../assets/img/homepage_assets/right-arrow-3.svg";
+import { errorIcon, imageWidth, imageHeight } from "../../utils/swalImages";
 
 const Listen = () => {
   if (
@@ -18,7 +17,9 @@ const Listen = () => {
     Swal.fire({
       title: `You are on MAINNET and LOCALHOST be careful`,
       text: `🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆`,
-      icon: "error",
+      imageUrl: errorIcon,
+      imageWidth,
+      imageHeight,
     });
   }
 
@@ -31,18 +32,17 @@ const Listen = () => {
         <Divider />
         <DemoImage />
         <StyledHeader>Are you an artist? Launch with us!</StyledHeader>
-        <StyledAccountButton href="mailto:info@nftfm.io" target="_blank">
+        <StyledAccountButton href="/register-artist">
           Contact us!
         </StyledAccountButton>
         <DescriptionLink to="/info">
-
-        <DescriptionBox>
-          <InfoHeaderContainer >
-            <InfoHeader>Info Page</InfoHeader>
-            <RightArrow />
-          </InfoHeaderContainer>
-          <InfoDetails>Learn more about our project!</InfoDetails>
-        </DescriptionBox>
+          <DescriptionBox>
+            <InfoHeaderContainer>
+              <InfoHeader>Info Page</InfoHeader>
+              <RightArrow />
+            </InfoHeaderContainer>
+            <InfoDetails>Learn more about our project!</InfoDetails>
+          </DescriptionBox>
         </DescriptionLink>
       </BaseView>
     </Switch>
@@ -52,7 +52,7 @@ const Listen = () => {
 const DescriptionLink = styled(NavLink)`
   width: 60%;
   text-decoration: none;
-`
+`;
 
 const RightArrow = styled(rightArrow)`
   width: 18px;
@@ -85,7 +85,6 @@ const StyledAccountButton = styled.a`
     background-color: rgba(256, 256, 256, 0.2);
   }
 `;
-
 
 const DescriptionBox = styled.div`
   margin: 80px 0;

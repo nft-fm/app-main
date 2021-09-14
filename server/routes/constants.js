@@ -1,5 +1,5 @@
 const Batch = require("../schemas/Batch.schema");
-const ADMIN_ACCOUNTS = ["0xc894929862b974a616D35953c8C3E479A38D339a"];
+const ADMIN_ACCOUNTS = ["0xc894929862b974a616D35953c8C3E479A38D339a", "0x85e604FAB6a37fc89783eEe9a23A0c57518c81DB"];
 const moment = require('moment');
 
 // const getDaysElapsed = (startTime) => Math.floor(((Date.now() / 1000 - startTime / 1000) / 86400 ) + 1)

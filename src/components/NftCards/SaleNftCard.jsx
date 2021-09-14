@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import BuyNftModal from "../NftModals";
-import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
+import NftModalHook from "../NftModalHook/NftModalHook";
 import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
-import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
-// import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.svg";
+import { ReactComponent as IconBinance } from "../../assets/img/icons/binance-logo.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import loading from "../../assets/img/loading.gif";
 import axios from "axios";
@@ -14,26 +12,14 @@ import { NavLink } from "react-router-dom";
 import { ReactComponent as Founder } from "../../assets/img/Badges/founder.svg";
 import { ReactComponent as Premium } from "../../assets/img/Badges/premium.svg";
 import { ReactComponent as Prerelease } from "../../assets/img/Badges/prerelease.svg";
+import { ReactComponent as Exclusive } from "../../assets/img/Badges/exclusive.svg";
+import { ReactComponent as GiftIcon } from "../../assets/img/icons/rewards-gift.svg";
 
 import ReactToolTip from "react-tooltip";
 
 const NftCard = (props) => {
-  const { usdPerEth, user, account } = useAccountConsumer();
-  const [nft, setNft] = useState({
-    address: "",
-    artist: "",
-    audioUrl: "",
-    genre: "",
-    imageUrl: "",
-    likeCount: 0,
-    liked: false,
-    nftId: 0,
-    title: "",
-    writer: "",
-    price: "...",
-    quantity: "--",
-    sold: "--",
-  });
+  const { user, account } = useAccountConsumer();
+  const [nft, setNft] = useState(null);
 
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -59,7 +45,6 @@ const NftCard = (props) => {
           completeNft.audioUrl.split("/").slice(-1)[0],
       })
       .then((res) => {
-        console.log("res", res);
         if (!res.data) {
           getNSeconds(props.nft);
         } else {
@@ -82,7 +67,6 @@ const NftCard = (props) => {
         startTime: 30,
       })
       .then((res) => {
-        console.log("got snnipet");
         const songFile = res.data.Body.data;
 
         setPartialSong(songFile);
@@ -90,7 +74,6 @@ const NftCard = (props) => {
   };
 
   useEffect(() => {
-    console.log("im here", basicLoaded);
     if (basicLoaded) {
       setLikesLoading(true);
     }
@@ -117,21 +100,31 @@ const NftCard = (props) => {
     }
   }, [isModalOpen]);
 
+  if (!nft) {
+    return null;
+  }
+
   return (
-    <Container>
+    <Container
+    onClick={() => setIsModalOpen(!isModalOpen)}
+      role="button"
+      aria-pressed="false"
+      tabindex="0"
+    open={isModalOpen || isShareOpen}>
       <ShareModal
+        onClick={(e) => e.stopPropagation()}
         open={isShareOpen}
         hide={() => setIsShareOpen(!isShareOpen)}
         updateShareCount={() => setShareCount({ count: shareCount.count + 1 })}
         nft={nft}
       />
-      <BuyNftModal
+      <NftModalHook
         open={isModalOpen}
         hide={hide}
         nft={nft}
         partialSong={partialSong}
         liked={liked}
-        setLiked={setLiked}
+        SetLiked={setLiked}
         likeCount={likeCount}
         setLikeCount={setLikeCount}
         setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
@@ -161,14 +154,21 @@ const NftCard = (props) => {
         src={nft.imageUrl}
         style={imageLoaded ? {} : { display: "none" }}
         alt="image"
-        onClick={() => setIsModalOpen(!isModalOpen)}
         onLoad={() => setImageLoaded(true)}
       />
+      {nft.isRedeemable && (
+        <RedeemButtonBackground onClick={() => setIsModalOpen(!isModalOpen)}>
+          <RedeemButton>
+            {/* Merch */}
+            <MerchIcon />
+          </RedeemButton>
+        </RedeemButtonBackground>
+      )}
       <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>
-        {nft.title}
+        {nft.title.length > 20 ? nft.title.slice(0, 20) + "..." : nft.title}
       </TrackName>
       <Artist to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}>
-        {nft.artist}
+        {nft.artist.length > 20 ? nft.artist.slice(0, 20) + "..." : nft.artist}
       </Artist>
       <BottomSection>
         <BadgeHolder>
@@ -215,6 +215,34 @@ const NftCard = (props) => {
                 </>
               );
             }
+            if (badge.exclusive) {
+              return (
+                <>
+                  <ExclusiveBadge
+                    className="exclusiveBadge"
+                    data-tip
+                    data-for="exclusiveTip"
+                  />
+                  <ReactToolTip id="exclusiveTip" place="top" effect="solid">
+                    Exclusive
+                  </ReactToolTip>
+                </>
+              );
+            }
+            if (badge.redeem) {
+              return (
+                <>
+                  <MerchBadge
+                    className="merchBadge"
+                    data-tip
+                    data-for="merchTip"
+                  />
+                  <ReactToolTip id="merchTip" place="top" effect="solid">
+                    Merch
+                  </ReactToolTip>
+                </>
+              );
+            }
           })}
         </BadgeHolder>
         <CostEth>
@@ -224,38 +252,79 @@ const NftCard = (props) => {
                 maximumFractionDigits: 6,
               })
             : nft.price}
-          <Eth />
+          {nft.chain === "ETH" ? <Eth /> : <Bsc/>}
         </CostEth>
-        {/* <CostUsd>
-          {usdPerEth
-            ? parseFloat(usdPerEth * nft.price).toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })
-            : "..."}
-          <Usd />
-        </CostUsd> */}
       </BottomSection>
-      {/* <PlayButton src={PlayIcon} onClick={() => {setIsModalOpen(true)}} /> */}
     </Container>
   );
 };
 
-// const PlayButton = styled(PlayIcon)`
-//   width: 30px;
-//   height: 30px;
-//   cursor: pointer;
-//   transition: all 0.2s ease-in-out;
-//   & path {
-//     transition: all 0.2s ease-in-out;
-//     fill: ${(props) => props.theme.color.gray};
-//   }
-//   &:hover {
-//     & path {
-//       fill: #20a4fc;
-//     }
-//   }
-// `;
+const RedeemButton = styled.div`
+  text-decoration: none;
+  color: ${(props) => props.theme.color.white};
+  background-color: ${(props) => props.theme.color.box};
+  border-radius: 7px;
+  padding: 3px 8px;
+`;
+
+const RedeemButtonBackground = styled.div`
+  position: absolute;
+  padding: 2px;
+  top: 205px;
+  left: 20px;
+  background-image: linear-gradient(to right, #fde404, #fa423e);
+
+  cursor: pointer;
+  text-decoration: none;
+  border-radius: 7px;
+  :hover {
+    animation: wiggle 100ms;
+  }
+  @keyframes wiggle {
+    0% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(-5deg);
+    }
+    50% {
+      transform: rotate(0deg);
+    }
+    75% {
+      transform: rotate(5deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+`;
+
+const MerchIcon = styled(GiftIcon)`
+  width: 15px;
+  height: 15px;
+  margin-top: 3px;
+  & path {
+    fill: ${(props) => props.theme.color.red};
+  }
+`;
+
+const MerchBadge = styled(GiftIcon)`
+  width: 12px;
+  height: 12px;
+  padding: 1px;
+  border: 1px solid ${(props) => props.theme.color.blue};
+  border-radius: 50%;
+  & path {
+    fill: ${(props) => props.theme.color.red};
+  }
+`;
+
+const ExclusiveBadge = styled(Exclusive)`
+  width: 15px;
+  height: 15px;
+  padding: 0 5px;
+`;
+
 const BadgeHolder = styled.div`
   width: 100%;
   display: flex;
@@ -279,30 +348,19 @@ const PrereleaseBadge = styled(Prerelease)`
   padding: 0 5px;
 `;
 
-const Usd = styled(IconUsd)`
+const Bsc = styled(IconBinance)`
   width: 18px;
   height: 18px;
-  margin: -2px 0 0 8px;
-  transition: all 0.2s ease-in-out;
-  & path {
-    fill: ${(props) => props.theme.color.gray};
-  }
+  margin: -2px 0 0 4px;
 `;
 
 const Eth = styled(IconEth)`
   width: 18px;
   height: 18px;
   margin: -2px 0 0 4px;
-  transition: all 0.2s ease-in-out;
   & path {
     fill: ${(props) => props.theme.color.white};
   }
-`;
-
-const CostUsd = styled.span`
-  display: flex;
-  color: white;
-  color: ${(props) => props.theme.color.gray};
 `;
 
 const CostEth = styled.span`
@@ -314,23 +372,6 @@ const BottomSection = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
-`;
-
-const Cart = styled(IconCart)`
-  width: 20px;
-  height: 20px;
-  margin: -2px 0 0 8px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  & path {
-    transition: all 0.2s ease-in-out;
-    fill: ${(props) => props.theme.color.gray};
-  }
-  &:hover {
-    & path {
-      fill: #20a4fc;
-    }
-  }
 `;
 
 const Side = styled.div`
@@ -369,8 +410,15 @@ const Container = styled.div`
   flex-direction: column;
   width: 200px;
   margin-bottom: 20px;
-  /* margin-left: 5px;
-  margin-right: 5px; */
+  position: relative;
+  transition: all 0.1s ease-in-out;
+  cursor: pointer;
+  :focus {
+    border: 1px solid white;
+  }
+  /* :hover {
+    transform: ${(props) => !props.open && "translateY(-0.15em)"};
+  } */
 `;
 
 const Image = styled.img`
@@ -394,14 +442,6 @@ const TrackName = styled.span`
   margin-bottom: 12px;
 `;
 
-// const Artist = styled(NavLink)`
-//   font-size: ${(props) => props.theme.fontSizes.xxs}px;
-//   text-align: center;
-//   color: ${(props) => props.theme.gray};
-//   margin-bottom: 12px;
-//   text-decoration: none;
-//   /* cursor: pointer; */
-// `;
 const Artist = styled(NavLink)`
   font-size: ${(props) => props.theme.fontSizes.xxs}px;
   text-align: center;
@@ -409,6 +449,9 @@ const Artist = styled(NavLink)`
   margin-bottom: 12px;
   text-decoration: none;
   /* cursor: pointer; */
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 export default NftCard;

@@ -54,13 +54,13 @@ const Roadmap = () => {
             <LaunchFeatureRow>
               <LaunchFeatureText>BSC Cross-Chain Integration</LaunchFeatureText>
               <FillerLine />
-              {/* <Checkmark src={grayCheckMark} /> */}
-              in progress
+              <Checkmark src={greenCheckMark} />
             </LaunchFeatureRow>
             <LaunchFeatureRow>
               <LaunchFeatureText>Public User Profiles</LaunchFeatureText>
               <FillerLine />
-              <Checkmark src={grayCheckMark} />
+              {/* <Checkmark src={grayCheckMark} /> */}
+              in progress
             </LaunchFeatureRow>
           </LaunchFeatureList>
         </LaunchFeaturesBox>

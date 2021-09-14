@@ -512,4 +512,25 @@ router.post("/updateRedeemers", async (req, res) => {
   }
 });
 
+router.post("/signNewFee", async (req, res) => {
+  try {
+    const { account } = req.body;
+    const sender = utils.verifyMessage(
+      JSON.stringify({
+        account: account,
+      }),
+      req.body.auth
+    );
+    if (sender !== account) return res.status(403).send("Credential error");
+    let getUser = await User.findOneAndUpdate(
+      { address: account },
+      { confirmedFeeIncrease: true }
+    );
+    if (!getUser) return res.status(404).send("No user found!");
+    if (getUser) res.status(200).send("User updated successfully");
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
 module.exports = router;

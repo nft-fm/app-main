@@ -20,12 +20,13 @@ import { ReactComponent as IconTwitter } from "../../assets/img/icons/social_twi
 import Instagram from "../../assets/img/icons/social_instagram.png";
 import Audius from "../../assets/img/icons/social_audius.png";
 import Spotify from "../../assets/img/icons/social_spotify.png";
+import { providers } from "ethers";
 
 const Profile = () => {
   const { account, connect, user } = useAccountConsumer();
   const [open, setOpen] = useState(false);
   const [reset, setReset] = useState(false);
-
+  const [userSigned, setUserSigned] = useState(false);
   const openMintModal = async () => {
     try {
       if (user.username === "") {
@@ -106,6 +107,65 @@ const Profile = () => {
     }
   };
 
+  const openCreateForm = async () => {
+    if (user.isLegacyArtist && !user.confirmedFeeIncrease && !userSigned) {
+      swal
+        .fire({
+          title: `NFT FM's terms have changed.`,
+          html: `<span>In order to mint new NFTs you need to agree to the new fee on initial sales, which is now 10%.
+          Your previously minted NFTs will not be affected, this only applies to new NFTs.
+          Read more about this <a href="https://nft-fm.medium.com/whats-coming-up-for-nft-fm-eddbfc5587eb" target="_blank" rel="noopener noreferrer">here</a>.</span>`,
+          showDenyButton: true,
+          showCloseButton: true,
+          confirmButtonText: `Agree to Terms`,
+        })
+        .then(async (res) => {
+          if (res.isConfirmed) {
+            const provider = new providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+
+            signer
+              .signMessage(JSON.stringify({ account }))
+              .then((authorization) => {
+                axios
+                  .post("/api/user/signNewFee", {
+                    account,
+                    auth: authorization,
+                  })
+                  .then(() => {
+                    swal
+                      .fire({
+                        title:
+                          "Thank you, you may now proceed to minting new NFTs.",
+                        timer: 3000,
+                      })
+                      .then(() => {
+                        setUserSigned(true);
+                        openMintModal();
+                      });
+                  })
+                  .catch((err) => {
+                    console.log("err", err.response);
+                    swal.fire({
+                      title: `Error: ${
+                        err.response ? err.response.status : 404
+                      }`,
+                      text: `${
+                        err.response ? err.response.data : "server error"
+                      }`,
+                      imageUrl: errorIcon,
+                      imageWidth,
+                      imageHeight,
+                    });
+                  });
+              });
+          }
+        });
+    } else {
+      openMintModal();
+    }
+  };
+
   if (!user || (user && !user.isArtist)) return <Error404 />; //this probably needs some work
   return (
     <BaseView>
@@ -175,7 +235,7 @@ const Profile = () => {
       <CreatedNftHolder>
         <NftContainer>
           <NftContainerTitle>YOUR MUSIC</NftContainerTitle>
-          <NftContainerRight onClick={() => openMintModal()}>
+          <NftContainerRight onClick={() => openCreateForm()}>
             <PlusIcon />
           </NftContainerRight>
           <NftContainerOutline />

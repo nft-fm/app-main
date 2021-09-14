@@ -28,6 +28,12 @@ const UserSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  isLegacyArtist: {
+    type: Boolean,
+  },
+  confirmedFeeIncrease: {
+    type: Boolean,
+  },
   profilePic: {
     type: String,
     required: false,

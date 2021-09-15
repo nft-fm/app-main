@@ -1,15 +1,15 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import Aos from 'aos'
-import 'aos/dist/aos.css'
+import Aos from "aos";
+import "aos/dist/aos.css";
 
 /* new assets! */
-import exclusive from "../../../assets/img/homepage_assets/homepage_exclusive2.png"
-import carbon from "../../../assets/img/homepage_assets/homepage_carbon.png"
+import exclusive from "../../../assets/img/homepage_assets/homepage_exclusive2.png";
+import carbon from "../../../assets/img/homepage_assets/homepage_carbon.png";
 
-import join from "../../../assets/img/homepage_assets/homepage_join.png"
-import airdrop from "../../../assets/img/homepage_assets/homepage_airdrop.png"
-import revenue from "../../../assets/img/homepage_assets/homepage_revenue.png"
+import join from "../../../assets/img/homepage_assets/homepage_join.png";
+import airdrop from "../../../assets/img/homepage_assets/homepage_collect.png";
+import revenue from "../../../assets/img/homepage_assets/homepage_revenue.png";
 // import art from "../../../assets/img/homepage_assets/homepage_art.png"
 // import video from "../../../assets/img/homepage_assets/homepage_video.png"
 
@@ -18,25 +18,29 @@ export const Features = ({ isLoaded, setIsLoaded }) => {
     Aos.init({
       duration: 1000,
       // disable: 'mobile'
-    })
-  }, [])
+    });
+  }, []);
 
   return (
     <Container>
       <FeatureContainer reverse>
         <FeaturesTextContainer
-        data-aos="fade-right"
-        data-aos-anchor-placement="top-bottom"
+          data-aos="fade-right"
+          data-aos-anchor-placement="top-bottom"
         >
           <FeaturesHeader>Jam out to exclusive tunes</FeaturesHeader>
           <FeaturesDescription>
-            NFTs on NFT FM aren’t just amazing pieces of visual art. They contain full-length tracks directly from the musicians. Owning these NFTs grants you the exclusive ability to stream these amazing songs at any time.
+            NFTs on NFT FM aren’t just amazing pieces of visual art. They
+            contain full-length tracks directly from the musicians. Owning these
+            NFTs grants you the exclusive ability to stream these amazing songs
+            at any time.
           </FeaturesDescription>
         </FeaturesTextContainer>
         <ExclusiveImageContainer
-        data-aos-anchor-placement="top-bottom"
-        data-aos="fade-left">
-          <Exclusive  src={exclusive} alt="homepage-exclusive"/>
+          data-aos-anchor-placement="top-bottom"
+          data-aos="fade-left"
+        >
+          <Exclusive src={exclusive} alt="homepage-exclusive" />
         </ExclusiveImageContainer>
       </FeatureContainer>
       {/* <Spacer /> */}
@@ -44,16 +48,30 @@ export const Features = ({ isLoaded, setIsLoaded }) => {
         data-aos="fade-in"
         data-aos-anchor-placement="top-bottom"
       >
-        <CarbonImageContainer data-aos="fade-right"
-                data-aos-anchor-placement="top-bottom"
+        <CarbonImageContainer
+          data-aos="fade-right"
+          data-aos-anchor-placement="top-bottom"
         >
-          <Carbon src={carbon} alt="homepage-carbon"/>
+          <Carbon src={carbon} alt="homepage-carbon" />
         </CarbonImageContainer>
-        <FeaturesTextContainer data-aos="fade-left"
-                data-aos-anchor-placement="top-bottom">
+        <FeaturesTextContainer
+          data-aos="fade-left"
+          data-aos-anchor-placement="top-bottom"
+        >
           <FeaturesHeader>Committed to Carbon Neutrality</FeaturesHeader>
           <FeaturesDescription>
-            We have partnered with Offsetra to provide transparency on our commitment to carbon neutrality. Each month, donations are made to chosen ecological funds to offset the emissions generated through transactions made on our platform.
+            We have partnered with{" "}
+            <a
+              href="https://offsetra.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              // style={{ textDecoration: "none" }}
+            >
+              Offsetra
+            </a>{" "}
+            to provide transparency on our commitment to carbon neutrality. Each
+            month, donations are made to chosen ecological funds to offset the
+            emissions generated through transactions made on our platform.
           </FeaturesDescription>
         </FeaturesTextContainer>
       </FeatureContainer>
@@ -62,45 +80,51 @@ export const Features = ({ isLoaded, setIsLoaded }) => {
         data-aos-anchor-placement="top-bottom"
       >
         <FeaturesTextContainer
-        data-aos-anchor-placement="top-bottom"
-        data-aos="fade-right">
+          data-aos-anchor-placement="top-bottom"
+          data-aos="fade-right"
+        >
           <FeaturesHeader>Support Amazing Artists</FeaturesHeader>
           <FeaturesDescription>
-            It’s no secret that traditional streaming services are not offering fair compensation to artists. With us, musicians make 95% of their sales.
+            It’s no secret that traditional streaming services are not offering
+            fair compensation to artists. With us, musicians make 95% of their
+            sales.
           </FeaturesDescription>
         </FeaturesTextContainer>
         <FeaturesImageContainer
-        data-aos-anchor-placement="top-bottom"
+          data-aos-anchor-placement="top-bottom"
           data-aos="fade-left"
         >
-          <Revenue src={revenue} alt="homepage-revenue"/>
+          <Revenue src={revenue} alt="homepage-revenue" />
         </FeaturesImageContainer>
       </FeatureContainer>
       <FeatureContainer
         data-aos="fade-in"
         data-aos-anchor-placement="top-bottom"
-        >
-        <FeaturesImageContainer
-        data-aos-anchor-placement="top-bottom"
-        data-aos="fade-right"
       >
-          <Join src={airdrop} alt="homepage-airdrop"/>
+        <FeaturesImageContainer
+          data-aos-anchor-placement="top-bottom"
+          data-aos="fade-right"
+        >
+          <Join src={airdrop} alt="homepage-airdrop" />
         </FeaturesImageContainer>
         <FeaturesTextContainer
-                data-aos-anchor-placement="top-bottom"
-        data-aos="fade-left">
-          <FeaturesHeader>Receive Airdrops!</FeaturesHeader>
+          data-aos-anchor-placement="top-bottom"
+          data-aos="fade-left"
+        >
+          <FeaturesHeader>Collect Music!</FeaturesHeader>
           <FeaturesDescription>
-            NFTs holders on our platform get monthly airdrops of our governance token, $VINYL. 30% of the supply is being dropped to NFT holding wallets throughout our first 4 years of operation!
+            Buy, trade, or swap your NFTs to build your collection. By growing
+            your collection you are directly contributing to the success and
+            growth of the NFT FM musicians!
           </FeaturesDescription>
         </FeaturesTextContainer>
       </FeatureContainer>
     </Container>
-  )
-}
+  );
+};
 const Spacer = styled.div`
   height: 40px;
-`
+`;
 
 const Container = styled.div`
   display: flex;
@@ -117,7 +141,7 @@ const Container = styled.div`
     margin: 0;
     padding-bottom: -30px;
   }
-`
+`;
 
 const Exclusive = styled.img`
   object-fit: cover;
@@ -128,7 +152,7 @@ const Exclusive = styled.img`
   @media only screen and (max-width: 600px) {
     height: 70vw;
   }
-`
+`;
 
 const Carbon = styled.img`
   object-fit: cover;
@@ -147,7 +171,7 @@ const Carbon = styled.img`
     height: 75vw;
     width: 75vw;
   }
-`
+`;
 
 const Revenue = styled(Carbon)`
   height: 300px;
@@ -161,7 +185,7 @@ const Revenue = styled(Carbon)`
   @media only screen and (max-width: 600px) {
     height: 60vw;
   }
-`
+`;
 
 const Join = styled.img`
   width: 400px;
@@ -175,18 +199,18 @@ const Join = styled.img`
   @media only screen and (max-width: 600px) {
     width: 80vw;
   }
-`
+`;
 
 const FeaturesImageContainer = styled.div`
   display: flex;
   width: 58%;
   align-items: center;
   justify-content: center;
-`
+`;
 
 const ExclusiveImageContainer = styled(FeaturesImageContainer)`
   display: flex;
-`
+`;
 
 const CarbonImageContainer = styled(FeaturesImageContainer)`
   @media only screen and (max-width: 1100px) {
@@ -196,7 +220,7 @@ const CarbonImageContainer = styled(FeaturesImageContainer)`
   @media only screen and (max-width: 800px) {
     margin: 0;
   }
-`
+`;
 
 const FeaturesTextContainer = styled.div`
   display: flex;
@@ -208,14 +232,14 @@ const FeaturesTextContainer = styled.div`
     justify-content: center;
     align-items: center;
   }
-`
+`;
 
 const FeaturesHeader = styled.h1`
   color: white;
   @media only screen and (max-width: 800px) {
     text-align: center;
   }
-`
+`;
 
 const FeaturesDescription = styled.div`
   color: #888888;
@@ -223,7 +247,7 @@ const FeaturesDescription = styled.div`
   display: block;
   font-size: 17px;
   line-height: 1.3;
-`
+`;
 
 const FeatureContainer = styled.div`
   margin-top: -100px;
@@ -236,7 +260,7 @@ const FeatureContainer = styled.div`
   line-height: 30px;
   width: calc(100% - 64px);
   @media only screen and (max-width: 800px) {
-    flex-direction: ${({ reverse }) => reverse ? "column-reverse": "column" };
+    flex-direction: ${({ reverse }) => (reverse ? "column-reverse" : "column")};
     margin-top: 0px;
     padding-bottom: 100px;
     padding-top: 50px;
@@ -246,4 +270,4 @@ const FeatureContainer = styled.div`
     padding-bottom: 30vw;
     padding-top: 15vw;
   }
-`
+`;

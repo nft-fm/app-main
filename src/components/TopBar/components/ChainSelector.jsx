@@ -43,32 +43,40 @@ const ChainSelector = () => {
     <ChainHolder
       onMouseOver={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
+      onClick={() => setOpen(true)}
+      aria-label="Change Chain Dropdown"
     >
       {chooseChain(selected)}
       <DropDown open={open}>
         <Spacer />
         <DropDownLinks>
-          <Eth
-            onClick={() => {
-              setSelected(0);
-              switchChain("ETH");
-              setOpen(false);
-            }}
-            data-tip
-            data-for="Ethereum"
-          />
+          <WrapperButton
+                      onClick={() => {
+                        setSelected(0);
+                        switchChain("ETH");
+                        setOpen(false);
+                      }}
+                      data-tip
+                      data-for="Ethereum"
+                      aria-label="Ethereum Main Chain"
+          >
+          <Eth />
+            </WrapperButton>
           <ReactToolTip id="Ethereum" place="right" effect="solid">
             Ethereum
           </ReactToolTip>
-          <Binance
-            onClick={() => {
-              setSelected(1);
-              switchChain("BSC");
-              setOpen(false);
-            }}
-            data-tip
-            data-for="Binance"
-          />
+          <WrapperButton
+                      onClick={() => {
+                        setSelected(1);
+                        switchChain("BSC");
+                        setOpen(false);
+                      }}
+                      data-tip
+                      data-for="Binance"
+                      aria-label="Binance Smart Chain"
+          >
+          <Binance/>
+          </WrapperButton>
           <ReactToolTip id="Binance" place="right" effect="solid">
             Binance
           </ReactToolTip>
@@ -77,6 +85,14 @@ const ChainSelector = () => {
     </ChainHolder>
   );
 };
+
+const WrapperButton = styled.button`
+background-color: transparent;
+padding: 0px;
+border: none;
+width: min-content;
+height: min-content;
+`
 
 const Binance = styled(IconBinance)`
   cursor: pointer;
@@ -105,6 +121,7 @@ const DropDownLinks = styled.div`
   border-left: 1px solid #232323;
   border-right: 1px solid #232323;
   width: 100%;
+  background-color: #090909;
 
   @media only screen and (max-width: 776px) {
     background-color: #121212;
@@ -124,7 +141,7 @@ const DropDown = styled.div`
   width: 30px;
 `;
 
-const ChainHolder = styled.nav`
+const ChainHolder = styled.button`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -132,6 +149,8 @@ const ChainHolder = styled.nav`
   display: flex;
   width: 30px;
   padding-right: 5px;
+  background-color: transparent;
+  border: none;
 `;
 
 export default ChainSelector;

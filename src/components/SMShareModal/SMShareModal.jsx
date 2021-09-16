@@ -19,8 +19,7 @@ const SMShareModal = ({
 }) => {
 
   if (!open) return null;
-
-  const url = `https://www.nftfm.io/market/${nft.nftId}`;
+  const url = `https://www.nftfm.io/market/${nft.chain}/${nft.nftId}`;
   const message = `Check out this amazing NFT of ${nft.artist}'s song, ${nft.title}!\nAvailable only at: `;
 
   const newShare = () => {

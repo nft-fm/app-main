@@ -11,6 +11,7 @@ import { ThemeProvider } from "styled-components";
 import { UseWalletProvider } from "use-wallet";
 import styled from "styled-components";
 import ModalsProvider from "./contexts/Modals";
+import Staking from "./views/Staking";
 import Listen from "./views/Home";
 import Library from "./views/Library";
 import Discover from "./views/Discover";
@@ -41,6 +42,13 @@ if (window.location.hostname !== "localhost") console.log = function () {};
 const Switches = () => {
   const location = useLocation();
   const { account, user } = useAccountConsumer();
+  const [artists, setArtists] = useState(null)
+  useEffect(() => {
+    axios
+      .post("/api/user/getArtists")
+      .then((res) => setArtists(res.data))
+      .catch((err) => console.log(err));
+  }, []);
 
   useEffect(() => {
     axios
@@ -96,6 +104,9 @@ const Switches = () => {
   return (
     <>
       <Switch>
+        <Route path="/staking" exact>
+          <Staking artists={artists} />
+        </Route>
         <Route path="/library" exact>
           <Library />
         </Route>

@@ -17,6 +17,9 @@ export const Nav = () => {
       <StyledLink exact tab="about" activeClassName="active" to="/info">
         Info
       </StyledLink>
+      <StyledLink exact tab="about" activeClassName="active" to="/staking">
+        Staking
+      </StyledLink>
       {user?.isArtist && (
         <StyledLink exact tab="profile" activeClassName="active" to="/profile">
           Profile

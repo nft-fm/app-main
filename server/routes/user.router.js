@@ -533,4 +533,14 @@ router.post("/signNewFee", async (req, res) => {
   }
 });
 
+router.post("/getArtists", async (req, res) => {
+  try {
+    const artists = await User.find({
+      isArtist: true,
+      profilePic: { $exists: true },
+    });
+    res.send(artists);
+  } catch (err) {}
+});
+
 module.exports = router;

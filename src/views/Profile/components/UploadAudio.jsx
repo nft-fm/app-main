@@ -85,7 +85,7 @@ const UploadAudio = ({
       .then((res) => {
         if (res.status === 200) {
           // let _nftData;
-          sliceBuffer(audioContext, buffer, 0, 15, (error, newBuffer) => {
+          sliceBuffer(audioContext, buffer, 0, 30, (error, newBuffer) => {
             if (error) {
               console.log(error);
             } else {

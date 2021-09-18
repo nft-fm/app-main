@@ -13,6 +13,7 @@ const UpdateSnnipets = () => {
   const [selected, setSelected] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState();
+  const [size, setSize] = useState(30);
 
   window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
@@ -227,8 +228,8 @@ const UpdateSnnipets = () => {
   }
 
   useEffect(() => {
-    setEnd(Number(start) + 30);
-  }, [start])
+    setEnd(Number(start) + Number(size));
+  }, [start, size])
   useEffect(() => {
     getAllSnnipets();
   }, []);
@@ -253,6 +254,8 @@ const UpdateSnnipets = () => {
         Work only with minted
         <input type="checkbox" id="scales" name="minted" onChange={e => showNotMinted(e.target.checked)}></input>
       </label>
+      <h3>Size in Seconds:</h3>
+      <input type="number" value={size} onChange={e => {setSize(e.target.value)}}/>
       <h3>Start Time:</h3>
       <input type="number" value={start} onChange={e => {setStart(e.target.value)}}/>
       <h3>End Time:</h3>

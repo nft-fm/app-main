@@ -8,6 +8,7 @@ import audioBufferToMp3 from "../../utils/audioBufferToMp3";
 const UpdateSnnipets = () => {
   const [start, setStart] = useState(0);
   const [end, setEnd] = useState(30);
+  const [allSnnipets, setAllSnnipets] = useState();
   const [snnipets, setSnnipets] = useState();
   const [selected, setSelected] = useState();
   const [isLoading, setIsLoading] = useState(false);
@@ -29,6 +30,7 @@ const UpdateSnnipets = () => {
       .get("/api/admin-music/getAllMintedNfts")
       .then((res) => {
         if (res.data && res.data[0]) {
+          setAllSnnipets(res.data);
           setSnnipets(res.data);
         } else {
           Swal.fire("No NFTs");
@@ -39,7 +41,6 @@ const UpdateSnnipets = () => {
   }
 
   const sliceBuffer = (audioContext, buffer, callback) => {
-
     var error = null;
 
     var duration = buffer.duration;
@@ -83,7 +84,7 @@ const UpdateSnnipets = () => {
     callback(error, newArrayBuffer);
   };
 
-  const uploadToAWS = (snnipetFormData, name, isLastOne) => {
+  const uploadToAWS = (snnipetFormData, name, isLastOne, changedStart) => {
     axios
     .post("api/admin-music/updateSnnipetAWS", snnipetFormData, {
       headers: {
@@ -92,13 +93,30 @@ const UpdateSnnipets = () => {
     })
     .then((res) => {
       if (res.data.success) {
-        console.log("SUCCESS FOR", name)
-        setProgress("snnipet for " + name + " has been updated");
-      } 
-      if (isLastOne) {
-        setIsLoading(false);
-        Swal.fire("Updated all nfts");
-      }
+        setProgress("snnipet for " + name + " has been updated in AWS");
+        if (changedStart) {
+          setProgress("Updating start time for " + name);
+          axios
+          .post("/api/nft-type/updateStartTime", {nft: {_id: changedStart._id, startTime: start}})
+          .then((res) => {
+            if (res.data && res.data.success) {
+              setProgress("Start time for " + name + " has been updated");
+              if (isLastOne) {
+                setIsLoading(false);
+                Swal.fire("Updated all nfts");
+              }
+            } else {
+              setProgress("ERR updating db startTime for " + name);
+            }
+          }).catch(err => {
+            setProgress("ERR updating db startTime for " + name);
+          });
+        }
+        else if (isLastOne) {
+          setIsLoading(false);
+          Swal.fire("Updated all nfts");
+        }
+    }
     })
     .catch((error) => {
       Swal.fire({
@@ -141,7 +159,8 @@ const UpdateSnnipets = () => {
               console.log("success", snnipetFormData);
               setProgress("\nCreated .mp3 file for: " + nft.title);
 
-              uploadToAWS(snnipetFormData, nft.title, isLastOne);
+              let hasChanged = nft.startTime !== start ? nft : false;
+              uploadToAWS(snnipetFormData, nft.title, isLastOne, hasChanged);
             }});
           console.log(buffer);
         })
@@ -199,6 +218,17 @@ const UpdateSnnipets = () => {
     })
   }
 
+  const showNotMinted = (checked) => {
+    if (checked) {
+      setSnnipets(allSnnipets.filter(snnipet => {return snnipet.isMinted}));
+    } else {
+      setSnnipets(allSnnipets);
+    }
+  }
+
+  useEffect(() => {
+    setEnd(Number(start) + 30);
+  }, [start])
   useEffect(() => {
     getAllSnnipets();
   }, []);
@@ -206,20 +236,27 @@ const UpdateSnnipets = () => {
   return (
     <Section>
       <h1>Update Snnipets</h1>
-      <select onChange={e => {setSelected(snnipets[e.target.value])}}>
+      <Select onChange={e => {
+        console.log(snnipets[e.target.value]);
+        setSelected(snnipets[e.target.value]);
+        setStart(snnipets[e.target.value].startTime);
+      }}>
         {snnipets && snnipets.map((snnipet, index) => {
           return (
                 <option value={index} key={index}>
-                  {snnipet.title} | {snnipet.artist}
+                  {snnipet.title} | {snnipet.artist} {!snnipet.isMinted && " (NOT MINTED)"}
                 </option>
           );
         })}
-      </select>
-      
+      </Select>
+      <label>
+        Work with only minted
+        <input type="checkbox" id="scales" name="minted" onChange={e => showNotMinted(e.target.checked)}></input>
+      </label>
       <h3>Start Time:</h3>
       <input type="number" value={start} onChange={e => {setStart(e.target.value)}}/>
       <h3>End Time:</h3>
-      <input type="number" value={end} onChange={e => {setEnd(e.target.value)}}/>
+      <h4>{end}</h4>
       {selected && !isLoading? 
         <Button onClick={updateSelectedSnnipet}>
           Update {selected.title}
@@ -254,6 +291,10 @@ const UpdateSnnipets = () => {
     </Section>
   );
 };
+
+const Select = styled.select`
+  width: 70%;
+`;
 
 const Logs = styled.div`
   display: flex;

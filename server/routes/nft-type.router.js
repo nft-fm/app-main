@@ -58,6 +58,20 @@ router.post("/artist-nfts", async (req, res) => {
   }
 });
 
+router.post("/updateStartTime", async (req, res) => {
+  try {
+    if (!req.body.nft) res.status(400).send("No address >_<");
+
+    const updateNft = await NftType.findById(req.body.nft._id);
+    updateNft.startTime = req.body.nft.startTime;
+    
+    await updateNft.save();
+    res.send({success: true});
+  } catch (err) {
+    res.status(500).send("Server Error");
+  }
+});
+
 router.post("/update-and-fetch", async (req, res) => {
   try {
     const nftData = req.body;

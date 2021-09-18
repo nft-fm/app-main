@@ -13,22 +13,13 @@ const getBucket = () => {
 
 router.get("/getAllMintedNfts", async (req, res) => {
   try {
-    const allNfts = await NftType.find({isDraft: false, isMinted: true}, {address: 1, audioUrl: 1, title: 1, artist: 1});
+    const allNfts = await NftType.find({"audioUrl" : {"$exists" : true, "$ne" : ""}}, {address: 1, audioUrl: 1, title: 1, artist: 1, isMinted: 1, startTime: 1});
     
     res.json(allNfts);
   } catch (err) {
     res.status(500).json(err);
   }
 })
-
-router.post("/getSnnipetAWS", async (req, res) => {
-  const s3 = getBucket();
-
-  const params = { Bucket: "nftfm-music", Key: req.body.key, Expires: 60 * 5 };
-  const url = s3.getSignedUrl("getObject", params);
-
-  res.status(200).send(url);
-});
 
 router.post("/updateSnnipetAWS", async (req, res) => {
   var AWS = require("aws-sdk");
@@ -73,7 +64,7 @@ router.post("/updateSnnipetAWS", async (req, res) => {
 router.get("/verifyForEmpty", async (req, res) => {
   try {
     let dontHaveSnnipet = [];
-    const allNfts = await NftType.find({isDraft: false, isMinted: true}, {address: 1, audioUrl: 1, title: 1, artist: 1});
+    const allNfts = await NftType.find({"audioUrl" : {"$exists" : true, "$ne" : ""}}, {address: 1, audioUrl: 1, title: 1, artist: 1});
     
     for (let i = 0; i < allNfts.length; i++) {
       const nft = allNfts[i];

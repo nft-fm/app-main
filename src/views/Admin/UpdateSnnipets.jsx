@@ -250,7 +250,7 @@ const UpdateSnnipets = () => {
         })}
       </Select>
       <label>
-        Work with only minted
+        Work only with minted
         <input type="checkbox" id="scales" name="minted" onChange={e => showNotMinted(e.target.checked)}></input>
       </label>
       <h3>Start Time:</h3>

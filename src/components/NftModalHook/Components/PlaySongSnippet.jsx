@@ -14,6 +14,7 @@ window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
 const PlaySongSnippet = (props) => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [canPlay, setCanPlay] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [time, setTime] = useState(0);
 
@@ -27,7 +28,7 @@ const PlaySongSnippet = (props) => {
       audio.currentTime = 0;
     };
 
-    audio.canplay = () => {
+    audio.oncanplay = () => {
       let _isLoading;
       setIsLoading((currentState) => {
         _isLoading = currentState;
@@ -36,8 +37,10 @@ const PlaySongSnippet = (props) => {
 
       if (_isLoading) {
         setIsLoading(false);
+        setIsPlaying(true);
         audio.play();
       }
+      setCanPlay(true);
     };
 
     audioRef.current = audio;
@@ -49,7 +52,7 @@ const PlaySongSnippet = (props) => {
   };
 
   const playSong = () => {
-    if (props.partialSong && audioRef.current) {
+    if (canPlay) {
       audioRef.current.play();
       setIsPlaying(true);
       setIsLoading(false);
@@ -74,7 +77,7 @@ const PlaySongSnippet = (props) => {
     if (isPlaying && audioRef.current) {
       intervalId = setInterval(() => {
         let _time = audioRef.current.currentTime || time;
-        if (_time >= 15) {
+        if (_time >= 30) {
           clearInterval(intervalId);
         } else {
           setTime(_time);
@@ -129,12 +132,13 @@ const Wrapper = styled.div`
 `;
 
 const Loading = styled.img`
-  width: 30px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
   & path {
     stroke: ${(props) => props.theme.color.lightgray};
   }
   margin-top: 10px;
+  margin-bottom: 10px;
 `;
 
 const PauseSVG = styled(PauseIcon)`

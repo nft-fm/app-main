@@ -10,12 +10,13 @@ const nftTypeRouter = require("./routes/nft-type.router");
 const nftRouter = require("./routes/nft.router");
 const govRouter = require("./routes/gov.router");
 const airRouter = require("./routes/airdrop.router");
-const connectDB = require("./modules/db");
-const sessionMiddleware = require("./middleware/session-middleware");
-const path = require("path");
+const adminMusicRouter = require("./routes/admin-music.router");
 const adminPollRouter = require("./routes/admin-poll.router");
 const vinylOwnerRouter = require("./routes/vinyl-owner.router");
 const Mixpanel = require("mixpanel");
+const connectDB = require("./modules/db");
+const sessionMiddleware = require("./middleware/session-middleware");
+const path = require("path");
 const { listenForMintEth, listenForMintBsc } = require("./web3/mint-listener");
 
 const PORT = process.env.PORT || 5000;
@@ -61,7 +62,9 @@ app.use("/api/nft", nftRouter);
 app.use("/api/gov", govRouter);
 app.use("/api/vinyl-owner", vinylOwnerRouter);
 app.use("/api/admin-poll", adminPollRouter);
+app.use("/api/admin-music", adminMusicRouter);
 app.use("/api/airdrop", airRouter);
+
 
 app.set("trust proxy", true);
 

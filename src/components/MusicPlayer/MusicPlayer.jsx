@@ -35,6 +35,7 @@ const MusicPlayer = (props) => {
     we need to make sure we have the most accurate reference to the information.
     Thats is another way to achive the same goal by updating the state with the currentState
     this way can be found in the funtion prepareRemainingSong (currently in line 180 with the counter)
+    - if you need help with any of that, feel free to contact me: Marina or _m_a_r_ in discord
   */
   const audioContextRef = useRef();
   const volumeRef = useRef();

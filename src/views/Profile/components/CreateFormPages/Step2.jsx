@@ -198,7 +198,7 @@ const Step2 = ({
                 "snnipetURL", 
                 "https://nftfm-music.s3-us-west-1.amazonaws.com/" +
                 account +
-                "/snnipets/snnipet_" +
+                "/30_sec_snnipets/snnipet_" +
                 audioFile.name,
               );
               axios

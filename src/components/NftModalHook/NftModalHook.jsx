@@ -352,7 +352,7 @@ const BuyNftModal = (props) => {
             <SnippetHolder>
               {/* {!isBought && <PlaySongSnippet partialSong={partialSong} />} */}
               <PlaySongSnippet partialSong={partialSong} />
-              <SnippetText>15 Sec Preview</SnippetText>
+              <SnippetText>30 Sec Preview</SnippetText>
             </SnippetHolder>
             <TrackDetailsHolder>
               <span>Genre: {nft.genre}</span>

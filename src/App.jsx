@@ -22,6 +22,7 @@ import RegisterArtist from "./views/RegisterArtist";
 import RegisterArtistComplete from "./views/RegisterArtist/Complete";
 import Info from "./views/Info";
 import Redeem from "./views/Redeem";
+import Admin from "./views/Admin";
 import TermsOfService from "./views/FooterLinks/TermsOfService";
 import PrivacyPolicy from "./views/FooterLinks/PrivacyPolicy";
 import { AccountProvider, useAccountConsumer } from "./contexts/Account";
@@ -96,6 +97,9 @@ const Switches = () => {
   return (
     <>
       <Switch>
+        <Route path="/admin" exact>
+          <Admin />
+        </Route>
         <Route path="/library" exact>
           <Library />
         </Route>

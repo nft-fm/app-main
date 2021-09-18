@@ -31,7 +31,7 @@ const PreviewBuyModal = ({ nft, currChainId }) => {
       .post("/api/nft-type/getSnnipetAWS", {
         key:
           completeNft.address +
-          "/snnipets/" +
+          "/30_secsnnipets/" +
           completeNft.audioUrl.split("/").slice(-1)[0],
       })
       .then((res) => {
@@ -99,7 +99,7 @@ const PreviewBuyModal = ({ nft, currChainId }) => {
       </InfoContainer>
       <SnippetHolder>
         <PlaySongSnippet partialSong={partialSong} />
-        <SnippetText>15 Sec Preview</SnippetText>
+        <SnippetText>30 Sec Preview</SnippetText>
       </SnippetHolder>
       <TrackDetailsHolder>
         <span>Genre: {nft.genre}</span>

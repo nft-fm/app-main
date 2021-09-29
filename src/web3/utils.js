@@ -8,6 +8,7 @@ import {
   // Auction
   BSC_NftAddress,
   BSC_FlatPriceSale,
+  StakingAddress,
 } from "./constants";
 import Swal from "sweetalert2";
 import NFTTokenABI from "./abi/NFTToken.abi.js";
@@ -15,6 +16,7 @@ import FlatPriceSaleABI from "./abi/FlatPriceSale.abi.js";
 import VinylABI from "./abi/Vinyl.abi";
 import TokenSaleABI from "./abi/TokenSale.abi.js";
 import AirdropABI from "./abi/Airdrop.abi.js";
+import StakingABI from "./abi/Staking.abi.js";
 // import BigNumber from "bignumber.js";
 
 const chooseNftAddress = async () => {
@@ -189,4 +191,51 @@ export const approve = async (callback) => {
     "0xB29F1ab1b820ec5E96Df9D237dD6C1b4AFDCc534",
     "10000000000000000000000000"
   );
+};
+
+export const stake = async () => {
+  // const { provider } = await require();
+  // const signer = provider.getSigner();
+  // const contract = new Contract(StakingAddress, StakingABI, signer)
+};
+export const claim = async () => {
+  // const { provider } = await require();
+  // const signer = provider.getSigner();
+  // const contract = new Contract(StakingAddress, StakingABI, signer)
+};
+export const unstake = async () => {
+  // const { provider } = await require();
+  // const signer = provider.getSigner();
+  // const contract = new Contract(StakingAddress, StakingABI, signer)
+};
+export const getBalanceOf = async (callback) => {
+  const { provider, walletAddress } = await require();
+  const signer = provider.getSigner();
+  const contract = new Contract(StakingAddress, StakingABI, signer);
+  const VINYLBalance = contract
+    .balanceOf(walletAddress)
+    .then((r) => utils.formatEther(r));
+  Promise.all([VINYLBalance]).then((res) => {
+    callback({ balance: res[0] });
+  });
+};
+export const getAccountTotalStaked = async () => {
+  // const { provider } = await require();
+  // const signer = provider.getSigner();
+  // const contract = new Contract(StakingAddress, StakingABI, signer)
+};
+export const getTotalStakedToArtist = async () => {
+  // const { provider } = await require();
+  // const signer = provider.getSigner();
+  // const contract = new Contract(StakingAddress, StakingABI, signer)
+};
+export const getStakersForArtist = async () => {
+  // const { provider } = await require();
+  // const signer = provider.getSigner();
+  // const contract = new Contract(StakingAddress, StakingABI, signer)
+};
+export const getVinylStaked = async () => {
+  // const { provider } = await require();
+  // const signer = provider.getSigner();
+  // const contract = new Contract(StakingAddress, StakingABI, signer)
 };

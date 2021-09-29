@@ -4,7 +4,7 @@ import styled from "styled-components";
 import swal from "sweetalert2";
 import { ReactComponent as IconX } from "../../assets/img/icons/x.svg";
 import { useAccountConsumer } from "../../contexts/Account";
-import { imageHeight, imageWidth, warningIcon } from "../../utils/swalImages";
+import { stake, claim, unstake, getBalanceOf} from "../../web3/utils"
 
 const StakingModal = (props) => {
   const { open, hide, artist } = props;
@@ -16,15 +16,33 @@ const StakingModal = (props) => {
   const stopProp = (e) => {
     e.stopPropagation();
   };
-  const stake = () => {
+
+  const stakeVINYL = () => {
     console.log("stake");
   };
-  const claim = () => {
+  const claimVINYL = () => {
     console.log("claim");
   };
-  const unstake = () => {
+  const unstakeVINYL = () => {
     console.log("unstake");
   };
+
+
+  const checkStake = async () => {
+    console.log("checkin");
+    getVinylStaked((res) => {
+      if (res.balance) {
+        setBalance(res.balance);
+      }
+      if (res.allowance) {
+        setBalance(res.balance);
+        setAllowance(res.allowance);
+        setCurrStaked(res.currStaked);
+        setRewardsAvailable(res.rewardsAvailable);
+      }
+    });
+  };
+
 
   if (!open) return null;
   return (

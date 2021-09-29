@@ -8,10 +8,6 @@ import axios from "axios";
 import { useAccountConsumer } from "../../contexts/Account";
 
 const Staking = ({ artists }) => {
-  const { account } = useAccountConsumer();
-
-
-
   return <BaseView>{artists && <StakingHolder artists={artists} />}</BaseView>;
 };
 

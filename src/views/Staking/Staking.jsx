@@ -3,11 +3,16 @@ import { Switch, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import BaseView from "../../components/Page/BaseView";
 import { useWallet } from "use-wallet";
-import CarouselHolder from "./Components/Carousel";
+import StakingHolder from "./Components/StakingHolder";
 import axios from "axios";
+import { useAccountConsumer } from "../../contexts/Account";
 
 const Staking = ({ artists }) => {
-  return <BaseView>{artists && <CarouselHolder artists={artists} />}</BaseView>;
+  const { account } = useAccountConsumer();
+
+
+
+  return <BaseView>{artists && <StakingHolder artists={artists} />}</BaseView>;
 };
 
 const PageContents = styled.div`

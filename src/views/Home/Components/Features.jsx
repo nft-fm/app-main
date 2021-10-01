@@ -10,8 +10,6 @@ import carbon from "../../../assets/img/homepage_assets/homepage_carbon.png";
 import join from "../../../assets/img/homepage_assets/homepage_join.png";
 import airdrop from "../../../assets/img/homepage_assets/homepage_collect.png";
 import revenue from "../../../assets/img/homepage_assets/homepage_revenue.png";
-// import art from "../../../assets/img/homepage_assets/homepage_art.png"
-// import video from "../../../assets/img/homepage_assets/homepage_video.png"
 
 export const Features = ({ isLoaded, setIsLoaded }) => {
   useEffect(() => {
@@ -86,7 +84,7 @@ export const Features = ({ isLoaded, setIsLoaded }) => {
           <FeaturesHeader>Support Amazing Artists</FeaturesHeader>
           <FeaturesDescription>
             It’s no secret that traditional streaming services are not offering
-            fair compensation to artists. With us, musicians make 95% of their
+            fair compensation to artists. With us, musicians make 90% of their
             sales.
           </FeaturesDescription>
         </FeaturesTextContainer>

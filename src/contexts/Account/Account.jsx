@@ -40,6 +40,7 @@ export const AccountProvider = ({ children }) => {
   const [usdPerEth, setUsdPerEth] = useState(0);
   const [usdPerBnb, setUsdPerBnb] = useState(0);
   const [oneSecToLoadMetaMask, setOneSecToLoadMetaMask] = useState(false);
+  const [noEmail, setNoEmail] = useState(false);
 
   const fetchUsdPerEthandBsc = async () => {
     await axios
@@ -58,6 +59,10 @@ export const AccountProvider = ({ children }) => {
     await axios
       .post(`/api/user/get-account`, { address: account })
       .then((res) => {
+        console.log("HERE DA USER", res.data);
+        if (!res.data.email) {
+          setNoEmail(true);
+        }
         setUser(res.data);
         axios
           .post(`/api/gov/verify-admin`, { address: account })
@@ -132,6 +137,7 @@ export const AccountProvider = ({ children }) => {
         setCurrChainId,
         usdPerEth,
         usdPerBnb,
+        noEmail,
       }}
     >
       {/* {oneSecToLoadMetaMask && !currChainId && <NoChainModal />}

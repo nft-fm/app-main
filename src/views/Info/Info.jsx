@@ -70,7 +70,7 @@ const Info = () => {
           <br />
           <span>
             NFT FM allows musicians to dictate artistically and financially the
-            terms on which they engage with their audience. 95% of sale revenue
+            terms on which they engage with their audience. 90% of sale revenue
             goes to the artist directly giving musicians much more of a chance
             to see the immediate results of their hard work.
           </span>

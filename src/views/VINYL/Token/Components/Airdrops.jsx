@@ -9,8 +9,6 @@ import carbon from "../../../../assets/img/homepage_assets/homepage_carbon.png";
 
 import airdrop from "../../../../assets/img/homepage_assets/homepage_airdrop.png";
 import revenue from "../../../../assets/img/homepage_assets/homepage_revenue.png";
-// import art from "../../../../assets/img/homepage_assets/homepage_art.png"
-// import video from "../../../../assets/img/homepage_assets/homepage_video.png"
 
 const Airdrops = ({ isLoaded, setIsLoaded }) => {
   useEffect(() => {

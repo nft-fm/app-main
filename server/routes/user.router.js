@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const User = require("../schemas/User.schema");
+const EmailList = require("../schemas/EmailList.schema");
 const NftType = require("../schemas/NftType.schema");
 const Application = require("../schemas/Application.schema");
 const Redeem = require("../schemas/Redeem.schema");
@@ -63,6 +64,43 @@ router.post("/get-account", async (req, res) => {
     res.status(500).send("server error");
   }
 });
+
+router.post("/add-email", async (req, res) => {
+  try {
+    console.log("adding", req.body);
+    let user = await User.findOne({ address: req.body.address });
+    user.email = req.body.email;
+    await user.save();
+    res.status(200).send("success");
+    }catch (error) {
+      res.status(500).send("server error");
+    }
+
+  }
+)
+
+router.post("/add-to-email-list", async (req, res) => {
+  try {
+    let emailList = await EmailList.findOne();
+    if (!emailList) {
+      emailList = new EmailList({
+        emails: [],
+      });
+      await emailList.save();
+      console.log("success");
+      res.status(200).send("success");
+      return;
+    } else {
+      emailList.emails = [...emailList.emails, req.body.email];
+      emailList.save();
+      res.status(200).send("success");
+    }
+    }catch (error) {
+      res.status(500).send("server error");
+    }
+
+  }
+)
 
 router.post("/track-pageview", async (req, res) => {
   try {

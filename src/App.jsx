@@ -32,6 +32,7 @@ import recordPlayer from "./assets/img/record_player.png";
 import recordPlayerSpin from "./assets/img/record_player_spin.png";
 import saQiBanner from "./assets/img/homepage_assets/saqi_banner.png";
 import saQiBannerMobile from "./assets/img/homepage_assets/saqi_banner_mobile.jpeg";
+import NoEmailModal from "./GetEmailModal";
 
 import isMobile from "./utils/isMobile";
 import theme from "./theme";
@@ -40,7 +41,7 @@ if (window.location.hostname !== "localhost") console.log = function () {};
 
 const Switches = () => {
   const location = useLocation();
-  const { account, user } = useAccountConsumer();
+  const { account, user, noEmail } = useAccountConsumer();
 
   useEffect(() => {
     axios
@@ -159,6 +160,7 @@ const App = () => {
       <StyledCanvas>
         <Router>
           <Switches />
+          <NoEmailModal/>
         </Router>
       </StyledCanvas>
     </Providers>

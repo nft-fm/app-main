@@ -33,7 +33,7 @@ const Listen = () => {
         <DemoImage />
         <StyledHeader>Are you an artist? Launch with us!</StyledHeader>
         <StyledAccountButton href="/register-artist">
-          Contact us!
+          Get Verified!
         </StyledAccountButton>
         <DescriptionLink to="/info">
           <DescriptionBox>

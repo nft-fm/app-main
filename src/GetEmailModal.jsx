@@ -3,6 +3,7 @@ import axios from "axios";
 import styled from "styled-components";
 import { AccountProvider, useAccountConsumer } from "./contexts/Account";
 import { ReactComponent as XIcon } from "./assets/img/icons/x.svg";
+import { ReactComponent as CheckIcon } from "./assets/img/icons/check_circle.svg";
 
 const GetEmailModal = () => {
   const [open, setOpen] = useState(false);
@@ -53,14 +54,19 @@ const GetEmailModal = () => {
         <Half>
           <form onSubmit={(e) => submitEmail(e)}>
             {!submitted ? 
+            <Bottom>
           <Input
             error={error}
             name="email"
             placeholder="email"
             type="email"
             onChange={(e) => setEmail(e.target.value)}
-          >
+            >
           </Input>
+          <Submit type="submit">
+            <Check/>
+          </Submit>
+            </Bottom>
             : <Thanks>
               Thank You!
               </Thanks>
@@ -77,6 +83,26 @@ const GetEmailModal = () => {
   return null;
 }
 
+const Submit = styled.button`
+  cursor: pointer;
+  background-color: #131313;
+    border: 1px solid transparent;
+    margin-left: 10px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    box-shadow: 1px 1px 1px #383838;
+    transition: all 0.1s ease-in-out;
+    &:hover {
+  background-color: #1f1f1f;
+      &>svg {
+        & path {
+        fill: ${(props) => props.theme.color.green};
+      }
+      }}
+`
+
 const Thanks = styled.div`
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
   background-image: linear-gradient(to right, #20a4fc, #fde404 35%, #68c12f 68%, #fa423e);
@@ -90,12 +116,22 @@ const Thanks = styled.div`
   font-weight: 600;
 `
 
+const Check = styled(CheckIcon)`
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  transition: all 0.1s ease-in-out;
+  & path {
+    fill: ${(props) => props.theme.color.white};
+  }
+`;
+
 const X = styled(XIcon)`
   cursor: pointer;
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
   & path {
-    fill: ${(props) => props.theme.color.white} !important;
+    fill: ${(props) => props.theme.color.white};
   }
   position: absolute;
   top: 0;
@@ -115,13 +151,13 @@ width: calc(100% - 8px);
 text-align: center;
 color: white;
 background-color: #131313;
-border: 1px solid ${props => props.error ? "red" : "transparent"} !important;
+border: 1px solid ${props => props.error ? "red" : "transparent"};
+border-bottom: 1px solid ${props => props.error ? "red" : "#383838"};
 height: 30px;
 font-size: 16px;
 border-radius: 4px;
 &:focus {
-outline: 1px solid ${props => props.error ? "transparent" : "white"} !important;
-
+  outline: ${props => props.error ? "none" : "1px solid white"};
 }
 `
 
@@ -132,9 +168,20 @@ font-weight: 300;
 letter-spacing: .5px;
 `
 
+const Bottom = styled.div`
+font-size: 16px;
+line-height: 22px;
+font-weight: 300;
+letter-spacing: .5px;
+display: flex;
+flex-direction: row;
+width: 100%;
+justify-content: space-between;
+`
+
 const Modal = styled.div`
 height: 86px;
-    width: 260px;
+    width: 280px;
 display: flex;
 justify-content: space-between;
 flex-direction: column;
@@ -148,7 +195,8 @@ right: 40px;
 border: 1px solid  ${(props) => props.theme.color.boxBorder};
 background: ${props => props.theme.color.box};
 color: white;
-border-radius: 0 0 0 20px;
+/* border-radius: 0 0 0 20px; */
+border-radius: 2px;
 z-index: 10000000;
 `
 

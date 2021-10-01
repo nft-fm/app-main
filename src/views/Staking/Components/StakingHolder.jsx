@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import StakingCard from "../../../components/NftCards/StakingCard"
+import StakingCard from "../../../components/NftCards/StakingCard";
+import { claimVinyl } from "../../../web3/utils";
+import { useStakingConsumer } from "../../../contexts/Staking";
 
 const StakingHolder = ({ artists }) => {
+  const {
+    balance,
+    totalEarned,
+    accountTotalStaked,
+    setNeedToUpdateBalances,
+    totalAvailable,
+  } = useStakingConsumer();
   const [formattedArtists, setFormattedArtists] = useState(null);
 
   const formatNfts = (artistData) => {
     const formattedNfts = artistData.map((artist, index) => {
-      return (
-        <StakingCard
-          artist={artist}
-          key={index}
-          index={index}
-          // selectNft={setSelectedNft}
-        />
-      );
+      return <StakingCard artist={artist} key={index} index={index} />;
     });
     for (let i = 0; i < 5; i++) {
       formattedNfts.push(<FillerCard />);
@@ -26,25 +28,34 @@ const StakingHolder = ({ artists }) => {
   useEffect(() => {
     setFormattedArtists(formatNfts(artists));
   }, [artists]);
+
+  const claimRewards = async () => {
+    claimVinyl(() => {
+      console.log("claimed!");
+      setNeedToUpdateBalances(true);
+    });
+  };
+
   return (
     <Container>
+      <StakingInfoSection>
+        <p>Your VINYL Balance: {balance}</p>
+        <p>Total VINYL you have staked: {accountTotalStaked}</p>
+        <p>Available Rewards: {totalAvailable}</p>
+        <p>Total Rewards Earned: {totalEarned}</p>
+        <button onClick={() => claimRewards()}>Claim Rewards!</button>
+      </StakingInfoSection>
       <Wrapper>
         {formattedArtists && <NftScroll>{formattedArtists}</NftScroll>}
-        {/* {artists.map((artist) => {
-          return (
-            <ArtistHolder>
-              <ProfilePic
-                src={artist.profilePic}
-                alt={`${artist.username}'s profile picture`}
-              />
-              <Legend>{artist.username}</Legend>
-            </ArtistHolder>
-          );
-        })} */}
       </Wrapper>
     </Container>
   );
 };
+
+const StakingInfoSection = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 const NftScroll = styled.div`
   justify-content: center;
@@ -66,7 +77,7 @@ const FillerCard = styled.div`
 `;
 
 const Wrapper = styled.div`
-  border: 2px solid ${(props) => props.theme.color.boxBorder};
+  /* border: 2px solid ${(props) => props.theme.color.boxBorder}; */
 `;
 
 const Legend = styled.p`

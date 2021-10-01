@@ -4,6 +4,7 @@ import styled from "styled-components";
 import swal from "sweetalert2";
 import { ReactComponent as IconX } from "../../assets/img/icons/x.svg";
 import { useAccountConsumer } from "../../contexts/Account";
+import { useStakingConsumer } from "../../contexts/Staking";
 import {
   stakeVinyl,
   claimVinyl,
@@ -13,46 +14,51 @@ import {
   getUserStakedToArtist,
 } from "../../web3/utils";
 import loading from "../../assets/img/loading.gif";
+import axios from "axios";
 
 const StakingModal = (props) => {
   const { open, hide, artist } = props;
-  // console.log('artist', artist)
-  const { account, connect, getUser, currChainId } = useAccountConsumer();
+  const { account } = useAccountConsumer();
+  const { balance, setNeedToUpdateBalances } = useStakingConsumer();
   const [isStakeLoading, setIsStakeLoading] = useState(false);
   const [isStakeMaxLoading, setIsStakeMaxLoading] = useState(false);
   const [isUnstakeLoading, setIsUnstakeLoading] = useState(false);
-  const [balance, setBalance] = useState(0);
   const [totalStakedToArtist, setTotalStakedToArtist] = useState(0);
   const [userStakedToArtist, setUserStakedToArtist] = useState(0);
 
-  const getBalances = () => {
-    getBalanceOfVinyl((res) => {
-      setBalance(res.balance);
-    });
+  const getArtistBalances = (justUnstaked) => {
     getTotalStakedToArtist(artist.address, (res) => {
       setTotalStakedToArtist(res.totalStaked);
     });
     getUserStakedToArtist(account, artist.address, (res) => {
       setUserStakedToArtist(res.userStaked);
+      console.log("iaeflkgaef", justUnstaked, res.userStaked);
+      if (justUnstaked && Number(res.userStaked) === 0) {
+        axios
+          .post("/api/user/removeStakedArtist", {
+            artist: artist.address,
+            account: account,
+          })
+          .then((res) => console.log(res))
+          .catch((err) => console.log(err));
+      }
     });
   };
 
   useEffect(() => {
-    open &&
+    if (open) {
       getTotalStakedToArtist(artist.address, (res) => {
         setTotalStakedToArtist(res.totalStaked);
       });
+    }
     if (account && open) {
-      console.log("getting info for", artist.username, artist.address);
-      getBalances();
+      getArtistBalances(false);
     }
   }, [open]);
 
   const stopProp = (e) => {
     e.stopPropagation();
   };
-
-  const [stakeInput, setStakeInput] = useState(0);
 
   const stake = () => {
     swal
@@ -69,21 +75,25 @@ const StakingModal = (props) => {
           }
         },
         confirmButtonText: "Stake!",
-        // showDenyButton: true,
-        // denyButtonText: `Stake Max`,
-        // denyButtonColor: "#68c12f",
       })
       .then((res) => {
-        console.log("stake res", res);
-        // if (res.isConfirmed) {
-        //   setIsStakeLoading(true);
-        //   console.log("stake input ", res.value);
-        //   stakeVinyl(res.value, artist.address, () => {
-        //     console.log("Staked!");
-        //     setIsStakeLoading(false);
-        //     getBalances();
-        //   });
-        // }
+        if (res.isConfirmed) {
+          setIsStakeLoading(true);
+          stakeVinyl(res.value, artist.address, () => {
+            setIsStakeLoading(false);
+            setNeedToUpdateBalances(true);
+
+            getArtistBalances(false);
+            axios
+              .post("/api/user/saveStakedArtist", {
+                artist: artist.address,
+                account: account,
+              })
+              .then((res) => console.log(res))
+              .catch((err) => console.log(err));
+            //save artist address in mongoawait axios
+          });
+        }
       });
   };
   const stakeMax = () => {
@@ -96,16 +106,24 @@ const StakingModal = (props) => {
       .then((res) => {
         if (res.isConfirmed) {
           setIsStakeMaxLoading(true);
-          console.log("stake max!", balance);
           stakeVinyl(balance, artist.address, () => {
-            console.log("Staked!");
             setIsStakeMaxLoading(false);
-            getBalances();
+            getArtistBalances(false);
+            setNeedToUpdateBalances(true);
+
+            axios
+              .post("/api/user/saveStakedArtist", {
+                artist: artist.address,
+                account: account,
+              })
+              .then((res) => console.log(res))
+              .catch((err) => console.log(err));
+            //save artist address in mongo
           });
         }
       });
   };
-
+  const [justUnstaked, setJustUnstaked] = useState(false);
   const unstake = () => {
     swal
       .fire({
@@ -123,17 +141,14 @@ const StakingModal = (props) => {
         if (res.isConfirmed) {
           setIsUnstakeLoading(true);
           unstakeVinyl(artist.address, res.value, () => {
-            console.log("unstaked!");
             setIsUnstakeLoading(false);
-            getBalances();
+            //passing 'true' in triggers the getArtistBalances function to delete artist address in mongo if new staked value = 0
+            getArtistBalances(true);
+            setNeedToUpdateBalances(true);
           });
         }
       });
   };
-
-  const [allowance, setAllowance] = useState(0);
-  const [currStaked, setCurrStaked] = useState(0);
-  const [rewardsAvailable, serRewardsAvailable] = useState(0);
 
   if (!open) return null;
   return (

@@ -204,10 +204,16 @@ export const stakeVinyl = async (amount, address, callback) => {
       callback();
     });
 };
-export const claimVinyl = async () => {
-  // const { provider } = await require();
-  // const signer = provider.getSigner();
-  // const contract = new Contract(StakingAddress, StakingABI, signer)
+export const claimVinyl = async (callback) => {
+  const { provider } = await require();
+  const signer = provider.getSigner();
+  const contract = new Contract(StakingAddress, StakingABI, signer);
+  contract
+    .claim()
+    .then((r) => r.wait())
+    .then(() => {
+      callback();
+    });
 };
 export const unstakeVinyl = async (artistAddress, amount, callback) => {
   const { provider } = await require();
@@ -231,10 +237,16 @@ export const getBalanceOfVinyl = async (callback) => {
     callback({ balance: res[0] });
   });
 };
-export const getAccountTotalStaked = async () => {
-  // const { provider } = await require();
-  // const signer = provider.getSigner();
-  // const contract = new Contract(StakingAddress, StakingABI, signer)
+export const getAccountTotalStaked = async (callback) => {
+  const { provider, walletAddress } = await require();
+  const signer = provider.getSigner();
+  const contract = new Contract(StakingAddress, StakingABI, signer);
+  const totalStaked = contract
+    .accountTotalStaked(walletAddress)
+    .then((r) => utils.formatEther(r));
+  Promise.all([totalStaked]).then((res) => {
+    callback({ totalStaked: res[0] });
+  });
 };
 export const getUserStakedToArtist = async (
   userAddress,
@@ -271,4 +283,26 @@ export const getVinylStaked = async () => {
   // const { provider } = await require();
   // const signer = provider.getSigner();
   // const contract = new Contract(StakingAddress, StakingABI, signer)
+};
+export const getTotalEarned = async (address, callback) => {
+  const { provider } = await require();
+  const signer = provider.getSigner();
+  const contract = new Contract(StakingAddress, StakingABI, signer);
+  const totalEarned = contract
+    .totalEarned(address)
+    .then((r) => utils.formatEther(r));
+  Promise.all([totalEarned]).then((res) => {
+    callback({ totalEarned: res[0] });
+  });
+};
+export const getAvailable = async (callback) => {
+  const { provider, walletAddress } = await require();
+  const signer = provider.getSigner();
+  const contract = new Contract(StakingAddress, StakingABI, signer);
+  const available = contract
+    .available(walletAddress)
+    .then((r) => utils.formatEther(r));
+  Promise.all([available]).then((res) => {
+    callback({ available: res[0] });
+  });
 };

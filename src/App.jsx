@@ -26,6 +26,7 @@ import Redeem from "./views/Redeem";
 import TermsOfService from "./views/FooterLinks/TermsOfService";
 import PrivacyPolicy from "./views/FooterLinks/PrivacyPolicy";
 import { AccountProvider, useAccountConsumer } from "./contexts/Account";
+import { StakingProvider } from "./contexts/Staking";
 import { PlaylistProvider } from "./contexts/Playlist/Playlist";
 import swal from "sweetalert2";
 import preloadImage from "./utils/preloadImg";
@@ -42,7 +43,7 @@ if (window.location.hostname !== "localhost") console.log = function () {};
 const Switches = () => {
   const location = useLocation();
   const { account, user } = useAccountConsumer();
-  const [artists, setArtists] = useState(null)
+  const [artists, setArtists] = useState(null);
   useEffect(() => {
     axios
       .post("/api/user/getArtists")
@@ -200,9 +201,11 @@ const Providers = ({ children }) => {
         }}
       >
         <AccountProvider>
-          <PlaylistProvider>
-            <ModalsProvider>{children}</ModalsProvider>
-          </PlaylistProvider>
+          <StakingProvider>
+            <PlaylistProvider>
+              <ModalsProvider>{children}</ModalsProvider>
+            </PlaylistProvider>
+          </StakingProvider>
         </AccountProvider>
       </UseWalletProvider>
     </ThemeProvider>

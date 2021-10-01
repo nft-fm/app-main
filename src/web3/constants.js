@@ -7,7 +7,7 @@ const TEST_AirdropAddress = "0xfb350dc8c2d739F9cA19A8A3B340e85c14138E6c";
 const TEST_BSC_NftAddress = "0xF495c06BdB0F87489384ecAb838c4e8d0068a590";
 const TEST_BSC_FlatPriceSale = "0x7A1eE0C0c12a2425832EDFE013eCf43874E9524B";
 
-const TEST_StakingAddress = "0x13025b52C039eF13CDC38f7D0f15C4D43Cc1cBAA"
+const TEST_StakingAddress = "0x05b1a028c680b4bDA364175d673c2f63bdaAc901"
 
 const MAIN_VinylAddress = "4";
 const MAIN_NftAddress = "0x88d3e00ce938f1A591336131B859465b50D608B7";
@@ -18,7 +18,7 @@ const MAIN_AirdropAddress = "0xC5532b875fab234b5aA58d6b28C208DF2f739b8F";
 const MAIN_BSC_NftAddress = "0xbE2158fd41bCca105Bf68f54B8A4794d4a25A3cC";
 const MAIN_BSC_FlatPriceSale = "0x163379Fe64F07bD6a4b84f10c6Ba9AA9d4F2DFCa";
 
-const MAIN_StakingAddress = "0x13025b52C039eF13CDC38f7D0f15C4D43Cc1cBAA" //TODO deploy and change this
+const MAIN_StakingAddress = "0x05b1a028c680b4bDA364175d673c2f63bdaAc901" //TODO deploy and change this
 
 const isMain = process.env.REACT_APP_IS_MAINNET;
 

@@ -61,6 +61,7 @@ const UserSchema = new Schema({
     },
   ],
   socials: [],
+  stakedArtists: [],
 });
 
 module.exports = User = mongoose.model("user", UserSchema);

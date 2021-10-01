@@ -6,9 +6,16 @@ import { useWallet } from "use-wallet";
 import StakingHolder from "./Components/StakingHolder";
 import axios from "axios";
 import { useAccountConsumer } from "../../contexts/Account";
+import { getBalanceOfVinyl } from "../../web3/utils";
 
 const Staking = ({ artists }) => {
-  return <BaseView>{artists && <StakingHolder artists={artists} />}</BaseView>;
+  const { account } = useAccountConsumer();
+
+  return (
+    <BaseView>
+      {artists && <StakingHolder artists={artists} />}
+    </BaseView>
+  );
 };
 
 const PageContents = styled.div`

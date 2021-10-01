@@ -5,6 +5,7 @@ import StakingCard from "../../../components/NftCards/StakingCard"
 
 const StakingHolder = ({ artists }) => {
   const [formattedArtists, setFormattedArtists] = useState(null);
+
   const formatNfts = (artistData) => {
     const formattedNfts = artistData.map((artist, index) => {
       return (

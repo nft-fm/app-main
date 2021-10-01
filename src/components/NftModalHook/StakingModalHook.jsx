@@ -1,55 +1,157 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import swal from "sweetalert2";
 import { ReactComponent as IconX } from "../../assets/img/icons/x.svg";
 import { useAccountConsumer } from "../../contexts/Account";
-import { stake, claim, unstake, getBalanceOf} from "../../web3/utils"
+import {
+  stakeVinyl,
+  claimVinyl,
+  unstakeVinyl,
+  getBalanceOfVinyl,
+  getTotalStakedToArtist,
+  getUserStakedToArtist,
+} from "../../web3/utils";
+import loading from "../../assets/img/loading.gif";
 
 const StakingModal = (props) => {
   const { open, hide, artist } = props;
-
-  const [isLoading, setIsLoading] = useState(false);
+  // console.log('artist', artist)
   const { account, connect, getUser, currChainId } = useAccountConsumer();
-  const history = useHistory();
+  const [isStakeLoading, setIsStakeLoading] = useState(false);
+  const [isStakeMaxLoading, setIsStakeMaxLoading] = useState(false);
+  const [isUnstakeLoading, setIsUnstakeLoading] = useState(false);
+  const [balance, setBalance] = useState(0);
+  const [totalStakedToArtist, setTotalStakedToArtist] = useState(0);
+  const [userStakedToArtist, setUserStakedToArtist] = useState(0);
+
+  const getBalances = () => {
+    getBalanceOfVinyl((res) => {
+      setBalance(res.balance);
+    });
+    getTotalStakedToArtist(artist.address, (res) => {
+      setTotalStakedToArtist(res.totalStaked);
+    });
+    getUserStakedToArtist(account, artist.address, (res) => {
+      setUserStakedToArtist(res.userStaked);
+    });
+  };
+
+  useEffect(() => {
+    open &&
+      getTotalStakedToArtist(artist.address, (res) => {
+        setTotalStakedToArtist(res.totalStaked);
+      });
+    if (account && open) {
+      console.log("getting info for", artist.username, artist.address);
+      getBalances();
+    }
+  }, [open]);
 
   const stopProp = (e) => {
     e.stopPropagation();
   };
 
-  const stakeVINYL = () => {
-    console.log("stake");
+  const [stakeInput, setStakeInput] = useState(0);
+
+  const stake = () => {
+    swal
+      .fire({
+        title: `How much would you like to stake into ${artist.username}?`,
+        text: `Your balance is: ${balance} VINYL`,
+        input: "number",
+        inputValidator: (value) => {
+          if (!value) {
+            return "You cannot stake nothing!";
+          }
+          if (Number(value) > Number(balance)) {
+            return "You cannot stake more than your balance!";
+          }
+        },
+        confirmButtonText: "Stake!",
+        // showDenyButton: true,
+        // denyButtonText: `Stake Max`,
+        // denyButtonColor: "#68c12f",
+      })
+      .then((res) => {
+        console.log("stake res", res);
+        // if (res.isConfirmed) {
+        //   setIsStakeLoading(true);
+        //   console.log("stake input ", res.value);
+        //   stakeVinyl(res.value, artist.address, () => {
+        //     console.log("Staked!");
+        //     setIsStakeLoading(false);
+        //     getBalances();
+        //   });
+        // }
+      });
   };
-  const claimVINYL = () => {
-    console.log("claim");
-  };
-  const unstakeVINYL = () => {
-    console.log("unstake");
+  const stakeMax = () => {
+    swal
+      .fire({
+        title: `Stake ${balance} VINYL in ${artist.username}?`,
+        confirmButtonText: "Stake Max!",
+        showCancelButton: true,
+      })
+      .then((res) => {
+        if (res.isConfirmed) {
+          setIsStakeMaxLoading(true);
+          console.log("stake max!", balance);
+          stakeVinyl(balance, artist.address, () => {
+            console.log("Staked!");
+            setIsStakeMaxLoading(false);
+            getBalances();
+          });
+        }
+      });
   };
 
-
-  const checkStake = async () => {
-    console.log("checkin");
-    getVinylStaked((res) => {
-      if (res.balance) {
-        setBalance(res.balance);
-      }
-      if (res.allowance) {
-        setBalance(res.balance);
-        setAllowance(res.allowance);
-        setCurrStaked(res.currStaked);
-        setRewardsAvailable(res.rewardsAvailable);
-      }
-    });
+  const unstake = () => {
+    swal
+      .fire({
+        title: `You have ${userStakedToArtist} VINYL staked in ${artist.username}`,
+        text: `How much would you like to withdraw?`,
+        input: "number",
+        inputAttributes: {
+          min: 1,
+          max: userStakedToArtist,
+        },
+        confirmButtonText: "Unstake",
+        showCancelButton: true,
+      })
+      .then((res) => {
+        if (res.isConfirmed) {
+          setIsUnstakeLoading(true);
+          unstakeVinyl(artist.address, res.value, () => {
+            console.log("unstaked!");
+            setIsUnstakeLoading(false);
+            getBalances();
+          });
+        }
+      });
   };
 
+  const [allowance, setAllowance] = useState(0);
+  const [currStaked, setCurrStaked] = useState(0);
+  const [rewardsAvailable, serRewardsAvailable] = useState(0);
 
   if (!open) return null;
   return (
-    <OpaqueFilter onClick={(e) => !isLoading && hide(e)}>
+    <OpaqueFilter
+      onClick={(e) =>
+        !isStakeLoading && !isStakeMaxLoading && !isUnstakeLoading && hide(e)
+      }
+    >
       <Container onClick={(e) => stopProp(e)}>
         <StyledModal>
-          <X onClick={(e) => !isLoading && hide(e)} />
+          <X
+            onClick={(e) =>
+              !isStakeLoading &&
+              !isStakeMaxLoading &&
+              !isUnstakeLoading &&
+              hide(e)
+            }
+          />
           <Image src={artist.profilePic} alt="image" />
           <RightSide>
             <TitleContainer>
@@ -61,12 +163,16 @@ const StakingModal = (props) => {
             </TitleContainer>
             <InfoContainer>
               <StakingRow>
+                <StakingText>Total Staked (all users):</StakingText>
+                <StakingAmount>{totalStakedToArtist} VINYL</StakingAmount>
+              </StakingRow>
+              <StakingRow>
                 <StakingText>Your Balance:</StakingText>
-                <StakingAmount>0.00 VINYL</StakingAmount>
+                <StakingAmount>{balance} VINYL</StakingAmount>
               </StakingRow>
               <StakingRow>
                 <StakingText>Currently Staked:</StakingText>
-                <StakingAmount>0.00 VINYL</StakingAmount>
+                <StakingAmount>{userStakedToArtist} VINYL</StakingAmount>
               </StakingRow>
               <StakingRow>
                 <StakingText>Rewards Available:</StakingText>
@@ -74,14 +180,40 @@ const StakingModal = (props) => {
               </StakingRow>
             </InfoContainer>
             <ButtonHolder>
-              <StakeButton color={"#68c12f"} onClick={() => stake()}>
-                STAKE
+              <StakeButton
+                color={"#68c12f"}
+                balance={!isStakeLoading && balance > 0 && true}
+                onClick={() => !isStakeLoading && balance > 0 && stake()}
+              >
+                {isStakeLoading ? (
+                  <Loading src={loading} alt="loading-icon" />
+                ) : (
+                  "STAKE"
+                )}
               </StakeButton>
-              <StakeButton color={"#20a4fc"} onClick={() => claim()}>
-                CLAIM
+              <StakeButton
+                color={"#20a4fc"}
+                balance={!isStakeMaxLoading && balance > 0 && true}
+                onClick={() => !isStakeMaxLoading && balance > 0 && stakeMax()}
+              >
+                {isStakeMaxLoading ? (
+                  <Loading src={loading} alt="loading-icon" />
+                ) : (
+                  "STAKE MAX"
+                )}
               </StakeButton>
-              <StakeButton color={"#fa423e"} onClick={() => unstake()}>
-                UNSTAKE
+              <StakeButton
+                color={"#fa423e"}
+                balance={!isUnstakeLoading && userStakedToArtist > 0 && true}
+                onClick={() =>
+                  !isUnstakeLoading && userStakedToArtist > 0 && unstake()
+                }
+              >
+                {isUnstakeLoading ? (
+                  <Loading src={loading} alt="loading-icon" />
+                ) : (
+                  "UNSTAKE"
+                )}
               </StakeButton>
             </ButtonHolder>
           </RightSide>
@@ -90,6 +222,13 @@ const StakingModal = (props) => {
     </OpaqueFilter>
   );
 };
+const Loading = styled.img`
+  width: 20px;
+  height: 20px;
+  & path {
+    stroke: ${(props) => props.theme.color.lightgray};
+  }
+`;
 
 const InfoContainer = styled.div`
   display: flex;
@@ -111,7 +250,8 @@ const StakingAmount = styled.p`
 `;
 
 const StakeButton = styled.button`
-  width: 30%;
+  cursor: ${(props) => (props.balance ? "pointer" : "not-allowed")};
+  width: 32%;
   color: white;
   border: 2px solid ${(props) => props.color};
   background-color: ${(props) => props.theme.color.box};
@@ -120,7 +260,7 @@ const StakeButton = styled.button`
 `;
 
 const ButtonHolder = styled.div`
-  width: 90%;
+  width: 100%;
   display: flex;
   justify-content: space-evenly;
 `;
@@ -154,11 +294,6 @@ const TrackDetailsHolder = styled.div`
   @media only screen and (max-width: 776px) {
     height: auto;
   }
-`;
-
-const Loading = styled.img`
-  width: 17px;
-  height: auto;
 `;
 const X = styled(IconX)`
   position: absolute;

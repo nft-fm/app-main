@@ -143,6 +143,9 @@ code {
 .swal2-button--confirm {
   border-radius: 5px;
 }
+.swal2-button--cancel {
+  border-radius: 5px;
+}
 
 .swal2-confirm {
   font-size: 30px;
@@ -164,6 +167,29 @@ code {
   min-width: 100px;
   color: white !important;
   background: #20a4fc !important;
+  background-size: 12px, 100% !important;
+  margin: 0px 30px !important;
+}
+.swal2-cancel {
+  font-size: 30px;
+  font-stretch: normal;
+  font-weight: 600 !important;
+  font-family: "Compita" !important;
+
+  font-style: normal;
+  line-height: 1;
+  text-decoration: none;
+  letter-spacing: normal;
+  display: flex;
+  align-items: center;
+  color: white;
+  border-radius: 12px !important;
+  text-transform: uppercase !important;
+  border: 4px solid #000 !important;
+  padding: 12px !important;
+  min-width: 100px;
+  color: white !important;
+  /* background: #20a4fc !important; */
   background-size: 12px, 100% !important;
   margin: 0px 30px !important;
 }

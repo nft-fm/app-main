@@ -26,6 +26,8 @@ const StakingModal = (props) => {
   const [totalStakedToArtist, setTotalStakedToArtist] = useState(0);
   const [userStakedToArtist, setUserStakedToArtist] = useState(0);
 
+
+  //if true is passed in and the res from getUserStakedToArtist === 0, delete artist address from users' schema
   const getArtistBalances = (justUnstaked) => {
     getTotalStakedToArtist(artist.address, (res) => {
       setTotalStakedToArtist(res.totalStaked);
@@ -39,7 +41,6 @@ const StakingModal = (props) => {
             artist: artist.address,
             account: account,
           })
-          .then((res) => console.log(res))
           .catch((err) => console.log(err));
       }
     });
@@ -82,20 +83,20 @@ const StakingModal = (props) => {
           stakeVinyl(res.value, artist.address, () => {
             setIsStakeLoading(false);
             setNeedToUpdateBalances(true);
-
             getArtistBalances(false);
+
+            //save artist address in mongo
             axios
               .post("/api/user/saveStakedArtist", {
                 artist: artist.address,
                 account: account,
               })
-              .then((res) => console.log(res))
               .catch((err) => console.log(err));
-            //save artist address in mongoawait axios
           });
         }
       });
   };
+
   const stakeMax = () => {
     swal
       .fire({
@@ -111,19 +112,18 @@ const StakingModal = (props) => {
             getArtistBalances(false);
             setNeedToUpdateBalances(true);
 
+            //save artist address in mongo
             axios
               .post("/api/user/saveStakedArtist", {
                 artist: artist.address,
                 account: account,
               })
-              .then((res) => console.log(res))
               .catch((err) => console.log(err));
-            //save artist address in mongo
           });
         }
       });
   };
-  const [justUnstaked, setJustUnstaked] = useState(false);
+
   const unstake = () => {
     swal
       .fire({

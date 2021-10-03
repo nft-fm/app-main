@@ -3,10 +3,13 @@ import styled from "styled-components";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import StakingCard from "../../../components/NftCards/StakingCard";
 
-const StakingHolder = ({ artists }) => {
+import { useStakingConsumer } from "../../../contexts/Staking";
+const StakingHolder = () => {
+  const { artists } = useStakingConsumer();
   const [formattedArtists, setFormattedArtists] = useState(null);
 
   const formatNfts = (artistData) => {
+    console.log('here')
     const formattedNfts = artistData.map((artist, index) => {
       return <StakingCard artist={artist} key={index} index={index} />;
     });
@@ -17,8 +20,10 @@ const StakingHolder = ({ artists }) => {
   };
 
   useEffect(() => {
-    setFormattedArtists(formatNfts(artists));
+    console.log('2', artists)
+    artists && setFormattedArtists(formatNfts(artists));
   }, [artists]);
+  console.log('4', artists)
 
   return (
     <Container>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import BaseView from "../../components/Page/BaseView";
 import StakingHolder from "./Components/StakingHolder";
@@ -6,7 +6,7 @@ import axios from "axios";
 import { useStakingConsumer } from "../../contexts/Staking";
 import { claimVinyl } from "../../web3/utils";
 
-const Staking = ({ artists }) => {
+const Staking = () => {
   const {
     balance,
     totalEarned,
@@ -21,6 +21,7 @@ const Staking = ({ artists }) => {
       setNeedToUpdateBalances(true);
     });
   };
+
   return (
     <BaseView>
       <StakingTopSection>
@@ -71,7 +72,7 @@ const Staking = ({ artists }) => {
           Claim Rewards!
         </ClaimButton>
       </StakingUserInfoSection>
-      {artists && <StakingHolder artists={artists} />}
+      <StakingHolder />
     </BaseView>
   );
 };

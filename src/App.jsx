@@ -43,13 +43,13 @@ if (window.location.hostname !== "localhost") console.log = function () {};
 const Switches = () => {
   const location = useLocation();
   const { account, user } = useAccountConsumer();
-  const [artists, setArtists] = useState(null);
-  useEffect(() => {
-    axios
-      .post("/api/user/getArtists")
-      .then((res) => setArtists(res.data))
-      .catch((err) => console.log(err));
-  }, []);
+  // const [artists, setArtists] = useState(null);
+  // useEffect(() => {
+  //   axios
+  //     .post("/api/user/getArtists")
+  //     .then((res) => setArtists(res.data))
+  //     .catch((err) => console.log(err));
+  // }, []);
 
   useEffect(() => {
     axios
@@ -106,7 +106,9 @@ const Switches = () => {
     <>
       <Switch>
         <Route path="/staking" exact>
-          <Staking artists={artists} />
+          <Staking 
+          // artists={artists} 
+          />
         </Route>
         <Route path="/library" exact>
           <Library />

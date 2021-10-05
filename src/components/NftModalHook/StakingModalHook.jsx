@@ -17,19 +17,31 @@ import loading from "../../assets/img/loading.gif";
 import axios from "axios";
 
 const StakingModal = (props) => {
-  const { open, hide, artist } = props;
-  const { account, connect } = useAccountConsumer();
+  const { open, hide, artist, setIsStakedArtist, orderArtists, unstakedCompletelyFromArtist } = props;
+  const { account, connect, user, setUser } = useAccountConsumer();
   const { balance, setNeedToUpdateBalances } = useStakingConsumer();
   const [isStakeLoading, setIsStakeLoading] = useState(false);
   const [isStakeMaxLoading, setIsStakeMaxLoading] = useState(false);
   const [isUnstakeLoading, setIsUnstakeLoading] = useState(false);
   const [totalStakedToArtist, setTotalStakedToArtist] = useState(0);
   const [userStakedToArtist, setUserStakedToArtist] = useState(0);
+  const [newArtist, setNewArtist] = useState(false)
+
+  const closeModal = () => {
+    if (newArtist) {
+      user.stakedArtists.push(artist.address)
+      orderArtists(user)
+  
+    };
+    hide()
+  }
 
   const handleUnlockClick = () => {
     connect("injected");
-    hide();
+    closeModal();
   };
+
+
 
   //if true is passed in and the res from getUserStakedToArtist === 0, delete artist address from users' schema
   const getArtistBalances = (justUnstaked) => {
@@ -88,7 +100,8 @@ const StakingModal = (props) => {
             setIsStakeLoading(false);
             setNeedToUpdateBalances(true);
             getArtistBalances(false);
-
+            setNewArtist(true)
+            setIsStakedArtist(true);
             //save artist address in mongo
             axios
               .post("/api/user/saveStakedArtist", {
@@ -115,6 +128,7 @@ const StakingModal = (props) => {
             setIsStakeMaxLoading(false);
             getArtistBalances(false);
             setNeedToUpdateBalances(true);
+            setIsStakedArtist(true);
 
             //save artist address in mongo
             axios
@@ -149,6 +163,11 @@ const StakingModal = (props) => {
             //passing 'true' in triggers the getArtistBalances function to delete artist address in mongo if new staked value = 0
             getArtistBalances(true);
             setNeedToUpdateBalances(true);
+            if (Number(res.value) === Number(userStakedToArtist)) {
+              setIsStakedArtist(false);
+              unstakedCompletelyFromArtist(artist.address)
+              closeModal()
+            }
           });
         }
       });
@@ -158,7 +177,7 @@ const StakingModal = (props) => {
   return (
     <OpaqueFilter
       onClick={(e) =>
-        !isStakeLoading && !isStakeMaxLoading && !isUnstakeLoading && hide(e)
+        !isStakeLoading && !isStakeMaxLoading && !isUnstakeLoading && closeModal(e)
       }
     >
       <Container onClick={(e) => stopProp(e)}>
@@ -168,7 +187,7 @@ const StakingModal = (props) => {
               !isStakeLoading &&
               !isStakeMaxLoading &&
               !isUnstakeLoading &&
-              hide(e)
+              closeModal(e)
             }
           />
           <Image src={artist.profilePic} alt="image" />
@@ -306,6 +325,7 @@ const StakingAmount = styled.p`
 const StakeButton = styled.button`
   cursor: ${(props) => (props.balance ? "pointer" : "not-allowed")};
   width: 32%;
+  height: 37px;
   color: white;
   border: 2px solid ${(props) => props.color};
   background-color: ${(props) => props.theme.color.box};

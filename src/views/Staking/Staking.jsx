@@ -5,6 +5,7 @@ import StakingHolder from "./Components/StakingHolder";
 import axios from "axios";
 import { useStakingConsumer } from "../../contexts/Staking";
 import { claimVinyl } from "../../web3/utils";
+import Swal from "sweetalert2";
 
 const Staking = () => {
   const {
@@ -15,11 +16,23 @@ const Staking = () => {
     totalAvailable,
   } = useStakingConsumer();
 
+  const [loading, setLoading] = useState(false)
+
   const claimRewards = async () => {
+    setLoading(true)
     claimVinyl(() => {
+      setLoading(false)
+      Swal.fire({
+        title: `Successfully claimed ${totalAvailable} VINYL!`,
+        timer: 5000,
+      })
       console.log("claimed!");
       setNeedToUpdateBalances(true);
-    });
+    }).catch((err) => {
+      Swal.fire({
+        title: 'Something went wrong, please try again.'
+      })
+    })
   };
 
   return (
@@ -66,7 +79,7 @@ const Staking = () => {
           </Row>
           <ClaimButton
             available={Number(totalAvailable) > 0}
-            onClick={() => totalAvailable && claimRewards()}
+            onClick={() => Number(totalAvailable) > 0 && claimRewards()}
           >
             Claim Rewards!
           </ClaimButton>

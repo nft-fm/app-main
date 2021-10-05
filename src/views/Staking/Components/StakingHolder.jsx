@@ -12,7 +12,15 @@ const StakingHolder = () => {
 
   const formatNfts = (artistData) => {
     const formattedNfts = artistData.map((artist, index) => {
-      return <StakingCard artist={artist} key={index} index={index} />;
+      return (
+        <StakingCard
+          artist={artist}
+          key={index}
+          index={index}
+          orderArtists={orderArtists}
+          unstakedCompletelyFromArtist={unstakedCompletelyFromArtist}
+        />
+      );
     });
     for (let i = 0; i < 5; i++) {
       formattedNfts.push(<FillerCard />);
@@ -20,7 +28,32 @@ const StakingHolder = () => {
     return formattedNfts;
   };
 
-  const orderArtists = () => {
+  const stakedInNewArtist = (artistAddress) => {
+    let totalArtists = artists;
+    totalArtists.map((artist, index) => {
+      if (artist.address === artistAddress) {
+        totalArtists.splice(index, 1);
+        artist.isUserStaked = true;
+        totalArtists.unshift(artist);
+      }
+    });
+
+    setFormattedArtists(formatNfts(totalArtists));
+  };
+
+  const unstakedCompletelyFromArtist = (artistAddress) => {
+    let totalArtists = artists;
+    totalArtists.map((artist, index) => {
+      if (artist.address === artistAddress) {
+        totalArtists.splice(index, 1);
+        totalArtists.push(artist);
+      }
+    });
+
+    setFormattedArtists(formatNfts(totalArtists));
+  };
+
+  const orderArtists = (user) => {
     let totalArtists = artists;
     user.stakedArtists.map((item) => {
       totalArtists.map((artist, index) => {
@@ -41,7 +74,7 @@ const StakingHolder = () => {
 
   useEffect(() => {
     if (user && user.stakedArtists.length > 0) {
-      orderArtists();
+      orderArtists(user);
     }
   }, [user]);
 

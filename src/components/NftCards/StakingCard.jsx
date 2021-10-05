@@ -12,6 +12,13 @@ const StakingCard = (props) => {
 
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isStakedArtist, setIsStakedArtist] = useState(false);
+
+  const updateCardWhenUnstaked = (address) => {
+    console.log('unstaked, should remove blue border now')
+    setIsStakedArtist(false)
+    props.unstakedCompletelyFromArtist(address)
+  }
 
   const hide = () => {
     setIsModalOpen(false);
@@ -19,6 +26,7 @@ const StakingCard = (props) => {
 
   useEffect(() => {
     if (props.artist) setArtist(props.artist);
+    if (props.artist.isUserStaked) setIsStakedArtist(true);
   }, [props.artist]);
 
   if (!artist) {
@@ -31,9 +39,16 @@ const StakingCard = (props) => {
       aria-pressed="false"
       tabindex="0"
       open={isModalOpen}
-      isStakedArtist={artist.isUserStaked}
+      isStakedArtist={isStakedArtist}
     >
-      <StakingModalHook open={isModalOpen} hide={hide} artist={artist} />
+      <StakingModalHook
+        open={isModalOpen}
+        hide={hide}
+        artist={artist}
+        setIsStakedArtist={setIsStakedArtist}
+        orderArtists={props.orderArtists}
+        unstakedCompletelyFromArtist={updateCardWhenUnstaked}
+      />
       {imageLoaded ? null : <Image src={loading} alt="image" />}
       <Image
         src={artist.profilePic}

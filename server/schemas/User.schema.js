@@ -31,6 +31,10 @@ const UserSchema = new Schema({
   isLegacyArtist: {
     type: Boolean,
   },
+  hasMinted: {
+    type: Boolean,
+    default: false,
+  },
   confirmedFeeIncrease: {
     type: Boolean,
   },

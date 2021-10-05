@@ -537,8 +537,11 @@ router.post("/getArtists", async (req, res) => {
   try {
     const artists = await User.find({
       isArtist: true,
+      hasMinted: true,
       profilePic: { $exists: true },
+      username: { $ne: "NFT FM" },
     });
+
     res.send(artists);
   } catch (err) {}
 });

@@ -35,6 +35,18 @@ const Staking = () => {
             <br /> By staking on an artist, you are growing your wallet and
             theirs at the same time!
           </p>
+        </StakingInfo>
+      </StakingTopSection>
+      <StakingUserInfoSection>
+        <Side>
+          <Row>
+            <p>Your Balance:</p>
+            <p>{balance} VINYL</p>
+          </Row>
+          <Row>
+            <p>Currently Staked:</p>
+            <p>{accountTotalStaked} VINYL</p>
+          </Row>
           <LinkButton
             href="https://pancakeswap.com"
             target="_blank"
@@ -42,49 +54,39 @@ const Staking = () => {
           >
             Buy VINYL
           </LinkButton>
-        </StakingInfo>
-      </StakingTopSection>
-      <StakingUserInfoSection>
-        <Side>
-          <Row>
-            <p>Your VINYL Balance:</p>
-            <p>{balance}</p>
-          </Row>
-          <Row>
-            <p>Your staked VINYL:</p>
-            <p>{accountTotalStaked}</p>
-          </Row>
         </Side>
         <Side>
           <Row>
-            <p>Available Rewards:</p>
-            <p>{totalAvailable}</p>
+            <p>Your Rewards:</p>
+            <p>{totalAvailable} VINYL</p>
           </Row>
           <Row>
-            <p>Total Rewards Earned:</p>
-            <p>{totalEarned}</p>
+            <p>Total Earned:</p>
+            <p>{totalEarned} VINYL</p>
           </Row>
+          <ClaimButton
+            available={Number(totalAvailable) > 0}
+            onClick={() => totalAvailable && claimRewards()}
+          >
+            Claim Rewards!
+          </ClaimButton>
         </Side>
-        <ClaimButton
-          available={Number(totalAvailable) > 0}
-          onClick={() => totalAvailable && claimRewards()}
-        >
-          Claim Rewards!
-        </ClaimButton>
       </StakingUserInfoSection>
       <StakingHolder />
     </BaseView>
   );
 };
-const ClaimButton = styled.button`
+
+
+const LinkButton = styled.a`
   text-decoration: none;
-  margin: 20px auto 20px;
-  width: 140px;
+  margin: 0px auto 20px;
+  width: 200px;
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
-  cursor: ${(props) => (props.available ? "pointer" : "not-allowed")};
+  cursor: pointer;
   transition: all 0.1s ease-in-out;
   display: flex;
   justify-content: center;
@@ -94,6 +96,31 @@ const ClaimButton = styled.button`
   font-family: "Compita";
   font-weight: 600;
   background-color: #181818;
+  font-size: ${(props) => props.theme.fontSizes.sm};
+  &:hover {
+    background-color: rgba(256, 256, 256, 0.2);
+  }
+`;
+
+const ClaimButton = styled.button`
+  cursor: ${(props) => (props.available ? "pointer" : "not-allowed")};
+  text-decoration: none;
+  margin: 0px auto 20px;
+  width: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  transition: all 0.1s ease-in-out;
+  display: flex;
+  justify-content: center;
+  border: 1px solid ${(props) => props.theme.color.red};
+  height: 32px;
+  border-radius: 20px;
+  font-family: "Compita";
+  font-weight: 600;
+  background-color: #181818;
+  font-size: ${(props) => props.theme.fontSizes.sm};
   &:hover {
     background-color: rgba(256, 256, 256, 0.2);
   }
@@ -102,25 +129,33 @@ const ClaimButton = styled.button`
 const Row = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 50%;
+  width: 75%;
   @media only screen and (max-width: 776px) {
-    width: 100%;
+    width: 90%;
   }
 `;
 
 const Side = styled.div`
-  width: 50%;
+  width: 45%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  background-color: ${(props) => props.theme.color.box};
+  border-radius: ${(props) => props.theme.borderRadius}px;
+  border: 1px solid ${(props) => props.theme.color.boxBorder};
+  /* padding: 0 20px; */
+
   @media only screen and (max-width: 776px) {
-    width: 80%;
+    width: 95%;
+    margin-bottom: 20px;
   }
 `;
 
 const StakingUserInfoSection = styled.section`
   display: flex;
+  justify-content: space-between;
   flex-wrap: wrap;
   width: 100%;
   color: white;
@@ -151,28 +186,4 @@ const StakingInfo = styled.section`
   flex-direction: column;
   text-align: center;
 `;
-
-const LinkButton = styled.a`
-  text-decoration: none;
-  margin: 20px auto 20px;
-  width: 140px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  cursor: pointer;
-  transition: all 0.1s ease-in-out;
-  display: flex;
-  justify-content: center;
-  border: 1px solid ${(props) => props.theme.color.red};
-  height: 32px;
-  border-radius: 20px;
-  font-family: "Compita";
-  font-weight: 600;
-  background-color: #181818;
-  &:hover {
-    background-color: rgba(256, 256, 256, 0.2);
-  }
-`;
-
 export default Staking;

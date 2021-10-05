@@ -12,16 +12,6 @@ const StakingCard = (props) => {
 
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isShareOpen, setIsShareOpen] = useState(false);
-  const [isStakedArtist, setIsStakedArtist] = useState(false);
-  const { user } = useAccountConsumer();
-
-  useEffect(() => {
-    if (user && user.stakedArtists.length > 0 && artist) {
-      user.stakedArtists.indexOf(artist.address) >= 0 &&
-        setIsStakedArtist(true);
-    }
-  }, [user]);
 
   const hide = () => {
     setIsModalOpen(false);
@@ -35,23 +25,15 @@ const StakingCard = (props) => {
     return null;
   }
 
-  //get total staked in artist
-  //get total you have staked in artist
-
   return (
     <Container
       role="button"
       aria-pressed="false"
       tabindex="0"
-      open={isModalOpen || isShareOpen}
-      isStakedArtist={isStakedArtist}
+      open={isModalOpen}
+      isStakedArtist={artist.isUserStaked}
     >
-      <StakingModalHook
-        open={isModalOpen}
-        hide={hide}
-        artist={artist}
-        setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
-      />
+      <StakingModalHook open={isModalOpen} hide={hide} artist={artist} />
       {imageLoaded ? null : <Image src={loading} alt="image" />}
       <Image
         src={artist.profilePic}
@@ -73,7 +55,11 @@ const Container = styled.div`
   color: ${(props) => props.theme.color.gray};
   padding: 12px;
   background-color: ${(props) => props.theme.color.box};
-  border: 1px solid ${(props) => props.isStakedArtist ? props.theme.color.blue : props.theme.color.boxBorder};
+  border: 1px solid
+    ${(props) =>
+      props.isStakedArtist
+        ? props.theme.color.blue
+        : props.theme.color.boxBorder};
   border-radius: ${(props) => props.theme.borderRadius}px;
   align-items: center;
   display: flex;
@@ -103,7 +89,7 @@ const Artist = styled(NavLink)`
   font-size: ${(props) => props.theme.fontSizes.xxs}px;
   text-align: center;
   color: ${(props) => props.theme.gray};
-  margin-bottom: 12px;
+  /* margin-bottom: 12px; */
   text-decoration: none;
   /* cursor: pointer; */
   &:hover {

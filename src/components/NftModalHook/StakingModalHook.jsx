@@ -18,7 +18,7 @@ import axios from "axios";
 
 const StakingModal = (props) => {
   const { open, hide, artist } = props;
-  const { account } = useAccountConsumer();
+  const { account, connect } = useAccountConsumer();
   const { balance, setNeedToUpdateBalances } = useStakingConsumer();
   const [isStakeLoading, setIsStakeLoading] = useState(false);
   const [isStakeMaxLoading, setIsStakeMaxLoading] = useState(false);
@@ -26,6 +26,10 @@ const StakingModal = (props) => {
   const [totalStakedToArtist, setTotalStakedToArtist] = useState(0);
   const [userStakedToArtist, setUserStakedToArtist] = useState(0);
 
+  const handleUnlockClick = () => {
+    connect("injected");
+    hide();
+  };
 
   //if true is passed in and the res from getUserStakedToArtist === 0, delete artist address from users' schema
   const getArtistBalances = (justUnstaked) => {
@@ -168,75 +172,102 @@ const StakingModal = (props) => {
             }
           />
           <Image src={artist.profilePic} alt="image" />
-          <RightSide>
-            <TitleContainer>
-              <Artist to={`/artist/${artist.suburl}`}>
-                {artist.username > 20
-                  ? artist.username.slice(0, 20) + "..."
-                  : artist.username}
-              </Artist>
-            </TitleContainer>
-            <InfoContainer>
-              <StakingRow>
-                <StakingText>Total Staked (all users):</StakingText>
-                <StakingAmount>{totalStakedToArtist} VINYL</StakingAmount>
-              </StakingRow>
-              <StakingRow>
-                <StakingText>Your Balance:</StakingText>
-                <StakingAmount>{balance} VINYL</StakingAmount>
-              </StakingRow>
-              <StakingRow>
-                <StakingText>Currently Staked:</StakingText>
-                <StakingAmount>{userStakedToArtist} VINYL</StakingAmount>
-              </StakingRow>
-              <StakingRow>
-                <StakingText>Rewards Available:</StakingText>
-                <StakingAmount>0.00 VINYL</StakingAmount>
-              </StakingRow>
-            </InfoContainer>
-            <ButtonHolder>
-              <StakeButton
-                color={"#68c12f"}
-                balance={!isStakeLoading && balance > 0 && true}
-                onClick={() => !isStakeLoading && balance > 0 && stake()}
-              >
-                {isStakeLoading ? (
-                  <Loading src={loading} alt="loading-icon" />
-                ) : (
-                  "STAKE"
-                )}
-              </StakeButton>
-              <StakeButton
-                color={"#20a4fc"}
-                balance={!isStakeMaxLoading && balance > 0 && true}
-                onClick={() => !isStakeMaxLoading && balance > 0 && stakeMax()}
-              >
-                {isStakeMaxLoading ? (
-                  <Loading src={loading} alt="loading-icon" />
-                ) : (
-                  "STAKE MAX"
-                )}
-              </StakeButton>
-              <StakeButton
-                color={"#fa423e"}
-                balance={!isUnstakeLoading && userStakedToArtist > 0 && true}
-                onClick={() =>
-                  !isUnstakeLoading && userStakedToArtist > 0 && unstake()
-                }
-              >
-                {isUnstakeLoading ? (
-                  <Loading src={loading} alt="loading-icon" />
-                ) : (
-                  "UNSTAKE"
-                )}
-              </StakeButton>
-            </ButtonHolder>
-          </RightSide>
+          <InfoContainer>
+            <Artist to={`/artist/${artist.suburl}`}>
+              {artist.username > 20
+                ? artist.username.slice(0, 20) + "..."
+                : artist.username}
+            </Artist>
+            <StakingRow>
+              <StakingText>Total Staked (all users):</StakingText>
+              <StakingAmount>{totalStakedToArtist} VINYL</StakingAmount>
+            </StakingRow>
+            <StakingRow>
+              <StakingText>Your Balance:</StakingText>
+              <StakingAmount>{balance} VINYL</StakingAmount>
+            </StakingRow>
+            <StakingRow>
+              <StakingText>Currently Staked:</StakingText>
+              <StakingAmount>{userStakedToArtist} VINYL</StakingAmount>
+            </StakingRow>
+            <StakingRow>
+              <StakingText>Rewards Available:</StakingText>
+              <StakingAmount>0.00 VINYL</StakingAmount>
+            </StakingRow>
+            {account ? (
+              <ButtonHolder>
+                <StakeButton
+                  color={"#68c12f"}
+                  balance={!isStakeLoading && balance > 0 && true}
+                  onClick={() => !isStakeLoading && balance > 0 && stake()}
+                >
+                  {isStakeLoading ? (
+                    <Loading src={loading} alt="loading-icon" />
+                  ) : (
+                    "STAKE"
+                  )}
+                </StakeButton>
+                <StakeButton
+                  color={"#20a4fc"}
+                  balance={!isStakeMaxLoading && balance > 0 && true}
+                  onClick={() =>
+                    !isStakeMaxLoading && balance > 0 && stakeMax()
+                  }
+                >
+                  {isStakeMaxLoading ? (
+                    <Loading src={loading} alt="loading-icon" />
+                  ) : (
+                    "STAKE MAX"
+                  )}
+                </StakeButton>
+                <StakeButton
+                  color={"#fa423e"}
+                  balance={!isUnstakeLoading && userStakedToArtist > 0 && true}
+                  onClick={() =>
+                    !isUnstakeLoading && userStakedToArtist > 0 && unstake()
+                  }
+                >
+                  {isUnstakeLoading ? (
+                    <Loading src={loading} alt="loading-icon" />
+                  ) : (
+                    "UNSTAKE"
+                  )}
+                </StakeButton>
+              </ButtonHolder>
+            ) : (
+              <AccountButton onClick={() => handleUnlockClick()}>
+                Connect
+              </AccountButton>
+            )}
+          </InfoContainer>
         </StyledModal>
       </Container>
     </OpaqueFilter>
   );
 };
+
+const AccountButton = styled.div`
+  width: 140px;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid ${(props) => props.theme.color.red};
+  height: 32px;
+  border-radius: 20px;
+  font-family: "Compita";
+  background-color: #181818;
+  letter-spacing: 1px;
+  font-size: ${(props) => props.theme.fontSizes.xs};
+  font-weight: 600;
+  cursor: pointer;
+  color: white;
+  &:hover {
+    background-color: rgba(256, 256, 256, 0.2);
+  }
+`;
+
 const Loading = styled.img`
   width: 20px;
   height: 20px;
@@ -248,7 +279,15 @@ const Loading = styled.img`
 const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  justify-content: space-evenly;
+  align-items: center;
+  width: calc(100% - 500px);
+  padding: 10px 30px;
+  @media only screen and (max-width: 776px) {
+    width: 90vw;
+    height: calc(100vh / 2);
+    justify-content: space-between;
+  }
 `;
 const StakingRow = styled.div`
   display: flex;
@@ -279,37 +318,6 @@ const ButtonHolder = styled.div`
   display: flex;
   justify-content: space-evenly;
 `;
-
-const LikeButton = styled.button`
-  background-color: transparent;
-  padding: 0px;
-  border: none;
-  width: min-content;
-  height: min-content;
-  margin: 0px 4px 0 0;
-`;
-
-const ShareButton = styled.button`
-  background-color: transparent;
-  padding: 0px;
-  border: none;
-  width: min-content;
-  height: min-content;
-  margin: 0px 4px 0 0;
-`;
-const TrackDetailsHolder = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  height: 50px;
-  margin-bottom: 10px;
-  justify-content: space-around;
-  color: #666;
-  padding-left: 20px;
-  @media only screen and (max-width: 776px) {
-    height: auto;
-  }
-`;
 const X = styled(IconX)`
   position: absolute;
   right: 2px;
@@ -323,15 +331,6 @@ const X = styled(IconX)`
     transition: all 0.2s ease-in-out;
     stroke: ${(props) => props.theme.color.gray};
     fill: ${(props) => props.theme.color.gray};
-  }
-`;
-
-const Side = styled.div`
-  display: flex;
-  align-items: center;
-  margin-left: -25px;
-  @media only screen and (max-width: 776px) {
-    margin-left: 0;
   }
 `;
 
@@ -356,19 +355,6 @@ const Container = styled.div`
   top: 50%;
   transform: translate(-50%, -50%);
   color: #666;
-`;
-
-const RightSide = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: calc(100% - 500px);
-  padding: 10px 30px;
-  @media only screen and (max-width: 776px) {
-    width: 90vw;
-    height: calc(100vh / 2);
-    justify-content: space-between;
-  }
 `;
 const StyledModal = styled.div`
   border-radius: 16px;
@@ -409,76 +395,13 @@ const Image = styled.img`
     height: 90vw;
   }
 `;
-
-const BadgeHolder = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-  height: 20px;
-  padding: 10px 0;
-  & > span {
-    padding: 0 5px;
-  }
-  @media only screen and (max-width: 776px) {
-    padding-bottom: 0px;
-  }
-`;
-
-const TitleContainer = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  white-space: nowrap;
-  /* margin-top: -10px; */
-  @media only screen and (max-width: 776px) {
-    width: 90%;
-    /* align-items: center; */
-    margin-top: -25px;
-  }
-`;
-const TrackName = styled.span`
-  color: white;
-  font-size: ${(props) => props.theme.fontSizes.md};
-  font-weight: 600;
-  margin-bottom: 6px;
-  @media only screen and (max-width: 776px) {
-    margin-top: 5px;
-    margin-bottom: 0px;
-    font-size: ${(props) => props.theme.fontSizes.sm};
-  }
-`;
 const Artist = styled(NavLink)`
   text-decoration: none;
-  font-size: ${(props) => props.theme.fontSizes.sm};
+  font-size: ${(props) => props.theme.fontSizes.md};
   color: white;
-  margin-bottom: 12px;
+  /* margin-bottom: 12px; */
   @media only screen and (max-width: 776px) {
     margin-bottom: 0px;
-  }
-`;
-
-const BuyButton = styled.button`
-  width: 150px;
-  /* height: 64px; */
-  cursor: pointer;
-  transition: all 0.1s ease-in-out;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
-  border: 1px solid ${(props) => props.theme.color.boxBorder};
-  border-radius: 8px;
-  background-color: ${(props) => props.theme.color.box};
-  /* margin-bottom: 20px; */
-  padding: 10px 20px;
-  &:hover {
-    background-color: ${(props) => props.theme.color.boxBorder};
-    border: 1px solid #383838;
-  }
-
-  &.buyButton {
-    background-color: ${(props) => props.theme.color.green};
   }
 `;
 

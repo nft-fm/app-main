@@ -1,1 +1,1 @@
-export { useStakingConsumer, StakingProvider } from './Staking'
+export { useStakingConsumer, StakingProvider } from './StakingContext'

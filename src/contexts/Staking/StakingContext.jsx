@@ -34,34 +34,36 @@ export const StakingProvider = ({ children }) => {
     setNeedToUpdateBalances(false);
   };
 
+  function shuffle(array) {
+    var m = array.length, t, i;
+  
+    // While there remain elements to shuffle…
+    while (m) {
+  
+      // Pick a remaining element…
+      i = Math.floor(Math.random() * m--);
+  
+      // And swap it with the current element.
+      t = array[m];
+      array[m] = array[i];
+      array[i] = t;
+    }
+  
+    return array;
+  }
+
   const getArtists = () => {
     axios
       .post("/api/user/getArtists")
-      .then((res) => setArtists(res.data))
+      .then((res) => {
+        setArtists(shuffle(res.data));
+      })
       .catch((err) => console.log(err));
   };
-  const formatArtists = () => {
-    let totalArtists = artists;
-    user.stakedArtists.map((item) => {
-      totalArtists.map((artist, index) => {
-        if (item === artist.address) {
-          totalArtists.splice(index, 1);
-          totalArtists.unshift(artist);
-        }
-      });
-    });
-    setArtists(totalArtists);
-  };
+
   useEffect(() => {
     getArtists();
   }, []);
-  useEffect(() => {
-    if (user && user.stakedArtists.length > 0) {
-      formatArtists();
-      console.log('1', artists)
-    }
-  }, [user]);
-  // console.log('0', artists)
 
   useEffect(() => {
     if (account || needToUpdateBalances) {

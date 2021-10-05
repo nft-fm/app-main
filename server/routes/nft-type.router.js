@@ -261,6 +261,10 @@ router.post("/notDraftAnymore", async (req, res) => {
       isDraft: false,
       timestamp: new Date(),
     });
+    let updateUser = await User.findOneAndUpdate(
+      { address: req.body.address },
+      { hasMinted: true }
+    );
     res.status(200).send("Success!");
   } catch (err) {
     res.send(err);

@@ -28,6 +28,10 @@ const UserSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  hasMinted: {
+    type: Boolean,
+    default: false,
+  },
   isLegacyArtist: {
     type: Boolean,
   },

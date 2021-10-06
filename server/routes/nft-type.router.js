@@ -958,6 +958,20 @@ router.get("/testing", async (req, res) => {
         });
       }
     });
+  } catch (err) {}
+});
+
+router.post("/updatePrice", async (req, res) => {
+  try {
+    console.log("here");
+    let updateNFT = await NftType.findOneAndUpdate(
+      { nftId: req.body.nftId, chain: req.body.chain },
+      { price: req.body.price },
+      { new: true }
+    );
+
+    console.log(updateNFT);
+    res.status(200).send("Success");
   } catch (err) {
     res.status(500).send(err);
   }

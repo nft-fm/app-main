@@ -190,3 +190,14 @@ export const approve = async (callback) => {
     "10000000000000000000000000"
   );
 };
+
+export const setNewPrice = async (nftId, price, callback) => {
+  console.log(nftId, price);
+  const { provider } = await require();
+  const signer = provider.getSigner();
+  const contract = new Contract(FlatPriceSale, FlatPriceSaleABI, signer);
+  contract
+    .setSetPrice(nftId, utils.parseUnits(price))
+    .then((r) => r.wait())
+    .then(() => callback());
+};

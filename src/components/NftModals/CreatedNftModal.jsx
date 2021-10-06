@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { ReactComponent as IconX } from "../../assets/img/icons/x.svg";
@@ -8,6 +8,9 @@ import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import Swal from "sweetalert2";
+import { setNewPrice } from "../../web3/utils";
+import loadingGif from "../../assets/img/loading.gif";
+
 const BuyNftModal = ({
   open,
   hide,
@@ -18,7 +21,8 @@ const BuyNftModal = ({
   setLikeCount,
   setIsShareOpen,
 }) => {
-  const { account, usdPerEth, usdPerBnb } = useAccountConsumer();
+  const { account, usdPerEth, usdPerBnb, currChainId } = useAccountConsumer();
+  const [loading, setLoading] = useState(false);
 
   if (!open) return null;
   const stopProp = (e) => {
@@ -40,16 +44,73 @@ const BuyNftModal = ({
     }
   };
 
+  const getChain = () => {
+    console.log(currChainId);
+    switch (currChainId) {
+      case 1:
+        return "ETH";
+      case 4:
+        return "ETH";
+      case 56:
+        return "BSC";
+      case 97:
+        return "BSC";
+    }
+  };
+  const handleChange = (value) => {
+    setLoading(false);
+    axios
+      .post("/api/nft-type/updatePrice", {
+        nftId: nft.nftId,
+        price: value,
+        chain: nft.chain,
+      })
+      .then((res) => {
+        Swal.fire({ title: "Success! Reload the page to see the changes." });
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const changeNftPrice = () => {
+    if (nft.chain != getChain()) {
+      Swal.fire({
+        title: `You need to be on ${getChain()} to change the price of this NFT.`,
+      });
+    } else {
+      Swal.fire({
+        title: `Change price for: ${nft.title}?`,
+        text: `Any contract interactions do incur gas fees. Enter the new price in ${
+          getChain() === "BSC" ? "BNB" : "ETH"
+        } below`,
+        input: "number",
+        inputValidator: (value) => {
+          if (Number(value) < 0) {
+            return "You cannot set a negative price!";
+          }
+        },
+        confirmButtonText: "Change Price!",
+      }).then((res) => {
+        if (res.isConfirmed) {
+          console.log(res.value);
+          setLoading(true);
+          setNewPrice(nft.nftId, res.value, () => {
+            handleChange(res.value);
+          });
+        }
+      });
+    }
+  };
+
   const share = () => {
     setIsShareOpen();
     hide();
   };
 
   return (
-    <OpaqueFilter onClick={(e) => hide(e)}>
+    <OpaqueFilter onClick={(e) => !loading && hide(e)}>
       <Container onClick={(e) => stopProp(e)}>
         <StyledModal>
-          <X onClick={(e) => hide(e)} />
+          <X onClick={(e) => !loading && hide(e)} />
           <CardTitle>
             <Logo src={logo} />
           </CardTitle>
@@ -132,11 +193,32 @@ const BuyNftModal = ({
               </TableRow>
             </StyledTable>
           </StatsContainer>
+          {loading ? (
+            <Loading src={loadingGif} alt="loading gif" />
+          ) : (
+            <PriceButton onClick={() => changeNftPrice()}>
+              Change NFT price
+            </PriceButton>
+          )}
         </StyledModal>
       </Container>
     </OpaqueFilter>
   );
 };
+const PriceButton = styled.button`
+  /* width: 32%; */
+  color: white;
+  border: 2px solid ${(props) => props.theme.color.yellow};
+  background-color: ${(props) => props.theme.color.box};
+  border-radius: ${(props) => props.theme.borderRadius}px;
+  padding: 5px 0;
+`;
+
+const Loading = styled.img`
+  width: 20px;
+  height: 20px;
+`;
+
 const X = styled(IconX)`
   position: absolute;
   right: 2px;
@@ -265,7 +347,6 @@ const OpaqueFilter = styled.div`
   transform: translate(-50%, -50%);
   background-color: rgba(0, 0, 0, 0.8);
   z-index: 500;
-  backdrop-filter: blur(4.6px);
 `;
 
 const Container = styled.div`

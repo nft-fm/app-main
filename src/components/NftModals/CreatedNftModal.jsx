@@ -74,7 +74,7 @@ const BuyNftModal = ({
   const changeNftPrice = () => {
     if (nft.chain != getChain()) {
       Swal.fire({
-        title: `You need to be on ${getChain()} to change the price of this NFT.`,
+        title: `You need to be on ${nft.chain} to change the price of this NFT.`,
       });
     } else {
       Swal.fire({
@@ -211,7 +211,7 @@ const PriceButton = styled.button`
   border: 2px solid ${(props) => props.theme.color.yellow};
   background-color: ${(props) => props.theme.color.box};
   border-radius: ${(props) => props.theme.borderRadius}px;
-  padding: 5px 0;
+  padding: 5px 10px;
 `;
 
 const Loading = styled.img`

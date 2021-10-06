@@ -43,6 +43,7 @@ if (window.location.hostname !== "localhost") console.log = function () {};
 const Switches = () => {
   const location = useLocation();
   const { account, user } = useAccountConsumer();
+
   // const [artists, setArtists] = useState(null);
   // useEffect(() => {
   //   axios
@@ -106,9 +107,7 @@ const Switches = () => {
     <>
       <Switch>
         <Route path="/staking" exact>
-          <Staking 
-          // artists={artists} 
-          />
+          <Staking />
         </Route>
         <Route path="/library" exact>
           <Library />

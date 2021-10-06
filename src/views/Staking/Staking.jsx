@@ -4,7 +4,10 @@ import BaseView from "../../components/Page/BaseView";
 import StakingHolder from "./Components/StakingHolder";
 import axios from "axios";
 import { useStakingConsumer } from "../../contexts/Staking";
+import { AccountContext } from "../../contexts/Account/Account";
+import { useAccountConsumer } from "../../contexts/Account";
 import { claimVinyl } from "../../web3/utils";
+import UseBscSorry from "./Components/UseBscSorry";
 import Swal from "sweetalert2";
 
 const Staking = () => {
@@ -15,30 +18,38 @@ const Staking = () => {
     setNeedToUpdateBalances,
     totalAvailable,
   } = useStakingConsumer();
+  const { currChainId } = useAccountConsumer();
+  const [isBsc, setIsBsc] = useState(false);
 
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const claimRewards = async () => {
-    setLoading(true)
+    setLoading(true);
     claimVinyl(() => {
-      setLoading(false)
+      setLoading(false);
       Swal.fire({
         title: `Successfully claimed ${totalAvailable} VINYL!`,
         timer: 5000,
-      })
+      });
       console.log("claimed!");
       setNeedToUpdateBalances(true);
     }).catch((err) => {
       Swal.fire({
-        title: 'Something went wrong, please try again.'
-      })
-    })
+        title: "Something went wrong, please try again.",
+      });
+    });
   };
+
+  useEffect(() => {
+    if (currChainId === 56 || currChainId === 97) {
+      setIsBsc(true);
+    }
+  }, [currChainId]);
 
   return (
     <BaseView>
+      <StakingHeader>NFT FM Staking</StakingHeader>
       <StakingTopSection>
-        <StakingHeader>NFT FM Staking</StakingHeader>
         <StakingInfo>
           <p>
             Here is where you can stake your VINYL on the NFT FM Artists!
@@ -47,49 +58,55 @@ const Staking = () => {
             <br />
             <br /> By staking on an artist, you are growing your wallet and
             theirs at the same time!
+            <br />
           </p>
         </StakingInfo>
       </StakingTopSection>
-      <StakingUserInfoSection>
-        <Side>
-          <Row>
-            <p>Your Balance:</p>
-            <p>{balance} VINYL</p>
-          </Row>
-          <Row>
-            <p>Currently Staked:</p>
-            <p>{accountTotalStaked} VINYL</p>
-          </Row>
-          <LinkButton
-            href="https://pancakeswap.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Buy VINYL
-          </LinkButton>
-        </Side>
-        <Side>
-          <Row>
-            <p>Your Rewards:</p>
-            <p>{totalAvailable} VINYL</p>
-          </Row>
-          <Row>
-            <p>Total Earned:</p>
-            <p>{totalEarned} VINYL</p>
-          </Row>
-          <ClaimButton
-            available={Number(totalAvailable) > 0}
-            onClick={() => Number(totalAvailable) > 0 && claimRewards()}
-          >
-            Claim Rewards!
-          </ClaimButton>
-        </Side>
-      </StakingUserInfoSection>
-      <StakingHolder />
+      {!isBsc ? (
+        <UseBscSorry />
+      ) : (
+        <>
+          <StakingUserInfoSection>
+            <Side>
+              <Row>
+                <p>Your Balance:</p>
+                <p>{balance} VINYL</p>
+              </Row>
+              <Row>
+                <p>Currently Staked:</p>
+                <p>{accountTotalStaked} VINYL</p>
+              </Row>
+              <LinkButton
+                href="https://pancakeswap.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Buy VINYL
+              </LinkButton>
+            </Side>
+            <Side>
+              <Row>
+                <p>Your Rewards:</p>
+                <p>{totalAvailable} VINYL</p>
+              </Row>
+              <Row>
+                <p>Total Earned:</p>
+                <p>{totalEarned} VINYL</p>
+              </Row>
+              <ClaimButton
+                available={Number(totalAvailable) > 0}
+                onClick={() => Number(totalAvailable) > 0 && claimRewards()}
+              >
+                Claim Rewards!
+              </ClaimButton>
+            </Side>
+          </StakingUserInfoSection>
+          <StakingHolder />
+        </>
+      )}
     </BaseView>
   );
 };
-
 
 const LinkButton = styled.a`
   text-decoration: none;
@@ -187,10 +204,17 @@ const StakingTopSection = styled.div`
   background-color: ${(props) => props.theme.color.box};
   border-radius: ${(props) => props.theme.borderRadius}px;
   border: 1px solid ${(props) => props.theme.color.boxBorder};
-  padding: 0 20px;
-  margin-top: 60px;
+  margin-top: 30px;
+  @media only screen and (max-width: 776px) {
+    width: 90vw;
+  }
 `;
 const StakingHeader = styled.h1`
+  font-family: "Compita";
+  font-weight: 600;
+  color: white;
+  margin-top: 60px;
+  font-size: 1.75rem;
   font-weight: 600;
 `;
 

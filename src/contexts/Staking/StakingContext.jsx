@@ -8,16 +8,18 @@ import {
 import { useAccountConsumer } from "../Account";
 import axios from "axios";
 
-const StakingContext = createContext();
+export const StakingContext = createContext();
 
 export const StakingProvider = ({ children }) => {
-  const { account, user, getUser } = useAccountConsumer();
+  const { account, user, getUser, currChainId } = useAccountConsumer();
   const [needToUpdateBalances, setNeedToUpdateBalances] = useState(false);
   const [balance, setBalance] = useState(0);
   const [accountTotalStaked, setAccountTotalStaked] = useState(0);
   const [totalEarned, setTotalEarned] = useState(0);
   const [totalAvailable, setTotalAvailable] = useState(0);
   const [artists, setArtists] = useState(null);
+
+  let isOnBsc = (currChainId === 56 || currChainId === 97)
 
   const getBalances = () => {
     getBalanceOfVinyl((res) => {
@@ -88,11 +90,11 @@ export const StakingProvider = ({ children }) => {
 
   useEffect(() => {
     console.log(user);
-    if (user && user.stakedArtists.length > 0) {
+    if (user && user.stakedArtists.length > 0 && isOnBsc) {
       orderArtists(user);
       setUpdate(true);
     }
-  }, [user]);
+  }, [user, isOnBsc]);
 
   const [update, setUpdate] = useState(false);
 
@@ -112,9 +114,9 @@ export const StakingProvider = ({ children }) => {
   useEffect(() => {
     if (account || needToUpdateBalances) {
       console.log("UPDATING BALANCES");
-      getBalances();
+      isOnBsc && getBalances();
     }
-  }, [account, needToUpdateBalances]);
+  }, [account, needToUpdateBalances, isOnBsc]);
 
   return (
     <StakingContext.Provider

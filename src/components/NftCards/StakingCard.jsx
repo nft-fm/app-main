@@ -14,12 +14,6 @@ const StakingCard = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isStakedArtist, setIsStakedArtist] = useState(false);
 
-  const updateCardWhenUnstaked = (address) => {
-    console.log('unstaked, should remove blue border now')
-    setIsStakedArtist(false)
-    props.unstakedCompletelyFromArtist(address)
-  }
-
   const hide = () => {
     setIsModalOpen(false);
   };
@@ -46,8 +40,6 @@ const StakingCard = (props) => {
         hide={hide}
         artist={artist}
         setIsStakedArtist={setIsStakedArtist}
-        orderArtists={props.orderArtists}
-        unstakedCompletelyFromArtist={updateCardWhenUnstaked}
       />
       {imageLoaded ? null : <Image src={loading} alt="image" />}
       <Image

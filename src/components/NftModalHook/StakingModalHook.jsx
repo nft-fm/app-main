@@ -17,31 +17,26 @@ import loading from "../../assets/img/loading.gif";
 import axios from "axios";
 
 const StakingModal = (props) => {
-  const { open, hide, artist, setIsStakedArtist, orderArtists, unstakedCompletelyFromArtist } = props;
-  const { account, connect, user, setUser } = useAccountConsumer();
-  const { balance, setNeedToUpdateBalances } = useStakingConsumer();
+  const { open, hide, artist, setIsStakedArtist } = props;
+  const { account, connect, user } = useAccountConsumer();
+  const { balance, setNeedToUpdateBalances, updateOrder } =
+    useStakingConsumer();
   const [isStakeLoading, setIsStakeLoading] = useState(false);
   const [isStakeMaxLoading, setIsStakeMaxLoading] = useState(false);
   const [isUnstakeLoading, setIsUnstakeLoading] = useState(false);
   const [totalStakedToArtist, setTotalStakedToArtist] = useState(0);
   const [userStakedToArtist, setUserStakedToArtist] = useState(0);
-  const [newArtist, setNewArtist] = useState(false)
+  const [newArtist, setNewArtist] = useState(false);
 
-  const closeModal = () => {
-    if (newArtist) {
-      user.stakedArtists.push(artist.address)
-      orderArtists(user)
-  
-    };
-    hide()
-  }
+  const closeModal = (val) => {
+    updateOrder(val);
+    hide();
+  };
 
   const handleUnlockClick = () => {
     connect("injected");
     closeModal();
   };
-
-
 
   //if true is passed in and the res from getUserStakedToArtist === 0, delete artist address from users' schema
   const getArtistBalances = (justUnstaked) => {
@@ -51,14 +46,14 @@ const StakingModal = (props) => {
     getUserStakedToArtist(account, artist.address, (res) => {
       setUserStakedToArtist(res.userStaked);
       console.log("iaeflkgaef", justUnstaked, res.userStaked);
-      if (justUnstaked && Number(res.userStaked) === 0) {
-        axios
-          .post("/api/user/removeStakedArtist", {
-            artist: artist.address,
-            account: account,
-          })
-          .catch((err) => console.log(err));
-      }
+      // if (justUnstaked && Number(res.userStaked) === 0) {
+      //   axios
+      //     .post("/api/user/removeStakedArtist", {
+      //       artist: artist.address,
+      //       account: account,
+      //     })
+      //     .catch((err) => console.log(err));
+      // }
     });
   };
 
@@ -72,10 +67,6 @@ const StakingModal = (props) => {
       getArtistBalances(false);
     }
   }, [open]);
-
-  const stopProp = (e) => {
-    e.stopPropagation();
-  };
 
   const stake = () => {
     swal
@@ -100,8 +91,8 @@ const StakingModal = (props) => {
             setIsStakeLoading(false);
             setNeedToUpdateBalances(true);
             getArtistBalances(false);
-            setNewArtist(true)
-            setIsStakedArtist(true);
+            setNewArtist(true);
+            // setIsStakedArtist(true);
             //save artist address in mongo
             axios
               .post("/api/user/saveStakedArtist", {
@@ -128,7 +119,7 @@ const StakingModal = (props) => {
             setIsStakeMaxLoading(false);
             getArtistBalances(false);
             setNeedToUpdateBalances(true);
-            setIsStakedArtist(true);
+            // setIsStakedArtist(true);
 
             //save artist address in mongo
             axios
@@ -164,20 +155,34 @@ const StakingModal = (props) => {
             getArtistBalances(true);
             setNeedToUpdateBalances(true);
             if (Number(res.value) === Number(userStakedToArtist)) {
-              setIsStakedArtist(false);
-              unstakedCompletelyFromArtist(artist.address)
-              closeModal()
+              axios
+                .post("/api/user/removeStakedArtist", {
+                  artist: artist.address,
+                  account: account,
+                })
+                .then((res) => {
+                  console.log(res);
+                  setIsStakedArtist(false);
+                  closeModal(true);
+                })
+                .catch((err) => console.log(err));
             }
           });
         }
       });
   };
 
+  const stopProp = (e) => {
+    e.stopPropagation();
+  };
   if (!open) return null;
   return (
     <OpaqueFilter
       onClick={(e) =>
-        !isStakeLoading && !isStakeMaxLoading && !isUnstakeLoading && closeModal(e)
+        !isStakeLoading &&
+        !isStakeMaxLoading &&
+        !isUnstakeLoading &&
+        closeModal(e)
       }
     >
       <Container onClick={(e) => stopProp(e)}>

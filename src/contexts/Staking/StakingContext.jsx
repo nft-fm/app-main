@@ -11,13 +11,14 @@ import axios from "axios";
 const StakingContext = createContext();
 
 export const StakingProvider = ({ children }) => {
-  const { account, user } = useAccountConsumer();
+  const { account, user, getUser } = useAccountConsumer();
   const [needToUpdateBalances, setNeedToUpdateBalances] = useState(false);
   const [balance, setBalance] = useState(0);
   const [accountTotalStaked, setAccountTotalStaked] = useState(0);
   const [totalEarned, setTotalEarned] = useState(0);
   const [totalAvailable, setTotalAvailable] = useState(0);
   const [artists, setArtists] = useState(null);
+
   const getBalances = () => {
     getBalanceOfVinyl((res) => {
       setBalance(res.balance);
@@ -35,20 +36,19 @@ export const StakingProvider = ({ children }) => {
   };
 
   function shuffle(array) {
-    var m = array.length, t, i;
-  
+    var m = array.length,
+      t,
+      i;
     // While there remain elements to shuffle…
     while (m) {
-  
       // Pick a remaining element…
       i = Math.floor(Math.random() * m--);
-  
       // And swap it with the current element.
       t = array[m];
       array[m] = array[i];
       array[i] = t;
     }
-  
+
     return array;
   }
 
@@ -64,6 +64,50 @@ export const StakingProvider = ({ children }) => {
   useEffect(() => {
     getArtists();
   }, []);
+
+  const orderArtists = (userInfo) => {
+    console.log("orderingArtists!", userInfo);
+    let totalArtists = artists;
+    if (userInfo.stakedArtists.length === 0) {
+      getArtists();
+    } else {
+      userInfo.stakedArtists.map((item) => {
+        totalArtists.map((artist, index) => {
+          if (item === artist.address) {
+            totalArtists.splice(index, 1);
+            artist.isUserStaked = true;
+
+            totalArtists.unshift(artist);
+          }
+        });
+      });
+      console.log(totalArtists);
+      setArtists(totalArtists);
+    }
+  };
+
+  useEffect(() => {
+    console.log(user);
+    if (user && user.stakedArtists.length > 0) {
+      orderArtists(user);
+      setUpdate(true);
+    }
+  }, [user]);
+
+  const [update, setUpdate] = useState(false);
+
+  const updateOrder = async (val) => {
+    await axios
+      .post(`/api/user/get-account`, { address: account })
+      .then((res) => {
+        console.log("user", res);
+        orderArtists(res.data);
+        setUpdate(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   useEffect(() => {
     if (account || needToUpdateBalances) {
@@ -81,6 +125,8 @@ export const StakingProvider = ({ children }) => {
         totalEarned,
         totalAvailable,
         artists,
+        updateOrder,
+        update,
       }}
     >
       {children}

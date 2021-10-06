@@ -6,8 +6,7 @@ import StakingCard from "../../../components/NftCards/StakingCard";
 import { useStakingConsumer } from "../../../contexts/Staking";
 import { useAccountConsumer } from "../../../contexts/Account";
 const StakingHolder = () => {
-  const { artists } = useStakingConsumer();
-  const { user } = useAccountConsumer();
+  const { artists, update } = useStakingConsumer();
   const [formattedArtists, setFormattedArtists] = useState(null);
 
   const formatNfts = (artistData) => {
@@ -17,8 +16,6 @@ const StakingHolder = () => {
           artist={artist}
           key={index}
           index={index}
-          orderArtists={orderArtists}
-          unstakedCompletelyFromArtist={unstakedCompletelyFromArtist}
         />
       );
     });
@@ -28,55 +25,13 @@ const StakingHolder = () => {
     return formattedNfts;
   };
 
-  const stakedInNewArtist = (artistAddress) => {
-    let totalArtists = artists;
-    totalArtists.map((artist, index) => {
-      if (artist.address === artistAddress) {
-        totalArtists.splice(index, 1);
-        artist.isUserStaked = true;
-        totalArtists.unshift(artist);
-      }
-    });
-
-    setFormattedArtists(formatNfts(totalArtists));
-  };
-
-  const unstakedCompletelyFromArtist = (artistAddress) => {
-    let totalArtists = artists;
-    totalArtists.map((artist, index) => {
-      if (artist.address === artistAddress) {
-        totalArtists.splice(index, 1);
-        totalArtists.push(artist);
-      }
-    });
-
-    setFormattedArtists(formatNfts(totalArtists));
-  };
-
-  const orderArtists = (user) => {
-    let totalArtists = artists;
-    user.stakedArtists.map((item) => {
-      totalArtists.map((artist, index) => {
-        if (item === artist.address) {
-          totalArtists.splice(index, 1);
-          artist.isUserStaked = true;
-
-          totalArtists.unshift(artist);
-        }
-      });
-    });
-    setFormattedArtists(formatNfts(totalArtists));
-  };
+  useEffect(() => {
+    artists && setFormattedArtists(formatNfts(artists));
+  }, [update]);
 
   useEffect(() => {
     artists && setFormattedArtists(formatNfts(artists));
   }, [artists]);
-
-  useEffect(() => {
-    if (user && user.stakedArtists.length > 0) {
-      orderArtists(user);
-    }
-  }, [user]);
 
   return (
     <Container>

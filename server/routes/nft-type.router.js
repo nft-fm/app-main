@@ -267,7 +267,7 @@ router.post("/notDraftAnymore", async (req, res) => {
     );
     addArtistToStake(req.body.address, (msg) => {
       res.status(200).send(msg);
-    }).catch(err => res.status(500).send("Error adding artist to staking pool!"))
+    }).catch(err => res.status(200).send("Error adding artist to staking pool!"))
   } catch (err) {
     res.send(err);
   }

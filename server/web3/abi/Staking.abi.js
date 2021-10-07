@@ -1,4 +1,4 @@
-export default [
+module.exports = [
   {
     inputs: [
       { internalType: "address", name: "_marketingWallet", type: "address" },

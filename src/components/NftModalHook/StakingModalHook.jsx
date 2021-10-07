@@ -29,7 +29,7 @@ const StakingModal = (props) => {
   const [newArtist, setNewArtist] = useState(false);
 
   const closeModal = (val) => {
-    updateOrder(val);
+    updateOrder();
     hide();
   };
 
@@ -60,6 +60,7 @@ const StakingModal = (props) => {
   useEffect(() => {
     if (open) {
       getTotalStakedToArtist(artist.address, (res) => {
+        console.log(res)
         setTotalStakedToArtist(res.totalStaked);
       });
     }

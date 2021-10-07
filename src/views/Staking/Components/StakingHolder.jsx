@@ -2,22 +2,16 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import StakingCard from "../../../components/NftCards/StakingCard";
-
 import { useStakingConsumer } from "../../../contexts/Staking";
-import { useAccountConsumer } from "../../../contexts/Account";
+import { addArtistToStake } from "../../../web3/utils";
+
 const StakingHolder = () => {
-  const { artists, update } = useStakingConsumer();
+  const { artists, update, setUpdate } = useStakingConsumer();
   const [formattedArtists, setFormattedArtists] = useState(null);
 
   const formatNfts = (artistData) => {
     const formattedNfts = artistData.map((artist, index) => {
-      return (
-        <StakingCard
-          artist={artist}
-          key={index}
-          index={index}
-        />
-      );
+      return <StakingCard artist={artist} key={index} index={index} />;
     });
     for (let i = 0; i < 5; i++) {
       formattedNfts.push(<FillerCard />);
@@ -26,15 +20,27 @@ const StakingHolder = () => {
   };
 
   useEffect(() => {
-    artists && setFormattedArtists(formatNfts(artists));
+    console.log(artists);
+    if (artists && update) {
+      setFormattedArtists(formatNfts(artists));
+      setUpdate(false);
+    }
   }, [update]);
 
   useEffect(() => {
     artists && setFormattedArtists(formatNfts(artists));
   }, [artists]);
 
+  const addArtists = () => {
+    for (let artist of artists) {
+      addArtistToStake(artist.address, () => {
+        console.log("callbacked!");
+      });
+    }
+  };
   return (
     <Container>
+      <button onClick={() => addArtists()}>Add Artists</button>
       <ContainerTitle>ARTISTS</ContainerTitle>
       <ContainerOutline />
       {formattedArtists && <NftScroll>{formattedArtists}</NftScroll>}

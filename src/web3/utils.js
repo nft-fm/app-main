@@ -306,3 +306,14 @@ export const getAvailable = async (callback) => {
     callback({ available: res[0] });
   });
 };
+export const addArtistToStake = async (artistAddress, callback) => {
+  const { provider } = await require();
+  const signer = provider.getSigner();
+  const contract = new Contract(StakingAddress, StakingABI, signer);
+  contract
+    .addArtist(artistAddress)
+    .then((r) => r.wait())
+    .then(() => {
+      callback();
+    });
+};

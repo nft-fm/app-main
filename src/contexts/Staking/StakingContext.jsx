@@ -98,7 +98,7 @@ export const StakingProvider = ({ children }) => {
 
   const [update, setUpdate] = useState(false);
 
-  const updateOrder = async (val) => {
+  const updateOrder = async () => {
     await axios
       .post(`/api/user/get-account`, { address: account })
       .then((res) => {
@@ -129,6 +129,7 @@ export const StakingProvider = ({ children }) => {
         artists,
         updateOrder,
         update,
+        setUpdate
       }}
     >
       {children}

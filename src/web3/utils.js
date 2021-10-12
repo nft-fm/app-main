@@ -274,10 +274,14 @@ export const getTotalStakedToArtist = async (address, callback) => {
     callback({ totalStaked: res[0] });
   });
 };
-export const getStakersForArtist = async () => {
-  // const { provider } = await require();
-  // const signer = provider.getSigner();
-  // const contract = new Contract(StakingAddress, StakingABI, signer)
+export const getStakersForArtist = async (address, callback) => {
+  const { provider } = await require();
+  const signer = provider.getSigner();
+  const contract = new Contract(StakingAddress, StakingABI, signer);
+  const allStakers = contract.stakersForArtist(address);
+  Promise.all([allStakers]).then((res) => {
+    callback({ allStakers: res[0] });
+  });
 };
 export const getVinylStaked = async () => {
   // const { provider } = await require();
@@ -316,4 +320,26 @@ export const addArtistToStake = async (artistAddress, callback) => {
     .then(() => {
       callback();
     });
+};
+export const getTotalEarnedByAllStakers = async (callback) => {
+  const { provider } = await require();
+  const signer = provider.getSigner();
+  const contract = new Contract(StakingAddress, StakingABI, signer);
+  const totalEarned = contract
+    .totalEarnedByAllStakers()
+    .then((r) => utils.formatEther(r));
+  Promise.all([totalEarned]).then((res) => {
+    callback({ totalEarned: res[0] });
+  });
+};
+export const getTotalEarnedByArtists = async (callback) => {
+  const { provider } = await require();
+  const signer = provider.getSigner();
+  const contract = new Contract(StakingAddress, StakingABI, signer);
+  const totalEarned = contract
+    .totalEarnedByArtists()
+    .then((r) => utils.formatEther(r));
+  Promise.all([totalEarned]).then((res) => {
+    callback({ totalEarned: res[0] });
+  });
 };

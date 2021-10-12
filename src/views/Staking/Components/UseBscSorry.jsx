@@ -1,24 +1,37 @@
 import React from "react";
 import styled from "styled-components";
 import switchNetwork from "../../../utils/switchNetwork";
+import { useAccountConsumer } from "../../../contexts/Account";
 
 const UseBscSorry = () => {
+  const { currChainId, account, connect } = useAccountConsumer();
   const switchBsc = async () => {
     await switchNetwork("BSC");
     window.location.reload();
   };
   return (
     <StyledLinkContainer>
-      <StyledLink>
-        <BigTitle>Change Network</BigTitle>
-        <SubTitle>
-          you need to be on Binance Smart
-          Chain to access this page 
-        </SubTitle>
-        <ButtonContainer>
-          <Button onClick={switchBsc}>Switch To Binance Smart Chain</Button>
-        </ButtonContainer>
-      </StyledLink>
+      {!account && (currChainId === 56 || currChainId === 97) ? (
+        <StyledLink>
+          <BigTitle>Connect Wallet</BigTitle>
+          <SubTitle>
+            you need to be connected to access staking
+          </SubTitle>
+          <ButtonContainer>
+            <Button onClick={() => connect('injected')}>Connect Your MetaMask</Button>
+          </ButtonContainer>
+        </StyledLink>
+      ) : (
+        <StyledLink>
+          <BigTitle>Change Network</BigTitle>
+          <SubTitle>
+            you need to be on Binance Smart Chain to access staking
+          </SubTitle>
+          <ButtonContainer>
+            <Button onClick={switchBsc}>Switch To Binance Smart Chain</Button>
+          </ButtonContainer>
+        </StyledLink>
+      )}
     </StyledLinkContainer>
   );
 };
@@ -47,8 +60,8 @@ const Button = styled.div`
   &:hover {
     background-size: 12px, 100%;
     font-size: 22px;
-    background-color: rgba(256,256,256,0.2);
-}
+    background-color: rgba(256, 256, 256, 0.2);
+  }
 `;
 
 const StyledLink = styled.div`

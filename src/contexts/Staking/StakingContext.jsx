@@ -4,6 +4,8 @@ import {
   getAccountTotalStaked,
   getTotalEarned,
   getAvailable,
+  getTotalEarnedByAllStakers,
+  getTotalEarnedByArtists,
 } from "../../web3/utils";
 import { useAccountConsumer } from "../Account";
 import axios from "axios";
@@ -18,8 +20,10 @@ export const StakingProvider = ({ children }) => {
   const [totalEarned, setTotalEarned] = useState(0);
   const [totalAvailable, setTotalAvailable] = useState(0);
   const [artists, setArtists] = useState(null);
+  const [totalEarnedByAllStakers, setTotalEarnedByAllStakers] = useState(0);
+  const [totalEarnedByAllArtists, setTotalEarnedByAllArtists] = useState(0);
 
-  let isOnBsc = (currChainId === 56 || currChainId === 97)
+  let isOnBsc = currChainId === 56 || currChainId === 97;
 
   const getBalances = () => {
     getBalanceOfVinyl((res) => {
@@ -34,8 +38,26 @@ export const StakingProvider = ({ children }) => {
     getAvailable((res) => {
       setTotalAvailable(res.available);
     });
+
+    getTotalEarnedByAllStakers((res) => {
+      setTotalEarnedByAllStakers(res.totalEarned);
+    });
+    getTotalEarnedByArtists((res) => {
+      setTotalEarnedByAllArtists(res.totalEarned);
+    });
     setNeedToUpdateBalances(false);
   };
+
+  // useEffect(() => {
+  //   if (window.ethereum) {
+  //     getTotalEarnedByAllStakers((res) => {
+  //       setTotalEarnedByAllStakers(res.totalEarned);
+  //     });
+  //     getTotalEarnedByArtists((res) => {
+  //       setTotalEarnedByAllArtists(res.totalEarned);
+  //     });
+  //   }
+  // }, [window.ethereum]);
 
   function shuffle(array) {
     var m = array.length,
@@ -129,7 +151,9 @@ export const StakingProvider = ({ children }) => {
         artists,
         updateOrder,
         update,
-        setUpdate
+        setUpdate,
+        totalEarnedByAllStakers,
+        totalEarnedByAllArtists,
       }}
     >
       {children}

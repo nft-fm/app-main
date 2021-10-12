@@ -188,8 +188,8 @@ const Providers = ({ children }) => {
   };
 
   useEffect(() => {
-    getChain();
-  }, []);
+    window.ethereum && getChain();
+  }, [window.ethereum]);
 
   return (
     <ThemeProvider theme={theme}>

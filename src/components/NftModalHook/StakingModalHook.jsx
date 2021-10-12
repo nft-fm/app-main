@@ -12,6 +12,7 @@ import {
   getBalanceOfVinyl,
   getTotalStakedToArtist,
   getUserStakedToArtist,
+  getTotalEarned,
 } from "../../web3/utils";
 import loading from "../../assets/img/loading.gif";
 import axios from "axios";
@@ -26,7 +27,7 @@ const StakingModal = (props) => {
   const [isUnstakeLoading, setIsUnstakeLoading] = useState(false);
   const [totalStakedToArtist, setTotalStakedToArtist] = useState(0);
   const [userStakedToArtist, setUserStakedToArtist] = useState(0);
-  const [newArtist, setNewArtist] = useState(false);
+  const [artistTotalEarned, setArtistTotalEarned] = useState(0);
 
   const closeModal = (val) => {
     updateOrder();
@@ -39,33 +40,22 @@ const StakingModal = (props) => {
   };
 
   //if true is passed in and the res from getUserStakedToArtist === 0, delete artist address from users' schema
-  const getArtistBalances = (justUnstaked) => {
+  const getArtistBalances = () => {
     getTotalStakedToArtist(artist.address, (res) => {
       setTotalStakedToArtist(res.totalStaked);
     });
-    getUserStakedToArtist(account, artist.address, (res) => {
-      setUserStakedToArtist(res.userStaked);
-      console.log("iaeflkgaef", justUnstaked, res.userStaked);
-      // if (justUnstaked && Number(res.userStaked) === 0) {
-      //   axios
-      //     .post("/api/user/removeStakedArtist", {
-      //       artist: artist.address,
-      //       account: account,
-      //     })
-      //     .catch((err) => console.log(err));
-      // }
+    getTotalEarned(artist.address, (res) => {
+      setArtistTotalEarned(res.totalEarned);
     });
+    account &&
+      getUserStakedToArtist(account, artist.address, (res) => {
+        setUserStakedToArtist(res.userStaked);
+      });
   };
 
   useEffect(() => {
     if (open) {
-      getTotalStakedToArtist(artist.address, (res) => {
-        console.log(res)
-        setTotalStakedToArtist(res.totalStaked);
-      });
-    }
-    if (account && open) {
-      getArtistBalances(false);
+      getArtistBalances();
     }
   }, [open]);
 
@@ -91,10 +81,7 @@ const StakingModal = (props) => {
           stakeVinyl(res.value, artist.address, () => {
             setIsStakeLoading(false);
             setNeedToUpdateBalances(true);
-            getArtistBalances(false);
-            setNewArtist(true);
-            // setIsStakedArtist(true);
-            //save artist address in mongo
+            getArtistBalances();
             axios
               .post("/api/user/saveStakedArtist", {
                 artist: artist.address,
@@ -118,7 +105,7 @@ const StakingModal = (props) => {
           setIsStakeMaxLoading(true);
           stakeVinyl(balance, artist.address, () => {
             setIsStakeMaxLoading(false);
-            getArtistBalances(false);
+            getArtistBalances();
             setNeedToUpdateBalances(true);
             // setIsStakedArtist(true);
 
@@ -153,7 +140,7 @@ const StakingModal = (props) => {
           unstakeVinyl(artist.address, res.value, () => {
             setIsUnstakeLoading(false);
             //passing 'true' in triggers the getArtistBalances function to delete artist address in mongo if new staked value = 0
-            getArtistBalances(true);
+            getArtistBalances();
             setNeedToUpdateBalances(true);
             if (Number(res.value) === Number(userStakedToArtist)) {
               axios
@@ -208,16 +195,16 @@ const StakingModal = (props) => {
               <StakingAmount>{totalStakedToArtist} VINYL</StakingAmount>
             </StakingRow>
             <StakingRow>
+              <StakingText>Total Earned:</StakingText>
+              <StakingAmount>{artistTotalEarned} VINYL</StakingAmount>
+            </StakingRow>
+            <StakingRow>
               <StakingText>Your Balance:</StakingText>
               <StakingAmount>{balance} VINYL</StakingAmount>
             </StakingRow>
             <StakingRow>
               <StakingText>Currently Staked:</StakingText>
               <StakingAmount>{userStakedToArtist} VINYL</StakingAmount>
-            </StakingRow>
-            <StakingRow>
-              <StakingText>Rewards Available:</StakingText>
-              <StakingAmount>0.00 VINYL</StakingAmount>
             </StakingRow>
             {account ? (
               <ButtonHolder>

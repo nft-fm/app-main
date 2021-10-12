@@ -9,6 +9,8 @@ import { useAccountConsumer } from "../../contexts/Account";
 import { claimVinyl } from "../../web3/utils";
 import UseBscSorry from "./Components/UseBscSorry";
 import Swal from "sweetalert2";
+import loadingGif from "../../assets/img/loading.gif";
+import EthereumHDKey from "ethereumjs-wallet/dist/hdkey";
 
 const Staking = () => {
   const {
@@ -17,8 +19,10 @@ const Staking = () => {
     accountTotalStaked,
     setNeedToUpdateBalances,
     totalAvailable,
+    totalEarnedByAllStakers,
+    totalEarnedByAllArtists,
   } = useStakingConsumer();
-  const { currChainId } = useAccountConsumer();
+  const { currChainId, account } = useAccountConsumer();
   const [isBsc, setIsBsc] = useState(false);
 
   const [loading, setLoading] = useState(false);
@@ -34,6 +38,7 @@ const Staking = () => {
       console.log("claimed!");
       setNeedToUpdateBalances(true);
     }).catch((err) => {
+      setLoading(false);
       Swal.fire({
         title: "Something went wrong, please try again.",
       });
@@ -46,26 +51,60 @@ const Staking = () => {
     }
   }, [currChainId]);
 
+  const addVinyl = async () => {
+    try {
+      const wasAdded = await window.ethereum.request({
+        method: "wallet_watchAsset",
+        params: {
+          type: "ERC20",
+          options: {
+            address: "0xfa800E905Ca7e8CaFB283a6F4c1A91f178602500",
+            symbol: "DTEST3",
+            decimals: 18,
+            // image: '',
+          },
+        },
+      });
+
+      if (wasAdded) {
+        console.log("Added!");
+      } else {
+        console.log("Your loss");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <BaseView>
       <StakingHeader>NFT FM Staking</StakingHeader>
-      <StakingTopSection>
-        <StakingInfo>
-          <p>
-            Here is where you can stake your VINYL on the NFT FM Artists!
-            <br />
-            Artists and Stakers are rewarded a portion of each transaction.
-            <br />
-            <br /> By staking on an artist, you are growing your wallet and
-            theirs at the same time!
-            <br />
-          </p>
-        </StakingInfo>
-      </StakingTopSection>
-      {!isBsc ? (
+      {!isBsc || !account ? (
         <UseBscSorry />
       ) : (
         <>
+          <StakingTopSection>
+            <StakingInfo>
+              <p>
+                Here is where you can stake your VINYL on the NFT FM Artists!
+                <br />
+                Artists and Stakers are rewarded a portion of each transaction.
+                <br />
+                <br /> By staking on an artist, you are growing your wallet and
+                theirs at the same time!
+                <br />
+              </p>
+              <Row>
+                <p>Total Earned By Stakers:</p>
+                <p>{totalEarnedByAllStakers} VINYL</p>
+              </Row>
+              <Row>
+                <p>Total Earned By Artists:</p>
+                <p>{totalEarnedByAllArtists} VINYL</p>
+              </Row>
+              <AddButton onClick={() => addVinyl()}>Add VINYL to Wallet</AddButton>
+            </StakingInfo>
+          </StakingTopSection>
           <StakingUserInfoSection>
             <Side>
               <Row>
@@ -76,13 +115,16 @@ const Staking = () => {
                 <p>Currently Staked:</p>
                 <p>{accountTotalStaked} VINYL</p>
               </Row>
-              <LinkButton
-                href="https://pancakeswap.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Buy VINYL
-              </LinkButton>
+                <LinkButton
+                  href="https://pancakeswap.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Buy VINYL
+                </LinkButton>
+              {/* <ButtonRow>
+                <AddButton onClick={() => addVinyl()}>Add VINYL</AddButton>
+              </ButtonRow> */}
             </Side>
             <Side>
               <Row>
@@ -94,10 +136,16 @@ const Staking = () => {
                 <p>{totalEarned} VINYL</p>
               </Row>
               <ClaimButton
-                available={Number(totalAvailable) > 0}
-                onClick={() => Number(totalAvailable) > 0 && claimRewards()}
+                available={Number(totalAvailable) > 0 && !loading}
+                onClick={() =>
+                  Number(totalAvailable) > 0 && !loading && claimRewards()
+                }
               >
-                Claim Rewards!
+                {!loading ? (
+                  "Claim Rewards!"
+                ) : (
+                  <Loading src={loadingGif} alt="loading gif" />
+                )}
               </ClaimButton>
             </Side>
           </StakingUserInfoSection>
@@ -107,6 +155,38 @@ const Staking = () => {
     </BaseView>
   );
 };
+
+const Loading = styled.img`
+  width: 20px;
+  height: 20px;
+  & path {
+    stroke: ${(props) => props.theme.color.lightgray};
+  }
+`;
+
+const AddButton = styled.button`
+  text-decoration: none;
+  margin: 0px auto 20px;
+  width: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+  display: flex;
+  justify-content: center;
+  border: 1px solid ${(props) => props.theme.color.red};
+  height: 32px;
+  border-radius: 20px;
+  font-family: "Compita";
+  font-weight: 600;
+  background-color: #181818;
+  font-size: ${(props) => props.theme.fontSizes.sm};
+  &:hover {
+    background-color: rgba(256, 256, 256, 0.2);
+  }
+`;
 
 const LinkButton = styled.a`
   text-decoration: none;
@@ -153,6 +233,15 @@ const ClaimButton = styled.button`
   font-size: ${(props) => props.theme.fontSizes.sm};
   &:hover {
     background-color: rgba(256, 256, 256, 0.2);
+  }
+`;
+
+const ButtonRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+  @media only screen and (max-width: 776px) {
+    width: 90%;
   }
 `;
 
@@ -222,5 +311,10 @@ const StakingInfo = styled.section`
   display: flex;
   flex-direction: column;
   text-align: center;
+  align-items: center;
+  padding: 0 10px;
+  & > p {
+    max-width: 85%;
+  }
 `;
 export default Staking;

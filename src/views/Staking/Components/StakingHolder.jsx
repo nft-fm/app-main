@@ -3,12 +3,15 @@ import styled from "styled-components";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import StakingCard from "../../../components/NftCards/StakingCard";
 import { useStakingConsumer } from "../../../contexts/Staking";
+import { useAccountConsumer } from "../../../contexts/Account";
 import { addArtistToStake } from "../../../web3/utils";
+import Swal from "sweetalert2";
 
 const StakingHolder = () => {
   const { artists, update, setUpdate } = useStakingConsumer();
+  const { account } = useAccountConsumer();
   const [formattedArtists, setFormattedArtists] = useState(null);
-
+  console.log(account);
   const formatNfts = (artistData) => {
     const formattedNfts = artistData.map((artist, index) => {
       return <StakingCard artist={artist} key={index} index={index} />;
@@ -32,17 +35,28 @@ const StakingHolder = () => {
   }, [artists]);
 
   const addArtists = () => {
-    for (let artist of artists) {
-      addArtistToStake(artist.address, () => {
-        console.log("callbacked!");
-      });
-    }
+    Swal.fire({
+      title: "This will add all artists below to the staking contract.",
+      text: "Are you sure you want to do this?",
+      showCancelButton: true,
+      confirmButtonText: "Proceed",
+    }).then((res) => {
+      if (res.isConfirmed) {
+        for (let artist of artists) {
+          addArtistToStake(artist.address, () => {
+            console.log("callbacked!");
+          });
+        }
+      }
+    });
   };
   return (
     <Container>
-      <button onClick={() => addArtists()}>Add Artists</button>
       <ContainerTitle>ARTISTS</ContainerTitle>
       <ContainerOutline />
+      {account === "0xc894929862b974a616D35953c8C3E479A38D339a" && (
+        <button onClick={() => addArtists()}>Add Artists</button>
+      )}
       {formattedArtists && <NftScroll>{formattedArtists}</NftScroll>}
     </Container>
   );

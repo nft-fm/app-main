@@ -117,7 +117,7 @@ const Staking = () => {
                 <p>{Math.round(accountTotalStaked * 100) / 100} VINYL</p>
               </Row>
               <LinkButton
-                href="https://pancakeswap.com"
+                href="https://pancakeswap.finance/swap?outputCurrency=0x5A2Df2e3D11dcDb645fbA2008c06fdBb114E805e"
                 target="_blank"
                 rel="noopener noreferrer"
               >

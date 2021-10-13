@@ -4,7 +4,7 @@ import axios from "axios";
 import isMobile from "../../utils/isMobile";
 import Swal from "sweetalert2";
 
-const AccountContext = createContext();
+export const AccountContext = createContext();
 
 // const NoChainModal = ({ }) => {
 //   return (

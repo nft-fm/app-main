@@ -35,6 +35,10 @@ const UserSchema = new Schema({
   isLegacyArtist: {
     type: Boolean,
   },
+  hasMinted: {
+    type: Boolean,
+    default: false,
+  },
   confirmedFeeIncrease: {
     type: Boolean,
   },
@@ -65,6 +69,7 @@ const UserSchema = new Schema({
     },
   ],
   socials: [],
+  stakedArtists: [],
 });
 
 module.exports = User = mongoose.model("user", UserSchema);

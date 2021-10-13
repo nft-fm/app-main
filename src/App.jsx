@@ -11,6 +11,7 @@ import { ThemeProvider } from "styled-components";
 import { UseWalletProvider } from "use-wallet";
 import styled from "styled-components";
 import ModalsProvider from "./contexts/Modals";
+import Staking from "./views/Staking";
 import Listen from "./views/Home";
 import Library from "./views/Library";
 import Discover from "./views/Discover";
@@ -25,6 +26,7 @@ import Redeem from "./views/Redeem";
 import TermsOfService from "./views/FooterLinks/TermsOfService";
 import PrivacyPolicy from "./views/FooterLinks/PrivacyPolicy";
 import { AccountProvider, useAccountConsumer } from "./contexts/Account";
+import { StakingProvider } from "./contexts/Staking";
 import { PlaylistProvider } from "./contexts/Playlist/Playlist";
 import swal from "sweetalert2";
 import preloadImage from "./utils/preloadImg";
@@ -42,6 +44,14 @@ if (window.location.hostname !== "localhost") console.log = function () {};
 const Switches = () => {
   const location = useLocation();
   const { account, user, noEmail } = useAccountConsumer();
+
+  // const [artists, setArtists] = useState(null);
+  // useEffect(() => {
+  //   axios
+  //     .post("/api/user/getArtists")
+  //     .then((res) => setArtists(res.data))
+  //     .catch((err) => console.log(err));
+  // }, []);
 
   useEffect(() => {
     axios
@@ -97,6 +107,9 @@ const Switches = () => {
   return (
     <>
       <Switch>
+        <Route path="/staking" exact>
+          <Staking />
+        </Route>
         <Route path="/library" exact>
           <Library />
         </Route>
@@ -177,8 +190,8 @@ const Providers = ({ children }) => {
   };
 
   useEffect(() => {
-    getChain();
-  }, []);
+    window.ethereum && getChain();
+  }, [window.ethereum]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -191,9 +204,11 @@ const Providers = ({ children }) => {
         }}
       >
         <AccountProvider>
-          <PlaylistProvider>
-            <ModalsProvider>{children}</ModalsProvider>
-          </PlaylistProvider>
+          <StakingProvider>
+            <PlaylistProvider>
+              <ModalsProvider>{children}</ModalsProvider>
+            </PlaylistProvider>
+          </StakingProvider>
         </AccountProvider>
       </UseWalletProvider>
     </ThemeProvider>

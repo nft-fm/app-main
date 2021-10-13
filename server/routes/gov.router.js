@@ -18,8 +18,10 @@ const web3 = new Web3(new Web3.providers.HttpProvider(
 
 router.get("/get-current-points/:id", async (req, res) => {
   try {
-    const batch = await getBatchNumber()
-    const suggestion = await Suggestion.find({ address: req.body.address, batch })
+    // const batch = await getBatchNumber()
+    const suggestion = await Suggestion.find({ address: req.body.address, 
+      // batch
+     })
 
     res.send(suggestion.totalVotes ? suggestion.totalVotes: 0)
   } catch (error) {
@@ -47,15 +49,15 @@ router.post('/suggestion', async (req, res) => {
       res.status(401).send("signature mismatch");
       return
     }
-    const batch = await getBatchNumber()
+    // const batch = await getBatchNumber()
     let user = await User.findOne({ address });
-    const alreadyMadeSuggestion = await Suggestion.findOne({
-      batch,
-      userId: user._id
-    });
-    if (alreadyMadeSuggestion) {
-      return res.status(403).send("You may only submit once per suggestion cycle.")
-    }
+    // const alreadyMadeSuggestion = await Suggestion.findOne({
+    //   // batch,
+    //   userId: user._id
+    // });
+    // if (alreadyMadeSuggestion) {
+    //   return res.status(403).send("You may only submit once per suggestion cycle.")
+    // }
     // let votes = new BigNumber(await contract.methods.balanceOf(req.body.address).call()).dividedBy(10 ** 18).toFixed(18)
 
     // if (parseFloat(votes) === 0) {
@@ -77,9 +79,11 @@ router.post('/get-suggestions', async (req, res) => {
   try {
     console.log("get suggestions!\naddress: ", req.body.address, "\npage: ", req.body.page, "\nsort: ", req.body.sort, "\n");
     const sort = req.body.sort === "new" ? { timestamp: -1 } : { totalVotes: -1 };
-    const batch = await getBatchNumber()
-    console.log(`batch number: ${batch}`)
-    let initialSuggestions = await Suggestion.find({ batch })
+    // const batch = await getBatchNumber()
+    // console.log(`batch number: ${batch}`)
+    let initialSuggestions = await Suggestion.find({ 
+      // batch
+     })
       .sort(sort)
       .skip(req.body.page * 6)
       .limit(6);
@@ -99,7 +103,9 @@ router.post('/get-suggestions', async (req, res) => {
       // console.log("\n\n\nuser: ", user, suggestion)
       suggestions.push({ totalVotes, _id, userId, message, address, picture, pictureColor, nickname, upDooted, downDooted, timestamp })
     }
-    let totalPages = await Suggestion.countDocuments({ batch }) / 6;
+    let totalPages = await Suggestion.countDocuments({ 
+      // batch 
+    }) / 6;
     if (!totalPages) {
 
       totalPages = 1

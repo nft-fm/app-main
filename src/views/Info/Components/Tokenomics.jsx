@@ -7,12 +7,12 @@ const Tokenomics = () => {
     <>
       <LaunchContainer>
         <ContainerTitle>TOKENOMICS</ContainerTitle>
-        <NftContainerRight
+        {/* <NftContainerRight
           href="https://drive.google.com/file/d/1BHmrjYef0FBp4Q0I-juXVfllviT0Paj9/view?usp=sharing"
           target="_blank"
         >
           CONTRACT AUDIT
-        </NftContainerRight>
+        </NftContainerRight> */}
         <ContainerOutline />
         <LaunchFeaturesContainer>
           <LaunchFeaturesBox>

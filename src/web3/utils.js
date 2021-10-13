@@ -8,6 +8,7 @@ import {
   // Auction
   BSC_NftAddress,
   BSC_FlatPriceSale,
+  StakingAddress,
 } from "./constants";
 import Swal from "sweetalert2";
 import NFTTokenABI from "./abi/NFTToken.abi.js";
@@ -15,6 +16,7 @@ import FlatPriceSaleABI from "./abi/FlatPriceSale.abi.js";
 import VinylABI from "./abi/Vinyl.abi";
 import TokenSaleABI from "./abi/TokenSale.abi.js";
 import AirdropABI from "./abi/Airdrop.abi.js";
+import StakingABI from "./abi/Staking.abi.js";
 // import BigNumber from "bignumber.js";
 
 const chooseNftAddress = async () => {
@@ -200,4 +202,154 @@ export const setNewPrice = async (nftId, price, callback) => {
     .setSetPrice(nftId, utils.parseUnits(price))
     .then((r) => r.wait())
     .then(() => callback());
+};
+export const stakeVinyl = async (amount, address, callback) => {
+  const { provider } = await require();
+  const signer = provider.getSigner();
+  const contract = new Contract(StakingAddress, StakingABI, signer);
+  contract
+    .stake(address, utils.parseEther(String(amount)))
+    .then((r) => r.wait())
+    .then(() => {
+      callback();
+    });
+};
+export const claimVinyl = async (callback) => {
+  const { provider } = await require();
+  const signer = provider.getSigner();
+  const contract = new Contract(StakingAddress, StakingABI, signer);
+  contract
+    .claim()
+    .then((r) => r.wait())
+    .then(() => {
+      callback();
+    });
+};
+export const unstakeVinyl = async (artistAddress, amount, callback) => {
+  const { provider } = await require();
+  const signer = provider.getSigner();
+  const contract = new Contract(StakingAddress, StakingABI, signer);
+  contract
+    .unstake(artistAddress, utils.parseEther(String(amount)))
+    .then((r) => r.wait())
+    .then(() => {
+      callback();
+    });
+};
+export const getBalanceOfVinyl = async (callback) => {
+  const { provider, walletAddress } = await require();
+  const signer = provider.getSigner();
+  const contract = new Contract(StakingAddress, StakingABI, signer);
+  const VINYLBalance = contract
+    .balanceOf(walletAddress)
+    .then((r) => utils.formatEther(r));
+  Promise.all([VINYLBalance]).then((res) => {
+    callback({ balance: res[0] });
+  });
+};
+export const getAccountTotalStaked = async (callback) => {
+  const { provider, walletAddress } = await require();
+  const signer = provider.getSigner();
+  const contract = new Contract(StakingAddress, StakingABI, signer);
+  const totalStaked = contract
+    .accountTotalStaked(walletAddress)
+    .then((r) => utils.formatEther(r));
+  Promise.all([totalStaked]).then((res) => {
+    callback({ totalStaked: res[0] });
+  });
+};
+export const getUserStakedToArtist = async (
+  userAddress,
+  artistAddress,
+  callback
+) => {
+  const { provider } = await require();
+  const signer = provider.getSigner();
+  const contract = new Contract(StakingAddress, StakingABI, signer);
+  const totalStaked = contract
+    .staked(userAddress, artistAddress)
+    .then((r) => utils.formatEther(r));
+  Promise.all([totalStaked]).then((res) => {
+    callback({ userStaked: res[0] });
+  });
+};
+export const getTotalStakedToArtist = async (address, callback) => {
+  const { provider } = await require();
+  const signer = provider.getSigner();
+  const contract = new Contract(StakingAddress, StakingABI, signer);
+  const totalStaked = contract
+    .totalStakedToArtist(address)
+    .then((r) => utils.formatEther(r));
+  Promise.all([totalStaked]).then((res) => {
+    callback({ totalStaked: res[0] });
+  });
+};
+export const getStakersForArtist = async (address, callback) => {
+  const { provider } = await require();
+  const signer = provider.getSigner();
+  const contract = new Contract(StakingAddress, StakingABI, signer);
+  const allStakers = contract.stakersForArtist(address);
+  Promise.all([allStakers]).then((res) => {
+    callback({ allStakers: res[0] });
+  });
+};
+export const getVinylStaked = async () => {
+  // const { provider } = await require();
+  // const signer = provider.getSigner();
+  // const contract = new Contract(StakingAddress, StakingABI, signer)
+};
+export const getTotalEarned = async (address, callback) => {
+  const { provider } = await require();
+  const signer = provider.getSigner();
+  const contract = new Contract(StakingAddress, StakingABI, signer);
+  const totalEarned = contract
+    .totalEarned(address)
+    .then((r) => utils.formatEther(r));
+  Promise.all([totalEarned]).then((res) => {
+    callback({ totalEarned: res[0] });
+  });
+};
+export const getAvailable = async (callback) => {
+  const { provider, walletAddress } = await require();
+  const signer = provider.getSigner();
+  const contract = new Contract(StakingAddress, StakingABI, signer);
+  const available = contract
+    .available(walletAddress)
+    .then((r) => utils.formatEther(r));
+  Promise.all([available]).then((res) => {
+    callback({ available: res[0] });
+  });
+};
+export const addArtistToStake = async (artistAddress, callback) => {
+  const { provider } = await require();
+  const signer = provider.getSigner();
+  const contract = new Contract(StakingAddress, StakingABI, signer);
+  contract
+    .addArtist(artistAddress)
+    .then((r) => r.wait())
+    .then(() => {
+      callback();
+    });
+};
+export const getTotalEarnedByAllStakers = async (callback) => {
+  const { provider } = await require();
+  const signer = provider.getSigner();
+  const contract = new Contract(StakingAddress, StakingABI, signer);
+  const totalEarned = contract
+    .totalEarnedByAllStakers()
+    .then((r) => utils.formatEther(r));
+  Promise.all([totalEarned]).then((res) => {
+    callback({ totalEarned: res[0] });
+  });
+};
+export const getTotalEarnedByArtists = async (callback) => {
+  const { provider } = await require();
+  const signer = provider.getSigner();
+  const contract = new Contract(StakingAddress, StakingABI, signer);
+  const totalEarned = contract
+    .totalEarnedByArtists()
+    .then((r) => utils.formatEther(r));
+  Promise.all([totalEarned]).then((res) => {
+    callback({ totalEarned: res[0] });
+  });
 };

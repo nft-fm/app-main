@@ -11,7 +11,7 @@ const {
   TEST_BSC_FlatPriceSale,
   MAIN_BSC_FlatPriceSale,
 } = require("../web3/constants");
-const { sign, findLikes } = require("../web3/server-utils");
+const { sign, findLikes, addArtistToStake } = require("../web3/server-utils");
 const { listenForMintEth, listenForMintBsc } = require("../web3/mint-listener");
 const { trackNftPurchase, trackNftView } = require("../modules/mixpanel");
 
@@ -265,7 +265,9 @@ router.post("/notDraftAnymore", async (req, res) => {
       { address: req.body.address },
       { hasMinted: true }
     );
-    res.status(200).send("Success!");
+    addArtistToStake(req.body.address, (msg) => {
+      res.status(200).send(msg);
+    }).catch(err => res.status(200).send("Error adding artist to staking pool!"))
   } catch (err) {
     res.send(err);
   }

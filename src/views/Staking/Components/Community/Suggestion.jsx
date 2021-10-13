@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 // import swal from "sweetalert2";
 import { useWallet } from "use-wallet";
-import { require, getVinylBalance } from "../../web3/utils";
+import { require, getVinylBalance } from "../../../../web3/utils";
 
 const Community = ({ fetchSuggestions, suggestions }) => {
   // const [exploitPrevent, setExploitPrevent] = useState(false);

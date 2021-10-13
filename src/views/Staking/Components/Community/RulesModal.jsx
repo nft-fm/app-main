@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import logo from "../../assets/img/logos/logo.png";
-import Modalmd from "../../components/Modal";
-import ModalTitle from "../../components/ModalTitle";
+import logo from "../../../../assets/img/logos/logo.png";
+import Modalmd from "../../../../components/Modal";
+import ModalTitle from "../../../../components/ModalTitle";
 
 const BetRulesModal = () => {
   return (

@@ -571,4 +571,54 @@ router.post("/signNewFee", async (req, res) => {
   }
 });
 
+router.post("/getArtists", async (req, res) => {
+  try {
+    const artists = await User.find({
+      isArtist: true,
+      hasMinted: true,
+      profilePic: { $exists: true },
+      username: { $ne: "NFT FM" },
+    });
+
+    res.send(artists);
+  } catch (err) {}
+});
+
+router.post("/saveStakedArtist", async (req, res) => {
+  try {
+    const user = await User.findOne({ address: req.body.account });
+
+    //checks if artist is already in array, if not pushes artist in
+    if (user) {
+      user.stakedArtists.indexOf(req.body.artist) === -1
+        ? user.stakedArtists.push(req.body.artist)
+        : res.status(200).send("artist already saved!");
+      await user.save();
+      res.status(200).json(user);
+    } else {
+      res.status(404);
+    }
+  } catch (err) {
+    res.status(500);
+  }
+});
+
+router.post("/removeStakedArtist", async (req, res) => {
+  try {
+    const user = await User.findOneAndUpdate(
+      { address: req.body.account },
+      { $pull: { stakedArtists: req.body.artist } },
+      { new: true }
+    );
+
+    if (user) {
+      res.status(200).json(user);
+    } else {
+      res.status(404);
+    }
+  } catch (err) {
+    res.status(500);
+  }
+});
+
 module.exports = router;

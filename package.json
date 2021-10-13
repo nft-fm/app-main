@@ -50,6 +50,7 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-paginate": "^6.5.0",
     "react-player": "^2.9.0",
+    "react-responsive-carousel": "^3.2.21",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-share": "^4.4.0",

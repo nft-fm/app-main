@@ -14,10 +14,13 @@ const {
   MAIN_VinylAddress,
   TEST_BSC_NFTToken,
   MAIN_BSC_NFTToken,
+  TEST_StakingAddress,
+  MAIN_StakingAddress,
 } = require("./constants");
 const FlatPriceSaleABI = require("./abi/FlatPriceSale.abi");
 const NFTTokenABI = require("./abi/NFTToken.abi");
 const VinylABI = require("./abi/Vinyl.abi");
+const StakingABI = require("./abi/Staking.abi");
 
 const sign = (types, values) => {
   let data = utils.defaultAbiCoder.encode(types, values);
@@ -166,6 +169,35 @@ const getVinylOwners = async (addresses) => {
   return newVariable;
 };
 
+const addArtistToStake = async (artistAddress, callback) => {
+  const PROVIDER_URL = process.env.REACT_APP_IS_MAINNET
+    ? process.env.BSC_PROVIDER_URL
+    : process.env.BSCTEST_PROVIDER_URL;
+  const STAKING_ADDRESS = process.env.REACT_APP_IS_MAINNET
+    ? MAIN_StakingAddress
+    : TEST_StakingAddress;
+  let provider = new providers.WebSocketProvider(PROVIDER_URL);
+  let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
+  const contract = new Contract(
+    STAKING_ADDRESS,
+    StakingABI,
+    walletWithProvider
+  );
+  contract.isArtist(artistAddress).then((r) => {
+    console.log(r);
+    if (!r) {
+      contract
+        .addArtist(artistAddress)
+        .then((r) => r.wait())
+        .then(() => {
+          callback("Artist added");
+        });
+    } else {
+      callback("Artist already added");
+    }
+  });
+};
+
 module.exports = {
   sign,
   // getSetSale,
@@ -174,4 +206,5 @@ module.exports = {
   getUserNftsBSC,
   getVinylOwners,
   getVinylBalance,
+  addArtistToStake,
 };

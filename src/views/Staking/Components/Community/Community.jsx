@@ -4,13 +4,13 @@ import ReactPaginate from "react-paginate";
 import styled from "styled-components";
 import swal from "sweetalert2";
 import { useWallet } from "use-wallet";
-import useModal from "../../hooks/useModal";
-import isMobile from "../../utils/isMobile";
-import { require, getVinylBalance } from "../../web3/utils";
-import { BaseView } from "../../components/Page/BaseView";
+import useModal from "../../../../hooks/useModal";
+import isMobile from "../../../../utils/isMobile";
+import { require, getVinylBalance } from "../../../../web3/utils";
+import { BaseView } from "../../../../components/Page/BaseView";
 import RulesModal from "./RulesModal";
 import Suggestion from "./Suggestion";
-import { errorIcon, imageWidth, imageHeight } from "../../../utils/swalImages";
+import { errorIcon, imageWidth, imageHeight } from "../../../../utils/swalImages";
 
 const Community = () => {
   const [suggestions, setSuggestions] = useState([]);
@@ -103,7 +103,6 @@ const Community = () => {
 
   if (account && !hasVinyl) {
     return (
-      <BaseView>
         <ApproveContainer>
           <ApproveText>
             No $VINYL detected in your account ending in:{" "}
@@ -113,12 +112,10 @@ const Community = () => {
             I own $VINYL, Connect Me!
           </ApproveButton> */}
         </ApproveContainer>
-      </BaseView>
     );
   }
   if (!account || !hasVinyl) {
     return (
-      <BaseView>
         <ApproveContainer>
           <ApproveText>
             NFT FM Community is only available to $VINYL Holders.
@@ -127,11 +124,9 @@ const Community = () => {
             I own $VINYL, Connect Me!
           </ApproveButton>
         </ApproveContainer>
-      </BaseView>
     );
   }
   return (
-    <BaseView>
       <Container>
         <GovContainer>
           <ComicTitle>
@@ -240,7 +235,6 @@ const Community = () => {
           </Pagination>
         </GovContainer>
       </Container>
-    </BaseView>
   );
 };
 

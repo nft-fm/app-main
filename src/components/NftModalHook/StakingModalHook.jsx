@@ -192,19 +192,27 @@ const StakingModal = (props) => {
             </Artist>
             <StakingRow>
               <StakingText>Total Staked (all users):</StakingText>
-              <StakingAmount>{totalStakedToArtist} VINYL</StakingAmount>
+              <StakingAmount>
+                {Math.round(totalStakedToArtist * 100) / 100} VINYL
+              </StakingAmount>
             </StakingRow>
             <StakingRow>
               <StakingText>Total Earned:</StakingText>
-              <StakingAmount>{artistTotalEarned} VINYL</StakingAmount>
+              <StakingAmount>
+                {Math.round(artistTotalEarned * 100) / 100} VINYL
+              </StakingAmount>
             </StakingRow>
             <StakingRow>
               <StakingText>Your Balance:</StakingText>
-              <StakingAmount>{balance} VINYL</StakingAmount>
+              <StakingAmount>
+                {Math.round(balance * 100) / 100} VINYL
+              </StakingAmount>
             </StakingRow>
             <StakingRow>
               <StakingText>Currently Staked:</StakingText>
-              <StakingAmount>{userStakedToArtist} VINYL</StakingAmount>
+              <StakingAmount>
+                {Math.round(userStakedToArtist * 100) / 100} VINYL
+              </StakingAmount>
             </StakingRow>
             {account ? (
               <ButtonHolder>

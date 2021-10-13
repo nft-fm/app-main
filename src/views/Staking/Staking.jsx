@@ -10,7 +10,8 @@ import { claimVinyl } from "../../web3/utils";
 import UseBscSorry from "./Components/UseBscSorry";
 import Swal from "sweetalert2";
 import loadingGif from "../../assets/img/loading.gif";
-import EthereumHDKey from "ethereumjs-wallet/dist/hdkey";
+import { StakingAddress } from "../../web3/constants";
+import Community from "./Components/Community";
 
 const Staking = () => {
   const {
@@ -21,6 +22,7 @@ const Staking = () => {
     totalAvailable,
     totalEarnedByAllStakers,
     totalEarnedByAllArtists,
+    artists,
   } = useStakingConsumer();
   const { currChainId, account } = useAccountConsumer();
   const [isBsc, setIsBsc] = useState(false);
@@ -58,19 +60,13 @@ const Staking = () => {
         params: {
           type: "ERC20",
           options: {
-            address: "0xfa800E905Ca7e8CaFB283a6F4c1A91f178602500",
-            symbol: "DTEST3",
+            address: StakingAddress,
+            symbol: "DTEST3", //TODO CHANGE THIS
             decimals: 18,
             // image: '',
           },
         },
       });
-
-      if (wasAdded) {
-        console.log("Added!");
-      } else {
-        console.log("Your loss");
-      }
     } catch (err) {
       console.log(err);
     }
@@ -96,32 +92,34 @@ const Staking = () => {
               </p>
               <Row>
                 <p>Total Earned By Stakers:</p>
-                <p>{totalEarnedByAllStakers} VINYL</p>
+                <p>{Math.round(totalEarnedByAllStakers * 100) / 100} VINYL</p>
               </Row>
               <Row>
                 <p>Total Earned By Artists:</p>
-                <p>{totalEarnedByAllArtists} VINYL</p>
+                <p>{Math.round(totalEarnedByAllArtists * 100) / 100} VINYL</p>
               </Row>
-              <AddButton onClick={() => addVinyl()}>Add VINYL to Wallet</AddButton>
+              <AddButton onClick={() => addVinyl()}>
+                Add VINYL to Wallet
+              </AddButton>
             </StakingInfo>
           </StakingTopSection>
           <StakingUserInfoSection>
             <Side>
               <Row>
                 <p>Your Balance:</p>
-                <p>{balance} VINYL</p>
+                <p>{Math.round(balance * 100) / 100} VINYL</p>
               </Row>
               <Row>
                 <p>Currently Staked:</p>
-                <p>{accountTotalStaked} VINYL</p>
+                <p>{Math.round(accountTotalStaked * 100) / 100} VINYL</p>
               </Row>
-                <LinkButton
-                  href="https://pancakeswap.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Buy VINYL
-                </LinkButton>
+              <LinkButton
+                href="https://pancakeswap.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Buy VINYL
+              </LinkButton>
               {/* <ButtonRow>
                 <AddButton onClick={() => addVinyl()}>Add VINYL</AddButton>
               </ButtonRow> */}
@@ -129,11 +127,11 @@ const Staking = () => {
             <Side>
               <Row>
                 <p>Your Rewards:</p>
-                <p>{totalAvailable} VINYL</p>
+                <p>{Math.round(totalAvailable * 100) / 100} VINYL</p>
               </Row>
               <Row>
                 <p>Total Earned:</p>
-                <p>{totalEarned} VINYL</p>
+                <p>{Math.round(totalEarned * 100) / 100} VINYL</p>
               </Row>
               <ClaimButton
                 available={Number(totalAvailable) > 0 && !loading}
@@ -150,6 +148,7 @@ const Staking = () => {
             </Side>
           </StakingUserInfoSection>
           <StakingHolder />
+          {/* {artists.length > 0 && <Community balance={balance} />} */}
         </>
       )}
     </BaseView>

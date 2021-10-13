@@ -31,19 +31,21 @@ const Staking = () => {
 
   const claimRewards = async () => {
     setLoading(true);
-    claimVinyl(() => {
+    claimVinyl((err) => {
       setLoading(false);
-      Swal.fire({
-        title: `Successfully claimed ${totalAvailable} VINYL!`,
-        timer: 5000,
-      });
-      console.log("claimed!");
-      setNeedToUpdateBalances(true);
-    }).catch((err) => {
-      setLoading(false);
-      Swal.fire({
-        title: "Something went wrong, please try again.",
-      });
+      if (err) {
+        Swal.fire({
+          title: `Something went wrong, please refresh and try again.`,
+          timer: 5000,
+        });
+      } else {
+        Swal.fire({
+          title: `Successfully claimed ${totalAvailable} VINYL!`,
+          timer: 5000,
+        });
+        console.log("claimed!");
+        setNeedToUpdateBalances(true);
+      }
     });
   };
 

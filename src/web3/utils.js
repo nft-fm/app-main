@@ -212,7 +212,10 @@ export const stakeVinyl = async (amount, address, callback) => {
     .then((r) => r.wait())
     .then(() => {
       callback();
-    });
+    })
+    .catch(err => {
+      callback(err)
+    })
 };
 export const claimVinyl = async (callback) => {
   const { provider } = await require();
@@ -223,7 +226,10 @@ export const claimVinyl = async (callback) => {
     .then((r) => r.wait())
     .then(() => {
       callback();
-    });
+    })
+    .catch(err => {
+      callback(err)
+    })
 };
 export const unstakeVinyl = async (artistAddress, amount, callback) => {
   const { provider } = await require();
@@ -234,7 +240,10 @@ export const unstakeVinyl = async (artistAddress, amount, callback) => {
     .then((r) => r.wait())
     .then(() => {
       callback();
-    });
+    })
+    .catch(err => {
+      callback(err)
+    })
 };
 export const getBalanceOfVinyl = async (callback) => {
   const { provider, walletAddress } = await require();

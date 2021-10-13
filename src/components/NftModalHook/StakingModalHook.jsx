@@ -78,16 +78,23 @@ const StakingModal = (props) => {
       .then((res) => {
         if (res.isConfirmed) {
           setIsStakeLoading(true);
-          stakeVinyl(res.value, artist.address, () => {
-            setIsStakeLoading(false);
-            setNeedToUpdateBalances(true);
-            getArtistBalances();
-            axios
-              .post("/api/user/saveStakedArtist", {
-                artist: artist.address,
-                account: account,
-              })
-              .catch((err) => console.log(err));
+          stakeVinyl(res.value, artist.address, (err) => {
+            if (err) {
+              setIsStakeLoading(false);
+              swal.fire({
+                title: "Error when staking, please refresh and try again.",
+              });
+            } else {
+              setIsStakeLoading(false);
+              setNeedToUpdateBalances(true);
+              getArtistBalances();
+              axios
+                .post("/api/user/saveStakedArtist", {
+                  artist: artist.address,
+                  account: account,
+                })
+                .catch((err) => console.log(err));
+            }
           });
         }
       });
@@ -103,19 +110,24 @@ const StakingModal = (props) => {
       .then((res) => {
         if (res.isConfirmed) {
           setIsStakeMaxLoading(true);
-          stakeVinyl(balance, artist.address, () => {
-            setIsStakeMaxLoading(false);
-            getArtistBalances();
-            setNeedToUpdateBalances(true);
-            // setIsStakedArtist(true);
+          stakeVinyl(balance, artist.address, (err) => {
+            if (err) {
+              setIsStakeMaxLoading(false);
+              swal.fire({
+                title: "Error when staking, please refresh and try again.",
+              });
+            } else {
+              setIsStakeMaxLoading(false);
+              getArtistBalances();
+              setNeedToUpdateBalances(true);
 
-            //save artist address in mongo
-            axios
-              .post("/api/user/saveStakedArtist", {
-                artist: artist.address,
-                account: account,
-              })
-              .catch((err) => console.log(err));
+              axios
+                .post("/api/user/saveStakedArtist", {
+                  artist: artist.address,
+                  account: account,
+                })
+                .catch((err) => console.log(err));
+            }
           });
         }
       });
@@ -137,23 +149,30 @@ const StakingModal = (props) => {
       .then((res) => {
         if (res.isConfirmed) {
           setIsUnstakeLoading(true);
-          unstakeVinyl(artist.address, res.value, () => {
-            setIsUnstakeLoading(false);
-            //passing 'true' in triggers the getArtistBalances function to delete artist address in mongo if new staked value = 0
-            getArtistBalances();
-            setNeedToUpdateBalances(true);
-            if (Number(res.value) === Number(userStakedToArtist)) {
-              axios
-                .post("/api/user/removeStakedArtist", {
-                  artist: artist.address,
-                  account: account,
-                })
-                .then((res) => {
-                  console.log(res);
-                  setIsStakedArtist(false);
-                  closeModal(true);
-                })
-                .catch((err) => console.log(err));
+          unstakeVinyl(artist.address, res.value, (err) => {
+            if (err) {
+              setIsUnstakeLoading(false);
+              swal.fire({
+                title: "Error when staking, please refresh and try again.",
+              });
+            } else {
+              setIsUnstakeLoading(false);
+              //passing 'true' in triggers the getArtistBalances function to delete artist address in mongo if new staked value = 0
+              getArtistBalances();
+              setNeedToUpdateBalances(true);
+              if (Number(res.value) === Number(userStakedToArtist)) {
+                axios
+                  .post("/api/user/removeStakedArtist", {
+                    artist: artist.address,
+                    account: account,
+                  })
+                  .then((res) => {
+                    console.log(res);
+                    setIsStakedArtist(false);
+                    closeModal(true);
+                  })
+                  .catch((err) => console.log(err));
+              }
             }
           });
         }

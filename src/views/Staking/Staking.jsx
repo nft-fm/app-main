@@ -50,7 +50,7 @@ const Staking = () => {
   useEffect(() => {
     if (
       currChainId === 56
-      //  || currChainId === 97
+       || currChainId === 97
     ) {
       setIsBsc(true);
     }

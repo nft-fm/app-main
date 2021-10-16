@@ -52,7 +52,7 @@ router.post("/get-account", async (req, res) => {
             chain: nft.chain,
           });
           if (usersNft) {
-            user.nfts.push({ nft: usersNft._id, quantity: nft.quantity });
+            user.nfts.push({ nft: usersNft._id, quantity: nft.quantity, chain: nft.chain });
           }
         }
       }

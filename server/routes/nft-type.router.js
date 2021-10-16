@@ -150,12 +150,14 @@ router.post("/get-user-nfts", async (req, res) => {
     }
     const gottenNfts = [];
     for (id of ids) {
+      console.log('here', id)
       const getNft = await NftType.findOne(
         {
           _id: id,
         },
         { snnipet: 0 }
       );
+      console.log('getNft', getNft)
       gottenNfts.push(getNft);
     }
 

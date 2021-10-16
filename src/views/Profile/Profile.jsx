@@ -108,7 +108,7 @@ const Profile = () => {
   };
 
   const openCreateForm = async () => {
-    if (user.isLegacyArtist && !user.confirmedFeeIncrease && !userSigned) {
+    if (!user.confirmedFeeIncrease && !userSigned) {
       swal
         .fire({
           title: `NFT FM's terms have changed.`,

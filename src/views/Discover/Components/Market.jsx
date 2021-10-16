@@ -190,8 +190,6 @@ const Listen = () => {
               <FillerCard />
               <FillerCard />
               <FillerCard />
-              <FillerCard />
-              <FillerCard />
             </>
           )}
         </InfiniteScroll>
@@ -290,7 +288,7 @@ const ContainerTitleInput = styled.input`
 `;
 
 const FillerCard = styled.div`
-  width: 226px;
+  width: 325px;
   height: 0px;
 `;
 
@@ -309,7 +307,8 @@ const NftScroll = styled.div`
     flex-direction: row;
     flex-wrap: wrap;
     width: 100%;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+    /* justify-content: space-evenly; */
     @media only screen and (max-width: 776px) {
       flex-direction: column;
       align-items: center;
@@ -320,7 +319,8 @@ const NftScroll = styled.div`
       flex-direction: row;
       flex-wrap: wrap;
       width: 100%;
-      justify-content: space-between;
+      /* justify-content: space-between; */
+      justify-content: space-evenly;
       overflow-x: clip !important;
       overflow-y: visible !important;
       @media only screen and (max-width: 776px) {

@@ -30,6 +30,8 @@ const NftCard = (props) => {
   const [shareCount, setShareCount] = useState({ count: 0 });
   const [basicLoaded, setBasicLoaded] = useState(false);
   const [likesLoading, setLikesLoading] = useState(false);
+  const [profilePic, setProfilePic] = useState("");
+  const [userInfo, setUserInfo] = useState();
 
   // const show = () => setIsModalOpen(true);
   const hide = () => {
@@ -72,6 +74,25 @@ const NftCard = (props) => {
         setPartialSong(songFile);
       });
   };
+
+  useEffect(() => {
+    if (userInfo?.profilePic) {
+      setProfilePic(userInfo.profilePic);
+    }
+  }, [userInfo]);
+
+  useEffect(() => {
+    if (nft?.artist) {
+      axios
+        .post("/api/user/get-public-account", {
+          suburl: nft.artist.replace(/ /g, "").toLowerCase(),
+        })
+        .then((res) => {
+          setUserInfo(res.data[0]);
+        })
+        .catch(() => (window.location = "/"));
+    }
+  }, [nft]);
 
   useEffect(() => {
     if (basicLoaded) {
@@ -131,16 +152,13 @@ const NftCard = (props) => {
         setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
       />
       <CardTop>
-        <LikeShare
-          nft={nft}
-          liked={liked}
-          setLiked={setLiked}
-          likeCount={likeCount}
-          setLikeCount={setLikeCount}
-          setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
-          shareCount={shareCount}
-          isLoading={likesLoading}
-        />
+        <Artist to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}>
+          <ProfilePicture img={profilePic} />
+          <Text>
+            <Caption>Created By</Caption>
+            <Name>{nft.artist.length > 25 ? nft.artist.slice(0, 25) + "..." : nft.artist}</Name>
+          </Text>
+        </Artist>
         <Side>
           <IconArea>
             {nft.numMinted - nft.numSold}
@@ -150,7 +168,7 @@ const NftCard = (props) => {
           </IconArea>
         </Side>
       </CardTop>
-      {imageLoaded ? null : <Image src={loading} alt="image" />}
+      {imageLoaded ? null : <Loading img={loading} alt="image" />}
       <Image
         src={nft.imageUrl}
         style={imageLoaded ? {} : { display: "none" }}
@@ -165,13 +183,11 @@ const NftCard = (props) => {
           </RedeemButton>
         </RedeemButtonBackground>
       )}
-      <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>
-        {nft.title.length > 25 ? nft.title.slice(0, 25) + "..." : nft.title}
-      </TrackName>
-      <Artist to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}>
-        {nft.artist.length > 25 ? nft.artist.slice(0, 25) + "..." : nft.artist}
-      </Artist>
-      <BottomSection>
+
+      <MidSection>
+        <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>
+          {nft.title.length > 25 ? nft.title.slice(0, 25) + "..." : nft.title}
+        </TrackName>
         <BadgeHolder>
           {nft.badges?.map((badge) => {
             if (badge.founder) {
@@ -246,19 +262,55 @@ const NftCard = (props) => {
             }
           })}
         </BadgeHolder>
+      </MidSection>
+      <BottomSection>
         <CostEth>
           {nft.price !== "..."
             ? parseFloat(nft.price).toLocaleString(undefined, {
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 6,
-              })
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 6,
+            })
             : nft.price}
           {nft.chain === "ETH" ? <Eth /> : <Bsc />}
         </CostEth>
+        <LikeShare
+          nft={nft}
+          liked={liked}
+          setLiked={setLiked}
+          likeCount={likeCount}
+          setLikeCount={setLikeCount}
+          setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
+          shareCount={shareCount}
+          isLoading={likesLoading}
+        />
       </BottomSection>
     </Container>
   );
 };
+
+const Text = styled.div`
+display: flex;
+flex-direction: column;
+align-items: start;
+margin-left: 10px;
+`
+
+const ProfilePicture = styled.div`
+width: 40px;
+height: 40px;
+border-radius: 20px;
+background-image: url(${props => props.img});
+background-size: cover;
+`
+
+const Caption = styled.div`
+font-size: 12px;
+`
+
+const Name = styled.div`
+font-size: 16px;
+margin-top: 5px;
+`
 
 const RedeemButton = styled.div`
   text-decoration: none;
@@ -327,7 +379,6 @@ const ExclusiveBadge = styled(Exclusive)`
 `;
 
 const BadgeHolder = styled.div`
-  width: 100%;
   display: flex;
   /* justify-content: center; */
   align-items: center;
@@ -369,15 +420,28 @@ const CostEth = styled.span`
   color: white;
 `;
 
+const MidSection = styled.div`
+width: 90%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+
+`;
+
 const BottomSection = styled.div`
   display: flex;
   width: 90%;
   justify-content: space-between;
+  align-items: center;
+
 `;
 
 const Side = styled.div`
   display: flex;
   align-items: center;
+  margin-right: 5px;
 `;
 
 const IconArea = styled.div`
@@ -390,7 +454,7 @@ const IconArea = styled.div`
 
 const CardTop = styled.div`
   width: calc(100% - 8px);
-  margin-bottom: 12px;
+  margin-bottom: 5px;
   display: flex;
   justify-content: space-between;
   font-weight: 600;
@@ -406,7 +470,7 @@ const Container = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
-  width: 325px;
+  width: 375px;
   margin-bottom: 20px;
   position: relative;
   transition: all 0.1s ease-in-out;
@@ -417,6 +481,7 @@ const Container = styled.div`
   @media only screen and (max-width: 330px) {
     width: 300px;
   }
+
 `;
 
 // const Container = styled.div`
@@ -440,8 +505,8 @@ const Container = styled.div`
 
 const Image = styled.img`
   cursor: pointer;
-  width: 325px;
-  height: 325px;
+  width: 375px;
+  height: 375px;
   /* border-radius: 12px; */
   object-fit: cover;
   margin-bottom: 12px;
@@ -453,23 +518,44 @@ const Image = styled.img`
   }
 `;
 
+const Loading = styled.div`
+  cursor: pointer;
+  width: 375px;
+  height: 375px;
+  /* border-radius: 12px; */
+  object-fit: cover;
+  margin-bottom: 12px;
+  border: 1px solid ${(props) => props.theme.color.boxBorder};
+  background-image: url(${props => props.img});
+  background-size: 100px 100px;
+  background-repeat: no-repeat;
+  background-position: center;
+  backdrop-filter: blur(10px);
+  @media only screen and (max-width: 330px) {
+    width: 300px;
+    height: 300px;
+  }
+`;
+
 const TrackName = styled.span`
   cursor: pointer;
   color: white;
   font-weight: 500;
-  width: 100%;
-  text-align: center;
+  text-align: left;
   font-size: ${(props) => props.theme.fontSizes.sm};
-  margin-bottom: 12px;
 `;
 
 const Artist = styled(NavLink)`
   font-size: ${(props) => props.theme.fontSizes.sm};
   text-align: center;
   color: ${(props) => props.theme.gray};
-  margin-bottom: 12px;
+  margin-bottom: 5px;
   text-decoration: none;
+  display: flex;
+  flex-direction: row;
+  margin-left: 5px;
   /* cursor: pointer; */
+  align-items: end;
   &:hover {
     text-decoration: underline;
   }

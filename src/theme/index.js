@@ -1,7 +1,7 @@
 import { black, white } from "./colors";
 
 const theme = {
-  borderRadius: 4,
+  borderRadius: 10,
   bgColor: "#090909",
   fontFamily: "Compita",
   fontColor: {

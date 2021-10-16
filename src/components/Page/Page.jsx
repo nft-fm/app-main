@@ -97,7 +97,7 @@ const StyledMain = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 1050px;
+  width: 1275px;
   /* @media only screen and (max-width: 1500px) {
     width: 976px;
   } */

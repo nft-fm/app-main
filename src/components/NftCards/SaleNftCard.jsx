@@ -144,6 +144,7 @@ const NftCard = (props) => {
         open={isModalOpen}
         hide={hide}
         nft={nft}
+        profilePic={profilePic}
         partialSong={partialSong}
         liked={liked}
         SetLiked={setLiked}

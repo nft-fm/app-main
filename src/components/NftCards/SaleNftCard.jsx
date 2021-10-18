@@ -476,9 +476,7 @@ const Container = styled.div`
   position: relative;
   transition: all 0.1s ease-in-out;
   cursor: pointer;
-  :focus {
-    border: 1px solid white;
-  }
+
   @media only screen and (max-width: 330px) {
     width: 300px;
   }

@@ -88,8 +88,8 @@ const Staking = () => {
                 <br />
                 Artists and Stakers are rewarded a portion of each transaction.
                 <br />
-                <br /> By staking on an artist, you are growing your wallet and
-                theirs at the same time!
+                <br /> By staking on an artist, you are rewarding yourself and
+                your artist at the same time!
                 <br />
               </p>
               <Row>
@@ -99,6 +99,10 @@ const Staking = () => {
               <Row>
                 <p>Total Earned By Artists:</p>
                 <p>{Math.round(totalEarnedByAllArtists * 100) / 100} VINYL</p>
+              </Row>
+              <Row>
+                <p>Total Stakable Artists:</p>
+                <p>{artists.length}</p>
               </Row>
               <AddButton onClick={() => addVinyl()}>
                 Add VINYL to Wallet

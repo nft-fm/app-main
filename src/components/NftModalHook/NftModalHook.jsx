@@ -86,7 +86,7 @@ const BuyNftModal = (props) => {
 
     setIsLoading(true);
     // {!} simplify the below
-    await getEthBalance(async (balance) => {
+    await getEthBalance(async (balance) => { 
       if (parseFloat(balance) >= nft.price) {
         Swal.fire({
           title: "Purchasing, please do not leave this page.",

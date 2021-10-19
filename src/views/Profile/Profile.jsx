@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import BaseView from "../../components/Page/BaseView";
@@ -21,12 +21,52 @@ import Instagram from "../../assets/img/icons/social_instagram.png";
 import Audius from "../../assets/img/icons/social_audius.png";
 import Spotify from "../../assets/img/icons/social_spotify.png";
 import { providers } from "ethers";
+import { usePlaylistConsumer } from "../../contexts/Playlist";
+import ArtistCard from "../../components/NftCards/ArtistCard";
+import Stakers from "./components/Stakers";
 
 const Profile = () => {
   const { account, connect, user } = useAccountConsumer();
   const [open, setOpen] = useState(false);
   const [reset, setReset] = useState(false);
   const [userSigned, setUserSigned] = useState(false);
+  const [whichView, setWhichView] = useState(true);
+  const [stakers, setStakers] = useState([]);
+  const [nfts, setNfts] = useState([]);
+  const { setNftsCallback } = usePlaylistConsumer();
+
+  const formatNfts = (nftsData) => {
+    const formattedNfts = nftsData.map((nft, index) => (
+      <ArtistCard nft={nft} key={index} index={index} />
+    ));
+    for (let i = 0; i < 5; i++) {
+      formattedNfts.push(<FillerCard />);
+    }
+    return formattedNfts;
+  };
+  const getArtistNfts = async () => {
+    setNfts([]);
+    axios.post("api/nft-type/artist-nfts", user).then((res) => {
+      setNfts(formatNfts(res.data));
+      setNftsCallback(res.data);
+    });
+  };
+  const getStakers = async () => {
+    axios.post("api/nft-type/artist-stakers", user).then((res) => {
+      if (res.data.length > 0) {
+        console.log(res.data)
+        setStakers(res.data);
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (user) {
+      getArtistNfts();
+      getStakers();
+    }
+  }, [user]);
+
   const openMintModal = async () => {
     try {
       if (user.username === "") {
@@ -234,12 +274,34 @@ const Profile = () => {
       </SocialsBar>
       <CreatedNftHolder>
         <NftContainer>
-          <NftContainerTitle>YOUR MUSIC</NftContainerTitle>
+          <NftContainerTitle>
+            {whichView ? "YOUR MUSIC" : "YOUR STAKERS"}
+          </NftContainerTitle>
+          <NftContainerLeft>
+            <NftContainerLeftSpan
+              selected={whichView}
+              onClick={() => stakers && setWhichView(!whichView)}
+            >
+              NFTs
+            </NftContainerLeftSpan>
+            &nbsp;|&nbsp;
+            <NftContainerLeftSpan
+              selected={!whichView}
+              onClick={() =>  stakers && setWhichView(!whichView)}
+            >
+              Staking
+            </NftContainerLeftSpan>
+          </NftContainerLeft>
           <NftContainerRight onClick={() => openCreateForm()}>
+            <span>Create&nbsp;&nbsp;</span>
             <PlusIcon />
           </NftContainerRight>
           <NftContainerOutline />
-          <ArtistNfts user={user} />
+          {whichView ? (
+            <ArtistNfts nfts={nfts} />
+          ) : (
+            <Stakers stakers={stakers} />
+          )}
         </NftContainer>
       </CreatedNftHolder>
       <CreateForm
@@ -251,6 +313,10 @@ const Profile = () => {
     </BaseView>
   );
 };
+const FillerCard = styled.div`
+  width: 226px;
+  height: 0px;
+`;
 
 const SpotifyIcon = styled.img`
   height: 17px;
@@ -340,6 +406,7 @@ const NftContainer = styled.div`
 `;
 
 const NftContainerTitle = styled.span`
+  width: 105px;
   position: absolute;
   font-weight: 600;
   margin-left: auto;
@@ -368,13 +435,44 @@ const NftContainerTitle = styled.span`
   }
 `;
 
-const NftContainerRight = styled.span`
+const NftContainerLeft = styled.div`
+  cursor: pointer;
   position: absolute;
   font-weight: 600;
-  margin-left: 85%;
-  margin-right: 15%;
+  margin-left: 20%;
+  margin-right: 80%;
   height: 17px;
-  width: 17px;
+  /* width: 17px; */
+  top: -13px;
+  padding: 5px 5px 3px 5px;
+  font: "Compita";
+  background-color: ${(props) => props.theme.bgColor};
+  font-size: ${(props) => props.theme.fontSizes.xs};
+  color: ${(props) => props.theme.color.gray};
+  display: flex;
+  flex-direction: row;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid #383838;
+  border-radius: 20px;
+  transition: 0.2s;
+  color: ${(props) => props.theme.color.gray};
+`;
+
+const NftContainerLeftSpan = styled.span`
+  color: ${(props) => (props.selected ? "white" : props.theme.color.gray)};
+  cursor: pointer;
+`;
+
+const NftContainerRight = styled.div`
+  cursor: pointer;
+  position: absolute;
+  font-weight: 600;
+  margin-left: 80%;
+  margin-right: 20%;
+  height: 17px;
+  /* width: 17px; */
   top: -13px;
   padding: 5px 5px 3px 5px;
   font: "Compita";
@@ -400,15 +498,25 @@ const NftContainerRight = styled.span`
 `;
 
 const NftContainerOutline = styled.div`
-  /* border-radius: 24px 24px 0 0; */
-  border-top: 6px solid #383838;
-  /* border-bottom: none; */
+  /* border-top: 6px solid #383838;
   height: 40px;
   width: 80%;
   display: flex;
   flex-direction: row;
 
   @media only screen and (max-width: 776px) {
+    width: 100%;
+  } */
+
+  border-radius: 24px 24px 0 0;
+  border: 6px solid #383838;
+  border-bottom: none;
+  height: 40px;
+  width: 80%;
+  /* display: flex;
+  flex-direction: row; */
+  @media only screen and (max-width: 776px) {
+    border-radius: 0;
     width: 100%;
   }
 `;

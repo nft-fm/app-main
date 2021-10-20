@@ -1,8 +1,8 @@
-const express = require('express')
-const router = express.Router()
-const NftType = require('../schemas/NftType.schema')
+const express = require("express");
+const router = express.Router();
+const NftType = require("../schemas/NftType.schema");
 
-router.get('/:id', async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const nft = await NftType.findOne({ nftId: id });
@@ -18,20 +18,28 @@ router.get('/:id', async (req, res) => {
           trait_type: "Genre",
           value: nft.genre,
         },
-      ]
-      const data = {
-        name: nft.title,
-        description: "An audio NFT from nftfm.io!",
-        image: nft.imageUrl,
-        attributes
-      };
+      ];
+      const data = nft.videoUrl
+        ? {
+            name: nft.artist + " - " + nft.title,
+            description: `This is an NFT from ${nft.artist}. The owner of this NFT can listen to this exclusive full length song at nftfm.io`,
+            image: nft.imageUrl,
+            video: nft.videoUrl,
+            attributes,
+          }
+        : {
+            name: nft.artist + " - " + nft.title,
+            description: `This is a music NFT from ${nft.artist}. The owner of this NFT can listen to this exclusive full length song only at nftfm.io`,
+            image: nft.imageUrl,
+            attributes,
+          };
 
       res.send(data);
     }
-    } catch (error) {
-        console.log(error);
-        res.status(500).send("server error");
-}
-})
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("server error");
+  }
+});
 
-module.exports = router
+module.exports = router;

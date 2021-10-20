@@ -1,10 +1,13 @@
-const { findAllByDisplayValue } = require('@testing-library/dom');
-const mongoose = require('mongoose');
+const { findAllByDisplayValue } = require("@testing-library/dom");
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const NftTypeSchema = new Schema({
   nftId: {
     type: Number,
+  },
+  chain: {
+    type: String,
   },
   title: {
     type: String,
@@ -26,6 +29,26 @@ const NftTypeSchema = new Schema({
     type: String,
     default: "",
   },
+  price: {
+    type: Number,
+    default: 0,
+  },
+  numMinted: {
+    type: Number,
+    default: 0,
+  },
+  numSold: {
+    type: Number,
+    default: 0,
+  },
+  startTime: { //this is for future implementation of snippet start times
+    type: Number,
+    default: 0,
+  },
+  dur: {
+    type: Number,
+    required: true,
+  },
   address: {
     type: String,
     required: true,
@@ -39,14 +62,43 @@ const NftTypeSchema = new Schema({
     type: String,
     default: "",
   },
+  videoUrl: {
+    type: String,
+  },
   numListens: {
     type: Number,
     default: 0,
   },
+  description: {
+    type: String,
+    default: "",
+  },
+  badges: [
+    {
+      founder: {
+        type: Boolean,
+      },
+    },
+    {
+      premium: {
+        type: Boolean,
+      },
+    },
+    {
+      prerelease: {
+        type: Boolean,
+      },
+    },
+    {
+      exclusive: {
+        type: Boolean,
+      },
+    },
+  ],
   likes: [
     {
-      type: String
-    }
+      type: String,
+    },
   ],
   shareCount: {
     type: Number,
@@ -66,8 +118,16 @@ const NftTypeSchema = new Schema({
   },
   timestamp: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
-})
+  isRedeemable: {
+    type: Boolean,
+  },
+  redeemedBy: [
+    {
+      type: String,
+    },
+  ],
+});
 
-module.exports = NftType = mongoose.model('type', NftTypeSchema);
+module.exports = NftType = mongoose.model("type", NftTypeSchema);

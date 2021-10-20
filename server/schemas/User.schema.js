@@ -1,12 +1,12 @@
-const mongoose = require('mongoose')
-const { stringToHex } = require('web3-utils')
-const Schema = mongoose.Schema
+const mongoose = require("mongoose");
+const { stringToHex } = require("web3-utils");
+const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
   address: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   suburl: {
     type: String,
@@ -26,30 +26,53 @@ const UserSchema = new Schema({
   },
   isArtist: {
     type: Boolean,
-    default: true,
+    default: false,
+  },
+  hasMinted: {
+    type: Boolean,
+    default: false,
+  },
+  isLegacyArtist: {
+    type: Boolean,
+  },
+  hasMinted: {
+    type: Boolean,
+    default: false,
+  },
+  confirmedFeeIncrease: {
+    type: Boolean,
   },
   profilePic: {
     type: String,
-    required: false
+    required: false,
   },
   timestamp: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   shared: [
     {
-      type: String
-    }
+      type: String,
+    },
   ],
   sold: {
-    type: Number
+    type: Number,
   },
-  x_nfts: [{
-    nft: {
-      type: String
+  nfts: [
+    {
+      nft: {
+        type: String,
+      },
+      quantity: {
+        type: Number,
+      },
+      chain: {
+        type: String,
+      },
     },
-  },
   ],
-})
+  socials: [],
+  stakedArtists: [],
+});
 
-module.exports = User = mongoose.model('user', UserSchema)
+module.exports = User = mongoose.model("user", UserSchema);

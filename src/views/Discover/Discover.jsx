@@ -1,39 +1,17 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Route, Switch, useRouteMatch } from "react-router-dom";
-import BaseView from "../BaseView";
+import React from "react";
+import { Switch } from "react-router-dom";
+import BaseView from "../../components/Page/BaseView";
 import Market from "./Components/Market";
-import styled, { keyframes } from "styled-components";
-import NftModalHook from "../../components/NftModalHook";
+import styled from "styled-components";
+import LinkedNftModal from "../../components/NftModalHook/LinkedNftModal";
 
 const Listen = () => {
-  const [id, setId] = useState(null);
-  const [isOpen, setIsOpen] = useState(true);
-
-  useEffect(() => {
-    console.log(
-      "win",
-      window.location.pathname,
-      window.location.pathname.length,
-      window.location.pathname.slice(10)
-    );
-    if (window.location.pathname.length > 10) {
-      setId(window.location.pathname.slice(10));
-    }
-  });
-
-  const hide = (e) => {
-    setIsOpen(false);
-    console.log("isOpen", isOpen);
-  };
-
   return (
     <Switch>
       <BaseView>
-        {/*  pathname && nftmocdalhook */}
-        {id && <NftModalHook hide={hide} id={id} open={isOpen} />}
+        <LinkedNftModal />
         <Container>
-          <StyledTitle>MARKETPLACE</StyledTitle>
-          {/* <Trending /> */}
+          <StyledTitle>Discover and Collect Exclusive Digital Music</StyledTitle>
           <Market />
         </Container>
       </BaseView>

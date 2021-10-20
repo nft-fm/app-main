@@ -1,21 +1,24 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
-import styled, { css } from "styled-components";
-
+import styled from "styled-components";
 import { useAccountConsumer } from "../../../contexts/Account";
 
 export const Nav = () => {
   const { user } = useAccountConsumer();
+
   return (
     <StyledNav>
-      <StyledLink exact tab="home" activeClassName="active" to="/">
-        Home
-      </StyledLink>
-      <StyledLink exact tab="discover" activeClassName="active" to="/discover">
-        Discover
+      <StyledLink exact tab="market" activeClassName="active" to="/">
+        Market
       </StyledLink>
       <StyledLink exact tab="library" activeClassName="active" to="/library">
         Library
+      </StyledLink>
+      <StyledLink exact tab="about" activeClassName="active" to="/info">
+        Info
+      </StyledLink>
+      <StyledLink exact tab="about" activeClassName="active" to="/staking">
+        Stake
       </StyledLink>
       {user?.isArtist && (
         <StyledLink exact tab="profile" activeClassName="active" to="/profile">
@@ -31,8 +34,15 @@ const StyledNav = styled.nav`
   align-items: center;
   display: flex;
   font-family: "Compita";
+  @media only screen and (max-width: 776px) {
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    & > * {
+      padding-top: 10px;
+      width: calc(100vw / 4);
+    }
+  }
 `;
-
 const StyledLink = styled(NavLink)`
   font-size: ${(props) => props.theme.fontSizes.xs};
   font-weight: 600;
@@ -51,8 +61,9 @@ const StyledLink = styled(NavLink)`
     color: white;
   }
   @media only screen and (max-width: 776px) {
-    &:last-child {
-      padding-right: 0px;
-    }
+    padding-right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 `;

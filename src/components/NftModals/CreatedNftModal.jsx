@@ -1,19 +1,16 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { useWallet } from "use-wallet";
 import axios from "axios";
-import swal from "sweetalert2";
 import { ReactComponent as IconX } from "../../assets/img/icons/x.svg";
 import logo from "../../assets/img/logos/logo_tiny.png";
 import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
 import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { useAccountConsumer } from "../../contexts/Account";
-import { getSetSale } from "../../web3/utils";
-import IconMetamask from "../../assets/img/icons/metamask_icon.png";
-
-import { ReactComponent as eth_icon } from "../../assets/img/icons/ethereum.svg";
 import Swal from "sweetalert2";
+import { setNewPrice } from "../../web3/utils";
+import loadingGif from "../../assets/img/loading.gif";
+
 const BuyNftModal = ({
   open,
   hide,
@@ -24,56 +21,107 @@ const BuyNftModal = ({
   setLikeCount,
   setIsShareOpen,
 }) => {
-  const { account, connect, usdPerEth } = useAccountConsumer();
+  const { account, usdPerEth, usdPerBnb, currChainId } = useAccountConsumer();
+  const [loading, setLoading] = useState(false);
 
   if (!open) return null;
   const stopProp = (e) => {
     e.stopPropagation();
   };
-  console.log("nft", nft);
-
-  const purchase = (id) => {
-    axios
-      .post("/api/nft-type/purchase", { id: id, address: account })
-      .then((res) => {
-        console.log("purchase res", res);
-      })
-      .catch((err) => console.log(err));
-  };
 
   const like = async () => {
     if (account) {
-      setLikeCount(liked ? likeCount - 1 : likeCount + 1)
+      setLikeCount(liked ? likeCount - 1 : likeCount + 1);
       setLiked(!liked);
-      await axios.post(`api/user/like-nft`, { address: account, nft: nft._id })
-        .catch(err => { console.log(err) })
+      await axios
+        .post(`api/user/like-nft`, { address: account, nft: nft._id })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
       hide();
       Swal.fire("Connect a wallet");
     }
-  }
+  };
+
+  const getChain = () => {
+    console.log(currChainId);
+    switch (currChainId) {
+      case 1:
+        return "ETH";
+      case 4:
+        return "ETH";
+      case 56:
+        return "BSC";
+      case 97:
+        return "BSC";
+    }
+  };
+  const handleChange = (value) => {
+    setLoading(false);
+    axios
+      .post("/api/nft-type/updatePrice", {
+        nftId: nft.nftId,
+        price: value,
+        chain: nft.chain,
+      })
+      .then((res) => {
+        Swal.fire({ title: "Success! Reload the page to see the changes." });
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const changeNftPrice = () => {
+    if (nft.chain != getChain()) {
+      Swal.fire({
+        title: `You need to be on ${nft.chain} to change the price of this NFT.`,
+      });
+    } else {
+      Swal.fire({
+        title: `Change price for: ${nft.title}?`,
+        text: `Any contract interactions do incur gas fees. Enter the new price in ${
+          getChain() === "BSC" ? "BNB" : "ETH"
+        } below`,
+        input: "number",
+        inputValidator: (value) => {
+          if (Number(value) < 0) {
+            return "You cannot set a negative price!";
+          }
+        },
+        confirmButtonText: "Change Price!",
+      }).then((res) => {
+        if (res.isConfirmed) {
+          console.log(res.value);
+          setLoading(true);
+          setNewPrice(nft.nftId, res.value, () => {
+            handleChange(res.value);
+          });
+        }
+      });
+    }
+  };
 
   const share = () => {
     setIsShareOpen();
     hide();
   };
-  console.log('nftprice', nft.title, nft.price)
 
   return (
-    <OpaqueFilter onClick={(e) => hide(e)}>
+    <OpaqueFilter onClick={(e) => !loading && hide(e)}>
       <Container onClick={(e) => stopProp(e)}>
         <StyledModal>
-          <X onClick={(e) => hide(e)} />
+          <X onClick={(e) => !loading && hide(e)} />
           <CardTitle>
             <Logo src={logo} />
           </CardTitle>
           <CardTop>
             <Side>
               <IconArea>
-                {liked ?
-                  <LikedHeart onClick={() => like()} /> :
+                {liked ? (
+                  <LikedHeart onClick={() => like()} />
+                ) : (
                   <Heart onClick={() => like()} />
-                }
+                )}
                 {likeCount}
               </IconArea>
               <IconArea>
@@ -83,9 +131,9 @@ const BuyNftModal = ({
             </Side>
             <Side>
               <IconArea>
-                {nft.sold}
+                {nft.numSold}
                 <span style={{ margin: "0 1px" }}>/</span>
-                {nft.quantity}
+                {nft.numMinted}
                 <Cart />
               </IconArea>
             </Side>
@@ -100,44 +148,77 @@ const BuyNftModal = ({
               <TableRow className="header">
                 <th>Earnings</th>
               </TableRow>
-              <TableRow>
-                <td>ETH</td>
-                <td><EthIcon
-                />{parseFloat(nft.sold * nft.price)}</td>
-              </TableRow>
+              {nft.chain === "ETH" && (
+                <TableRow>
+                  <td>ETH</td>
+                  <td>
+                    {/* <EthIcon /> */}
+                    {parseFloat(nft.numSold * nft.price)}
+                  </td>
+                </TableRow>
+              )}
+              {nft.chain === "BSC" && (
+                <TableRow>
+                  <td>BNB</td>
+                  <td>
+                    {/* <BnbIcon /> */}
+                    {parseFloat(nft.numSold * nft.price)}
+                  </td>
+                </TableRow>
+              )}
               <TableRow>
                 <td>USD</td>
-                <td>
-                  ${" "}
-                  {parseFloat(nft.sold * nft.price * usdPerEth).toLocaleString(
-                    undefined,
-                    {
+                {nft.chain === "ETH" && (
+                  <td>
+                    ${" "}
+                    {parseFloat(
+                      nft.numSold * nft.price * usdPerEth
+                    ).toLocaleString(undefined, {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
-                    }
-                  )}
-                </td>
+                    })}
+                  </td>
+                )}
+                {nft.chain === "BSC" && (
+                  <td>
+                    ${" "}
+                    {parseFloat(
+                      nft.numSold * nft.price * usdPerBnb
+                    ).toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </td>
+                )}
               </TableRow>
             </StyledTable>
           </StatsContainer>
+          {loading ? (
+            <Loading src={loadingGif} alt="loading gif" />
+          ) : (
+            <PriceButton onClick={() => changeNftPrice()}>
+              Change NFT price
+            </PriceButton>
+          )}
         </StyledModal>
       </Container>
     </OpaqueFilter>
   );
 };
-
-const EthIcon = styled(eth_icon)`
-  width: 15px;
-  height: 15px;
-  cursor: pointer;
-  /* position: absolute; */
-  /* right: -12px; */
-  margin-right: 3px;
-  transition: all 0.2s;
-  & path {
-    fill: white;
-  }
+const PriceButton = styled.button`
+  /* width: 32%; */
+  color: white;
+  border: 2px solid ${(props) => props.theme.color.yellow};
+  background-color: ${(props) => props.theme.color.box};
+  border-radius: ${(props) => props.theme.borderRadius}px;
+  padding: 5px 10px;
 `;
+
+const Loading = styled.img`
+  width: 20px;
+  height: 20px;
+`;
+
 const X = styled(IconX)`
   position: absolute;
   right: 2px;
@@ -195,7 +276,7 @@ const LikedHeart = styled(IconHeart)`
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   & path {
-    stroke: ${props => props.theme.color.pink};
+    stroke: ${(props) => props.theme.color.pink};
   }
 `;
 
@@ -266,7 +347,6 @@ const OpaqueFilter = styled.div`
   transform: translate(-50%, -50%);
   background-color: rgba(0, 0, 0, 0.8);
   z-index: 500;
-  backdrop-filter: blur(4.6px);
 `;
 
 const Container = styled.div`
@@ -307,13 +387,6 @@ const Image = styled.img`
   margin-bottom: 16px;
 `;
 
-const PricesContainer = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 20px;
-`;
 const InfoContainer = styled.div`
   width: 80%;
   display: flex;
@@ -341,9 +414,8 @@ const TableRow = styled.table`
   justify-content: space-between;
   &.header {
     justify-content: center;
-    border-bottom: 1px solid ${props => props.theme.color.gray};
+    border-bottom: 1px solid ${(props) => props.theme.color.gray};
     margin-bottom: 5px;
-    
   }
 `;
 const TrackName = styled.span`
@@ -355,31 +427,6 @@ const Artist = styled.span`
   font-size: ${(props) => props.theme.fontSizes.xs};
   color: ${(props) => props.theme.color.lightgray};
   margin-bottom: 12px;
-`;
-
-const Row = styled.div`
-  width: 90%;
-  display: flex;
-  justify-content: space-between;
-`;
-
-const BuyButton = styled.button`
-  width: 140px;
-  height: 64px;
-  cursor: pointer;
-  transition: all 0.1s ease-in-out;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
-  border: 1px solid ${(props) => props.theme.color.boxBorder};
-  border-radius: 2px;
-  background-color: ${(props) => props.theme.color.box};
-  margin-bottom: 20px;
-  &:hover {
-    background-color: ${(props) => props.theme.color.boxBorder};
-    border: 1px solid #383838;
-  }
 `;
 
 export default BuyNftModal;

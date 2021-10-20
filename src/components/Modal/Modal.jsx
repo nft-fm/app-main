@@ -1,11 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 const Modal = ({ children }) => {
-  const stopProp = (e) => {
-    e.stopPropagation();
-  };
-
   return (
     <OpaqueFilter>
       <Container>
@@ -27,6 +23,7 @@ const OpaqueFilter = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  z-index: 1;
 `;
 
 const Container = styled.div`
@@ -34,6 +31,10 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   padding: 10px;
+  @media only screen and (max-width: 776px) {
+    width: 100vw;
+    height: 100vh;
+  }
 `;
 
 export default Modal;

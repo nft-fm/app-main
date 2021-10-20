@@ -13,7 +13,7 @@ const Button = ({
   to,
   variant,
 }) => {
-  const { color, spacing } = useContext(ThemeContext)
+  const { color } = useContext(ThemeContext)
 
   let boxShadow;
   let buttonSize;

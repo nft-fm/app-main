@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import BaseView from "../BaseView";
+import BaseView from "../../components/Page/BaseView";
 
 const PrivacyPolicy = () => {
   return (
@@ -619,7 +619,11 @@ const PrivacyPolicy = () => {
           electronically, you can contact us directly at:
           <br />
           <br />
-          <a href="mailto:support@nftfm.io" target="_blank">
+          <a
+            href="mailto:support@nftfm.io"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             support@nftfm.io
           </a>
         </SectionContent>
@@ -645,12 +649,6 @@ const StyledHeader = styled.span`
   font-size: ${(props) => props.theme.fontSizes.lg};
   margin-left: auto;
   margin-right: auto;
-`;
-
-const PageContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
 `;
 
 const SectionTitle = styled.li`

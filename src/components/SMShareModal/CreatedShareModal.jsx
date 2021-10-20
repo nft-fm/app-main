@@ -1,54 +1,48 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { ReactComponent as IconX } from "../../assets/img/icons/x.svg";
-import logo from "../../assets/img/logos/logo_tiny.png";
-import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
-import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
-import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
-import PlayIcon from "../../assets/img/icons/listen_play.svg";
-import { useAccountConsumer } from "../../contexts/Account";
-import IconMetamask from "../../assets/img/icons/metamask_icon.png";
-import loading from "../../assets/img/loading.gif";
-import Swal from "sweetalert2";
-import { usePlaylistConsumer } from "../../contexts/Playlist";
 import {
   FacebookShareButton,
   TwitterShareButton,
-  RedditShareButton,
-  InstapaperShareButton,
   TwitterIcon,
   FacebookIcon,
 } from "react-share";
 
-const SMShareModal = ({ open, children, hide, onClose, nft }) => {
-  const { account, connect, usdPerEth } = useAccountConsumer();
+const SMShareModal = ({ open, children, hide, onClose, nft, updateShareCount }) => {
 
   if (!open) return null;
   const stopProp = (e) => {
     e.stopPropagation();
   };
-  const url = `https://www.nftfm.io/discover/${nft._id}`;
-  const message = `Check out my new NFT, ${nft.title}, available now on NFT FM!`
+  const url = `https://www.nftfm.io/`;
+  const message = `Check out my new NFT, ${nft.title}, available now on NFT FM!\nAvailable only at: `
 
+  const newShare = () => {
+    axios.post('/api/nft-type/newShare', nft);
+    updateShareCount()
+    hide();
+  }
   return (
-    <OpaqueFilter onClick={(e) => hide(e)}>
+    <OpaqueFilter onClick={(e) => hide()}>
       <Container onClick={(e) => stopProp(e)}>
         <StyledModal>
           <X onClick={(e) => hide(e)} />
-          <span>Share {nft.title} by {nft.artist}!</span>
+          <span>
+            Share {nft.title} by {nft.artist}!
+          </span>
           <Buttons>
-            <TwitterShareButton
-              title={message}
-              url={url}
-            >
-              <TwitterIcon size={50} round={true} />
+            <TwitterShareButton title={message} url={url}>
+              <ButtonHolder onClick={() => newShare()}>
+                <TwitterIcon size={50} borderRadius={"10px"} />
+                <span>Twitter</span>
+              </ButtonHolder>
             </TwitterShareButton>
-            <FacebookShareButton
-              quote={message}
-              url={url}
-            >
-              <FacebookIcon size={50} round={true} />
+            <FacebookShareButton quote={message} url={url}>
+              <ButtonHolder onClick={() => newShare()}>
+                <FacebookIcon size={50} borderRadius={"10px"} />
+                <span>Facebook</span>
+              </ButtonHolder>
             </FacebookShareButton>
           </Buttons>
         </StyledModal>
@@ -57,11 +51,37 @@ const SMShareModal = ({ open, children, hide, onClose, nft }) => {
   );
 };
 
+const ButtonHolder = styled.div`
+  width: 50%;
+  background-color: ${(props) => props.theme.color.box};
+  border-radius: ${(props) => props.theme.borderRadius}px;
+  border: 1px solid ${(props) => props.theme.color.boxBorder};
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  cursor: pointer;
+  padding: 5px;
+  /* padding: 5px 5px 0px 5px; */
+  margin-left: auto;
+  margin-right: auto;
+  & > span {
+    color: white;
+    font-size: ${(props) => props.theme.fontSizes.sm};
+    margin-left: 10px;
+  }
+  transition: 0.1s ease-in-out;
+  :hover {
+    background-color: ${(props) => props.theme.color.gray};
+  }
+`;
+
 const Buttons = styled.div`
-width: 60%;
-display: flex;
-justify-content: space-evenly;
-`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 250px;
+`;
 
 const X = styled(IconX)`
   position: absolute;
@@ -88,14 +108,13 @@ const OpaqueFilter = styled.div`
   transform: translate(-50%, -50%);
   background-color: rgba(0, 0, 0, 0.8);
   z-index: 500;
-  backdrop-filter: blur(4.6px);
 `;
 
 const Container = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
-  height: 200px;
+  /* height: 200px; */
   /* width: 400px; */
   position: fixed;
   left: 50%;
@@ -118,7 +137,11 @@ const StyledModal = styled.div`
   justify-content: space-evenly;
   position: relative;
   & > span {
-      font-size: ${props => props.theme.fontSizes.md}
+    font-size: ${(props) => props.theme.fontSizes.md};
+    text-align: center;
+  }
+  @media only screen and (max-width: 776px) {
+    width: 80vw;
   }
 `;
 

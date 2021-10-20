@@ -1,18 +1,16 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import CreatedNftModal from "../NftModals/CreatedNftModal";
-import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
-import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
+import { ReactComponent as IconBinance } from "../../assets/img/icons/binance-logo.svg";
 import { useAccountConsumer } from "../../contexts/Account";
-import axios from "axios";
 import ShareModal from "../SMShareModal/CreatedShareModal";
 import LikeShare from "./LikeShare";
 
 const NftCard = (props) => {
-  const { usdPerEth, user, account } = useAccountConsumer();
+  const { usdPerEth, usdPerBnb, user } = useAccountConsumer();
   const [nft, setNft] = useState({
     address: "",
     artist: "",
@@ -27,12 +25,13 @@ const NftCard = (props) => {
     price: "...",
     quantity: "--",
     sold: "--",
-  })
+  });
   const [isOpen, setIsOpen] = useState(false);
   const [liked, setLiked] = useState(props.nft.liked);
   const [likeCount, setLikeCount] = useState(props.nft.likeCount);
   const [isShareOpen, setIsShareOpen] = useState(false);
-  const show = () => setIsOpen(true);
+  const [shareCount, setShareCount] = useState({ count: 0 });
+
   const hide = (e) => {
     setIsOpen(false);
   };
@@ -40,23 +39,17 @@ const NftCard = (props) => {
   useEffect(() => {
     setNft({
       ...props.nft,
-      price: nft.price === "..." ? "..." : nft.price,
-      quantity: nft.quantity === "--" ? "--" : nft.quantity,
-      sold: nft.sold === "--" ? "--" : nft.sold,
     });
+    setShareCount({ count: props.nft.shareCount });
     setLikeCount(props.nft.likeCount);
     setLiked(props.nft.liked);
-    axios.post("/api/nft-type/full-nft-info", { nft: props.nft, account: account })
-      .then((res) => {
-        setNft(res.data)
-      })
-      .catch(err => console.log(err));
   }, [props.nft, user]);
   return (
     <Container>
       <ShareModal
         open={isShareOpen}
         hide={() => setIsShareOpen(!isShareOpen)}
+        updateShareCount={() => setShareCount({ count: shareCount.count + 1 })}
         nft={nft}
       />
       <CreatedNftModal
@@ -77,12 +70,13 @@ const NftCard = (props) => {
           likeCount={likeCount}
           setLikeCount={setLikeCount}
           setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
+          shareCount={shareCount}
         />
         <Side>
           <IconArea>
-            {nft.sold}
+            {nft.numSold}
             <span style={{ margin: "0 1px" }}>/</span>
-            {nft.quantity}
+            {nft.numMinted}
             <Cart />
           </IconArea>
         </Side>
@@ -92,45 +86,53 @@ const NftCard = (props) => {
         alt="image"
         onClick={() => setIsOpen(!isOpen)}
       />
-      <TrackName>{nft.title}</TrackName>
-      <Artist>{nft.artist}</Artist>
+      <TrackName>
+        {nft.title.length > 20 ? nft.title.slice(0, 20) + "..." : nft.title}
+      </TrackName>
+      <Artist>
+        {nft.artist.length > 20 ? nft.artist.slice(0, 20) + "..." : nft.artist}
+      </Artist>
       <CostFields>
         <CostEth>
           {nft?.price?.toLocaleString(undefined, {
             minimumFractionDigits: 3,
             maximumFractionDigits: 3,
           })}
-          <Eth />
+          {nft?.chain === "ETH" && <Eth />}
+          {nft?.chain === "BSC" && <Bnb />}
         </CostEth>
-        <CostUsd>
-          {usdPerEth && nft.price !== "..."
-            ? (usdPerEth * nft.price).toLocaleString(undefined, {
+        {usdPerEth && usdPerBnb && nft.price !== "..." && nft.chain === "ETH" && (
+          <CostUsd>
+            $
+            {(usdPerEth * nft.price).toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
-            })
-            : "..."}
-          <Usd />
-        </CostUsd>
+            })}
+          </CostUsd>
+        )}
+        {usdPerEth && usdPerBnb && nft.price !== "..." && nft.chain === "BSC" && (
+          <CostUsd>
+            $
+            {(usdPerBnb * nft.price).toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </CostUsd>
+        )}
       </CostFields>
     </Container>
   );
 };
-
-const Usd = styled(IconUsd)`
+const Bnb = styled(IconBinance)`
   width: 18px;
   height: 18px;
-  margin: -2px 0 0 8px;
-  transition: all 0.2s ease-in-out;
-  & path {
-    fill: ${(props) => props.theme.color.gray};
-  }
+  margin: -2px 0 0 4px;
 `;
 
 const Eth = styled(IconEth)`
   width: 18px;
   height: 18px;
   margin: -2px 0 0 4px;
-  transition: all 0.2s ease-in-out;
   & path {
     fill: ${(props) => props.theme.color.white};
   }
@@ -170,50 +172,50 @@ const Cart = styled(IconCart)`
   }
 `;
 
-const Share = styled(IconShare)`
-  width: 16px;
-  height: 16px;
-  margin: 0 4px 0 0;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  & path {
-    transition: all 0.2s ease-in-out;
-    fill: ${(props) => props.theme.color.gray};
-  }
-  &:hover {
-    & path {
-      fill: #20a4fc;
-    }
-  }
-`;
+// const Share = styled(IconShare)`
+//   width: 16px;
+//   height: 16px;
+//   margin: 0 4px 0 0;
+//   cursor: pointer;
+//   transition: all 0.2s ease-in-out;
+//   & path {
+//     transition: all 0.2s ease-in-out;
+//     fill: ${(props) => props.theme.color.gray};
+//   }
+//   &:hover {
+//     & path {
+//       fill: #20a4fc;
+//     }
+//   }
+// `;
 
-const LikedHeart = styled(IconHeart)`
-  width: 20px;
-  height: 20px;
-  margin: -3px 4px 0 0;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  & path {
-    stroke: ${(props) => props.theme.color.pink};
-  }
-`;
+// const LikedHeart = styled(IconHeart)`
+//   width: 20px;
+//   height: 20px;
+//   margin: -3px 4px 0 0;
+//   cursor: pointer;
+//   transition: all 0.2s ease-in-out;
+//   & path {
+//     stroke: ${(props) => props.theme.color.pink};
+//   }
+// `;
 
-const Heart = styled(IconHeart)`
-  width: 20px;
-  height: 20px;
-  margin: -3px 4px 0 0;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  & path {
-    transition: all 0.2s ease-in-out;
-    stroke: ${(props) => props.theme.color.gray};
-  }
-  &:hover {
-    & path {
-      stroke: ${(props) => props.theme.color.pink};
-    }
-  }
-`;
+// const Heart = styled(IconHeart)`
+//   width: 20px;
+//   height: 20px;
+//   margin: -3px 4px 0 0;
+//   cursor: pointer;
+//   transition: all 0.2s ease-in-out;
+//   & path {
+//     transition: all 0.2s ease-in-out;
+//     stroke: ${(props) => props.theme.color.gray};
+//   }
+//   &:hover {
+//     & path {
+//       stroke: ${(props) => props.theme.color.pink};
+//     }
+//   }
+// `;
 
 const Side = styled.div`
   display: flex;

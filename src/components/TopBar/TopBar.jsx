@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import Container from "../Container";
-import { Col } from "../Grid";
 import Logo from "../Logo";
 import AccountButton from "./components/AccountButton";
 import { Nav } from "./components/Nav";
@@ -12,7 +11,7 @@ const TopBar = () => {
     <StyledTopBar id="top">
       <Container size="lg">
         <StyledTopBarInner>
-          <NavLink to="/" style={{ textDecoration: "none" }}>
+          <NavLink to="/home" style={{ textDecoration: "none" }}>
             <Logo />
           </NavLink>
           <NavRight>
@@ -39,6 +38,7 @@ const NavContainer = styled.div`
 const NavRight = styled.div`
   display: flex;
   z-index: 20;
+  align-items: center;
 `;
 
 const StyledTopBar = styled.div`
@@ -46,7 +46,8 @@ const StyledTopBar = styled.div`
   border-bottom: 1px solid #232323;
   width: 100%;
   z-index: 50;
-  position: relative;
+  position: sticky;
+  top: 0px;
 `;
 
 const StyledTopBarInner = styled.div`

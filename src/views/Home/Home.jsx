@@ -1,306 +1,145 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Route, Switch, useRouteMatch } from "react-router-dom";
-import { useWallet } from "use-wallet";
-import styled, { keyframes, css } from "styled-components";
-import BaseView from "../BaseView";
-import axios from "axios";
-import logo from "../../assets/img/logos/logo.png";
-import greenCheckMark from "../../assets/img/green_check.png";
-import grayCheckMark from "../../assets/img/gray_check.png";
-import Landing from "./Landing";
-import demoImage from "../../assets/img/metamask_fox.svg";
-import { FAQ } from "./FAQ/FAQ"
-import recordPlayer from "../../assets/img/record_player.png";
+import React from "react";
+import { Switch, NavLink } from "react-router-dom";
+import styled from "styled-components";
+import BaseView from "../../components/Page/BaseView";
+import Landing from "./Components/Landing";
+import Swal from "sweetalert2";
+import { Features } from "./Components/Features";
+import DemoImage from "./Components/DemoImage/DemoImage";
+import { ReactComponent as rightArrow } from "../../assets/img/homepage_assets/right-arrow-3.svg";
+import { errorIcon, imageWidth, imageHeight } from "../../utils/swalImages";
 
 const Listen = () => {
-  const { path } = useRouteMatch();
-  const { account, connect } = useWallet();
+  if (
+    window.location.hostname === "localhost" &&
+    process.env.REACT_APP_IS_MAINNET
+  ) {
+    Swal.fire({
+      title: `You are on MAINNET and LOCALHOST be careful`,
+      text: `🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆`,
+      imageUrl: errorIcon,
+      imageWidth,
+      imageHeight,
+    });
+  }
 
   return (
     <Switch>
       <BaseView>
         <Landing />
         <Divider />
-        <DescriptionBoxContainer>
-          <DescriptionColumn>
-            <StyledHeader>Welcome to NFT FM</StyledHeader>
-            <StyledSubHeader>collect music from artists you know and love</StyledSubHeader>
-            <StyledParagraph>
-              We are a music distribution platform dedicated to artists and fans alike. We aim to add legitimacy to both the Music and the Crypto industry by providing fans a way to directly support the artists they love. On NFT FM, artists have full control over how they distribute their music. Over 90% of all purchases go directly to the Musicians.
-            </StyledParagraph>
-          </DescriptionColumn>
-          <DemoImage src={recordPlayer} />
-        </DescriptionBoxContainer>
-        <LaunchContainer>
-          <ContainerTitle>
-            ROADMAP
-          </ContainerTitle>
-          <ContainerOutline />
-          <LaunchFeaturesContainer>
-            <LaunchFeaturesBox>
-              <LaunchFeaturesHeader>Pre-Launch</LaunchFeaturesHeader>
-              <LaunchFeatureList>
-                <LaunchFeatureRow>
-                  <LaunchFeatureText>
-                    Carbon Neutrality Partnerships
-                  </LaunchFeatureText>
-                  <FillerLine />
-                  <Checkmark src={greenCheckMark} />
-                </LaunchFeatureRow>
-                <LaunchFeatureRow>
-                  <LaunchFeatureText>
-                  Artist Outreach
-                  </LaunchFeatureText>
-                  <FillerLine />
-                  <Checkmark src={greenCheckMark} />
-                </LaunchFeatureRow>
-                <LaunchFeatureRow>
-                  <LaunchFeatureText>
-                    Opensea Integration Completed
-                  </LaunchFeatureText>
-                  <FillerLine />
-                  <Checkmark src={greenCheckMark} />
-                </LaunchFeatureRow>
-                <LaunchFeatureRow>
-                  <LaunchFeatureText>
-                    Smart Contracts Audited
-                  </LaunchFeatureText>
-                  <FillerLine />
-                  <Checkmark src={greenCheckMark} />
-                </LaunchFeatureRow>
-              </LaunchFeatureList>
-            </LaunchFeaturesBox>
-            <LaunchFeaturesBox>
-              <LaunchFeaturesHeader>Q2</LaunchFeaturesHeader>
-              <LaunchFeatureList>
-                <LaunchFeatureRow>
-                  <LaunchFeatureText>
-                    Full Album NFTs
-                  </LaunchFeatureText>
-                  <FillerLine />
-                  <Checkmark src={grayCheckMark} />
-                </LaunchFeatureRow>
-                <LaunchFeatureRow>
-                  <LaunchFeatureText>
-                    Public User Profiles
-                  </LaunchFeatureText>
-                  <FillerLine />
-                  <Checkmark src={grayCheckMark} />
-                </LaunchFeatureRow>
-                <LaunchFeatureRow>
-                  <LaunchFeatureText>
-                    On-Platform Resale
-                  </LaunchFeatureText>
-                  <FillerLine />
-                  <Checkmark src={grayCheckMark} />
-                </LaunchFeatureRow>
-                <LaunchFeatureRow>
-                  <LaunchFeatureText>
-                    Credit Card Support
-                  </LaunchFeatureText>
-                  <FillerLine />
-                  <Checkmark src={grayCheckMark} />
-                </LaunchFeatureRow>
-              </LaunchFeatureList>
-            </LaunchFeaturesBox>
-          </LaunchFeaturesContainer>
-        </LaunchContainer>
-        <LaunchContainer>
-          <ContainerTitle faq>
-            <b className="first">F</b>requently<b>A</b>sked<b>Q</b>uestions
-          </ContainerTitle>
-          <ContainerOutline />
-          <FAQ />
-        </LaunchContainer>
+        <Features />
+        <Divider />
+        <DemoImage />
+        <StyledHeader>Are you an artist? Launch with us!</StyledHeader>
+        <StyledAccountButton href="/register-artist">
+          Get Verified!
+        </StyledAccountButton>
+        <DescriptionLink to="/info">
+          <DescriptionBox>
+            <InfoHeaderContainer>
+              <InfoHeader>Info Page</InfoHeader>
+              <RightArrow />
+            </InfoHeaderContainer>
+            <InfoDetails>Learn more about our project!</InfoDetails>
+          </DescriptionBox>
+        </DescriptionLink>
       </BaseView>
     </Switch>
   );
 };
 
-const DescriptionColumn = styled.div`
-display: flex;
-flex-direction: column;
-flex: 1;
-`
+const DescriptionLink = styled(NavLink)`
+  width: 60%;
+  text-decoration: none;
+`;
 
-const DemoImage = styled.img`
-  height: 213px;
-  border: 2px solid black;
-  width: auto;
-  margin: auto 0 auto 20%;
-  @media only screen and (max-width: 776px) {
-    display: none;
+const RightArrow = styled(rightArrow)`
+  width: 18px;
+  height: 18px;
+  margin-top: 9px;
+  margin-left: 10px;
+  & path {
+    fill: white;
+    font-weight: 900;
   }
-`
-
-const Divider = styled.div`
-width: 80%;
-height: 4px;
-border-radius: 2px;
-background-color: ${props => props.theme.color.boxBorder};
-margin-bottom: 80px;
-@media only screen and (max-width: 776px) {
-    display: none;
-  }
-`
-
-const LaunchFeaturesHeader = styled.h3`
-  margin-top: 0;
-  margin-bottom: 30px;
-  align-self: center;
-  color: white;
-  font-family: "Compita";
 `;
 
-const Checkmark = styled.img`
-  max-height: 25px;
-  max-width: 25px;
-  margin-left: auto;
-  // margin-right: 5px;
-  `;
-
-const LaunchFeatureText = styled.div`
-  // margin-left: 4px;
-`;
-
-const LaunchFeatureList = styled.div`
+const StyledAccountButton = styled.a`
+  margin-top: -20px;
+  width: 200px;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
   display: flex;
-  flex-direction: column;
-`;
-
-const LaunchFeatureRow = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
+  justify-content: center;
   align-items: center;
-  max-height: 25px;
+  border: 1px solid ${(props) => props.theme.color.red};
+  height: 45px;
+  border-radius: 20px;
+  font-size: 20px;
   font-family: "Compita";
-  font-size: medium;
-  font-weight: 500;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.12;
-  letter-spacing: normal;
-  text-align: left;
-  color: #ffffff;
+  background-color: #181818;
+  color: white;
+  text-decoration: none;
+  &:hover {
+    background-color: rgba(256, 256, 256, 0.2);
+  }
 `;
 
-const LaunchFeaturesBox = styled.div`
+const DescriptionBox = styled.div`
+  margin: 80px 0;
+  border-radius: ${(props) => props.theme.borderRadius}px;
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
-  justify-content: flex-start;
-  width: calc(48% - 64px);
+  width: calc(100% - 64px);
   padding: 32px;
-  border-radius: ${props => props.theme.borderRadius}px;
   border: solid 1px #262626;
   background-color: #181818;
-  padding-bottom: 50px;
-  @media only screen and (max-width: 776px) {
-    width: calc(100% - 64px);
-    &:first-child {
-      margin-bottom: 20px;
-    }
-  }
-`;
-
-const StyledParagraph = styled.p`
-  color: white;
-  font-family: "Compita";
-  margin: auto 0;
-`;
-
-const StyledSubHeader = styled.h2`
-  color: white;
-  font-family: "Compita";
-  margin: 0 0 24px 32px;
-  @media only screen and (max-width: 776px) {
-    display: none;
-  }
 `;
 
 const StyledHeader = styled.h1`
+  display: flex;
   color: white;
   margin: 0 0 24px 0;
   font-family: "Compita";
+  padding: 32px 0px;
+  text-align: center;
 `;
 
-const DescriptionBoxContainer = styled.div`
-  border-radius: ${props => props.theme.borderRadius}px;
-  display:flex;
-  flex-direction: row;
-  width: calc(100% - 64px);
-  padding: 32px;
-  margin-bottom: 40px;
-  border: solid 1px #262626;
-  background-color: #181818;
+const InfoHeader = styled.h1`
+  color: white;
+  margin: 0 0 16px 0;
+  font-family: "Compita";
+  text-align: center;
+  text-decoration: none;
 `;
 
-
-const LaunchContainer = styled.div`
-  position:relative;
-  // border-radius: ${props => props.theme.borderRadius}px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 80px;
-  margin-bottom: 40px;
-`;
-
-const FillerLine = styled.div`
-  flex: 1;
-  height: 1px;
-  background-color: gray;
-  margin-left: 10px;
-  margin-right: 10px;
-`
-
-const ContainerTitle = styled.span`
-  position: absolute;
-  font-weight: 600;
-  left: calc(10% + 50px);
-  top: ${props => props.faq ? "-8px" : "-8px"};
-  padding: 0 12px;
-  font: "Compita";
-  background-color: ${props => props.theme.bgColor};
-  font-size: ${props => props.theme.fontSizes.sm};
-  color: ${props => props.faq ? "#3d3d3d" : props.theme.color.gray};
+const InfoHeaderContainer = styled.div`
   display: flex;
   flex-direction: row;
-  display: flex;
-  align-items: center;
-  b {
-    margin-left: 5px;
-    // font-size: 18px;
-    color: ${props => props.theme.color.gray};
-    font-size: ${props => props.theme.fontSizes.sm}
-  }
-  b.first{
-    margin-left: 0px;
-  }
+  text-decoration: none;
 `;
 
+const InfoDetails = styled.h2`
+  text-decoration: none;
+  color: #d3d3d3;
+  font-family: "Compita";
+  text-align: center;
+  font-size: 22px;
+  margin: 0px;
+`;
 
-const ContainerOutline = styled.div`
-  border-radius: 24px 24px 0 0;
-  border: 6px solid #383838;
-  border-bottom: none;
-  height: 40px;
+const Divider = styled.div`
   width: 80%;
-  display: flex;
-  flex-direction: row;
+  height: 4px;
+  border-radius: 2px;
+  background-color: ${(props) => props.theme.color.boxBorder};
+  margin-bottom: 80px;
+  @media only screen and (max-width: 776px) {
+    display: none;
+  }
 `;
 
-
-const LaunchFeaturesContainer = styled.div`
-  display: flex;
-  width: 100%;
-  flex-direction: row;
-  justify-content: space-between;
-  @media only screen and (max-width: 776px) {
-    flex-direction: column;
-    width: 100%;
-    align-items: center;
-  }
-`
 export default Listen;

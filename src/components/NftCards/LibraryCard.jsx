@@ -1,29 +1,30 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import BuyNftModal from "../NftModals";
-import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
-import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../assets/img/icons/coins.svg";
 import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.svg";
 import { useAccountConsumer } from "../../contexts/Account";
-import axios from "axios";
 import { usePlaylistConsumer } from "../../contexts/Playlist";
 import ShareModal from "../SMShareModal/SMShareModal";
 import LikeShare from "./LikeShare";
 
+import LibraryModal from "../NftModals/LibraryModal";
+import { ReactComponent as Founder } from "../../assets/img/Badges/founder.svg";
+import { ReactComponent as Premium } from "../../assets/img/Badges/premium.svg";
+import { ReactComponent as Prerelease } from "../../assets/img/Badges/prerelease.svg";
+import { ReactComponent as Exclusive } from "../../assets/img/Badges/exclusive.svg";
+
+import ReactToolTip from "react-tooltip";
 const NftCard = (props) => {
-  const { user, account } = useAccountConsumer();
-  const { nft, selectNft } = props;
-  const [isOpen, setIsOpen] = useState(false);
+  const { user } = useAccountConsumer();
+  const { nft } = props;
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const { setNftCallback } = usePlaylistConsumer();
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
 
-  const show = () => setIsOpen(true);
-  const hide = (e) => {
-    setIsOpen(false);
-    console.log("isOpen", isOpen);
+  const hide = () => {
+    setIsModalOpen(false);
   };
 
   useEffect(() => {
@@ -32,14 +33,14 @@ const NftCard = (props) => {
   }, [props.nft, user]);
 
   return (
-    <Container>
+    <Container onClick={() => setIsModalOpen(!isModalOpen)}>
       <ShareModal
         open={isShareOpen}
         hide={() => setIsShareOpen(!isShareOpen)}
         nft={nft}
       />
-      {/* <BuyNftModal
-        open={isOpen}
+      <LibraryModal
+        open={isModalOpen}
         hide={hide}
         nft={nft}
         liked={liked}
@@ -47,7 +48,7 @@ const NftCard = (props) => {
         likeCount={likeCount}
         setLikeCount={setLikeCount}
         setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
-      /> */}
+      />
       <CardTop>
         <LikeShare
           nft={nft}
@@ -58,31 +59,140 @@ const NftCard = (props) => {
           setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
         />
         <Side>
-          <IconArea
-            href={`https://testnets.opensea.io/assets/0x66B9f92D1167EeFd6f49dFeA83BCCFBDDa721409/${nft.nftId}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Trade
-            <Cart />
-          </IconArea>
+          {nft.chain === "ETH" && (
+            <IconArea
+              href={`https://opensea.io/assets/0x88d3e00ce938f1a591336131b859465b50d608b7/${nft.nftId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Trade
+              <Cart />
+            </IconArea>
+          )}
+          {/* {(nft.chain === "BSC") && (
+            <IconArea
+              href={''}
+            >
+              BSC
+              <Cart />
+            </IconArea>
+          )} */}
         </Side>
       </CardTop>
       <Image
         src={nft.imageUrl}
         alt="image"
-      // onClick={() => setIsOpen(!isOpen)}
+        // onClick={() => setIsOpen(!isOpen)}
       />
       <BottomWrapper>
         <Bottom>
-          <TrackName>{nft.title}</TrackName>
-          <Artist>{nft.artist}</Artist>
+          <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>
+            {nft.title.length > 15 ? nft.title.slice(0, 15) + "..." : nft.title}
+          </TrackName>
+          <Artist>
+            {nft.artist.length > 20
+              ? nft.artist.slice(0, 20) + "..."
+              : nft.artist}
+          </Artist>
         </Bottom>
         <PlayButton src={PlayIcon} onClick={() => setNftCallback(nft)} />
       </BottomWrapper>
+      <BottomSection>
+        <BadgeHolder>
+          {nft.badges?.map((badge) => {
+            if (badge.founder) {
+              return (
+                <>
+                  <FounderBadge
+                    className="founderBadge"
+                    data-tip
+                    data-for="founderTip"
+                  />
+                  <ReactToolTip id="founderTip" place="top" effect="solid">
+                    Founder
+                  </ReactToolTip>
+                </>
+              );
+            }
+            if (badge.premium) {
+              return (
+                <>
+                  <PremiumBadge
+                    className="premiumBadge"
+                    data-tip
+                    data-for="premiumTip"
+                  />
+                  <ReactToolTip id="premiumTip" place="top" effect="solid">
+                    Premium
+                  </ReactToolTip>
+                </>
+              );
+            }
+            if (badge.prerelease) {
+              return (
+                <>
+                  <PrereleaseBadge
+                    className="prereleaseBadge"
+                    data-tip
+                    data-for="prereleaseTip"
+                  />
+                  <ReactToolTip id="prereleaseTip" place="top" effect="solid">
+                    Prerelease
+                  </ReactToolTip>
+                </>
+              );
+            }
+            if (badge.exclusive) {
+              return (
+                <>
+                  <ExclusiveBadge
+                    className="exclusiveBadge"
+                    data-tip
+                    data-for="exclusiveTip"
+                  />
+                  <ReactToolTip id="exclusiveTip" place="top" effect="solid">
+                    Exclusive
+                  </ReactToolTip>
+                </>
+              );
+            }
+          })}
+        </BadgeHolder>
+      </BottomSection>
     </Container>
   );
 };
+const ExclusiveBadge = styled(Exclusive)`
+  width: 15px;
+  height: 15px;
+  padding: 0 5px;
+`;
+const FounderBadge = styled(Founder)`
+  width: 15px;
+  height: 15px;
+  padding: 0 5px;
+`;
+const PremiumBadge = styled(Premium)`
+  width: 15px;
+  height: 15px;
+  padding: 0 5px;
+`;
+const PrereleaseBadge = styled(Prerelease)`
+  width: 15px;
+  height: 15px;
+  padding: 0 5px;
+`;
+const BadgeHolder = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const BottomSection = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+`;
 
 const PlayButton = styled(PlayIcon)`
   width: 50px;
@@ -129,50 +239,50 @@ const Cart = styled(IconCart)`
   }
 `;
 
-const Share = styled(IconShare)`
-  width: 16px;
-  height: 16px;
-  margin: 0 4px 0 0;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  & path {
-    transition: all 0.2s ease-in-out;
-    fill: ${(props) => props.theme.color.gray};
-  }
-  &:hover {
-    & path {
-      fill: #20a4fc;
-    }
-  }
-`;
+// const Share = styled(IconShare)`
+//   width: 16px;
+//   height: 16px;
+//   margin: 0 4px 0 0;
+//   cursor: pointer;
+//   transition: all 0.2s ease-in-out;
+//   & path {
+//     transition: all 0.2s ease-in-out;
+//     fill: ${(props) => props.theme.color.gray};
+//   }
+//   &:hover {
+//     & path {
+//       fill: #20a4fc;
+//     }
+//   }
+// `;
 
-const LikedHeart = styled(IconHeart)`
-  width: 20px;
-  height: 20px;
-  margin: -3px 4px 0 0;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  & path {
-    stroke: ${(props) => props.theme.color.pink};
-  }
-`;
+// const LikedHeart = styled(IconHeart)`
+//   width: 20px;
+//   height: 20px;
+//   margin: -3px 4px 0 0;
+//   cursor: pointer;
+//   transition: all 0.2s ease-in-out;
+//   & path {
+//     stroke: ${(props) => props.theme.color.pink};
+//   }
+// `;
 
-const Heart = styled(IconHeart)`
-  width: 20px;
-  height: 20px;
-  margin: -3px 4px 0 0;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  & path {
-    transition: all 0.2s ease-in-out;
-    stroke: ${(props) => props.theme.color.gray};
-  }
-  &:hover {
-    & path {
-      stroke: ${(props) => props.theme.color.pink};
-    }
-  }
-`;
+// const Heart = styled(IconHeart)`
+//   width: 20px;
+//   height: 20px;
+//   margin: -3px 4px 0 0;
+//   cursor: pointer;
+//   transition: all 0.2s ease-in-out;
+//   & path {
+//     transition: all 0.2s ease-in-out;
+//     stroke: ${(props) => props.theme.color.gray};
+//   }
+//   &:hover {
+//     & path {
+//       stroke: ${(props) => props.theme.color.pink};
+//     }
+//   }
+// `;
 
 const Side = styled.div`
   display: flex;
@@ -192,7 +302,7 @@ const IconArea = styled.a`
     transition: all 0.2s ease-in-out;
     color: #20a4fc;
     & svg > path {
-    transition: all 0.2s ease-in-out;
+      transition: all 0.2s ease-in-out;
       fill: #20a4fc;
     }
   }
@@ -211,25 +321,39 @@ const CardTop = styled.div`
 
 const Container = styled.div`
   color: ${(props) => props.theme.color.gray};
-  padding: 12px;
+  padding: 12px 0;
   background-color: ${(props) => props.theme.color.box};
   border: 1px solid ${(props) => props.theme.color.boxBorder};
   border-radius: ${(props) => props.theme.borderRadius}px;
   align-items: center;
   display: flex;
   flex-direction: column;
-  width: 200px;
-  margin-bottom: 24px;
+  width: 325px;
+  margin-bottom: 20px;
+  position: relative;
+  transition: all 0.1s ease-in-out;
+  cursor: pointer;
+  :focus {
+    border: 1px solid white;
+  }
+  @media only screen and (max-width: 330px) {
+    width: 300px;
+  }
 `;
 
 const Image = styled.img`
-  width: 200px;
-  height: 200px;
-  border-radius: 12px;
+  /* cursor: pointer; */
+  width: 325px;
+  height: 325px;
+  /* border-radius: 12px; */
   object-fit: cover;
   margin-bottom: 12px;
   border: 1px solid ${(props) => props.theme.color.boxBorder};
   background-color: #1e1e1e;
+  @media only screen and (max-width: 330px) {
+    width: 300px;
+    height: 300px;
+  }
 `;
 
 const TrackName = styled.span`

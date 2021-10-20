@@ -1,31 +1,26 @@
-import React, { useCallback, useEffect, useState, useRef } from "react";
-import BaseView from "../BaseView";
-import axios from "axios";
-import styled, { keyframes } from "styled-components";
-import default_pic from "../../assets/img/profile_page_assets/default_profile.png";
+import React from "react";
+import BaseView from "../../components/Page/BaseView";
+import styled from "styled-components";
 import { useAccountConsumer } from "../../contexts/Account";
-import cog from "../../assets/img/icons/cog.svg";
-import { ReactComponent as CopyIcon } from "../../assets/img/icons/copy_icon.svg";
-import { ReactComponent as plus_icon } from "../../assets/img/icons/plus_icon.svg";
-import { ReactComponent as lock_icon } from "../../assets/img/icons/lock.svg";
 import IconMetamask from "../../assets/img/icons/metamask_icon.png";
-import Library from "./components/Library";
-import ProfilePic from "./components/ProfilePic";
+import Library from "./components/LibraryNfts";
 import swal from "sweetalert2";
+import { warningIcon, imageWidth, imageHeight } from "../../utils/swalImages";
 
 const Profile = () => {
-  const { account, connect, user, setUser } = useAccountConsumer();
+  const { account, connect, user } = useAccountConsumer();
 
   const connectWallet = async () => {
     const newChainId = await window.ethereum.request({ method: "eth_chainId" });
-    if ((Number(newChainId) === 4)) {
+    if ((Number(newChainId) === process.env.REACT_APP_IS_MAINNET ? 1 : 4)) {
       connect("injected");
     } else {
       swal.fire({
         title: "Wrong Chain",
-        text:
-          "You are on the wrong chain. Open MetaMask and select Rinkeby Test Network before connecting.",
-        icon: "warning",
+        text: "You are on the wrong chain. Please connect to Ethereum Mainnet.",
+        imageUrl: warningIcon,
+        imageWidth,
+        imageHeight      
       });
     }
   }
@@ -46,13 +41,6 @@ const Profile = () => {
     </BaseView>
   );
 };
-
-const Divider = styled.div`
-width: 200px;
-height: 1px;
-background-color: ${props => props.theme.fontColor.gray};
-margin-bottom: 6px;
-`
 
 const ButtonText = styled.span`
   font-family: "Compita";
@@ -107,143 +95,5 @@ const IsConnected = styled.div`
   background-color: rgba(0, 0, 0, 0.7);
   position: absolute;
   z-index: 11;
-`;
-
-const Landing = styled.div`
-  /* height: 450px; */
-  top: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-`;
-
-const CopyButton = styled(CopyIcon)`
-  width: 15px;
-  height: 15px;
-  cursor: pointer;
-  transition: all 0.2s linear;
-  position: absolute;
-  margin-left: 150px;
-  & path {
-    fill: ${(props) => props.theme.color.gray};
-  }
-
-  &:hover {
-    & path {
-      fill: ${(props) => props.theme.color.lightgray};
-    }
-  }
-`;
-
-const Username = styled.span`
-  font-size: ${(props) => props.theme.fontSizes.md};
-  white-space: nowrap;
-`;
-
-const AddressSpan = styled.span`
-  color: ${(props) => props.theme.color.gray};
-  display: flex;
-  /* align-items: center;s */
-  position: relative;
-  height: 20px;
-`;
-const SideSpan = styled.span`
-  font-size: ${(props) => props.theme.fontSizes.sm};
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const BlueSpan = styled.span`
-  padding-left: ${(props) => props.theme.spacing[1]}px;
-  color: ${(props) => props.theme.color.blue};
-  font-size: ${(props) => props.theme.fontSizes.xs};
-`;
-
-const Cog = styled.img`
-  width: 15px;
-  right: 45px;
-  position: absolute;
-  cursor: pointer;
-  :hover {
-    animation: rotation 4s infinite linear;
-  }
-  @keyframes rotation {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(359deg);
-    }
-  }
-  @media only screen and (max-width: 776px) {
-    top: 0px;
-    right: -25px;
-  }
-`;
-
-const ProfileInfoHolder = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const Side = styled.div`
-  width: calc(100% / 3);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-end;
-  & > span:nth-child(1) {
-    margin-top: 40px;
-  }
-`;
-
-const ProfileHolder = styled.div`
-  position: relative;
-  width: calc(100% / 3);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const ProfileHeading = styled.div`
-  margin-left: auto;
-  margin-right: auto;
-  display: flex;
-  height: 200px;
-  /* margin-top: 80px; */
-  color: ${(props) => props.theme.fontColor.white};
-  width: 100%;
-    justify-content: space-between;
-  @media only screen and (max-width: 776px) {
-    width: 90%;
-  }
-`;
-
-const StyledInput = styled.input`
-  background-color: ${(props) => props.theme.bgColor};
-  font-size: ${props => props.theme.fontSizes.sm};
-  border: none;
-  outline: none;
-  color: white;
-  opacity: 0.6;
-  text-align: center;
-`;
-
-const AccountDetails = styled.div`
-  width: 100%;
-  margin-top: 75px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: white;
-`;
-
-const Banner = styled.div`
-  height: 50px;
 `;
 export default Profile;

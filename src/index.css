@@ -100,6 +100,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  overflow-anchor: none;
 }
 
 a {
@@ -142,6 +143,9 @@ code {
 .swal2-button--confirm {
   border-radius: 5px;
 }
+.swal2-button--cancel {
+  border-radius: 5px;
+}
 
 .swal2-confirm {
   font-size: 30px;
@@ -163,6 +167,29 @@ code {
   min-width: 100px;
   color: white !important;
   background: #20a4fc !important;
+  background-size: 12px, 100% !important;
+  margin: 0px 30px !important;
+}
+.swal2-cancel {
+  font-size: 30px;
+  font-stretch: normal;
+  font-weight: 600 !important;
+  font-family: "Compita" !important;
+
+  font-style: normal;
+  line-height: 1;
+  text-decoration: none;
+  letter-spacing: normal;
+  display: flex;
+  align-items: center;
+  color: white;
+  border-radius: 12px !important;
+  text-transform: uppercase !important;
+  border: 4px solid #000 !important;
+  padding: 12px !important;
+  min-width: 100px;
+  color: white !important;
+  /* background: #20a4fc !important; */
   background-size: 12px, 100% !important;
   margin: 0px 30px !important;
 }
@@ -190,3 +217,46 @@ code {
   background-size: 12px, 100% !important;
   margin: 0px 30px !important;
 }
+
+.pagination {
+  list-style-type: none;
+  display: flex;
+  margin: 0px;
+}
+
+.pagination > li {
+
+  cursor: pointer;
+  user-select: none;
+  height: 24px;
+  display: flex;
+  transition: all 0.1s linear;
+}
+
+
+
+.pagination > li > a {
+  outline: none;
+  height: 100%;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination > li:last-child {
+  border-radius: 0 5px 5px 0;
+}
+
+.pagination > li:last-child > a {
+  padding-right: 6px;
+}
+
+.pagination > li:first-child > a {
+  padding-left: 6px;
+}
+
+.pagination > li:first-child {
+  border-radius: 5px 0 0 5px;
+}
+

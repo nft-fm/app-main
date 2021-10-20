@@ -11,7 +11,7 @@ const Listen = () => {
       <BaseView>
         <LinkedNftModal />
         <Container>
-          <StyledTitle>MARKETPLACE</StyledTitle>
+          <StyledTitle>Discover and Collect Exclusive Digital Music</StyledTitle>
           <Market />
         </Container>
       </BaseView>

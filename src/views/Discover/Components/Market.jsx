@@ -288,7 +288,7 @@ const ContainerTitleInput = styled.input`
 `;
 
 const FillerCard = styled.div`
-  width: 325px;
+  width: 375px;
   height: 0px;
 `;
 
@@ -342,10 +342,10 @@ const LaunchContainer = styled.div`
 `;
 
 const ContainerOutline = styled.div`
-  border-radius: 24px 24px 0 0;
   border: 6px solid #383838;
   border-bottom: none;
-  height: 40px;
+  // height: 40px;
+  margin-bottom: 40px;
   width: 80%;
   /* display: flex;
   flex-direction: row; */

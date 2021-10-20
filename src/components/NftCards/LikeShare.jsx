@@ -17,7 +17,7 @@ const LikeShare = (props) => {
       setLiked(!liked);
       await axios
         .post(`/api/user/like-nft`, { address: account, nft: nft._id })
-        .then((res) => {})
+        .then((res) => { })
         .catch((err) => {
           console.log("here", err);
         });
@@ -33,6 +33,14 @@ const LikeShare = (props) => {
 
   return (
     <Side>
+      <IconArea>
+        <ShareButton onClick={(e) => share(e)} aria-label="share button">
+          <Share />
+          <ShareText>Share</ShareText>
+        </ShareButton>
+        {/* {shareCount?.count ? shareCount.count : nft.shareCount} */}
+      </IconArea>
+      <Spacer />
       <IconArea>
         {isLoading ? (
           <img src={loading} alt="likes loading" />
@@ -51,24 +59,26 @@ const LikeShare = (props) => {
         )}
         {likeCount}
       </IconArea>
-      <Spacer />
-      <IconArea>
-        <ShareButton onClick={(e) => share(e)} aria-label="share button">
-          <Share aria-hidden="true" />
-        </ShareButton>
-        {/* {shareCount?.count ? shareCount.count : nft.shareCount} */}
-      </IconArea>
     </Side>
   );
 };
 
-const ShareButton = styled.button`
+const ShareText = styled.div`
+margin-left: 5px;
+
+`
+
+const ShareButton = styled.div`
   background-color: transparent;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   padding: 0px;
   border: none;
   width: min-content;
   height: min-content;
   margin: 0px 4px 0 0;
+
 `;
 
 const LikeButton = styled.button`
@@ -93,11 +103,7 @@ const Share = styled(IconShare)`
     transition: all 0.2s ease-in-out;
     fill: ${(props) => props.theme.color.gray};
   }
-  &:hover {
-    & path {
-      fill: #20a4fc;
-    }
-  }
+
 `;
 
 const LikedHeart = styled(IconHeart)`

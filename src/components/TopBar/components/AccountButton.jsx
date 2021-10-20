@@ -85,7 +85,7 @@ const StyledAccountButton = styled.div`
   border-radius: 20px;
   font-family: "Compita";
   background-color: #181818;
-  /* margin-left: ${(props) => props.theme.spacing[3]}px; */
+  margin-left: ${(props) => props.theme.spacing[3]}px;
   &:hover {
     background-color: rgba(256, 256, 256, 0.2);
   }

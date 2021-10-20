@@ -229,29 +229,8 @@ const BuyNftModal = (props) => {
           <RightSide>
             <CardTop>
               <Side>
-                <IconArea>
-                  <LikeButton
-                    onClick={() => like()}
-                    aria-pressed={liked}
-                    aria-label="like button"
-                  >
-                    {liked ? (
-                      <LikedHeart aria-hidden="true" />
-                    ) : (
-                      <Heart aria-hidden="true" />
-                    )}
-                  </LikeButton>
-                  {likeCount}
-                </IconArea>
-                <IconArea>
-                  <ShareButton
-                    onClick={() => share()}
-                    aria-label="share button"
-                  >
-                    <Share onClick={() => share()} />
-                  </ShareButton>
-                  {nft.shareCount}
-                </IconArea>
+                <ProfilePicture img={props.profilePic} />
+
               </Side>
               <Side>
                 <IconArea>
@@ -349,31 +328,61 @@ const BuyNftModal = (props) => {
                   : nft.artist}
               </Artist>
             </InfoContainer>
-            <SnippetHolder>
-              {/* {!isBought && <PlaySongSnippet partialSong={partialSong} />} */}
-              <PlaySongSnippet partialSong={partialSong} />
-              <SnippetText>15 Sec Preview</SnippetText>
-            </SnippetHolder>
             <TrackDetailsHolder>
-              <span>Genre: {nft.genre}</span>
-              {/* <span>Producer: {nft.producer}</span> */}
-              {/* <span>Track Length: {formatSongDur(nft.dur)}</span> */}
-              <span>
-                Release Date: {moment(nft.timestamp).format("MMM Do YYYY")}
-              </span>
+              <Info>
+                <span>Genre: {nft.genre}</span>
+                {/* <span>Producer: {nft.producer}</span> */}
+                {/* <span>Track Length: {formatSongDur(nft.dur)}</span> */}
+                <span>
+                  Release Date: {moment(nft.timestamp).format("MMM Do YYYY")}
+                </span>
+              </Info>
+              <Actions>
+                <IconArea>
+                  <LikeButton
+                    onClick={() => like()}
+                    aria-pressed={liked}
+                    aria-label="like button"
+                  >
+                    {liked ? (
+                      <LikedHeart aria-hidden="true" />
+                    ) : (
+                      <Heart aria-hidden="true" />
+                    )}
+                  </LikeButton>
+                  {likeCount}
+                </IconArea>
+                <IconArea  onClick={() => share()}>
+                  <ShareButton
+                    onClick={() => share()}
+                    aria-label="share button"
+                  >
+                    <Share onClick={() => share()} />
+                  </ShareButton>
+                  {/* {nft.shareCount}  */}
+                  Share
+                </IconArea>
+              </Actions>
             </TrackDetailsHolder>
             <DescriptionHolder>
               <DescriptionLegend>Description</DescriptionLegend>
               <DescriptionContent>{nft.description}</DescriptionContent>
             </DescriptionHolder>
+            <SnippetHolder>
+              {/* {!isBought && <PlaySongSnippet partialSong={partialSong} />} */}
+              <PlaySongSnippet partialSong={partialSong} />
+              <SnippetText>15 Sec Preview</SnippetText>
+            </SnippetHolder>
+
+
             <PricesContainer>
               <PriceHolder>
                 <PriceItem>
                   {nft.price
                     ? parseFloat(nft.price).toLocaleString(undefined, {
-                        minimumFractionDigits: 0,
-                        maximumFractionDigits: 6,
-                      })
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 6,
+                    })
                     : "--"}{" "}
                 </PriceItem>
                 &nbsp;
@@ -428,6 +437,23 @@ const BuyNftModal = (props) => {
   );
 };
 
+const ProfilePicture = styled.div`
+width: 100px;
+height: 100px;
+border-radius: 50px;
+margin-left: 20px;
+margin-top: 10px;
+background-image: url(${props => props.img});
+background-size: cover;
+`
+
+const ActionButtons = styled.div`
+display: flex;
+flex-direction: row;
+width: 100%;
+justify-content: start;
+`
+
 const LikeButton = styled.button`
   background-color: transparent;
   padding: 0px;
@@ -464,16 +490,25 @@ const Eth = styled(IconEth)`
 const TrackDetailsHolder = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   height: 50px;
   margin-bottom: 10px;
-  justify-content: space-around;
+  justify-content: space-between;
   color: #666;
-  padding-left: 20px;
+  padding-left: 10px;
   @media only screen and (max-width: 776px) {
     height: auto;
   }
 `;
+
+const Info = styled.div`
+display: flex;
+flex-direction: column;
+`
+
+const Actions = styled.div`
+display: flex;
+`
 
 const MerchBadge = styled(GiftIcon)`
   width: 16px;
@@ -511,9 +546,9 @@ const DescriptionHolder = styled.fieldset`
   width: calc(100% - 10px);
   border-radius: 8px;
   border: 1px solid ${(props) => props.theme.color.lightgray};
-  padding: 2px 0px 0px 10px;
-  height: 60px;
+  height: 100px;
   overflow-y: scroll;
+  padding: 2px 0px 0px 10px;
   &::-webkit-scrollbar {
     width: 6px;
     background: rgba(0, 0, 0, 0);
@@ -530,7 +565,8 @@ const DescriptionLegend = styled.legend`
   margin-left: 10px;
 `;
 const DescriptionContent = styled.span`
-  margin-top: -10px;
+  margin: 10px;
+  margin-left: 0px;
 `;
 
 const SnippetHolder = styled.div`
@@ -539,7 +575,7 @@ const SnippetHolder = styled.div`
   align-items: center;
   padding: 10px, 0;
   width: 100%;
-  margin-top: 10px;
+  margin-top: 20px;
   @media only screen and (max-width: 776px) {
     width: 90%;
   }
@@ -575,7 +611,7 @@ const PricesContainer = styled.div`
   display: flex;
   justify-content: center;
   /* margin-left: 10%; */
-  margin: 30px 0;
+  margin: 20px 0;
   @media only screen and (max-width: 776px) {
     margin: 20px 0;
   }
@@ -666,6 +702,7 @@ const IconArea = styled.div`
   font-size: 14px;
   height: 100%;
   align-items: center;
+  cursor: pointer;
 `;
 
 const CardTop = styled.div`
@@ -685,7 +722,8 @@ const OpaqueFilter = styled.div`
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: brightness(20%) blur(2px);
   z-index: 500;
 `;
 
@@ -698,6 +736,7 @@ const Container = styled.div`
   top: 50%;
   transform: translate(-50%, -50%);
   color: #666;
+  z-index: 505;
 `;
 
 const RightSide = styled.div`
@@ -715,7 +754,8 @@ const RightSide = styled.div`
 const StyledModal = styled.div`
   border-radius: 16px;
   border: solid 1px #181818;
-  width: 800px;
+  width: 1100px;
+  height: 600px;
   background-color: ${(props) => props.theme.bgColor};
   font-size: 16px;
   font-weight: normal;
@@ -732,7 +772,8 @@ const StyledModal = styled.div`
 `;
 
 const Image = styled.img`
-  width: 500px;
+  width: 750px;
+
   /* height: 400px; */
   aspect-ratio: 1;
   border-radius: 16px;
@@ -756,7 +797,7 @@ const BadgeHolder = styled.div`
   width: 100%;
   display: flex;
   justify-content: flex-end;
-  height: 20px;
+  height: 10px;
   padding: 10px 0;
   & > span {
     padding: 0 5px;
@@ -801,7 +842,8 @@ const Artist = styled(NavLink)`
 `;
 
 const BuyButton = styled.button`
-  width: 150px;
+  width: 200px;
+  height: 60px;
   /* height: 64px; */
   cursor: pointer;
   transition: all 0.1s ease-in-out;

@@ -467,6 +467,8 @@ router.post("/getNftsWithParams", async (req, res) => {
         return { timestamp: -1 };
       } else if (req.body.sort === 3) {
         return { timestamp: 1 };
+      } else if (req.body.sort === 4) {
+        return { shareCount: 1 }
       }
     };
     let nftTypes = await NftType.find({

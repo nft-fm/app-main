@@ -46,8 +46,8 @@ const Info = () => {
               <h3>FAQ</h3>
               <section>We answer your questions</section>
             </InfoSubContainer>
-            <InfoSubContainer>
-            {/* <InfoSubContainer onClick={() => handleClick("tokenomicsRef")}> */}
+            {/* <InfoSubContainer> */}
+            <InfoSubContainer onClick={() => handleClick("tokenomicsRef")}>
               <LinkImage src={tokenomics} alt="tokenomics" />
               <h3>Tokenomics</h3>
               <section>Coming Soon</section>
@@ -94,12 +94,12 @@ const Info = () => {
             Sustainable practices are important and we hope that we can be a
             model going forward in this industry.
           </span>
-          <StyledAccountButton
+          {/* <StyledAccountButton
             target="_blank"
             href="https://drive.google.com/file/d/1i24DtdT2pIxu5YgIvud0bGa6zxl888GJ/view?usp=sharing"
           >
             <Button>Litepaper</Button>
-          </StyledAccountButton>
+          </StyledAccountButton> */}
         </ProjectSummary>
         <div id="roadmapRef" />
         <RoadMap />
@@ -112,7 +112,7 @@ const Info = () => {
           <FAQ />
         </LaunchContainer>
         <div id="tokenomicsRef" />
-        {/* <Tokenomics /> */}
+        <Tokenomics />
         <div id="teamsRef" />
         <Team />
       </BaseView>

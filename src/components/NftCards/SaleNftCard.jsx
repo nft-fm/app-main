@@ -473,11 +473,6 @@ const Container = styled.div`
   flex-direction: column;
   width: 375px;
   margin-bottom: 20px;
-<<<<<<< HEAD
-  height: 319px;
-  /* margin-left: 5px;
-  margin-right: 5px; */
-=======
   position: relative;
   transition: all 0.1s ease-in-out;
   cursor: pointer;
@@ -486,7 +481,6 @@ const Container = styled.div`
     width: 300px;
   }
 
->>>>>>> 171af9af75aab63697f21c7332de1ae845e3e92a
 `;
 
 // const Container = styled.div`

@@ -161,6 +161,13 @@ const Switches = () => {
 };
 
 const App = () => {
+
+  console.log("window.location.href", window.location.href);
+
+  if (window.location.href.includes("nftfm.io")) {
+    window.location.replace("https://beta.fanfare.fm");
+  }
+
   useEffect(() => {
     preloadImage(recordPlayer);
     preloadImage(recordPlayerSpin);

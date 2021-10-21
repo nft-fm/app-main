@@ -154,7 +154,7 @@ const Staking = () => {
             </Side>
           </StakingUserInfoSection>
           <StakingHolder />
-          {/* {artists.length > 0 && <Community balance={balance} />} */}
+          {artists.length > 0 && <Community balance={balance} />}
         </>
       )}
     </BaseView>

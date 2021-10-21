@@ -13,7 +13,7 @@ const TopBar = () => {
         <StyledTopBarInner>
           <NavLink to="/home" style={{ textDecoration: "none" }}>
             <LogoContainer>
-              <Logo /> <p>ANFARE BETA</p>
+              <Logo /> <p>BETA</p>
             </LogoContainer>
           </NavLink>
           <NavRight>
@@ -30,9 +30,9 @@ const TopBar = () => {
 
 const LogoContainer = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   color: white;
-  font-size: ${(props) => props.theme.fontSizes.xs};
+  font-size: ${(props) => props.theme.fontSizes.xxs};
 `;
 
 const NavContainer = styled.div`

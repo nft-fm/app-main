@@ -19,6 +19,7 @@ const Listen = () => {
   const limit = 30;
 
   const getNftsWithParams = async (pageIncrease, searchParam, sortParam) => {
+    console.log("here", hasMore);
     if (hasMore) {
       await axios
         .post("/api/nft-type/getNftsWithParams", {
@@ -139,16 +140,6 @@ const Listen = () => {
     >
       Cheapest
     </MenuSpan>,
-    // <MenuSpan
-    //   isMenuOpen={menuOpen}
-    //   onClick={() => {
-    //     setSort(3);
-    //     setSelected("Date: Low - High");
-    //     setMenuOpen(false);
-    //   }}
-    // >
-    //   Date: Low - High
-    // </MenuSpan>,
   ];
 
   return (
@@ -181,6 +172,7 @@ const Listen = () => {
           dataLength={allNfts.length}
           next={() => getNftsWithParams(1, search, sort)}
           hasMore={hasMore}
+          onScroll={(e) => console.log(e)}
         >
           {allNfts.map((item, index) => (
             <NftCard nft={item} />
@@ -290,6 +282,10 @@ const ContainerTitleInput = styled.input`
 const FillerCard = styled.div`
   width: 375px;
   height: 0px;
+
+  @media only screen and (max-width: 330px) {
+    width: 300px;
+  }
 `;
 
 const NftScroll = styled.div`

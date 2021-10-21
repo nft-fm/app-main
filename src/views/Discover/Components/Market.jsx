@@ -172,7 +172,6 @@ const Listen = () => {
           dataLength={allNfts.length}
           next={() => getNftsWithParams(1, search, sort)}
           hasMore={hasMore}
-          onScroll={(e) => console.log(e)}
         >
           {allNfts.map((item, index) => (
             <NftCard nft={item} />

@@ -110,7 +110,7 @@ const Tokenomics = () => {
             <UtilityTitle>Staking</UtilityTitle>
             <Divider />
             <BulletPoint>
-              Join your favorite FANFARE artist's fanclub by staking your $VINYL
+              Join your favorite Fanfare artist's fanclub by staking your $VINYL
               to start immediately earning rewards for both you and the artist!
             </BulletPoint>
             <br />
@@ -122,7 +122,7 @@ const Tokenomics = () => {
             {/* <BulletPoint>Artist's can </BulletPoint>
             <br /> */}
             <BulletPoint>
-              Stake your $VINYL on your favorite FANFARE artist today!
+              Stake your $VINYL on your favorite Fanfare artist today!
             </BulletPoint>
             <br />
           </Half>

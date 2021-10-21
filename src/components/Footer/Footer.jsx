@@ -24,7 +24,7 @@ export const Footer = ({ isOpen }) => (
         <div style={{ width: "150px" }} />
         <div style={{ width: "150px" }} />
       </FooterContact>
-      <FooterCopy>&copy; 2021 FANFARE Inc.</FooterCopy>
+      <FooterCopy>&copy; 2021 Fanfare Inc.</FooterCopy>
     </Column>
   </StyledFooter>
 );

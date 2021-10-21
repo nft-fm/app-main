@@ -118,7 +118,7 @@ const Community = () => {
     return (
         <ApproveContainer>
           <ApproveText>
-            FANFARE Community is only available to $VINYL Holders.
+            Fanfare Community is only available to $VINYL Holders.
           </ApproveText>
           <ApproveButton onClick={() => getConnectedFam()}>
             I own $VINYL, Connect Me!
@@ -166,7 +166,7 @@ const Community = () => {
               <InputWrapper>
                 <Input
                   maxlength="200"
-                  placeholder="What would you like to see on FANFARE?"
+                  placeholder="What would you like to see on Fanfare?"
                   value={newSuggestion}
                   onChange={(e) => handleChange(e)}
                 />

@@ -11,7 +11,7 @@ const PrivacyPolicy = () => {
         <SectionContent>
           In these dark internet ages, it is often hard (if not impossible) to
           tell what information is being collected from you and how exactly it
-          is being used. At FANFARE Inc. (“FANFARE”), we want to bring this
+          is being used. At Fanfare Inc. (“Fanfare”), we want to bring this
           information into the light. This Privacy Policy (“Policy”) will
           explain (without the legal jargon) how we use your information and
           will remind you that you have rights when it comes to controlling your
@@ -24,21 +24,21 @@ const PrivacyPolicy = () => {
           You should also head over and read our Terms of Use Agreement as there
           are important parts of that agreement that operate in conjunction with
           this agreement and that materially affect your right to bring a
-          lawsuit against FANFARE in regards to this Policy. We believe our
+          lawsuit against Fanfare in regards to this Policy. We believe our
           privacy practices are top-notch! But, if you disagree, we will be sad
           to see you leave.
         </SectionContent>
         <SectionTitle>Services this Policy Covers</SectionTitle>
         <SectionContent>
-          This ToU applies to all online services operated by FANFARE, including
-          our website <a href="nftfm.io">www.nftfm.io</a> (the “Site”), our
+          This ToU applies to all online services operated by Fanfare, including
+          our website <a href="beta.fanfare.fm">beta.fanfare.fm</a> (the “Site”), our
           social media accounts, and any future online services that we develop
           (collectively the “Services”).
         </SectionContent>
         <SectionTitle>Third-Party Websites and Services</SectionTitle>
         <SectionContent>
           Our Services may contain links to third-party websites, or we may
-          utilize services that are not owned or controlled by FANFARE. Be aware
+          utilize services that are not owned or controlled by Fanfare. Be aware
           that we have no control over and assume no responsibility for the
           content, privacy policies, or practices of any third-party website or
           service. We do not warrant the offerings of any third party and are
@@ -75,7 +75,7 @@ const PrivacyPolicy = () => {
           information, when combined with other information, is used to reveal
           your identity.
         </SectionContent>
-        <SectionTitle>Personal Information FANFARE Collects</SectionTitle>
+        <SectionTitle>Personal Information Fanfare Collects</SectionTitle>
         <SectionContent>
           We only collect personal information from you when you voluntarily
           consent for us to use it. Depending on whether you are using our
@@ -92,7 +92,7 @@ const PrivacyPolicy = () => {
             <li>
               <ListItemTitle>Using Our Services as An Artist:</ListItemTitle> To
               make non-fungible tokens available for purchase on our Site,
-              Artists must first be verified manually through FANFARE (currently,
+              Artists must first be verified manually through Fanfare (currently,
               we are only accepting select Artists) and then connect the
               MetaMask extension to our Site so that you can either make
               non-fungible tokens available yourself or use our white-glove
@@ -214,7 +214,7 @@ const PrivacyPolicy = () => {
               interests and online habits. We use targeted advertising in an
               effort to market to audiences that we hope may be interested in
               our Services. That is why you may see some ‘paid’ or ‘sponsored’
-              advertisements from FANFARE while using third-party platforms.
+              advertisements from Fanfare while using third-party platforms.
             </li>
             <br />
             <li>
@@ -274,7 +274,7 @@ const PrivacyPolicy = () => {
           information for technical reasons.
         </SectionContent>
         <SectionTitle>
-          Reasons FANFARE Collects Personal Information
+          Reasons Fanfare Collects Personal Information
         </SectionTitle>
         <SectionContent>
           In these George Orwellian times, we think it is important to point out
@@ -336,7 +336,7 @@ const PrivacyPolicy = () => {
             </li>
             <br />
             <li>
-              <ListItemTitle>New Owners:</ListItemTitle> If FANFARE is involved
+              <ListItemTitle>New Owners:</ListItemTitle> If Fanfare is involved
               in a bankruptcy, merger, acquisition, reorganization, or sale of
               major assets, your information may be sold or transferred as part
               of that transaction. Your personal information may be transferred
@@ -345,11 +345,11 @@ const PrivacyPolicy = () => {
             <br />
             <li>
               <ListItemTitle>
-                Other Companies Owned by FANFARE Inc:
+                Other Companies Owned by Fanfare Inc:
               </ListItemTitle>{" "}
-              FANFARE may share information with other companies that are
-              affiliated with FANFARE, or wholly or partially owned by FANFARE, or
-              the majority members of FANFARE.
+              Fanfare may share information with other companies that are
+              affiliated with Fanfare, or wholly or partially owned by Fanfare, or
+              the majority members of Fanfare.
             </li>
             <br />
             <li>
@@ -370,8 +370,8 @@ const PrivacyPolicy = () => {
         </SectionContent>
         <SectionTitle>Personal Information Retention and Storage</SectionTitle>
         <SectionContent>
-          At FANFARE, we only store your information for as long as we need it to
-          render our Services. FANFARE is a business that is formed and operated
+          At Fanfare, we only store your information for as long as we need it to
+          render our Services. Fanfare is a business that is formed and operated
           in the United States. As such, the data we do collect is stored and
           processed in the United States. However, in addition to storing
           information directly onto our servers, we also use some third-party
@@ -490,7 +490,7 @@ const PrivacyPolicy = () => {
           matter, then by using our Services, you agree to the binding
           arbitration provisions outlined in our Terms of Use Agreement.
         </SectionContent>
-        <SectionTitle>Contact FANFARE</SectionTitle>
+        <SectionTitle>Contact Fanfare</SectionTitle>
         <SectionContent>
           If you ever have any questions about how we use your personal
           information or about our Services in general, feel free to reach out

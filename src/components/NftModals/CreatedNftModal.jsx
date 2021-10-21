@@ -212,6 +212,7 @@ const PriceButton = styled.button`
   background-color: ${(props) => props.theme.color.box};
   border-radius: ${(props) => props.theme.borderRadius}px;
   padding: 5px 10px;
+  cursor: pointer;
 `;
 
 const Loading = styled.img`

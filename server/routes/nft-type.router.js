@@ -970,6 +970,7 @@ router.post("/updatePrice", async (req, res) => {
       { price: req.body.price },
       { new: true }
     );
+    console.log("update", updateNFT);
     res.status(200).send("Success");
   } catch (err) {
     res.status(500).send(err);

@@ -288,7 +288,7 @@ const ContainerTitleInput = styled.input`
 `;
 
 const FillerCard = styled.div`
-  width: 325px;
+  width: 375px;
   height: 0px;
 `;
 

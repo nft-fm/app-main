@@ -500,6 +500,7 @@ const Container = styled.div`
   margin-left: auto;
   margin-right: auto;
   margin-top: 10vh;
+  margin-bottom: 10vh;
   max-width: 100vw;
   display: flex;
   flex-direction: column;

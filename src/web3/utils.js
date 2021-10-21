@@ -116,7 +116,7 @@ export const mintNFT = async (data, finalCallback) => {
 export const getVinylBalance = async (callback) => {
   const { provider, walletAddress } = await require();
   const signer = provider.getSigner();
-  const vinylContract = new Contract(VinylAddress, VinylABI, signer);
+  const vinylContract = new Contract(StakingAddress, StakingABI, signer);
   const vinylBalance = vinylContract
     .balanceOf(walletAddress)
     .then((r) => utils.formatEther(r));

@@ -198,6 +198,9 @@ color: white;
 /* border-radius: 0 0 0 20px; */
 border-radius: 2px;
 z-index: 10000000;
+@media only screen and (max-width: 776px) {
+  margin-top: 150px;
+}
 `
 
 export default GetEmailModal;

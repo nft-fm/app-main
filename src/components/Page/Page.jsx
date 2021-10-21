@@ -9,12 +9,6 @@ const Page = ({ children }) => {
 
   return (
     <StyledPage>
-      <Aesthetics>
-        <Aesthetics1 />
-        <Aesthetics2 />
-        <Aesthetics3 />
-        <Aesthetics4 />
-      </Aesthetics>
       <TopBar />
       <NavContainer>
         <Nav />

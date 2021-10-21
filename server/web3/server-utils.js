@@ -208,7 +208,7 @@ const getStakersForArtist = async (address, callback) => {
     : TEST_StakingAddress;
   const contract = new Contract(STAKING_ADDRESS, StakingABI, PROVIDER_URL);
   let promise = await contract.stakersForArtist(address).then((r) => {
-    return  r ;
+    return r;
   });
   let newVariable = await Promise.all([...promise]).then((res) => res);
   return newVariable;

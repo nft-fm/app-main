@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import logo from "../../assets/img/logos/logo_nav.png";
+import logo from "../../assets/img/logos/Fanfare_logo.svg";
 import { NavLink } from "react-router-dom";
 
 export const Footer = ({ isOpen }) => (
   <StyledFooter isOpen={isOpen}>
     <Column>
-      <Logo src={logo} />
+      {/* <Logo src={logo} /> */}
       <FooterLinks>
         <FooterLink to="/termsofservice">Terms of Service</FooterLink>
         <ContactDiv>
@@ -24,7 +24,7 @@ export const Footer = ({ isOpen }) => (
         <div style={{ width: "150px" }} />
         <div style={{ width: "150px" }} />
       </FooterContact>
-      <FooterCopy>&copy; 2021 NFT FM Inc.</FooterCopy>
+      <FooterCopy>&copy; 2021 FANFARE Inc.</FooterCopy>
     </Column>
   </StyledFooter>
 );
@@ -131,7 +131,7 @@ const FooterLinks = styled.div`
 `;
 
 const Logo = styled.img`
-  width: 120px;
+  width: 30px;
   height: auto;
 `;
 

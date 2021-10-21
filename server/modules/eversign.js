@@ -27,7 +27,7 @@ const sendSignRequest = async (data) => {
 				"deliver_email": "",
 				"language": "en"
 			}, {
-				"role": "NFT FM",
+				"role": "FANFARE",
 				"name": "Jackson Felty",
 				"email": "jackson@nftfm.io",
 				"pin": "",

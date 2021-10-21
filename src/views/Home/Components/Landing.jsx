@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import logo from "../../../assets/img/logos/logo.png";
+import logo from "../../../assets/img/logos/Fanfare_logo.svg";
 import { NavLink } from "react-router-dom";
 import { ReactComponent as IconDiscord } from "../../../assets/img/icons/social_discord.svg";
 import { ReactComponent as IconMedium } from "../../../assets/img/icons/social_medium.svg";
@@ -14,7 +14,8 @@ const Listen = () => {
     <Landing>
       <LandingTitle>
         <Logo src={logo} />
-        <StyledTitle>NFT FM</StyledTitle>
+        <StyledTitle>FANFARE</StyledTitle>
+        <p style={{ fontSize: "0.625rem", marginTop: '-20px' }}>BETA</p>
       </LandingTitle>
       <LaunchContainer>
         <NavLink to="/market/16">

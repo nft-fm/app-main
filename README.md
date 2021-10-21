@@ -1,4 +1,4 @@
-## NFT FM
+## FANFARE
 
 This is a MERN (Mongo, Express, React, and Node) repo.
 

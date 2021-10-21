@@ -99,7 +99,7 @@ const Community = ({ poll, setPoll, hasVinyl, getConnectedFam }) => {
       </ContainerTitle>
       <ContainerOutline />
       <UtilityContainer>
-        <ComicTitle>NFT FM TEAM</ComicTitle>
+        <ComicTitle>FANFARE TEAM</ComicTitle>
         <PollContainer>
           <SuggestionBody>
             <SuggestionText>{poll.question}</SuggestionText>

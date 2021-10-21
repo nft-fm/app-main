@@ -34,7 +34,7 @@ const Airdrops = ({ isLoaded, setIsLoaded }) => {
             Yes! We are going to be airdropping 30% of the unburned $VINYL
             supply over 4 years! This comes to 2500 $VINYL at the start of every
             month beginning July 2021 and ending June 2025. These tokens will be
-            airdropped equally to all holders of NFT FM NFTs. Each NFT
+            airdropped equally to all holders of FANFARE NFTs. Each NFT
             represents a percentage of the tokens to be received. So holding
             multiple NFTs = more airdrop!
           </FeaturesDescription>

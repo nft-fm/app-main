@@ -377,7 +377,7 @@ const NodeMail = (name, email, music, account) => {
 
   var message = `<html>
       <div>
-      <p>Hey! Someone applied to be an artist on NFT FM!</p>
+      <p>Hey! Someone applied to be an artist on FANFARE!</p>
       <p>Name: ${name}</p>
       <p>Email: ${email}</p>
       <p>Music: ${music}</p>
@@ -577,7 +577,7 @@ router.post("/getArtists", async (req, res) => {
       isArtist: true,
       hasMinted: true,
       profilePic: { $exists: true },
-      username: { $ne: "NFT FM" },
+      username: { $ne: "FANFARE" },
     });
 
     res.send(artists);

@@ -46,7 +46,7 @@ const Tokenomics = () => {
           <SubHolder>
             <LaunchFeaturesTextLargest>43.75%</LaunchFeaturesTextLargest>
             <LaunchFeaturesTextSmallGray>
-              In circulation within the NFT FM community
+              In circulation within the FANFARE community
             </LaunchFeaturesTextSmallGray>
           </SubHolder>
           <MiniSpacer />

@@ -76,7 +76,7 @@ const Staking = () => {
 
   return (
     <BaseView>
-      <StakingHeader>NFT FM Staking</StakingHeader>
+      <StakingHeader>FANFARE Staking</StakingHeader>
       {!isBsc || !account ? (
         <UseBscSorry />
       ) : (
@@ -84,7 +84,7 @@ const Staking = () => {
           <StakingTopSection>
             <StakingInfo>
               <p>
-                Here is where you can stake your VINYL on the NFT FM Artists!
+                Here is where you can stake your VINYL on the FANFARE Artists!
                 <br />
                 Artists and Stakers are rewarded a portion of each transaction.
                 <br />

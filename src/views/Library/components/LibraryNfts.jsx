@@ -26,7 +26,7 @@ const Library = ({ user }) => {
         />
       );
     });
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 3; i++) {
       formattedNfts.push(<FillerCard />);
     }
     return formattedNfts;
@@ -78,7 +78,7 @@ const StyledTitle = styled.div`
   color: white;
 `;
 const FillerCard = styled.div`
-  width: 226px;
+  width: 325px;
   height: 0px;
 `;
 
@@ -101,7 +101,7 @@ const NftScroll = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
-  justify-content: space-between;
+  justify-content: space-evenly;
   flex-wrap: wrap;
 
   @media only screen and (max-width: 776px) {

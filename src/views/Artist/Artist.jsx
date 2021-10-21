@@ -269,6 +269,7 @@ const NftContainerOutline = styled.div`
   @media only screen and (max-width: 776px) {
     width: 100%;
   }
+  
 `;
 const ProfileInfoHolder = styled.div`
   width: 100%;

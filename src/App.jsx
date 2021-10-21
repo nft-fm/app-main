@@ -122,9 +122,6 @@ const Switches = () => {
         <Route path="/artist">
           <Artist />
         </Route>
-        <Route path="/market">
-          <Discover />
-        </Route>
         {/* <Route path="/community">
           <Community />
         </Route>
@@ -149,8 +146,11 @@ const Switches = () => {
         <Route path="/info">
           <Info />
         </Route>
-        <Route path="/">
+        <Route path="/home">
           <Listen />
+        </Route>
+        <Route path="/">
+          <Discover />
         </Route>
         <Route path="/*">
           <Error404 />

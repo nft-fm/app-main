@@ -11,7 +11,12 @@ const {
   TEST_BSC_FlatPriceSale,
   MAIN_BSC_FlatPriceSale,
 } = require("../web3/constants");
-const { sign, findLikes, addArtistToStake } = require("../web3/server-utils");
+const {
+  sign,
+  findLikes,
+  addArtistToStake,
+  getStakersForArtist,
+} = require("../web3/server-utils");
 const { listenForMintEth, listenForMintBsc } = require("../web3/mint-listener");
 const { trackNftPurchase, trackNftView } = require("../modules/mixpanel");
 
@@ -51,13 +56,21 @@ router.post("/artist-nfts", async (req, res) => {
       isDraft: false,
       isMinted: true,
     });
-
     res.send(findLikes(nfts, req.body.address));
   } catch (err) {
     res.status(500).send(err);
   }
 });
 
+router.post("/artist-stakers", async (req, res) => {
+  try {
+    const stakers = await getStakersForArtist(req.body.address);
+    const users = await User.find({ address : { $in: stakers }})
+    res.send(users);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
 router.post("/update-and-fetch", async (req, res) => {
   try {
     const nftData = req.body;
@@ -150,12 +163,14 @@ router.post("/get-user-nfts", async (req, res) => {
     }
     const gottenNfts = [];
     for (id of ids) {
+      console.log("here", id);
       const getNft = await NftType.findOne(
         {
           _id: id,
         },
         { snnipet: 0 }
       );
+      console.log("getNft", getNft);
       gottenNfts.push(getNft);
     }
 
@@ -267,7 +282,9 @@ router.post("/notDraftAnymore", async (req, res) => {
     );
     addArtistToStake(req.body.address, (msg) => {
       res.status(200).send(msg);
-    }).catch(err => res.status(200).send("Error adding artist to staking pool!"))
+    }).catch((err) =>
+      res.status(200).send("Error adding artist to staking pool!")
+    );
   } catch (err) {
     res.send(err);
   }

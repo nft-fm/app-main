@@ -33,7 +33,7 @@ const NftCard = (props) => {
   }, [props.nft, user]);
 
   return (
-    <Container onClick={() => setIsModalOpen(!isModalOpen)} >
+    <Container onClick={() => setIsModalOpen(!isModalOpen)}>
       <ShareModal
         open={isShareOpen}
         hide={() => setIsShareOpen(!isShareOpen)}
@@ -48,7 +48,6 @@ const NftCard = (props) => {
         likeCount={likeCount}
         setLikeCount={setLikeCount}
         setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
-        
       />
       <CardTop>
         <LikeShare
@@ -60,7 +59,7 @@ const NftCard = (props) => {
           setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
         />
         <Side>
-          {(nft.chain === "ETH") && (
+          {nft.chain === "ETH" && (
             <IconArea
               href={`https://opensea.io/assets/0x88d3e00ce938f1a591336131b859465b50d608b7/${nft.nftId}`}
               target="_blank"
@@ -83,7 +82,7 @@ const NftCard = (props) => {
       <Image
         src={nft.imageUrl}
         alt="image"
-      // onClick={() => setIsOpen(!isOpen)}
+        // onClick={() => setIsOpen(!isOpen)}
       />
       <BottomWrapper>
         <Bottom>
@@ -322,25 +321,39 @@ const CardTop = styled.div`
 
 const Container = styled.div`
   color: ${(props) => props.theme.color.gray};
-  padding: 12px;
+  padding: 12px 0;
   background-color: ${(props) => props.theme.color.box};
   border: 1px solid ${(props) => props.theme.color.boxBorder};
   border-radius: ${(props) => props.theme.borderRadius}px;
   align-items: center;
   display: flex;
   flex-direction: column;
-  width: 200px;
-  margin-bottom: 24px;
+  width: 325px;
+  margin-bottom: 20px;
+  position: relative;
+  transition: all 0.1s ease-in-out;
+  cursor: pointer;
+  :focus {
+    border: 1px solid white;
+  }
+  @media only screen and (max-width: 330px) {
+    width: 300px;
+  }
 `;
 
 const Image = styled.img`
-  width: 200px;
-  height: 200px;
-  border-radius: 12px;
+  /* cursor: pointer; */
+  width: 325px;
+  height: 325px;
+  /* border-radius: 12px; */
   object-fit: cover;
   margin-bottom: 12px;
   border: 1px solid ${(props) => props.theme.color.boxBorder};
   background-color: #1e1e1e;
+  @media only screen and (max-width: 330px) {
+    width: 300px;
+    height: 300px;
+  }
 `;
 
 const TrackName = styled.span`

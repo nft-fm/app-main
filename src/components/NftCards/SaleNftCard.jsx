@@ -106,11 +106,12 @@ const NftCard = (props) => {
 
   return (
     <Container
-    onClick={() => setIsModalOpen(!isModalOpen)}
+      onClick={() => setIsModalOpen(!isModalOpen)}
       role="button"
       aria-pressed="false"
       tabindex="0"
-    open={isModalOpen || isShareOpen}>
+      open={isModalOpen || isShareOpen}
+    >
       <ShareModal
         onClick={(e) => e.stopPropagation()}
         open={isShareOpen}
@@ -165,10 +166,10 @@ const NftCard = (props) => {
         </RedeemButtonBackground>
       )}
       <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>
-        {nft.title.length > 20 ? nft.title.slice(0, 20) + "..." : nft.title}
+        {nft.title.length > 25 ? nft.title.slice(0, 25) + "..." : nft.title}
       </TrackName>
       <Artist to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}>
-        {nft.artist.length > 20 ? nft.artist.slice(0, 20) + "..." : nft.artist}
+        {nft.artist.length > 25 ? nft.artist.slice(0, 25) + "..." : nft.artist}
       </Artist>
       <BottomSection>
         <BadgeHolder>
@@ -252,7 +253,7 @@ const NftCard = (props) => {
                 maximumFractionDigits: 6,
               })
             : nft.price}
-          {nft.chain === "ETH" ? <Eth /> : <Bsc/>}
+          {nft.chain === "ETH" ? <Eth /> : <Bsc />}
         </CostEth>
       </BottomSection>
     </Container>
@@ -370,7 +371,7 @@ const CostEth = styled.span`
 
 const BottomSection = styled.div`
   display: flex;
-  width: 100%;
+  width: 90%;
   justify-content: space-between;
 `;
 
@@ -388,11 +389,8 @@ const IconArea = styled.div`
 `;
 
 const CardTop = styled.div`
-  /* width: calc(100% - 4px); */
-  /* padding: 0px 2px; */
   width: calc(100% - 8px);
   margin-bottom: 12px;
-  padding: 0 4px;
   display: flex;
   justify-content: space-between;
   font-weight: 600;
@@ -401,14 +399,14 @@ const CardTop = styled.div`
 
 const Container = styled.div`
   color: ${(props) => props.theme.color.gray};
-  padding: 12px;
+  padding: 12px 0;
   background-color: ${(props) => props.theme.color.box};
   border: 1px solid ${(props) => props.theme.color.boxBorder};
   border-radius: ${(props) => props.theme.borderRadius}px;
   align-items: center;
   display: flex;
   flex-direction: column;
-  width: 200px;
+  width: 325px;
   margin-bottom: 20px;
   position: relative;
   transition: all 0.1s ease-in-out;
@@ -416,20 +414,43 @@ const Container = styled.div`
   :focus {
     border: 1px solid white;
   }
-  /* :hover {
-    transform: ${(props) => !props.open && "translateY(-0.15em)"};
-  } */
+  @media only screen and (max-width: 330px) {
+    width: 300px;
+  }
 `;
+
+// const Container = styled.div`
+//   color: ${(props) => props.theme.color.gray};
+//   padding: 12px;
+//   background-color: ${(props) => props.theme.color.box};
+//   border: 1px solid ${(props) => props.theme.color.boxBorder};
+//   border-radius: ${(props) => props.theme.borderRadius}px;
+//   align-items: center;
+//   display: flex;
+//   flex-direction: column;
+//   width: 200px;
+//   margin-bottom: 20px;
+//   position: relative;
+//   transition: all 0.1s ease-in-out;
+//   cursor: pointer;
+//   :focus {
+//     border: 1px solid white;
+//   }
+// `;
 
 const Image = styled.img`
   cursor: pointer;
-  width: 200px;
-  height: 200px;
-  border-radius: 12px;
+  width: 325px;
+  height: 325px;
+  /* border-radius: 12px; */
   object-fit: cover;
   margin-bottom: 12px;
   border: 1px solid ${(props) => props.theme.color.boxBorder};
   background-color: #1e1e1e;
+  @media only screen and (max-width: 330px) {
+    width: 300px;
+    height: 300px;
+  }
 `;
 
 const TrackName = styled.span`
@@ -438,12 +459,12 @@ const TrackName = styled.span`
   font-weight: 500;
   width: 100%;
   text-align: center;
-  font-size: ${(props) => props.theme.fontSizes.xs}px;
+  font-size: ${(props) => props.theme.fontSizes.sm};
   margin-bottom: 12px;
 `;
 
 const Artist = styled(NavLink)`
-  font-size: ${(props) => props.theme.fontSizes.xxs}px;
+  font-size: ${(props) => props.theme.fontSizes.sm};
   text-align: center;
   color: ${(props) => props.theme.gray};
   margin-bottom: 12px;

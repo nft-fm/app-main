@@ -197,14 +197,30 @@ const addArtistToStake = async (artistAddress, callback) => {
     }
   });
 };
+const getStakersForArtist = async (address, callback) => {
+  const PROVIDER_URL = getDefaultProvider(
+    process.env.REACT_APP_IS_MAINNET
+      ? process.env.BSC_PROVIDER_URL
+      : process.env.BSCTEST_PROVIDER_URL
+  );
+  const STAKING_ADDRESS = process.env.REACT_APP_IS_MAINNET
+    ? MAIN_StakingAddress
+    : TEST_StakingAddress;
+  const contract = new Contract(STAKING_ADDRESS, StakingABI, PROVIDER_URL);
+  let promise = await contract.stakersForArtist(address).then((r) => {
+    return  r ;
+  });
+  let newVariable = await Promise.all([...promise]).then((res) => res);
+  return newVariable;
+};
 
 module.exports = {
   sign,
-  // getSetSale,
   findLikes,
   getUserNftsETH,
   getUserNftsBSC,
   getVinylOwners,
   getVinylBalance,
   addArtistToStake,
+  getStakersForArtist,
 };

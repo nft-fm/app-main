@@ -15,7 +15,7 @@ const Vinyl = () => {
             {/* <Logo src={logo} /> */}
             <StyledTitle>VINYL</StyledTitle>
             <StyledContent>
-              Driving FANFARE forward through community interactions
+              Driving Fanfare forward through community interactions
             </StyledContent>
             <VinylLinks />
             {/* <NftFmTagline>Tune in to your favorite community.</NftFmTagline> */}

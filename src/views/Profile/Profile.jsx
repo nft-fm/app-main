@@ -151,7 +151,7 @@ const Profile = () => {
     if (!user.confirmedFeeIncrease && !userSigned) {
       swal
         .fire({
-          title: `FANFARE's terms have changed.`,
+          title: `Fanfare's terms have changed.`,
           html: `<span>In order to mint new NFTs you need to agree to the new fee on initial sales, which is now 10%.
           Your previously minted NFTs will not be affected, this only applies to new NFTs.
           Read more about this <a href="https://nft-fm.medium.com/whats-coming-up-for-nft-fm-eddbfc5587eb" target="_blank" rel="noopener noreferrer">here</a>.</span>`,

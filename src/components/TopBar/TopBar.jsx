@@ -13,7 +13,7 @@ const TopBar = () => {
         <StyledTopBarInner>
           <NavLink to="/home" style={{ textDecoration: "none" }}>
             <LogoContainer>
-              <Logo /> <p>BETA</p>
+              <Logo /> <span style={{ marginBottom: "3px" }}>BETA</span>
             </LogoContainer>
           </NavLink>
           <NavRight>

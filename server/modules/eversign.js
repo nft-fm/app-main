@@ -13,8 +13,8 @@ const sendSignRequest = async (data) => {
 			"template_id": templates[0].document_hash,
 			"custom_requester_name": "",
 			"custom_requester_email": "",
-			"redirect": "https://www.nftfm.io",
-			"redirect_decline": "https://www.nftfm.io",
+			"redirect": "https://beta.fanfare.fm",
+			"redirect_decline": "https://beta.fanfare.fm",
 			"client": "",
 			"expires": "",
 			"embedded_signing_enabled": 0,
@@ -27,7 +27,7 @@ const sendSignRequest = async (data) => {
 				"deliver_email": "",
 				"language": "en"
 			}, {
-				"role": "FANFARE",
+				"role": "Fanfare",
 				"name": "Jackson Felty",
 				"email": "jackson@nftfm.io",
 				"pin": "",

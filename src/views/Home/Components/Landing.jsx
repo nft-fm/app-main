@@ -29,7 +29,7 @@ const Listen = () => {
       </LaunchContainer>
       <SocialsBar>
         <IconContainer
-          href="https://t.me/joinchat/q6_q25NWr99kOGUx"
+          href="http://t.me/fanfare_fm"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -37,7 +37,7 @@ const Listen = () => {
           <IconText>Telegram</IconText>
         </IconContainer>
         <IconContainer
-          href="https://nft-fm.medium.com/"
+          href="https://fanfare-fm.medium.com/"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -45,7 +45,7 @@ const Listen = () => {
           <IconText>Medium</IconText>
         </IconContainer>
         <IconContainer
-          href="https://twitter.com/NFTFM_IO"
+          href="https://twitter.com/fanfare_fm"
           target="_blank"
           rel="noopener noreferrer"
         >

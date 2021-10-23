@@ -63,6 +63,7 @@ export const require = async (statement, error) => {
 
 export const getSetSale = async (nftId, callback) => {
   const { provider } = await require();
+  console.log("got set Sale");
   const signer = provider.getSigner();
   let contract = new Contract(chooseFlatPriceSale(), FlatPriceSaleABI, signer);
 
@@ -187,7 +188,7 @@ export const setNewPrice = async (nftId, price, callback) => {
   console.log(nftId, price);
   const { provider } = await require();
   const signer = provider.getSigner();
-  const contract = new Contract(FlatPriceSale, FlatPriceSaleABI, signer);
+  const contract = new Contract(chooseFlatPriceSale(), FlatPriceSaleABI, signer);
   contract
     .setSetPrice(nftId, utils.parseUnits(price))
     .then((r) => r.wait())

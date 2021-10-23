@@ -50,7 +50,7 @@ const trackPageview = (props) => {
     distinct_id: address ? address : null,
     ip,
     ipAddress: ip,
-    page: page === "" ? "home" : page,
+    page: page === "" ? "market" : page,
     isLoggedIn: address ? true : false,
   });
 };

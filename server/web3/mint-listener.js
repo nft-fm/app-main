@@ -23,10 +23,13 @@ const listenForMintEth = async () => {
   contract.on("MintAndStake", async (data) => {
     let filter = contract.filters.MintAndStake(data);
     let event = await contract.queryFilter(filter);
-    await NftType.findByIdAndUpdate(event[0].args.databaseID.toString(), {
-      isMinted: true,
-      nftId: event[0].args.nftID,
-    }).catch((err) => {
+    await NftType.findOneAndUpdate(
+      { _id: event[0].args.databaseID.toString(), chain: "ETH" },
+      {
+        isMinted: true,
+        nftId: event[0].args.nftID,
+      }
+    ).catch((err) => {
       console.log(err);
     });
   });
@@ -44,22 +47,28 @@ const listenForMintBsc = async () => {
   const contract = new Contract(NFTToken, NFTTokenABI, walletWithProvider);
 
   contract.on("MintAndStake", async (data) => {
+    console.log('HERE!!!!')
     const blockNum = await provider.getBlockNumber();
 
     let filter = contract.filters.MintAndStake(data);
-    let event = await contract.queryFilter(filter, blockNum - 4000, blockNum).then((r) => {
-      return r;
-    })
-    .catch((r) => {
-      console.log("owch", r);
-    })
-    ;
-    await NftType.findByIdAndUpdate(event[0].args.databaseID.toString(), {
-      isMinted: true,
-      nftId: event[0].args.nftID,
-    }).catch((err) => {
+    let event = await contract
+      .queryFilter(filter, blockNum - 4000, blockNum)
+      .then((r) => {
+        return r;
+      })
+      .catch((r) => {
+        console.log("owch", r);
+      });
+    await NftType.findOneAndUpdate(
+      { _id: event[0].args.databaseID.toString(), chain: "BSC" },
+      {
+        isMinted: true,
+        nftId: event[0].args.nftID,
+      }
+    ).catch((err) => {
       console.log(err);
     });
+    console.log('UPDATED!!!!')
   });
 };
 

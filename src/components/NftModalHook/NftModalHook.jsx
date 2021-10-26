@@ -52,6 +52,7 @@ const BuyNftModal = (props) => {
 
   useEffect(() => {
     if (open) {
+      console.log("info", account, nft);
       axios
         .post("/api/nft-type/trackNftView", {
           address: account,

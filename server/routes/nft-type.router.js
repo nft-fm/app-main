@@ -826,6 +826,7 @@ router.post("/getSongList", async (req, res) => {
 
 router.post("/purchase", async (req, res) => {
   try {
+    console.log("purchasing!", req.body);
     let nft = await NftType.findOne({ _id: req.body.id });
     if (!nft) {
       res.status(500).send("No NFT found");
@@ -937,6 +938,7 @@ router.post("/trackNftView", async (req, res) => {
       title: req.body.title,
       ip: req.ip,
     };
+    console.log("track nftView", payload);
     if (process.env.PRODUCTION) {
       trackNftView(payload);
     }

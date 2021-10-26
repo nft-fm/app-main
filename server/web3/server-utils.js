@@ -21,6 +21,8 @@ const FlatPriceSaleABI = require("./abi/FlatPriceSale.abi");
 const NFTTokenABI = require("./abi/NFTToken.abi");
 const VinylABI = require("./abi/Vinyl.abi");
 const StakingABI = require("./abi/Staking.abi");
+const dotenv = require("dotenv");
+dotenv.config();
 
 const sign = (types, values) => {
   let data = utils.defaultAbiCoder.encode(types, values);
@@ -104,6 +106,8 @@ const getUserNftsETH = async (account) => {
   return nftIdsAndQuantities;
   // return { nftIds, numNfts };
 };
+
+
 const getUserNftsBSC = async (account) => {
   const PROVIDER_URL = process.env.REACT_APP_IS_MAINNET
     ? process.env.BSC_PROVIDER_URL
@@ -111,6 +115,7 @@ const getUserNftsBSC = async (account) => {
   const NFTToken = process.env.REACT_APP_IS_MAINNET
     ? MAIN_BSC_NFTToken
     : TEST_BSC_NFTToken;
+  
   let provider = new providers.WebSocketProvider(PROVIDER_URL);
   let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
   const contract = new Contract(NFTToken, NFTTokenABI, walletWithProvider);

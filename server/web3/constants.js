@@ -14,7 +14,7 @@ const MAIN_BSC_NFTToken = "0xbE2158fd41bCca105Bf68f54B8A4794d4a25A3cC";
 const MAIN_BSC_FlatPriceSale = "0x163379Fe64F07bD6a4b84f10c6Ba9AA9d4F2DFCa";
 
 const TEST_StakingAddress = "0xfa800E905Ca7e8CaFB283a6F4c1A91f178602500";
-const MAIN_StakingAddress = "0x5A2Df2e3D11dcDb645fbA2008c06fdBb114E805e";//TODO deploy and change this
+const MAIN_StakingAddress = "0x5A2Df2e3D11dcDb645fbA2008c06fdBb114E805e";
 
 module.exports = {
   TEST_NFTToken,

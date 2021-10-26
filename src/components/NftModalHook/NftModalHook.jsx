@@ -84,10 +84,9 @@ const BuyNftModal = (props) => {
       });
       return;
     }
-
     setIsLoading(true);
     // {!} simplify the below
-    await getEthBalance(async (balance) => { 
+    await getEthBalance(async (balance) => {
       if (parseFloat(balance) >= nft.price) {
         Swal.fire({
           title: "Purchasing, please do not leave this page.",
@@ -101,44 +100,39 @@ const BuyNftModal = (props) => {
               saleId: nft.nftId,
               price: String(nft.price),
             },
-            () => {
-              axios
-                .post("/api/nft-type/purchase", {
-                  id: id,
-                  address: account,
-                })
-                .then((res) => {
-                  setTimeout(function () {
-                    setIsLoading(false);
-                    setIsBought(true);
-                    getUser();
-                  }, 1000);
-                  if (nft.isRedeemable) {
-                    Swal.fire({
-                      title: "Redeem Merch!",
-                      text: "You just bought an NFT with redeemable merch! Click this button to go to the redemption portal",
-                      confirmButtonText: "Redeem!",
-                    }).then((res) => {
-                      if (res.isConfirmed) {
-                        history.push("/redeem");
-                      }
-                    });
-                  } else {
-                    Swal.fire({
-                      title: "Succesful purchase!",
-                      html: `<div>View in your library (can take a moment to appear)<div>`,
-                    });
-                  }
-                })
-                .catch((err) => {
-                  console.error(err.status, err.message, err.error);
-                  Swal.fire(
-                    `Error: ${err.response ? err.response.status : 404}`,
-                    `${err.response ? err.response.data : "server error"}`,
-                    "error"
-                  );
-                  setIsLoading(false);
+            (err) => {
+              if (err) {
+                setIsLoading(false);
+                swal.fire({
+                  imageUrl: errorIcon,
+                  imageWidth,
+                  imageHeight,
+                  title: "Couldn't complete sale!",
+                  text: "Please try again",
                 });
+              } else {
+                setTimeout(function () {
+                  setIsLoading(false);
+                  setIsBought(true);
+                  getUser();
+                }, 1000);
+                if (nft.isRedeemable) {
+                  Swal.fire({
+                    title: "Redeem Merch!",
+                    text: "You just bought an NFT with redeemable merch! Click this button to go to the redemption portal",
+                    confirmButtonText: "Redeem!",
+                  }).then((res) => {
+                    if (res.isConfirmed) {
+                      history.push("/redeem");
+                    }
+                  });
+                } else {
+                  Swal.fire({
+                    title: "Succesful purchase!",
+                    html: `<div>View in your library (can take a few minutes to appear)<div>`,
+                  });
+                }
+              }
             }
           ).catch((err) => {
             setIsLoading(false);
@@ -231,7 +225,6 @@ const BuyNftModal = (props) => {
             <CardTop>
               <Side>
                 <ProfilePicture img={props.profilePic} />
-
               </Side>
               <Side>
                 <IconArea>
@@ -353,7 +346,7 @@ const BuyNftModal = (props) => {
                   </LikeButton>
                   {likeCount}
                 </IconArea>
-                <IconArea  onClick={() => share()}>
+                <IconArea onClick={() => share()}>
                   <ShareButton
                     onClick={() => share()}
                     aria-label="share button"
@@ -375,15 +368,14 @@ const BuyNftModal = (props) => {
               <SnippetText>15 Sec Preview</SnippetText>
             </SnippetHolder>
 
-
             <PricesContainer>
               <PriceHolder>
                 <PriceItem>
                   {nft.price
                     ? parseFloat(nft.price).toLocaleString(undefined, {
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 6,
-                    })
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 6,
+                      })
                     : "--"}{" "}
                 </PriceItem>
                 &nbsp;
@@ -439,21 +431,21 @@ const BuyNftModal = (props) => {
 };
 
 const ProfilePicture = styled.div`
-width: 60px;
-height: 60px;
-border-radius: 50px;
-margin-left: 20px;
-margin-top: 10px;
-background-image: url(${props => props.img});
-background-size: cover;
-`
+  width: 60px;
+  height: 60px;
+  border-radius: 50px;
+  margin-left: 20px;
+  margin-top: 10px;
+  background-image: url(${(props) => props.img});
+  background-size: cover;
+`;
 
 const ActionButtons = styled.div`
-display: flex;
-flex-direction: row;
-width: 100%;
-justify-content: start;
-`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: start;
+`;
 
 const LikeButton = styled.button`
   background-color: transparent;
@@ -503,17 +495,17 @@ const TrackDetailsHolder = styled.div`
 `;
 
 const Info = styled.div`
-display: flex;
-flex-direction: column;
-@media only screen and (max-width: 776px) {
-  margin-left: 15px;
-  margin-top: 5px;
-}
-`
+  display: flex;
+  flex-direction: column;
+  @media only screen and (max-width: 776px) {
+    margin-left: 15px;
+    margin-top: 5px;
+  }
+`;
 
 const Actions = styled.div`
-display: flex;
-`
+  display: flex;
+`;
 
 const MerchBadge = styled(GiftIcon)`
   width: 16px;

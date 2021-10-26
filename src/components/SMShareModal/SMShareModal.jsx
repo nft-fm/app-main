@@ -20,7 +20,7 @@ const SMShareModal = ({
 
   if (!open) return null;
   const url = `https://beta.fanfare.fm/market/${nft.chain}/${nft.nftId}`;
-  const message = `Check out this amazing NFT of ${nft.artist}'s song, ${nft.title}!\nAvailable only at: `;
+  const message = `${nft.title} by ${nft.artist}\nAvailable at: `;
 
   const newShare = () => {
     axios.post("/api/nft-type/newShare", nft);

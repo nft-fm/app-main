@@ -137,7 +137,8 @@ export const buyNFT = async (data, callback) => {
     .then((r) => {
       return r.wait();
     })
-    .then(() => callback());
+    .then(() => callback())
+    .catch(err => callback(err))
 };
 
 export const airdrop = async (wallets, amounts, callback) => {

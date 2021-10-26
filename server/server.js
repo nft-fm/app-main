@@ -29,7 +29,7 @@ function ensureSecure(req, res, next) {
 }
 
 if (process.env.PRODUCTION) {
-  // app.all("*", ensureSecure);
+  app.all("*", ensureSecure);
 }
 
 app.use(cors());

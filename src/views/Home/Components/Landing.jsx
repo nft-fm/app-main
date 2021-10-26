@@ -18,7 +18,7 @@ const Listen = () => {
         <p style={{ fontSize: "0.625rem", marginTop: '-20px' }}>BETA</p>
       </LandingTitle>
       <LaunchContainer>
-        <NavLink to="/market/16">
+        <NavLink to="/market/ETH/16">
           <DesktopBanner src={saQiBannerDesktop} alt="saQi Banner" />
         </NavLink>
         <MobileDescription>

@@ -350,6 +350,8 @@ router.post("/get-one", async (req, res) => {
     let { id, address, chain } = req.body;
     let nftType = await NftType.findOne({ nftId: id, chain: chain });
 
+    console.log("getting?", nftType);
+
     if (nftType) {
       res.send({ ...nftType.toObject(), likeCount: nftType.likes.length });
     } else {

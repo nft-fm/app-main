@@ -438,8 +438,8 @@ const BuyNftModal = (props) => {
 };
 
 const ProfilePicture = styled.div`
-width: 100px;
-height: 100px;
+width: 60px;
+height: 60px;
 border-radius: 50px;
 margin-left: 20px;
 margin-top: 10px;
@@ -504,6 +504,10 @@ const TrackDetailsHolder = styled.div`
 const Info = styled.div`
 display: flex;
 flex-direction: column;
+@media only screen and (max-width: 776px) {
+  margin-left: 15px;
+  margin-top: 5px;
+}
 `
 
 const Actions = styled.div`
@@ -749,6 +753,7 @@ const RightSide = styled.div`
     width: 90vw;
     height: calc(100vh / 2);
     justify-content: space-between;
+    padding-top: 0px;
   }
 `;
 const StyledModal = styled.div`
@@ -767,7 +772,7 @@ const StyledModal = styled.div`
     height: 95vh;
     flex-direction: column;
     align-items: center;
-    /* justify-content: flex-start; */
+    justify-content: flex-start;
   }
 `;
 
@@ -817,7 +822,7 @@ const InfoContainer = styled.div`
   @media only screen and (max-width: 776px) {
     width: 90%;
     /* align-items: center; */
-    margin-top: -25px;
+    margin-top: -20px;
   }
 `;
 const TrackName = styled.span`

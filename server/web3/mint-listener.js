@@ -47,7 +47,6 @@ const listenForMintBsc = async () => {
   const contract = new Contract(NFTToken, NFTTokenABI, walletWithProvider);
 
   contract.on("MintAndStake", async (data) => {
-    console.log('HERE!!!!')
     const blockNum = await provider.getBlockNumber();
 
     let filter = contract.filters.MintAndStake(data);
@@ -68,7 +67,6 @@ const listenForMintBsc = async () => {
     ).catch((err) => {
       console.log(err);
     });
-    console.log('UPDATED!!!!')
   });
 };
 

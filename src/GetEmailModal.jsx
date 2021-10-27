@@ -190,8 +190,8 @@ text-align: center;
 /* height: 20px; */
 /* width: 200px; */
 padding: 16px;
-top: 80px;
-right: 40px;
+top: 130px;
+right: 20px;
 border: 1px solid  ${(props) => props.theme.color.boxBorder};
 background: ${props => props.theme.color.box};
 color: white;

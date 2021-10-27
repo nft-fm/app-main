@@ -35,6 +35,7 @@ import recordPlayerSpin from "./assets/img/record_player_spin.png";
 import saQiBanner from "./assets/img/homepage_assets/saqi_banner.png";
 import saQiBannerMobile from "./assets/img/homepage_assets/saqi_banner_mobile.jpeg";
 import NoEmailModal from "./GetEmailModal";
+import PromoBanner from './PromoBanner'
 
 import isMobile from "./utils/isMobile";
 import theme from "./theme";
@@ -179,6 +180,7 @@ const App = () => {
   return (
     <Providers>
       <StyledCanvas>
+        <PromoBanner />
         <Router>
           <Switches />
           <NoEmailModal/>

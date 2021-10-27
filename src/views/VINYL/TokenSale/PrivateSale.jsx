@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import {
-  buyPresale,
-  getVinylBalance,
-  require,
-  getEthBalance,
-} from "../../../web3/utils";
-import useWallet from "use-wallet";
+import Swal from "sweetalert2";
+import { useAccountConsumer } from "../../../contexts/Account";
 // import axios from "axios";
 import isMobile from "../../../utils/isMobile";
+import { errorIcon, imageHeight, imageWidth } from "../../../utils/swalImages";
 import { VinylAddress } from "../../../web3/constants";
+import {
+  buyPresale,
+  getEthBalance,
+  getVinylBalance,
+} from "../../../web3/utils";
 import { ReactComponent as telegram_icon } from "../../assets/img/icons/social_telegram.svg";
-import Swal from "sweetalert2";
-import { errorIcon, imageWidth, imageHeight } from "../../../utils/swalImages";
 
 const Disclaimer = () => {
-  const { account, connect } = useWallet();
+  const { account, connect } = useAccountConsumer();
   const [val, setVal] = useState(1);
   const [amountBought, setAmountBought] = useState(0);
   // const [signed, setSigned] = useState(false);
@@ -110,7 +109,7 @@ const Disclaimer = () => {
             )}`,
             imageUrl: errorIcon,
             imageWidth,
-            imageHeight          
+            imageHeight,
           });
           return;
         }

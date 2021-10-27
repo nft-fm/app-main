@@ -1,9 +1,9 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import NftModalHook from "./NftModalHook";
 import { useAccountConsumer } from "../../contexts/Account";
-import axios from "axios";
 import ShareModal from "../SMShareModal/SMShareModal";
+import NftModalHook from "./NftModalHook";
 
 const NftCard = (props) => {
   const { account } = useAccountConsumer();
@@ -102,9 +102,9 @@ const NftCard = (props) => {
         nft={nft}
         partialSong={partialSong}
         liked={liked}
-        SetLiked={setLiked}
         likeCount={likeCount}
         setLikeCount={setLikeCount}
+        setLiked={setLiked}
         setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
       />
     </Container>

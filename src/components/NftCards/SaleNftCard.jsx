@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import NftModalHook from "../NftModalHook/NftModalHook";
-import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
-import { ReactComponent as IconBinance } from "../../assets/img/icons/binance-logo.svg";
-import { useAccountConsumer } from "../../contexts/Account";
-import loading from "../../assets/img/loading.gif";
 import axios from "axios";
-import ShareModal from "../SMShareModal/SMShareModal";
-import LikeShare from "./LikeShare";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import ReactToolTip from "react-tooltip";
+import styled from "styled-components";
+import { ReactComponent as Exclusive } from "../../assets/img/Badges/exclusive.svg";
 import { ReactComponent as Founder } from "../../assets/img/Badges/founder.svg";
 import { ReactComponent as Premium } from "../../assets/img/Badges/premium.svg";
 import { ReactComponent as Prerelease } from "../../assets/img/Badges/prerelease.svg";
-import { ReactComponent as Exclusive } from "../../assets/img/Badges/exclusive.svg";
+import { ReactComponent as IconBinance } from "../../assets/img/icons/binance-logo.svg";
+import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
 import { ReactComponent as GiftIcon } from "../../assets/img/icons/rewards-gift.svg";
+import loading from "../../assets/img/loading.gif";
+import { useAccountConsumer } from "../../contexts/Account";
+import NftModalHook from "../NftModalHook/NftModalHook";
+import ShareModal from "../SMShareModal/SMShareModal";
+import LikeShare from "./LikeShare";
 
-import ReactToolTip from "react-tooltip";
 
 const NftCard = (props) => {
   const { user, account } = useAccountConsumer();
@@ -147,7 +147,7 @@ const NftCard = (props) => {
         profilePic={profilePic}
         partialSong={partialSong}
         liked={liked}
-        SetLiked={setLiked}
+        setLiked={setLiked}
         likeCount={likeCount}
         setLikeCount={setLikeCount}
         setIsShareOpen={() => setIsShareOpen(!isShareOpen)}

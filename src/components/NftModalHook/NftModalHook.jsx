@@ -201,6 +201,35 @@ const BuyNftModal = (props) => {
     }
   };
 
+  const calcBonus = () => {
+    if (nft.chain === "ETH")
+      if (nft.price <= .001)
+        return 100000
+      else if (nft.price <= .01)
+        return 500000
+      else if (nft.price <= .1)
+        return 3000000
+      else
+        return 30000000
+    else {
+      if (nft.price <= .01)
+        return 100000
+      else if (nft.price <= .1)
+        return 500000
+      else if (nft.price <= 1)
+        return 3000000
+      else
+        return 30000000
+    }
+  }
+
+  const calcEligibility = () => {
+    if (nft.numMinted < 5)
+      return nft.numMinted - nft.numSold > 0
+    else
+      return nft.numSold < 5
+  }
+
   //add in to the nft modal
   // const formatSongDur = (d) => {
   //   d = Number(d);
@@ -373,9 +402,9 @@ const BuyNftModal = (props) => {
                 <PriceItem>
                   {nft.price
                     ? parseFloat(nft.price).toLocaleString(undefined, {
-                        minimumFractionDigits: 0,
-                        maximumFractionDigits: 6,
-                      })
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 6,
+                    })
                     : "--"}{" "}
                 </PriceItem>
                 &nbsp;
@@ -423,12 +452,17 @@ const BuyNftModal = (props) => {
                 <ButtonText>Sold Out!</ButtonText>
               </BuyButton>
             )}
+            {calcEligibility() && <Promotion>💚 This NFT is eligible for an Airdrop Bonus of {calcBonus().toLocaleString()} VINYL! 💚</Promotion>}
           </RightSide>
         </StyledModal>
       </Container>
     </OpaqueFilter>
   );
 };
+
+const Promotion = styled.div`
+margin-top: 10px;
+`
 
 const ProfilePicture = styled.div`
   width: 60px;

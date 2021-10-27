@@ -1,8 +1,8 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { useWallet } from "use-wallet";
 import axios from "axios";
-import isMobile from "../../utils/isMobile";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import { useWallet } from "use-wallet";
+import isMobile from "../../utils/isMobile";
 
 export const AccountContext = createContext();
 
@@ -123,12 +123,34 @@ export const AccountProvider = ({ children }) => {
     if (account && !user) initialize();
   }, [account, currChainId, user]);
 
+  const fixedConnect = async () => {
+    const provider = window.ethereum;
+    // Technically trust wallet is also an injected wallet, but
+    // for whatever reason useWallet doesn't handle the address
+    // properly. So we need to define selectedAddress on the provider
+    // for trust wallet to be injected... Dumb.
+    if (
+      provider.isTrust &&
+      provider.send &&
+      provider.request &&
+      "address" in provider
+    ) {
+      Object.defineProperty(provider, "selectedAddress", {
+        get() {
+          return this.address;
+        },
+        configurable: true,
+      });
+    }
+    await connect("injected");
+  };
+
   return (
     <AccountContext.Provider
       value={{
         isAdmin,
         account,
-        connect,
+        connect: fixedConnect,
         initialize,
         user,
         getUser,

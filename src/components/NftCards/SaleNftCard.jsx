@@ -126,13 +126,7 @@ const NftCard = (props) => {
   }
 
   return (
-    <Container
-      onClick={() => setIsModalOpen(!isModalOpen)}
-      role="button"
-      aria-pressed="false"
-      tabindex="0"
-      open={isModalOpen || isShareOpen}
-    >
+    <>
       <ShareModal
         onClick={(e) => e.stopPropagation()}
         open={isShareOpen}
@@ -152,140 +146,149 @@ const NftCard = (props) => {
         setLikeCount={setLikeCount}
         setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
       />
-      <CardTop>
-        <Artist to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}>
-          <ProfilePicture img={profilePic} />
-          <Text>
-            <Caption>Created By</Caption>
-            <Name>{nft.artist.length > 25 ? nft.artist.slice(0, 25) + "..." : nft.artist}</Name>
-          </Text>
-        </Artist>
-        <Side>
-          <IconArea>
-            {nft.numMinted - nft.numSold}
-            <span style={{ margin: "0 1px" }}>&nbsp;of&nbsp;</span>
-            {nft.numMinted}
-            <span style={{ margin: "0 1px" }}>&nbsp;Available</span>
-          </IconArea>
-        </Side>
-      </CardTop>
-      {imageLoaded ? null : <Loading img={loading} alt="image" />}
-      <Image
-        src={nft.imageUrl}
-        style={imageLoaded ? {} : { display: "none" }}
-        alt="image"
-        onLoad={() => setImageLoaded(true)}
-      />
-      {nft.isRedeemable && (
-        <RedeemButtonBackground onClick={() => setIsModalOpen(!isModalOpen)}>
-          <RedeemButton>
-            {/* Merch */}
-            <MerchIcon />
-          </RedeemButton>
-        </RedeemButtonBackground>
-      )}
+      <Container
+        onClick={() => setIsModalOpen(!isModalOpen)}
+        role="button"
+        aria-pressed="false"
+        tabindex="0"
+        open={isModalOpen || isShareOpen}
+      >
 
-      <MidSection>
-        <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>
-          {nft.title.length > 25 ? nft.title.slice(0, 25) + "..." : nft.title}
-        </TrackName>
-        <BadgeHolder>
-          {nft.badges?.map((badge) => {
-            if (badge.founder) {
-              return (
-                <>
-                  <FounderBadge
-                    className="founderBadge"
-                    data-tip
-                    data-for="founderTip"
-                  />
-                  <ReactToolTip id="founderTip" place="top" effect="solid">
-                    Founder
-                  </ReactToolTip>
-                </>
-              );
-            }
-            if (badge.premium) {
-              return (
-                <>
-                  <PremiumBadge
-                    className="premiumBadge"
-                    data-tip
-                    data-for="premiumTip"
-                  />
-                  <ReactToolTip id="premiumTip" place="top" effect="solid">
-                    Premium
-                  </ReactToolTip>
-                </>
-              );
-            }
-            if (badge.prerelease) {
-              return (
-                <>
-                  <PrereleaseBadge
-                    className="prereleaseBadge"
-                    data-tip
-                    data-for="prereleaseTip"
-                  />
-                  <ReactToolTip id="prereleaseTip" place="top" effect="solid">
-                    Prerelease
-                  </ReactToolTip>
-                </>
-              );
-            }
-            if (badge.exclusive) {
-              return (
-                <>
-                  <ExclusiveBadge
-                    className="exclusiveBadge"
-                    data-tip
-                    data-for="exclusiveTip"
-                  />
-                  <ReactToolTip id="exclusiveTip" place="top" effect="solid">
-                    Exclusive
-                  </ReactToolTip>
-                </>
-              );
-            }
-            if (badge.redeem) {
-              return (
-                <>
-                  <MerchBadge
-                    className="merchBadge"
-                    data-tip
-                    data-for="merchTip"
-                  />
-                  <ReactToolTip id="merchTip" place="top" effect="solid">
-                    Merch
-                  </ReactToolTip>
-                </>
-              );
-            }
-          })}
-        </BadgeHolder>
-      </MidSection>
-      <BottomSection>
-        <CostEth>
-          {nft.price !== "..."
-            ? parseFloat(nft.price).toLocaleString(undefined, {
-              minimumFractionDigits: 0,
-              maximumFractionDigits: 6,
-            })
-            : nft.price}
-          {nft.chain === "ETH" ? <Eth /> : <Bsc />}
-        </CostEth>
-        <LikeShare
-          nft={nft}
-          liked={liked}
-          setLiked={setLiked}
-          likeCount={likeCount}
-          setLikeCount={setLikeCount}
-          setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
-          shareCount={shareCount}
-          isLoading={likesLoading}
+        <CardTop>
+          <Artist to={`/artist/${nft.artist.replace(/ /g, "").toLowerCase()}`}>
+            <ProfilePicture img={profilePic} />
+            <Text>
+              <Caption>Created By</Caption>
+              <Name>{nft.artist.length > 25 ? nft.artist.slice(0, 25) + "..." : nft.artist}</Name>
+            </Text>
+          </Artist>
+          <Side>
+            <IconArea>
+              {nft.numMinted - nft.numSold}
+              <span style={{ margin: "0 1px" }}>&nbsp;of&nbsp;</span>
+              {nft.numMinted}
+              <span style={{ margin: "0 1px" }}>&nbsp;Available</span>
+            </IconArea>
+          </Side>
+        </CardTop>
+        {imageLoaded ? null : <Loading img={loading} alt="image" />}
+        <Image
+          src={nft.imageUrl}
+          style={imageLoaded ? {} : { display: "none" }}
+          alt="image"
+          onLoad={() => setImageLoaded(true)}
         />
-      </BottomSection>
-    </Container>
+        {nft.isRedeemable && (
+          <RedeemButtonBackground onClick={() => setIsModalOpen(!isModalOpen)}>
+            <RedeemButton>
+              {/* Merch */}
+              <MerchIcon />
+            </RedeemButton>
+          </RedeemButtonBackground>
+        )}
+
+        <MidSection>
+          <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>
+            {nft.title.length > 25 ? nft.title.slice(0, 25) + "..." : nft.title}
+          </TrackName>
+          <BadgeHolder>
+            {nft.badges?.map((badge) => {
+              if (badge.founder) {
+                return (
+                  <>
+                    <FounderBadge
+                      className="founderBadge"
+                      data-tip
+                      data-for="founderTip"
+                    />
+                    <ReactToolTip id="founderTip" place="top" effect="solid">
+                      Founder
+                    </ReactToolTip>
+                  </>
+                );
+              }
+              if (badge.premium) {
+                return (
+                  <>
+                    <PremiumBadge
+                      className="premiumBadge"
+                      data-tip
+                      data-for="premiumTip"
+                    />
+                    <ReactToolTip id="premiumTip" place="top" effect="solid">
+                      Premium
+                    </ReactToolTip>
+                  </>
+                );
+              }
+              if (badge.prerelease) {
+                return (
+                  <>
+                    <PrereleaseBadge
+                      className="prereleaseBadge"
+                      data-tip
+                      data-for="prereleaseTip"
+                    />
+                    <ReactToolTip id="prereleaseTip" place="top" effect="solid">
+                      Prerelease
+                    </ReactToolTip>
+                  </>
+                );
+              }
+              if (badge.exclusive) {
+                return (
+                  <>
+                    <ExclusiveBadge
+                      className="exclusiveBadge"
+                      data-tip
+                      data-for="exclusiveTip"
+                    />
+                    <ReactToolTip id="exclusiveTip" place="top" effect="solid">
+                      Exclusive
+                    </ReactToolTip>
+                  </>
+                );
+              }
+              if (badge.redeem) {
+                return (
+                  <>
+                    <MerchBadge
+                      className="merchBadge"
+                      data-tip
+                      data-for="merchTip"
+                    />
+                    <ReactToolTip id="merchTip" place="top" effect="solid">
+                      Merch
+                    </ReactToolTip>
+                  </>
+                );
+              }
+            })}
+          </BadgeHolder>
+        </MidSection>
+        <BottomSection>
+          <CostEth>
+            {nft.price !== "..."
+              ? parseFloat(nft.price).toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 6,
+              })
+              : nft.price}
+            {nft.chain === "ETH" ? <Eth /> : <Bsc />}
+          </CostEth>
+          <LikeShare
+            nft={nft}
+            liked={liked}
+            setLiked={setLiked}
+            likeCount={likeCount}
+            setLikeCount={setLikeCount}
+            setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
+            shareCount={shareCount}
+            isLoading={likesLoading}
+          />
+        </BottomSection>
+      </Container>
+    </>
   );
 };
 
@@ -476,7 +479,12 @@ const Container = styled.div`
   position: relative;
   transition: all 0.1s ease-in-out;
   cursor: pointer;
+  box-shadow: rgba(255, 255, 255, .1) 0px 3px 10px 0px;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: rgba(255, 255, 255, .2) 0px 3px 10px 0px;
 
+  }
   @media only screen and (max-width: 330px) {
     width: 300px;
   }

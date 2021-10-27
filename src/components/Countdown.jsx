@@ -87,7 +87,6 @@ const Countdown = styled.div`
   /* color: white; */
   align-items: center;
   margin-top: 5px;
-  margin-right: 5px;
   font-family: SophiaNubian-Bold, sans-serif;
 `
 

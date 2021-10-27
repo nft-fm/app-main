@@ -12,14 +12,30 @@ const GetEmailModal = () => {
   return (
     <Container open={open}>
       <PromoText>💚 Announcing a new airdrop campaign for NFT purchasers! Click an NFT to learn more! 💚</PromoText>
+      <MobilePromoText>💚 Buy an NFT for a VINYL airdrop bonus! 💚</MobilePromoText>
       <CountDownContainer><CountDown endTime={1635982149000}/></CountDownContainer>
     </Container>
   )
 }
 
+const MobilePromoText = styled.div`
+display: none;
+@media only screen and (max-width: 776px) {
+  display: block;
+}
+`
+
 const CountDownContainer = styled.div`
 position: absolute;
 right: 10px;
+@media only screen and (max-width: 776px) {
+  position: relative;
+  right: 0px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
 `
 
 const Row = styled.div`
@@ -46,11 +62,14 @@ display: flex;
 flex-direction: row;
 justify-content: center;
 align-items: center;
+@media only screen and (max-width: 776px) {
+display: none;
+}
 `
 
 const Container = styled.div`
 width: 100vw;
-height: ${props => props.open ? '140px' : '40px'};
+height: 40px;
 border-bottom: 1px solid #232323;
 background-color: #121212;
 display: flex;
@@ -58,7 +77,12 @@ flex-direction: row;
 justify-content: center;
 align-items: center;
 color: #888;
+@media only screen and (max-width: 776px) {
+  flex-direction: column;
+  justify-content: space-evenly;
 
+  height: 100px;
+}
 `
 
 

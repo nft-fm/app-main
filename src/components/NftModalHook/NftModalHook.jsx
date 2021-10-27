@@ -747,15 +747,14 @@ const CardTop = styled.div`
 `;
 const OpaqueFilter = styled.div`
   cursor: default;
+  position: fixed;
+  left: 0;
+  top: 0;
   width: 100vw;
   height: 100vh;
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
   background-color: rgba(255, 255, 255, 0.1);
   backdrop-filter: brightness(20%) blur(2px);
-  z-index: 500;
+  z-index: 5000;
 `;
 
 const Container = styled.div`
@@ -767,7 +766,7 @@ const Container = styled.div`
   top: 50%;
   transform: translate(-50%, -50%);
   color: #666;
-  z-index: 505;
+  z-index: 5005;
 `;
 
 const RightSide = styled.div`

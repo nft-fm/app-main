@@ -203,25 +203,30 @@ const BuyNftModal = (props) => {
 
   const calcBonus = () => {
     if (nft.chain === "ETH")
-      return null
-    else {
-      if (nft.price < .01)
+      if (nft.price <= .001)
         return 100000
-      else if (nft.price < .1)
+      else if (nft.price <= .01)
         return 500000
-      else if (nft.price < 1)
+      else if (nft.price <= .1)
         return 3000000
-      else 
+      else
+        return 30000000
+    else {
+      if (nft.price <= .01)
+        return 100000
+      else if (nft.price <= .1)
+        return 500000
+      else if (nft.price <= 1)
+        return 3000000
+      else
         return 30000000
     }
   }
 
   const calcEligibility = () => {
-    if (nft.chain === "ETH")
-      return false
-    else if (nft.numMinted < 5)
+    if (nft.numMinted < 5)
       return nft.numMinted - nft.numSold > 0
-    else 
+    else
       return nft.numSold < 5
   }
 
@@ -397,9 +402,9 @@ const BuyNftModal = (props) => {
                 <PriceItem>
                   {nft.price
                     ? parseFloat(nft.price).toLocaleString(undefined, {
-                        minimumFractionDigits: 0,
-                        maximumFractionDigits: 6,
-                      })
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 6,
+                    })
                     : "--"}{" "}
                 </PriceItem>
                 &nbsp;
@@ -447,7 +452,7 @@ const BuyNftModal = (props) => {
                 <ButtonText>Sold Out!</ButtonText>
               </BuyButton>
             )}
-            {calcEligibility() &&  <Promotion>💚 This NFT is eligible for an Airdrop Bonus of {calcBonus().toLocaleString()} VINYL! 💚</Promotion>}
+            {calcEligibility() && <Promotion>💚 This NFT is eligible for an Airdrop Bonus of {calcBonus().toLocaleString()} VINYL! 💚</Promotion>}
           </RightSide>
         </StyledModal>
       </Container>

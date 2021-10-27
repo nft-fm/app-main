@@ -204,22 +204,22 @@ const BuyNftModal = (props) => {
   const calcBonus = () => {
     if (nft.chain === "ETH")
       if (nft.price <= .001)
-        return 100000
+        return 50000
       else if (nft.price <= .01)
-        return 500000
+        return 250000
       else if (nft.price <= .1)
-        return 3000000
+        return 1500000
       else
-        return 30000000
+        return 15000000
     else {
       if (nft.price <= .01)
-        return 100000
+        return 50000
       else if (nft.price <= .1)
-        return 500000
+        return 250000
       else if (nft.price <= 1)
-        return 3000000
+        return 1500000
       else
-        return 30000000
+        return 15000000
     }
   }
 
@@ -336,7 +336,7 @@ const BuyNftModal = (props) => {
               </ReactToolTip>
             </BadgeHolder>
             <InfoContainer>
-              {nft.title.length > 18 ? (
+              {nft.title.length > 32 ? (
                 <Ticker>
                   <TrackName>{nft.title}</TrackName>
                 </Ticker>
@@ -361,6 +361,16 @@ const BuyNftModal = (props) => {
                 </span>
               </Info>
               <Actions>
+                <IconArea onClick={() => share()}>
+                  <ShareButton
+                    onClick={() => share()}
+                    aria-label="share button"
+                  >
+                    <Share onClick={() => share()} />
+                  </ShareButton>
+                  {/* {nft.shareCount}  */}
+                  Share
+                </IconArea>
                 <IconArea>
                   <LikeButton
                     onClick={() => like()}
@@ -374,16 +384,6 @@ const BuyNftModal = (props) => {
                     )}
                   </LikeButton>
                   {likeCount}
-                </IconArea>
-                <IconArea onClick={() => share()}>
-                  <ShareButton
-                    onClick={() => share()}
-                    aria-label="share button"
-                  >
-                    <Share onClick={() => share()} />
-                  </ShareButton>
-                  {/* {nft.shareCount}  */}
-                  Share
                 </IconArea>
               </Actions>
             </TrackDetailsHolder>
@@ -453,6 +453,7 @@ const BuyNftModal = (props) => {
               </BuyButton>
             )}
             {calcEligibility() && <Promotion>💚 This NFT is eligible for an Airdrop Bonus of {calcBonus().toLocaleString()} VINYL! 💚</Promotion>}
+            {calcEligibility() && <MobilePromotion>This NFT is eligible for an Airdrop Bonus of {calcBonus().toLocaleString()} VINYL! 💚</MobilePromotion>}
           </RightSide>
         </StyledModal>
       </Container>
@@ -460,8 +461,22 @@ const BuyNftModal = (props) => {
   );
 };
 
+const MobilePromotion = styled.div`
+margin-top: 10px;
+display: none;
+@media only screen and (max-width: 776px) {
+  height: auto;
+  display: block;
+
+}
+`
+
 const Promotion = styled.div`
 margin-top: 10px;
+@media only screen and (max-width: 776px) {
+  height: auto;
+  display: none;
+}
 `
 
 const ProfilePicture = styled.div`
@@ -589,15 +604,21 @@ const DescriptionHolder = styled.fieldset`
     border-radius: 6px;
     background: rgb(217, 217, 217, 0.6);
   }
-  /* margin-top: 10px; */
+  @media only screen and (max-width: 776px) {
+    height: 70px;
+  }
 `;
 const DescriptionLegend = styled.legend`
   padding: 0 5px;
   margin-left: 10px;
+
 `;
 const DescriptionContent = styled.span`
   margin: 10px;
   margin-left: 0px;
+  @media only screen and (max-width: 776px) {
+    height: 70px;
+  }
 `;
 
 const SnippetHolder = styled.div`
@@ -672,6 +693,10 @@ const X = styled(IconX)`
     transition: all 0.2s ease-in-out;
     stroke: ${(props) => props.theme.color.gray};
     fill: ${(props) => props.theme.color.gray};
+  }
+  @media only screen and (max-width: 776px) {
+    width: 35px;
+  height: 35px;
   }
 `;
 
@@ -755,6 +780,7 @@ const OpaqueFilter = styled.div`
   background-color: rgba(255, 255, 255, 0.1);
   backdrop-filter: brightness(20%) blur(2px);
   z-index: 5000;
+  transform: translateZ(10px);
 `;
 
 const Container = styled.div`
@@ -767,6 +793,11 @@ const Container = styled.div`
   transform: translate(-50%, -50%);
   color: #666;
   z-index: 5005;
+  @media only screen and (max-width: 776px) {
+    left: 0px;
+    top: 0px;
+    transform: unset;
+  }
 `;
 
 const RightSide = styled.div`
@@ -777,8 +808,7 @@ const RightSide = styled.div`
   padding: 10px 30px;
   @media only screen and (max-width: 776px) {
     width: 90vw;
-    height: calc(100vh / 2);
-    justify-content: space-between;
+    justify-content: space-evenly;
     padding-top: 0px;
   }
 `;
@@ -794,8 +824,8 @@ const StyledModal = styled.div`
   justify-content: space-between;
   position: relative;
   @media only screen and (max-width: 776px) {
-    width: 90vw;
-    height: 95vh;
+    width: 100vw;
+    height: 100vh;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
@@ -819,8 +849,8 @@ const Image = styled.img`
   user-select: none;
   /* margin-bottom: 16px; */
   @media only screen and (max-width: 776px) {
-    width: 90vw;
-    height: 90vw;
+    height: 20%;
+    width: auto;
   }
 `;
 
@@ -857,14 +887,14 @@ const TrackName = styled.span`
   font-weight: 600;
   margin-bottom: 6px;
   @media only screen and (max-width: 776px) {
-    margin-top: 5px;
+    margin-top: 10px;
     margin-bottom: 0px;
-    font-size: ${(props) => props.theme.fontSizes.sm};
+    font-size: ${(props) => props.theme.fontSizes.xs};
   }
 `;
 const Artist = styled(NavLink)`
   text-decoration: none;
-  font-size: ${(props) => props.theme.fontSizes.sm};
+  font-size: ${(props) => props.theme.fontSizes.xs};
   color: white;
   margin-bottom: 12px;
   @media only screen and (max-width: 776px) {

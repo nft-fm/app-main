@@ -16,7 +16,7 @@ const Listen = () => {
   const [selected, setSelected] = useState("Date: High - Low");
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState(2);
-  const limit = 30;
+  const limit = 200;
 
   const getNftsWithParams = async (pageIncrease, searchParam, sortParam) => {
     console.log("here", hasMore);
@@ -168,11 +168,11 @@ const Listen = () => {
 
       <ContainerOutline />
       <NftScroll>
-        <InfiniteScroll
+        {/* <InfiniteScroll
           dataLength={allNfts.length}
           next={() => getNftsWithParams(1, search, sort)}
           hasMore={hasMore}
-        >
+        > */}
           {allNfts.map((item, index) => (
             <NftCard nft={item} />
           ))}
@@ -183,7 +183,7 @@ const Listen = () => {
               <FillerCard />
             </>
           )}
-        </InfiniteScroll>
+        {/* </InfiniteScroll> */}
       </NftScroll>
     </LaunchContainer>
   );
@@ -297,34 +297,7 @@ const NftScroll = styled.div`
     flex-direction: column;
     align-items: center;
   }
-  & > div {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    width: 100%;
-    /* justify-content: space-between; */
-    /* justify-content: space-evenly; */
-    @media only screen and (max-width: 776px) {
-      flex-direction: column;
-      align-items: center;
-      margin-top: 25px;
-    }
-    & > div {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      width: 100%;
-      /* justify-content: space-between; */
-      justify-content: space-evenly;
-      overflow-x: clip !important;
-      overflow-y: visible !important;
-      @media only screen and (max-width: 776px) {
-        flex-direction: column;
-        align-items: center;
-        margin-top: 25px;
-      }
-    }
-  }
+  
 `;
 
 const LaunchContainer = styled.div`

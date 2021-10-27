@@ -125,6 +125,7 @@ const NftCard = (props) => {
     return null;
   }
 
+
   return (
     <>
       <ShareModal

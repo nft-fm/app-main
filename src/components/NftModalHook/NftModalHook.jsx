@@ -220,7 +220,7 @@ const BuyNftModal = (props) => {
     if (nft.chain === "ETH")
       return false
     else if (nft.numMinted < 5)
-      return nft.numMinted > 0
+      return nft.numMinted - nft.numSold > 0
     else 
       return nft.numSold < 5
   }

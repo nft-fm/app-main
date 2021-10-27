@@ -45,7 +45,7 @@ const listenForBuyEth = async () => {
     ).catch((err) => {
       console.log(err);
     });
-    const updateUser = await User.findOneAndUpdate(
+    await User.findOneAndUpdate(
       { address: event[0].args.account },
       {
         $push: {
@@ -60,11 +60,11 @@ const listenForBuyEth = async () => {
     });
     if (process.env.PRODUCTION) {
       trackNftPurchase({
-        address: req.body.address,
-        ip: req.ip,
-        artistAddress: nft.address,
-        nftId: nft.nftId,
-        nftPrice: nft.price,
+        address: event[0].args.account,
+        artistAddress: updateNFT.address,
+        nftId: updateNFT._id,
+        nftPrice: updateNFT.price,
+        chain: "ETH",
       });
     }
   });
@@ -104,7 +104,7 @@ const listenForBuyBsc = async () => {
     ).catch((err) => {
       console.log(err);
     });
-    const updateUser = await User.findOneAndUpdate(
+    await User.findOneAndUpdate(
       { address: event[0].args.account },
       {
         $push: {
@@ -119,11 +119,11 @@ const listenForBuyBsc = async () => {
     });
     if (process.env.PRODUCTION) {
       trackNftPurchase({
-        address: req.body.address,
-        ip: req.ip,
-        artistAddress: nft.address,
-        nftId: nft.nftId,
-        nftPrice: nft.price,
+        address: event[0].args.account,
+        artistAddress: updateNFT.address,
+        nftId: updateNFT._id,
+        nftPrice: updateNFT.price,
+        chain: "BSC",
       });
     }
   });

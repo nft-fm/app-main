@@ -45,8 +45,9 @@ const trackLogin = (props) => {
 };
 
 const trackPageview = (props) => {
-  const { address, ip, page } = props;
+  const { address, ip, page, hasMetamask } = props;
   mixpanel.track("pageview", {
+    hasMetamask: hasMetamask,
     distinct_id: address ? address : null,
     ip,
     ipAddress: ip,

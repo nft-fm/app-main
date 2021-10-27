@@ -56,6 +56,7 @@ const Switches = () => {
   useEffect(() => {
     axios
       .post(`/api/user/track-pageview`, {
+        hasMetamask: !!window.ethereum,
         address: account,
         page: location.pathname.substring(1),
       })

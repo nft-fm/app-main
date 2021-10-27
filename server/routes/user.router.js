@@ -106,6 +106,7 @@ router.post("/track-pageview", async (req, res) => {
   try {
     if (process.env.PRODUCTION) {
       trackPageview({
+        hasMetamask: req.body.hasMetamask,
         address: req.body.account,
         ip: req.ip,
         page: req.body.page,

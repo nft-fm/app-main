@@ -296,6 +296,7 @@ const NftScroll = styled.div`
   @media only screen and (max-width: 776px) {
     flex-direction: column;
     align-items: center;
+    margin-top: 24px;
   }
   
 `;

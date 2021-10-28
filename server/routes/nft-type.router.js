@@ -16,9 +16,13 @@ const {
   findLikes,
   addArtistToStake,
   getStakersForArtist,
+  setNewPrice
 } = require("../web3/server-utils");
 const { listenForMintEth, listenForMintBsc } = require("../web3/mint-listener");
 const { trackNftPurchase, trackNftView } = require("../modules/mixpanel");
+
+const Web3 = require('web3');
+const web3 = new Web3(new Web3.providers.HttpProvider(process.env.PROVIDER_URL))
 
 // const findLikes = (nfts, account) => {
 //   for (let i = 0; i < nfts.length; i++) {
@@ -65,7 +69,7 @@ router.post("/artist-nfts", async (req, res) => {
 router.post("/artist-stakers", async (req, res) => {
   try {
     const stakers = await getStakersForArtist(req.body.address);
-    const users = await User.find({ address : { $in: stakers }})
+    const users = await User.find({ address: { $in: stakers } })
     res.send(users);
   } catch (err) {
     res.status(500).send(err);
@@ -152,7 +156,7 @@ router.post("/get-user-nfts", async (req, res) => {
       res.send("no nfts!");
       return;
     }
-    for (nft of req.body.nfts) {
+    for (let nft of req.body.nfts) {
       if (nft.quantity > 1) {
         for (let i = 0; i < nft.quantity; i++) {
           ids.push(nft.nft);
@@ -162,7 +166,7 @@ router.post("/get-user-nfts", async (req, res) => {
       }
     }
     const gottenNfts = [];
-    for (id of ids) {
+    for (let id of ids) {
       console.log("here", id);
       const getNft = await NftType.findOne(
         {
@@ -982,17 +986,31 @@ router.get("/testing", async (req, res) => {
         });
       }
     });
-  } catch (err) {}
+  } catch (err) { }
 });
 
 router.post("/updatePrice", async (req, res) => {
   try {
-    let updateNFT = await NftType.findOneAndUpdate(
-      { nftId: req.body.nftId, chain: req.body.chain },
-      { price: req.body.price },
-      { new: true }
+    const { address, nftId, flatPriceSale, price, chain, sig } = req.body
+    const signingAddress = web3.eth.accounts.recover(
+      JSON.stringify({ address, nftId, flatPriceSale, price, chain }),
+      sig
     );
-    console.log("update", updateNFT);
+
+    if (req.body.address !== signingAddress)
+      return res.status(401).send("signature mismatch");
+
+    // !! I need help with the function below
+
+    // await setNewPrice(nftId, flatPriceSale, price, async () => {
+    //   let updateNFT = await NftType.findOneAndUpdate(
+    //     { nftId, chain },
+    //     { price },
+    //     { new: true }
+    //   );
+    //   console.log(updateNFT)
+    // })
+
     res.status(200).send("Success");
   } catch (err) {
     res.status(500).send(err);

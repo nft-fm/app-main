@@ -5,14 +5,13 @@ const mixpanelToken = process.env.PRODUCTION
 const mixpanel = Mixpanel.init(mixpanelToken, { protocol: "https" });
 
 const trackNftPurchase = (props) => {
-  const { address, ip, artistAddress, nftId, nftPrice } = props;
+  const { address, artistAddress, nftId, nftPrice, chain } = props;
   mixpanel.track("nft purchase", {
     distinct_id: address,
-    ip,
-    ipAddress: ip,
     artistAddress,
     nftId,
     nftPrice,
+    chain,
   });
 };
 

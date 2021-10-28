@@ -592,12 +592,15 @@ router.post("/signNewFee", async (req, res) => {
 });
 
 router.post("/getArtists", async (req, res) => {
+  const usersToExclude = ["Fanfare", "NFT FM"];
   try {
     const artists = await User.find({
       isArtist: true,
       hasMinted: true,
       profilePic: { $exists: true },
-      $and: [{ username: { $ne: "Fanfare" } }, { username: { $ne: "NFT FM" } }]
+      $and: usersToExclude.map(username => {
+        return { "username": { $ne: username } };
+      })
     });
 
     res.send(artists);

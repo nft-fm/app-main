@@ -1,10 +1,9 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
+import { ReactComponent as down_arrow } from "../../../assets/img/icons/down_arrow.svg";
 import NftCard from "../../../components/NftCards/SaleNftCard";
 import { useAccountConsumer } from "../../../contexts/Account";
-import { ReactComponent as down_arrow } from "../../../assets/img/icons/down_arrow.svg";
-import InfiniteScroll from "react-infinite-scroll-component";
 // import { ReactComponent as down_arrow } from "../../../assets/img/icons/down_arrow.svg";
 
 const Listen = () => {
@@ -140,6 +139,17 @@ const Listen = () => {
     >
       Cheapest
     </MenuSpan>,
+    <MenuSpan
+      isMenuOpen={menuOpen}
+      onClick={() => {
+        setSort(5);
+        setSelected("Liked: High - Low");
+        setMenuOpen(false);
+      }}
+      selected={selected === "Liked: High - Low"}
+    >
+      Liked
+    </MenuSpan>,
   ];
 
   return (
@@ -156,8 +166,9 @@ const Listen = () => {
         onMouseEnter={() => setMenuOpen(true)}
         onMouseLeave={() => setMenuOpen(false)}
         isMenuOpen={menuOpen}
+        optionCount={menuOptions.length}
       >
-        <SelectedSpan onClick={() => setMenuOpen(!menuOpen)}>
+        <SelectedSpan onClick={() => setMenuOpen(!menuOpen)} >
           {/* {selected} */}
           Sort by <DownArrow />
         </SelectedSpan>
@@ -237,7 +248,7 @@ const ContainerTitleSorting = styled.div`
   flex-direction: column;
   align-items: flex-start;
 
-  height: ${(props) => props.isMenuOpen && "110px"};
+  height: ${(props) => props.isMenuOpen && `${props.optionCount * 28 + 20}px`};
   z-index: 2;
 
   @media only screen and (max-width: 1200px) {

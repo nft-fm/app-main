@@ -1,57 +1,18 @@
 import React from "react";
 import styled from "styled-components";
-import swal from "sweetalert2";
-import metamaskLogo from "../../../assets/img/metamask_fox.svg";
 import { useAccountConsumer } from "../../../contexts/Account";
+import { noMetaMaskWarning } from '../../../utils/connectWallet';
 import isMobile from "../../../utils/isMobile";
 import ChainSelector from "./ChainSelector";
-
 // https://stackoverflow.com/questions/21741841/detecting-ios-android-operating-system
 
-function getMetaMaskLink() {
-  var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-  if (/android/i.test(userAgent)) {
-    return {
-      title: "Open in App Store",
-      link: "https://metamask.app.link/bxwkE8oF99",
-    };
-  }
-  if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-    return {
-      title: "Open in App Store",
-      link: "https://metamask.app.link/skAH3BaF99",
-    };
-  }
-  return {
-    title: "Open Instructions",
-    link: "https://metamask.io/download.html",
-  };
-}
+
 
 const AccountButton = (props) => {
   const { account, connect } = useAccountConsumer();
 
-  // const [onPresentInstallMetamask] = useModal(<InstallMetamaskModal />);
   const handleUnlockClick = () =>
-    window.ethereum ? connect("injected") : openMetamaskAlert();
-
-  const openMetamaskAlert = async () => {
-    if (account) return;
-
-    const { title, link } = getMetaMaskLink();
-    swal
-      .fire({
-        title: "You need to install metamask.",
-        confirmButtonText: title,
-        imageUrl: metamaskLogo,
-        imageWidth: 100,
-      })
-      .then(({ isConfirmed }) => {
-        if (isConfirmed) {
-          window.open(link, "_blank").focus();
-        }
-      });
-  };
+    window.ethereum ? connect("injected") : noMetaMaskWarning(account);
 
   // if (account) {
   //   ReactGA.set({

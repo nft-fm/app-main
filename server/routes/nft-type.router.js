@@ -65,7 +65,7 @@ router.post("/artist-nfts", async (req, res) => {
 router.post("/artist-stakers", async (req, res) => {
   try {
     const stakers = await getStakersForArtist(req.body.address);
-    const users = await User.find({ address : { $in: stakers }})
+    const users = await User.find({ address: { $in: stakers } })
     res.send(users);
   } catch (err) {
     res.status(500).send(err);
@@ -459,39 +459,33 @@ router.post("/countNfts", async (req, res) => {
 
 router.post("/getNftsWithParams", async (req, res) => {
   try {
-    const getSortParam = () => {
-      if (req.body.sort === 0) {
-        return { price: -1 };
-      } else if (req.body.sort === 1) {
-        return { price: 1 };
-      } else if (req.body.sort === 2) {
-        return { timestamp: -1 };
-      } else if (req.body.sort === 3) {
-        return { timestamp: 1 };
-      } else if (req.body.sort === 4) {
-        return { shareCount: 1 }
-      }
+    const { address, sort, page, limit, length } = req.body;
+    const sortParams = {
+      0: { price: -1 },
+      1: { price: 1 },
+      2: { timestamp: -1 },
+      3: { timestamp: 1 },
+      4: { shareCount: 1 },
+      5: { likeCount: -1 }
     };
+    const query = { $regex: req.body.search, $options: "i" };
+
     let nftTypes = await NftType.find({
       isDraft: false,
       isMinted: true,
       $or: [
-        {
-          title: { $regex: req.body.search, $options: "i" },
-        },
-        {
-          artist: { $regex: req.body.search, $options: "i" },
-        },
+        { title: query }, { artist: query }
       ],
     })
-      .sort(getSortParam())
-      .skip(req.body.page * req.body.limit)
-      .limit(req.body.limit);
+      .sort(sortParams[sort] ? sortParams[sort] : {})
+      .skip(page * limit)
+      .limit(limit);
     res.send({
-      nfts: findLikes(nftTypes, req.body.address),
-      hasMore: nftTypes.length === req.body.limit,
+      nfts: findLikes(nftTypes, address),
+      hasMore: length === limit,
     });
   } catch (error) {
+    console.error(error);
     res.status(500).send("server error");
   }
 });
@@ -878,7 +872,7 @@ router.post("/newShare", async (req, res) => {
 router.post("/get-by-nftId", async (req, res) => {
   try {
     const getNft = await NftType.findOne({ nftId: req.body.nftId });
-    res.status(200).send(findLikes(getNft, req.body.address));
+    res.status(200).send(getNft.map(nft => { return {} }));
   } catch (err) {
     res.status(500).send(err);
   }
@@ -982,7 +976,7 @@ router.get("/testing", async (req, res) => {
         });
       }
     });
-  } catch (err) {}
+  } catch (err) { }
 });
 
 router.post("/updatePrice", async (req, res) => {

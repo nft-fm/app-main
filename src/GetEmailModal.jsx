@@ -190,14 +190,17 @@ text-align: center;
 /* height: 20px; */
 /* width: 200px; */
 padding: 16px;
-top: 80px;
-right: 40px;
+top: 130px;
+right: 20px;
 border: 1px solid  ${(props) => props.theme.color.boxBorder};
 background: ${props => props.theme.color.box};
 color: white;
 /* border-radius: 0 0 0 20px; */
 border-radius: 2px;
 z-index: 10000000;
+@media only screen and (max-width: 776px) {
+  margin-top: 150px;
+}
 `
 
 export default GetEmailModal;

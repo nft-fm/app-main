@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import logo from "../../assets/img/logos/logo_nav.png";
+import logo from "../../assets/img/logos/Fanfare_logo.svg";
 
 const Logo = () => {
   return (

@@ -32,7 +32,7 @@ export const FAQ = () => {
       />
       <Question
         question="Can a NFT Platform be Carbon Neutral?"
-        answer="While cryptocurrency mining and transactions are becoming more efficient every year, it’s important to acknowledge the potential harm they can cause to the environment at the present. At NFT FM, we use the industry leading cryptoart-footprint API to calculate the global emissions caused by all transactions on our platform. At the end of each month, we purchase Carbon Credits equivalent to the calculated CO2 output to offset any potential carbon we produce."
+        answer="While cryptocurrency mining and transactions are becoming more efficient every year, it’s important to acknowledge the potential harm they can cause to the environment at the present. At Fanfare, we use the industry leading cryptoart-footprint API to calculate the global emissions caused by all transactions on our platform. At the end of each month, we purchase Carbon Credits equivalent to the calculated CO2 output to offset any potential carbon we produce."
       />
     </LaunchFeaturesContainer>
   );
@@ -58,7 +58,7 @@ Can NFTs really be music?
 NFTs can hold anything that you can store as data. While the most common formats people use are images and GIFs, we believe NFTs to be the future of music trading and collecting. 
 
 I’m new to crypto, how do I use your platform?
-We understand cryptocurrency can be a new sometimes scary concept. That’s okay! Before you buy your first song or album on NFT FM, we would love for you to read our full guide on cryptocurrencies, NFTs, and how they can be used.
+We understand cryptocurrency can be a new sometimes scary concept. That’s okay! Before you buy your first song or album on Fanfare, we would love for you to read our full guide on cryptocurrencies, NFTs, and how they can be used.
 However, if you can’t wait to start collecting music of your own, here’s some quick instructions to get you started trading right away:
 Our platform is built on the decentralized web. To use our platform, you’ll first have to install the extension MetaMask. MetaMask is a (what is MetaMask to make them feel more comfortable).
 Next, purchase enough Ethereum to purchase your favorite music on through a trading platform such as Coinbase. You can see how much Ethereum each song or album costs in the discover page.
@@ -71,6 +71,6 @@ I have an NFT that I want to trade away.
  NFTs function just like cryptocurrency, except they’re tied to other pieces of media. In this case, music. When selling your NFT becomes a good investment for you, (steps on trading away/placing a sell price)
 
  Aren’t cryptocurrencies really bad for the environment?
- While cryptocurrency mining and transactions are becoming more efficient every year, it’s important to acknowledge the potential harm they can cause to the environment at the present. At NFT FM, we use the industry leading cryptoart-footprint API to calculate the global emissions caused by all transactions on our platform. At the end of each month, we purchase Carbon Credits equivalent to the calculated CO2 output to offset any potential carbon we produce. If you want to read more on our commitment to environmental protection, you can read more on our (more details on another page)
+ While cryptocurrency mining and transactions are becoming more efficient every year, it’s important to acknowledge the potential harm they can cause to the environment at the present. At Fanfare, we use the industry leading cryptoart-footprint API to calculate the global emissions caused by all transactions on our platform. At the end of each month, we purchase Carbon Credits equivalent to the calculated CO2 output to offset any potential carbon we produce. If you want to read more on our commitment to environmental protection, you can read more on our (more details on another page)
 */
 // }

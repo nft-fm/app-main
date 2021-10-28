@@ -17,6 +17,7 @@ const adminPollRouter = require("./routes/admin-poll.router");
 const vinylOwnerRouter = require("./routes/vinyl-owner.router");
 const Mixpanel = require("mixpanel");
 const { listenForMintEth, listenForMintBsc } = require("./web3/mint-listener");
+const { listenForBuyBsc, listenForBuyEth } = require("./web3/buy-listener")
 
 const PORT = process.env.PORT || 5000;
 
@@ -29,7 +30,7 @@ function ensureSecure(req, res, next) {
 }
 
 if (process.env.PRODUCTION) {
-  // app.all("*", ensureSecure);
+  app.all("*", ensureSecure);
 }
 
 app.use(cors());
@@ -48,6 +49,8 @@ dotenv.config();
 connectDB();
 listenForMintEth();
 listenForMintBsc();
+listenForBuyEth();
+listenForBuyBsc();
 
 app.use(cookieParser());
 app.use(sessionMiddleware);

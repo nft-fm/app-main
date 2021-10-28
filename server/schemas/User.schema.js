@@ -66,6 +66,9 @@ const UserSchema = new Schema({
       quantity: {
         type: Number,
       },
+      chain: {
+        type: String,
+      },
     },
   ],
   socials: [],

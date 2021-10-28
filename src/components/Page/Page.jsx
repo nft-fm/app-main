@@ -9,12 +9,6 @@ const Page = ({ children }) => {
 
   return (
     <StyledPage>
-      <Aesthetics>
-        <Aesthetics1 />
-        <Aesthetics2 />
-        <Aesthetics3 />
-        <Aesthetics4 />
-      </Aesthetics>
       <TopBar />
       <NavContainer>
         <Nav />
@@ -97,10 +91,10 @@ const StyledMain = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 1226px;
-  @media only screen and (max-width: 1500px) {
+  width: 1175px;
+  /* @media only screen and (max-width: 1500px) {
     width: 976px;
-  }
+  } */
   @media only screen and (max-width: 1200px) {
     width: 726px;
   }

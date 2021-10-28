@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import logo from "../../../assets/img/logos/logo.png";
+import logo from "../../../assets/img/logos/Fanfare_logo.svg";
 import { NavLink } from "react-router-dom";
 import { ReactComponent as IconDiscord } from "../../../assets/img/icons/social_discord.svg";
 import { ReactComponent as IconMedium } from "../../../assets/img/icons/social_medium.svg";
@@ -14,10 +14,11 @@ const Listen = () => {
     <Landing>
       <LandingTitle>
         <Logo src={logo} />
-        <StyledTitle>NFT FM</StyledTitle>
+        <StyledTitle>FANFARE</StyledTitle>
+        <p style={{ fontSize: "0.625rem", marginTop: '-20px' }}>BETA</p>
       </LandingTitle>
       <LaunchContainer>
-        <NavLink to="/market/16">
+        <NavLink to="/market/ETH/16">
           <DesktopBanner src={saQiBannerDesktop} alt="saQi Banner" />
         </NavLink>
         <MobileDescription>
@@ -28,7 +29,7 @@ const Listen = () => {
       </LaunchContainer>
       <SocialsBar>
         <IconContainer
-          href="https://t.me/joinchat/q6_q25NWr99kOGUx"
+          href="http://t.me/fanfare_fm"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -36,7 +37,7 @@ const Listen = () => {
           <IconText>Telegram</IconText>
         </IconContainer>
         <IconContainer
-          href="https://nft-fm.medium.com/"
+          href="https://fanfare-fm.medium.com/"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -44,7 +45,7 @@ const Listen = () => {
           <IconText>Medium</IconText>
         </IconContainer>
         <IconContainer
-          href="https://twitter.com/NFTFM_IO"
+          href="https://twitter.com/fanfare_fm"
           target="_blank"
           rel="noopener noreferrer"
         >

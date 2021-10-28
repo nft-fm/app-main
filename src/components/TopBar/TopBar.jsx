@@ -11,8 +11,10 @@ const TopBar = () => {
     <StyledTopBar id="top">
       <Container size="lg">
         <StyledTopBarInner>
-          <NavLink to="/" style={{ textDecoration: "none" }}>
-            <Logo />
+          <NavLink to="/home" style={{ textDecoration: "none" }}>
+            <LogoContainer>
+              <Logo /> <span style={{ marginBottom: "3px" }}>BETA</span>
+            </LogoContainer>
           </NavLink>
           <NavRight>
             <NavContainer>
@@ -25,6 +27,13 @@ const TopBar = () => {
     </StyledTopBar>
   );
 };
+
+const LogoContainer = styled.div`
+  display: flex;
+  align-items: flex-end;
+  color: white;
+  font-size: ${(props) => props.theme.fontSizes.xxs};
+`;
 
 const NavContainer = styled.div`
   display: flex;
@@ -46,7 +55,8 @@ const StyledTopBar = styled.div`
   border-bottom: 1px solid #232323;
   width: 100%;
   z-index: 50;
-  position: relative;
+  position: sticky;
+  top: 0px;
 `;
 
 const StyledTopBarInner = styled.div`

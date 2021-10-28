@@ -18,7 +18,9 @@ const UseBscSorry = () => {
             you need to be connected to access staking
           </SubTitle>
           <ButtonContainer>
-            <Button onClick={() => connect('injected')}>Connect Your MetaMask</Button>
+            <Button
+            aria-label="Connect MetaMask"
+            onClick={() => connect('injected')}>Connect Your MetaMask</Button>
           </ButtonContainer>
         </StyledLink>
       ) : (
@@ -28,7 +30,10 @@ const UseBscSorry = () => {
             you need to be on Binance Smart Chain to access staking
           </SubTitle>
           <ButtonContainer>
-            <Button onClick={switchBsc}>Switch To Binance Smart Chain</Button>
+            <Button
+            aria-label="Switch to BSC"
+            onClick={switchBsc}
+            >Switch To Binance Smart Chain</Button>
           </ButtonContainer>
         </StyledLink>
       )}
@@ -45,7 +50,9 @@ const ButtonContainer = styled.div`
   justify-content: center;
 `;
 
-const Button = styled.div`
+const Button = styled.button`
+color: white;
+  background: transparent;
   border: 2px solid ${(props) => props.theme.color.red};
   cursor: pointer;
   font-size: 20px;

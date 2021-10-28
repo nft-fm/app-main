@@ -21,6 +21,8 @@ const FlatPriceSaleABI = require("./abi/FlatPriceSale.abi");
 const NFTTokenABI = require("./abi/NFTToken.abi");
 const VinylABI = require("./abi/Vinyl.abi");
 const StakingABI = require("./abi/Staking.abi");
+const dotenv = require("dotenv");
+dotenv.config();
 
 const sign = (types, values) => {
   let data = utils.defaultAbiCoder.encode(types, values);
@@ -104,6 +106,8 @@ const getUserNftsETH = async (account) => {
   return nftIdsAndQuantities;
   // return { nftIds, numNfts };
 };
+
+
 const getUserNftsBSC = async (account) => {
   const PROVIDER_URL = process.env.REACT_APP_IS_MAINNET
     ? process.env.BSC_PROVIDER_URL
@@ -111,6 +115,7 @@ const getUserNftsBSC = async (account) => {
   const NFTToken = process.env.REACT_APP_IS_MAINNET
     ? MAIN_BSC_NFTToken
     : TEST_BSC_NFTToken;
+  
   let provider = new providers.WebSocketProvider(PROVIDER_URL);
   let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
   const contract = new Contract(NFTToken, NFTTokenABI, walletWithProvider);
@@ -197,14 +202,30 @@ const addArtistToStake = async (artistAddress, callback) => {
     }
   });
 };
+const getStakersForArtist = async (address, callback) => {
+  const PROVIDER_URL = getDefaultProvider(
+    process.env.REACT_APP_IS_MAINNET
+      ? process.env.BSC_PROVIDER_URL
+      : process.env.BSCTEST_PROVIDER_URL
+  );
+  const STAKING_ADDRESS = process.env.REACT_APP_IS_MAINNET
+    ? MAIN_StakingAddress
+    : TEST_StakingAddress;
+  const contract = new Contract(STAKING_ADDRESS, StakingABI, PROVIDER_URL);
+  let promise = await contract.stakersForArtist(address).then((r) => {
+    return r;
+  });
+  let newVariable = await Promise.all([...promise]).then((res) => res);
+  return newVariable;
+};
 
 module.exports = {
   sign,
-  // getSetSale,
   findLikes,
   getUserNftsETH,
   getUserNftsBSC,
   getVinylOwners,
   getVinylBalance,
   addArtistToStake,
+  getStakersForArtist,
 };

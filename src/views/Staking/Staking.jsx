@@ -31,19 +31,21 @@ const Staking = () => {
 
   const claimRewards = async () => {
     setLoading(true);
-    claimVinyl(() => {
+    claimVinyl((err) => {
       setLoading(false);
-      Swal.fire({
-        title: `Successfully claimed ${totalAvailable} VINYL!`,
-        timer: 5000,
-      });
-      console.log("claimed!");
-      setNeedToUpdateBalances(true);
-    }).catch((err) => {
-      setLoading(false);
-      Swal.fire({
-        title: "Something went wrong, please try again.",
-      });
+      if (err) {
+        Swal.fire({
+          title: `Something went wrong, please refresh and try again.`,
+          timer: 5000,
+        });
+      } else {
+        Swal.fire({
+          title: `Successfully claimed ${totalAvailable} VINYL!`,
+          timer: 5000,
+        });
+        console.log("claimed!");
+        setNeedToUpdateBalances(true);
+      }
     });
   };
 
@@ -74,7 +76,7 @@ const Staking = () => {
 
   return (
     <BaseView>
-      <StakingHeader>NFT FM Staking</StakingHeader>
+      <StakingHeader>Fanfare Staking</StakingHeader>
       {!isBsc || !account ? (
         <UseBscSorry />
       ) : (
@@ -82,12 +84,12 @@ const Staking = () => {
           <StakingTopSection>
             <StakingInfo>
               <p>
-                Here is where you can stake your VINYL on the NFT FM Artists!
+                Here is where you can stake your VINYL on the Fanfare Artists!
                 <br />
                 Artists and Stakers are rewarded a portion of each transaction.
                 <br />
-                <br /> By staking on an artist, you are growing your wallet and
-                theirs at the same time!
+                <br /> By staking on an artist, you are rewarding yourself and
+                your artist at the same time!
                 <br />
               </p>
               <Row>
@@ -97,6 +99,10 @@ const Staking = () => {
               <Row>
                 <p>Total Earned By Artists:</p>
                 <p>{Math.round(totalEarnedByAllArtists * 100) / 100} VINYL</p>
+              </Row>
+              <Row>
+                <p>Total Stakable Artists:</p>
+                <p>{artists.length}</p>
               </Row>
               <AddButton onClick={() => addVinyl()}>
                 Add VINYL to Wallet
@@ -148,7 +154,7 @@ const Staking = () => {
             </Side>
           </StakingUserInfoSection>
           <StakingHolder />
-          {/* {artists.length > 0 && <Community balance={balance} />} */}
+          {artists.length > 0 && <Community balance={balance} />}
         </>
       )}
     </BaseView>

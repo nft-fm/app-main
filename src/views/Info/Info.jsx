@@ -26,13 +26,13 @@ const Info = () => {
   return (
     <Switch>
       <BaseView>
-        <Header1>All About NFT FM</Header1>
+        <Header1>All About Fanfare</Header1>
         <InfoContainer>
           <MobileInfo childs={2}>
             <InfoSubContainer onClick={() => handleClick("litepaperRef")}>
               <LinkImage src={litepaper} alt="litepaper" />
               <h3>Litepaper</h3>
-              <section>In depth review of NFT FM</section>
+              <section>In depth review of Fanfare</section>
             </InfoSubContainer>
             <InfoSubContainer onClick={() => handleClick("roadmapRef")}>
               <LinkImage src={roadmap} alt="roadmap" />
@@ -46,8 +46,8 @@ const Info = () => {
               <h3>FAQ</h3>
               <section>We answer your questions</section>
             </InfoSubContainer>
-            <InfoSubContainer>
-            {/* <InfoSubContainer onClick={() => handleClick("tokenomicsRef")}> */}
+            {/* <InfoSubContainer> */}
+            <InfoSubContainer onClick={() => handleClick("tokenomicsRef")}>
               <LinkImage src={tokenomics} alt="tokenomics" />
               <h3>Tokenomics</h3>
               <section>Coming Soon</section>
@@ -57,7 +57,7 @@ const Info = () => {
             <InfoSubContainer onClick={() => handleClick("teamsRef")}>
               <LinkImage src={team} alt="team" />
               <h3>Team</h3>
-              <section>Meet the NFT FM Team</section>
+              <section>Meet the Fanfare Team</section>
             </InfoSubContainer>
           </MobileInfo>
         </InfoContainer>
@@ -66,17 +66,17 @@ const Info = () => {
           id="litepaperRef"
         />
         <ProjectSummary>
-          <h3>NFT FM is the first Audiocentric NFT marketplace.</h3>
+          <h3>Fanfare is the first Audiocentric NFT marketplace.</h3>
           <br />
           <span>
-            NFT FM allows musicians to dictate artistically and financially the
+            Fanfare allows musicians to dictate artistically and financially the
             terms on which they engage with their audience. 90% of sale revenue
             goes to the artist directly giving musicians much more of a chance
             to see the immediate results of their hard work.
           </span>
           <br />
           <span>
-            NFT FM differs from traditional NFTs because it transfers exclusive
+            Fanfare differs from traditional NFTs because it transfers exclusive
             listening rights to the NFT owner. While typically NFTs consist of
             only an image or video file, our NFTs add full-length music on top
             of the media traditionally contained in NFTs. Our NFTs have been
@@ -86,20 +86,20 @@ const Info = () => {
           </span>
           <br />
           <span>
-            NFT FM is committed to being 100% carbon neutral. Every month the
+            Fanfare is committed to being 100% carbon neutral. Every month the
             company's carbon footprint is calculated using a cutting-edge Crypto
             Art Footprint API. Then a donation to a carbon fund is made based on
-            that calculation. NFT FM is also partnered with Offsetra to ensure
+            that calculation. Fanfare is also partnered with Offsetra to ensure
             transparency and accountability in terms of carbon neutrality.
             Sustainable practices are important and we hope that we can be a
             model going forward in this industry.
           </span>
-          <StyledAccountButton
+          {/* <StyledAccountButton
             target="_blank"
             href="https://drive.google.com/file/d/1i24DtdT2pIxu5YgIvud0bGa6zxl888GJ/view?usp=sharing"
           >
             <Button>Litepaper</Button>
-          </StyledAccountButton>
+          </StyledAccountButton> */}
         </ProjectSummary>
         <div id="roadmapRef" />
         <RoadMap />
@@ -112,7 +112,7 @@ const Info = () => {
           <FAQ />
         </LaunchContainer>
         <div id="tokenomicsRef" />
-        {/* <Tokenomics /> */}
+        <Tokenomics />
         <div id="teamsRef" />
         <Team />
       </BaseView>

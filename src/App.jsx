@@ -35,6 +35,7 @@ import recordPlayerSpin from "./assets/img/record_player_spin.png";
 import saQiBanner from "./assets/img/homepage_assets/saqi_banner.png";
 import saQiBannerMobile from "./assets/img/homepage_assets/saqi_banner_mobile.jpeg";
 import NoEmailModal from "./GetEmailModal";
+import PromoBanner from './PromoBanner'
 
 import isMobile from "./utils/isMobile";
 import theme from "./theme";
@@ -56,6 +57,7 @@ const Switches = () => {
   useEffect(() => {
     axios
       .post(`/api/user/track-pageview`, {
+        hasMetamask: !!window.ethereum,
         address: account,
         page: location.pathname.substring(1),
       })
@@ -122,9 +124,6 @@ const Switches = () => {
         <Route path="/artist">
           <Artist />
         </Route>
-        <Route path="/market">
-          <Discover />
-        </Route>
         {/* <Route path="/community">
           <Community />
         </Route>
@@ -149,8 +148,11 @@ const Switches = () => {
         <Route path="/info">
           <Info />
         </Route>
-        <Route path="/">
+        <Route path="/home">
           <Listen />
+        </Route>
+        <Route path="/">
+          <Discover />
         </Route>
         <Route path="/*">
           <Error404 />
@@ -161,6 +163,13 @@ const Switches = () => {
 };
 
 const App = () => {
+
+  console.log("window.location.href", window.location.href);
+
+  if (window.location.href.includes("nftfm.io")) {
+    window.location.replace("https://beta.fanfare.fm");
+  }
+
   useEffect(() => {
     preloadImage(recordPlayer);
     preloadImage(recordPlayerSpin);
@@ -171,6 +180,7 @@ const App = () => {
   return (
     <Providers>
       <StyledCanvas>
+        <PromoBanner />
         <Router>
           <Switches />
           <NoEmailModal/>

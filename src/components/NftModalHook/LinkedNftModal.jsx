@@ -1,9 +1,9 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import NftModalHook from "./NftModalHook";
 import { useAccountConsumer } from "../../contexts/Account";
-import axios from "axios";
 import ShareModal from "../SMShareModal/SMShareModal";
+import NftModalHook from "./NftModalHook";
 
 const NftCard = (props) => {
   const { account } = useAccountConsumer();
@@ -58,19 +58,12 @@ const NftCard = (props) => {
   };
 
   useEffect(() => {
+    console.log("awefjio", window.location.pathname, window.location.pathname.length);
     if (window.location.pathname.length > 7) {
-      let chain;
-      let nftId;
-      if (
-        window.location.pathname.slice(8, 11).toUpperCase() !== "BSC" &&
-        window.location.pathname.slice(8, 11).toUpperCase() !== "ETH"
-      ) {
-        chain = "ETH";
-        nftId = window.location.pathname.slice(8);
-      } else {
-        chain = window.location.pathname.slice(8, 11).toUpperCase();
-        nftId = window.location.pathname.slice(12);
-      }
+
+      let chain = window.location.pathname.slice(8, 11).toUpperCase();
+      let nftId = window.location.pathname.slice(12);
+
       console.log(chain, nftId);
       axios
         .post("/api/nft-type/get-one", {
@@ -85,6 +78,9 @@ const NftCard = (props) => {
           setLiked(res.data.liked);
           getSnnipetAWS(res.data);
           setIsModalOpen(true);
+        })
+        .catch(err => {
+          console.log("err", err, err.res);
         });
     }
   }, []);
@@ -106,9 +102,9 @@ const NftCard = (props) => {
         nft={nft}
         partialSong={partialSong}
         liked={liked}
-        SetLiked={setLiked}
         likeCount={likeCount}
         setLikeCount={setLikeCount}
+        setLiked={setLiked}
         setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
       />
     </Container>

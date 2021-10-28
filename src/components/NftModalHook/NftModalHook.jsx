@@ -52,6 +52,7 @@ const BuyNftModal = (props) => {
 
   useEffect(() => {
     if (open) {
+      console.log("info", account, nft);
       axios
         .post("/api/nft-type/trackNftView", {
           address: account,
@@ -83,7 +84,6 @@ const BuyNftModal = (props) => {
       });
       return;
     }
-
     setIsLoading(true);
     // {!} simplify the below
     await getEthBalance(async (balance) => {
@@ -100,44 +100,39 @@ const BuyNftModal = (props) => {
               saleId: nft.nftId,
               price: String(nft.price),
             },
-            () => {
-              axios
-                .post("/api/nft-type/purchase", {
-                  id: id,
-                  address: account,
-                })
-                .then((res) => {
-                  setTimeout(function () {
-                    setIsLoading(false);
-                    setIsBought(true);
-                    getUser();
-                  }, 1000);
-                  if (nft.isRedeemable) {
-                    Swal.fire({
-                      title: "Redeem Merch!",
-                      text: "You just bought an NFT with redeemable merch! Click this button to go to the redemption portal",
-                      confirmButtonText: "Redeem!",
-                    }).then((res) => {
-                      if (res.isConfirmed) {
-                        history.push("/redeem");
-                      }
-                    });
-                  } else {
-                    Swal.fire({
-                      title: "Succesful purchase!",
-                      html: `<div>View in your library (can take a moment to appear)<div>`,
-                    });
-                  }
-                })
-                .catch((err) => {
-                  console.error(err.status, err.message, err.error);
-                  Swal.fire(
-                    `Error: ${err.response ? err.response.status : 404}`,
-                    `${err.response ? err.response.data : "server error"}`,
-                    "error"
-                  );
-                  setIsLoading(false);
+            (err) => {
+              if (err) {
+                setIsLoading(false);
+                swal.fire({
+                  imageUrl: errorIcon,
+                  imageWidth,
+                  imageHeight,
+                  title: "Couldn't complete sale!",
+                  text: "Please try again",
                 });
+              } else {
+                setTimeout(function () {
+                  setIsLoading(false);
+                  setIsBought(true);
+                  getUser();
+                }, 1000);
+                if (nft.isRedeemable) {
+                  Swal.fire({
+                    title: "Redeem Merch!",
+                    text: "You just bought an NFT with redeemable merch! Click this button to go to the redemption portal",
+                    confirmButtonText: "Redeem!",
+                  }).then((res) => {
+                    if (res.isConfirmed) {
+                      history.push("/redeem");
+                    }
+                  });
+                } else {
+                  Swal.fire({
+                    title: "Succesful purchase!",
+                    html: `<div>View in your library (can take a few minutes to appear)<div>`,
+                  });
+                }
+              }
             }
           ).catch((err) => {
             setIsLoading(false);
@@ -206,6 +201,35 @@ const BuyNftModal = (props) => {
     }
   };
 
+  const calcBonus = () => {
+    if (nft.chain === "ETH")
+      if (nft.price <= .001)
+        return 50000
+      else if (nft.price <= .01)
+        return 250000
+      else if (nft.price <= .1)
+        return 1500000
+      else
+        return 15000000
+    else {
+      if (nft.price <= .01)
+        return 50000
+      else if (nft.price <= .1)
+        return 250000
+      else if (nft.price <= 1)
+        return 1500000
+      else
+        return 15000000
+    }
+  }
+
+  const calcEligibility = () => {
+    if (nft.numMinted < 5)
+      return nft.numMinted - nft.numSold > 0
+    else
+      return nft.numSold < 5
+  }
+
   //add in to the nft modal
   // const formatSongDur = (d) => {
   //   d = Number(d);
@@ -229,29 +253,7 @@ const BuyNftModal = (props) => {
           <RightSide>
             <CardTop>
               <Side>
-                <IconArea>
-                  <LikeButton
-                    onClick={() => like()}
-                    aria-pressed={liked}
-                    aria-label="like button"
-                  >
-                    {liked ? (
-                      <LikedHeart aria-hidden="true" />
-                    ) : (
-                      <Heart aria-hidden="true" />
-                    )}
-                  </LikeButton>
-                  {likeCount}
-                </IconArea>
-                <IconArea>
-                  <ShareButton
-                    onClick={() => share()}
-                    aria-label="share button"
-                  >
-                    <Share onClick={() => share()} />
-                  </ShareButton>
-                  {nft.shareCount}
-                </IconArea>
+                <ProfilePicture img={props.profilePic} />
               </Side>
               <Side>
                 <IconArea>
@@ -334,7 +336,7 @@ const BuyNftModal = (props) => {
               </ReactToolTip>
             </BadgeHolder>
             <InfoContainer>
-              {nft.title.length > 18 ? (
+              {nft.title.length > 32 ? (
                 <Ticker>
                   <TrackName>{nft.title}</TrackName>
                 </Ticker>
@@ -349,31 +351,60 @@ const BuyNftModal = (props) => {
                   : nft.artist}
               </Artist>
             </InfoContainer>
-            <SnippetHolder>
-              {/* {!isBought && <PlaySongSnippet partialSong={partialSong} />} */}
-              <PlaySongSnippet partialSong={partialSong} />
-              <SnippetText>15 Sec Preview</SnippetText>
-            </SnippetHolder>
             <TrackDetailsHolder>
-              <span>Genre: {nft.genre}</span>
-              {/* <span>Producer: {nft.producer}</span> */}
-              {/* <span>Track Length: {formatSongDur(nft.dur)}</span> */}
-              <span>
-                Release Date: {moment(nft.timestamp).format("MMM Do YYYY")}
-              </span>
+              <Info>
+                <span>Genre: {nft.genre}</span>
+                {/* <span>Producer: {nft.producer}</span> */}
+                {/* <span>Track Length: {formatSongDur(nft.dur)}</span> */}
+                <span>
+                  Release Date: {moment(nft.timestamp).format("MMM Do YYYY")}
+                </span>
+              </Info>
+              <Actions>
+                <IconArea onClick={() => share()}>
+                  <ShareButton
+                    onClick={() => share()}
+                    aria-label="share button"
+                  >
+                    <Share onClick={() => share()} />
+                  </ShareButton>
+                  {/* {nft.shareCount}  */}
+                  Share
+                </IconArea>
+                <IconArea>
+                  <LikeButton
+                    onClick={() => like()}
+                    aria-pressed={liked}
+                    aria-label="like button"
+                  >
+                    {liked ? (
+                      <LikedHeart aria-hidden="true" />
+                    ) : (
+                      <Heart aria-hidden="true" />
+                    )}
+                  </LikeButton>
+                  {likeCount}
+                </IconArea>
+              </Actions>
             </TrackDetailsHolder>
             <DescriptionHolder>
               <DescriptionLegend>Description</DescriptionLegend>
               <DescriptionContent>{nft.description}</DescriptionContent>
             </DescriptionHolder>
+            <SnippetHolder>
+              {/* {!isBought && <PlaySongSnippet partialSong={partialSong} />} */}
+              <PlaySongSnippet partialSong={partialSong} />
+              <SnippetText>15 Sec Preview</SnippetText>
+            </SnippetHolder>
+
             <PricesContainer>
               <PriceHolder>
                 <PriceItem>
                   {nft.price
                     ? parseFloat(nft.price).toLocaleString(undefined, {
-                        minimumFractionDigits: 0,
-                        maximumFractionDigits: 6,
-                      })
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 6,
+                    })
                     : "--"}{" "}
                 </PriceItem>
                 &nbsp;
@@ -421,12 +452,49 @@ const BuyNftModal = (props) => {
                 <ButtonText>Sold Out!</ButtonText>
               </BuyButton>
             )}
+            {calcEligibility() && <Promotion>💚 This NFT is eligible for an Airdrop Bonus of {calcBonus().toLocaleString()} VINYL! 💚</Promotion>}
+            {calcEligibility() && <MobilePromotion>This NFT is eligible for an Airdrop Bonus of {calcBonus().toLocaleString()} VINYL! 💚</MobilePromotion>}
           </RightSide>
         </StyledModal>
       </Container>
     </OpaqueFilter>
   );
 };
+
+const MobilePromotion = styled.div`
+margin-top: 10px;
+display: none;
+@media only screen and (max-width: 776px) {
+  height: auto;
+  display: block;
+
+}
+`
+
+const Promotion = styled.div`
+margin-top: 10px;
+@media only screen and (max-width: 776px) {
+  height: auto;
+  display: none;
+}
+`
+
+const ProfilePicture = styled.div`
+  width: 60px;
+  height: 60px;
+  border-radius: 50px;
+  margin-left: 20px;
+  margin-top: 10px;
+  background-image: url(${(props) => props.img});
+  background-size: cover;
+`;
+
+const ActionButtons = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: start;
+`;
 
 const LikeButton = styled.button`
   background-color: transparent;
@@ -464,15 +532,28 @@ const Eth = styled(IconEth)`
 const TrackDetailsHolder = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   height: 50px;
   margin-bottom: 10px;
-  justify-content: space-around;
+  justify-content: space-between;
   color: #666;
-  padding-left: 20px;
+  padding-left: 10px;
   @media only screen and (max-width: 776px) {
     height: auto;
   }
+`;
+
+const Info = styled.div`
+  display: flex;
+  flex-direction: column;
+  @media only screen and (max-width: 776px) {
+    margin-left: 15px;
+    margin-top: 5px;
+  }
+`;
+
+const Actions = styled.div`
+  display: flex;
 `;
 
 const MerchBadge = styled(GiftIcon)`
@@ -511,9 +592,9 @@ const DescriptionHolder = styled.fieldset`
   width: calc(100% - 10px);
   border-radius: 8px;
   border: 1px solid ${(props) => props.theme.color.lightgray};
-  padding: 2px 0px 0px 10px;
-  height: 60px;
+  height: 100px;
   overflow-y: scroll;
+  padding: 2px 0px 0px 10px;
   &::-webkit-scrollbar {
     width: 6px;
     background: rgba(0, 0, 0, 0);
@@ -523,14 +604,21 @@ const DescriptionHolder = styled.fieldset`
     border-radius: 6px;
     background: rgb(217, 217, 217, 0.6);
   }
-  /* margin-top: 10px; */
+  @media only screen and (max-width: 776px) {
+    height: 70px;
+  }
 `;
 const DescriptionLegend = styled.legend`
   padding: 0 5px;
   margin-left: 10px;
+
 `;
 const DescriptionContent = styled.span`
-  margin-top: -10px;
+  margin: 10px;
+  margin-left: 0px;
+  @media only screen and (max-width: 776px) {
+    height: 70px;
+  }
 `;
 
 const SnippetHolder = styled.div`
@@ -539,7 +627,7 @@ const SnippetHolder = styled.div`
   align-items: center;
   padding: 10px, 0;
   width: 100%;
-  margin-top: 10px;
+  margin-top: 20px;
   @media only screen and (max-width: 776px) {
     width: 90%;
   }
@@ -575,7 +663,7 @@ const PricesContainer = styled.div`
   display: flex;
   justify-content: center;
   /* margin-left: 10%; */
-  margin: 30px 0;
+  margin: 20px 0;
   @media only screen and (max-width: 776px) {
     margin: 20px 0;
   }
@@ -605,6 +693,10 @@ const X = styled(IconX)`
     transition: all 0.2s ease-in-out;
     stroke: ${(props) => props.theme.color.gray};
     fill: ${(props) => props.theme.color.gray};
+  }
+  @media only screen and (max-width: 776px) {
+    width: 35px;
+  height: 35px;
   }
 `;
 
@@ -666,6 +758,7 @@ const IconArea = styled.div`
   font-size: 14px;
   height: 100%;
   align-items: center;
+  cursor: pointer;
 `;
 
 const CardTop = styled.div`
@@ -679,14 +772,15 @@ const CardTop = styled.div`
 `;
 const OpaqueFilter = styled.div`
   cursor: default;
+  position: fixed;
+  left: 0;
+  top: 0;
   width: 100vw;
   height: 100vh;
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(0, 0, 0, 0.8);
-  z-index: 500;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: brightness(20%) blur(2px);
+  z-index: 5000;
+  transform: translateZ(10px);
 `;
 
 const Container = styled.div`
@@ -698,6 +792,12 @@ const Container = styled.div`
   top: 50%;
   transform: translate(-50%, -50%);
   color: #666;
+  z-index: 5005;
+  @media only screen and (max-width: 776px) {
+    left: 0px;
+    top: 0px;
+    transform: unset;
+  }
 `;
 
 const RightSide = styled.div`
@@ -708,14 +808,15 @@ const RightSide = styled.div`
   padding: 10px 30px;
   @media only screen and (max-width: 776px) {
     width: 90vw;
-    height: calc(100vh / 2);
-    justify-content: space-between;
+    justify-content: space-evenly;
+    padding-top: 0px;
   }
 `;
 const StyledModal = styled.div`
   border-radius: 16px;
   border: solid 1px #181818;
-  width: 800px;
+  width: 1100px;
+  height: 600px;
   background-color: ${(props) => props.theme.bgColor};
   font-size: 16px;
   font-weight: normal;
@@ -723,16 +824,17 @@ const StyledModal = styled.div`
   justify-content: space-between;
   position: relative;
   @media only screen and (max-width: 776px) {
-    width: 90vw;
-    height: 95vh;
+    width: 100vw;
+    height: 100vh;
     flex-direction: column;
     align-items: center;
-    /* justify-content: flex-start; */
+    justify-content: flex-start;
   }
 `;
 
 const Image = styled.img`
-  width: 500px;
+  width: 750px;
+
   /* height: 400px; */
   aspect-ratio: 1;
   border-radius: 16px;
@@ -747,8 +849,8 @@ const Image = styled.img`
   user-select: none;
   /* margin-bottom: 16px; */
   @media only screen and (max-width: 776px) {
-    width: 90vw;
-    height: 90vw;
+    height: 20%;
+    width: auto;
   }
 `;
 
@@ -756,7 +858,7 @@ const BadgeHolder = styled.div`
   width: 100%;
   display: flex;
   justify-content: flex-end;
-  height: 20px;
+  height: 10px;
   padding: 10px 0;
   & > span {
     padding: 0 5px;
@@ -776,7 +878,7 @@ const InfoContainer = styled.div`
   @media only screen and (max-width: 776px) {
     width: 90%;
     /* align-items: center; */
-    margin-top: -25px;
+    margin-top: -20px;
   }
 `;
 const TrackName = styled.span`
@@ -785,14 +887,14 @@ const TrackName = styled.span`
   font-weight: 600;
   margin-bottom: 6px;
   @media only screen and (max-width: 776px) {
-    margin-top: 5px;
+    margin-top: 10px;
     margin-bottom: 0px;
-    font-size: ${(props) => props.theme.fontSizes.sm};
+    font-size: ${(props) => props.theme.fontSizes.xs};
   }
 `;
 const Artist = styled(NavLink)`
   text-decoration: none;
-  font-size: ${(props) => props.theme.fontSizes.sm};
+  font-size: ${(props) => props.theme.fontSizes.xs};
   color: white;
   margin-bottom: 12px;
   @media only screen and (max-width: 776px) {
@@ -801,7 +903,8 @@ const Artist = styled(NavLink)`
 `;
 
 const BuyButton = styled.button`
-  width: 150px;
+  width: 200px;
+  height: 60px;
   /* height: 64px; */
   cursor: pointer;
   transition: all 0.1s ease-in-out;

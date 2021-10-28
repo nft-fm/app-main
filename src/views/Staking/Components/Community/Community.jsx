@@ -3,14 +3,17 @@ import React, { useCallback, useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import styled from "styled-components";
 import swal from "sweetalert2";
-import { useWallet } from "use-wallet";
+import { useAccountConsumer } from "../../../../contexts/Account";
 import useModal from "../../../../hooks/useModal";
 import isMobile from "../../../../utils/isMobile";
-import { require, getVinylBalance } from "../../../../web3/utils";
-import { BaseView } from "../../../../components/Page/BaseView";
+import {
+  errorIcon,
+  imageHeight,
+  imageWidth,
+} from "../../../../utils/swalImages";
+import { getVinylBalance, require } from "../../../../web3/utils";
 import RulesModal from "./RulesModal";
 import Suggestion from "./Suggestion";
-import { errorIcon, imageWidth, imageHeight } from "../../../../utils/swalImages";
 
 const Community = () => {
   const [suggestions, setSuggestions] = useState([]);
@@ -20,7 +23,7 @@ const Community = () => {
   const [sort, setSort] = useState("new");
   const [userAlreadySuggested, setUserAlreadySuggested] = useState(false);
   const [presentRulesModal] = useModal(<RulesModal />);
-  const { account, connect } = useWallet();
+  const { account, connect } = useAccountConsumer();
   const [hasVinyl, setHasVinyl] = useState(false);
 
   const fetchSuggestions = useCallback(() => {
@@ -103,138 +106,138 @@ const Community = () => {
 
   if (account && !hasVinyl) {
     return (
-        <ApproveContainer>
-          <ApproveText>
-            No $VINYL detected in your account ending in:{" "}
-            {account.substring(account.length - 4)}
-          </ApproveText>
-          {/* <ApproveButton onClick={() => getConnectedFam()}>
+      <ApproveContainer>
+        <ApproveText>
+          No $VINYL detected in your account ending in:{" "}
+          {account.substring(account.length - 4)}
+        </ApproveText>
+        {/* <ApproveButton onClick={() => getConnectedFam()}>
             I own $VINYL, Connect Me!
           </ApproveButton> */}
-        </ApproveContainer>
+      </ApproveContainer>
     );
   }
   if (!account || !hasVinyl) {
     return (
-        <ApproveContainer>
-          <ApproveText>
-            NFT FM Community is only available to $VINYL Holders.
-          </ApproveText>
-          <ApproveButton onClick={() => getConnectedFam()}>
-            I own $VINYL, Connect Me!
-          </ApproveButton>
-        </ApproveContainer>
+      <ApproveContainer>
+        <ApproveText>
+          Fanfare Community is only available to $VINYL Holders.
+        </ApproveText>
+        <ApproveButton onClick={() => getConnectedFam()}>
+          I own $VINYL, Connect Me!
+        </ApproveButton>
+      </ApproveContainer>
     );
   }
   return (
-      <Container>
-        <GovContainer>
-          <ComicTitle>
-            Community
-            <Icon onClick={presentRulesModal} viewBox="0 0 180 180">
-              <path
-                fill="none"
-                stroke-width="11"
-                d="M9,89a81,81 0 1,1 0,2zm51-14c0-13 1-19 8-26c7-9 18-10 28-8c10,2 22,12 22,26c0,14-11,19-15,22c-3,3-5,6-5,9v22m0,12v16"
+    <Container>
+      <GovContainer>
+        <ComicTitle>
+          Community
+          <Icon onClick={presentRulesModal} viewBox="0 0 180 180">
+            <path
+              fill="none"
+              stroke-width="11"
+              d="M9,89a81,81 0 1,1 0,2zm51-14c0-13 1-19 8-26c7-9 18-10 28-8c10,2 22,12 22,26c0,14-11,19-15,22c-3,3-5,6-5,9v22m0,12v16"
+            />
+          </Icon>
+        </ComicTitle>
+        {!isMobile() && (
+          <Sorting>
+            <Option
+              style={{
+                color: sort === "top" ? "white" : "rgba(256,256,256,0.8)",
+                textDecoration: sort === "top" ? "underline" : "none",
+              }}
+              onClick={() => toggleSort("top")}
+            >
+              top
+            </Option>
+            <Option
+              style={{
+                color: sort === "new" ? "white" : "rgba(256,256,256,0.8)",
+                textDecoration: sort === "new" ? "underline" : "none",
+              }}
+              onClick={() => toggleSort("new")}
+            >
+              new
+            </Option>
+          </Sorting>
+        )}
+        <SuggestionContainer>
+          <Form>
+            <InputWrapper>
+              <Input
+                maxlength="200"
+                placeholder="What would you like to see on Fanfare?"
+                value={newSuggestion}
+                onChange={(e) => handleChange(e)}
               />
-            </Icon>
-          </ComicTitle>
-          {!isMobile() && (
-            <Sorting>
-              <Option
-                style={{
-                  color: sort === "top" ? "white" : "rgba(256,256,256,0.8)",
-                  textDecoration: sort === "top" ? "underline" : "none",
-                }}
-                onClick={() => toggleSort("top")}
-              >
-                top
-              </Option>
-              <Option
-                style={{
-                  color: sort === "new" ? "white" : "rgba(256,256,256,0.8)",
-                  textDecoration: sort === "new" ? "underline" : "none",
-                }}
-                onClick={() => toggleSort("new")}
-              >
-                new
-              </Option>
-            </Sorting>
-          )}
-          <SuggestionContainer>
-            <Form>
-              <InputWrapper>
-                <Input
-                  maxlength="200"
-                  placeholder="What would you like to see on NFT FM?"
-                  value={newSuggestion}
-                  onChange={(e) => handleChange(e)}
-                />
-                {newSuggestion && (
-                  <CharLimit
-                    disabled={userAlreadySuggested}
-                    style={{
-                      color: newSuggestion.length >= 200 ? "red" : "white",
-                    }}
-                  >
-                    {newSuggestion.length}/200
-                  </CharLimit>
-                )}
-              </InputWrapper>
-              <Button
-                disabled={userAlreadySuggested}
-                type="submit"
-                onClick={(e) => submitSuggestion(e)}
-              >
-                Submit
-              </Button>
-            </Form>
-          </SuggestionContainer>
-          {isMobile() && (
-            <Sorting>
-              <Option
-                style={{
-                  color: sort === "top" ? "white" : "rgba(256,256,256,0.8)",
-                  textDecoration: sort === "top" ? "underline" : "none",
-                }}
-                onClick={() => toggleSort("top")}
-              >
-                top
-              </Option>
-              <Option
-                style={{
-                  color: sort === "new" ? "white" : "rgba(256,256,256,0.8)",
-                  textDecoration: sort === "new" ? "underline" : "none",
-                }}
-                onClick={() => toggleSort("new")}
-              >
-                new
-              </Option>
-            </Sorting>
-          )}
-          {suggestions.length > 0 && (
-            <Suggestion
-              fetchSuggestions={() => fetchSuggestions()}
-              suggestions={suggestions}
-            />
-          )}
-          <Pagination>
-            <ReactPaginate
-              previousLabel={"←"}
-              nextLabel={"→"}
-              breakLabel={"..."}
-              pageCount={totalPages}
-              marginPagesDisplayed={1}
-              pageRangeDisplayed={3}
-              onPageChange={(data) => setPage(data.selected)}
-              forcePage={page}
-              containerClassName={"pagination"}
-              subContainerClassName={"pages pagination"}
-              activeClassName={"active"}
-            />
-          </Pagination>
-        </GovContainer>
-      </Container>
+              {newSuggestion && (
+                <CharLimit
+                  disabled={userAlreadySuggested}
+                  style={{
+                    color: newSuggestion.length >= 200 ? "red" : "white",
+                  }}
+                >
+                  {newSuggestion.length}/200
+                </CharLimit>
+              )}
+            </InputWrapper>
+            <Button
+              disabled={userAlreadySuggested}
+              type="submit"
+              onClick={(e) => submitSuggestion(e)}
+            >
+              Submit
+            </Button>
+          </Form>
+        </SuggestionContainer>
+        {isMobile() && (
+          <Sorting>
+            <Option
+              style={{
+                color: sort === "top" ? "white" : "rgba(256,256,256,0.8)",
+                textDecoration: sort === "top" ? "underline" : "none",
+              }}
+              onClick={() => toggleSort("top")}
+            >
+              top
+            </Option>
+            <Option
+              style={{
+                color: sort === "new" ? "white" : "rgba(256,256,256,0.8)",
+                textDecoration: sort === "new" ? "underline" : "none",
+              }}
+              onClick={() => toggleSort("new")}
+            >
+              new
+            </Option>
+          </Sorting>
+        )}
+        {suggestions.length > 0 && (
+          <Suggestion
+            fetchSuggestions={() => fetchSuggestions()}
+            suggestions={suggestions}
+          />
+        )}
+        <Pagination>
+          <ReactPaginate
+            previousLabel={"←"}
+            nextLabel={"→"}
+            breakLabel={"..."}
+            pageCount={totalPages}
+            marginPagesDisplayed={1}
+            pageRangeDisplayed={3}
+            onPageChange={(data) => setPage(data.selected)}
+            forcePage={page}
+            containerClassName={"pagination"}
+            subContainerClassName={"pages pagination"}
+            activeClassName={"active"}
+          />
+        </Pagination>
+      </GovContainer>
+    </Container>
   );
 };
 
@@ -500,6 +503,7 @@ const Container = styled.div`
   margin-left: auto;
   margin-right: auto;
   margin-top: 10vh;
+  margin-bottom: 10vh;
   max-width: 100vw;
   display: flex;
   flex-direction: column;

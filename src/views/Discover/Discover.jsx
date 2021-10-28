@@ -11,7 +11,7 @@ const Listen = () => {
       <BaseView>
         <LinkedNftModal />
         <Container>
-          <StyledTitle>MARKETPLACE</StyledTitle>
+          <StyledTitle>Discover and Collect Exclusive Digital Music</StyledTitle>
           <Market />
         </Container>
       </BaseView>
@@ -37,6 +37,10 @@ const StyledTitle = styled.div`
   font-weight: 600;
   /* letter-spacing: 3px; */
   color: white;
+  @media only screen and (max-width: 776px) {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
 `;
 
 export default Listen;

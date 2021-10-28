@@ -338,7 +338,7 @@ const AuctionForm = () => {
       swal.fire({
         title: "Error uploading audio or image.",
         text:
-          "Please refresh the page and try again. If the issues persists, contact NFT FM.",
+          "Please refresh the page and try again. If the issues persists, contact Fanfare.",
           imageUrl: errorIcon,
           imageWidth,
           imageHeight      

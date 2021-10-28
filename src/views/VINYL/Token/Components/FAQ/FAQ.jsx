@@ -7,12 +7,12 @@ export const FAQ = () => {
       <Question
         question="Did someone say Airdrops?!"
         answer="Yes! We are going to be airdropping 30% of the unburned $VINYL supply over 4 years! This comes to 2,500 $VINYL at the start of every month beginning July 2021 
-        and ending June 2025. These tokens will be airdropped equally to all holders of NFT FM NFTs. Each NFT represents a percentage of the tokens to be received. So holding multiple NFTs = more airdrop!"
+        and ending June 2025. These tokens will be airdropped equally to all holders of Fanfare NFTs. Each NFT represents a percentage of the tokens to be received. So holding multiple NFTs = more airdrop!"
       />
       <Question
         question="Governance and Proposals"
         answer="Our governance board is composed of a reddit-style commenting and voting system. Each month we will publish an article directly addressing the top three highest voted proposals. In addition to that, we have a community polling system where we will be asking the community more direct yes/no style questions on topics such as features, collaborations, and how resources should be allocated. 
-        The NFT FM team will do it’s best to ensure that the results of polls and community desires are respected and pursued. We will be publishing a history log of the polls taken and the resulting actions taken by NFT FM."
+        The Fanfare team will do it’s best to ensure that the results of polls and community desires are respected and pursued. We will be publishing a history log of the polls taken and the resulting actions taken by Fanfare."
       />
       {/* <Question
         question="NFT Farming"

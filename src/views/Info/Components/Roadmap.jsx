@@ -56,12 +56,12 @@ const Roadmap = () => {
               <FillerLine />
               <Checkmark src={greenCheckMark} />
             </LaunchFeatureRow>
-            <LaunchFeatureRow>
-              <LaunchFeatureText>Public User Profiles</LaunchFeatureText>
+                      <LaunchFeatureRow>
+              <LaunchFeatureText>Artist Staking and Fanclubs</LaunchFeatureText>
               <FillerLine />
-              {/* <Checkmark src={grayCheckMark} /> */}
-              in progress
+              <Checkmark src={greenCheckMark} />
             </LaunchFeatureRow>
+
           </LaunchFeatureList>
         </LaunchFeaturesBox>
       </LaunchFeaturesContainer>
@@ -70,24 +70,28 @@ const Roadmap = () => {
           <LaunchFeaturesHeader>Q4 2021</LaunchFeaturesHeader>
           <LaunchFeatureList>
           <LaunchFeatureRow>
-              <LaunchFeatureText>Artist Staking and Fanclubs</LaunchFeatureText>
+              <LaunchFeatureText>Public User Profiles</LaunchFeatureText>
               <FillerLine />
-              <Checkmark src={grayCheckMark} />
+              {/* <Checkmark src={grayCheckMark} /> */}
+              in progress
             </LaunchFeatureRow>
           <LaunchFeatureRow>
-              <LaunchFeatureText>On-Platform Resale</LaunchFeatureText>
+              <LaunchFeatureText>Auctions</LaunchFeatureText>
               <FillerLine />
-              <Checkmark src={grayCheckMark} />
+              {/* <Checkmark src={grayCheckMark} /> */}
+              in progress
             </LaunchFeatureRow>
             <LaunchFeatureRow>
-              <LaunchFeatureText>Full Album NFTs</LaunchFeatureText>
+              <LaunchFeatureText>Fiat Payment</LaunchFeatureText>
               <FillerLine />
-              <Checkmark src={grayCheckMark} />
+              {/* <Checkmark src={grayCheckMark} /> */}
+              in progress
             </LaunchFeatureRow>
           <LaunchFeatureRow>
-              <LaunchFeatureText>New Blockchain Integration (TBA)</LaunchFeatureText>
+              <LaunchFeatureText>New Blockchain Integration (FLOW)</LaunchFeatureText>
               <FillerLine />
-              <Checkmark src={grayCheckMark} />
+              {/* <Checkmark src={grayCheckMark} /> */}
+              in progress
             </LaunchFeatureRow>
           </LaunchFeatureList>
         </LaunchFeaturesBox>

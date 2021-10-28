@@ -86,7 +86,7 @@ const Tokenomics = () => {
             <UtilityTitle>Governance</UtilityTitle>
             <Divider />
             <BulletPoint>
-              Make and vote on proposals for new features or changes to NFTFM
+              Make and vote on proposals on the state of direction for Fanfare
             </BulletPoint>
             <br />
             <BulletPoint>
@@ -95,38 +95,35 @@ const Tokenomics = () => {
             </BulletPoint>
             <br />
             <BulletPoint>
-              On a regular basis, $VINYL holders will be polled on a decision
+              On a regular basis, $VINYL holders are polled on a decision
               being made. They get to vote on these corporate decisions with
               their vote being weighted by their coin ownership
             </BulletPoint>
             <br />
-            <BulletPoint>
-              Token holders likes cast on the site are weighted based off of the
-              quantity of $VINYL that they hold
-            </BulletPoint>
-            <BulletPoint>More coming soon!</BulletPoint>
           </Half>
           <Half>
             <UtilityTitle>Staking</UtilityTitle>
             <Divider />
             <BulletPoint>
-              Join your favorite NFT FM artist's fanclub by staking your $VINYL
+              Join your favorite Fanfare artist's fanclub by staking your $VINYL
               to start immediately earning rewards for both you and the artist!
             </BulletPoint>
             <br />
             <BulletPoint>
-              Artist's can see who is staking on them and interact with them via
-              our custom chat feature
+              Artist's can see who is staking on them and distribute rewards to their most dedicated fans
             </BulletPoint>
             <br />
             {/* <BulletPoint>Artist's can </BulletPoint>
             <br /> */}
             <BulletPoint>
-              Stake your $VINYL on your favorite NFT FM artist today!
+              Stake your $VINYL on your favorite Fanfare artist today!
             </BulletPoint>
             <br />
           </Half>
         </Holder>
+        <div>
+          more coming soon!
+        </div>
       </UtilityContainer>
     </>
   );

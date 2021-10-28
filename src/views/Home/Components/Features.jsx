@@ -28,7 +28,7 @@ export const Features = ({ isLoaded, setIsLoaded }) => {
         >
           <FeaturesHeader>Jam out to exclusive tunes</FeaturesHeader>
           <FeaturesDescription>
-            NFTs on NFT FM aren’t just amazing pieces of visual art. They
+            NFTs on Fanfare aren’t just amazing pieces of visual art. They
             contain full-length tracks directly from the musicians. Owning these
             NFTs grants you the exclusive ability to stream these amazing songs
             at any time.
@@ -113,7 +113,7 @@ export const Features = ({ isLoaded, setIsLoaded }) => {
           <FeaturesDescription>
             Buy, trade, or swap your NFTs to build your collection. By growing
             your collection you are directly contributing to the success and
-            growth of the NFT FM musicians!
+            growth of the Fanfare musicians!
           </FeaturesDescription>
         </FeaturesTextContainer>
       </FeatureContainer>

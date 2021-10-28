@@ -8,38 +8,38 @@ import { ReactComponent as IconTwitter } from "../../../assets/img/icons/social_
 export const Socials = () => (
   <Landing>
     <SocialsBar>
-      <IconContainer
-        href="https://t.me/joinchat/q6_q25NWr99kOGUx"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <Telegram />
-        <IconText>Telegram</IconText>
-      </IconContainer>
-      <IconContainer
-        href="https://nft-fm.medium.com/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <Medium />
-        <IconText>Medium</IconText>
-      </IconContainer>
-      <IconContainer
-        href="https://twitter.com/NFTFM_IO"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <Twitter />
-        <IconText>Twitter</IconText>
-      </IconContainer>
-      <IconContainer
-        href="https://discord.com/invite/ejXAypqHD6"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <Discord />
-        <IconText>Discord</IconText>
-      </IconContainer>
+    <IconContainer
+          href="http://t.me/fanfare_fm"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Telegram />
+          <IconText>Telegram</IconText>
+        </IconContainer>
+        <IconContainer
+          href="https://fanfare-fm.medium.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Medium />
+          <IconText>Medium</IconText>
+        </IconContainer>
+        <IconContainer
+          href="https://twitter.com/fanfare_fm"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Twitter />
+          <IconText>Twitter</IconText>
+        </IconContainer>
+        <IconContainer
+          href="https://discord.gg/ejXAypqHD6"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Discord />
+          <IconText>Discord</IconText>
+        </IconContainer>
     </SocialsBar>
   </Landing>
 );

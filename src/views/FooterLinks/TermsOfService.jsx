@@ -8,10 +8,10 @@ const PrivacyPolicy = () => {
       <Container>
         <StyledHeader>Terms of Use Agreement</StyledHeader>
         <SectionContent>
-          This Terms of Use Agreement (the “ToU”) is made between NFT FM Inc.
-          (“NFT FM,” “we,” “us” or “our”) and you, the individual choosing to
+          This Terms of Use Agreement (the “ToU”) is made between Fanfare Inc.
+          (“Fanfare,” “we,” “us” or “our”) and you, the individual choosing to
           use our services (“you,” or “your”). This ToU applies to all online
-          services operated by NFT FM, including our website www.nftfm.io (the
+          services operated by Fanfare, including our website beta.fanfare.fm (the
           “Site”), our social media accounts, and any future online services
           that we develop (collectively the “Services”). Please note that our
           Privacy Policy is subject to this ToU. There are terms in the Privacy
@@ -40,7 +40,7 @@ const PrivacyPolicy = () => {
         <SectionTitle>Third-Party Websites and Services</SectionTitle>
         <SectionContent>
           Our Services may contain links to third-party websites, or we may
-          utilize services that are not owned or controlled by NFT FM. Be aware
+          utilize services that are not owned or controlled by Fanfare. Be aware
           that we have no control over and assume no responsibility for the
           content, privacy policies, or practices of any third-party website or
           service. We do not warrant the offerings of any third party and are
@@ -66,10 +66,10 @@ const PrivacyPolicy = () => {
         </SectionContent>
         <SectionTitle>Description of Our Services</SectionTitle>
         <SectionContent>
-          NFT FM is a music distribution platform that allows musical artists
+          Fanfare is a music distribution platform that allows musical artists
           (the “Artist”) to create and sell non-fungible tokens incorporating
           music-related items such as sound recordings, event tickets,
-          merchandise, and album artwork to users of the NFT FM Site (the
+          merchandise, and album artwork to users of the Fanfare Site (the
           “Users”). Users can purchase such content (either by paying a flat fee
           or participating in an auction) using Ethereum cryptocurrency. Once a
           purchase has been made, the User can access the content they purchased
@@ -94,9 +94,9 @@ const PrivacyPolicy = () => {
             </li>
             <br />
             <li>
-              <ListItemTitle>What is NFT FM’s Role?</ListItemTitle>
+              <ListItemTitle>What is Fanfare’s Role?</ListItemTitle>
               <br />
-              NFT FM provides an administrative platform that allows for
+              Fanfare provides an administrative platform that allows for
               non-fungible token sales to occur and for Users to access their
               purchased non-fungible tokens. However, we are not a broker,
               financial institute, or creditor. We are also not a party to the
@@ -104,7 +104,7 @@ const PrivacyPolicy = () => {
             </li>
           </ul>
         </SectionContent>
-        <SectionTitle>Connecting to NFT FM</SectionTitle>
+        <SectionTitle>Connecting to Fanfare</SectionTitle>
         <SectionContent>
           Want to just browse our Services? Go right ahead; no account or
           third-party connection is needed. If you are an Artist that wants to
@@ -147,10 +147,10 @@ const PrivacyPolicy = () => {
           Non-fungible tokens are available for purchase on our Site for either
           a fixed-price or via auction. Auction items may be subject to minimum
           reserve pricing. All purchases and bidding are completed by MetaMask,
-          completely independent from NFT FM, and we are not responsible for
+          completely independent from Fanfare, and we are not responsible for
           transactions that occur. Sales are final and non-refundable.
         </SectionContent>
-        <SectionTitle>NFT FM Fees</SectionTitle>
+        <SectionTitle>Fanfare Fees</SectionTitle>
         <SectionContent>
           Currently, our Services are available to all Users for free. However,
           we may in the future offer some paid features within our Site. You
@@ -164,23 +164,23 @@ const PrivacyPolicy = () => {
         </SectionContent>
         <SectionTitle>License to Use Our Services</SectionTitle>
         <SectionContent>
-          NFT FM grants to you a limited, non-exclusive, non-transferable,
-          revocable license to access and use NFT FM Services for personal,
-          non-commercial purposes only. NFT FM reserves the right to terminate
+          Fanfare grants to you a limited, non-exclusive, non-transferable,
+          revocable license to access and use Fanfare Services for personal,
+          non-commercial purposes only. Fanfare reserves the right to terminate
           this license at any time, for any reason.
         </SectionContent>
         <SectionTitle>
           Assumption of Risk Associated with Cryptocurrency
         </SectionTitle>
         <SectionContent>
-          NFT FM is not liable for any losses, damages, or claims, including,
+          Fanfare is not liable for any losses, damages, or claims, including,
           but not limited to, any loss of use, loss of profits, or loss of data
           arising out of your use of cryptocurrency or purchase of non-fungible
-          tokens in connection with our Services or otherwise. NFT FM Services
+          tokens in connection with our Services or otherwise. Fanfare Services
           are provided on an “as is” basis without any WARRANTIES OR GUARANTIES
           of any kind regarding your use of cryptocurrency or regarding the laws
           and regulations surrounding cryptocurrency in your jurisdiction. By
-          using NFT FM Services, you assume all risks associated with
+          using Fanfare Services, you assume all risks associated with
           cryptocurrency and non-fungible tokens. You warrant that you
           understand that the risk of loss in the investment of cryptocurrency
           can be substantial and understand that cryptocurrency is volatile in
@@ -210,7 +210,7 @@ const PrivacyPolicy = () => {
         </SectionContent>
         <SectionTitle>User Guidelines</SectionTitle>
         <SectionContent>
-          To ensure that the NFT FM Platform is enjoyable for everyone, we have
+          To ensure that the Fanfare Platform is enjoyable for everyone, we have
           established some ground rules that you must follow while using our
           Services. By using our Services, you agree that you will not:
           <br />
@@ -221,11 +221,11 @@ const PrivacyPolicy = () => {
               interact with our Services;
             </li>
             <li>
-              use the NFT FM Service to facilitate the sending of “spam” or
+              use the Fanfare Service to facilitate the sending of “spam” or
               unsolicited commercial email;
             </li>
             <li>
-              circumvent or attempt to circumvent any technology used by NFT FM
+              circumvent or attempt to circumvent any technology used by Fanfare
               to protect our Services, Artists, and/or Users;
             </li>
             <li>
@@ -253,7 +253,7 @@ const PrivacyPolicy = () => {
             <li>
               share, copy, distribute, sell, lease, rent, exploit or otherwise
               make available for commercial use any non-fungible token or other
-              content hosted on NFT FM that is not solely owned by you;
+              content hosted on Fanfare that is not solely owned by you;
             </li>
             <li>
               upload or share any content that is not solely owned by you, or
@@ -285,7 +285,7 @@ const PrivacyPolicy = () => {
             <li>
               <ListItemTitle>Involuntary Termination</ListItemTitle>
               <br />
-              NFT FM will make best efforts to notify you if we have a reason to
+              Fanfare will make best efforts to notify you if we have a reason to
               believe that you have violated this ToU and may issue you a
               written warning outlining the behavior that we believe is in
               violation. However, we reserve the right to suspend or terminate
@@ -297,8 +297,8 @@ const PrivacyPolicy = () => {
               <br />
               You are free to voluntarily disconnect your MetaMask account from
               our Site. We cannot guarantee that ALL information you have
-              previously provided to NFT FM will be deleted when you disconnect
-              from NFT FM, and we reserve the right to keep some information.
+              previously provided to Fanfare will be deleted when you disconnect
+              from Fanfare, and we reserve the right to keep some information.
               See our Privacy Policy for more information on this.
             </li>
           </ul>
@@ -311,7 +311,7 @@ const PrivacyPolicy = () => {
           rights of any person or entity. If you are a copyright owner or an
           authorized agent of a copyright owner, and you believe that content on
           our Services infringes on another copyrighted work, please submit your
-          claim via email to legal@nftfm.io, with the subject line: “Copyright
+          claim via email to info@nftfm.io, with the subject line: “Copyright
           Infringement” and include in your claim a detailed description of the
           alleged infringement. In accordance with 17 U.S.C. 512(c)(3) of the
           Digital Millennium Copyright Act (DMCA), your claim must include:
@@ -349,20 +349,20 @@ const PrivacyPolicy = () => {
         </SectionContent>
         <SectionTitle>Our Intellectual Property</SectionTitle>
         <SectionContent>
-          Your use of the NFT FM Site and Services does not grant or transfer
+          Your use of the Fanfare Site and Services does not grant or transfer
           you any rights, title, or interest in any of our intellectual
           property. You are not permitted to copy, distribute or otherwise
           exploit any copyrighted content that we have created and published on
           our Services or any of our trademarks or service marks such as the NFT
           FM name, logo, domain name, and any other branding that is indicative
-          of NFT FM, without our express written permission. We may use some
+          of Fanfare, without our express written permission. We may use some
           open source or licensed third-party content in our Services, for
           example, fonts and graphics, and we do not make any claim of ownership
           to such content.
         </SectionContent>
         <SectionTitle>Artist’s Intellectual Property</SectionTitle>
         <SectionContent>
-          NFT FM does not have any ownership rights in the audio, images, text,
+          Fanfare does not have any ownership rights in the audio, images, text,
           files, graphics, autographs, photos, or other materials created by an
           Artist using our Services or any Artist's trademarks such as their
           name and logos. YOU UNDERSTAND THAT PURCHASE OF A NON-FUNGIBLE TOKEN
@@ -376,25 +376,25 @@ const PrivacyPolicy = () => {
           <ul>
             <li>
               <ListItemTitle>
-                NFT FM’s Representations and Warranties:
+                Fanfare’s Representations and Warranties:
               </ListItemTitle>
               <br />
-              NFT FM’S PLATFORM AND SERVICES ARE PROVIDED “AS IS” AND “WITH ALL
-              FAULTS.” NFT FM MAY USE REASONABLE EFFORTS TO CORRECT ERRORS AND
-              OMISSIONS IN OUR SERVICES. HOWEVER, NFT FM EXPRESSLY DISCLAIMS ANY
+              Fanfare’S PLATFORM AND SERVICES ARE PROVIDED “AS IS” AND “WITH ALL
+              FAULTS.” Fanfare MAY USE REASONABLE EFFORTS TO CORRECT ERRORS AND
+              OMISSIONS IN OUR SERVICES. HOWEVER, Fanfare EXPRESSLY DISCLAIMS ANY
               AND ALL WARRANTIES OF ANY KIND OR NATURE, WHETHER EXPRESS OR
               IMPLIED, INCLUDING WITHOUT LIMITATION THE IMPLIED WARRANTIES OF
               MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, TO THE
-              FULLEST EXTENT THAT THE LAW OF THE JURISDICTION PERMITS. NFT FM
+              FULLEST EXTENT THAT THE LAW OF THE JURISDICTION PERMITS. Fanfare
               DOES NOT WARRANT THAT USE WILL BE UNINTERRUPTED, ERROR-FREE,
-              SECURE, OR THAT DEFECTS WILL BE CORRECTED IF ERRORS OCCUR. NFT FM
+              SECURE, OR THAT DEFECTS WILL BE CORRECTED IF ERRORS OCCUR. Fanfare
               IS NOT RESPONSIBLE FOR ENSURING THAT YOU COMPLY WITH THIS ToU AND
               WILL NOT BE LIABLE FOR ANY ACTIONS THAT RESULT FROM YOUR
-              NON-COMPLIANCE. NFT FM DOES NOT WARRANT ANY SECURITY IN INVESTING
+              NON-COMPLIANCE. Fanfare DOES NOT WARRANT ANY SECURITY IN INVESTING
               IN CRYPTOCURRENCY AND WILL NOT BE LIABLE FOR RETROACTIVE
               CRYPTOCURRENCY DISTRIBUTIONS THAT YOU DID NOT RECEIVE DUE TO
               WALLET MISINFORMATION OR UNANTICIPATED DEFECTS OR ERRORS IN THE
-              NFT FM SERVICES. NFT FM DOES NOT GUARANTEE ANY LEVEL OF SUCCESS OR
+              Fanfare SERVICES. Fanfare DOES NOT GUARANTEE ANY LEVEL OF SUCCESS OR
               THAT ANY AMOUNT OF TRAFFIC WILL BE ACHIEVED BY YOUR USE OF OUR
               SERVICES.
             </li>
@@ -402,7 +402,7 @@ const PrivacyPolicy = () => {
             <li>
               <ListItemTitle>User Representations and Warranties</ListItemTitle>
               <br />
-              By using NFT FM’s Services, you represent and warrant that:
+              By using Fanfare’s Services, you represent and warrant that:
             </li>
             <ul>
               <li>
@@ -413,11 +413,11 @@ const PrivacyPolicy = () => {
               </li>
               <li>
                 You are fully liable for all materials and content provided by
-                you to NFT FM or shared in associated with NFT FM;
+                you to Fanfare or shared in associated with Fanfare;
               </li>
               <li>
                 You have read and agree to this ToU and our Privacy Policy and
-                will not use NFT FM Services for any fraudulent or inappropriate
+                will not use Fanfare Services for any fraudulent or inappropriate
                 purpose or in a way that violates this ToU or our Privacy
                 Policy; and
               </li>
@@ -430,7 +430,7 @@ const PrivacyPolicy = () => {
         </SectionContent>
         <SectionTitle>Limitation of Liability</SectionTitle>
         <SectionContent>
-          IN NO EVENT WILL NFT FM BE LIABLE FOR ANY CLAIMS IN REGARDS TO ARTIST
+          IN NO EVENT WILL Fanfare BE LIABLE FOR ANY CLAIMS IN REGARDS TO ARTIST
           OR USER GENERATED CONTENT, FAILURE TO PROVIDE ACCURATE OR COMPLETE
           INFORMATION, FAILURE TO KEEP CRYPTOCURRENCY OR PERSONAL INFORMATION
           CONFIDENTIAL, LOSS OF USE, LOSS OF DATA, CHANGES TO THE SERVICES OR
@@ -440,18 +440,18 @@ const PrivacyPolicy = () => {
           SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES OF ANY KIND, WHETHER
           RESULTING FROM AN ACTION UNDER CONTRACT, TORT, STRICT PRODUCT
           LIABILITY OR OTHERWISE THAT ARISE AS A RESULT OF YOUR USE OF OUR
-          SERVICES. IN NO EVENT WILL THE AGGREGATE LIABILITY OF NFT FM UNDER
+          SERVICES. IN NO EVENT WILL THE AGGREGATE LIABILITY OF Fanfare UNDER
           THIS ToU AND OUR PRIVACY POLICY EXCEED THE AMOUNT (IF ANY) PAID BY YOU
-          TO NFT FM FOR OUR SERVICES. IF APPLICABLE LAW DOES NOT ALLOW THE
-          LIMITATION OR EXCLUSION OF LIABILITY ABOVE, NFT FM’S LIABILITY WILL BE
+          TO Fanfare FOR OUR SERVICES. IF APPLICABLE LAW DOES NOT ALLOW THE
+          LIMITATION OR EXCLUSION OF LIABILITY ABOVE, Fanfare’S LIABILITY WILL BE
           LIMITED TO THE MAXIMUM EXTENT PERMITTED BY THE APPLICABLE
           JURISDICTION. YOU ACKNOWLEDGE AND AGREE THAT SUCH LIMITATIONS AND
           EXCLUSIONS REFLECT A FAIR AND REASONABLE ALLOCATION OF RISK AND HAVE
-          BEEN REACHED DUE TO FUNDAMENTAL BARGAINING BETWEEN YOU AND NFT FM.
+          BEEN REACHED DUE TO FUNDAMENTAL BARGAINING BETWEEN YOU AND Fanfare.
         </SectionContent>
         <SectionTitle>Indemnification</SectionTitle>
         <SectionContent>
-          You agree to indemnify and hold NFT FM harmless from any and all
+          You agree to indemnify and hold Fanfare harmless from any and all
           claims, losses, liability, damages, expenses, and costs (including
           attorney fees, mediation, arbitration, and court costs), resulting
           from:
@@ -479,7 +479,7 @@ const PrivacyPolicy = () => {
         <SectionTitle>Privacy, Cookies and Data Protection</SectionTitle>
         <SectionContent>
           All personal information you provide to us in connection with your use
-          of NFT FM Services is collected by us according to our Privacy Policy.
+          of Fanfare Services is collected by us according to our Privacy Policy.
           Our use of cookies and data protection systems are also explained in
           this policy.
         </SectionContent>
@@ -497,13 +497,13 @@ const PrivacyPolicy = () => {
         </SectionContent>
         <SectionTitle>International Users</SectionTitle>
         <SectionContent>
-          NFT FM Services are controlled, operated, and administered from our
+          Fanfare Services are controlled, operated, and administered from our
           offices within the United States of America and are not intended to be
           subject to the laws or jurisdiction of any country outside of the
           United States of America. WE DO NOT REPRESENT OR WARRANT THAT OUR
           PLATFORM AND SERVICES ARE APPROPRIATE, LEGAL, OR AVAILABLE FOR USE IN
           ANY PARTICULAR JURISDICTION OTHER THAN THE UNITED STATES OF AMERICA.
-          Those who choose to access NFT FM outside of the United States of
+          Those who choose to access Fanfare outside of the United States of
           America do so on their own initiative and assume all risks associated
           with such access, including but not limited to any compliance with
           their particular jurisdictions’ laws and regulations and any United
@@ -525,9 +525,9 @@ const PrivacyPolicy = () => {
             <li>
               <ListItemTitle>Letting Us Know About Complaints</ListItemTitle>
               <br />
-              At NFT FM, we hope that we can work out any complaints or
+              At Fanfare, we hope that we can work out any complaints or
               differences that we may have with you respectfully and calmly. If
-              you have any concerns about the Services that NFT FM provides,
+              you have any concerns about the Services that Fanfare provides,
               please reach out to us to let us know. If we cannot work out our
               differences together, then the following mandatory binding
               arbitration will apply to resolve the dispute.
@@ -537,7 +537,7 @@ const PrivacyPolicy = () => {
               <ListItemTitle>Mandatory Binding Arbitration</ListItemTitle>
               <br />
               If any controversy or claim arising out of, or relating to, this
-              ToU, NFT FM’s Services, or our Privacy Policy cannot be amicably
+              ToU, Fanfare’s Services, or our Privacy Policy cannot be amicably
               resolved, such controversy or claim will be determined by binding
               arbitration rather than in a court of law. Except that mandatory
               binding arbitration will not apply with respect to any claims
@@ -553,7 +553,7 @@ const PrivacyPolicy = () => {
               limitations for asserting claims, claims must be asserted within
               the shortest period of time permitted by the applicable law. If an
               arbitrator determines a claim to be frivolous, you agree to
-              reimburse NFT FM for all fees associated with the arbitration,
+              reimburse Fanfare for all fees associated with the arbitration,
               including attorneys’ fees and arbitration costs.
             </li>
             <br />
@@ -562,9 +562,9 @@ const PrivacyPolicy = () => {
               <br />
               You agree to waive any right to participate in a class or
               representative action or proceeding and warrant that any claims
-              brought against NFT FM will be initiated only in your individual
+              brought against Fanfare will be initiated only in your individual
               capacity. Any relief awarded by an arbitrator or otherwise will
-              not affect other users of NFT FM Services.
+              not affect other users of Fanfare Services.
             </li>
           </ul>
         </SectionContent>
@@ -572,10 +572,10 @@ const PrivacyPolicy = () => {
         <SectionContent>
           You are not entitled to assign this ToU or Privacy Policy to any third
           party, in whole or in part, without the prior written consent of NFT
-          FM. NFT FM reserves the right to assign this ToU or Privacy Policy, in
+          FM. Fanfare reserves the right to assign this ToU or Privacy Policy, in
           whole or in part, to any third party at any time without notice,
           including but not limited to any individual or entity acquiring all or
-          substantially all of the NFT FM business or assets.
+          substantially all of the Fanfare business or assets.
         </SectionContent>
         <SectionTitle>Survival of Terms Beyond Termination</SectionTitle>
         <SectionContent>
@@ -589,7 +589,7 @@ const PrivacyPolicy = () => {
         </SectionContent>
         <SectionTitle>Waiver and Severability</SectionTitle>
         <SectionContent>
-          No waiver by NFT FM of any term or condition in this ToU will be
+          No waiver by Fanfare of any term or condition in this ToU will be
           deemed or construed to be a waiver of such term or condition in the
           future, or of any preceding or subsequent breach of the same or any
           other term or condition of this ToU or any other agreement. If any
@@ -608,23 +608,23 @@ const PrivacyPolicy = () => {
         <SectionTitle>Entire Agreement</SectionTitle>
         <SectionContent>
           This ToU and our Privacy Policy represent the entire and exclusive
-          agreement between NFT FM and our Users. All previous written and oral
+          agreement between Fanfare and our Users. All previous written and oral
           agreements and communications related to the subject matter of this
           ToU and our Privacy Policy are superseded.
         </SectionContent>
         <SectionTitle>Contact Us</SectionTitle>
         <SectionContent>
-          If you have any questions about this ToU, our Privacy Policy, NFT FM
+          If you have any questions about this ToU, our Privacy Policy, Fanfare
           Services, or would like a copy of this ToU mailed to you
           electronically, you can contact us directly at:
           <br />
           <br />
           <a
-            href="mailto:support@nftfm.io"
+            href="mailto:info@nftfm.io"
             target="_blank"
             rel="noopener noreferrer"
           >
-            support@nftfm.io
+            info@nftfm.io
           </a>
         </SectionContent>
       </Container>

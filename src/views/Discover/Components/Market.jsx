@@ -16,9 +16,10 @@ const Listen = () => {
   const [selected, setSelected] = useState("Date: High - Low");
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState(2);
-  const limit = 30;
+  const limit = 200;
 
   const getNftsWithParams = async (pageIncrease, searchParam, sortParam) => {
+    console.log("here", hasMore);
     if (hasMore) {
       await axios
         .post("/api/nft-type/getNftsWithParams", {
@@ -139,16 +140,6 @@ const Listen = () => {
     >
       Cheapest
     </MenuSpan>,
-    // <MenuSpan
-    //   isMenuOpen={menuOpen}
-    //   onClick={() => {
-    //     setSort(3);
-    //     setSelected("Date: Low - High");
-    //     setMenuOpen(false);
-    //   }}
-    // >
-    //   Date: Low - High
-    // </MenuSpan>,
   ];
 
   return (
@@ -177,11 +168,11 @@ const Listen = () => {
 
       <ContainerOutline />
       <NftScroll>
-        <InfiniteScroll
+        {/* <InfiniteScroll
           dataLength={allNfts.length}
           next={() => getNftsWithParams(1, search, sort)}
           hasMore={hasMore}
-        >
+        > */}
           {allNfts.map((item, index) => (
             <NftCard nft={item} />
           ))}
@@ -190,11 +181,9 @@ const Listen = () => {
               <FillerCard />
               <FillerCard />
               <FillerCard />
-              <FillerCard />
-              <FillerCard />
             </>
           )}
-        </InfiniteScroll>
+        {/* </InfiniteScroll> */}
       </NftScroll>
     </LaunchContainer>
   );
@@ -290,8 +279,12 @@ const ContainerTitleInput = styled.input`
 `;
 
 const FillerCard = styled.div`
-  width: 226px;
+  width: 375px;
   height: 0px;
+
+  @media only screen and (max-width: 330px) {
+    width: 300px;
+  }
 `;
 
 const NftScroll = styled.div`
@@ -303,33 +296,9 @@ const NftScroll = styled.div`
   @media only screen and (max-width: 776px) {
     flex-direction: column;
     align-items: center;
+    margin-top: 24px;
   }
-  & > div {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    width: 100%;
-    justify-content: space-between;
-    @media only screen and (max-width: 776px) {
-      flex-direction: column;
-      align-items: center;
-      margin-top: 25px;
-    }
-    & > div {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      width: 100%;
-      justify-content: space-between;
-      overflow-x: clip !important;
-      overflow-y: visible !important;
-      @media only screen and (max-width: 776px) {
-        flex-direction: column;
-        align-items: center;
-        margin-top: 25px;
-      }
-    }
-  }
+  
 `;
 
 const LaunchContainer = styled.div`
@@ -342,10 +311,10 @@ const LaunchContainer = styled.div`
 `;
 
 const ContainerOutline = styled.div`
-  border-radius: 24px 24px 0 0;
   border: 6px solid #383838;
   border-bottom: none;
-  height: 40px;
+  // height: 40px;
+  margin-bottom: 40px;
   width: 80%;
   /* display: flex;
   flex-direction: row; */

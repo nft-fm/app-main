@@ -52,7 +52,7 @@ router.post("/get-account", async (req, res) => {
             chain: nft.chain,
           });
           if (usersNft) {
-            user.nfts.push({ nft: usersNft._id, quantity: nft.quantity });
+            user.nfts.push({ nft: usersNft._id, quantity: nft.quantity, chain: nft.chain });
           }
         }
       }
@@ -106,6 +106,7 @@ router.post("/track-pageview", async (req, res) => {
   try {
     if (process.env.PRODUCTION) {
       trackPageview({
+        hasMetamask: req.body.hasMetamask,
         address: req.body.account,
         ip: req.ip,
         page: req.body.page,
@@ -377,7 +378,7 @@ const NodeMail = (name, email, music, account) => {
 
   var message = `<html>
       <div>
-      <p>Hey! Someone applied to be an artist on NFT FM!</p>
+      <p>Hey! Someone applied to be an artist on Fanfare!</p>
       <p>Name: ${name}</p>
       <p>Email: ${email}</p>
       <p>Music: ${music}</p>
@@ -577,7 +578,7 @@ router.post("/getArtists", async (req, res) => {
       isArtist: true,
       hasMinted: true,
       profilePic: { $exists: true },
-      username: { $ne: "NFT FM" },
+      username: { $ne: "Fanfare" },
     });
 
     res.send(artists);

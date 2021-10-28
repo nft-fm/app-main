@@ -15,8 +15,8 @@ const SMShareModal = ({ open, children, hide, onClose, nft, updateShareCount }) 
   const stopProp = (e) => {
     e.stopPropagation();
   };
-  const url = `https://www.nftfm.io/`;
-  const message = `Check out my new NFT, ${nft.title}, available now on NFT FM!\nAvailable only at: `
+  const url = `https://beta.fanfare.fm/`;
+  const message = `Check out my new NFT, ${nft.title}, available now on Fanfare!\nAvailable only at: `
 
   const newShare = () => {
     axios.post('/api/nft-type/newShare', nft);

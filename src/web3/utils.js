@@ -47,17 +47,8 @@ export const getEthBalance = async (callback) => {
 export const require = async (statement, error) => {
   let provider;
   let walletAddress;
-  // if (isMobile()) {
-  // 	const baseProvider = new WalletConnectProvider({
-  // 		rpc: { 1: "https://mainnet.eth.aragon.network/" }
-  // 	});
-  // 	await baseProvider.enable();
-  // 	provider = new providers.Web3Provider(baseProvider);
-  // 	walletAddress = baseProvider.accounts[0];
-  // } else {
   provider = new providers.Web3Provider(window.ethereum);
   walletAddress = window.ethereum.selectedAddress;
-  // }
   if (!statement && error) {
     throw error;
   }
@@ -72,6 +63,7 @@ export const require = async (statement, error) => {
 
 export const getSetSale = async (nftId, callback) => {
   const { provider } = await require();
+  console.log("got set Sale");
   const signer = provider.getSigner();
   let contract = new Contract(chooseFlatPriceSale(), FlatPriceSaleABI, signer);
 
@@ -125,7 +117,7 @@ export const mintNFT = async (data, finalCallback) => {
 export const getVinylBalance = async (callback) => {
   const { provider, walletAddress } = await require();
   const signer = provider.getSigner();
-  const vinylContract = new Contract(VinylAddress, VinylABI, signer);
+  const vinylContract = new Contract(StakingAddress, StakingABI, signer);
   const vinylBalance = vinylContract
     .balanceOf(walletAddress)
     .then((r) => utils.formatEther(r));
@@ -135,18 +127,18 @@ export const getVinylBalance = async (callback) => {
   });
 };
 
-export const buyNFT = async (data, finalCallback) => {
+export const buyNFT = async (data, callback) => {
   const { provider } = await require();
   const signer = provider.getSigner();
   let contract = new Contract(chooseFlatPriceSale(), FlatPriceSaleABI, signer);
 
-  let result = await contract
+  contract
     .buyNFT(data.saleId, data.amount, { value: utils.parseUnits(data.price) })
-    .then((res) => {
-      return res.wait();
-    });
-
-  finalCallback(result);
+    .then((r) => {
+      return r.wait();
+    })
+    .then(() => callback())
+    .catch(err => callback(err))
 };
 
 export const airdrop = async (wallets, amounts, callback) => {
@@ -197,7 +189,7 @@ export const setNewPrice = async (nftId, price, callback) => {
   console.log(nftId, price);
   const { provider } = await require();
   const signer = provider.getSigner();
-  const contract = new Contract(FlatPriceSale, FlatPriceSaleABI, signer);
+  const contract = new Contract(chooseFlatPriceSale(), FlatPriceSaleABI, signer);
   contract
     .setSetPrice(nftId, utils.parseUnits(price))
     .then((r) => r.wait())
@@ -213,9 +205,9 @@ export const stakeVinyl = async (amount, address, callback) => {
     .then(() => {
       callback();
     })
-    .catch(err => {
-      callback(err)
-    })
+    .catch((err) => {
+      callback(err);
+    });
 };
 export const claimVinyl = async (callback) => {
   const { provider } = await require();
@@ -227,9 +219,9 @@ export const claimVinyl = async (callback) => {
     .then(() => {
       callback();
     })
-    .catch(err => {
-      callback(err)
-    })
+    .catch((err) => {
+      callback(err);
+    });
 };
 export const unstakeVinyl = async (artistAddress, amount, callback) => {
   const { provider } = await require();
@@ -241,9 +233,9 @@ export const unstakeVinyl = async (artistAddress, amount, callback) => {
     .then(() => {
       callback();
     })
-    .catch(err => {
-      callback(err)
-    })
+    .catch((err) => {
+      callback(err);
+    });
 };
 export const getBalanceOfVinyl = async (callback) => {
   const { provider, walletAddress } = await require();
@@ -297,15 +289,9 @@ export const getStakersForArtist = async (address, callback) => {
   const { provider } = await require();
   const signer = provider.getSigner();
   const contract = new Contract(StakingAddress, StakingABI, signer);
-  const allStakers = contract.stakersForArtist(address);
-  Promise.all([allStakers]).then((res) => {
-    callback({ allStakers: res[0] });
-  });
+  await contract.stakersForArtist(address).then((r) => callback(r));
 };
 export const getVinylStaked = async () => {
-  // const { provider } = await require();
-  // const signer = provider.getSigner();
-  // const contract = new Contract(StakingAddress, StakingABI, signer)
 };
 export const getTotalEarned = async (address, callback) => {
   const { provider } = await require();

@@ -1,9 +1,14 @@
-import React, { useState, useRef } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
-import { useAccountConsumer } from "../../../contexts/Account";
-
-import { ReactComponent as upload_icon } from "../../../assets/img/profile_page_assets/upload_icon.svg";
+import swal from 'sweetalert2';
 import Loading from "../../../assets/img/loading.gif";
+import { ReactComponent as upload_icon } from "../../../assets/img/profile_page_assets/upload_icon.svg";
+import { useAccountConsumer } from "../../../contexts/Account";
+import {
+  errorIcon,
+  imageHeight,
+  imageWidth
+} from "../../../utils/swalImages";
 
 const ProfilePic = (props) => {
   const { account, user, setUser } = useAccountConsumer();
@@ -24,6 +29,14 @@ const ProfilePic = (props) => {
   };
 
   const handleImageChange = (e) => {
+    if (e.target.files[0].size > 60 * 1024 * 1024) {
+      return swal.fire({
+        title: `Error: Image files must be under 60MB`,
+        imageUrl: errorIcon,
+        imageWidth,
+        imageHeight,
+      })
+    }
     setNewPic(true);
     setImageFile(e.target.files[0]);
     const picUrl =

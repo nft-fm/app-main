@@ -54,9 +54,9 @@ const StakingHolder = () => {
     <Container>
       <ContainerTitle>ARTISTS</ContainerTitle>
       <ContainerOutline />
-      {account === "0xc894929862b974a616D35953c8C3E479A38D339a" && (
+      {/* {account === "0xc894929862b974a616D35953c8C3E479A38D339a" && (
         <button onClick={() => addArtists()}>Add Artists</button>
-      )}
+      )} */}
       {formattedArtists && <NftScroll>{formattedArtists}</NftScroll>}
     </Container>
   );

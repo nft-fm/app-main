@@ -60,6 +60,7 @@ const trackNftMint = () => {};
 const trackArtistApplication = () => {};
 
 const trackNftView = (props) => {
+  console.log("nft view", props);
   const { address, ip, nftId, artistAddress, title, artist } = props;
   mixpanel.track("nft view", {
     distinct_id: address ? address : null,

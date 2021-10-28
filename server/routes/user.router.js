@@ -597,7 +597,7 @@ router.post("/getArtists", async (req, res) => {
       isArtist: true,
       hasMinted: true,
       profilePic: { $exists: true },
-      username: { $ne: "Fanfare" },
+      $and: [{ username: { $ne: "Fanfare" } }, { username: { $ne: "NFT FM" } }]
     });
 
     res.send(artists);

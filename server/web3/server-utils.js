@@ -74,6 +74,26 @@ const findLikes = (nfts, account) => {
   return nfts;
 };
 
+/* 
+  I need to change the provider?? 
+*/
+
+const setNewPrice = async (nftId, flatPriceSale, price, callback) => {
+  const PROVIDER_URL = process.env.REACT_APP_IS_MAINNET
+    ? process.env.MAIN_PROVIDER_URL
+    : process.env.RINKEBY_PROVIDER_URL;
+
+  let provider = new providers.WebSocketProvider(PROVIDER_URL);
+  let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
+
+  const contract = new Contract(flatPriceSale, FlatPriceSaleABI, walletWithProvider);
+
+  contract
+    .setSetPrice(nftId, utils.parseUnits(price))
+    .then((r) => r.wait())
+    .then(await callback);
+};
+
 const getUserNftsETH = async (account) => {
   const PROVIDER_URL = process.env.REACT_APP_IS_MAINNET
     ? process.env.MAIN_PROVIDER_URL
@@ -115,7 +135,7 @@ const getUserNftsBSC = async (account) => {
   const NFTToken = process.env.REACT_APP_IS_MAINNET
     ? MAIN_BSC_NFTToken
     : TEST_BSC_NFTToken;
-  
+
   let provider = new providers.WebSocketProvider(PROVIDER_URL);
   let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
   const contract = new Contract(NFTToken, NFTTokenABI, walletWithProvider);
@@ -228,4 +248,5 @@ module.exports = {
   getVinylBalance,
   addArtistToStake,
   getStakersForArtist,
+  setNewPrice
 };

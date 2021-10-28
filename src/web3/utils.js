@@ -19,7 +19,7 @@ import AirdropABI from "./abi/Airdrop.abi.js";
 import StakingABI from "./abi/Staking.abi.js";
 // import BigNumber from "bignumber.js";
 
-const chooseNftAddress = async () => {
+export const chooseNftAddress = async () => {
   const newChainId = await window.ethereum.request({ method: "eth_chainId" });
   if (Number(newChainId) === 1 || Number(newChainId) === 4) {
     return NftAddress;
@@ -27,7 +27,8 @@ const chooseNftAddress = async () => {
     return BSC_NftAddress;
   }
 };
-const chooseFlatPriceSale = async () => {
+
+export const chooseFlatPriceSale = async () => {
   const newChainId = await window.ethereum.request({ method: "eth_chainId" });
   if (Number(newChainId) === 1 || Number(newChainId) === 4) {
     return FlatPriceSale;
@@ -189,12 +190,14 @@ export const setNewPrice = async (nftId, price, callback) => {
   console.log(nftId, price);
   const { provider } = await require();
   const signer = provider.getSigner();
+  console.log(signer)
   const contract = new Contract(chooseFlatPriceSale(), FlatPriceSaleABI, signer);
   contract
     .setSetPrice(nftId, utils.parseUnits(price))
     .then((r) => r.wait())
     .then(() => callback());
 };
+
 export const stakeVinyl = async (amount, address, callback) => {
   const { provider } = await require();
   const signer = provider.getSigner();

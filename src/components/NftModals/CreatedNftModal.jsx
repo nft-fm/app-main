@@ -1,15 +1,15 @@
+import axios from "axios";
 import React, { useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
-import { ReactComponent as IconX } from "../../assets/img/icons/x.svg";
-import logo from "../../assets/img/logos/logo_tiny.png";
+import Swal from "sweetalert2";
+import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
 import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
-import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
-import { useAccountConsumer } from "../../contexts/Account";
-import Swal from "sweetalert2";
-import { setNewPrice } from "../../web3/utils";
+import { ReactComponent as IconX } from "../../assets/img/icons/x.svg";
 import loadingGif from "../../assets/img/loading.gif";
+import logo from "../../assets/img/logos/logo_tiny.png";
+import { useAccountConsumer } from "../../contexts/Account";
+import { chooseFlatPriceSale, require } from "../../web3/utils";
 
 const BuyNftModal = ({
   open,
@@ -57,47 +57,50 @@ const BuyNftModal = ({
         return "BSC";
     }
   };
-  const handleChange = (value) => {
-    setLoading(false);
-    axios
-      .post("/api/nft-type/updatePrice", {
-        nftId: nft.nftId,
-        price: value,
-        chain: nft.chain,
-      })
-      .then((res) => {
-        Swal.fire({ title: "Success! Reload the page to see the changes." });
-      })
-      .catch((err) => console.log(err));
-  };
 
-  const changeNftPrice = () => {
-    if (nft.chain != getChain()) {
-      Swal.fire({
+  const changeNftPrice = async () => {
+    if (nft.chain !== getChain()) 
+      return Swal.fire({
         title: `You need to be on ${nft.chain} to change the price of this NFT.`,
       });
-    } else {
-      Swal.fire({
-        title: `Change price for: ${nft.title}?`,
-        text: `Any contract interactions do incur gas fees. Enter the new price in ${
-          getChain() === "BSC" ? "BNB" : "ETH"
-        } below`,
-        input: "number",
-        inputValidator: (value) => {
-          if (Number(value) < 0) {
-            return "You cannot set a negative price!";
-          }
-        },
-        confirmButtonText: "Change Price!",
-      }).then((res) => {
-        if (res.isConfirmed) {
-          console.log(res.value);
-          setLoading(true);
-          setNewPrice(nft.nftId, res.value, () => {
-            handleChange(res.value);
-          });
+    const res = await Swal.fire({
+      title: `Change price for: ${nft.title}?`,
+      text: `Any contract interactions do incur gas fees. Enter the new price in ${
+        getChain() === "BSC" ? "BNB" : "ETH"
+      } below`,
+      input: "number",
+      inputValidator: (value) => {
+        if (Number(value) < 0) {
+          return "You cannot set a negative price!";
         }
-      });
+      },
+      confirmButtonText: "Change Price!",
+    })
+    if (res.isConfirmed) {
+      console.log(res.value);
+      setLoading(true);
+      try {
+        const { provider } = await require();
+        const signer = provider.getSigner();
+        const flatPriceSale = await chooseFlatPriceSale()
+        const data = {
+          address: account,
+          nftId: nft.nftId,
+          flatPriceSale,
+          price: res.value,
+          chain: nft.chain,
+        }
+        const sig = await signer.signMessage(JSON.stringify(data))
+        await axios.post("/api/nft-type/updatePrice", {
+          ...data,
+          sig
+        })
+        setLoading(false)
+        Swal.fire({ title: "Success! Reload the page to see the changes." });
+      } catch (error) {
+        console.error(error)
+        setLoading(false)
+      }
     }
   };
 

@@ -20,7 +20,7 @@ const Profile = () => {
         text: "You are on the wrong chain. Please connect to Ethereum Mainnet.",
         imageUrl: warningIcon,
         imageWidth,
-        imageHeight      
+        imageHeight
       });
     }
   }
@@ -31,7 +31,11 @@ const Profile = () => {
         <IsConnected>
           <GetConnected>
             <ConnectButton onClick={() => connectWallet()}>
-              <MetaMask src={IconMetamask} />
+              <LogoContainer>
+                <MetaMask src={IconMetamask} />
+                <Spacer />
+                <MetaMask src={"https://trustwallet.com/assets/images/media/assets/trust_platform.svg"} />
+              </LogoContainer>
               <ButtonText>Connect Wallet</ButtonText>
             </ConnectButton>
           </GetConnected>
@@ -41,6 +45,16 @@ const Profile = () => {
     </BaseView>
   );
 };
+
+const Spacer = styled.div`
+width: 10px;
+`
+
+const LogoContainer = styled.div`
+display: flex;
+flex-direction: row;
+`
+
 
 const ButtonText = styled.span`
   font-family: "Compita";

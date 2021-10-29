@@ -73,7 +73,6 @@ const StyledTitle = styled.div`
   font-size: ${(props) => props.theme.fontSizes.md};
   margin: 60px 0 40px 0;
   font-weight: 600;
-  /* letter-spacing: 3px; */
   text-align: center;
   color: white;
 `;

@@ -1,20 +1,20 @@
+import axios from "axios";
+import { providers } from "ethers";
 import React, { useState } from "react";
 import { Switch } from "react-router-dom";
 import styled from "styled-components";
-import { providers } from "ethers";
-import BaseView from "../../components/Page/BaseView";
-import { useWallet } from "use-wallet";
-import axios from "axios";
 import swal from "sweetalert2";
+import BaseView from "../../components/Page/BaseView";
+import { useAccountConsumer } from "../../contexts/Account";
 import {
   errorIcon,
-  warningIcon,
-  imageWidth,
   imageHeight,
+  imageWidth,
+  warningIcon,
 } from "../../utils/swalImages";
 
 const RegisterArtist = () => {
-  const { account, connect } = useWallet();
+  const { account, connect } = useAccountConsumer();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [musicLinks, setMusicLinks] = useState("");

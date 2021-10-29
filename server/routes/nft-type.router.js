@@ -824,44 +824,45 @@ router.post("/getSongList", async (req, res) => {
   });
 });
 
-router.post("/purchase", async (req, res) => {
-  try {
-    let nft = await NftType.findOne({ _id: req.body.id });
-    if (!nft) {
-      res.status(500).send("No NFT found");
-      return;
-    }
-    if (nft.numSold >= nft.numMinted) {
-      res.status(500).send("Out of Stock");
-      return;
-    }
-    let user = await User.findOne({ address: req.body.address });
-    if (!user) {
-      res.status(500).send("No user found");
-      return;
-    }
+// router.post("/purchase", async (req, res) => {
+//   try {
+//     console.log("purchasing!", req.body);
+//     let nft = await NftType.findOne({ _id: req.body.id });
+//     if (!nft) {
+//       res.status(500).send("No NFT found");
+//       return;
+//     }
+//     if (nft.numSold >= nft.numMinted) {
+//       res.status(500).send("Out of Stock");
+//       return;
+//     }
+//     let user = await User.findOne({ address: req.body.address });
+//     if (!user) {
+//       res.status(500).send("No user found");
+//       return;
+//     }
 
-    user.nfts.push({ nft: nft._id, quantity: 1 });
+//     user.nfts.push({ nft: nft._id, quantity: 1 });
 
-    await user.save();
+//     await user.save();
 
-    nft.numSold++;
-    await nft.save();
+//     nft.numSold++;
+//     await nft.save();
 
-    if (process.env.PRODUCTION) {
-      trackNftPurchase({
-        address: req.body.address,
-        ip: req.ip,
-        artistAddress: nft.address,
-        nftId: nft.nftId,
-        nftPrice: nft.price,
-      });
-    }
-    res.status(200).send("Success!");
-  } catch (err) {
-    res.status(500).send(err);
-  }
-});
+//     if (process.env.PRODUCTION) {
+//       trackNftPurchase({
+//         address: req.body.address,
+//         ip: req.ip,
+//         artistAddress: nft.address,
+//         nftId: nft.nftId,
+//         nftPrice: nft.price,
+//       });
+//     }
+//     res.status(200).send("Success!");
+//   } catch (err) {
+//     res.status(500).send(err);
+//   }
+// });
 
 router.post("/newShare", async (req, res) => {
   try {
@@ -930,13 +931,14 @@ router.post("/checkRedeemable", async (req, res) => {
 router.post("/trackNftView", async (req, res) => {
   try {
     const payload = {
-      address: req.body.account,
+      address: req.body.address,
       nftId: req.body.nftId,
       artistAddress: req.body.artistAddress,
       artist: req.body.artist,
       title: req.body.title,
       ip: req.ip,
     };
+    console.log("track nftView", payload);
     if (process.env.PRODUCTION) {
       trackNftView(payload);
     }

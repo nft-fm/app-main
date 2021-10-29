@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { ReactComponent as down_arrow } from "../../../assets/img/icons/down_arrow.svg";
 import NftCard from "../../../components/NftCards/SaleNftCard";
@@ -17,72 +17,70 @@ const Listen = () => {
   const [sort, setSort] = useState(2);
   const limit = 200;
 
-  const getNftsWithParams = async (pageIncrease, searchParam, sortParam) => {
-    console.log("here", hasMore);
-    if (hasMore) {
-      await axios
-        .post("/api/nft-type/getNftsWithParams", {
-          address: account,
-          limit,
-          page: page,
-          search: searchParam,
-          sort: sortParam,
-        })
-        .then((res) => {
-          setAllNfts([...allNfts, ...res.data.nfts]);
-          setPage(page + pageIncrease);
-          setHasMore(res.data.hasMore);
-        });
-    }
-  };
+  // const getNftsWithParams = async (pageIncrease, searchParam, sortParam) => {
+  //   console.log("here", hasMore);
+  //   if (hasMore) {
+  //     await axios
+  //       .post("/api/nft-type/getNftsWithParams", {
+  //         address: account,
+  //         limit,
+  //         page: page,
+  //         search: searchParam,
+  //         sort: sortParam,
+  //       })
+  //       .then((res) => {
+  //         setAllNfts([...allNfts, ...res.data.nfts]);
+  //         setPage(page + pageIncrease);
+  //         setHasMore(res.data.hasMore);
+  //       });
+  //   }
+  // };
 
-  useEffect(() => {
-    const fetchWithNoSearch = async () => {
-      setPage(0);
-      if (search === "") {
-        setHasMore(true);
-        setAllNfts([]);
-        await axios
-          .post("/api/nft-type/getNftsWithParams", {
-            address: account,
-            limit,
-            page: 0,
-            search: "",
-            sort: sort,
-          })
-          .then((res) => {
-            setAllNfts(res.data.nfts);
-            setPage(page + 1);
-            setHasMore(res.data.hasMore);
-          });
-      }
-    };
+  // useEffect(() => {
+  //   const fetchWithNoSearch = async () => {
+  //     setPage(0);
+  //     if (search === "") {
+  //       setHasMore(true);
+  //       setAllNfts([]);
+  //       await axios
+  //         .post("/api/nft-type/getNftsWithParams", {
+  //           address: account,
+  //           limit,
+  //           page: 0,
+  //           search: "",
+  //           sort: sort,
+  //         })
+  //         .then((res) => {
+  //           setAllNfts(res.data.nfts);
+  //           setPage(page + 1);
+  //           setHasMore(res.data.hasMore);
+  //         });
+  //     }
+  //   };
 
-    fetchWithNoSearch();
-  }, [search]);
+  //   fetchWithNoSearch();
+  // }, [search, account]);
 
-  useEffect(() => {
-    const handleSort = async (pageIncrease, searchParam, sortParam) => {
-      setPage(0);
-      setHasMore(true);
-      setAllNfts([]);
-      await axios
-        .post("/api/nft-type/getNftsWithParams", {
-          address: account,
-          limit,
-          page: 0,
-          search: searchParam,
-          sort: sortParam,
-        })
-        .then((res) => {
-          setAllNfts(res.data.nfts);
-          setPage(1);
-          setHasMore(res.data.hasMore);
-        });
-    };
+  const handleSort = useCallback(async () => {
+    setPage(0);
+    setHasMore(true);
+    await axios
+      .post("/api/nft-type/getNftsWithParams", {
+        address: account,
+        limit,
+        page: 0,
+        search,
+        sort,
+      })
+      .then((res) => {
+        setAllNfts(res.data.nfts);
+        setPage(1);
+        setHasMore(res.data.hasMore);
+      });
+  }, [search, sort, account])
 
-    handleSort(1, search, sort);
-  }, [sort]);
+  // handles login and sort
+  useEffect(handleSort, [sort, account, handleSort]);
 
   const handleSearch = async (e, pageIncrease, searchParam, sortParam) => {
     e.preventDefault();

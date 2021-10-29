@@ -152,7 +152,7 @@ router.post("/get-user-nfts", async (req, res) => {
       res.send("no nfts!");
       return;
     }
-    for (nft of req.body.nfts) {
+    for (let nft of req.body.nfts) {
       if (nft.quantity > 1) {
         for (let i = 0; i < nft.quantity; i++) {
           ids.push(nft.nft);
@@ -162,7 +162,7 @@ router.post("/get-user-nfts", async (req, res) => {
       }
     }
     const gottenNfts = [];
-    for (id of ids) {
+    for (let id of ids) {
       console.log("here", id);
       const getNft = await NftType.findOne(
         {
@@ -469,7 +469,6 @@ router.post("/getNftsWithParams", async (req, res) => {
       5: { likeCount: -1 }
     };
     const query = { $regex: req.body.search, $options: "i" };
-
     let nftTypes = await NftType.find({
       isDraft: false,
       isMinted: true,

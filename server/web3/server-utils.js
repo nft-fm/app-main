@@ -55,10 +55,11 @@ const sign = (types, values) => {
 // this just formats likes at this point
 const findLikes = (nfts, account) => (
   nfts.map(nft => {
+    const likes = nft._doc.likes
     return {
       ...nft._doc,
       likes: [],
-      liked: nft._doc.likes.includes((like) => like.toString() === account)
+      liked: likes && likes.includes(account)
     }
   })
 );

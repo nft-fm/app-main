@@ -20,7 +20,8 @@ const MAIN_BSC_FlatPriceSale = "0x163379Fe64F07bD6a4b84f10c6Ba9AA9d4F2DFCa";
 
 const MAIN_StakingAddress = "0x5A2Df2e3D11dcDb645fbA2008c06fdBb114E805e" //TODO deploy and change this
 
-const isMain = process.env.REACT_APP_IS_MAINNET;
+// const isMain = process.env.REACT_APP_IS_MAINNET;
+const isMain = true
 
 export const NftAddress = isMain ? MAIN_NftAddress : TEST_NftAddress;
 export const FlatPriceSale = isMain ? MAIN_FlatPriceSale : TEST_FlatPriceSale;

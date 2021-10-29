@@ -7,12 +7,12 @@ import { useWallet } from "use-wallet";
 import useModal from "../../../../hooks/useModal";
 import isMobile from "../../../../utils/isMobile";
 import { require, getVinylBalance } from "../../../../web3/utils";
-import { BaseView } from "../../../../components/Page/BaseView";
 import RulesModal from "./RulesModal";
 import Suggestion from "./Suggestion";
 import { errorIcon, imageWidth, imageHeight } from "../../../../utils/swalImages";
+import { useStakingConsumer } from "../../../../contexts/Staking";
 
-const Community = () => {
+const Community = (props) => {
   const [suggestions, setSuggestions] = useState([]);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -22,6 +22,7 @@ const Community = () => {
   const [presentRulesModal] = useModal(<RulesModal />);
   const { account, connect } = useWallet();
   const [hasVinyl, setHasVinyl] = useState(false);
+  const { accountTotalStaked } = useStakingConsumer();
 
   const fetchSuggestions = useCallback(() => {
     axios
@@ -44,6 +45,7 @@ const Community = () => {
     if (account) {
       fetchSuggestions();
       getVinylBalance((res) => Number(res.vinyl[0]) > 0 && setHasVinyl(true));
+      if (accountTotalStaked > 0) setHasVinyl(true)
     }
   }, [page, sort, account, fetchSuggestions]);
 

@@ -95,8 +95,8 @@ const Spacer = styled.div`
 `;
 
 const Share = styled(IconShare)`
-  width: 17px;
-  height: 17px;
+  width: 20px;
+  height: 20px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   & path {
@@ -107,8 +107,8 @@ const Share = styled(IconShare)`
 `;
 
 const LikedHeart = styled(IconHeart)`
-  width: 20px;
-  height: 20px;
+  width: 25px;
+  height: 25px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   & path {
@@ -117,8 +117,8 @@ const LikedHeart = styled(IconHeart)`
 `;
 
 const Heart = styled(IconHeart)`
-  width: 20px;
-  height: 20px;
+  width: 25px;
+  height: 25px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   & path {
@@ -140,7 +140,7 @@ const Side = styled.div`
 const IconArea = styled.div`
   /* margin: 0 8px; */
   display: flex;
-  font-size: 14px;
+  font-size: 20px;
   height: 100%;
   align-items: center;
   img {

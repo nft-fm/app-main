@@ -1,35 +1,34 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
-import { ReactComponent as IconX } from "../../assets/img/icons/x.svg";
-import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
-import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
-import PlayIcon from "../../assets/img/icons/listen_play.svg";
-import { useAccountConsumer } from "../../contexts/Account";
-import loading from "../../assets/img/loading.gif";
-import Swal from "sweetalert2";
-import { usePlaylistConsumer } from "../../contexts/Playlist";
-import { buyNFT, getEthBalance } from "../../web3/utils";
-import swal from "sweetalert2";
+import moment from "moment";
+import React, { useEffect, useState } from "react";
+import { NavLink, useHistory } from "react-router-dom";
+import {
+  FacebookIcon, FacebookShareButton, TwitterIcon, TwitterShareButton
+} from "react-share";
 import ReactToolTip from "react-tooltip";
-import PlaySongSnippet from "./Components/PlaySongSnippet";
-import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
+import styled from "styled-components";
+import { default as Swal, default as swal } from "sweetalert2";
+import { ReactComponent as Exclusive } from "../../assets/img/Badges/exclusive.svg";
 import { ReactComponent as Founder } from "../../assets/img/Badges/founder.svg";
 import { ReactComponent as Premium } from "../../assets/img/Badges/premium.svg";
 import { ReactComponent as Prerelease } from "../../assets/img/Badges/prerelease.svg";
-import { ReactComponent as Exclusive } from "../../assets/img/Badges/exclusive.svg";
-import { ReactComponent as GiftIcon } from "../../assets/img/icons/rewards-gift.svg";
-import moment from "moment";
-import { NavLink } from "react-router-dom";
-import {
-  errorIcon,
-  warningIcon,
-  imageWidth,
-  imageHeight,
-} from "../../utils/swalImages";
-import Ticker from "../../components/Ticker";
 import { ReactComponent as IconBinance } from "../../assets/img/icons/binance-logo.svg";
+import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
+import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
+import PlayIcon from "../../assets/img/icons/listen_play.svg";
+import { ReactComponent as GiftIcon } from "../../assets/img/icons/rewards-gift.svg";
+import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
+import { ReactComponent as IconX } from "../../assets/img/icons/x.svg";
+import loading from "../../assets/img/loading.gif";
+import Ticker from "../../components/Ticker";
+import { useAccountConsumer } from "../../contexts/Account";
+import { usePlaylistConsumer } from "../../contexts/Playlist";
+import {
+  errorIcon, imageHeight, imageWidth, warningIcon
+} from "../../utils/swalImages";
+import { buyNFT, getEthBalance } from "../../web3/utils";
+import PlaySongSnippet from "./Components/PlaySongSnippet";
+
 
 const BuyNftModal = (props) => {
   const {
@@ -46,6 +45,8 @@ const BuyNftModal = (props) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isBought, setIsBought] = useState(false);
+  const [sharing, setSharing] = useState(null)
+
   const { account, connect, getUser, currChainId } = useAccountConsumer();
   const { setNftCallback } = usePlaylistConsumer();
   const history = useHistory();
@@ -243,6 +244,27 @@ const BuyNftModal = (props) => {
   //   return hDisplay + mDisplay + sDisplay;
   // };
 
+  const newShare = (e, social) => {
+    e.stopPropagation()
+    setSharing(social)
+  };
+
+  const url = `https://beta.fanfare.fm/market/${nft.chain}/${nft.nftId}`;
+  const message = `${nft.title} by ${nft.artist}\nAvailable at: `;
+  
+  useEffect(() => {
+    if (sharing) {
+      axios.post("/api/nft-type/newShare", nft);
+      const shareUrl = 
+        sharing === 'Facebook' ? 
+        `https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${message}` 
+        :
+        `https://twitter.com/intent/tweet?url=${url}&text=${message}`
+      window.open(shareUrl, sharing, "height=600, width=800")
+      setSharing(null)
+    }
+  }, [nft, sharing, url, message])
+
   if (!open) return null;
   return (
     <OpaqueFilter onClick={(e) => !isLoading && hide(e)}>
@@ -361,16 +383,30 @@ const BuyNftModal = (props) => {
                 </span>
               </Info>
               <Actions>
-                <IconArea onClick={() => share()}>
+                {/* <IconArea onClick={() => share()}>
                   <ShareButton
                     onClick={() => share()}
                     aria-label="share button"
                   >
                     <Share onClick={() => share()} />
                   </ShareButton>
-                  {/* {nft.shareCount}  */}
+                  {nft.shareCount} 
                   Share
-                </IconArea>
+                </IconArea> */}
+                <IconArea>
+                  <Buttons>
+                    <TwitterShareButton title={message} url={url}>
+                      <ButtonHolder onClick={(e) => newShare(e, 'Twitter')}>
+                        <TwitterIcon size={25} borderRadius={"10px"} />
+                      </ButtonHolder>
+                    </TwitterShareButton>
+                    <FacebookShareButton quote={message} url={url}>
+                      <ButtonHolder onClick={(e) => newShare(e, 'Facebook')}>
+                        <FacebookIcon size={25} borderRadius={"10px"} />
+                      </ButtonHolder>
+                    </FacebookShareButton>
+                  </Buttons>
+              </IconArea>
                 <IconArea>
                   <LikeButton
                     onClick={() => like()}
@@ -467,9 +503,36 @@ display: none;
 @media only screen and (max-width: 776px) {
   height: auto;
   display: block;
-
 }
 `
+
+const ButtonHolder = styled.div`
+  background-color: ${(props) => props.theme.color.box};
+  border-radius: ${(props) => props.theme.borderRadius}px;
+  /* border: 1px solid ${(props) => props.theme.color.boxBorder}; */
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  cursor: pointer;
+  padding: 5px;
+  /* padding: 5px 5px 0px 5px; */
+  margin-left: auto;
+  margin-right: auto;
+  & > span {
+    color: white;
+    font-size: ${(props) => props.theme.fontSizes.sm};
+    margin-left: 10px;
+  }
+  transition: 0.1s ease-in-out;
+  :hover {
+    background-color: ${(props) => props.theme.color.gray};
+  }
+`;
+
+const Buttons = styled.div`
+  z-index: 5;
+  justify-content: space-evenly;
+`;
 
 const Promotion = styled.div`
 margin-top: 10px;

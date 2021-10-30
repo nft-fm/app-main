@@ -150,7 +150,7 @@ const NftCard = (props) => {
       <Container
         onClick={() => setIsModalOpen(!isModalOpen)}
         role="button"
-        aria-pressed="false"
+        aria-pressed="false" 
         tabindex="0"
         open={isModalOpen || isShareOpen}
       >

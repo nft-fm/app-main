@@ -1,14 +1,19 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import {
+  FacebookIcon, FacebookShareButton, TwitterIcon, TwitterShareButton
+} from "react-share";
 import styled from "styled-components";
+import Swal from "sweetalert2";
 import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
 import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
-import { useAccountConsumer } from "../../contexts/Account";
-import axios from "axios";
-import Swal from "sweetalert2";
 import loading from "../../assets/img/loading.gif";
+import { useAccountConsumer } from "../../contexts/Account";
 
 const LikeShare = (props) => {
   const { account } = useAccountConsumer();
+  const [sharing, setSharing] = useState(null)
+
   const { nft, liked, setLiked, likeCount, isLoading, setLikeCount } = props;
   const like = async (e) => {
     e.stopPropagation();
@@ -31,13 +36,47 @@ const LikeShare = (props) => {
     props.setIsShareOpen();
   };
 
+  const url = `https://beta.fanfare.fm/`;
+  const message = `Check out my new NFT, ${nft.title}, available now on Fanfare!\nAvailable only at: `;
+
+  const newShare = (e, social) => {
+    e.stopPropagation();
+    setSharing(social)
+  };
+
+  useEffect(() => {
+    if (sharing) {
+      axios.post("/api/nft-type/newShare", nft);
+      const shareUrl = 
+        sharing === 'Facebook' ? 
+        `https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${message}` 
+        :
+        `https://twitter.com/intent/tweet?url=${url}&text=${message}`
+      window.open(shareUrl, sharing, "height=500, width=500")
+      setSharing(null)
+    }
+  }, [nft, sharing, url, message])
+
   return (
     <Side>
       <IconArea>
-        <ShareButton onClick={(e) => share(e)} aria-label="share button">
+      <Buttons>
+        <TwitterShareButton title={message} url={url}>
+          <ButtonHolder onClick={(e) => newShare(e, 'Twitter')}>
+            <TwitterIcon size={25} borderRadius={"10px"} />
+          </ButtonHolder>
+        </TwitterShareButton>
+        <FacebookShareButton quote={message} url={url}>
+          <ButtonHolder onClick={(e) => newShare(e, 'Facebook')}>
+            <FacebookIcon size={25} borderRadius={"10px"} />
+          </ButtonHolder>
+        </FacebookShareButton>
+      </Buttons>
+        {/* <ShareButton onClick={(e) => share(e)} aria-label="share button">
           <Share />
           <ShareText>Share</ShareText>
-        </ShareButton>
+        </ShareButton> 
+        */}
         {/* {shareCount?.count ? shareCount.count : nft.shareCount} */}
       </IconArea>
       <Spacer />
@@ -148,6 +187,34 @@ const IconArea = styled.div`
     height: 18px;
     margin-right: 6px;
   }
+`;
+
+const ButtonHolder = styled.div`
+  background-color: ${(props) => props.theme.color.box};
+  border-radius: ${(props) => props.theme.borderRadius}px;
+  /* border: 1px solid ${(props) => props.theme.color.boxBorder}; */
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  cursor: pointer;
+  padding: 5px;
+  /* padding: 5px 5px 0px 5px; */
+  margin-left: auto;
+  margin-right: auto;
+  & > span {
+    color: white;
+    font-size: ${(props) => props.theme.fontSizes.sm};
+    margin-left: 10px;
+  }
+  transition: 0.1s ease-in-out;
+  :hover {
+    background-color: ${(props) => props.theme.color.gray};
+  }
+`;
+
+const Buttons = styled.div`
+  z-index: 5;
+  justify-content: space-evenly;
 `;
 
 export default LikeShare;

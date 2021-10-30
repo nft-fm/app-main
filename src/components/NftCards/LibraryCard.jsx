@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from "react";
+import ReactToolTip from "react-tooltip";
 import styled from "styled-components";
+import { ReactComponent as Exclusive } from "../../assets/img/Badges/exclusive.svg";
+import { ReactComponent as Founder } from "../../assets/img/Badges/founder.svg";
+import { ReactComponent as Premium } from "../../assets/img/Badges/premium.svg";
+import { ReactComponent as Prerelease } from "../../assets/img/Badges/prerelease.svg";
 import { ReactComponent as IconCart } from "../../assets/img/icons/coins.svg";
 import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.svg";
 import { useAccountConsumer } from "../../contexts/Account";
 import { usePlaylistConsumer } from "../../contexts/Playlist";
+import LibraryModal from "../NftModals/LibraryModal";
 import ShareModal from "../SMShareModal/SMShareModal";
 import LikeShare from "./LikeShare";
 
-import LibraryModal from "../NftModals/LibraryModal";
-import { ReactComponent as Founder } from "../../assets/img/Badges/founder.svg";
-import { ReactComponent as Premium } from "../../assets/img/Badges/premium.svg";
-import { ReactComponent as Prerelease } from "../../assets/img/Badges/prerelease.svg";
-import { ReactComponent as Exclusive } from "../../assets/img/Badges/exclusive.svg";
 
-import ReactToolTip from "react-tooltip";
+
 const NftCard = (props) => {
   const { user } = useAccountConsumer();
   const { nft } = props;
@@ -28,9 +29,9 @@ const NftCard = (props) => {
   };
 
   useEffect(() => {
-    setLikeCount(props.nft.likeCount);
-    setLiked(props.nft.liked);
-  }, [props.nft, user]);
+    setLikeCount(nft.likeCount);
+    setLiked(nft.liked);
+  }, [nft, user]);
 
   return (
     <Container onClick={() => setIsModalOpen(!isModalOpen)}>

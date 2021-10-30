@@ -1,12 +1,11 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import CreatedNftModal from "../NftModals/CreatedNftModal";
+import { ReactComponent as IconBinance } from "../../assets/img/icons/binance-logo.svg";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
 import { ReactComponent as IconEth } from "../../assets/img/icons/ethereum.svg";
-import { ReactComponent as IconUsd } from "../../assets/img/icons/dollar.svg";
-import { ReactComponent as IconBinance } from "../../assets/img/icons/binance-logo.svg";
 import { useAccountConsumer } from "../../contexts/Account";
-import ShareModal from "../SMShareModal/CreatedShareModal";
+import CreatedNftModal from "../NftModals/CreatedNftModal";
 import LikeShare from "./LikeShare";
 
 const NftCard = (props) => {
@@ -46,12 +45,12 @@ const NftCard = (props) => {
   }, [props.nft, user]);
   return (
     <Container>
-      <ShareModal
+      {/* <ShareModal
         open={isShareOpen}
         hide={() => setIsShareOpen(!isShareOpen)}
         updateShareCount={() => setShareCount({ count: shareCount.count + 1 })}
         nft={nft}
-      />
+      /> */}
       <CreatedNftModal
         open={isOpen}
         hide={hide}
@@ -279,6 +278,38 @@ const Artist = styled.span`
   text-align: center;
   color: ${(props) => props.theme.gray};
   margin-bottom: 12px;
+`;
+
+const ButtonHolder = styled.div`
+  width: 50%;
+  background-color: ${(props) => props.theme.color.box};
+  border-radius: ${(props) => props.theme.borderRadius}px;
+  border: 1px solid ${(props) => props.theme.color.boxBorder};
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  cursor: pointer;
+  padding: 5px;
+  /* padding: 5px 5px 0px 5px; */
+  margin-left: auto;
+  margin-right: auto;
+  & > span {
+    color: white;
+    font-size: ${(props) => props.theme.fontSizes.sm};
+    margin-left: 10px;
+  }
+  transition: 0.1s ease-in-out;
+  :hover {
+    background-color: ${(props) => props.theme.color.gray};
+  }
+`;
+
+const Buttons = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 250px;
 `;
 
 export default NftCard;

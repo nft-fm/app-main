@@ -20,6 +20,14 @@ const {
 const { listenForMintEth, listenForMintBsc } = require("../web3/mint-listener");
 const { trackNftPurchase, trackNftView } = require("../modules/mixpanel");
 
+router.get("/test-get-all", async (req, res) => {
+  NftType.find({ isMinted: true })
+    .then(r => res.json(r.map(({ nftId, imageUrl }) => {
+      return { nftId, imageUrl }
+    })))
+    .catch(() => res.status(500).send("Server Error"))
+})
+
 // const findLikes = (nfts, account) => {
 //   for (let i = 0; i < nfts.length; i++) {
 //     const likes = nfts[i]._doc.likes;
@@ -152,7 +160,7 @@ router.post("/get-user-nfts", async (req, res) => {
       res.send("no nfts!");
       return;
     }
-    for (let nft of req.body.nfts) {
+    for (nft of req.body.nfts) {
       if (nft.quantity > 1) {
         for (let i = 0; i < nft.quantity; i++) {
           ids.push(nft.nft);
@@ -162,7 +170,7 @@ router.post("/get-user-nfts", async (req, res) => {
       }
     }
     const gottenNfts = [];
-    for (let id of ids) {
+    for (id of ids) {
       console.log("here", id);
       const getNft = await NftType.findOne(
         {
@@ -469,6 +477,7 @@ router.post("/getNftsWithParams", async (req, res) => {
       5: { likeCount: -1 }
     };
     const query = { $regex: req.body.search, $options: "i" };
+
     let nftTypes = await NftType.find({
       isDraft: false,
       isMinted: true,

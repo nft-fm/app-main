@@ -48,8 +48,8 @@ const GetEmailModal = () => {
       <Modal>
           <X onClick={() => setOpen(false)}/>
         {!submitted && <Half>
-          Please add your email for an<br/>
-          opportunity for a <span style={{color: "#20A4FC", fontWeight: "600"}}>free NFT!</span>
+          Please add your email<br/>
+          to earn a <span style={{color: "#20A4FC", fontWeight: "600"}}>free bonus NFT!</span>
         </Half>}
         <Half>
           <form onSubmit={(e) => submitEmail(e)}>

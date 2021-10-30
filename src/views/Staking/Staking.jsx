@@ -76,7 +76,7 @@ const Staking = () => {
 
   return (
     <BaseView>
-      <StakingHeader>Fanfare Staking</StakingHeader>
+        <StyledTitle>FANFARE STAKING</StyledTitle> <ContainerOutline />
       {!isBsc || !account ? (
         <UseBscSorry />
       ) : (
@@ -160,6 +160,30 @@ const Staking = () => {
     </BaseView>
   );
 };
+
+const ContainerOutline = styled.div`
+  /* border-radius: 24px 24px 0 0; */
+  border-top: 6px solid #383838;
+  /* border-bottom: none; */
+  height: 40px;
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+
+  @media only screen and (max-width: 776px) {
+    width: 100%;
+  }
+`;
+
+const StyledTitle = styled.div`
+  font-family: "Compita";
+  font-size: ${(props) => props.theme.fontSizes.md};
+  margin: 60px 0 40px 0;
+  font-weight: 600;
+  /* letter-spacing: 3px; */
+  text-align: center;
+  color: white;
+`;
 
 const Loading = styled.img`
   width: 20px;

@@ -924,7 +924,7 @@ router.post("/checkRedeemable", async (req, res) => {
 router.post("/trackNftView", async (req, res) => {
   try {
     const payload = {
-      address: req.body.account,
+      address: req.body.address,
       nftId: req.body.nftId,
       artistAddress: req.body.artistAddress,
       artist: req.body.artist,

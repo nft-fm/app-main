@@ -1,18 +1,48 @@
-import React from "react";
+import React, {useEffect} from "react";
 import styled from "styled-components";
 import { useAccountConsumer } from "../../../contexts/Account";
 import { noMetaMaskWarning } from '../../../utils/connectWallet';
 import isMobile from "../../../utils/isMobile";
 import ChainSelector from "./ChainSelector";
+import IconMetamask from "../../../assets/img/icons/metamask_icon.png";
+import Cookies from 'universal-cookie'
+
+
 // https://stackoverflow.com/questions/21741841/detecting-ios-android-operating-system
 
 
 
 const AccountButton = (props) => {
   const { account, connect } = useAccountConsumer();
+  const cookies = new Cookies()
+  // const [onPresentInstallMetamask] = useModal(<InstallMetamaskModal />);
+  const handleUnlockClick = () => {
+    if (window.ethereum) {
+      connect("injected")
+      cookies.set('connected', true)
+    }
+    else
+      openMetamaskAlert();
+  }
 
-  const handleUnlockClick = () =>
-    window.ethereum ? connect("injected") : noMetaMaskWarning(account);
+  const openMetamaskAlert = async () => {
+    if (account) return;
+
+    const { title, link } = getMetaMaskLink();
+    swal
+      .fire({
+        title: "You need to install metamask.",
+        confirmButtonText: title,
+        imageUrl: metamaskLogo,
+        imageWidth: 100,
+      })
+      .then(({ isConfirmed }) => {
+        if (isConfirmed) {
+          window.open(link, "_blank").focus();
+        }
+      });
+  };
+
 
   // if (account) {
   //   ReactGA.set({
@@ -25,10 +55,17 @@ const AccountButton = (props) => {
   return (
     <>
       <ChainSelector />
-      <StyledAccountButton>
-        {!account ? (
-          <Button onClick={handleUnlockClick}>Connect</Button>
-        ) : isMobile() ? (
+      {!account ? (
+        <ConnectButton onClick={handleUnlockClick}>
+          <LogoContainer>
+            <MetaMask src={IconMetamask} />
+            <Spacer />
+            <MetaMask src={"https://trustwallet.com/assets/images/media/assets/trust_platform.svg"} />
+          </LogoContainer>
+          <ButtonText>Connect Wallet</ButtonText>
+        </ConnectButton>
+      ) : isMobile() ? (
+        <StyledAccountButton>
           <StyledA
             href={`https://etherscan.io/address/${account}`}
             target={`_blank`}
@@ -37,7 +74,9 @@ const AccountButton = (props) => {
             <div>{account.substring(0, 6)}</div>
             <div>{"..." + account.substring(account.length - 4)}</div>
           </StyledA>
-        ) : (
+        </StyledAccountButton>
+      ) : (
+        <StyledAccountButton>
           <StyledA
             href={`https://etherscan.io/address/${account}`}
             target={`_blank`}
@@ -46,11 +85,76 @@ const AccountButton = (props) => {
               "..." +
               account.substring(account.length - 4)}
           </StyledA>
-        )}
-      </StyledAccountButton>
+        </StyledAccountButton>
+      )}
     </>
   );
 };
+
+
+const Spacer = styled.div`
+width: 10px;
+`
+
+const LogoContainer = styled.div`
+display: flex;
+flex-direction: row;
+margin-bottom: 5px;
+`
+
+const ButtonText = styled.span`
+  font-family: "Compita";
+  font-size: ${(props) => props.theme.fontSizes.xs};
+  font-weight: 600;
+  color: white;
+`;
+
+const MetaMask = styled.img`
+  width: 18px;
+  height: auto;
+`;
+
+const ConnectButton = styled.button`
+  padding: 5px 10px 5px 10px;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  border: 1px solid ${(props) => props.theme.color.red};
+  border-radius: 10px;
+  background-color: ${(props) => props.theme.color.box};
+  margin-left: 10px;
+  &:hover {
+    background-color: ${(props) => props.theme.color.boxBorder};
+    border: 1px solid #383838;
+  }
+`;
+
+const GetConnected = styled.div`
+  width: 300px;
+  height: 150px;
+  color: white;
+  border: 1px solid ${(props) => props.theme.color.boxBorder};
+  background-color: ${(props) => props.theme.color.box};
+  border-radius: ${(props) => props.theme.borderRadius}px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 300px;
+`;
+
+const IsConnected = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  position: absolute;
+  z-index: 11;
+`;
 
 const Button = styled.button`
   border: none;

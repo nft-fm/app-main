@@ -127,10 +127,18 @@ const BuyNftModal = (props) => {
                     }
                   });
                 } else {
+                  alert(JSON.stringify(nft))
+
                   Swal.fire({
-                    title: "Succesful purchase!",
+                    title: "Successful purchase!",
                     html: `<div>View in your library (can take a few minutes to appear)<div>`,
-                  });
+                    confirmButtonText: "Share My NFT!",
+                  }).then(res => {
+                    if (res.isConfirmed){
+                      let text = `I’m proud to directly support up-and-coming artists by buying their NFTs on Fanfare! Check out this song by ${nft.artist} at ${window.location}`
+                      window.open(`https://twitter.com/intent/tweet?text=${text}`);
+                    }
+                  })
                 }
               }
             }
@@ -148,7 +156,7 @@ const BuyNftModal = (props) => {
       } else {
         setIsLoading(false);
         swal.fire({
-          title: `Not Enough ETH`,
+          title: `Not Enough ETH/BNB`,
           text: `in wallet address: ...${account.substring(
             account.length - 4
           )}`,
@@ -779,7 +787,7 @@ const OpaqueFilter = styled.div`
   height: 100vh;
   background-color: rgba(255, 255, 255, 0.1);
   backdrop-filter: brightness(20%) blur(2px);
-  z-index: 5000;
+  z-index: 500;
   transform: translateZ(10px);
 `;
 
@@ -792,7 +800,7 @@ const Container = styled.div`
   top: 50%;
   transform: translate(-50%, -50%);
   color: #666;
-  z-index: 5005;
+  z-index: 505;
   @media only screen and (max-width: 776px) {
     left: 0px;
     top: 0px;

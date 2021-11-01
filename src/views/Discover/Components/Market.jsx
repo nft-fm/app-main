@@ -77,10 +77,12 @@ const Listen = () => {
         setPage(1);
         setHasMore(res.data.hasMore);
       });
-  }, [search, sort, account])
+  }, [search, sort, account]);
 
   // handles login and sort
-  useEffect(handleSort, [sort, account, handleSort]);
+  useEffect(() => {
+    handleSort();
+  }, [sort, account, handleSort]);
 
   const handleSearch = async (e, pageIncrease, searchParam, sortParam) => {
     e.preventDefault();
@@ -166,7 +168,7 @@ const Listen = () => {
         isMenuOpen={menuOpen}
         optionCount={menuOptions.length}
       >
-        <SelectedSpan onClick={() => setMenuOpen(!menuOpen)} >
+        <SelectedSpan onClick={() => setMenuOpen(!menuOpen)}>
           {/* {selected} */}
           Sort by <DownArrow />
         </SelectedSpan>
@@ -182,16 +184,16 @@ const Listen = () => {
           next={() => getNftsWithParams(1, search, sort)}
           hasMore={hasMore}
         > */}
-          {allNfts.map((item, index) => (
-            <NftCard nft={item} />
-          ))}
-          {!hasMore && (
-            <>
-              <FillerCard />
-              <FillerCard />
-              <FillerCard />
-            </>
-          )}
+        {allNfts.map((item, index) => (
+          <NftCard nft={item} />
+        ))}
+        {!hasMore && (
+          <>
+            <FillerCard />
+            <FillerCard />
+            <FillerCard />
+          </>
+        )}
         {/* </InfiniteScroll> */}
       </NftScroll>
     </LaunchContainer>
@@ -307,7 +309,6 @@ const NftScroll = styled.div`
     align-items: center;
     margin-top: 24px;
   }
-  
 `;
 
 const LaunchContainer = styled.div`

@@ -30,6 +30,8 @@ import {
 } from "../../utils/swalImages";
 import Ticker from "../../components/Ticker";
 import { ReactComponent as IconBinance } from "../../assets/img/icons/binance-logo.svg";
+import LikeShare from "../NftCards/LikeShare";
+
 
 const BuyNftModal = (props) => {
   const {
@@ -42,6 +44,9 @@ const BuyNftModal = (props) => {
     likeCount,
     setLikeCount,
     setIsShareOpen,
+    setShareCount,
+    shareCount,
+    likesLoading
   } = props;
 
   const [isLoading, setIsLoading] = useState(false);
@@ -134,7 +139,7 @@ const BuyNftModal = (props) => {
                     html: `<div>View in your library (can take a few minutes to appear)<div>`,
                     confirmButtonText: "Share My NFT!",
                   }).then(res => {
-                    if (res.isConfirmed){
+                    if (res.isConfirmed) {
                       let text = `I’m proud to directly support up-and-coming artists by buying their NFTs on Fanfare! Check out this song by ${nft.artist} at ${window.location}`
                       window.open(`https://twitter.com/intent/tweet?text=${text}`);
                     }
@@ -369,30 +374,16 @@ const BuyNftModal = (props) => {
                 </span>
               </Info>
               <Actions>
-                <IconArea onClick={() => share()}>
-                  <ShareButton
-                    onClick={() => share()}
-                    aria-label="share button"
-                  >
-                    <Share onClick={() => share()} />
-                  </ShareButton>
-                  {/* {nft.shareCount}  */}
-                  Share
-                </IconArea>
-                <IconArea>
-                  <LikeButton
-                    onClick={() => like()}
-                    aria-pressed={liked}
-                    aria-label="like button"
-                  >
-                    {liked ? (
-                      <LikedHeart aria-hidden="true" />
-                    ) : (
-                      <Heart aria-hidden="true" />
-                    )}
-                  </LikeButton>
-                  {likeCount}
-                </IconArea>
+                <LikeShare
+                  nft={nft}
+                  liked={liked}
+                  setLiked={setLiked}
+                  likeCount={likeCount}
+                  setLikeCount={setLikeCount}
+                  updateShareCount={() => setShareCount({ count: shareCount.count + 1 })}
+                  shareCount={shareCount}
+                  isLoading={likesLoading}
+                />
               </Actions>
             </TrackDetailsHolder>
             <DescriptionHolder>

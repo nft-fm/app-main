@@ -115,9 +115,9 @@ const NftCard = (props) => {
   }, [props.nft, user]);
 
   useEffect(() => {
-      getSnnipetAWS(props.nft);
-      //setPartialSong(partialSong);
-      //getNSeconds(props.nft);
+    getSnnipetAWS(props.nft);
+    //setPartialSong(partialSong);
+    //getNSeconds(props.nft);
   }, []);
 
   if (!nft) {
@@ -127,13 +127,7 @@ const NftCard = (props) => {
 
   return (
     <>
-      <ShareModal
-        onClick={(e) => e.stopPropagation()}
-        open={isShareOpen}
-        hide={() => setIsShareOpen(!isShareOpen)}
-        updateShareCount={() => setShareCount({ count: shareCount.count + 1 })}
-        nft={nft}
-      />
+
       <NftModalHook
         open={isModalOpen}
         hide={hide}
@@ -144,7 +138,9 @@ const NftCard = (props) => {
         setLiked={setLiked}
         likeCount={likeCount}
         setLikeCount={setLikeCount}
-        setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
+        setShareCount={() => setShareCount({ count: shareCount.count + 1 })}
+        shareCount={shareCount}
+        likesLoading={likesLoading}
       />
       <Container
         onClick={() => setIsModalOpen(!isModalOpen)}
@@ -285,7 +281,7 @@ const NftCard = (props) => {
             setLiked={setLiked}
             likeCount={likeCount}
             setLikeCount={setLikeCount}
-            setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
+            updateShareCount={() => setShareCount({ count: shareCount.count + 1 })}
             shareCount={shareCount}
             isLoading={likesLoading}
           />

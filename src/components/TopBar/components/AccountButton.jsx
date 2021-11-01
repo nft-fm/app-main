@@ -6,11 +6,31 @@ import isMobile from "../../../utils/isMobile";
 import ChainSelector from "./ChainSelector";
 import IconMetamask from "../../../assets/img/icons/metamask_icon.png";
 import Cookies from 'universal-cookie'
+import swal from 'sweetalert2'
+import metamaskLogo from "../../../assets/img/metamask_fox.svg";
 
 
 // https://stackoverflow.com/questions/21741841/detecting-ios-android-operating-system
 
-
+function getMetaMaskLink() {
+  var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+  if (/android/i.test(userAgent)) {
+    return {
+      title: "Open in App Store",
+      link: "https://metamask.app.link/bxwkE8oF99",
+    };
+  }
+  if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+    return {
+      title: "Open in App Store",
+      link: "https://metamask.app.link/skAH3BaF99",
+    };
+  }
+  return {
+    title: "Open Instructions",
+    link: "https://metamask.io/download.html",
+  };
+}
 
 const AccountButton = (props) => {
   const { account, connect } = useAccountConsumer();

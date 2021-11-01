@@ -15,6 +15,7 @@ import { useAccountConsumer } from "../../contexts/Account";
 import NftModalHook from "../NftModalHook/NftModalHook";
 import ShareModal from "../SMShareModal/SMShareModal";
 import LikeShare from "./LikeShare";
+import PlaySongSnippet from "../NftModalHook/Components/SimplifiedPlay";
 
 
 const NftCard = (props) => {
@@ -114,12 +115,10 @@ const NftCard = (props) => {
   }, [props.nft, user]);
 
   useEffect(() => {
-    if (isModalOpen && !partialSong) {
       getSnnipetAWS(props.nft);
       //setPartialSong(partialSong);
       //getNSeconds(props.nft);
-    }
-  }, [isModalOpen]);
+  }, []);
 
   if (!nft) {
     return null;
@@ -179,6 +178,9 @@ const NftCard = (props) => {
           alt="image"
           onLoad={() => setImageLoaded(true)}
         />
+        <PreviewButton onClick={(e) => e.stopPropagation()}>
+          {partialSong && <PlaySongSnippet partialSong={partialSong} />}
+        </PreviewButton>
         {nft.isRedeemable && (
           <RedeemButtonBackground onClick={() => setIsModalOpen(!isModalOpen)}>
             <RedeemButton>
@@ -292,6 +294,14 @@ const NftCard = (props) => {
     </>
   );
 };
+
+const PreviewButton = styled.div`
+position: absolute;
+top: 380px;
+right: 10px;
+display: flex;
+justify-content: flex-end;
+`
 
 const Text = styled.div`
 display: flex;

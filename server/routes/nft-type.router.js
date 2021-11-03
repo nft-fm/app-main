@@ -19,6 +19,8 @@ const {
 } = require("../web3/server-utils");
 const { listenForMintEth, listenForMintBsc } = require("../web3/mint-listener");
 const { trackNftPurchase, trackNftView } = require("../modules/mixpanel");
+const { listenForBuyBsc, listenForBuyEth } = require("../web3/buy-listener")
+
 
 // const findLikes = (nfts, account) => {
 //   for (let i = 0; i < nfts.length; i++) {
@@ -822,6 +824,16 @@ router.post("/getSongList", async (req, res) => {
     // an error occurred
     else res.status(200).send(data); // successful response
   });
+});
+
+router.post("/purchase", async (req, res) => {
+  try {
+    listenForBuyEth();
+    listenForBuyBsc();
+    res.send("ok");
+  } catch (err) {
+    res.status(500).send(err);
+  }
 });
 
 // router.post("/purchase", async (req, res) => {

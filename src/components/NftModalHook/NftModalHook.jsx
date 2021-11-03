@@ -93,6 +93,7 @@ const BuyNftModal = (props) => {
           showConfirmButton: false,
           timer: 3000,
         }).then(async () => {
+          axios.post("/api/nft/purchase");
           await buyNFT(
             {
               nftID: id,

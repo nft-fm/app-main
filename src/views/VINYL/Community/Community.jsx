@@ -3,17 +3,17 @@ import React, { useCallback, useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import styled from "styled-components";
 import swal from "sweetalert2";
-import { useWallet } from "use-wallet";
-import { require, getVinylBalance } from "../../../web3/utils";
 import { BaseView } from "../../../components/Page/BaseView";
-// import RulesModal from "./RulesModal";
-import Suggestion from "./Suggestion";
+import { useAccountConsumer } from "../../../contexts/Account";
+import { errorIcon, imageHeight, imageWidth } from "../../../utils/swalImages";
+import { getVinylBalance, require } from "../../../web3/utils";
 import GovernancePolls from "./GovernancePolls";
 import { Socials } from "./Socials";
-import { errorIcon, imageWidth, imageHeight } from "../../../utils/swalImages";
+// import RulesModal from "./RulesModal";
+import Suggestion from "./Suggestion";
 
 const Community = () => {
-  const { account, connect } = useWallet();
+  const { account, connect } = useAccountConsumer();
   const [suggestions, setSuggestions] = useState([]);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth > 991);
 

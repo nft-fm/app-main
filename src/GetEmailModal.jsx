@@ -48,8 +48,8 @@ const GetEmailModal = () => {
       <Modal>
           <X onClick={() => setOpen(false)}/>
         {!submitted && <Half>
-          Please add your email for an<br/>
-          opportunity for a <span style={{color: "#20A4FC", fontWeight: "600"}}>free NFT!</span>
+          Please add your email<br/>
+          to earn a <span style={{color: "#20A4FC", fontWeight: "600"}}>free bonus NFT!</span>
         </Half>}
         <Half>
           <form onSubmit={(e) => submitEmail(e)}>
@@ -190,14 +190,14 @@ text-align: center;
 /* height: 20px; */
 /* width: 200px; */
 padding: 16px;
-top: 80px;
-right: 40px;
+top: 130px;
+right: 20px;
 border: 1px solid  ${(props) => props.theme.color.boxBorder};
 background: ${props => props.theme.color.box};
 color: white;
 /* border-radius: 0 0 0 20px; */
 border-radius: 2px;
-z-index: 10000000;
+z-index: 100;
 @media only screen and (max-width: 776px) {
   margin-top: 150px;
 }

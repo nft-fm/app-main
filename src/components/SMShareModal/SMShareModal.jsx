@@ -18,7 +18,6 @@ const SMShareModal = ({
   updateShareCount,
 }) => {
 
-  if (!open) return null;
   const url = `https://beta.fanfare.fm/market/${nft.chain}/${nft.nftId}`;
   const message = `${nft.title} by ${nft.artist}\nAvailable at: `;
 
@@ -34,38 +33,25 @@ const SMShareModal = ({
   }
 
   return (
-    <OpaqueFilter onClick={(e) => hideModal(e)}>
-      <Container onClick={e => e.stopPropagation()}>
-        <StyledModal>
-          <X onClick={(e) => hide(e)} />
-          <span>
-            Share {nft.title} by {nft.artist}!
-          </span>
-          <Buttons>
-            <TwitterShareButton
-              title={message}
-              url={url}
-              hashtags={["NFTFM", "NFTs", "NFTCommunity", "NFTart", "nftmusic"]}
-            >
-              <ButtonHolder onClick={() => newShare()}>
-                <TwitterIcon size={50} borderRadius={"10px"} />
-                <span>Twitter</span>
-              </ButtonHolder>
-            </TwitterShareButton>
-            <FacebookShareButton
-              quote={message}
-              url={url}
-              // hashtags={["NFTFM", "NFTs", "NFTCommunity", "NFTart", "nftmusic"]}
-            >
-              <ButtonHolder onClick={() => newShare()}>
-                <FacebookIcon size={50} borderRadius={"10px"} />
-                <span>Facebook</span>
-              </ButtonHolder>
-            </FacebookShareButton>
-          </Buttons>
-        </StyledModal>
-      </Container>
-    </OpaqueFilter>
+    <Buttons>
+      <TwitterShareButton
+        title={message}
+        url={url}
+        hashtags={["NFTFM", "NFTs", "NFTCommunity", "NFTart", "nftmusic"]}
+      >
+        <ButtonHolder onClick={() => newShare()}>
+          <TwitterIcon size={50} borderRadius={"10px"} />
+        </ButtonHolder>
+      </TwitterShareButton>
+      <FacebookShareButton
+        quote={message}
+        url={url}
+      >
+        <ButtonHolder onClick={() => newShare()}>
+          <FacebookIcon size={50} borderRadius={"10px"} />
+        </ButtonHolder>
+      </FacebookShareButton>
+    </Buttons>
   );
 };
 
@@ -96,9 +82,8 @@ const ButtonHolder = styled.div`
 const Buttons = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-evenly;
-  height: 250px;
 `;
 
 const X = styled(IconX)`

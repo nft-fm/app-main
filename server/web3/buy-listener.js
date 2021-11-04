@@ -58,15 +58,15 @@ const listenForBuyEth = async () => {
     ).catch((err) => {
       console.log(err);
     });
-    if (process.env.PRODUCTION) {
       trackNftPurchase({
         address: event[0].args.account,
         artistAddress: updateNFT.address,
         nftId: updateNFT._id,
         nftPrice: updateNFT.price,
         chain: "ETH",
+        title: updateNFT.title,
+        artist: updateNFT.artist,
       });
-    }
   });
 };
 
@@ -117,7 +117,6 @@ const listenForBuyBsc = async () => {
     ).catch((err) => {
       console.log(err);
     });
-    if (process.env.PRODUCTION) {
       trackNftPurchase({
         address: event[0].args.account,
         artistAddress: updateNFT.address,
@@ -125,7 +124,6 @@ const listenForBuyBsc = async () => {
         nftPrice: updateNFT.price,
         chain: "BSC",
       });
-    }
   });
 };
 

@@ -5,8 +5,7 @@ dotenv.config();
 
 const sendSignRequest = async (data) => {
 	let templates = (await axios.get(`https://api.eversign.com/api/document?access_key=${process.env.EVERSIGN_ACCESS_KEY}&business_id=${process.env.EVERSIGN_BUSINESS_ID}&type=templates`)).data
-	console.log(templates);
-	
+
 	let doc = await axios.post(`
 		https://api.eversign.com/api/document?access_key=${process.env.EVERSIGN_ACCESS_KEY}&business_id=${process.env.EVERSIGN_BUSINESS_ID} `, {
 			"sandbox": 0,
@@ -19,7 +18,7 @@ const sendSignRequest = async (data) => {
 			"expires": "",
 			"embedded_signing_enabled": 0,
 			"signers": [{
-				"role": "client",
+				"role": "Artist",
 				"name": data.name,
 				"email": data.email,
 				"pin": "",
@@ -27,7 +26,7 @@ const sendSignRequest = async (data) => {
 				"deliver_email": "",
 				"language": "en"
 			}, {
-				"role": "Fanfare",
+				"role": "Company",
 				"name": "Jackson Felty",
 				"email": "jackson@nftfm.io",
 				"pin": "",
@@ -42,8 +41,6 @@ const sendSignRequest = async (data) => {
 				"language": "en"
 			}] // people who are CCed with the finished document
 	})
-
-	// console.log(doc);
 	return 
 }
 

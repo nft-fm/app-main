@@ -16,9 +16,12 @@ const {
   findLikes,
   addArtistToStake,
   getStakersForArtist,
+  getAllNftsFromEthContract,
+  getAllNftsFromBscContract,
 } = require("../web3/server-utils");
 const { listenForMintEth, listenForMintBsc } = require("../web3/mint-listener");
-const { trackNftPurchase, trackNftView } = require("../modules/mixpanel");
+const { trackNftView } = require("../modules/mixpanel");
+const { listenForBuyBsc, listenForBuyEth } = require("../web3/buy-listener");
 
 // const findLikes = (nfts, account) => {
 //   for (let i = 0; i < nfts.length; i++) {
@@ -65,7 +68,7 @@ router.post("/artist-nfts", async (req, res) => {
 router.post("/artist-stakers", async (req, res) => {
   try {
     const stakers = await getStakersForArtist(req.body.address);
-    const users = await User.find({ address : { $in: stakers }})
+    const users = await User.find({ address: { $in: stakers } });
     res.send(users);
   } catch (err) {
     res.status(500).send(err);
@@ -469,7 +472,7 @@ router.post("/getNftsWithParams", async (req, res) => {
       } else if (req.body.sort === 3) {
         return { timestamp: 1 };
       } else if (req.body.sort === 4) {
-        return { shareCount: 1 }
+        return { shareCount: 1 };
       }
     };
     let nftTypes = await NftType.find({
@@ -824,6 +827,16 @@ router.post("/getSongList", async (req, res) => {
   });
 });
 
+router.post("/purchase", async (req, res) => {
+  try {
+    listenForBuyEth();
+    listenForBuyBsc();
+    res.send("ok");
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
 // router.post("/purchase", async (req, res) => {
 //   try {
 //     console.log("purchasing!", req.body);
@@ -939,9 +952,7 @@ router.post("/trackNftView", async (req, res) => {
       ip: req.ip,
     };
     console.log("track nftView", payload);
-    if (process.env.PRODUCTION) {
       trackNftView(payload);
-    }
     res.status(200).send("success");
   } catch (err) {
     res.status(500).send(err);
@@ -998,5 +1009,40 @@ router.post("/updatePrice", async (req, res) => {
     res.status(500).send(err);
   }
 });
+
+//this function will compare the numSold of the db nfts to the
+//contract and update the db to reflect the sold ammount in the contract
+const compareAndUpdateDBtoContract = async () => {
+  const allEthNfts = await NftType.find({ isMinted: true, chain: "ETH" }).sort({
+    nftId: -1,
+  });
+  getAllNftsFromEthContract(allEthNfts, async (comparedNfts) => {
+    for (let nftSet of comparedNfts) {
+      if (nftSet.nftFromDB.numSold != nftSet.nftFromContract.sold) {
+        console.log(nftSet);
+        await NftType.findOneAndUpdate(
+          { nftId: nftSet.nftFromDB.nftId, chain: "ETH" },
+          { numSold: nftSet.nftFromContract.sold }
+        );
+      }
+    }
+  });
+
+  const allBscNfts = await NftType.find({ isMinted: true, chain: "BSC" }).sort({
+    nftId: -1,
+  });
+  getAllNftsFromBscContract(allBscNfts, async (comparedNfts) => {
+    for (let nftSet of comparedNfts) {
+      if (nftSet.nftFromDB.numSold != nftSet.nftFromContract.sold) {
+        console.log(nftSet);
+        await NftType.findOneAndUpdate(
+          { nftId: nftSet.nftFromDB.nftId, chain: "BSC" },
+          { numSold: nftSet.nftFromContract.sold }
+        );
+      }
+    }
+  });
+};
+// compareAndUpdateDBtoContract();
 
 module.exports = router;

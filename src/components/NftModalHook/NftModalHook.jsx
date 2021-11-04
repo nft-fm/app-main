@@ -98,6 +98,7 @@ const BuyNftModal = (props) => {
           showConfirmButton: false,
           timer: 3000,
         }).then(async () => {
+          axios.post("/api/nft/purchase");
           await buyNFT(
             {
               nftID: id,
@@ -451,8 +452,8 @@ const BuyNftModal = (props) => {
                 <ButtonText>Sold Out!</ButtonText>
               </BuyButton>
             )}
-            {calcEligibility() && <Promotion>💚 This NFT is eligible for an Airdrop Bonus of {calcBonus().toLocaleString()} VINYL! 💚</Promotion>}
-            {calcEligibility() && <MobilePromotion>This NFT is eligible for an Airdrop Bonus of {calcBonus().toLocaleString()} VINYL! 💚</MobilePromotion>}
+            {/* {calcEligibility() && <Promotion>💚 This NFT is eligible for an Airdrop Bonus of {calcBonus().toLocaleString()} VINYL! 💚</Promotion>}
+            {calcEligibility() && <MobilePromotion>This NFT is eligible for an Airdrop Bonus of {calcBonus().toLocaleString()} VINYL! 💚</MobilePromotion>} */}
           </RightSide>
         </StyledModal>
       </Container>
@@ -804,7 +805,7 @@ const RightSide = styled.div`
   flex-direction: column;
   align-items: center;
   width: calc(100% - 500px);
-  padding: 10px 30px;
+  padding: 10px 20px;
   @media only screen and (max-width: 776px) {
     width: 90vw;
     justify-content: space-evenly;

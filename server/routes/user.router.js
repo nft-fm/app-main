@@ -30,13 +30,9 @@ router.post("/get-account", async (req, res) => {
         isArtist: process.env.PRODUCTION ? false : true,
       });
       await user.save();
-      if (process.env.PRODUCTION) {
         trackNewUser({ address: req.body.address, ip: req.ip });
-      }
     }
-    if (process.env.PRODUCTION) {
       trackLogin({ address: req.body.address, ip: req.ip });
-    }
 
     //This overwrites the user's database nfts with the nfts attributed to the user in the smart contract
     //handles when user's buy/sell nfts off platform
@@ -388,7 +384,7 @@ const NodeMail = (name, email, music, account) => {
 
   var mail = {
     from: "Jackson Felty <jackson@nftfm.io>", //sender email
-    to: "jackson@nftfm.io, quinn@nftfm.io", // receiver email
+    to: "jackson@nftfm.io", // receiver email
     subject: "New Artist Application",
     html: message,
   };
@@ -406,7 +402,6 @@ router.post("/send-artist-form", async (req, res) => {
   try {
     const { name, email, account, musicLinks } = req.body;
     NodeMail(name, email, musicLinks, account); //sends Jackson and Quinn an email alerting them, can remove once new docusigner is found
-
     const sender = utils.verifyMessage(
       JSON.stringify({
         name: name,
@@ -416,7 +411,6 @@ router.post("/send-artist-form", async (req, res) => {
       }),
       req.body.auth
     );
-
     if (sender !== account) return res.status(403).send("Credential error");
 
     let alreadyApplied = await Application.findOne({
@@ -432,7 +426,6 @@ router.post("/send-artist-form", async (req, res) => {
       musicLinks,
     });
     await application.save();
-
     if (name && email) {
       sendSignRequest(req.body);
       return res.sendStatus(200);

@@ -492,8 +492,14 @@ router.post("/getNftsWithParams", async (req, res) => {
       .sort(getSortParam())
       .skip(req.body.page * req.body.limit)
       .limit(req.body.limit);
+    let nftList = findLikes(nftTypes, req.body.address)
+    if (res.body.sort === 5) {
+      nftList = nftList.sort((a, b) => {
+        return a.likeCount - b.likeCount
+      })
+    }
     res.send({
-      nfts: findLikes(nftTypes, req.body.address),
+      nfts: nftList,
       hasMore: nftTypes.length === req.body.limit,
     });
   } catch (error) {
@@ -954,7 +960,7 @@ router.post("/trackNftView", async (req, res) => {
       ip: req.ip,
     };
     console.log("track nftView", payload);
-      trackNftView(payload);
+    trackNftView(payload);
     res.status(200).send("success");
   } catch (err) {
     res.status(500).send(err);
@@ -995,7 +1001,7 @@ router.get("/testing", async (req, res) => {
         });
       }
     });
-  } catch (err) {}
+  } catch (err) { }
 });
 
 router.post("/updatePrice", async (req, res) => {

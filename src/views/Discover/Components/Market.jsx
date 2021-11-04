@@ -15,27 +15,27 @@ const Listen = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [selected, setSelected] = useState("Date: High - Low");
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useState(2);
+  const [sort, setSort] = useState(4);
   const limit = 200;
 
-  const getNftsWithParams = async (pageIncrease, searchParam, sortParam) => {
-    console.log("here", hasMore);
-    if (hasMore) {
-      await axios
-        .post("/api/nft-type/getNftsWithParams", {
-          address: account,
-          limit,
-          page: page,
-          search: searchParam,
-          sort: sortParam,
-        })
-        .then((res) => {
-          setAllNfts([...allNfts, ...res.data.nfts]);
-          setPage(page + pageIncrease);
-          setHasMore(res.data.hasMore);
-        });
-    }
-  };
+  // const getNftsWithParams = async (pageIncrease, searchParam, sortParam) => {
+  //   console.log("here", hasMore);
+  //   if (hasMore) {
+  //     await axios
+  //       .post("/api/nft-type/getNftsWithParams", {
+  //         address: account,
+  //         limit,
+  //         page: page,
+  //         search: searchParam,
+  //         sort: sortParam,
+  //       })
+  //       .then((res) => {
+  //         setAllNfts([...allNfts, ...res.data.nfts]);
+  //         setPage(page + pageIncrease);
+  //         setHasMore(res.data.hasMore);
+  //       });
+  //   }
+  // };
 
   useEffect(() => {
     const fetchWithNoSearch = async () => {
@@ -53,6 +53,7 @@ const Listen = () => {
           })
           .then((res) => {
             setAllNfts(res.data.nfts);
+
             setPage(page + 1);
             setHasMore(res.data.hasMore);
           });

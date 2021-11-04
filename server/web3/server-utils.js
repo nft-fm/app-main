@@ -16,6 +16,10 @@ const {
   MAIN_BSC_NFTToken,
   TEST_StakingAddress,
   MAIN_StakingAddress,
+  MAIN_FlatPriceSale,
+  TEST_FlatPriceSale,
+  MAIN_BSC_FlatPriceSale,
+  TEST_BSC_FlatPriceSale,
 } = require("./constants");
 const FlatPriceSaleABI = require("./abi/FlatPriceSale.abi");
 const NFTTokenABI = require("./abi/NFTToken.abi");
@@ -96,7 +100,6 @@ const getUserNftsETH = async (account) => {
   return nftIdsAndQuantities;
   // return { nftIds, numNfts };
 };
-
 
 const getUserNftsBSC = async (account) => {
   const PROVIDER_URL = process.env.REACT_APP_IS_MAINNET
@@ -210,6 +213,41 @@ const getStakersForArtist = async (address, callback) => {
   return newVariable;
 };
 
+const getAllNftsFromEthContract = async (nftsFromDB, callback) => {
+  const PROVIDER_URL = getDefaultProvider(
+    process.env.REACT_APP_IS_MAINNET
+      ? process.env.MAIN_PROVIDER_URL
+      : process.env.RINKEBY_PROVIDER_URL
+  );
+  const FlatPriceSale = process.env.REACT_APP_IS_MAINNET
+    ? MAIN_FlatPriceSale
+    : TEST_FlatPriceSale;
+  const contract = new Contract(FlatPriceSale, FlatPriceSaleABI, PROVIDER_URL);
+  let nfts = [];
+  for (let nft of nftsFromDB) {
+    let r = await contract.sets(nft.nftId);
+    nfts.push({nftFromDB: nft, nftFromContract: r});
+  }
+  callback(nfts);
+};
+const getAllNftsFromBscContract = async (nftsFromDB, callback) => {
+  const PROVIDER_URL = getDefaultProvider(
+    process.env.REACT_APP_IS_MAINNET
+      ? process.env.BSC_PROVIDER_URL
+      : process.env.BSCTEST_PROVIDER_URL
+  );
+  const FlatPriceSale = process.env.REACT_APP_IS_MAINNET
+    ? MAIN_BSC_FlatPriceSale
+    : TEST_BSC_FlatPriceSale;
+  const contract = new Contract(FlatPriceSale, FlatPriceSaleABI, PROVIDER_URL);
+  let nfts = [];
+  for (let nft of nftsFromDB) {
+    let r = await contract.sets(nft.nftId);
+    nfts.push({nftFromDB: nft, nftFromContract: r});
+  }
+  callback(nfts);
+};
+
 module.exports = {
   sign,
   findLikes,
@@ -219,4 +257,6 @@ module.exports = {
   getVinylBalance,
   addArtistToStake,
   getStakersForArtist,
+  getAllNftsFromEthContract,
+  getAllNftsFromBscContract,
 };

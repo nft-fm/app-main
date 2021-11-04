@@ -15,7 +15,7 @@ const Listen = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [selected, setSelected] = useState("Date: High - Low");
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useState(4);
+  const [sort, setSort] = useState(5);
   const limit = 200;
 
   // const getNftsWithParams = async (pageIncrease, searchParam, sortParam) => {

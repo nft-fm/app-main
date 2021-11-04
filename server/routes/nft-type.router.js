@@ -493,9 +493,9 @@ router.post("/getNftsWithParams", async (req, res) => {
       .skip(req.body.page * req.body.limit)
       .limit(req.body.limit);
     let nftList = findLikes(nftTypes, req.body.address)
-    if (res.body.sort === 5) {
+    if (req.body.sort === 5) {
       nftList = nftList.sort((a, b) => {
-        return a.likeCount - b.likeCount
+        return b.likeCount - a.likeCount
       })
     }
     res.send({

@@ -291,6 +291,7 @@ const Side = styled.div`
 
 const IconArea = styled.a`
   margin: 0 8px;
+  margin-left: 5px;
   cursor: pointer;
   text-decoration: none;
   display: flex;

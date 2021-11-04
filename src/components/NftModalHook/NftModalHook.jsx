@@ -451,8 +451,8 @@ const BuyNftModal = (props) => {
                 <ButtonText>Sold Out!</ButtonText>
               </BuyButton>
             )}
-            {calcEligibility() && <Promotion>💚 This NFT is eligible for an Airdrop Bonus of {calcBonus().toLocaleString()} VINYL! 💚</Promotion>}
-            {calcEligibility() && <MobilePromotion>This NFT is eligible for an Airdrop Bonus of {calcBonus().toLocaleString()} VINYL! 💚</MobilePromotion>}
+            {/* {calcEligibility() && <Promotion>💚 This NFT is eligible for an Airdrop Bonus of {calcBonus().toLocaleString()} VINYL! 💚</Promotion>}
+            {calcEligibility() && <MobilePromotion>This NFT is eligible for an Airdrop Bonus of {calcBonus().toLocaleString()} VINYL! 💚</MobilePromotion>} */}
           </RightSide>
         </StyledModal>
       </Container>

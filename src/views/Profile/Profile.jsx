@@ -70,7 +70,7 @@ const Profile = () => {
   const openMintModal = async () => {
     try {
       if (user.username === "") {
-        swal.fire("You ned to set a username first!");
+        swal.fire("You need to set a username first!");
         return;
       }
 

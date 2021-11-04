@@ -30,13 +30,9 @@ router.post("/get-account", async (req, res) => {
         isArtist: process.env.PRODUCTION ? false : true,
       });
       await user.save();
-      if (process.env.PRODUCTION) {
         trackNewUser({ address: req.body.address, ip: req.ip });
-      }
     }
-    if (process.env.PRODUCTION) {
       trackLogin({ address: req.body.address, ip: req.ip });
-    }
 
     //This overwrites the user's database nfts with the nfts attributed to the user in the smart contract
     //handles when user's buy/sell nfts off platform

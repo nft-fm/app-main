@@ -20,7 +20,7 @@ const {
   getAllNftsFromBscContract,
 } = require("../web3/server-utils");
 const { listenForMintEth, listenForMintBsc } = require("../web3/mint-listener");
-const { trackNftPurchase, trackNftView } = require("../modules/mixpanel");
+const { trackNftView } = require("../modules/mixpanel");
 const { listenForBuyBsc, listenForBuyEth } = require("../web3/buy-listener");
 
 // const findLikes = (nfts, account) => {
@@ -952,9 +952,7 @@ router.post("/trackNftView", async (req, res) => {
       ip: req.ip,
     };
     console.log("track nftView", payload);
-    if (process.env.PRODUCTION) {
       trackNftView(payload);
-    }
     res.status(200).send("success");
   } catch (err) {
     res.status(500).send(err);

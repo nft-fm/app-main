@@ -40,6 +40,7 @@ const RegisterArtist = () => {
     signer
       .signMessage(JSON.stringify({ name, email, account, musicLinks }))
       .then((authorization) => {
+        console.log('here')
         axios
           .post("/api/user/send-artist-form", {
             name,

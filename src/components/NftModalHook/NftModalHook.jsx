@@ -98,6 +98,7 @@ const BuyNftModal = (props) => {
           showConfirmButton: false,
           timer: 3000,
         }).then(async () => {
+          axios.post("/api/nft/purchase");
           await buyNFT(
             {
               nftID: id,
@@ -804,7 +805,7 @@ const RightSide = styled.div`
   flex-direction: column;
   align-items: center;
   width: calc(100% - 500px);
-  padding: 10px 30px;
+  padding: 10px 20px;
   @media only screen and (max-width: 776px) {
     width: 90vw;
     justify-content: space-evenly;

@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { stringToHex } = require("web3-utils");
 const Schema = mongoose.Schema;
 
 const ApplicationSchema = new Schema({

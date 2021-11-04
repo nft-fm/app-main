@@ -34,11 +34,11 @@ const NftCard = (props) => {
 
   return (
     <Container onClick={() => setIsModalOpen(!isModalOpen)}>
-      <ShareModal
+      {/* <ShareModal
         open={isShareOpen}
         hide={() => setIsShareOpen(!isShareOpen)}
         nft={nft}
-      />
+      /> */}
       <LibraryModal
         open={isModalOpen}
         hide={hide}
@@ -50,14 +50,14 @@ const NftCard = (props) => {
         setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
       />
       <CardTop>
-        {/* <LikeShare
+        <LikeShare
           nft={nft}
           liked={liked}
           setLiked={setLiked}
           likeCount={likeCount}
           setLikeCount={setLikeCount}
           setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
-        /> */}
+        />
         <Side>
           {nft.chain === "ETH" && (
             <IconArea

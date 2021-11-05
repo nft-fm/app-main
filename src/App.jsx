@@ -183,7 +183,7 @@ const App = () => {
         {/* <PromoBanner /> */}
         <Router>
           <Switches />
-          <NoEmailModal/>
+          {!isMobile() && <NoEmailModal/>}
         </Router>
       </StyledCanvas>
     </Providers>

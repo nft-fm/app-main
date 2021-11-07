@@ -1,4 +1,4 @@
-import { Contract, utils, providers } from "ethers";
+import { Contract, utils, providers, BigNumber } from "ethers";
 import {
   NftAddress,
   FlatPriceSale,
@@ -200,7 +200,7 @@ export const stakeVinyl = async (amount, address, callback) => {
   const signer = provider.getSigner();
   const contract = new Contract(StakingAddress, StakingABI, signer);
   contract
-    .stake(address, utils.parseEther(String(amount)))
+    .stake(address, utils.parseEther(String(amount)).sub(utils.parseUnits("1", "wei")))
     .then((r) => r.wait())
     .then(() => {
       callback();

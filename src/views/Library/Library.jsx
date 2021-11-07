@@ -1,16 +1,19 @@
 import React from "react";
-import BaseView from "../../components/Page/BaseView";
 import styled from "styled-components";
-import { useAccountConsumer } from "../../contexts/Account";
-import IconMetamask from "../../assets/img/icons/metamask_icon.png";
-import Library from "./components/LibraryNfts";
 import swal from "sweetalert2";
-import { warningIcon, imageWidth, imageHeight } from "../../utils/swalImages";
+import IconMetamask from "../../assets/img/icons/metamask_icon.png";
+import BaseView from "../../components/Page/BaseView";
+import { useAccountConsumer } from "../../contexts/Account";
+import { noMetaMaskWarning } from '../../utils/connectWallet';
+import { imageHeight, imageWidth, warningIcon } from "../../utils/swalImages";
+import Library from "./components/LibraryNfts";
 
 const Profile = () => {
   const { account, connect, user } = useAccountConsumer();
 
   const connectWallet = async () => {
+    if (!window.ethereum) return await noMetaMaskWarning();
+    
     const newChainId = await window.ethereum.request({ method: "eth_chainId" });
     if ((Number(newChainId) === process.env.REACT_APP_IS_MAINNET ? 1 : 4)) {
       connect("injected");

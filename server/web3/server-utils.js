@@ -56,27 +56,17 @@ const sign = (types, values) => {
 //   return r;
 // };
 
-const findLikes = (nfts, account) => {
-  for (let i = 0; i < nfts.length; i++) {
-    const likes = nfts[i]._doc.likes;
-    if (likes && likes.find((like) => like.toString() === account)) {
-      nfts[i] = {
-        ...nfts[i]._doc,
-        likes: [],
-        likeCount: nfts[i]._doc.likes.length,
-        liked: true,
-      };
-    } else {
-      nfts[i] = {
-        ...nfts[i]._doc,
-        likes: [],
-        likeCount: nfts[i]._doc.likes.length || 0,
-        liked: false,
-      };
+// this just formats likes at this point
+const findLikes = (nfts, account) => (
+  nfts.map(nft => {
+    const likes = nft._doc.likes
+    return {
+      ...nft._doc,
+      likes: [],
+      liked: likes && likes.includes(account)
     }
-  }
-  return nfts;
-};
+  })
+);
 
 const getUserNftsETH = async (account) => {
   const PROVIDER_URL = process.env.REACT_APP_IS_MAINNET

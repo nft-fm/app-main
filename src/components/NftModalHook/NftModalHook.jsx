@@ -267,22 +267,34 @@ const BuyNftModal = (props) => {
 
   const calcBonus = () => {
     if (nft.chain === "ETH")
-      if (nft.price <= 0.001) return 50000;
-      else if (nft.price <= 0.01) return 250000;
-      else if (nft.price <= 0.1) return 1500000;
-      else return 15000000;
+      if (nft.price < .001)
+        return 50000
+      else if (nft.price < .01)
+        return 250000
+      else if (nft.price < .1)
+        return 1500000
+      else
+        return 15000000
     else {
-      if (nft.price <= 0.01) return 50000;
-      else if (nft.price <= 0.1) return 250000;
-      else if (nft.price <= 1) return 1500000;
-      else return 15000000;
+      if (nft.price < .01)
+        return 50000
+      else if (nft.price < .1)
+        return 250000
+      else if (nft.price < 1)
+        return 1500000
+      else
+        return 15000000
     }
   };
 
   const calcEligibility = () => {
-    if (nft.numMinted < 5) return nft.numMinted - nft.numSold > 0;
-    else return nft.numSold < 5;
-  };
+    if (nft.chain === "BSC" && nft.price < 0.001)
+      return false
+    if (nft.numMinted < 5)
+      return nft.numMinted - nft.numSold > 0
+    else
+      return nft.numSold < 5
+  }
 
   //add in to the nft modal
   // const formatSongDur = (d) => {
@@ -494,8 +506,8 @@ const BuyNftModal = (props) => {
                 <ButtonText>Sold Out!</ButtonText>
               </BuyButton>
             )}
-            {/* {calcEligibility() && <Promotion>💚 This NFT is eligible for an Airdrop Bonus of {calcBonus().toLocaleString()} VINYL! 💚</Promotion>}
-            {calcEligibility() && <MobilePromotion>This NFT is eligible for an Airdrop Bonus of {calcBonus().toLocaleString()} VINYL! 💚</MobilePromotion>} */}
+            {calcEligibility() && <Promotion>💚 This NFT is eligible for an Airdrop Bonus of {calcBonus().toLocaleString()} VINYL! 💚</Promotion>}
+            {calcEligibility() && <MobilePromotion>This NFT is eligible for an Airdrop Bonus of {calcBonus().toLocaleString()} VINYL! 💚</MobilePromotion>}
           </RightSide>
         </StyledModal>
       </Container>

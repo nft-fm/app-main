@@ -22,6 +22,8 @@ const {
 const { listenForMintEth, listenForMintBsc } = require("../web3/mint-listener");
 const { trackNftView } = require("../modules/mixpanel");
 const { listenForBuyBsc, listenForBuyEth } = require("../web3/buy-listener");
+const cron = require("node-cron");
+
 
 router.get("/test-get-all", async (req, res) => {
   NftType.find({ isMinted: true })
@@ -1045,6 +1047,13 @@ const compareAndUpdateDBtoContract = async () => {
     }
   });
 };
-// compareAndUpdateDBtoContract();
+//cron every two hours
+cron.schedule('0 */2 * * *', () => {
+  try {
+    compareAndUpdateDBtoContract()
+  } catch (err) {
+    console.log(err)
+  }
+})
 
 module.exports = router;

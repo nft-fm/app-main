@@ -9,11 +9,11 @@ const Slider = ({nftData, updateState, usdPerEth, usdPerBnb, currChainId }) => {
 
 
     return (
-        <div className="slider-box">
+        <div>
         <div>
         <h1>Advanced Options</h1>
-          <label className="slider-label"></label>
-          <p className="slider-title">Price</p>
+          <label></label>
+          <p>Price</p>
         </div>
         <input 
             className="slider"

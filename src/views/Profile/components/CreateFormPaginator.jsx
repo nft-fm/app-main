@@ -34,6 +34,7 @@ const CreateFormPaginator = ({
   isLoadingImage,
   isLoading,
   currChainId,
+  checked
 }) => {
   const [step2, setStep2] = useState(false);
   const [step3, setStep3] = useState(false);
@@ -121,6 +122,15 @@ const CreateFormPaginator = ({
           timer: 5000,
           imageUrl: errorIcon,
           imageWidth,
+          imageHeight,
+        });
+      }
+      if (checked) {
+        return swal.fire({
+          title: "🚨🚨Warning your NFTs may not sell using advanced options.",
+          timer: 5000,
+          imageUrl: warningIcon,
+          imageWidth, 
           imageHeight,
         });
       }

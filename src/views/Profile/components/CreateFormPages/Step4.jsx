@@ -1,10 +1,46 @@
-import React from "react";
+import React, { useState } from "react";
 import styled, { css } from "styled-components";
+import Slider from './Slider';
+import swal from 'sweetalert2';
+import {
+  warningIcon,
+  imageWidth,
+  imageHeight,
+} from "../../../../utils/swalImages";
 
 // const Step4 = ({ nftData: { price, numMinted, }, updateState, usdPerEth }) => {
 const Step4 = ({ nftData, updateState, usdPerEth, usdPerBnb, currChainId }) => {
+  const [checked, setChecked]= useState(false);
+
+  const handleChange = () => {
+    setChecked(!checked); 
+    console.log(checked);
+
+  };
+
+  const handleSubmit = async () => {
+  if (!checked) {
+    return swal.fire({
+      title: "🚨🚨Warning your NFTs may not sell using advanced options.",
+      timer: 5000,
+      imageUrl: warningIcon,
+      imageWidth, 
+      imageHeight,
+    }).then((res) => (!res.isDismissed ? handleChange() : null));
+  }  
+  };
+
+
   return (
     <InputContainer>
+    {checked ? (<Slider
+      nftData={nftData}
+      updateState={updateState}
+      usdPerBnb={usdPerBnb}
+      usdPerEth={usdPerEth}
+      currChainId={currChainId}
+    />) : (
+      <div>
       <ArtistTop>
         <h1>Data</h1>
         <IconContainer>
@@ -35,7 +71,7 @@ const Step4 = ({ nftData, updateState, usdPerEth, usdPerBnb, currChainId }) => {
           }}
         >
           {currChainId === 1 || (currChainId === 4 && "ETH")}
-          {currChainId === 56 || (currChainId === 97 && "BNB")}
+          {currChainId === 56 || (currChainId === 97 && "NB")}
         </p>
       </PriceContainer>
       <PriceContainer noBorder>
@@ -78,11 +114,27 @@ const Step4 = ({ nftData, updateState, usdPerEth, usdPerBnb, currChainId }) => {
             {(nftData.price * usdPerBnb * nftData.numMinted).toFixed(2)} $USD
           </p>
         )}
-      </PriceContainer>
+      </PriceContainer> </div>)}
+      <AdvancedOptions>
+      <label>
+        <input 
+        type="checkbox" 
+        checked={checked}
+        onChange={handleChange}
+        onClick={()=>handleSubmit()} /> Advanced Options
+      </label>
+      </AdvancedOptions>
       <BottomSpacer />
     </InputContainer>
   );
 };
+
+const AdvancedOptions = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 10px;
+  `;
 
 const MobileSpacer = styled.div`
   @media only screen and (max-width: 776px) {

@@ -535,7 +535,7 @@ router.post("/uploadSnnipetS3", async (req, res) => {
         cb(null, { fieldName: "audioFile" });
       },
       key: function (req, file, cb) {
-        cb(null, req.body.artist + "/snnipets/" + file.originalname);
+        cb(null, req.body.artist + "/30_sec_snnipets/" + file.originalname);
       },
     }),
   });

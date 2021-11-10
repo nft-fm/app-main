@@ -183,7 +183,7 @@ const Step2 = ({
       })
       .then((res) => {
         if (res.status === 200) {
-          sliceBuffer(audioContext, buffer, 0, 15, (error, newBuffer) => {
+          sliceBuffer(audioContext, buffer, 0, 30, (error, newBuffer) => {
             if (error) {
               console.log(error);
             } else {
@@ -206,7 +206,7 @@ const Step2 = ({
                 "snnipetURL", 
                 "https://nftfm-music.s3-us-west-1.amazonaws.com/" +
                 account +
-                "/snnipets/snnipet_" +
+                "/30_sec_snnipets/snnipet_" +
                 audioFile.name,
               );
               axios
@@ -225,7 +225,7 @@ const Step2 = ({
                     snnipet:
                       "https://nftfm-music.s3-us-west-1.amazonaws.com/" +
                       account +
-                      "/snnipets/snnipet_" +
+                      "/30_sec_snnipets/snnipet_" +
                       audioName,
                     dur: duration
                   })

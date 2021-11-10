@@ -33,7 +33,8 @@ const Slider = ({nftData, updateState, usdPerEth, usdPerBnb, currChainId }) => {
         />
         <div 
         style={{display: "flex", flex: "row", justifyContent: "space-between" }}>
-        <p>{nftData.price} BNB </p>
+        <p>{nftData.price}{currChainId === 1 || (currChainId === 4 && "ETH")}
+          {currChainId === 56 || (currChainId === 97 && "BNB")}</p>
         {(currChainId === 1 || currChainId === 4) && (
           <p>{(nftData.price * usdPerEth).toFixed(2)} $USD</p>
         )}

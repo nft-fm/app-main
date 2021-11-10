@@ -125,15 +125,6 @@ const CreateFormPaginator = ({
           imageHeight,
         });
       }
-      if (checked) {
-        return swal.fire({
-          title: "🚨🚨Warning your NFTs may not sell using advanced options.",
-          timer: 5000,
-          imageUrl: warningIcon,
-          imageWidth, 
-          imageHeight,
-        });
-      }
       if (price <= 0 || numMinted <= 0 || !Number.isInteger(numMinted)) {
         if (!Number.isInteger(numMinted)) {
           return swal.fire({

@@ -21,7 +21,7 @@ const Step4 = ({ nftData, updateState, usdPerEth, usdPerBnb, currChainId }) => {
   const handleSubmit = async () => {
   if (!checked) {
     return swal.fire({
-      title: "🚨🚨Warning your NFTs may not sell using advanced options.",
+      title: "🚨🚨Warning your NFTs may not sell using advanced options.🚨🚨",
       timer: 5000,
       imageUrl: warningIcon,
       imageWidth, 
@@ -33,7 +33,7 @@ const Step4 = ({ nftData, updateState, usdPerEth, usdPerBnb, currChainId }) => {
 
   return (
     <InputContainer>
-    {checked ? (<Slider
+    {!checked ? (<Slider
       nftData={nftData}
       updateState={updateState}
       usdPerBnb={usdPerBnb}
@@ -42,7 +42,7 @@ const Step4 = ({ nftData, updateState, usdPerEth, usdPerBnb, currChainId }) => {
     />) : (
       <div>
       <ArtistTop>
-        <h1>Data</h1>
+        <h1>Advanced Options</h1>
         <IconContainer>
           {/* <EthIcon />
           <UsdIcon /> */}

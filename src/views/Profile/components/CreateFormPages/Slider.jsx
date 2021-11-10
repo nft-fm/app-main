@@ -11,7 +11,7 @@ const Slider = ({nftData, updateState, usdPerEth, usdPerBnb, currChainId }) => {
     return (
         <div>
         <div>
-        <h1>Advanced Options</h1>
+        <h1>Data</h1>
           <label></label>
           <p>Price</p>
         </div>

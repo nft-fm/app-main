@@ -100,14 +100,12 @@ router.post("/add-to-email-list", async (req, res) => {
 
 router.post("/track-pageview", async (req, res) => {
   try {
-    if (process.env.PRODUCTION) {
       trackPageview({
         hasMetamask: req.body.hasMetamask,
         address: req.body.account,
         ip: req.ip,
         page: req.body.page,
       });
-    }
     res.status(200).send("success");
   } catch (error) {
     res.status(500).send("server error");

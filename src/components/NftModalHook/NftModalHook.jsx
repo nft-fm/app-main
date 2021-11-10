@@ -119,7 +119,7 @@ const BuyNftModal = (props) => {
           showConfirmButton: false,
           timer: 3000,
         }).then(async () => {
-          axios.post("/api/nft/purchase");
+          axios.post("/api/nft-type/purchase");
           await buyNFT(
             {
               nftID: id,
@@ -154,8 +154,6 @@ const BuyNftModal = (props) => {
                     }
                   });
                 } else {
-                  alert(JSON.stringify(nft));
-
                   Swal.fire({
                     title: "Successful purchase!",
                     html: `<div>View in your library (can take a few minutes to appear)<div>`,

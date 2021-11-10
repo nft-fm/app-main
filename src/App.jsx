@@ -30,8 +30,6 @@ import { StakingProvider } from "./contexts/Staking";
 import { PlaylistProvider } from "./contexts/Playlist/Playlist";
 import swal from "sweetalert2";
 import preloadImage from "./utils/preloadImg";
-import recordPlayer from "./assets/img/record_player.png";
-import recordPlayerSpin from "./assets/img/record_player_spin.png";
 import saQiBanner from "./assets/img/homepage_assets/saqi_banner.png";
 import saQiBannerMobile from "./assets/img/homepage_assets/saqi_banner_mobile.jpeg";
 import NoEmailModal from "./GetEmailModal";
@@ -55,6 +53,7 @@ const Switches = () => {
   // }, []);
 
   useEffect(() => {
+    console.log("track pageview?", location.pathname);
     axios
       .post(`/api/user/track-pageview`, {
         hasMetamask: !!window.ethereum,
@@ -171,8 +170,6 @@ const App = () => {
   }
 
   useEffect(() => {
-    preloadImage(recordPlayer);
-    preloadImage(recordPlayerSpin);
     preloadImage(saQiBanner);
     preloadImage(saQiBannerMobile);
   }, []);

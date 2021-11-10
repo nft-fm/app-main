@@ -321,7 +321,7 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
   };
 
   const updateState = (e) => {
-    if (e.target.name === "numMinted" && Number(e.target.value) > 10000) {
+    if (e.target.name === "numMinted" && Number(e.target.value) > 100) {
       return;
     }
     if (e.target.name === "numMinted") {

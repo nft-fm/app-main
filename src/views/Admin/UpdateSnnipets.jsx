@@ -239,10 +239,14 @@ const UpdateSnnipets = (
       {/*&<h3>Size in Seconds:</h3>
       <input type="number" value={size} onChange={e => {setSize(e.target.value)}}/>*/}
       <Rows>
+      <div>
       <h3>Start Time:</h3>
       <input type="number" value={start} onChange={e => {setStart(e.target.value)}}/>
+      </div>
+      <div>
       <h3>End Time:</h3>
       <h4>{end}</h4>
+      </div>
       </Rows>
       {selected && !isLoading? 
         <Button onClick={updateSelectedSnnipet}>
@@ -250,29 +254,15 @@ const UpdateSnnipets = (
         </Button> : isLoading ?
         <Button>
           Loading <LoadingIcon src={Loading}/>
-        </Button> : <Button>Choose a song!</Button>
+        </Button> : <Button>Update Snippet</Button>
       }
-     {/*{!isLoading ? 
-        <Button onClick={verifySnnipets}>
-          Verify If all songs have snnipets
-        </Button> :
-        <Button>
-          Loading <LoadingIcon src={Loading}/>
-        </Button>
-      }
-      {progress && progress !== "" && 
-      <Logs>
-      <h4>Logs</h4>
-      {progress}
-      </Logs>
-      }*/}
       
     </Section>
   );
 };
 
 const Select = styled.select`
-  width: 70%;
+  width: 100%;
 `;
 
 const Logs = styled.div`
@@ -296,7 +286,6 @@ const LoadingIcon = styled.img`
 const Section = styled.div`
   color: white;
   width: 100%;
-  border-bottom: 2px solid ${(props) => props.theme.color.blue};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -307,12 +296,15 @@ const Section = styled.div`
 const Rows = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 70%;
-  margin-top: 20px;
+  align-items: space-between;
+  justify-content: space-between;
+  width: 100%;
   input {
-    'width': '30%';
+    width: 40px;
+  }
+  div {
+    align-items: center;
+    margin-right: 10%;
   }
 `;
 

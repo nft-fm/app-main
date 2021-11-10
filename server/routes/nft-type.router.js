@@ -831,14 +831,9 @@ router.post("/getSongList", async (req, res) => {
   });
 });
 
-router.post("/purchase", async (req, res) => {
-  try {
+router.get("/purchase", () => {
     listenForBuyEth();
     listenForBuyBsc();
-    res.send("ok");
-  } catch (err) {
-    res.status(500).send(err);
-  }
 });
 
 // router.post("/purchase", async (req, res) => {
@@ -1017,6 +1012,7 @@ router.post("/updatePrice", async (req, res) => {
 //this function will compare the numSold of the db nfts to the
 //contract and update the db to reflect the sold ammount in the contract
 const compareAndUpdateDBtoContract = async () => {
+  console.log('here')
   const allEthNfts = await NftType.find({ isMinted: true, chain: "ETH" }).sort({
     nftId: -1,
   });
@@ -1047,10 +1043,10 @@ const compareAndUpdateDBtoContract = async () => {
     }
   });
 };
-//cron every two hours
+// cron every two hours
 cron.schedule('0 */2 * * *', () => {
   try {
-    compareAndUpdateDBtoContract()
+    process.env.REACT_APP_IS_MAINNET && compareAndUpdateDBtoContract()
   } catch (err) {
     console.log(err)
   }

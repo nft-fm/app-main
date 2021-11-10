@@ -66,7 +66,7 @@ app.use("/api/gov", govRouter);
 app.use("/api/vinyl-owner", vinylOwnerRouter);
 app.use("/api/admin-poll", adminPollRouter);
 app.use("/api/airdrop", airRouter);
-// app.use("/api/email", emailRouter);
+app.use("/api/email", emailRouter);
 
 app.set("trust proxy", true);
 

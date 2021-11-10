@@ -138,7 +138,10 @@ export const buyNFT = async (data, callback) => {
       return r.wait();
     })
     .then(() => callback())
-    .catch(err => callback(err))
+    .catch((err) => {
+      console.log("ERROR HERE", err);
+      callback(err);
+    });
 };
 
 export const airdrop = async (wallets, amounts, callback) => {
@@ -189,7 +192,11 @@ export const setNewPrice = async (nftId, price, callback) => {
   console.log(nftId, price);
   const { provider } = await require();
   const signer = provider.getSigner();
-  const contract = new Contract(chooseFlatPriceSale(), FlatPriceSaleABI, signer);
+  const contract = new Contract(
+    chooseFlatPriceSale(),
+    FlatPriceSaleABI,
+    signer
+  );
   contract
     .setSetPrice(nftId, utils.parseUnits(price))
     .then((r) => r.wait())
@@ -200,7 +207,10 @@ export const stakeVinyl = async (amount, address, callback) => {
   const signer = provider.getSigner();
   const contract = new Contract(StakingAddress, StakingABI, signer);
   contract
-    .stake(address, utils.parseEther(String(amount)).sub(utils.parseUnits("1", "wei")))
+    .stake(
+      address,
+      utils.parseEther(String(amount)).sub(utils.parseUnits("1", "wei"))
+    )
     .then((r) => r.wait())
     .then(() => {
       callback();
@@ -291,8 +301,7 @@ export const getStakersForArtist = async (address, callback) => {
   const contract = new Contract(StakingAddress, StakingABI, signer);
   await contract.stakersForArtist(address).then((r) => callback(r));
 };
-export const getVinylStaked = async () => {
-};
+export const getVinylStaked = async () => {};
 export const getTotalEarned = async (address, callback) => {
   const { provider } = await require();
   const signer = provider.getSigner();

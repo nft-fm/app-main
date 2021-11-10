@@ -46,14 +46,6 @@ const Switches = () => {
   const location = useLocation();
   const { account, user, noEmail } = useAccountConsumer();
 
-  // const [artists, setArtists] = useState(null);
-  // useEffect(() => {
-  //   axios
-  //     .post("/api/user/getArtists")
-  //     .then((res) => setArtists(res.data))
-  //     .catch((err) => console.log(err));
-  // }, []);
-
   useEffect(() => {
     axios
       .post(`/api/user/track-pageview`, {

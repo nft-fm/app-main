@@ -82,6 +82,21 @@ router.post("/artist-stakers", async (req, res) => {
     res.status(500).send(err);
   }
 });
+
+router.post("/updateStartTime", async (req, res) => {
+  try {
+    if (!req.body.nft) res.status(400).send("No address >_<");
+
+    const updateNft = await NftType.findById(req.body.nft._id);
+    updateNft.startTime = req.body.nft.startTime;
+    
+    await updateNft.save();
+    res.send({success: true});
+  } catch (err) {
+    res.status(500).send("Server Error");
+  }
+});
+
 router.post("/update-and-fetch", async (req, res) => {
   try {
     const nftData = req.body;
@@ -506,7 +521,8 @@ router.post("/getSnnipetAWS", async (req, res) => {
 
   const params = { Bucket: "nftfm-music", Key: req.body.key, Expires: 60 * 5 };
   const url = s3.getSignedUrl("getObject", params);
-
+  
+  console.log("got url", url);
   res.status(200).send(url);
 });
 
@@ -535,7 +551,7 @@ router.post("/uploadSnnipetS3", async (req, res) => {
         cb(null, { fieldName: "audioFile" });
       },
       key: function (req, file, cb) {
-        cb(null, req.body.artist + "/snnipets/" + file.originalname);
+        cb(null, req.body.artist + "/30_sec_snnipets/" + file.originalname);
       },
     }),
   });
@@ -782,23 +798,13 @@ router.post("/getPartialSong", async (req, res) => {
 });
 
 router.post("/getSong", async (req, res) => {
-  const start = Date.now();
-  // AWS.config.update({accessKeyId: 'id-omitted', secretAccessKey: 'key-omitted'})
 
-  // Tried with and without this. Since s3 is not region-specific, I don't
-  // think it should be necessary.
-  // AWS.config.update({region: 'us-west-2'})
-
-  //from react audio player version
-  //const params = { Bucket: "nftfm-music", Key: req.body.key, Expires: 60 * 5 };
-  //const url = s3.getSignedUrl('getObject', params)
-  //res.status(200).send(url);
   const s3 = getBucket();
 
   s3.getObject(
     { Bucket: "nftfm-music", Key: req.body.key },
     function (error, data) {
-      const end = Date.now();
+
       if (error != null) {
         res.status(500).send("Couldnt retrieve song of music");
         return;

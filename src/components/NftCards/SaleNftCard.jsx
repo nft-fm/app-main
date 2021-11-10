@@ -44,7 +44,7 @@ const NftCard = (props) => {
       .post("/api/nft-type/getSnnipetAWS", {
         key:
           completeNft.address +
-          "/snnipets/" +
+          "/30_sec_snnipets/" +
           completeNft.audioUrl.split("/").slice(-1)[0],
       })
       .then((res) => {
@@ -182,7 +182,7 @@ const NftCard = (props) => {
             <RedeemButton>
               {/* Merch */}
               <MerchIcon />
-            </RedeemButton>
+            </RedeemButton>  
           </RedeemButtonBackground>
         )}
 

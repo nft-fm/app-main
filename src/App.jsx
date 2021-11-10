@@ -16,6 +16,7 @@ import Listen from "./views/Home";
 import Library from "./views/Library";
 import Discover from "./views/Discover";
 import Profile from "./views/Profile";
+import Admin from "./views/Admin";
 import Artist from "./views/Artist";
 import Error404 from "./views/404";
 import GovPolls from "./views/VINYL/GovPolls";
@@ -111,6 +112,9 @@ const Switches = () => {
       <Switch>
         <Route path="/staking" exact>
           <Staking />
+        </Route>
+        <Route path="/admin" exact>
+          <Admin />
         </Route>
         <Route path="/library" exact>
           <Library />

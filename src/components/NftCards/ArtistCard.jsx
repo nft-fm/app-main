@@ -44,6 +44,7 @@ const NftCard = (props) => {
     setLikeCount(props.nft.likeCount);
     setLiked(props.nft.liked);
   }, [props.nft, user]);
+  console.log(nft);
   return (
     <Container>
       <ShareModal

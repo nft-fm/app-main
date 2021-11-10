@@ -245,7 +245,7 @@ const UpdateSnnipets = (
       
       {selected && !isLoading? 
         <Button onClick={updateSelectedSnnipet}>
-          Update Snnipet
+          Update Snippet
         </Button> : isLoading ?
         <Button>
           Loading <LoadingIcon src={Loading}/>

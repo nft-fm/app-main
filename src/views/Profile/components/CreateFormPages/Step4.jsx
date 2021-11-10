@@ -33,7 +33,7 @@ const Step4 = ({ nftData, updateState, usdPerEth, usdPerBnb, currChainId }) => {
 
   return (
     <InputContainer>
-    {checked ? (<Slider
+    {!checked ? (<Slider
       nftData={nftData}
       updateState={updateState}
       usdPerBnb={usdPerBnb}

@@ -33,7 +33,7 @@ const UpdateSnnipets = (
     await axios
       .get("/api/admin-music/getAllMintedNfts")
       .then((res) => {
-        if (res.data) {
+        if (res.data && res.data[0]) {
         
           console.log(res.data);
           selected(res.data);
@@ -238,17 +238,19 @@ const UpdateSnnipets = (
 
       {/*&<h3>Size in Seconds:</h3>
       <input type="number" value={size} onChange={e => {setSize(e.target.value)}}/>*/}
+      <Rows>
       <h3>Start Time:</h3>
       <input type="number" value={start} onChange={e => {setStart(e.target.value)}}/>
       <h3>End Time:</h3>
       <h4>{end}</h4>
+      </Rows>
       {selected && !isLoading? 
-        <Button onClick={nft}>
-          Update {nft.title}
+        <Button onClick={updateSelectedSnnipet}>
+          Update {selected.title}
         </Button> : isLoading ?
         <Button>
           Loading <LoadingIcon src={Loading}/>
-        </Button> : <Button>Update</Button>
+        </Button> : <Button>Choose a song!</Button>
       }
      {/*{!isLoading ? 
         <Button onClick={verifySnnipets}>
@@ -300,6 +302,18 @@ const Section = styled.div`
   align-items: center;
   justify-content: center;
   padding-bottom: 20px;
+`;
+
+const Rows = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 70%;
+  margin-top: 20px;
+  input {
+    'width': '30%';
+  }
 `;
 
 const Button = styled.a`

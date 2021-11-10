@@ -954,7 +954,7 @@ router.post("/trackNftView", async (req, res) => {
       ip: req.ip,
     };
     console.log("track nftView", payload);
-      trackNftView(payload);
+    trackNftView(payload);
     res.status(200).send("success");
   } catch (err) {
     res.status(500).send(err);

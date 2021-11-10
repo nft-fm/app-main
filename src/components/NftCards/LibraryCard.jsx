@@ -34,11 +34,11 @@ const NftCard = (props) => {
 
   return (
     <Container onClick={() => setIsModalOpen(!isModalOpen)}>
-      <ShareModal
+      {/* <ShareModal
         open={isShareOpen}
         hide={() => setIsShareOpen(!isShareOpen)}
         nft={nft}
-      />
+      /> */}
       <LibraryModal
         open={isModalOpen}
         hide={hide}
@@ -291,6 +291,7 @@ const Side = styled.div`
 
 const IconArea = styled.a`
   margin: 0 8px;
+  margin-left: 5px;
   cursor: pointer;
   text-decoration: none;
   display: flex;

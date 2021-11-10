@@ -305,14 +305,14 @@ const Step2 = ({
   };
 
   const handleAudio = (e) => {
-    if (e.target.files[0].size > 200 * 1024 * 1024) {
-      return swal.fire({
-        title: `Error: Image files must be under 60MB`,
-        imageUrl: errorIcon,
-        imageWidth,
-        imageHeight,
-      })
-    }
+    // if (e.target.files[0].size > 200 * 1024 * 1024) {
+    //   return swal.fire({
+    //     title: `Error: Image files must be under 60MB`,
+    //     imageUrl: errorIcon,
+    //     imageWidth,
+    //     imageHeight,
+    //   })
+    // }
     // setIsAudioUploaded(null);
     setAudioFile(null);
     hiddenAudioInput.current.click();

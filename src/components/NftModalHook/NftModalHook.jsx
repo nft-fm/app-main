@@ -31,7 +31,28 @@ import {
 import Ticker from "../../components/Ticker";
 import { ReactComponent as IconBinance } from "../../assets/img/icons/binance-logo.svg";
 import LikeShare from "../NftCards/LikeShare";
+import isMobile from "../../utils/isMobile";
+import metamaskLogo from "../../assets/img/metamask_fox.svg";
 
+function getMetaMaskLink() {
+  var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+  if (/android/i.test(userAgent)) {
+    return {
+      title: "Open in App Store",
+      link: "https://metamask.app.link/bxwkE8oF99",
+    };
+  }
+  if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+    return {
+      title: "Open in App Store",
+      link: "https://metamask.app.link/skAH3BaF99",
+    };
+  }
+  return {
+    title: "Open Instructions",
+    link: "https://metamask.io/download.html",
+  };
+}
 
 const BuyNftModal = (props) => {
   const {
@@ -46,7 +67,7 @@ const BuyNftModal = (props) => {
     setIsShareOpen,
     setShareCount,
     shareCount,
-    likesLoading
+    likesLoading,
   } = props;
 
   const [isLoading, setIsLoading] = useState(false);
@@ -133,18 +154,20 @@ const BuyNftModal = (props) => {
                     }
                   });
                 } else {
-                  alert(JSON.stringify(nft))
+                  alert(JSON.stringify(nft));
 
                   Swal.fire({
                     title: "Successful purchase!",
                     html: `<div>View in your library (can take a few minutes to appear)<div>`,
                     confirmButtonText: "Share My NFT!",
-                  }).then(res => {
+                  }).then((res) => {
                     if (res.isConfirmed) {
-                      let text = `I’m proud to directly support up-and-coming artists by buying their NFTs on Fanfare! Check out this song by ${nft.artist} at ${window.location}`
-                      window.open(`https://twitter.com/intent/tweet?text=${text}`);
+                      let text = `I’m proud to directly support up-and-coming artists by buying their NFTs on Fanfare! Check out this song by ${nft.artist} at ${window.location}`;
+                      window.open(
+                        `https://twitter.com/intent/tweet?text=${text}`
+                      );
                     }
-                  })
+                  });
                 }
               }
             }
@@ -200,44 +223,73 @@ const BuyNftModal = (props) => {
     hide();
   };
 
-  const connectWallet = async () => {
-    const newChainId = await window.ethereum.request({ method: "eth_chainId" });
-    if (Number(newChainId) === process.env.REACT_APP_IS_MAINNET ? 1 : 4) {
-      connect("injected");
-    } else {
-      swal.fire({
-        title: "Wrong Chain",
-        text: "You are on the wrong chain. Please connect to Ethereum Mainnet.",
-        imageUrl: warningIcon,
-        imageWidth,
-        imageHeight,
+  const openMetamaskAlert = async () => {
+    if (account) return;
+
+    const { title, link } = getMetaMaskLink();
+    swal
+      .fire({
+        title: "You need to install metamask.",
+        confirmButtonText: title,
+        imageUrl: metamaskLogo,
+        imageWidth: 100,
+      })
+      .then(({ isConfirmed }) => {
+        if (isConfirmed) {
+          window.open(link, "_blank").focus();
+        }
       });
+  };
+  const connectWallet = async () => {
+    if (isMobile()) {
+      openMetamaskAlert();
+    } else {
+      const newChainId = await window.ethereum.request({
+        method: "eth_chainId",
+      });
+      if (
+        Number(newChainId) === process.env.REACT_APP_IS_MAINNET
+          ? 1 || 56
+          : 4 || 97
+      ) {
+        connect("injected");
+      } else {
+        swal.fire({
+          title: "Wrong Chain",
+          text: "You are on the wrong chain. Please connect to Ethereum Mainnet.",
+          imageUrl: warningIcon,
+          imageWidth,
+          imageHeight,
+        });
+      }
     }
   };
 
   const calcBonus = () => {
     if (nft.chain === "ETH")
-      if (nft.price <= .001)
+      if (nft.price < .001)
         return 50000
-      else if (nft.price <= .01)
+      else if (nft.price < .01)
         return 250000
-      else if (nft.price <= .1)
+      else if (nft.price < .1)
         return 1500000
       else
         return 15000000
     else {
-      if (nft.price <= .01)
+      if (nft.price < .01)
         return 50000
-      else if (nft.price <= .1)
+      else if (nft.price < .1)
         return 250000
-      else if (nft.price <= 1)
+      else if (nft.price < 1)
         return 1500000
       else
         return 15000000
     }
-  }
+  };
 
   const calcEligibility = () => {
+    if (nft.chain === "BSC" && nft.price < 0.001)
+      return false
     if (nft.numMinted < 5)
       return nft.numMinted - nft.numSold > 0
     else
@@ -381,7 +433,9 @@ const BuyNftModal = (props) => {
                   setLiked={setLiked}
                   likeCount={likeCount}
                   setLikeCount={setLikeCount}
-                  updateShareCount={() => setShareCount({ count: shareCount.count + 1 })}
+                  updateShareCount={() =>
+                    setShareCount({ count: shareCount.count + 1 })
+                  }
                   shareCount={shareCount}
                   isLoading={likesLoading}
                 />
@@ -402,9 +456,9 @@ const BuyNftModal = (props) => {
                 <PriceItem>
                   {nft.price
                     ? parseFloat(nft.price).toLocaleString(undefined, {
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 6,
-                    })
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 6,
+                      })
                     : "--"}{" "}
                 </PriceItem>
                 &nbsp;
@@ -452,8 +506,8 @@ const BuyNftModal = (props) => {
                 <ButtonText>Sold Out!</ButtonText>
               </BuyButton>
             )}
-            {/* {calcEligibility() && <Promotion>💚 This NFT is eligible for an Airdrop Bonus of {calcBonus().toLocaleString()} VINYL! 💚</Promotion>}
-            {calcEligibility() && <MobilePromotion>This NFT is eligible for an Airdrop Bonus of {calcBonus().toLocaleString()} VINYL! 💚</MobilePromotion>} */}
+            {calcEligibility() && <Promotion>💚 This NFT is eligible for an Airdrop Bonus of {calcBonus().toLocaleString()} VINYL! 💚</Promotion>}
+            {calcEligibility() && <MobilePromotion>This NFT is eligible for an Airdrop Bonus of {calcBonus().toLocaleString()} VINYL! 💚</MobilePromotion>}
           </RightSide>
         </StyledModal>
       </Container>
@@ -462,22 +516,21 @@ const BuyNftModal = (props) => {
 };
 
 const MobilePromotion = styled.div`
-margin-top: 10px;
-display: none;
-@media only screen and (max-width: 776px) {
-  height: auto;
-  display: block;
-
-}
-`
+  margin-top: 10px;
+  display: none;
+  @media only screen and (max-width: 776px) {
+    height: auto;
+    display: block;
+  }
+`;
 
 const Promotion = styled.div`
-margin-top: 10px;
-@media only screen and (max-width: 776px) {
-  height: auto;
-  display: none;
-}
-`
+  margin-top: 10px;
+  @media only screen and (max-width: 776px) {
+    height: auto;
+    display: none;
+  }
+`;
 
 const ProfilePicture = styled.div`
   width: 60px;
@@ -611,7 +664,6 @@ const DescriptionHolder = styled.fieldset`
 const DescriptionLegend = styled.legend`
   padding: 0 5px;
   margin-left: 10px;
-
 `;
 const DescriptionContent = styled.span`
   margin: 10px;
@@ -696,7 +748,7 @@ const X = styled(IconX)`
   }
   @media only screen and (max-width: 776px) {
     width: 35px;
-  height: 35px;
+    height: 35px;
   }
 `;
 

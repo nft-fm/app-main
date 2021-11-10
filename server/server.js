@@ -10,6 +10,7 @@ const nftTypeRouter = require("./routes/nft-type.router");
 const nftRouter = require("./routes/nft.router");
 const govRouter = require("./routes/gov.router");
 const airRouter = require("./routes/airdrop.router");
+const emailRouter = require("./routes/email.router")
 const connectDB = require("./modules/db");
 const sessionMiddleware = require("./middleware/session-middleware");
 const path = require("path");
@@ -65,6 +66,7 @@ app.use("/api/gov", govRouter);
 app.use("/api/vinyl-owner", vinylOwnerRouter);
 app.use("/api/admin-poll", adminPollRouter);
 app.use("/api/airdrop", airRouter);
+// app.use("/api/email", emailRouter);
 
 app.set("trust proxy", true);
 

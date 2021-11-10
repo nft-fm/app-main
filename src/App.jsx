@@ -180,10 +180,10 @@ const App = () => {
   return (
     <Providers>
       <StyledCanvas>
-        {/* <PromoBanner /> */}
+        <PromoBanner />
         <Router>
           <Switches />
-          <NoEmailModal/>
+          {!isMobile() && <NoEmailModal/>}
         </Router>
       </StyledCanvas>
     </Providers>

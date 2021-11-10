@@ -15,6 +15,7 @@ const Listen = () => {
   const [selected, setSelected] = useState("Date: High - Low");
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState(2);
+  // const [sort, setSort] = useState(Math.floor(Math.random() * 6));
   const limit = 200;
 
   // const getNftsWithParams = async (pageIncrease, searchParam, sortParam) => {

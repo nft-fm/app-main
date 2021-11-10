@@ -11,10 +11,10 @@ const GetEmailModal = () => {
 
   return (
     <Container open={open}>
-      <PromoText>💚 Announcing a new airdrop campaign for NFT purchasers! Click an NFT to learn more! (1 airdrop per wallet) 💚</PromoText>
+      <PromoText>💚 Announcing a new airdrop campaign for NFT purchasers! Click an NFT to learn more! 💚</PromoText>
       <MobilePromoText>💚 Buy an NFT for a VINYL airdrop bonus! 💚</MobilePromoText>
-      <CountDownContainer><CountDown endTime={1635982149000}/></CountDownContainer>
-    </Container>
+      <CountDownContainer><CountDown endTime={1636869600000}/></CountDownContainer>
+    </Container> 
   )
 }
 

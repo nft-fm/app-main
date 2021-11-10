@@ -119,7 +119,7 @@ const BuyNftModal = (props) => {
           showConfirmButton: false,
           timer: 3000,
         }).then(async () => {
-          axios.get("/api/nft-type/purchase")
+          // axios.get("/api/nft-type/purchase")
           await buyNFT(
             {
               nftID: id,

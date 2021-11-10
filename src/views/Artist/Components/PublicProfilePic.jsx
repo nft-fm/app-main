@@ -1,11 +1,13 @@
-import React, { useEffect, useState, useRef } from "react";
+import axios from "axios";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import swal from "sweetalert2";
-import { useAccountConsumer } from "../../../contexts/Account";
-
-import upload_icon from "../../../assets/img/profile_page_assets/upload_icon.svg";
-import axios from "axios";
 import Loading from "../../../assets/img/loading.gif";
+import upload_icon from "../../../assets/img/profile_page_assets/upload_icon.svg";
+import { useAccountConsumer } from "../../../contexts/Account";
+import { errorIcon, imageHeight, imageWidth } from "../../../utils/swalImages";
+
+
 
 const PublicProfilePic = (props) => {
   const { account, user, setUser } = useAccountConsumer();
@@ -20,6 +22,14 @@ const PublicProfilePic = (props) => {
   };
 
   const handleImageChange = (e) => {
+    if (e.target.files[0].size > 60 * 1024 * 1024) {
+      return swal.fire({
+        title: `Error: Image files must be under 60MB`,
+        imageUrl: errorIcon,
+        imageWidth,
+        imageHeight,
+      })
+    }
     setImageFile(e.target.files[0]);
     const picUrl =
       "https://nftfm-profilepic.s3-us-west-1.amazonaws.com/" +
@@ -32,6 +42,7 @@ const PublicProfilePic = (props) => {
       profilePic: picUrl,
     });
   };
+  
   useEffect(() => {
     if (imageFile) {
       setLoading(true);
@@ -79,7 +90,7 @@ const PublicProfilePic = (props) => {
           type="file"
           accept=".jpg,.jpeg,.png,.gif"
           ref={hiddenImageInput}
-          onChange={(e) => handleImageChange(e)}
+          onChange={handleImageChange}
           style={{ display: "none" }}
           defaultValue={imageFile !== "" ? imageFile : null}
         />

@@ -116,7 +116,7 @@ const UploadAudio = ({
                     snnipet:
                       "https://nftfm-music.s3-us-west-1.amazonaws.com/" +
                       account +
-                      "/snnipets/snnipet_" +
+                      "/30_sec_snnipets/snnipet_" +
                       audioName,
                       dur: duration
                   });

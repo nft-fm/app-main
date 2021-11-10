@@ -87,7 +87,6 @@ const LikeShare = ({ nft, liked, setLiked, likeCount, isLoading, setLikeCount, u
 
 const ShareText = styled.div`
 margin-left: 5px;
-
 `
 
 const ShareButton = styled.div`

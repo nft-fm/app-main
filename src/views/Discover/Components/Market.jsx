@@ -1,21 +1,22 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import axios from "axios";
+import React, { useCallback, useEffect, useState } from "react";
+import styled from "styled-components";
+import { ReactComponent as down_arrow } from "../../../assets/img/icons/down_arrow.svg";
 import NftCard from "../../../components/NftCards/SaleNftCard";
 import { useAccountConsumer } from "../../../contexts/Account";
-import { ReactComponent as down_arrow } from "../../../assets/img/icons/down_arrow.svg";
-import InfiniteScroll from "react-infinite-scroll-component";
 // import { ReactComponent as down_arrow } from "../../../assets/img/icons/down_arrow.svg";
 
 const Listen = () => {
   const { account } = useAccountConsumer();
   const [allNfts, setAllNfts] = useState([]);
+  const [shown, setShown] = useState(6);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const [selected, setSelected] = useState("Date: High - Low");
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useState(Math.floor(Math.random() * 6));
+  const [sort, setSort] = useState(2);
+  // const [sort, setSort] = useState(Math.floor(Math.random() * 6));
   const limit = 200;
 
   // const getNftsWithParams = async (pageIncrease, searchParam, sortParam) => {
@@ -37,54 +38,53 @@ const Listen = () => {
   //   }
   // };
 
+  // useEffect(() => {
+  //   const fetchWithNoSearch = async () => {
+  //     setPage(0);
+  //     if (search === "") {
+  //       setHasMore(true);
+  //       setAllNfts([]);
+  //       await axios
+  //         .post("/api/nft-type/getNftsWithParams", {
+  //           address: account,
+  //           limit,
+  //           page: 0,
+  //           search: "",
+  //           sort: sort,
+  //         })
+  //         .then((res) => {
+  //           setAllNfts(res.data.nfts);
+  //           setPage(page + 1);
+  //           setHasMore(res.data.hasMore);
+  //         });
+  //     }
+  //   };
+
+  //   fetchWithNoSearch();
+  // }, [search, account]);
+
+  const handleSort = useCallback(async () => {
+    setPage(0);
+    setHasMore(true);
+    await axios
+      .post("/api/nft-type/getNftsWithParams", {
+        address: account,
+        limit,
+        page: 0,
+        search,
+        sort,
+      })
+      .then((res) => {
+        setAllNfts(res.data.nfts);
+        setPage(1);
+        setHasMore(res.data.hasMore);
+      });
+  }, [search, sort, account]);
+
+  // handles login and sort
   useEffect(() => {
-    const fetchWithNoSearch = async () => {
-      setPage(0);
-      if (search === "") {
-        setHasMore(true);
-        setAllNfts([]);
-        await axios
-          .post("/api/nft-type/getNftsWithParams", {
-            address: account,
-            limit,
-            page: 0,
-            search: "",
-            sort: sort,
-          })
-          .then((res) => {
-            setAllNfts(res.data.nfts);
-
-            setPage(page + 1);
-            setHasMore(res.data.hasMore);
-          });
-      }
-    };
-
-    fetchWithNoSearch();
-  }, [search]);
-
-  useEffect(() => {
-    const handleSort = async (pageIncrease, searchParam, sortParam) => {
-      setPage(0);
-      setHasMore(true);
-      setAllNfts([]);
-      await axios
-        .post("/api/nft-type/getNftsWithParams", {
-          address: account,
-          limit,
-          page: 0,
-          search: searchParam,
-          sort: sortParam,
-        })
-        .then((res) => {
-          setAllNfts(res.data.nfts);
-          setPage(1);
-          setHasMore(res.data.hasMore);
-        });
-    };
-
-    handleSort(1, search, sort);
-  }, [sort]);
+    handleSort();
+  }, [sort, account, handleSort]);
 
   const handleSearch = async (e, pageIncrease, searchParam, sortParam) => {
     e.preventDefault();
@@ -106,6 +106,11 @@ const Listen = () => {
         });
     }
   };
+
+  const loadMore = () => {
+    setShown(shown + 6)
+  }
+
 
   const menuOptions = [
     <MenuSpan
@@ -141,6 +146,17 @@ const Listen = () => {
     >
       Cheapest
     </MenuSpan>,
+    <MenuSpan
+      isMenuOpen={menuOpen}
+      onClick={() => {
+        setSort(5);
+        setSelected("Liked: High - Low");
+        setMenuOpen(false);
+      }}
+      selected={selected === "Liked: High - Low"}
+    >
+      Liked
+    </MenuSpan>,
   ];
 
   return (
@@ -157,6 +173,7 @@ const Listen = () => {
         onMouseEnter={() => setMenuOpen(true)}
         onMouseLeave={() => setMenuOpen(false)}
         isMenuOpen={menuOpen}
+        optionCount={menuOptions.length}
       >
         <SelectedSpan onClick={() => setMenuOpen(!menuOpen)}>
           {/* {selected} */}
@@ -169,26 +186,25 @@ const Listen = () => {
 
       <ContainerOutline />
       <NftScroll>
-        {/* <InfiniteScroll
-          dataLength={allNfts.length}
-          next={() => getNftsWithParams(1, search, sort)}
-          hasMore={hasMore}
-        > */}
-          {allNfts.map((item, index) => (
-            <NftCard nft={item} />
-          ))}
-          {!hasMore && (
-            <>
-              <FillerCard />
-              <FillerCard />
-              <FillerCard />
-            </>
-          )}
-        {/* </InfiniteScroll> */}
+        {allNfts.map((item, index) => {
+          if (index >= shown * 3)
+            return null
+          else
+            return <NftCard nft={item} />
+        })
+        }
       </NftScroll>
+      {(shown * 3 < allNfts.length) && <LoadMore onClick={loadMore}>Load More</LoadMore> }
     </LaunchContainer>
   );
 };
+
+const LoadMore = styled.div`
+align-self: center;
+margin-top: 20px;
+margin-bottom: 50px;
+cursor: pointer;
+`
 
 const DownArrow = styled(down_arrow)`
   position: absolute;
@@ -238,7 +254,7 @@ const ContainerTitleSorting = styled.div`
   flex-direction: column;
   align-items: flex-start;
 
-  height: ${(props) => props.isMenuOpen && "110px"};
+  height: ${(props) => props.isMenuOpen && `${props.optionCount * 28 + 20}px`};
   z-index: 2;
 
   @media only screen and (max-width: 1200px) {
@@ -294,21 +310,23 @@ const NftScroll = styled.div`
   flex-wrap: wrap;
   width: 100%;
   justify-content: space-between;
+  overflowY: scroll !important;
   @media only screen and (max-width: 776px) {
     flex-direction: column;
     align-items: center;
     margin-top: 24px;
   }
-  
 `;
 
 const LaunchContainer = styled.div`
   position: relative;
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 40px;
+  overflowY: scroll !important;
 `;
 
 const ContainerOutline = styled.div`

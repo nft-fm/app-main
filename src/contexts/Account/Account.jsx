@@ -106,10 +106,10 @@ export const AccountProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (isMobile() && !window.ethereum) {
-      Swal.fire("Mobile site only supported via MetaMask Browser");
-      return;
-    }
+    // if (isMobile() && !window.ethereum) {
+    //   Swal.fire("Mobile site only supported via MetaMask Browser");
+    //   return;
+    // }
 
     if (window.ethereum) {
       window.ethereum.on("accountsChanged", (accounts) => {

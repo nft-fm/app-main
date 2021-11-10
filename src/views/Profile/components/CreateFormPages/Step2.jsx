@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
-import styled, { css } from "styled-components";
 // import UploadAudio from "../UploadAudio";
 import axios from "axios";
-import { useAccountConsumer } from "../../../../contexts/Account";
-import { errorIcon, imageWidth, imageHeight } from "../../../../utils/swalImages";
+import React, { useEffect, useRef, useState } from 'react';
+import styled, { css } from "styled-components";
 import swal from "sweetalert2";
 import loading_gif from "../../../../assets/img/loading.gif";
+import { useAccountConsumer } from "../../../../contexts/Account";
 import audioBufferToMp3 from "../../../../utils/audioBufferToMp3";
+import { errorIcon, imageHeight, imageWidth } from "../../../../utils/swalImages";
 
 const Step2 = ({ 
   nftData, 
@@ -35,6 +35,14 @@ const Step2 = ({
   };
 
   const handleImageChange = (e) => {
+    if (e.target.files[0].size > 60 * 1024 * 1024) {
+      return swal.fire({
+        title: `Error: Image files must be under 60MB`,
+        imageUrl: errorIcon,
+        imageWidth,
+        imageHeight,
+      })
+    }
     if (e.target.files[0] && !isLoadingImage) {
       setImageFile(e.target.files[0]);
       setImageName(e.target.files[0].name);
@@ -175,7 +183,7 @@ const Step2 = ({
       })
       .then((res) => {
         if (res.status === 200) {
-          sliceBuffer(audioContext, buffer, 0, 15, (error, newBuffer) => {
+          sliceBuffer(audioContext, buffer, 0, 30, (error, newBuffer) => {
             if (error) {
               console.log(error);
             } else {
@@ -198,7 +206,7 @@ const Step2 = ({
                 "snnipetURL", 
                 "https://nftfm-music.s3-us-west-1.amazonaws.com/" +
                 account +
-                "/snnipets/snnipet_" +
+                "/30_sec_snnipets/snnipet_" +
                 audioFile.name,
               );
               axios
@@ -217,7 +225,7 @@ const Step2 = ({
                     snnipet:
                       "https://nftfm-music.s3-us-west-1.amazonaws.com/" +
                       account +
-                      "/snnipets/snnipet_" +
+                      "/30_sec_snnipets/snnipet_" +
                       audioName,
                     dur: duration
                   })
@@ -297,6 +305,14 @@ const Step2 = ({
   };
 
   const handleAudio = (e) => {
+    // if (e.target.files[0].size > 200 * 1024 * 1024) {
+    //   return swal.fire({
+    //     title: `Error: Image files must be under 60MB`,
+    //     imageUrl: errorIcon,
+    //     imageWidth,
+    //     imageHeight,
+    //   })
+    // }
     // setIsAudioUploaded(null);
     setAudioFile(null);
     hiddenAudioInput.current.click();

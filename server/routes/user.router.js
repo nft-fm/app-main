@@ -68,11 +68,11 @@ router.post("/add-email", async (req, res) => {
     user.email = req.body.email;
     await user.save();
     res.status(200).send("success");
-    }catch (error) {
-      res.status(500).send("server error");
-    }
-
+  } catch (error) {
+    res.status(500).send("server error");
   }
+
+}
 )
 
 router.post("/add-to-email-list", async (req, res) => {
@@ -91,11 +91,11 @@ router.post("/add-to-email-list", async (req, res) => {
       emailList.save();
       res.status(200).send("success");
     }
-    }catch (error) {
-      res.status(500).send("server error");
-    }
-
+  } catch (error) {
+    res.status(500).send("server error");
   }
+
+}
 )
 
 router.post("/track-pageview", async (req, res) => {
@@ -147,6 +147,24 @@ router.post("/update-account", async (req, res) => {
   }
 });
 
+// need to run this route on main site before this stuff will work?
+
+// router.post('/update-nft-to-include-likes', async (req, res) => {
+//   try {
+//     const nfts = await NftType.find()
+
+//     for (let nft of nfts) {
+//       nft.likeCount = nft._doc.likes.length
+//       await nft.save()
+//     }
+
+//     res.json(nfts);
+//   } catch (error) {
+//     console.log(error)
+//     res.status(500).json("failed to update likes 👎")
+//   }
+// })
+
 router.post("/like-nft", async (req, res) => {
   try {
     let nft = await NftType.findOne({ _id: req.body.nft });
@@ -160,18 +178,19 @@ router.post("/like-nft", async (req, res) => {
       likes.splice(hasLiked, 1);
       nft.likes = likes;
     }
-    await NftType.updateOne({ _id: req.body.nft }, { likes: nft.likes }).then(
-      () => {
-        res.send({
-          nft: {
-            ...nft._doc,
-            liked: hasLiked < 0,
-            likes: [],
-            likeCount: likeCount,
-          },
-        });
-      }
-    );
+
+    nft.likeCount = nft.likes.length
+
+    await nft.save()
+
+    res.send({
+      nft: {
+        ...nft._doc,
+        liked: hasLiked < 0,
+        likes: [],
+        likeCount: likeCount,
+      },
+    });
   } catch (error) {
     res.sendStatus(500);
   }
@@ -566,16 +585,19 @@ router.post("/signNewFee", async (req, res) => {
 });
 
 router.post("/getArtists", async (req, res) => {
+  const usersToExclude = ["Fanfare", "NFT FM"];
   try {
     const artists = await User.find({
       isArtist: true,
       hasMinted: true,
       profilePic: { $exists: true },
-      username: { $ne: "Fanfare" },
+      $and: usersToExclude.map(username => {
+        return { "username": { $ne: username } };
+      })
     });
 
     res.send(artists);
-  } catch (err) {}
+  } catch (err) { }
 });
 
 router.post("/saveStakedArtist", async (req, res) => {

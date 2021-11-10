@@ -50,6 +50,7 @@ const NftCard = (props) => {
         setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
       />
       <CardTop>
+        <Spacer />
         <LikeShare
           nft={nft}
           liked={liked}
@@ -162,6 +163,11 @@ const NftCard = (props) => {
     </Container>
   );
 };
+
+const Spacer = styled.div`
+width: 5px;
+`
+
 const ExclusiveBadge = styled(Exclusive)`
   width: 15px;
   height: 15px;

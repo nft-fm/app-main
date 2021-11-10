@@ -1,12 +1,13 @@
 import React, {useEffect} from "react";
 import styled from "styled-components";
-import swal from "sweetalert2";
-import metamaskLogo from "../../../assets/img/metamask_fox.svg";
 import { useAccountConsumer } from "../../../contexts/Account";
+import { noMetaMaskWarning } from '../../../utils/connectWallet';
 import isMobile from "../../../utils/isMobile";
 import ChainSelector from "./ChainSelector";
 import IconMetamask from "../../../assets/img/icons/metamask_icon.png";
 import Cookies from 'universal-cookie'
+import swal from 'sweetalert2'
+import metamaskLogo from "../../../assets/img/metamask_fox.svg";
 
 
 // https://stackoverflow.com/questions/21741841/detecting-ios-android-operating-system

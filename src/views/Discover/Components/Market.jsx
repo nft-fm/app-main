@@ -194,7 +194,7 @@ const Listen = () => {
         })
         }
       </NftScroll>
-      <LoadMore onClick={loadMore}>Load More</LoadMore>
+      {(shown * 3 < allNfts.length) && <LoadMore onClick={loadMore}>Load More</LoadMore> }
     </LaunchContainer>
   );
 };

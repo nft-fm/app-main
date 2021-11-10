@@ -26,14 +26,14 @@ const AudioProgressBar = (props) => {
     if (!bounds) setBounds(invisibleBar.current.getBoundingClientRect());
     if (isDragging) {
       let position = (e.clientX - bounds.left) / bounds.width;
-      props.skipTo(position * 15);
+      props.skipTo(position * 30);
       setIsDragging(false);
     }
   };
 
   const changePosition = (e) => {
     let position = (e.clientX - bounds.left) / bounds.width;
-    props.skipTo(position * 15);
+    props.skipTo(position * 30);
   };
 
   const checkForToogle = (e) => {
@@ -53,7 +53,7 @@ const AudioProgressBar = (props) => {
 
   useEffect(() => {
     if (!isDragging && props.time) {
-      setFilled((props.time / 15) * 100);
+      setFilled((props.time / 30) * 100);
     }
   }, [props]);
 

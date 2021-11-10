@@ -15,6 +15,7 @@ const connectDB = require("./modules/db");
 const sessionMiddleware = require("./middleware/session-middleware");
 const path = require("path");
 const adminPollRouter = require("./routes/admin-poll.router");
+const adminMusicRouter = require("./routes/admin-music.router");
 const vinylOwnerRouter = require("./routes/vinyl-owner.router");
 const Mixpanel = require("mixpanel");
 const { listenForMintEth, listenForMintBsc } = require("./web3/mint-listener");
@@ -65,6 +66,7 @@ app.use("/api/nft", nftRouter);
 app.use("/api/gov", govRouter);
 app.use("/api/vinyl-owner", vinylOwnerRouter);
 app.use("/api/admin-poll", adminPollRouter);
+app.use("/api/admin-music", adminMusicRouter);
 app.use("/api/airdrop", airRouter);
 app.use("/api/email", emailRouter);
 

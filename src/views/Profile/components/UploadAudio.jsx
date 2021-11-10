@@ -85,7 +85,7 @@ const UploadAudio = ({
       .then((res) => {
         if (res.status === 200) {
           // let _nftData;
-          sliceBuffer(audioContext, buffer, 0, 15, (error, newBuffer) => {
+          sliceBuffer(audioContext, buffer, 0, 30, (error, newBuffer) => {
             if (error) {
               console.log(error);
             } else {
@@ -116,7 +116,7 @@ const UploadAudio = ({
                     snnipet:
                       "https://nftfm-music.s3-us-west-1.amazonaws.com/" +
                       account +
-                      "/30_sec_snnipets/snnipet_" +
+                      "/snnipets/" +
                       audioName,
                       dur: duration
                   });

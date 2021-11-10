@@ -182,7 +182,7 @@ const NftCard = (props) => {
             <RedeemButton>
               {/* Merch */}
               <MerchIcon />
-            </RedeemButton>
+            </RedeemButton>  
           </RedeemButtonBackground>
         )}
 

@@ -157,6 +157,17 @@ const Listen = () => {
     >
       Liked
     </MenuSpan>,
+        <MenuSpan
+        isMenuOpen={menuOpen}
+        onClick={() => {
+          setSort(5);
+          setSelected("Liked: High - Low");
+          setMenuOpen(false);
+        }}
+        selected={selected === "Liked: High - Low"}
+      >
+        Genre
+      </MenuSpan>,
   ];
 
   return (

@@ -9,6 +9,7 @@ import { useAccountConsumer } from "../../../contexts/Account";
 const Listen = () => {
   const { account } = useAccountConsumer();
   const [allNfts, setAllNfts] = useState([]);
+  const [shown, setShown] = useState(6);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -106,6 +107,11 @@ const Listen = () => {
     }
   };
 
+  const loadMore = () => {
+    setShown(shown + 6)
+  }
+
+
   const menuOptions = [
     <MenuSpan
       isMenuOpen={menuOpen}
@@ -180,26 +186,25 @@ const Listen = () => {
 
       <ContainerOutline />
       <NftScroll>
-        {/* <InfiniteScroll
-          dataLength={allNfts.length}
-          next={() => getNftsWithParams(1, search, sort)}
-          hasMore={hasMore}
-        > */}
-        {allNfts.map((item, index) => (
-          <NftCard nft={item} />
-        ))}
-        {!hasMore && (
-          <>
-            <FillerCard />
-            <FillerCard />
-            <FillerCard />
-          </>
-        )}
-        {/* </InfiniteScroll> */}
+        {allNfts.map((item, index) => {
+          if (index >= shown * 3)
+            return null
+          else
+            return <NftCard nft={item} />
+        })
+        }
       </NftScroll>
+      <LoadMore onClick={loadMore}>Load More</LoadMore>
     </LaunchContainer>
   );
 };
+
+const LoadMore = styled.div`
+align-self: center;
+margin-top: 20px;
+margin-bottom: 50px;
+cursor: pointer;
+`
 
 const DownArrow = styled(down_arrow)`
   position: absolute;
@@ -305,6 +310,7 @@ const NftScroll = styled.div`
   flex-wrap: wrap;
   width: 100%;
   justify-content: space-between;
+  overflowY: scroll !important;
   @media only screen and (max-width: 776px) {
     flex-direction: column;
     align-items: center;
@@ -315,10 +321,12 @@ const NftScroll = styled.div`
 const LaunchContainer = styled.div`
   position: relative;
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 40px;
+  overflowY: scroll !important;
 `;
 
 const ContainerOutline = styled.div`

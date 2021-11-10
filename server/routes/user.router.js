@@ -100,11 +100,11 @@ router.post("/add-to-email-list", async (req, res) => {
 
 router.post("/track-pageview", async (req, res) => {
   try {
+
+    console.log("track pageview", req.body);
       trackPageview({
-        hasMetamask: req.body.hasMetamask,
-        address: req.body.account,
         ip: req.ip,
-        page: req.body.page,
+        ...req.body,
       });
     res.status(200).send("success");
   } catch (error) {

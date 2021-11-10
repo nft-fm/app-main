@@ -34,35 +34,14 @@ import saQiBanner from "./assets/img/homepage_assets/saqi_banner.png";
 import saQiBannerMobile from "./assets/img/homepage_assets/saqi_banner_mobile.jpeg";
 import NoEmailModal from "./GetEmailModal";
 import PromoBanner from './PromoBanner'
-
 import isMobile from "./utils/isMobile";
 import theme from "./theme";
+import Tracking from "./mixpanel/tracking";
 
 if (window.location.hostname !== "localhost") console.log = function () {};
 
 const Switches = () => {
-  const location = useLocation();
-  const { account, user, noEmail } = useAccountConsumer();
-
-  // const [artists, setArtists] = useState(null);
-  // useEffect(() => {
-  //   axios
-  //     .post("/api/user/getArtists")
-  //     .then((res) => setArtists(res.data))
-  //     .catch((err) => console.log(err));
-  // }, []);
-
-  useEffect(() => {
-    console.log("track pageview?", location.pathname);
-    axios
-      .post(`/api/user/track-pageview`, {
-        hasMetamask: !!window.ethereum,
-        address: account,
-        page: location.pathname.substring(1),
-      })
-      .then((res) => {})
-      .catch((err) => {});
-  }, [location]);
+  const { user } = useAccountConsumer();
 
   const [ownsRedeemable, setOwnsRedeemable] = useState(false);
   const history = useHistory();
@@ -123,12 +102,6 @@ const Switches = () => {
         <Route path="/artist">
           <Artist />
         </Route>
-        {/* <Route path="/community">
-          <Community />
-        </Route>
-        {/* <Route path="/token">
-          <Token />
-        </Route> */}
         <Route path="/gov-polls">
           <GovPolls />
         </Route>
@@ -179,6 +152,7 @@ const App = () => {
       <StyledCanvas>
         <PromoBanner />
         <Router>
+        <Tracking/>
           <Switches />
           {!isMobile() && <NoEmailModal/>}
         </Router>
@@ -205,7 +179,6 @@ const Providers = ({ children }) => {
       {/* change the ChainId below here for the preffered network when testing, 1 main 3 ropsten 42 kovan */}
       <UseWalletProvider
         chainId={currChainId}
-        // chainId={process.env.REACT_APP_IS_MAINNET ? 1 : 97}
         connectors={{
           walletconnect: { rpcUrl: "https://mainnet.eth.aragon.network/" },
         }}

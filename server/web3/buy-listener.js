@@ -12,6 +12,11 @@ const User = require("../schemas/User.schema");
 const { trackNftPurchase } = require("../modules/mixpanel");
 
 const listenForBuyEth = async () => {
+  //do not track for local mainnet testing
+  if (process.env.REACT_APP_IS_MAINNET && !process.env.PRODUCTION) {
+    return;
+  }
+
   const NFTToken = process.env.REACT_APP_IS_MAINNET
     ? MAIN_FlatPriceSale
     : TEST_FlatPriceSale;
@@ -71,6 +76,11 @@ const listenForBuyEth = async () => {
 };
 
 const listenForBuyBsc = async () => {
+  //do not track for local mainnet testing
+  if (process.env.REACT_APP_IS_MAINNET && !process.env.PRODUCTION) {
+    return;
+  }
+
   const NFTToken = process.env.REACT_APP_IS_MAINNET
     ? MAIN_BSC_FlatPriceSale
     : TEST_BSC_FlatPriceSale;
@@ -83,7 +93,6 @@ const listenForBuyBsc = async () => {
 
   contract.on("Buy", async (data) => {
     const blockNum = await provider.getBlockNumber();
-
     let filter = contract.filters.Buy(data);
     let event = await contract
       .queryFilter(filter, blockNum - 4000, blockNum)

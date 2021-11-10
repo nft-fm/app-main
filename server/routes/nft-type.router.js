@@ -492,7 +492,8 @@ router.post("/getNftsWithParams", async (req, res) => {
       2: { timestamp: -1 },
       3: { timestamp: 1 },
       4: { shareCount: 1 },
-      5: { likeCount: -1 }
+      5: { likeCount: -1 },
+      6: {genre: ""}
     };
     const query = { $regex: req.body.search, $options: "i" };
 

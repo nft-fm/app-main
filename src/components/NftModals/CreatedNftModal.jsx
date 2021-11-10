@@ -149,7 +149,9 @@ const BuyNftModal = ({
               <TableRow className="header">
                 <th>Update Snippet</th>
               </TableRow>
-              <UpdateSnnipets />
+              <UpdateSnnipets 
+              nft={nft}
+              />
               </StyledTable>
             <StyledTable>
               <TableRow className="header">

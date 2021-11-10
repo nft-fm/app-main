@@ -51,7 +51,6 @@ router.post("/updateSnnipetAWS", async (req, res) => {
     }),
  
   });
-  console.log(upload);
 
   const singleUpload = upload.single("audioFile");
   singleUpload(req, res, async function (err) {

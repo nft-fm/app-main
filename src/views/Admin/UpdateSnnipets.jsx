@@ -13,7 +13,7 @@ const UpdateSnnipets = (
   const [end, setEnd] = useState(30);
   //const [allSnnipets, setAllSnnipets] = useState();
   const [snnipets, setSnnipets] = useState([]);
-  const [selected, setSelected] = useState();
+  const [selected, setSelected] = useState(nft);
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState();
   const [size, setSize] = useState(30);
@@ -29,11 +29,11 @@ const UpdateSnnipets = (
     return ab;
   };
 
-  const getAllSnnipets = async () => {
+  /*const getAllSnnipets = async () => {
     await axios
-      .get("/api/admin-music/getAllMintedNfts")
+      .get("/api/admin-music/getSelectedNft")
       .then((res) => {
-        if (res.data && res.data[0]) {
+        if (res.data) {
         
           console.log(res.data);
           selected(res.data);
@@ -43,7 +43,8 @@ const UpdateSnnipets = (
       }).catch(err => {
         Swal.fire("Error getting nfts", err);
       });
-  }
+  }*/
+  
 
   const sliceBuffer = (audioContext, buffer, callback) => {
     var error = null;
@@ -189,7 +190,7 @@ const UpdateSnnipets = (
   const updateSelectedSnnipet = async () => {
     const audioCtx = new AudioContext();
     setIsLoading(true);
-    await update(audioCtx, selected, true);
+    await update(audioCtx, nft, true);
   }
 
   /*const verifySnnipets = async () => {
@@ -238,19 +239,13 @@ const UpdateSnnipets = (
 
       {/*&<h3>Size in Seconds:</h3>
       <input type="number" value={size} onChange={e => {setSize(e.target.value)}}/>*/}
-      <Rows>
-      <div>
+      
       <h3>Start Time:</h3>
       <input type="number" value={start} onChange={e => {setStart(e.target.value)}}/>
-      </div>
-      <div>
-      <h3>End Time:</h3>
-      <h4>{end}</h4>
-      </div>
-      </Rows>
+      
       {selected && !isLoading? 
         <Button onClick={updateSelectedSnnipet}>
-          Update {selected.title}
+          Update Snnipet
         </Button> : isLoading ?
         <Button>
           Loading <LoadingIcon src={Loading}/>
@@ -293,20 +288,6 @@ const Section = styled.div`
   padding-bottom: 20px;
 `;
 
-const Rows = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: space-between;
-  justify-content: space-between;
-  width: 100%;
-  input {
-    width: 40px;
-  }
-  div {
-    align-items: center;
-    margin-right: 10%;
-  }
-`;
 
 const Button = styled.a`
   margin-left: auto;

@@ -108,7 +108,7 @@ const LikeButton = styled.button`
   border: none;
   width: min-content;
   height: min-content;
-  margin: 0px 4px 0 0;
+  margin: 0px 4px 5px 0;
 `;
 
 const Spacer = styled.div`
@@ -128,28 +128,29 @@ const Share = styled(IconShare)`
 `;
 
 const LikedHeart = styled(IconHeart)`
-  width: 25px;
-  height: 25px;
+  width: 30px;
+  height: 30px;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.1s ease-in-out;
   & path {
     stroke: ${(props) => props.theme.color.pink};
   }
 `;
 
 const Heart = styled(IconHeart)`
-  width: 25px;
-  height: 25px;
+  width: 30px;
+  height: 30px;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.1s ease-in-out;
   & path {
-    transition: all 0.2s ease-in-out;
+    transition: all 0.1s ease-in-out;
     stroke: ${(props) => props.theme.color.gray};
   }
   &:hover {
     & path {
       stroke: ${(props) => props.theme.color.pink};
     }
+    transform: scale(1.2);
   }
 `;
 

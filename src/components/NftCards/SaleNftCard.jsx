@@ -487,10 +487,11 @@ const Container = styled.div`
   transition: all 0.1s ease-in-out;
   cursor: pointer;
   box-shadow: rgba(255, 255, 255, .1) 0px 3px 10px 0px;
+  opacity: .9;
   &:hover {
-    transform: translateY(-2px);
+    transform: translateY(-2px) scale(1.01);
     box-shadow: rgba(255, 255, 255, .2) 0px 3px 10px 0px;
-
+    opacity: 1;
   }
   @media only screen and (max-width: 330px) {
     width: 300px;

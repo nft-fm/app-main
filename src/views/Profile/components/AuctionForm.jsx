@@ -13,7 +13,6 @@ import { ReactComponent as eth_icon } from "../../../assets/img/icons/ethereum.s
 import { ReactComponent as arrow } from "../../../assets/img/icons/arrow_cropped.svg";
 // import { ReactComponent as arrow_down } from "../../../assets/img/icons/arrow_down.svg";
 
-import ImagePreview from "./ImagePreview";
 import { NavLink, useHistory } from "react-router-dom";
 
 import { useAccountConsumer } from "../../../contexts/Account";
@@ -408,7 +407,7 @@ const AuctionForm = () => {
       </Header>
       <Main>
         <Files>
-          <ImagePreview imageFile={imageFile} />
+          {/* <ImagePreview imageFile={imageFile} /> */}
         </Files>
         <Inputs autoComplete="off">
           <TopInputs>

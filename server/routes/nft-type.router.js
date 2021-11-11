@@ -1053,7 +1053,7 @@ const compareAndUpdateDBtoContract = async () => {
 // cron every two hours
 cron.schedule('0 */2 * * *', () => {
   try {
-    process.env.REACT_APP_IS_MAINNET && compareAndUpdateDBtoContract()
+    process.env.REACT_APP_IS_MAINNET && process.env.PRODUCTION && compareAndUpdateDBtoContract()
   } catch (err) {
     console.log(err)
   }

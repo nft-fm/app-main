@@ -28,7 +28,7 @@ export const Question = (props) => {
       </FaqQuestion>
       <FaqBody active={active} ref={content} height={height}>
         <FaqDivider />
-        <FaqAnswer>{props.answer}</FaqAnswer>
+        <FaqAnswer>{props.answer} {props.links}</FaqAnswer>
       </FaqBody>
     </FaqCard>
   );

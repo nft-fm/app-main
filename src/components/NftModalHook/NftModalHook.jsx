@@ -428,6 +428,7 @@ const BuyNftModal = (props) => {
                   }
                   shareCount={shareCount}
                   isLoading={likesLoading}
+                  displayShare={true}
                 />
               </Actions>
             </TrackDetailsHolder>

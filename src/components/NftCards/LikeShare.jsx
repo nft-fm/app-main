@@ -13,7 +13,7 @@ import {
   FacebookIcon,
 } from "react-share";
 
-const LikeShare = ({ nft, liked, setLiked, likeCount, isLoading, setLikeCount, updateShareCount, setIsShareOpen }) => {
+const LikeShare = ({ nft, liked, setLiked, likeCount, isLoading, setLikeCount, updateShareCount, setIsShareOpen, displayShare }) => {
   const { account } = useAccountConsumer();
 
   const url = `https://beta.fanfare.fm/market/${nft.chain}/${nft.nftId}`;
@@ -43,24 +43,28 @@ const LikeShare = ({ nft, liked, setLiked, likeCount, isLoading, setLikeCount, u
 
   return (
     <Side>
-      <IconArea>
-        <TwitterShareButton
-          title={message}
-          url={url}
-          hashtags={["NFTFM", "NFTs", "NFTCommunity", "NFTart", "nftmusic"]}
-        >
-          <TwitterIcon onClick={() => newShare()} size={25} borderRadius={"10px"} />
-        </TwitterShareButton>
-      </IconArea>
-      <Spacer />
-      <IconArea>
-        <FacebookShareButton
-          quote={message}
-          url={url}
-        >
-          <FacebookIcon onClick={() => newShare()} size={25} borderRadius={"10px"} />
-        </FacebookShareButton>
-      </IconArea>
+      {displayShare &&
+        <>
+          <IconArea>
+            <TwitterShareButton
+              title={message}
+              url={url}
+              hashtags={["NFTFM", "NFTs", "NFTCommunity", "NFTart", "nftmusic"]}
+            >
+              <TwitterIcon onClick={() => newShare()} size={25} borderRadius={"10px"} />
+            </TwitterShareButton>
+          </IconArea>
+          <Spacer />
+          <IconArea>
+            <FacebookShareButton
+              quote={message}
+              url={url}
+            >
+              <FacebookIcon onClick={() => newShare()} size={25} borderRadius={"10px"} />
+            </FacebookShareButton>
+          </IconArea>
+        </>
+      }
       <Spacer />
       <IconArea>
         {isLoading ? (

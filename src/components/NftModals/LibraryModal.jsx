@@ -104,6 +104,7 @@ const LibraryModal = ({
                   setLiked={setLiked}
                   likeCount={likeCount}
                   setLikeCount={setLikeCount}
+                  displayShare={true}
                 />
               </Side>
               <Side>

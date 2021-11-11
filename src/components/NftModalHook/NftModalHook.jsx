@@ -72,7 +72,7 @@ const BuyNftModal = (props) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isBought, setIsBought] = useState(false);
-  const { account, connect, getUser, currChainId } = useAccountConsumer();
+  const { account, connect, getUser, currChainId, user } = useAccountConsumer();
   const { setNftCallback } = usePlaylistConsumer();
   const history = useHistory();
 
@@ -129,7 +129,7 @@ const BuyNftModal = (props) => {
             },
             (err) => {
               if (err) {
-                console.log("HEREH", err)
+                console.log("HEREH", err);
                 setIsLoading(false);
                 swal.fire({
                   imageUrl: errorIcon,
@@ -138,13 +138,18 @@ const BuyNftModal = (props) => {
                   title: "Couldn't complete sale!",
                   text: "Please try again",
                 });
-                // axios.post("/api/email/sendPurchaseEmails", nft, account);
               } else {
                 setTimeout(function () {
                   setIsLoading(false);
                   setIsBought(true);
                   getUser();
                 }, 1000);
+                axios
+                  .post("/api/email/sendPurchaseEmails", {
+                    nft: nft,
+                    user: user,
+                  })
+                  .then((res) => console.log(res));
                 if (nft.isRedeemable) {
                   Swal.fire({
                     title: "Redeem Merch!",
@@ -156,7 +161,6 @@ const BuyNftModal = (props) => {
                     }
                   });
                 } else {
-                  // alert(JSON.stringify(nft));
                   Swal.fire({
                     title: "Successful purchase!",
                     html: `<div>View in your library (can take a few minutes to appear)<div>`,

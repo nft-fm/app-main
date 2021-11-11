@@ -6,7 +6,6 @@ const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
 
 const ArtistMail = (artistEmail, nft) => {
-  console.log(0);
   const OAuth2Client = new google.auth.OAuth2(
     process.env.NOTIFICATION_OAUTH_CLIENT_ID,
     process.env.NOTIFICATION_CLIENT_SECRET,
@@ -47,8 +46,8 @@ const ArtistMail = (artistEmail, nft) => {
   var message = `<html>
         <div>
         <p>Someone purchased your ${nft.title} NFT! Congratulations!</p>
-        <p>There are now ${nft.numSold - nft.quantity} / ${
-    nft.quantity
+        <p>There are now ${nft.numMinted - nft.numSold}/${
+    nft.numMinted
   } copies for sale.</p>
         </div>
         </html>`;
@@ -69,8 +68,7 @@ const ArtistMail = (artistEmail, nft) => {
   });
 };
 
-const UserMail = (userEmail, nft) => {
-  console.log(0);
+const UserMail = (userEmail, data) => {
   const OAuth2Client = new google.auth.OAuth2(
     process.env.NOTIFICATION_OAUTH_CLIENT_ID,
     process.env.NOTIFICATION_CLIENT_SECRET,
@@ -79,14 +77,10 @@ const UserMail = (userEmail, nft) => {
   OAuth2Client.setCredentials({
     refresh_token: process.env.REFRESH_TOKEN,
   });
-  console.log(1);
-  let accessToken = "";
   const getAToken = async () => {
-    accessToken = await OAuth2Client.getAccessToken();
+    let accessToken = await OAuth2Client.getAccessToken();
     return accessToken;
   };
-  getAToken();
-  console.log(2);
 
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
@@ -110,13 +104,14 @@ const UserMail = (userEmail, nft) => {
       console.log("Server is ready to take our messages");
     }
   });
-  console.log(3);
 
   //this is the email body
   var message = `<html>
         <div>
-        <p>You purchased ${nft.title} by ${artist}! </p>
+        <p>Thank you for your purchase of ${data.title} by ${data.artist}! </p>
         <p>Listen to your new NFT in your <a href="https://beta.fanfare.fm/library">Library</a></p>
+        <p>Discover amazing new music in our <a href="https://beta.fanfare.fm/discover">Marketplace</a>!</p>
+        <p>Keep in touch with the Fanfare community here: <a href="https://t.me/fanfare_fm">https://t.me/fanfare_fm</a></p>
         </div>
         </html>`;
 
@@ -138,9 +133,16 @@ const UserMail = (userEmail, nft) => {
 router.post("/sendPurchaseEmails", async (req, res) => {
   try {
     console.log("sendPurchaseNotification hit", req.body);
+    let artist = await User.findOne({ address: req.body.nft.address });
     //send to artist and to user
-    ArtistMail("whyquinn@gmail.com", req.body.nft);
-    // UserMail("whyquinn@gmail.com");
+    ArtistMail(artist.email, req.body.nft);
+    if (req.body.user.email != "") {
+      UserMail(req.body.user.email, {
+        title: req.body.nft.title,
+        artist: artist.username,
+      });
+    }
+    res.status(200).send("Success!");
   } catch (err) {
     res.status(500).send(err);
   }

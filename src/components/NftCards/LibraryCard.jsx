@@ -33,12 +33,7 @@ const NftCard = (props) => {
   }, [props.nft, user]);
 
   return (
-    <Container onClick={() => setIsModalOpen(!isModalOpen)}>
-      {/* <ShareModal
-        open={isShareOpen}
-        hide={() => setIsShareOpen(!isShareOpen)}
-        nft={nft}
-      /> */}
+    <>
       <LibraryModal
         open={isModalOpen}
         hide={hide}
@@ -49,28 +44,27 @@ const NftCard = (props) => {
         setLikeCount={setLikeCount}
         setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
       />
-      <CardTop>
-        <Spacer />
-        <LikeShare
-          nft={nft}
-          liked={liked}
-          setLiked={setLiked}
-          likeCount={likeCount}
-          setLikeCount={setLikeCount}
-          setIsShareOpen={() => setIsShareOpen(!isShareOpen)}
-        />
-        <Side>
-          {nft.chain === "ETH" && (
-            <IconArea
-              href={`https://opensea.io/assets/0x88d3e00ce938f1a591336131b859465b50d608b7/${nft.nftId}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Trade
-              <Cart />
-            </IconArea>
-          )}
-          {/* {(nft.chain === "BSC") && (
+      <Container onClick={() => setIsModalOpen(!isModalOpen)}>
+        {/* <ShareModal
+        open={isShareOpen}
+        hide={() => setIsShareOpen(!isShareOpen)}
+        nft={nft}
+      /> */}
+
+        <CardTop>
+
+          <Side>
+            {nft.chain === "ETH" && (
+              <IconArea
+                href={`https://opensea.io/assets/0x88d3e00ce938f1a591336131b859465b50d608b7/${nft.nftId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Trade
+                <Cart />
+              </IconArea>
+            )}
+            {/* {(nft.chain === "BSC") && (
             <IconArea
               href={''}
             >
@@ -78,89 +72,90 @@ const NftCard = (props) => {
               <Cart />
             </IconArea>
           )} */}
-        </Side>
-      </CardTop>
-      <Image
-        src={nft.imageUrl}
-        alt="image"
+          </Side>
+        </CardTop>
+        <Image
+          src={nft.imageUrl}
+          alt="image"
         // onClick={() => setIsOpen(!isOpen)}
-      />
-      <BottomWrapper>
-        <Bottom>
-          <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>
-            {nft.title.length > 15 ? nft.title.slice(0, 15) + "..." : nft.title}
-          </TrackName>
-          <Artist>
-            {nft.artist.length > 20
-              ? nft.artist.slice(0, 20) + "..."
-              : nft.artist}
-          </Artist>
-        </Bottom>
-        <PlayButton src={PlayIcon} onClick={() => setNftCallback(nft)} />
-      </BottomWrapper>
-      <BottomSection>
-        <BadgeHolder>
-          {nft.badges?.map((badge) => {
-            if (badge.founder) {
-              return (
-                <>
-                  <FounderBadge
-                    className="founderBadge"
-                    data-tip
-                    data-for="founderTip"
-                  />
-                  <ReactToolTip id="founderTip" place="top" effect="solid">
-                    Founder
-                  </ReactToolTip>
-                </>
-              );
-            }
-            if (badge.premium) {
-              return (
-                <>
-                  <PremiumBadge
-                    className="premiumBadge"
-                    data-tip
-                    data-for="premiumTip"
-                  />
-                  <ReactToolTip id="premiumTip" place="top" effect="solid">
-                    Premium
-                  </ReactToolTip>
-                </>
-              );
-            }
-            if (badge.prerelease) {
-              return (
-                <>
-                  <PrereleaseBadge
-                    className="prereleaseBadge"
-                    data-tip
-                    data-for="prereleaseTip"
-                  />
-                  <ReactToolTip id="prereleaseTip" place="top" effect="solid">
-                    Prerelease
-                  </ReactToolTip>
-                </>
-              );
-            }
-            if (badge.exclusive) {
-              return (
-                <>
-                  <ExclusiveBadge
-                    className="exclusiveBadge"
-                    data-tip
-                    data-for="exclusiveTip"
-                  />
-                  <ReactToolTip id="exclusiveTip" place="top" effect="solid">
-                    Exclusive
-                  </ReactToolTip>
-                </>
-              );
-            }
-          })}
-        </BadgeHolder>
-      </BottomSection>
-    </Container>
+        />
+        <BottomWrapper>
+          <Bottom>
+            <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>
+              {nft.title.length > 15 ? nft.title.slice(0, 15) + "..." : nft.title}
+            </TrackName>
+            <Artist>
+              {nft.artist.length > 20
+                ? nft.artist.slice(0, 20) + "..."
+                : nft.artist}
+            </Artist>
+          </Bottom>
+          <PlayButton src={PlayIcon} onClick={() => setNftCallback(nft)} />
+        </BottomWrapper>
+        <BottomSection>
+          <BadgeHolder>
+            {nft.badges?.map((badge) => {
+              if (badge.founder) {
+                return (
+                  <>
+                    <FounderBadge
+                      className="founderBadge"
+                      data-tip
+                      data-for="founderTip"
+                    />
+                    <ReactToolTip id="founderTip" place="top" effect="solid">
+                      Founder
+                    </ReactToolTip>
+                  </>
+                );
+              }
+              if (badge.premium) {
+                return (
+                  <>
+                    <PremiumBadge
+                      className="premiumBadge"
+                      data-tip
+                      data-for="premiumTip"
+                    />
+                    <ReactToolTip id="premiumTip" place="top" effect="solid">
+                      Premium
+                    </ReactToolTip>
+                  </>
+                );
+              }
+              if (badge.prerelease) {
+                return (
+                  <>
+                    <PrereleaseBadge
+                      className="prereleaseBadge"
+                      data-tip
+                      data-for="prereleaseTip"
+                    />
+                    <ReactToolTip id="prereleaseTip" place="top" effect="solid">
+                      Prerelease
+                    </ReactToolTip>
+                  </>
+                );
+              }
+              if (badge.exclusive) {
+                return (
+                  <>
+                    <ExclusiveBadge
+                      className="exclusiveBadge"
+                      data-tip
+                      data-for="exclusiveTip"
+                    />
+                    <ReactToolTip id="exclusiveTip" place="top" effect="solid">
+                      Exclusive
+                    </ReactToolTip>
+                  </>
+                );
+              }
+            })}
+          </BadgeHolder>
+        </BottomSection>
+      </Container>
+    </>
   );
 };
 
@@ -217,12 +212,14 @@ const PlayButton = styled(PlayIcon)`
 `;
 
 const BottomWrapper = styled.div`
-  width: 100%;
+  width: 95%;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
   text-align: left;
+  padding-left: 5%;
+  padding-right: 5%;
 `;
 
 const Bottom = styled.div`

@@ -21,7 +21,8 @@ const LikeShare = ({ nft, liked, setLiked, likeCount, isLoading, setLikeCount, u
 
   const newShare = () => {
     axios.post("/api/nft-type/newShare", nft);
-    updateShareCount();
+    if (updateShareCount)
+      updateShareCount();
   };
 
   const like = async (e) => {

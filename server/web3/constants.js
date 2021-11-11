@@ -16,6 +16,8 @@ const MAIN_BSC_FlatPriceSale = "0x163379Fe64F07bD6a4b84f10c6Ba9AA9d4F2DFCa";
 const TEST_StakingAddress = "0xfa800E905Ca7e8CaFB283a6F4c1A91f178602500";
 const MAIN_StakingAddress = "0x5A2Df2e3D11dcDb645fbA2008c06fdBb114E805e";
 
+const AirdropWallet = "0x2BaeCb9A9609781bEc8CaCD6b5EeeE774b01462E"
+
 module.exports = {
   TEST_NFTToken,
   TEST_FlatPriceSale,
@@ -29,4 +31,5 @@ module.exports = {
   MAIN_BSC_FlatPriceSale,
   TEST_StakingAddress,
   MAIN_StakingAddress,
+  AirdropWallet
 };

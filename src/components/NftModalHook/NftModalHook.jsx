@@ -96,6 +96,38 @@ const BuyNftModal = (props) => {
     e.stopPropagation();
   };
 
+  const calcBonus = () => {
+    if (nft.chain === "ETH")
+      if (nft.price < 0.001) return 50000;
+      else if (nft.price < 0.01) return 250000;
+      else if (nft.price < 0.1) return 1500000;
+      else return 15000000;
+    else {
+      if (nft.price < 0.01) return 50000;
+      else if (nft.price < 0.1) return 250000;
+      else if (nft.price < 1) return 1500000;
+      else return 15000000;
+    }
+  };
+
+  const calcEligibility = () => {
+    if (nft.chain === "BSC" && nft.price < 0.001) return false;
+    if (nft.numMinted < 5) return nft.numMinted - nft.numSold > 0;
+    else return nft.numSold < 5;
+  };
+
+  const airdrop = async () => {
+    const drop = await axios
+      .post("/api/airdrop/airdropOnNftPurchase", {
+        receiver: user.address,
+        amount: calcBonus(),
+      })
+      .then((res) => {
+        return res.data; //txId
+      });
+    return drop;
+  };
+  
   const purchase = async (id) => {
     if (
       (nft.chain === "ETH" && currChainId !== 1 && currChainId !== 4) ||
@@ -151,28 +183,61 @@ const BuyNftModal = (props) => {
                   })
                   .then((res) => console.log(res));
                 if (nft.isRedeemable) {
-                  Swal.fire({
-                    title: "Redeem Merch!",
-                    text: "You just bought an NFT with redeemable merch! Click this button to go to the redemption portal",
-                    confirmButtonText: "Redeem!",
-                  }).then((res) => {
-                    if (res.isConfirmed) {
-                      history.push("/redeem");
-                    }
-                  });
+                  if (calcEligibility()) {
+                    airdrop();
+                    Swal.fire({
+                      title: "Redeem Merch!",
+                      html: `<div><p>You just bought an NFT with redeemable merch! Click this button to go to the redemption portal</p>
+                      <p>You just received an airdrop of ${calcBonus()} $VINYL!</div>`,
+                      confirmButtonText: "Redeem!",
+                    }).then((res) => {
+                      if (res.isConfirmed) {
+                        history.push("/redeem");
+                      }
+                    });
+                  } else {
+                    Swal.fire({
+                      title: "Redeem Merch!",
+                      text: "You just bought an NFT with redeemable merch! Click this button to go to the redemption portal",
+                      confirmButtonText: "Redeem!",
+                    }).then((res) => {
+                      if (res.isConfirmed) {
+                        history.push("/redeem");
+                      }
+                    });
+                  }
                 } else {
-                  Swal.fire({
-                    title: "Successful purchase!",
-                    html: `<div>View in your library (can take a few minutes to appear)<div>`,
-                    confirmButtonText: "Share My NFT!",
-                  }).then((res) => {
-                    if (res.isConfirmed) {
-                      let text = `I’m proud to directly support up-and-coming artists by buying their NFTs on Fanfare! Check out this song by ${nft.artist} at ${window.location}`;
-                      window.open(
-                        `https://twitter.com/intent/tweet?text=${text}`
-                      );
-                    }
-                  });
+                  if (calcEligibility()) {
+                    airdrop();
+                    Swal.fire({
+                      title: "Successful purchase!",
+                      html: `<div><p>View in your library (can take a few minutes to appear)<p>
+                      <p>You received an airdrop of ${calcBonus()} $VINYL!</p>
+                      <div>`,
+                      confirmButtonText: "Share My NFT!",
+                    }).then((res) => {
+                      if (res.isConfirmed) {
+                        let text = `I’m proud to directly support up-and-coming artists by buying their NFTs on Fanfare! Check out this song by ${nft.artist} at ${window.location}`;
+                        window.open(
+                          `https://twitter.com/intent/tweet?text=${text}`
+                        );
+                      }
+                    });
+                  } else {
+                    Swal.fire({
+                      title: "Successful purchase!",
+                      html: `<div>View in your library (can take a few minutes to appear)
+                      <div>`,
+                      confirmButtonText: "Share My NFT!",
+                    }).then((res) => {
+                      if (res.isConfirmed) {
+                        let text = `I’m proud to directly support up-and-coming artists by buying their NFTs on Fanfare! Check out this song by ${nft.artist} at ${window.location}`;
+                        window.open(
+                          `https://twitter.com/intent/tweet?text=${text}`
+                        );
+                      }
+                    });
+                  }
                 }
               }
             }
@@ -268,26 +333,6 @@ const BuyNftModal = (props) => {
         });
       }
     }
-  };
-
-  const calcBonus = () => {
-    if (nft.chain === "ETH")
-      if (nft.price < 0.001) return 50000;
-      else if (nft.price < 0.01) return 250000;
-      else if (nft.price < 0.1) return 1500000;
-      else return 15000000;
-    else {
-      if (nft.price < 0.01) return 50000;
-      else if (nft.price < 0.1) return 250000;
-      else if (nft.price < 1) return 1500000;
-      else return 15000000;
-    }
-  };
-
-  const calcEligibility = () => {
-    if (nft.chain === "BSC" && nft.price < 0.001) return false;
-    if (nft.numMinted < 5) return nft.numMinted - nft.numSold > 0;
-    else return nft.numSold < 5;
   };
 
   //add in to the nft modal

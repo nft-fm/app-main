@@ -34,6 +34,7 @@ const CreateFormPaginator = ({
   isLoadingImage,
   isLoading,
   currChainId,
+  checked
 }) => {
   const [step2, setStep2] = useState(false);
   const [step3, setStep3] = useState(false);

@@ -17,6 +17,7 @@ import moment from "moment";
 import { NavLink } from "react-router-dom";
 import { ReactComponent as PlayIcon } from "../../assets/img/icons/listen_play.svg";
 import Ticker from "../../components/Ticker";
+import LikeShare from '../NftCards/LikeShare'
 
 const LibraryModal = ({
   open,
@@ -97,18 +98,14 @@ const LibraryModal = ({
           <RightSide>
             <CardTop>
               <Side>
-                <IconArea>
-                  {liked ? (
-                    <LikedHeart onClick={() => like()} />
-                  ) : (
-                    <Heart onClick={() => like()} />
-                  )}
-                  {likeCount}
-                </IconArea>
-                <IconArea>
-                  <Share onClick={() => share()} />
-                  {nft.shareCount}
-                </IconArea>
+                <LikeShare
+                  nft={nft}
+                  liked={liked}
+                  setLiked={setLiked}
+                  likeCount={likeCount}
+                  setLikeCount={setLikeCount}
+                  displayShare={true}
+                />
               </Side>
               <Side>
                 <IconArea>
@@ -399,7 +396,6 @@ const Heart = styled(IconHeart)`
 const Side = styled.div`
   display: flex;
   align-items: center;
-  margin-left: -25px;
   @media only screen and (max-width: 776px) {
     margin-left: 0;
   }
@@ -426,6 +422,7 @@ const CardTop = styled.div`
 const OpaqueFilter = styled.div`
   width: 100vw;
   height: 100vh;
+  cursor: unset;
   position: fixed;
   left: 50%;
   top: 50%;

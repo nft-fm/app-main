@@ -13,7 +13,7 @@ import {
   FacebookIcon,
 } from "react-share";
 
-const LikeShare = ({ nft, liked, setLiked, likeCount, isLoading, setLikeCount, updateShareCount, setIsShareOpen }) => {
+const LikeShare = ({ nft, liked, setLiked, likeCount, isLoading, setLikeCount, updateShareCount, setIsShareOpen, displayShare }) => {
   const { account } = useAccountConsumer();
 
   const url = `https://beta.fanfare.fm/market/${nft.chain}/${nft.nftId}`;
@@ -21,7 +21,8 @@ const LikeShare = ({ nft, liked, setLiked, likeCount, isLoading, setLikeCount, u
 
   const newShare = () => {
     axios.post("/api/nft-type/newShare", nft);
-    updateShareCount();
+    if (updateShareCount)
+      updateShareCount();
   };
 
   const like = async (e) => {
@@ -42,24 +43,28 @@ const LikeShare = ({ nft, liked, setLiked, likeCount, isLoading, setLikeCount, u
 
   return (
     <Side>
-      <IconArea>
-        <TwitterShareButton
-          title={message}
-          url={url}
-          hashtags={["NFTFM", "NFTs", "NFTCommunity", "NFTart", "nftmusic"]}
-        >
-          <TwitterIcon onClick={() => newShare()} size={25} borderRadius={"10px"} />
-        </TwitterShareButton>
-      </IconArea>
-      <Spacer />
-      <IconArea>
-        <FacebookShareButton
-          quote={message}
-          url={url}
-        >
-          <FacebookIcon onClick={() => newShare()} size={25} borderRadius={"10px"} />
-        </FacebookShareButton>
-      </IconArea>
+      {displayShare &&
+        <>
+          <IconArea>
+            <TwitterShareButton
+              title={message}
+              url={url}
+              hashtags={["NFTFM", "NFTs", "NFTCommunity", "NFTart", "nftmusic"]}
+            >
+              <TwitterIcon onClick={() => newShare()} size={25} borderRadius={"10px"} />
+            </TwitterShareButton>
+          </IconArea>
+          <Spacer />
+          <IconArea>
+            <FacebookShareButton
+              quote={message}
+              url={url}
+            >
+              <FacebookIcon onClick={() => newShare()} size={25} borderRadius={"10px"} />
+            </FacebookShareButton>
+          </IconArea>
+        </>
+      }
       <Spacer />
       <IconArea>
         {isLoading ? (
@@ -107,7 +112,7 @@ const LikeButton = styled.button`
   border: none;
   width: min-content;
   height: min-content;
-  margin: 0px 4px 0 0;
+  margin: 0px 4px 5px 0;
 `;
 
 const Spacer = styled.div`
@@ -127,28 +132,29 @@ const Share = styled(IconShare)`
 `;
 
 const LikedHeart = styled(IconHeart)`
-  width: 25px;
-  height: 25px;
+  width: 30px;
+  height: 30px;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.1s ease-in-out;
   & path {
     stroke: ${(props) => props.theme.color.pink};
   }
 `;
 
 const Heart = styled(IconHeart)`
-  width: 25px;
-  height: 25px;
+  width: 30px;
+  height: 30px;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.1s ease-in-out;
   & path {
-    transition: all 0.2s ease-in-out;
+    transition: all 0.1s ease-in-out;
     stroke: ${(props) => props.theme.color.gray};
   }
   &:hover {
     & path {
       stroke: ${(props) => props.theme.color.pink};
     }
+    transform: scale(1.2);
   }
 `;
 

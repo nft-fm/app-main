@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { ReactComponent as IconX } from "../../assets/img/icons/x.svg";
-import logo from "../../assets/img/logos/logo_tiny.png";
+//import logo from "../../assets/img/logos/logo_tiny.png";
 import { ReactComponent as IconHeart } from "../../assets/img/icons/heart.svg";
 import { ReactComponent as IconShare } from "../../assets/img/icons/share.svg";
 import { ReactComponent as IconCart } from "../../assets/img/icons/cart.svg";
@@ -10,6 +10,7 @@ import { useAccountConsumer } from "../../contexts/Account";
 import Swal from "sweetalert2";
 import { setNewPrice } from "../../web3/utils";
 import loadingGif from "../../assets/img/loading.gif";
+import UpdateSnnipets from "../../views/Admin/UpdateSnnipets";
 
 const BuyNftModal = ({
   open,
@@ -112,7 +113,7 @@ const BuyNftModal = ({
         <StyledModal>
           <X onClick={(e) => !loading && hide(e)} />
           <CardTitle>
-            <Logo src={logo} />
+            {/*<Logo src={logo} />*/}
           </CardTitle>
           <CardTop>
             <Side>
@@ -144,6 +145,14 @@ const BuyNftModal = ({
             <Artist>{nft.artist}</Artist>
           </InfoContainer>
           <StatsContainer>
+            <StyledTable>
+              <TableRow className="header">
+                <th>Update Snippet</th>
+              </TableRow>
+              <UpdateSnnipets 
+              nft={nft}
+              />
+              </StyledTable>
             <StyledTable>
               <TableRow className="header">
                 <th>Earnings</th>

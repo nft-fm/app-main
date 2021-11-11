@@ -7,7 +7,7 @@ const mixpanel = Mixpanel.init(mixpanelToken, { protocol: "https" });
 const trackNftPurchase = (props) => {
   const { address, artistAddress, nftId, nftPrice, chain, title, artist } = props;
   console.log("tracking NFT Purchase", props, process.env.PRODUCTION, mixpanelToken);
-  mixpanel.track("nft purchase", {
+  mixpanel.track("nft sale", {
     distinct_id: address,
     artistAddress,
     nftId,
@@ -47,7 +47,7 @@ const trackLogin = (props) => {
 };
 
 const trackPageview = (props) => {
-  const { address, ip, page, hasMetamask, browser, deviceType, platform } = props;
+  const { address, ip, page, hasMetamask, browser, deviceType, platform, source } = props;
   console.log("track pageview", props);
     mixpanel.track("pageview", {
     hasMetamask: hasMetamask,
@@ -59,6 +59,7 @@ const trackPageview = (props) => {
     browser,
     deviceType,
     platform,
+    source,
   });
 };
 const trackNftMint = () => {};

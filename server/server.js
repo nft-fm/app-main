@@ -48,10 +48,6 @@ app.use(function (req, res, next) {
 
 dotenv.config();
 connectDB();
-listenForMintEth();
-listenForMintBsc();
-listenForBuyEth();
-listenForBuyBsc();
 
 app.use(cookieParser());
 app.use(sessionMiddleware);

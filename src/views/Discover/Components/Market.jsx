@@ -154,7 +154,7 @@ const Listen = () => {
         <MenuSpan
         isMenuOpen={menuOpen}
         onClick={() => {
-          setSort(6);
+          setSort(5);
           setSelected("Liked: High - Low");
           setMenuOpen(false);
         }}

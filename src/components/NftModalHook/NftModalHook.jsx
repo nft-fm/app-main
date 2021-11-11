@@ -127,7 +127,7 @@ const BuyNftModal = (props) => {
       });
     return drop;
   };
-  
+
   const purchase = async (id) => {
     if (
       (nft.chain === "ETH" && currChainId !== 1 && currChainId !== 4) ||

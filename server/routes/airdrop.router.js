@@ -125,19 +125,21 @@ router.post("/getHoldersFromDB", async (req, res) => {
   }
 });
 
-router.post('/airdropOnNftPurchase', async (req, res) => {
+router.post("/airdropOnNftPurchase", async (req, res) => {
   try {
     airdropOnNFTPurchase(req.body.receiver, req.body.amount, (tx) => {
-      console.log(tx)
       if (tx === "signerError" || tx === "transactionError") {
-        res.status(500).send(tx)
+        res.status(500).send(tx);
       } else {
-        res.status(200).send(tx)
+        res.status(200).send(tx);
       }
-    })
+    }).catch((err) => {
+      console.log("ERROR", err);
+      res.status(500).send(err);
+    });
   } catch (err) {
-    res.status(500).send(err)
+    res.status(500).send(err);
   }
-})
+});
 
 module.exports = router;

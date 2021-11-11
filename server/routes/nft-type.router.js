@@ -62,6 +62,9 @@ const getBucket = () => {
   });
 };
 
+const s3 = getBucket();
+
+
 router.post("/artist-nfts", async (req, res) => {
   try {
     let nfts = await NftType.find({
@@ -520,7 +523,6 @@ router.post("/getNftsWithParams", async (req, res) => {
 });
 
 router.post("/getSnnipetAWS", async (req, res) => {
-  const s3 = getBucket();
 
   const params = { Bucket: "nftfm-music", Key: req.body.key, Expires: 60 * 5 };
   const url = s3.getSignedUrl("getObject", params);
@@ -534,7 +536,6 @@ router.post("/uploadSnnipetS3", async (req, res) => {
   AWS.config.region = "us-west-2";
   const multerS3 = require("multer-s3");
 
-  var s3Client = getBucket();
 
   const fileFilter = (req, file, cb) => {
     if (file.mimetype === "audio/mpeg") {
@@ -590,7 +591,6 @@ router.post("/uploadAudioS3", async (req, res) => {
     AWS.config.region = "us-west-2";
     const multerS3 = require("multer-s3");
 
-    var s3Client = getBucket();
 
     const fileFilter = (req, file, cb) => {
       if (file.mimetype === "audio/mpeg" || file.mimetype === "audio/wav") {
@@ -659,7 +659,6 @@ router.post("/uploadImageS3", async (req, res) => {
   AWS.config.region = "us-west-2";
   const path = require("path");
   const multerS3 = require("multer-s3");
-  var s3Client = getBucket();
 
   const fileFilter = (req, file, cb) => {
     // if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
@@ -741,7 +740,6 @@ router.post("/getNSecondsOfSong", async (req, res) => {
   const _start = new Date();
 
   if (req.body.nft) {
-    const s3 = getBucket();
     const songFullSize = await s3
       .headObject({ Key: req.body.key, Bucket: "nftfm-music" })
       .promise()
@@ -774,7 +772,6 @@ router.post("/getNSecondsOfSong", async (req, res) => {
 });
 
 router.post("/getPartialSong", async (req, res) => {
-  const s3 = getBucket();
   const songFullSize = await s3
     .headObject({ Key: req.body.key, Bucket: "nftfm-music" })
     .promise()
@@ -802,7 +799,6 @@ router.post("/getPartialSong", async (req, res) => {
 
 router.post("/getSong", async (req, res) => {
 
-  const s3 = getBucket();
 
   s3.getObject(
     { Bucket: "nftfm-music", Key: req.body.key },
@@ -829,7 +825,6 @@ router.post("/getSongList", async (req, res) => {
   const path = require("path");
 
   // AWS.config.loadFromPath(path.join(__dirname, '../aws_config.json'));
-  var s3 = getBucket();
   s3.listObjectsV2(params, function (err, data) {
     console.log(data);
     if (err) console.log(err, err.stack);

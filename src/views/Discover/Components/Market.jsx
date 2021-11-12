@@ -16,6 +16,8 @@ const Listen = () => {
   const [selected, setSelected] = useState("Date: High - Low");
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState(2);
+  const [genre, setGenre] = useState("All");
+  const [genreMenu, setGenreMenu] = useState(false);
   // const [sort, setSort] = useState(Math.floor(Math.random() * 6));
   const limit = 200;
 
@@ -63,6 +65,8 @@ const Listen = () => {
   //   fetchWithNoSearch();
   // }, [search, account]);
 
+  console.log("genre", genre);
+
   const handleSort = useCallback(async () => {
     setPage(0);
     setHasMore(true);
@@ -73,18 +77,19 @@ const Listen = () => {
         page: 0,
         search,
         sort,
+        genre,
       })
       .then((res) => {
         setAllNfts(res.data.nfts);
         setPage(1);
         setHasMore(res.data.hasMore);
       });
-  }, [search, sort, account]);
+  }, [search, sort, account, genre]);
 
   // handles login and sort
   useEffect(() => {
     handleSort();
-  }, [sort, account, handleSort]);
+  }, [sort, account, handleSort, genre]);
 
   const handleSearch = async (e, pageIncrease, searchParam, sortParam) => {
     e.preventDefault();
@@ -98,6 +103,7 @@ const Listen = () => {
           page: 0,
           search: searchParam,
           sort: sortParam,
+          genre,
         })
         .then((res) => {
           setAllNfts(res.data.nfts);
@@ -108,9 +114,8 @@ const Listen = () => {
   };
 
   const loadMore = () => {
-    setShown(shown + 6)
-  }
-
+    setShown(shown + 6);
+  };
 
   const menuOptions = [
     <MenuSpan
@@ -157,17 +162,36 @@ const Listen = () => {
     >
       Liked
     </MenuSpan>,
-        <MenuSpan
-        isMenuOpen={menuOpen}
-        onClick={() => {
-          setSort(5);
-          setSelected("Liked: High - Low");
-          setMenuOpen(false);
-        }}
-        selected={selected === "Liked: High - Low"}
-      >
-        Genre
-      </MenuSpan>,
+    <MenuSpan
+      isMenuOpen={menuOpen}
+      onClick={() => {
+        setSort(6);
+        setSelected("Sales: High - Low");
+        setMenuOpen(false);
+      }}
+      selected={selected === "Sales: High - Low"}
+    >
+      Most Sales
+    </MenuSpan>,
+  ];
+
+  const genres = [
+    "All",
+    "Country",
+    "Electronic",
+    "Funk",
+    "Hip hop",
+    "Jazz",
+    "Latin",
+    "Pop",
+    "Punk",
+    "Raggae",
+    "Rock",
+    "Metal",
+    "Soul music and R&B",
+    "Polka",
+    "Traditional/Folk",
+    "Other",
   ];
 
   return (
@@ -179,6 +203,31 @@ const Listen = () => {
           onChange={(e) => setSearch(e.target.value)}
         />
       </ContainerTitleForm>
+
+      <ContainerTitleGenre
+        onMouseEnter={() => setGenreMenu(true)}
+        onMouseLeave={() => setGenreMenu(false)}
+        isMenuOpen={genreMenu}
+        optionCount={genres.length}
+      >
+        <SelectedSpan onClick={() => setGenreMenu(!genreMenu)}>
+          Genre <DownArrow />
+        </SelectedSpan>
+        {genres.map((item) => {
+          return (
+            <MenuSpan
+              isMenuOpen={genreMenu}
+              onClick={() => {
+                setGenre(item);
+                setGenreMenu(false);
+              }}
+              selected={genre === item}
+            >
+              {item}
+            </MenuSpan>
+          );
+        })}
+      </ContainerTitleGenre>
 
       <ContainerTitleSorting
         onMouseEnter={() => setMenuOpen(true)}
@@ -198,24 +247,23 @@ const Listen = () => {
       <ContainerOutline />
       <NftScroll>
         {allNfts.map((item, index) => {
-          if (index >= shown * 3)
-            return null
-          else
-            return <NftCard nft={item} />
-        })
-        }
+          if (index >= shown * 3) return null;
+          else return <NftCard nft={item} />;
+        })}
       </NftScroll>
-      {(shown * 3 < allNfts.length) && <LoadMore onClick={loadMore}>Load More</LoadMore> }
+      {shown * 3 < allNfts.length && (
+        <LoadMore onClick={loadMore}>Load More</LoadMore>
+      )}
     </LaunchContainer>
   );
 };
 
 const LoadMore = styled.div`
-align-self: center;
-margin-top: 20px;
-margin-bottom: 50px;
-cursor: pointer;
-`
+  align-self: center;
+  margin-top: 20px;
+  margin-bottom: 50px;
+  cursor: pointer;
+`;
 
 const DownArrow = styled(down_arrow)`
   position: absolute;
@@ -248,6 +296,34 @@ const MenuSpan = styled.span`
     color: white;
   }
 `;
+const ContainerTitleGenre = styled.div`
+  width: 110px;
+  position: absolute;
+  right: calc(25% + 50px);
+  top: -15px;
+  height: 20px;
+  padding: 5px 10px 5px 10px;
+  font: "Compita";
+  background-color: ${(props) => props.theme.color.boxBorder};
+  font-size: 1.2rem;
+  color: ${(props) => (props.faq ? "#3d3d3d" : props.theme.color.gray)};
+  border: 4px solid #383838;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  height: ${(props) => props.isMenuOpen && `${props.optionCount * 28 + 20}px`};
+  z-index: 2;
+
+  @media only screen and (max-width: 1200px) {
+    left: 44%;
+  }
+  @media only screen and (max-width: 776px) {
+    left: 10%;
+    top: 25px;
+  }
+`;
 const ContainerTitleSorting = styled.div`
   width: 110px;
   position: absolute;
@@ -273,10 +349,7 @@ const ContainerTitleSorting = styled.div`
     right: calc(10% + 50px);
   }
   @media only screen and (max-width: 776px) {
-    /* left: 80vw;
-    right: auto; */
-    left: auto;
-    right: auto;
+    right: 10%;
     top: 25px;
   }
 `;
@@ -321,8 +394,12 @@ const NftScroll = styled.div`
   flex-wrap: wrap;
   width: 100%;
   justify-content: space-between;
-  overflowY: scroll !important;
+  overflowy: scroll !important;
+  @media only screen and (max-width: 1200px) {
+    width: 775px;
+  }
   @media only screen and (max-width: 776px) {
+    width: 100%;
     flex-direction: column;
     align-items: center;
     margin-top: 24px;
@@ -337,7 +414,7 @@ const LaunchContainer = styled.div`
   flex-direction: column;
   align-items: center;
   margin-bottom: 40px;
-  overflowY: scroll !important;
+  overflowy: scroll !important;
 `;
 
 const ContainerOutline = styled.div`

@@ -149,7 +149,6 @@ const StakingModal = (props) => {
       .then((res) => {
         if (res.isConfirmed) {
           if (Number(res.value)) {
-            console.log(res.value, Number(res.value), typeof Number(res.value));
             setIsUnstakeLoading(true);
             unstakeVinyl(artist.address, res.value, (err) => {
               if (err) {

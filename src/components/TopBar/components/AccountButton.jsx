@@ -8,6 +8,7 @@ import IconMetamask from "../../../assets/img/icons/metamask_icon.png";
 import Cookies from 'universal-cookie'
 import swal from 'sweetalert2'
 import metamaskLogo from "../../../assets/img/metamask_fox.svg";
+import Modal from "../../../components/WalletProviderModal/Modal"
 
 
 // https://stackoverflow.com/questions/21741841/detecting-ios-android-operating-system
@@ -74,7 +75,7 @@ const AccountButton = (props) => {
 
   return (
     <>
-      <ChainSelector />
+      {/* <ChainSelector />
       {!account ? (
         <ConnectButton onClick={handleUnlockClick}>
           <LogoContainer>
@@ -83,30 +84,10 @@ const AccountButton = (props) => {
             <MetaMask src={"https://trustwallet.com/assets/images/media/assets/trust_platform.svg"} />
           </LogoContainer>
           <ButtonText>Connect Wallet</ButtonText>
-        </ConnectButton>
-      ) : isMobile() ? (
-        <StyledAccountButton>
-          <StyledA
-            href={`https://etherscan.io/address/${account}`}
-            target={`_blank`}
-            style={{ marginLeft: "-5px" }}
-          >
-            <div>{account.substring(0, 6)}</div>
-            <div>{"..." + account.substring(account.length - 4)}</div>
-          </StyledA>
-        </StyledAccountButton>
-      ) : (
-        <StyledAccountButton>
-          <StyledA
-            href={`https://etherscan.io/address/${account}`}
-            target={`_blank`}
-          >
-            {account.substring(0, 6) +
-              "..." +
-              account.substring(account.length - 4)}
-          </StyledA>
-        </StyledAccountButton>
-      )}
+        </ConnectButton> */}
+      {/* ) : isMobile() ? ( */}
+  <Modal />
+      {/* ) : ( <p>TEST</p> )} */}
     </>
   );
 };

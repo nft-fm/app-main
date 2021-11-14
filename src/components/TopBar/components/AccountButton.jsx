@@ -75,7 +75,7 @@ const AccountButton = (props) => {
 
   return (
     <>
-      {/* <ChainSelector />
+      <ChainSelector /> 
       {!account ? (
         <ConnectButton onClick={handleUnlockClick}>
           <LogoContainer>
@@ -84,10 +84,10 @@ const AccountButton = (props) => {
             <MetaMask src={"https://trustwallet.com/assets/images/media/assets/trust_platform.svg"} />
           </LogoContainer>
           <ButtonText>Connect Wallet</ButtonText>
-        </ConnectButton> */}
-      {/* ) : isMobile() ? ( */}
+        </ConnectButton> 
+      ) : isMobile() ? ( 
   <Modal />
-      {/* ) : ( <p>TEST</p> )} */}
+       ) : ( <p>TEST</p> )} 
     </>
   );
 };

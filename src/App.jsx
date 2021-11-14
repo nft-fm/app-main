@@ -154,7 +154,7 @@ const App = () => {
   return (
     <Providers>
       <StyledCanvas>
-        <PromoBanner />
+        {/* <PromoBanner /> */}
         <Router>
         <Tracking/>
           <Switches />

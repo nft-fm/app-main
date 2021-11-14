@@ -207,23 +207,23 @@ const BuyNftModal = (props) => {
                     });
                   }
                 } else {
-                  if (calcEligibility()) {
-                    airdrop();
-                    Swal.fire({
-                      title: "Successful purchase!",
-                      html: `<div><p>View in your library (can take a few minutes to appear)<p>
-                      <p>You received an airdrop of ${calcBonus()} $VINYL!</p>
-                      <div>`,
-                      confirmButtonText: "Share My NFT!",
-                    }).then((res) => {
-                      if (res.isConfirmed) {
-                        let text = `I’m proud to directly support up-and-coming artists by buying their NFTs on Fanfare! Check out this song by ${nft.artist} at ${window.location}`;
-                        window.open(
-                          `https://twitter.com/intent/tweet?text=${text}`
-                        );
-                      }
-                    });
-                  } else {
+                  // if (calcEligibility()) {
+                  //   airdrop();
+                  //   Swal.fire({
+                  //     title: "Successful purchase!",
+                  //     html: `<div><p>View in your library (can take a few minutes to appear)<p>
+                  //     <p>You received an airdrop of ${calcBonus()} $VINYL!</p>
+                  //     <div>`,
+                  //     confirmButtonText: "Share My NFT!",
+                  //   }).then((res) => {
+                  //     if (res.isConfirmed) {
+                  //       let text = `I’m proud to directly support up-and-coming artists by buying their NFTs on Fanfare! Check out this song by ${nft.artist} at ${window.location}`;
+                  //       window.open(
+                  //         `https://twitter.com/intent/tweet?text=${text}`
+                  //       );
+                  //     }
+                  //   });
+                  // } else {
                     Swal.fire({
                       title: "Successful purchase!",
                       html: `<div>View in your library (can take a few minutes to appear)
@@ -237,7 +237,7 @@ const BuyNftModal = (props) => {
                         );
                       }
                     });
-                  }
+                  // }
                 }
               }
             }
@@ -546,7 +546,7 @@ const BuyNftModal = (props) => {
                 <ButtonText>Sold Out!</ButtonText>
               </BuyButton>
             )}
-            {calcEligibility() && (
+            {/* {calcEligibility() && (
               <Promotion>
                 💚 This NFT is eligible for an Airdrop Bonus of{" "}
                 {calcBonus().toLocaleString()} VINYL! 💚
@@ -557,7 +557,7 @@ const BuyNftModal = (props) => {
                 This NFT is eligible for an Airdrop Bonus of{" "}
                 {calcBonus().toLocaleString()} VINYL! 💚
               </MobilePromotion>
-            )}
+            )} */}
           </RightSide>
         </StyledModal>
       </Container>

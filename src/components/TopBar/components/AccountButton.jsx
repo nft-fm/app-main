@@ -101,10 +101,6 @@ const AccountButton = (props) => {
             <ButtonText>Connect Wallet</ButtonText>
           </ConnectButton> 
           )
-        } else {
-          return (
-            <div>catch all</div>
-          )
         }
       })()}
 

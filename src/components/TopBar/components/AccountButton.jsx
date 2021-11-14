@@ -13,20 +13,21 @@ import Modal from "../../../components/WalletProviderModal/Modal"
 
 // https://stackoverflow.com/questions/21741841/detecting-ios-android-operating-system
 
+
 function getMetaMaskLink() {
   var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-  if (/android/i.test(userAgent)) {
-    return {
-      title: "Open in App Store",
-      link: "https://metamask.app.link/bxwkE8oF99",
-    };
-  }
-  if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-    return {
-      title: "Open in App Store",
-      link: "https://metamask.app.link/skAH3BaF99",
-    };
-  }
+  // if (/android/i.test(userAgent)) {
+  //   return {
+  //     title: "Open in App Store",
+  //     link: "https://metamask.app.link/bxwkE8oF99",
+  //   };
+  // }
+  // if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+  //   return {
+  //     title: "Open in App Store",
+  //     link: "https://metamask.app.link/skAH3BaF99",
+  //   };
+  // }
   return {
     title: "Open Instructions",
     link: "https://metamask.io/download.html",
@@ -45,6 +46,14 @@ const AccountButton = (props) => {
     else
       openMetamaskAlert();
   }
+  //Display wallet connect modal if is mobile
+  useEffect(() => {
+    if (isMobile() ) {
+//Return modal if is mobile
+      return <Modal />
+    }
+  }, [])
+
 
   const openMetamaskAlert = async () => {
     if (account) return;
@@ -76,7 +85,32 @@ const AccountButton = (props) => {
   return (
     <>
       <ChainSelector /> 
-      {!account ? (
+      {(() => {
+        if (!account && isMobile()) {
+          return (
+            (<Modal />)
+          )
+        } else if (!account && !isMobile()) {
+          return (
+            <ConnectButton onClick={handleUnlockClick}>
+            <LogoContainer>
+              <MetaMask src={IconMetamask} />
+              <Spacer />
+              <MetaMask src={"https://trustwallet.com/assets/images/media/assets/trust_platform.svg"} />
+            </LogoContainer>
+            <ButtonText>Connect Wallet</ButtonText>
+          </ConnectButton> 
+          )
+        } else {
+          return (
+            <div>catch all</div>
+          )
+        }
+      })()}
+
+
+      {/* {!account && isMobile("mobile") ? (<Modal />) : (null)}
+      { !account && isMobile("desktop")  ? (
         <ConnectButton onClick={handleUnlockClick}>
           <LogoContainer>
             <MetaMask src={IconMetamask} />
@@ -85,9 +119,7 @@ const AccountButton = (props) => {
           </LogoContainer>
           <ButtonText>Connect Wallet</ButtonText>
         </ConnectButton> 
-      ) : isMobile() ? ( 
-  <Modal />
-       ) : ( <p>TEST</p> )} 
+       ): (<Modal />)}  */}
     </>
   );
 };

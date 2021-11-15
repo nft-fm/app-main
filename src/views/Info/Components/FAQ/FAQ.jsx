@@ -22,7 +22,8 @@ export const FAQ = () => {
       />
       <Question
         question="How do I upload my music here?"
-        answer="While our goal is to expand this platform to allow anyone to use it, we currently only allow verified artists to upload music. Please reach out to our team to get verified."
+        answer="While our goal is to expand this platform to allow anyone to use it, we currently only allow verified artists to upload music. Please reach out to our team to "
+        links = {<a href="/register-artist">get verified.</a>}      
       />
       <Question
         question="What happens when I buy an NFT?"

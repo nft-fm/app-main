@@ -71,7 +71,7 @@ const Step4 = ({ nftData, updateState, usdPerEth, usdPerBnb, currChainId }) => {
           }}
         >
           {currChainId === 1 || (currChainId === 4 && "ETH")}
-          {currChainId === 56 || (currChainId === 97 && "NB")}
+          {currChainId === 56 || (currChainId === 97 && "BNB")}
         </p>
       </PriceContainer>
       <PriceContainer noBorder>

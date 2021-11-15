@@ -101,6 +101,11 @@ const Info = () => {
             <Button>Litepaper</Button>
           </StyledAccountButton> */}
         </ProjectSummary>
+
+        <StyledHeader>Are you an artist? Launch with us!</StyledHeader>
+        <StyledAccountButton href="/register-artist">
+          Get Verified!
+        </StyledAccountButton>
         <div id="roadmapRef" />
         <RoadMap />
         <div id="faqRef" />
@@ -119,6 +124,15 @@ const Info = () => {
     </Switch>
   );
 };
+
+const StyledHeader = styled.h1`
+  display: flex;
+  color: white;
+  margin: 0 0 24px 0;
+  font-family: "Compita";
+  padding: 32px 0px;
+  text-align: center;
+`;
 
 const LinkImage = styled.img`
   transition: all 0.2s ease-in-out;

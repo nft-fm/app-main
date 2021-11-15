@@ -175,7 +175,7 @@ const NftCard = (props) => {
           onLoad={() => setImageLoaded(true)}
         />
         <PreviewButton onClick={(e) => e.stopPropagation()}>
-          {partialSong && <PlaySongSnippet partialSong={partialSong} />}
+          {partialSong && <PlaySongSnippet partialSong={partialSong} pauseSong={props.pauseSong} setPauseSong={props.setPauseSong} />}
         </PreviewButton>
         {nft.isRedeemable && (
           <RedeemButtonBackground onClick={() => setIsModalOpen(!isModalOpen)}>

@@ -49,6 +49,9 @@ const PlaySongSnippet = (props) => {
   };
 
   const playSong = () => {
+    props.pauseSong()
+    props.setPauseSong(() => stopSong)
+    //this function is passed down from market.jsx. it pauses the current song running (the reference is stored in market.jsx) and then updates that reference to the new stopsong function.
     if (props.partialSong && audioRef.current) {
       audioRef.current.play();
       setIsPlaying(true);
@@ -93,12 +96,12 @@ const PlaySongSnippet = (props) => {
     };
   }, []);
   return (
-    <Wrapper>
+    <Wrapper onClick={isPlaying ? stopSong : playSong}>
       {isLoading ? (
         <Loading src={loading} />
       ) :
       
-      <PlayButton aria-label="play button" onClick={isPlaying ? stopSong : playSong} >
+      <PlayButton aria-label="play button"  >
 
       {isPlaying ? (
         <PauseSVG />

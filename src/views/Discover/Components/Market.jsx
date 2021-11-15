@@ -20,6 +20,8 @@ const Listen = () => {
   const [genreMenu, setGenreMenu] = useState(false);
   // const [sort, setSort] = useState(Math.floor(Math.random() * 6));
   const limit = 200;
+  const [pauseSong, setPauseSong] = useState(() => () => {}) // this is fucking weird, don't touch me.
+
 
   // const getNftsWithParams = async (pageIncrease, searchParam, sortParam) => {
   //   console.log("here", hasMore);
@@ -194,6 +196,8 @@ const Listen = () => {
     "Other",
   ];
 
+  console.log(pauseSong)
+
   return (
     <LaunchContainer>
       <ContainerTitleForm onSubmit={(e) => handleSearch(e, 1, search, 2)}>
@@ -248,7 +252,7 @@ const Listen = () => {
       <NftScroll>
         {allNfts.map((item, index) => {
           if (index >= shown * 3) return null;
-          else return <NftCard nft={item} />;
+          else return <NftCard nft={item} pauseSong={pauseSong} setPauseSong={setPauseSong} />;
         })}
       </NftScroll>
       {shown * 3 < allNfts.length && (

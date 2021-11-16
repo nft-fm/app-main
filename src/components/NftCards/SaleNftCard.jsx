@@ -482,11 +482,11 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 375px;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
   position: relative;
   transition: all 0.1s ease-in-out;
   cursor: pointer;
-  box-shadow: rgba(255, 255, 255, .1) 0px 3px 10px 0px;
+  // box-shadow: rgba(255, 255, 255, .1) 0px 3px 10px 0px;
   opacity: .9;
   &:hover {
     transform: translateY(-2px) scale(1.01);

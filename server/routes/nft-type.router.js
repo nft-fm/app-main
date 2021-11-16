@@ -23,6 +23,8 @@ const { listenForMintEth, listenForMintBsc } = require("../web3/mint-listener");
 const { trackNftView } = require("../modules/mixpanel");
 const { listenForBuyBsc, listenForBuyEth } = require("../web3/buy-listener");
 const cron = require("node-cron");
+const path = require("path");
+const multerS3 = require("multer-s3");
 
 router.get("/test-get-all", async (req, res) => {
   NftType.find({ isMinted: true })
@@ -62,6 +64,7 @@ router.get("/test-get-all", async (req, res) => {
 const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: "us-west-2"
 });
 
 
@@ -548,11 +551,6 @@ router.post("/getSnnipetAWS", async (req, res) => {
 });
 
 router.post("/uploadSnnipetS3", async (req, res) => {
-  var AWS = require("aws-sdk");
-  AWS.config.region = "us-west-2";
-  const multerS3 = require("multer-s3");
-
-
   const fileFilter = (req, file, cb) => {
     if (file.mimetype === "audio/mpeg") {
       cb(null, true);
@@ -565,7 +563,7 @@ router.post("/uploadSnnipetS3", async (req, res) => {
     fileFilter,
     storage: multerS3({
       ACL: "public-read",
-      s3: s3Client,
+    s3: s3  ,
       bucket: "nftfm-music",
       metadata: function (req, file, cb) {
         cb(null, { fieldName: "audioFile" });
@@ -603,10 +601,6 @@ router.post("/uploadSnnipetS3", async (req, res) => {
 
 router.post("/uploadAudioS3", async (req, res) => {
   try {
-    var AWS = require("aws-sdk");
-    AWS.config.region = "us-west-2";
-    const multerS3 = require("multer-s3");
-
 
     const fileFilter = (req, file, cb) => {
       if (file.mimetype === "audio/mpeg" || file.mimetype === "audio/wav") {
@@ -620,7 +614,7 @@ router.post("/uploadAudioS3", async (req, res) => {
       fileFilter,
       storage: multerS3({
         ACL: "public-read",
-        s3: s3Client,
+        s3: s3,
         bucket: "nftfm-music",
         metadata: function (req, file, cb) {
           cb(null, { fieldName: "audioFile" });
@@ -671,10 +665,6 @@ router.post("/handleAudio", async (req, res) => {
 });
 
 router.post("/uploadImageS3", async (req, res) => {
-  var AWS = require("aws-sdk");
-  AWS.config.region = "us-west-2";
-  const path = require("path");
-  const multerS3 = require("multer-s3");
 
   const fileFilter = (req, file, cb) => {
     // if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
@@ -688,7 +678,7 @@ router.post("/uploadImageS3", async (req, res) => {
     fileFilter,
     storage: multerS3({
       ACL: "public-read",
-      s3: s3Client,
+      s3: s3,
       bucket: "nftfm-images",
       metadata: function (req, file, cb) {
         cb(null, { fieldName: "imageFile" });
@@ -834,9 +824,6 @@ router.post("/getSongList", async (req, res) => {
     Bucket: "nftfm-music",
     Prefix: account,
   };
-  var AWS = require("aws-sdk");
-  AWS.config.region = "us-west-2";
-  const path = require("path");
 
   // AWS.config.loadFromPath(path.join(__dirname, '../aws_config.json'));
   s3.listObjectsV2(params, function (err, data) {

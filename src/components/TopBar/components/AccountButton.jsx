@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useAccountConsumer } from "../../../contexts/Account";
 import { noMetaMaskWarning } from '../../../utils/connectWallet';
@@ -8,6 +8,7 @@ import IconMetamask from "../../../assets/img/icons/metamask_icon.png";
 import Cookies from 'universal-cookie'
 import swal from 'sweetalert2'
 import metamaskLogo from "../../../assets/img/metamask_fox.svg";
+import axios from 'axios'
 
 
 // https://stackoverflow.com/questions/21741841/detecting-ios-android-operating-system
@@ -44,6 +45,15 @@ const AccountButton = (props) => {
     else
       openMetamaskAlert();
   }
+
+  useEffect(() => {
+    if (window.location.pathname.substring(0, 3) === '/r/') {
+      axios.post('/api/email/referral', {
+        referrer: window.location.pathname.substring(3, window.location.pathname.length),
+        joiner: account
+      })
+    }
+  }, [account])
 
   const openMetamaskAlert = async () => {
     if (account) return;

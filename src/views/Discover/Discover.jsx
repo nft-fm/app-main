@@ -4,6 +4,7 @@ import BaseView from "../../components/Page/BaseView";
 import Market from "./Components/Market";
 import styled from "styled-components";
 import LinkedNftModal from "../../components/NftModalHook/LinkedNftModal";
+import NoEmailModal from "../../GetEmailModal";
 
 const Listen = () => {
   return (
@@ -11,7 +12,7 @@ const Listen = () => {
       <BaseView>
         <LinkedNftModal />
         <Container>
-          <StyledTitle>Discover and Collect Exclusive Digital Music</StyledTitle>
+          <StyledTitle>Discover and Collect Exclusive Digital Music!</StyledTitle>
           <Market />
         </Container>
       </BaseView>
@@ -33,7 +34,7 @@ const Container = styled.div`
 const StyledTitle = styled.div`
   font-family: "Compita";
   font-size: ${(props) => props.theme.fontSizes.md};
-  margin: 60px 0 40px 0;
+  margin: 30px 0 40px 0;
   font-weight: 600;
   /* letter-spacing: 3px; */
   color: white;

@@ -10,19 +10,24 @@ const GetEmailModal = () => {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
+  const [copied, setCopied] = useState(false)
   const { account, user } = useAccountConsumer();
 
   useEffect(() => {
     const storedEmail = localStorage.getItem('email');
-    if (!storedEmail) {
-      setOpen(true);
+    if (storedEmail) {
+      setEmail(storedEmail);
+      setSubmitted(true);
+    }
+    if (account) {
+      setOpen(true)
     }
     console.log("user", user, user?.email === "", storedEmail);
     if (user && user?.email === "" && storedEmail) {
-      axios.post("/api/user/add-email", {email: storedEmail, address: user.address})
-      .then(() => {
-      })
-      .catch((err) => console.error(err));
+      axios.post("/api/user/add-email", { email: storedEmail, address: user.address })
+        .then(() => {
+        })
+        .catch((err) => console.error(err));
       //save email to user
     }
   }, [user, submitted])
@@ -35,53 +40,87 @@ const GetEmailModal = () => {
       setError(true);
       return;
     }
-    axios.post("/api/user/add-to-email-list", {email})
-    .then(() => {
-      setSubmitted(true);
-      localStorage.setItem('email', email);
-    })
-    .catch((err) => console.error(err));
+    axios.post("/api/user/add-to-email-list", { email })
+      .then(() => {
+        setSubmitted(true);
+        localStorage.setItem('email', email);
+      })
+      .catch((err) => console.error(err));
   }
-  
+
+
+  const copyToClipboard = async () => {
+    await navigator.clipboard.writeText(`https://beta.fanfare.fm/r/${account}`).then(() => setCopied(true))
+  }
+
   if (open) {
     return (
       <Modal>
-          <X onClick={() => setOpen(false)}/>
-        {!submitted && <Half>
-          Sign up for our new<br/>
-          platform to earn a <span style={{color: "#20A4FC", fontWeight: "600"}}>free NFT!</span>
-        </Half>}
+        <X onClick={() => setOpen(false)} />
+        {!submitted &&
+          <Half>
+            Sign up for our new<br />
+            platform to earn a <span style={{ color: "#20A4FC", fontWeight: "600" }}>free NFT!</span>
+          </Half>
+        }
         <Half>
           <form onSubmit={(e) => submitEmail(e)}>
-            {!submitted ? 
-            <Bottom>
-          <Input
-            error={error}
-            name="email"
-            placeholder="email"
-            type="email"
-            onChange={(e) => setEmail(e.target.value)}
-            >
-          </Input>
-          <Submit type="submit">
-            <Check/>
-          </Submit>
-            </Bottom>
-            : <Thanks>
-              Thank You!
-              </Thanks>
-          }
+            {!submitted ?
+              <Bottom>
+                <Input
+                  error={error}
+                  name="email"
+                  placeholder="email"
+                  type="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                >
+                </Input>
+                <Submit type="submit">
+                  <Check />
+                </Submit>
+              </Bottom>
+              :
+              <Half>
+                Thanks! Please share with your friends<br />
+                for a <span style={{ color: "#20A4FC", fontWeight: "600" }}>100 VINYL</span> whenever someone joins! <br />
+              </Half>
+            }
           </form>
         </Half>
-        {submitted && <Half>
-          We will be reaching out to<br/>
-          you <span style={{color: "#20A4FC", fontWeight: "600"}}>via email</span> soon.
-        </Half>}
+        {submitted &&
+          <ReferSection>
+            <ReferInput width={copied ? 200 : 300} value={`https://beta.fanfare.fm/r/${account}`} onClick={copyToClipboard} /> {copied && <Confirm><Check />copied!</Confirm>}
+          </ReferSection>
+        }
       </Modal>
     );
-}
+  }
   return null;
 }
+
+const Confirm = styled.div`
+display: flex;
+flex-direction: row;
+align-items: center;
+margin: 5px;
+`
+
+const ReferInput = styled.input`
+outline: none;
+  padding: 5px 8px 3px 8px;
+  height: 20px;
+  font: "Compita";
+  background-color: ${(props) => props.theme.color.boxBorder};
+  font-size: ${(props) => props.theme.fontSizes.xs};
+  color: white;
+  border: 4px solid #383838;
+  border-radius: 20px;
+  display: flex;
+  margin-left: 10px;
+  width: ${props => props.width}px;
+  cursor: pointer;
+  user-select: none;
+  `
 
 const Submit = styled.button`
   cursor: pointer;
@@ -168,6 +207,17 @@ font-weight: 300;
 letter-spacing: .5px;
 `
 
+const ReferSection = styled.div`
+font-size: 16px;
+line-height: 22px;
+font-weight: 300;
+letter-spacing: .5px;
+display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: space-between;
+`
+
 const Bottom = styled.div`
 font-size: 16px;
 line-height: 22px;
@@ -180,18 +230,18 @@ justify-content: space-between;
 `
 
 const Modal = styled.div`
-height: 86px;
-    width: 280px;
+height: 100px;
+    width: 340px;
 display: flex;
 justify-content: space-between;
 flex-direction: column;
-position: fixed;
+position: absolute;
 text-align: center;
 /* height: 20px; */
 /* width: 200px; */
 padding: 16px;
-top: 130px;
-right: 20px;
+top: 110px;
+right: 10px;
 border: 1px solid  ${(props) => props.theme.color.boxBorder};
 background: ${props => props.theme.color.box};
 color: white;

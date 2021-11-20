@@ -39,7 +39,7 @@ import isMobile from "./utils/isMobile";
 import theme from "./theme";
 import Tracking from "./mixpanel/tracking";
 
-if (window.location.hostname !== "localhost") console.log = function () {};
+if (window.location.hostname !== "localhost") console.log = function () { };
 
 const Switches = () => {
   const { user } = useAccountConsumer();
@@ -52,7 +52,7 @@ const Switches = () => {
     if (
       user?.nfts.length > 0 &&
       window.location.pathname.slice(window.location.pathname.length - 7) !==
-        "/redeem"
+      "/redeem"
     ) {
       axios
         .post("/api/nft-type/checkRedeemable", user)
@@ -84,6 +84,7 @@ const Switches = () => {
         });
     }
   }, [user]);
+
 
   return (
     <>
@@ -152,16 +153,16 @@ const App = () => {
   }, []);
 
   return (
-    <Providers>
       <StyledCanvas>
         <PromoBanner />
         <Router>
-        <Tracking/>
+        <Providers>
+          <Tracking />
           <Switches />
-          {!isMobile() && <NoEmailModal/>}
+          {!isMobile() && <NoEmailModal />}
+          </Providers>
         </Router>
       </StyledCanvas>
-    </Providers>
   );
 };
 

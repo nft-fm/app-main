@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const NftType = require("../schemas/NftType.schema");
 const User = require("../schemas/User.schema");
+const Referral = require('../schemas/Referral.schema')
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
 
@@ -147,5 +148,26 @@ router.post("/sendPurchaseEmails", async (req, res) => {
     res.status(500).send(err);
   }
 });
+
+router.post('/referral', async (req, res) => {
+  if (req.body.referrer === req.body.joiner || !req.body.referrer || !req.body.joiner)
+    return res.sendStatus(200)
+  try {
+    let referral = await Referral.findOne({joiner: req.body.joiner})
+    if (referral){
+      res.sendStatus(200)
+    }
+    else {
+      let newReferral = new Referral({
+        referrer: req.body.referrer,
+        joiner: req.body.joiner
+      })
+      await newReferral.save()
+      res.sendStatus(200)
+    }
+  } catch (error) {
+    res.status(500).send(error);
+  }
+})
 
 module.exports = router;

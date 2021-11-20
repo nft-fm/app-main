@@ -27,8 +27,9 @@ const Tracking = () => {
       browser: getBrowserType(),
       deviceType: getDeviceType(),
       platform: navigator.platform,
-      source: queryString.parse(location.search).utm_source || "",
-      campaign: queryString.parse(location.search).utm_campaign || "",
+      utm_source: queryString.parse(location.search).utm_source || null,
+      utm_campaign: queryString.parse(location.search).utm_campaign || null,
+      utm_content: queryString.parse(location.search).utm_content || null,
     })
     .then((res) => {})
     .catch((err) => {});

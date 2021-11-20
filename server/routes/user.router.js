@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
+const mongoose = require('mongoose');
 const User = require("../schemas/User.schema");
 const EmailList = require("../schemas/EmailList.schema");
 const NftType = require("../schemas/NftType.schema");
@@ -21,15 +22,34 @@ const {
   trackLogin,
   trackPageview,
 } = require("../modules/mixpanel");
+const { airdropOnNFTPurchase } = require("../web3/server-utils.js");
+
+// const trackSuccessfulReferral = (props) => {
+//   console.log("successful refer", props);
+//   airdropOnNFTPurchase(props.utm_content, 100, (tx) => {
+//     if (tx === "signerError" || tx === "transactionError") {
+//       console.log("airdrop success");
+//     } else {
+//       console.log("airdrop failure");
+//     }
+//   }).catch((err) => {
+//     console.log("ERROR", err);
+//   });
+// }
 
 router.post("/get-account", async (req, res) => {
   try {
     let user = await User.findOne({ address: req.body.address });
+
     if (!user) {
       user = new User({
         address: req.body.address,
         isArtist: process.env.PRODUCTION ? false : true,
       });
+      if (req.body.utm_source === "referral") {
+        trackSuccessfulReferral(req.body);
+        user.referredByAddress = req.body.utm_content;
+      }
       await user.save();
         trackNewUser({ address: req.body.address, ip: req.ip });
     }
@@ -58,6 +78,7 @@ router.post("/get-account", async (req, res) => {
 
     res.send(user);
   } catch (error) {
+    console.error(error);
     res.status(500).send("server error");
   }
 });

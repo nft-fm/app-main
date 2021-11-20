@@ -153,16 +153,16 @@ const App = () => {
   }, []);
 
   return (
-    <Providers>
       <StyledCanvas>
         <PromoBanner />
         <Router>
+        <Providers>
           <Tracking />
           <Switches />
           {!isMobile() && <NoEmailModal />}
+          </Providers>
         </Router>
       </StyledCanvas>
-    </Providers>
   );
 };
 

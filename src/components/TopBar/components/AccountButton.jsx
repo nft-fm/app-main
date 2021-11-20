@@ -9,7 +9,10 @@ import Cookies from 'universal-cookie'
 import swal from 'sweetalert2'
 import metamaskLogo from "../../../assets/img/metamask_fox.svg";
 import axios from 'axios'
-
+import {
+  useLocation,
+} from "react-router-dom";
+import queryString from "query-string";
 
 // https://stackoverflow.com/questions/21741841/detecting-ios-android-operating-system
 
@@ -47,13 +50,20 @@ const AccountButton = (props) => {
   }
 
   useEffect(() => {
-    if (window.location.pathname.substring(0, 3) === '/r/') {
+    if (queryString.parse(location.search).utm_source) {
       axios.post('/api/email/referral', {
-        referrer: window.location.pathname.substring(3, window.location.pathname.length),
-        joiner: account
+        joiner: account,
+        referrer: queryString.parse(location.search).utm_content,
       })
     }
+    // if (window.location.pathname.substring(0, 3) === '/r/') {
+    //   axios.post('/api/email/referral', {
+    //     referrer: window.location.pathname.substring(3, window.location.pathname.length),
+    //     joiner: account
+    //   })
+    // }
   }, [account])
+  const location = useLocation();
 
   const openMetamaskAlert = async () => {
     if (account) return;

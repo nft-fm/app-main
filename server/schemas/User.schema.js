@@ -49,6 +49,10 @@ const UserSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  referredByAddress: {
+      type: String,
+      default: null,
+  },
   shared: [
     {
       type: String,

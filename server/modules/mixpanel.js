@@ -47,7 +47,7 @@ const trackLogin = (props) => {
 };
 
 const trackPageview = (props) => {
-  const { address, ip, page, hasMetamask, browser, deviceType, platform, source } = props;
+  const { address, ip, page, hasMetamask, browser, deviceType, platform, utm_source, utm_campaign, utm_content } = props;
   console.log("track pageview", props);
     mixpanel.track("pageview", {
     hasMetamask: hasMetamask,
@@ -59,7 +59,9 @@ const trackPageview = (props) => {
     browser,
     deviceType,
     platform,
-    source,
+    utm_source,
+    utm_campaign,
+    utm_content,
   });
 };
 const trackNftMint = () => {};

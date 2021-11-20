@@ -50,7 +50,7 @@ const GetEmailModal = () => {
 
 
   const copyToClipboard = async () => {
-    await navigator.clipboard.writeText(`https://beta.fanfare.fm/r/${account}`).then(() => setCopied(true))
+    await navigator.clipboard.writeText(`https://beta.fanfare.fm/?utm_source=referral&utm_campaign=airdrop_1&utm_content=${account}`).then(() => setCopied(true))
   }
 
   if (open) {
@@ -89,7 +89,7 @@ const GetEmailModal = () => {
         </Half>
         {submitted &&
           <ReferSection>
-            <ReferInput width={copied ? 200 : 300} value={`https://beta.fanfare.fm/r/${account}`} onClick={copyToClipboard} /> {copied && <Confirm><Check />copied!</Confirm>}
+            <ReferInput width={copied ? 200 : 300} value={`https://beta.fanfare.fm/?utm_source=referral&utm_campaign=airdrop_1&utm_content=${account}`} onClick={copyToClipboard} /> {copied && <Confirm><Check />copied!</Confirm>}
           </ReferSection>
         }
       </Modal>

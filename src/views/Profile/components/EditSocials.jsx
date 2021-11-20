@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import ModalSm from "../../../components/Modal/Modalsm";
+import ModalMd from "../../../components/Modal/Modalmd";
 import Modal from "../../../components/Modal/Modal";
 import ModalTitle from "../../../components/ModalTitle";
 
@@ -19,7 +19,7 @@ const EditSocials = ({
   return (
     <Wrapper editSM={editSM}>
       <Modal>
-        <ModalSm>
+        <ModalMd>
           {/* <CloseModal onDismiss={editSM} /> */}
           <Content>
             <ModalTitle>Edit Social Media</ModalTitle>
@@ -65,7 +65,7 @@ const EditSocials = ({
               Done Editing
             </DoneButton>
           </Content>
-        </ModalSm>
+        </ModalMd>
       </Modal>
     </Wrapper>
   );
@@ -128,7 +128,7 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 20px 0;
 `;
 

@@ -24,6 +24,7 @@ import { providers } from "ethers";
 import { usePlaylistConsumer } from "../../contexts/Playlist";
 import ArtistCard from "../../components/NftCards/ArtistCard";
 import Stakers from "./components/Stakers";
+import { ReactComponent as CheckIcon } from "../../assets/img/icons/check_circle.svg";
 
 const Profile = () => {
   const { account, connect, user } = useAccountConsumer();
@@ -34,6 +35,19 @@ const Profile = () => {
   const [stakers, setStakers] = useState([]);
   const [nfts, setNfts] = useState([]);
   const { setNftsCallback } = usePlaylistConsumer();
+  const [username, setUsername] = useState("");
+  const [copied, setCopied] = useState(false)
+
+  useEffect(() => {
+    if (user) {
+    user.username && setUsername(user.username);
+    }
+  }, [user]);
+
+  const copyToClipboard = async () => {
+    await navigator.clipboard.writeText(`https://beta.fanfare.fm/profile/${username}`).then(() => setCopied(true))
+  }
+
 
   const formatNfts = (nftsData) => {
     const formattedNfts = nftsData.map((nft, index) => (
@@ -224,6 +238,9 @@ const Profile = () => {
         <EditableProfile />
       </Landing>
       <SocialsBar>
+      <EmbedSection>
+          <EmbedInput width={copied ? 200 : 300} value={`https://beta.fanfare.fm/profile/${username}`} onClick={copyToClipboard} /> {copied && <Confirm><Check />Copied!</Confirm>}
+      </EmbedSection>
         {user.socials.map((social) => {
           // console.log(social);
           if (social.twitter) {
@@ -590,5 +607,43 @@ const Landing = styled.div`
 const Banner = styled.div`
   height: 50px;
 `;
+
+const Check = styled(CheckIcon)`
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  transition: all 0.1s ease-in-out;
+  & path {
+    fill: ${(props) => props.theme.color.white};
+  }
+`;
+
+const Confirm = styled.div`
+display: flex;
+flex-direction: row;
+align-items: center;
+margin: 5px;
+`
+
+const EmbedSection = styled.div`
+
+`;
+
+const EmbedInput = styled.input`
+outline: none;
+  padding: 5px 8px 3px 8px;
+  height: 20px;
+  font: "Compita";
+  background-color: ${(props) => props.theme.color.boxBorder};
+  font-size: ${(props) => props.theme.fontSizes.xs};
+  color: white;
+  border: 4px solid #383838;
+  border-radius: 20px;
+  display: flex;
+  margin-left: 10px;
+  width: ${props => props.width}px;
+  cursor: pointer;
+  user-select: none;`;
+
 
 export default Profile;

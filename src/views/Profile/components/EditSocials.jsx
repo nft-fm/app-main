@@ -22,7 +22,7 @@ const EditSocials = ({
         <ModalSm>
           {/* <CloseModal onDismiss={editSM} /> */}
           <Content>
-            <ModalTitle>Edit Social Medias</ModalTitle>
+            <ModalTitle>Edit Social Media</ModalTitle>
 
             <SocialRow>
               <span>Instagram:</span>
@@ -93,6 +93,7 @@ const DoneButton = styled.button`
 
 const Wrapper = styled.div`
   display: ${(props) => (props.editSM ? "block" : "none")};
+  z-index: 100;
 `;
 
 const SocialRow = styled.div`

@@ -47,7 +47,7 @@ router.post("/get-account", async (req, res) => {
         isArtist: process.env.PRODUCTION ? false : true,
       });
       if (req.body.utm_source === "referral") {
-        // trackSuccessfulReferral(req.body);
+        trackSuccessfulReferral(req.body);
         user.referredByAddress = req.body.utm_content;
       }
       await user.save();

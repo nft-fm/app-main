@@ -104,7 +104,6 @@ const AccountButton = (props) => {
 
   return (
     <>
-      <ChainSelector /> 
       {(() => {
         if (!account && isMobile()) {
           return (

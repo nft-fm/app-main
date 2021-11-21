@@ -51,31 +51,31 @@ const ChainSelector = () => {
         <Spacer />
         <DropDownLinks>
           <WrapperButton
-                      onClick={() => {
-                        setSelected(0);
-                        switchChain("ETH");
-                        setOpen(false);
-                      }}
-                      data-tip
-                      data-for="Ethereum"
-                      aria-label="Ethereum Main Chain"
+            onClick={() => {
+              setSelected(0);
+              switchChain("ETH");
+              setOpen(false);
+            }}
+            data-tip
+            data-for="Ethereum"
+            aria-label="Ethereum Main Chain"
           >
-          <Eth />
-            </WrapperButton>
+            <Eth />
+          </WrapperButton>
           <ReactToolTip id="Ethereum" place="right" effect="solid">
             Ethereum
           </ReactToolTip>
           <WrapperButton
-                      onClick={() => {
-                        setSelected(1);
-                        switchChain("BSC");
-                        setOpen(false);
-                      }}
-                      data-tip
-                      data-for="Binance"
-                      aria-label="Binance Smart Chain"
+            onClick={() => {
+              setSelected(1);
+              switchChain("BSC");
+              setOpen(false);
+            }}
+            data-tip
+            data-for="Binance"
+            aria-label="Binance Smart Chain"
           >
-          <Binance/>
+            <Binance />
           </WrapperButton>
           <ReactToolTip id="Binance" place="right" effect="solid">
             Binance
@@ -148,7 +148,7 @@ const ChainHolder = styled.button`
   align-items: center;
   display: flex;
   width: 30px;
-  padding-right: 5px;
+  padding-right: 10px;
   background-color: transparent;
   border: none;
 `;

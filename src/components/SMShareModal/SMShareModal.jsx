@@ -38,7 +38,7 @@ const SMShareModal = ({
       <TwitterShareButton
         title={message}
         url={url}
-        hashtags={["#NFTCollectors", "#MusicLovers", "Fanfare", "NFTCommunity"}
+        hashtags={["#NFTCollectors", "#MusicLovers", "Fanfare", "NFTCommunity"]}
       >
         <ButtonHolder onClick={() => newShare()}>
           <TwitterIcon size={50} borderRadius={"10px"} />

@@ -15,6 +15,17 @@ const Artist = () => {
   const [profilePic, setProfilePic] = useState("");
   const [userInfo, setUserInfo] = useState();
   const [userNfts, setUserNfts] = useState();
+  const [copySuccess, setCopySuccess] = useState('');
+
+  const copyToClipBoard = async copyMe => {
+    try {
+      await navigator.clipboard.writeText(copyMe);
+      setCopySuccess('Copied!');
+    } catch (err) {
+      setCopySuccess('Failed to copy!');
+    }
+  };
+
   useEffect(() => {
     if (userInfo?.profilePic) {
       setProfilePic(userInfo.profilePic);
@@ -65,6 +76,13 @@ const Artist = () => {
       </Landing>
 
       <SocialsBar>
+      <div>
+      <button onClick={() => copyToClipBoard('TEST')} onChange={copySuccess}>
+      Share
+      </button>
+    // after copying see the message here
+      {copySuccess}
+      </div>
         {userInfo?.socials.map((social) => {
           if (social.twitter) {
             return (

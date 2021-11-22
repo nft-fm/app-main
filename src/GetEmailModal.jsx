@@ -4,23 +4,22 @@ import styled from "styled-components";
 import { AccountProvider, useAccountConsumer } from "./contexts/Account";
 import { ReactComponent as XIcon } from "./assets/img/icons/x.svg";
 import { ReactComponent as CheckIcon } from "./assets/img/icons/check_circle.svg";
+import AccountButton from './components/TopBar/components/AccountButton'
+
 
 const GetEmailModal = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false)
-  const { account, user } = useAccountConsumer();
+  const { account, user, connect } = useAccountConsumer();
 
   useEffect(() => {
     const storedEmail = localStorage.getItem('email');
     if (storedEmail) {
       setEmail(storedEmail);
       setSubmitted(true);
-    }
-    if (account) {
-      setOpen(true)
     }
     console.log("user", user, user?.email === "", storedEmail);
     if (user && user?.email === "" && storedEmail) {
@@ -33,8 +32,8 @@ const GetEmailModal = () => {
   }, [user, submitted])
 
   const submitEmail = (e) => {
+    connect("injected")
     e.preventDefault()
-
     let validEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (!validEmail.test(email)) {
       setError(true);
@@ -75,9 +74,9 @@ const GetEmailModal = () => {
                   onChange={(e) => setEmail(e.target.value)}
                 >
                 </Input>
-                <Submit type="submit">
-                  <Check />
-                </Submit>
+                  <Submit type="submit">
+                    <Check />
+                  </Submit>
               </Bottom>
               :
               <Half>

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import switchNetwork from "../../../utils/switchNetwork";
 import { useAccountConsumer } from "../../../contexts/Account";
 import IconMetamask from "../../../assets/img/icons/metamask_icon.png";
-
+import AccountButton from '../../../components/TopBar/components/AccountButton'
 
 const UseBscSorry = () => {
   const { currChainId, account, connect } = useAccountConsumer();
@@ -16,14 +16,7 @@ const UseBscSorry = () => {
       {!account && (currChainId === 56 || currChainId === 97) ? (
         <IsConnected>
           <GetConnected>
-            <ConnectButton onClick={() => connect('injected')}>
-              <LogoContainer>
-                <MetaMask src={IconMetamask} />
-                <Spacer />
-                <MetaMask src={"https://trustwallet.com/assets/images/media/assets/trust_platform.svg"} />
-              </LogoContainer>
-              <ButtonText>Connect Wallet</ButtonText>
-            </ConnectButton>
+            <AccountButton />
           </GetConnected>
         </IsConnected>
       ) : (

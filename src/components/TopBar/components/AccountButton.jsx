@@ -13,25 +13,23 @@ import {
   useLocation,
 } from "react-router-dom";
 import queryString from "query-string";
-import Modal from "../../../components/WalletProviderModal/Modal"
 
 // https://stackoverflow.com/questions/21741841/detecting-ios-android-operating-system
 
-
 function getMetaMaskLink() {
   var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-  // if (/android/i.test(userAgent)) {
-  //   return {
-  //     title: "Open in App Store",
-  //     link: "https://metamask.app.link/bxwkE8oF99",
-  //   };
-  // }
-  // if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-  //   return {
-  //     title: "Open in App Store",
-  //     link: "https://metamask.app.link/skAH3BaF99",
-  //   };
-  // }
+  if (/android/i.test(userAgent)) {
+    return {
+      title: "Open in App Store",
+      link: "https://metamask.app.link/bxwkE8oF99",
+    };
+  }
+  if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+    return {
+      title: "Open in App Store",
+      link: "https://metamask.app.link/skAH3BaF99",
+    };
+  }
   return {
     title: "Open Instructions",
     link: "https://metamask.io/download.html",
@@ -50,14 +48,6 @@ const AccountButton = (props) => {
     else
       openMetamaskAlert();
   }
-  //Display wallet connect modal if is mobile
-  useEffect(() => {
-    if (isMobile() ) {
-//Return modal if is mobile
-      return <Modal />
-    }
-  }, [])
-
 
   useEffect(() => {
     if (queryString.parse(location.search).utm_source) {
@@ -104,29 +94,7 @@ const AccountButton = (props) => {
 
   return (
     <>
-      <ChainSelector /> 
-      {(() => {
-        if (!account && isMobile()) {
-          return (
-            (<Modal />)
-          )
-        } else if (!account && !isMobile()) {
-          return (
-            <ConnectButton onClick={handleUnlockClick}>
-            <LogoContainer>
-              <MetaMask src={IconMetamask} />
-              <Spacer />
-              <MetaMask src={"https://trustwallet.com/assets/images/media/assets/trust_platform.svg"} />
-            </LogoContainer>
-            <ButtonText>Connect Wallet</ButtonText>
-          </ConnectButton> 
-          )
-        }
-      })()}
-
-
-      {/* {!account && isMobile("mobile") ? (<Modal />) : (null)}
-      { !account && isMobile("desktop")  ? (
+      {!account ? (
         <ConnectButton onClick={handleUnlockClick}>
           <LogoContainer>
             <MetaMask src={IconMetamask} />
@@ -134,8 +102,30 @@ const AccountButton = (props) => {
             <MetaMask src={"https://trustwallet.com/assets/images/media/assets/trust_platform.svg"} />
           </LogoContainer>
           <ButtonText>Connect Wallet</ButtonText>
-        </ConnectButton> 
-       ): (<Modal />)}  */}
+        </ConnectButton>
+      ) : isMobile() ? (
+        <StyledAccountButton>
+          <StyledA
+            href={`https://etherscan.io/address/${account}`}
+            target={`_blank`}
+            style={{ marginLeft: "-5px" }}
+          >
+            <div>{account.substring(0, 6)}</div>
+            <div>{"..." + account.substring(account.length - 4)}</div>
+          </StyledA>
+        </StyledAccountButton>
+      ) : (
+        <StyledAccountButton>
+          <StyledA
+            href={`https://etherscan.io/address/${account}`}
+            target={`_blank`}
+          >
+            {account.substring(0, 6) +
+              "..." +
+              account.substring(account.length - 4)}
+          </StyledA>
+        </StyledAccountButton>
+      )}
     </>
   );
 };
@@ -233,7 +223,6 @@ const StyledAccountButton = styled.div`
   border-radius: 20px;
   font-family: "Compita";
   background-color: #181818;
-  margin-left: ${(props) => props.theme.spacing[3]}px;
   &:hover {
     background-color: rgba(256, 256, 256, 0.2);
   }

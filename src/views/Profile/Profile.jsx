@@ -36,17 +36,22 @@ const Profile = () => {
   const [nfts, setNfts] = useState([]);
   const { setNftsCallback } = usePlaylistConsumer();
   const [username, setUsername] = useState("");
-  const [copied, setCopied] = useState(false)
+  const [copySuccess, setCopySuccess] = useState('');
 
   useEffect(() => {
     if (user) {
-    user.username && setUsername(user.username);
+    user.suburl && setUsername(user.suburl);
     }
   }, [user]);
 
-  const copyToClipboard = async () => {
-    await navigator.clipboard.writeText(`https://beta.fanfare.fm/profile/${username}`).then(() => setCopied(true))
-  }
+  const copyToClipBoard = async () => {
+    try {
+      await navigator.clipboard.writeText(`https://beta.fanfare.fm/profile/${username}`);
+      setCopySuccess('Copied!');
+    } catch (err) {
+      setCopySuccess('Failed to copy!');
+    }
+  };
 
 
   const formatNfts = (nftsData) => {
@@ -239,7 +244,11 @@ const Profile = () => {
       </Landing>
       <SocialsBar>
       <EmbedSection>
-          <EmbedInput width={copied ? 200 : 300} value={`https://beta.fanfare.fm/profile/${username}`} onClick={copyToClipboard} /> {copied && <Confirm><Check />Copied!</Confirm>}
+      <EmbedButton 
+      onClick={copyToClipBoard}
+      >
+      Embed Profile
+      </EmbedButton>
       </EmbedSection>
         {user.socials.map((social) => {
           // console.log(social);
@@ -629,21 +638,27 @@ const EmbedSection = styled.div`
 
 `;
 
-const EmbedInput = styled.input`
-outline: none;
-  padding: 5px 8px 3px 8px;
-  height: 20px;
-  font: "Compita";
+const EmbedButton = styled.button`
+width: 100px;
+height: 34px;
+cursor: pointer;
+transition: all 0.1s ease-in-out;
+display: flex;
+flex-direction: column;
+font-size: 10px;
+font-weight: 600;
+color: white;
+align-items: center;
+justify-content: center;
+border: 1px solid ${(props) => props.theme.color.boxBorder};
+border-radius: 2px;
+background-color: ${(props) => props.theme.color.box};
+/* margin-bottom: 20px; */
+&:hover {
   background-color: ${(props) => props.theme.color.boxBorder};
-  font-size: ${(props) => props.theme.fontSizes.xs};
-  color: white;
-  border: 4px solid #383838;
-  border-radius: 20px;
-  display: flex;
-  margin-left: 10px;
-  width: ${props => props.width}px;
-  cursor: pointer;
-  user-select: none;`;
+  border: 1px solid #383838;
+}
+`;
 
 
 export default Profile;

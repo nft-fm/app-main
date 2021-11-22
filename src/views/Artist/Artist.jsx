@@ -10,21 +10,33 @@ import { ReactComponent as IconTwitter } from "../../assets/img/icons/social_twi
 import Instagram from "../../assets/img/icons/social_instagram.png";
 import Audius from "../../assets/img/icons/social_audius.png";
 import Spotify from "../../assets/img/icons/social_spotify.png";
+import Button from "../../components/Button/Button";
+
 const Artist = () => {
   const [edit, setEdit] = useState(false);
   const [profilePic, setProfilePic] = useState("");
   const [userInfo, setUserInfo] = useState();
   const [userNfts, setUserNfts] = useState();
   const [copySuccess, setCopySuccess] = useState('');
+  const [username, setUsername] = useState('');
 
-  const copyToClipBoard = async copyMe => {
+
+  useEffect(() => {
+    if (userInfo) {
+      setUsername(userInfo.suburl);
+    }
+  }, [userInfo]);
+
+  const copyToClipBoard = async () => {
     try {
-      await navigator.clipboard.writeText(copyMe);
+      await navigator.clipboard.writeText(`https://beta.fanfare.fm/profile/${username}`);
       setCopySuccess('Copied!');
     } catch (err) {
       setCopySuccess('Failed to copy!');
     }
   };
+
+
 
   useEffect(() => {
     if (userInfo?.profilePic) {
@@ -77,11 +89,14 @@ const Artist = () => {
 
       <SocialsBar>
       <div>
-      <button onClick={() => copyToClipBoard('TEST')} onChange={copySuccess}>
+      <Button 
+      
+      onClick={copyToClipBoard}
+      size= "xsm"
+      styled={{fontSize:"5px"}}
+      >
       Share
-      </button>
-    // after copying see the message here
-      {copySuccess}
+      </Button>
       </div>
         {userInfo?.socials.map((social) => {
           if (social.twitter) {

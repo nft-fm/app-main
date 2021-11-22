@@ -81,7 +81,7 @@ color: #888;
   flex-direction: column;
   justify-content: space-evenly;
 
-  height: 100px;
+  // height: 100px;
 }
 `
 

@@ -13,7 +13,6 @@ import {
   useLocation,
 } from "react-router-dom";
 import queryString from "query-string";
-import Modal from "../../../components/WalletProviderModal/Modal"
 
 // https://stackoverflow.com/questions/21741841/detecting-ios-android-operating-system
 

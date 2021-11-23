@@ -3,6 +3,9 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useWallet } from "use-wallet";
 import isMobile from "../../utils/isMobile";
+import WalletConnectProvider from "@walletconnect/web3-provider";
+import Web3 from "web3"
+
 
 export const AccountContext = createContext();
 
@@ -41,6 +44,7 @@ export const AccountProvider = ({ children }) => {
   const [usdPerBnb, setUsdPerBnb] = useState(0);
   const [oneSecToLoadMetaMask, setOneSecToLoadMetaMask] = useState(false);
   const [noEmail, setNoEmail] = useState(false);
+  const [wcAccount, setwcAccount] = useState(null)
 
   const fetchUsdPerEthandBsc = async () => {
     await axios
@@ -123,6 +127,24 @@ export const AccountProvider = ({ children }) => {
     if (account && !user) initialize();
   }, [account, currChainId, user]);
 
+  const walletConnectInit = async () => {
+    window.localStorage.removeItem("walletconnect")
+    const provider = new WalletConnectProvider({
+        rpc: {
+            1: 'https://eth-node.b-protocol.workers.dev',
+        }
+    });
+
+    const connectFn = async () => {
+        //  Enable session (triggers QR Code modal)
+        await provider.enable()
+        return provider.accounts[0]
+    }
+   
+    const userAccount = await connectFn()
+    setwcAccount(userAccount)
+  }
+
   const fixedConnect = async () => {
     const provider = window.ethereum;
     // Technically trust wallet is also an injected wallet, but
@@ -149,8 +171,8 @@ export const AccountProvider = ({ children }) => {
     <AccountContext.Provider
       value={{
         isAdmin,
-        account,
-        connect: fixedConnect,
+        account: !isMobile ? account : wcAccount,
+        connect: !isMobile ? fixedConnect : walletConnectInit,
         initialize,
         user,
         getUser,

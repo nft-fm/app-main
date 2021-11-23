@@ -1,55 +1,31 @@
 import React, { useState } from 'react'
-import WalletConnect from "@walletconnect/client";
+import WalletConnectProvider from "@walletconnect/web3-provider";
 import QRCodeModal from "@walletconnect/qrcode-modal";
 import styled from 'styled-components'
 import WalletConnectLogo from '../../assets/img/wallet_connect.svg'
+import Web3 from "web3"
+import { useAccountConsumer } from "../../contexts/Account";
 
 function Modal() {
 
-    const [state, setState] = useState({ 
+    const [state, setState] = useState({
         connector: null
-      });
+    });
+    const { account, connect } = useAccountConsumer();
 
-    const walletConnectInit = async() => {
-        // Bridge url
-        const bridge = "https://bridge.walletconnect.org";
-        const connector = new WalletConnect({ bridge });
-
-        setState(connector)
-
-        if (!connector.connected) {
-            await connector.createSession();
-        }
-
-        QRCodeModal.open(connector.uri)
-
-        await subscribeToEvents();
-    }
-
-    const subscribeToEvents = async() => {
-        const connector = state.connector;
-
-        if (!connector) {
-            //window.alert("opps")
-            return;
-        } else {
-            window.alert("yeah")
-        }
-
-    }
 
     return (
         <div>
             <ConnectButton
                 onClick={() => {
-                    walletConnectInit()
+                    connect()
                 }}
             >
-            <LogoContainer>
-            <img src= {WalletConnectLogo} />
-            <Spacer />
-          </LogoContainer>
-            <ButtonText>Connect Wallet</ButtonText>
+                <LogoContainer>
+                    <img src={WalletConnectLogo} />
+                    <Spacer />
+                </LogoContainer>
+                <ButtonText>Connect Wallet</ButtonText>
             </ConnectButton>
         </div>
     )

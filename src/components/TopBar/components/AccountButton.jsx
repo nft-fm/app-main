@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useAccountConsumer } from "../../../contexts/Account";
 import { noMetaMaskWarning } from '../../../utils/connectWallet';
@@ -48,8 +48,8 @@ const AccountButton = (props) => {
   }
   //Display wallet connect modal if is mobile
   useEffect(() => {
-    if (isMobile() ) {
-//Return modal if is mobile
+    if (isMobile()) {
+      //Return modal if is mobile
       return <Modal />
     }
   }, [])
@@ -84,7 +84,7 @@ const AccountButton = (props) => {
 
   return (
     <>
-      <ChainSelector /> 
+      <ChainSelector />
       {(() => {
         if (!account && isMobile()) {
           return (
@@ -93,29 +93,44 @@ const AccountButton = (props) => {
         } else if (!account && !isMobile()) {
           return (
             <ConnectButton onClick={handleUnlockClick}>
-            <LogoContainer>
-              <MetaMask src={IconMetamask} />
-              <Spacer />
-              <MetaMask src={"https://trustwallet.com/assets/images/media/assets/trust_platform.svg"} />
-            </LogoContainer>
-            <ButtonText>Connect Wallet</ButtonText>
-          </ConnectButton> 
+              <LogoContainer>
+                <MetaMask src={IconMetamask} />
+                <Spacer />
+                <MetaMask src={"https://trustwallet.com/assets/images/media/assets/trust_platform.svg"} />
+              </LogoContainer>
+              <ButtonText>Connect Wallet</ButtonText>
+            </ConnectButton>
+          )
+        } else if (account && isMobile()) {
+
+          return (
+            <StyledAccountButton>
+              <StyledA
+                href={`https://etherscan.io/address/${account}`}
+                target={`_blank`}
+                style={{ marginLeft: "-5px" }}
+              >
+                <div>{account.substring(0, 6)}</div>
+                <div>{"..." + account.substring(account.length - 4)}</div>
+              </StyledA>
+            </StyledAccountButton>
+          )
+        } else {
+
+          return (
+            <StyledAccountButton>
+              <StyledA
+                href={`https://etherscan.io/address/${account}`}
+                target={`_blank`}
+              >
+                {account.substring(0, 6) +
+                  "..." +
+                  account.substring(account.length - 4)}
+              </StyledA>
+            </StyledAccountButton>
           )
         }
       })()}
-
-
-      {/* {!account && isMobile("mobile") ? (<Modal />) : (null)}
-      { !account && isMobile("desktop")  ? (
-        <ConnectButton onClick={handleUnlockClick}>
-          <LogoContainer>
-            <MetaMask src={IconMetamask} />
-            <Spacer />
-            <MetaMask src={"https://trustwallet.com/assets/images/media/assets/trust_platform.svg"} />
-          </LogoContainer>
-          <ButtonText>Connect Wallet</ButtonText>
-        </ConnectButton> 
-       ): (<Modal />)}  */}
     </>
   );
 };

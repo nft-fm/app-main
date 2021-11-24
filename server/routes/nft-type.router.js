@@ -542,9 +542,13 @@ router.post("/getNftsWithParams", async (req, res) => {
 });
 
 router.post("/getSnnipetAWS", async (req, res) => {
+  const params = { Bucket: "nftfm-music", Key: req.body.key };
+  
+  await s3
+    .headObject(params)
+    .promise()
 
-  const params = { Bucket: "nftfm-music", Key: req.body.key, Expires: 60 * 5 };
-  const url = s3.getSignedUrl("getObject", params);
+  const url = await s3.getSignedUrl("getObject", params);
 
   console.log("got url", url);
   res.status(200).send(url);
@@ -743,7 +747,7 @@ router.post("/handleImage", async (req, res) => {
 });
 
 router.post("/getNSecondsOfSong", async (req, res) => {
-  const _start = new Date();
+  console.log("/getNSecondsOfSong");
 
   if (req.body.nft) {
     const songFullSize = await s3
@@ -778,6 +782,7 @@ router.post("/getNSecondsOfSong", async (req, res) => {
 });
 
 router.post("/getPartialSong", async (req, res) => {
+  console.log("/getPartialSong");
   const songFullSize = await s3
     .headObject({ Key: req.body.key, Bucket: "nftfm-music" })
     .promise()
@@ -804,6 +809,7 @@ router.post("/getPartialSong", async (req, res) => {
 });
 
 router.post("/getSong", async (req, res) => {
+  console.log("/getSong");
 
   s3.getObject(
     { Bucket: "nftfm-music", Key: req.body.key },

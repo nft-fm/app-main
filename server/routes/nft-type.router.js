@@ -845,46 +845,6 @@ router.get("/purchase", () => {
   listenForBuyBsc();
 });
 
-// router.post("/purchase", async (req, res) => {
-//   try {
-//     console.log("purchasing!", req.body);
-//     let nft = await NftType.findOne({ _id: req.body.id });
-//     if (!nft) {
-//       res.status(500).send("No NFT found");
-//       return;
-//     }
-//     if (nft.numSold >= nft.numMinted) {
-//       res.status(500).send("Out of Stock");
-//       return;
-//     }
-//     let user = await User.findOne({ address: req.body.address });
-//     if (!user) {
-//       res.status(500).send("No user found");
-//       return;
-//     }
-
-//     user.nfts.push({ nft: nft._id, quantity: 1 });
-
-//     await user.save();
-
-//     nft.numSold++;
-//     await nft.save();
-
-//     if (process.env.PRODUCTION) {
-//       trackNftPurchase({
-//         address: req.body.address,
-//         ip: req.ip,
-//         artistAddress: nft.address,
-//         nftId: nft.nftId,
-//         nftPrice: nft.price,
-//       });
-//     }
-//     res.status(200).send("Success!");
-//   } catch (err) {
-//     res.status(500).send(err);
-//   }
-// });
-
 router.post("/newShare", async (req, res) => {
   try {
     const getNft = await NftType.findOne({ nftId: req.body.nftId });

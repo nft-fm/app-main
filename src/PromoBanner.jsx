@@ -13,7 +13,7 @@ const GetEmailModal = () => {
     <Container open={open}>
       <PromoText>💚 Buy an NFT for an immediate VINYL airdrop! Click on an NFT for more information. 💚</PromoText>
       <MobilePromoText>💚 Buy an NFT for a VINYL airdrop bonus! 💚</MobilePromoText>
-      <CountDownContainer><CountDown endTime={1637546400000}/></CountDownContainer>
+      {/* <CountDownContainer><CountDown endTime={1637546400000}/></CountDownContainer> */}
     </Container> 
   )
 }
@@ -81,7 +81,7 @@ color: #888;
   flex-direction: column;
   justify-content: space-evenly;
 
-  height: 100px;
+  // height: 100px;
 }
 `
 

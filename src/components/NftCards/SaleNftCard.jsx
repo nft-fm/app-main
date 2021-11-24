@@ -114,11 +114,12 @@ const NftCard = (props) => {
     }
   }, [props.nft, user]);
 
-  useEffect(() => {
+  const fetchSong = (e) => (() => {
+    e.stopPropagation()
     getSnnipetAWS(props.nft);
     //setPartialSong(partialSong);
     //getNSeconds(props.nft);
-  }, []);
+  });
 
   if (!nft) {
     return null;
@@ -174,7 +175,7 @@ const NftCard = (props) => {
           alt="image"
           onLoad={() => setImageLoaded(true)}
         />
-        <PreviewButton onClick={(e) => e.stopPropagation()}>
+        <PreviewButton onClick={(e) => e.fetchSong()}>
           {partialSong && <PlaySongSnippet partialSong={partialSong} pauseSong={props.pauseSong} setPauseSong={props.setPauseSong} />}
         </PreviewButton>
         {nft.isRedeemable && (

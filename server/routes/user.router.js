@@ -122,8 +122,6 @@ router.post("/add-to-email-list", async (req, res) => {
 
 router.post("/track-pageview", async (req, res) => {
   try {
-
-    console.log("track pageview", req.body);
       trackPageview({
         ip: req.ip,
         ...req.body,

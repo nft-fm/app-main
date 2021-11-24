@@ -9,6 +9,7 @@ import { useAccountConsumer } from "../../../contexts/Account";
 const Listen = () => {
   const { account } = useAccountConsumer();
   const [allNfts, setAllNfts] = useState([]);
+  const [featuredNfts, setFeaturedNfts] = useState([]);
   const [shown, setShown] = useState(6);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
@@ -66,6 +67,11 @@ const Listen = () => {
 
   //   fetchWithNoSearch();
   // }, [search, account]);
+
+  axios.post("/api/nft-type/get-featured").then(res => {
+    setFeaturedNfts(res.data);
+  });
+
 
   console.log("genre", genre);
 
@@ -200,6 +206,15 @@ const Listen = () => {
 
   return (
     <LaunchContainer>
+          <LaunchContainer>
+      <ContainerOutline />
+      <NftScroll>
+        {featuredNfts.map((item, index) => {
+          if (index >= shown * 3) return null;
+          else return <NftCard nft={item} pauseSong={pauseSong} setPauseSong={setPauseSong} />;
+        })}
+      </NftScroll>
+    </LaunchContainer>
       <ContainerTitleForm onSubmit={(e) => handleSearch(e, 1, search, 2)}>
         <ContainerTitleInput
           type="text"

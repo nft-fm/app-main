@@ -91,6 +91,7 @@ const PlaySongSnippet = (props) => {
   }, [isPlaying, time]);
 
   useEffect(() => {
+    playSong()
     return () => {
       if (audioRef && audioRef.current) audioRef.current.pause();
     };

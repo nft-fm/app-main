@@ -38,6 +38,7 @@ const AccountButton = (props) => {
   const { account, connect } = useAccountConsumer();
   const cookies = new Cookies()
   // const [onPresentInstallMetamask] = useModal(<InstallMetamaskModal />);
+
   const handleUnlockClick = () => {
     if (window.ethereum) {
       connect("injected")

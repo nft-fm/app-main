@@ -167,12 +167,13 @@ export const AccountProvider = ({ children }) => {
     await connect("injected");
   };
 
+
   return (
     <AccountContext.Provider
       value={{
         isAdmin,
-        account: !isMobile ? account : wcAccount,
-        connect: !isMobile ? fixedConnect : walletConnectInit,
+        account: !isMobile() ? account : wcAccount,
+        connect: !isMobile() ? fixedConnect : walletConnectInit,
         initialize,
         user,
         getUser,

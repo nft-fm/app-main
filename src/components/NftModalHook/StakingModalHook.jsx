@@ -138,43 +138,47 @@ const StakingModal = (props) => {
       .fire({
         title: `You have ${userStakedToArtist} VINYL staked in ${artist.username}`,
         text: `How much would you like to withdraw?`,
-        input: "number",
-        inputAttributes: {
-          min: 1,
-          max: userStakedToArtist,
-        },
+        input: "text",
+        // inputAttributes: {
+        //   min: 1,
+        //   max: userStakedToArtist,
+        // },
         confirmButtonText: "Unstake",
         showCancelButton: true,
       })
       .then((res) => {
         if (res.isConfirmed) {
-          setIsUnstakeLoading(true);
-          unstakeVinyl(artist.address, res.value, (err) => {
-            if (err) {
-              setIsUnstakeLoading(false);
-              swal.fire({
-                title: "Error when staking, please refresh and try again.",
-              });
-            } else {
-              setIsUnstakeLoading(false);
-              //passing 'true' in triggers the getArtistBalances function to delete artist address in mongo if new staked value = 0
-              getArtistBalances();
-              setNeedToUpdateBalances(true);
-              if (Number(res.value) === Number(userStakedToArtist)) {
-                axios
-                  .post("/api/user/removeStakedArtist", {
-                    artist: artist.address,
-                    account: account,
-                  })
-                  .then((res) => {
-                    console.log(res);
-                    setIsStakedArtist(false);
-                    closeModal(true);
-                  })
-                  .catch((err) => console.log(err));
+          if (Number(res.value)) {
+            setIsUnstakeLoading(true);
+            unstakeVinyl(artist.address, res.value, (err) => {
+              if (err) {
+                setIsUnstakeLoading(false);
+                swal.fire({
+                  title: "Error when staking, please refresh and try again.",
+                });
+              } else {
+                setIsUnstakeLoading(false);
+                //passing 'true' in triggers the getArtistBalances function to delete artist address in mongo if new staked value = 0
+                getArtistBalances();
+                setNeedToUpdateBalances(true);
+                if (Number(res.value) === Number(userStakedToArtist)) {
+                  axios
+                    .post("/api/user/removeStakedArtist", {
+                      artist: artist.address,
+                      account: account,
+                    })
+                    .then((res) => {
+                      console.log(res);
+                      setIsStakedArtist(false);
+                      closeModal(true);
+                    })
+                    .catch((err) => console.log(err));
+                }
               }
-            }
-          });
+            });
+          } else {
+            swal.fire('Unstake value must be a number!')
+          }
         }
       });
   };

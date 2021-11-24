@@ -8,26 +8,28 @@ import IconMetamask from "../../../assets/img/icons/metamask_icon.png";
 import Cookies from 'universal-cookie'
 import swal from 'sweetalert2'
 import metamaskLogo from "../../../assets/img/metamask_fox.svg";
-import Modal from "../../../components/WalletProviderModal/Modal"
-
+import axios from 'axios'
+import {
+  useLocation,
+} from "react-router-dom";
+import queryString from "query-string";
 
 // https://stackoverflow.com/questions/21741841/detecting-ios-android-operating-system
 
-
 function getMetaMaskLink() {
   var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-  // if (/android/i.test(userAgent)) {
-  //   return {
-  //     title: "Open in App Store",
-  //     link: "https://metamask.app.link/bxwkE8oF99",
-  //   };
-  // }
-  // if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-  //   return {
-  //     title: "Open in App Store",
-  //     link: "https://metamask.app.link/skAH3BaF99",
-  //   };
-  // }
+  if (/android/i.test(userAgent)) {
+    return {
+      title: "Open in App Store",
+      link: "https://metamask.app.link/bxwkE8oF99",
+    };
+  }
+  if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+    return {
+      title: "Open in App Store",
+      link: "https://metamask.app.link/skAH3BaF99",
+    };
+  }
   return {
     title: "Open Instructions",
     link: "https://metamask.io/download.html",
@@ -47,14 +49,22 @@ const AccountButton = (props) => {
     else
       openMetamaskAlert();
   }
-  //Display wallet connect modal if is mobile
-  useEffect(() => {
-    if (isMobile()) {
-      //Return modal if is mobile
-      return <Modal />
-    }
-  }, [])
 
+  useEffect(() => {
+    if (queryString.parse(location.search).utm_source) {
+      axios.post('/api/email/referral', {
+        joiner: account,
+        referrer: queryString.parse(location.search).utm_content,
+      })
+    }
+    // if (window.location.pathname.substring(0, 3) === '/r/') {
+    //   axios.post('/api/email/referral', {
+    //     referrer: window.location.pathname.substring(3, window.location.pathname.length),
+    //     joiner: account
+    //   })
+    // }
+  }, [account])
+  const location = useLocation();
 
   const openMetamaskAlert = async () => {
     if (account) return;

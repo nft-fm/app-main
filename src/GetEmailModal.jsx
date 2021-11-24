@@ -4,84 +4,175 @@ import styled from "styled-components";
 import { AccountProvider, useAccountConsumer } from "./contexts/Account";
 import { ReactComponent as XIcon } from "./assets/img/icons/x.svg";
 import { ReactComponent as CheckIcon } from "./assets/img/icons/check_circle.svg";
+import swal from 'sweetalert2'
+import metamaskLogo from "./assets/img/metamask_fox.svg";
+
 
 const GetEmailModal = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
-  const { account, user } = useAccountConsumer();
+  const [copied, setCopied] = useState(false)
+  const { account, user, connect } = useAccountConsumer();
 
   useEffect(() => {
     const storedEmail = localStorage.getItem('email');
-    if (!storedEmail) {
-      setOpen(true);
+    if (storedEmail) {
+      setEmail(storedEmail);
+      setSubmitted(true);
+      if (!account)
+        setOpen(false)
     }
+    if (account && storedEmail)
+      setOpen(true)
+
     console.log("user", user, user?.email === "", storedEmail);
     if (user && user?.email === "" && storedEmail) {
-      axios.post("/api/user/add-email", {email: storedEmail, address: user.address})
-      .then(() => {
-      })
-      .catch((err) => console.error(err));
+      axios.post("/api/user/add-email", { email: storedEmail, address: user.address })
+        .then(() => {
+        })
+        .catch((err) => console.error(err));
       //save email to user
     }
-  }, [user, submitted])
+  }, [user, submitted, account])
+
+  function getMetaMaskLink() {
+    var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    if (/android/i.test(userAgent)) {
+      return {
+        title: "Open in App Store",
+        link: "https://metamask.app.link/bxwkE8oF99",
+      };
+    }
+    if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+      return {
+        title: "Open in App Store",
+        link: "https://metamask.app.link/skAH3BaF99",
+      };
+    }
+    return {
+      title: "Open Instructions",
+      link: "https://metamask.io/download.html",
+    };
+  }
+
+  const handleUnlockClick = () => {
+    if (window.ethereum) {
+      connect("injected")
+    }
+    else
+      openMetamaskAlert();
+  }
+
+  const openMetamaskAlert = async () => {
+    if (account) return;
+    const { title, link } = getMetaMaskLink();
+    swal
+      .fire({
+        title: "You need to install metamask.",
+        confirmButtonText: title,
+        imageUrl: metamaskLogo,
+        imageWidth: 100,
+      })
+      .then(({ isConfirmed }) => {
+        if (isConfirmed) {
+          window.open(link, "_blank").focus();
+        }
+      });
+  };
 
   const submitEmail = (e) => {
     e.preventDefault()
+    if (!account)
+      handleUnlockClick()
 
     let validEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (!validEmail.test(email)) {
       setError(true);
       return;
     }
-    axios.post("/api/user/add-to-email-list", {email})
-    .then(() => {
-      setSubmitted(true);
-      localStorage.setItem('email', email);
-    })
-    .catch((err) => console.error(err));
+    axios.post("/api/user/add-to-email-list", { email })
+      .then(() => {
+        setSubmitted(true);
+        localStorage.setItem('email', email);
+      })
+      .catch((err) => console.error(err));
   }
-  
+
+
+  const copyToClipboard = async () => {
+    await navigator.clipboard.writeText(`https://beta.fanfare.fm/?utm_source=referral&utm_campaign=airdrop_1&utm_content=${account}`).then(() => setCopied(true))
+  }
+
   if (open) {
     return (
       <Modal>
-          <X onClick={() => setOpen(false)}/>
-        {!submitted && <Half>
-          Sign up for our new<br/>
-          platform to earn a <span style={{color: "#20A4FC", fontWeight: "600"}}>free NFT!</span>
-        </Half>}
+        <X onClick={() => setOpen(false)} />
+        {!submitted &&
+          <Half>
+            Sign up for our new<br />
+            platform to earn a <span style={{ color: "#20A4FC", fontWeight: "600" }}>free NFT!</span>
+          </Half>
+        }
         <Half>
           <form onSubmit={(e) => submitEmail(e)}>
-            {!submitted ? 
-            <Bottom>
-          <Input
-            error={error}
-            name="email"
-            placeholder="email"
-            type="email"
-            onChange={(e) => setEmail(e.target.value)}
-            >
-          </Input>
-          <Submit type="submit">
-            <Check/>
-          </Submit>
-            </Bottom>
-            : <Thanks>
-              Thank You!
-              </Thanks>
-          }
+            {!submitted ?
+              <Bottom>
+                <Input
+                  error={error}
+                  name="email"
+                  placeholder="email"
+                  type="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                >
+                </Input>
+                <Submit type="submit">
+                  <Check />
+                </Submit>
+              </Bottom>
+              :
+              <Half>
+                Thanks! Please share with your friends<br />
+                for <span style={{ color: "#20A4FC", fontWeight: "600" }}>100 VINYL</span> whenever someone joins! <br />
+              </Half>
+            }
           </form>
         </Half>
-        {submitted && <Half>
-          We will be reaching out to<br/>
-          you <span style={{color: "#20A4FC", fontWeight: "600"}}>via email</span> soon.
-        </Half>}
+        {submitted &&
+          <ReferSection>
+            <ReferInput width={copied ? 200 : 300} value={`https://beta.fanfare.fm/?utm_source=referral&utm_campaign=airdrop_1&utm_content=${account}`} onClick={copyToClipboard} /> {copied && <Confirm><Check />copied!</Confirm>}
+          </ReferSection>
+        }
       </Modal>
     );
-}
+  }
   return null;
 }
+
+const Confirm = styled.div`
+display: flex;
+flex-direction: row;
+align-items: center;
+margin: 5px;
+`
+
+const ReferInput = styled.input`
+outline: none;
+  padding: 5px 8px 3px 8px;
+  height: 20px;
+  font: "Compita";
+  background-color: ${(props) => props.theme.color.boxBorder};
+  font-size: ${(props) => props.theme.fontSizes.xs};
+  color: white;
+  border: 4px solid #383838;
+  border-radius: 20px;
+  display: flex;
+  margin-left: 10px;
+  width: ${props => props.width}px;
+  cursor: pointer;
+  user-select: none;
+  `
 
 const Submit = styled.button`
   cursor: pointer;
@@ -168,6 +259,17 @@ font-weight: 300;
 letter-spacing: .5px;
 `
 
+const ReferSection = styled.div`
+font-size: 16px;
+line-height: 22px;
+font-weight: 300;
+letter-spacing: .5px;
+display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: space-between;
+`
+
 const Bottom = styled.div`
 font-size: 16px;
 line-height: 22px;
@@ -180,18 +282,18 @@ justify-content: space-between;
 `
 
 const Modal = styled.div`
-height: 86px;
-    width: 280px;
+height: 100px;
+    width: 340px;
 display: flex;
 justify-content: space-between;
 flex-direction: column;
-position: fixed;
+position: absolute;
 text-align: center;
 /* height: 20px; */
 /* width: 200px; */
 padding: 16px;
-top: 130px;
-right: 20px;
+top: 110px;
+right: 10px;
 border: 1px solid  ${(props) => props.theme.color.boxBorder};
 background: ${props => props.theme.color.box};
 color: white;

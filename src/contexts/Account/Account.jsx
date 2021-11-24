@@ -6,6 +6,11 @@ import isMobile from "../../utils/isMobile";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import Web3 from "web3"
 
+import queryString from "query-string";
+import {
+  BrowserRouter as Router,
+  useLocation,
+} from "react-router-dom";
 
 export const AccountContext = createContext();
 
@@ -45,6 +50,7 @@ export const AccountProvider = ({ children }) => {
   const [oneSecToLoadMetaMask, setOneSecToLoadMetaMask] = useState(false);
   const [noEmail, setNoEmail] = useState(false);
   const [wcAccount, setwcAccount] = useState(null)
+  const location = useLocation();
 
   const fetchUsdPerEthandBsc = async () => {
     await axios
@@ -60,8 +66,14 @@ export const AccountProvider = ({ children }) => {
   };
 
   const getUser = async () => {
+    
     await axios
-      .post(`/api/user/get-account`, { address: account })
+      .post(`/api/user/get-account`, {
+        address: account,
+        utm_source: queryString.parse(location.search).utm_source || null,
+        utm_campaign: queryString.parse(location.search).utm_campaign || null,
+        utm_content: queryString.parse(location.search).utm_content || null,
+       })
       .then((res) => {
         console.log("HERE DA USER", res.data);
         if (!res.data.email) {

@@ -20,12 +20,14 @@ const {
   TEST_FlatPriceSale,
   MAIN_BSC_FlatPriceSale,
   TEST_BSC_FlatPriceSale,
+  AirdropWallet,
 } = require("./constants");
 const FlatPriceSaleABI = require("./abi/FlatPriceSale.abi");
 const NFTTokenABI = require("./abi/NFTToken.abi");
 const VinylABI = require("./abi/Vinyl.abi");
 const StakingABI = require("./abi/Staking.abi");
 const dotenv = require("dotenv");
+const Web3 = require("web3");
 dotenv.config();
 
 const sign = (types, values) => {
@@ -57,16 +59,15 @@ const sign = (types, values) => {
 // };
 
 // this just formats likes at this point
-const findLikes = (nfts, account) => (
-  nfts.map(nft => {
-    const likes = nft._doc.likes
+const findLikes = (nfts, account) =>
+  nfts.map((nft) => {
+    const likes = nft._doc.likes;
     return {
       ...nft._doc,
       likes: [],
-      liked: likes && likes.includes(account)
-    }
-  })
-);
+      liked: likes && likes.includes(account),
+    };
+  });
 
 const getUserNftsETH = async (account) => {
   const PROVIDER_URL = process.env.REACT_APP_IS_MAINNET
@@ -226,7 +227,7 @@ const getAllNftsFromEthContract = async (nftsFromDB, callback) => {
   let nfts = [];
   for (let nft of nftsFromDB) {
     let r = await contract.sets(nft.nftId);
-    nfts.push({nftFromDB: nft, nftFromContract: r});
+    nfts.push({ nftFromDB: nft, nftFromContract: r });
   }
   callback(nfts);
 };
@@ -243,9 +244,58 @@ const getAllNftsFromBscContract = async (nftsFromDB, callback) => {
   let nfts = [];
   for (let nft of nftsFromDB) {
     let r = await contract.sets(nft.nftId);
-    nfts.push({nftFromDB: nft, nftFromContract: r});
+    nfts.push({ nftFromDB: nft, nftFromContract: r });
   }
   callback(nfts);
+};
+
+const airdropOnNFTPurchase = async (receiver, amount, callback) => {
+  const web3 = new Web3(
+    process.env.REACT_APP_IS_MAINNET && process.env.PRODUCTION
+      ? process.env.BSC_PROVIDER_URL
+      : process.env.BSCTEST_PROVIDER_URL
+  );
+  const gasprice = await web3.eth.getGasPrice();
+  let count = await web3.eth.getTransactionCount(AirdropWallet);
+
+  const vinylAddress = process.env.REACT_APP_IS_MAINNET && process.env.PRODUCTION
+    ? MAIN_StakingAddress
+    : TEST_StakingAddress;
+  const token = new web3.eth.Contract(VinylABI, vinylAddress);
+
+  const txObject = {
+    from: AirdropWallet,
+    nonce: "0x" + count.toString(16),
+    to: vinylAddress,
+    gas: 100000,
+    value: "0x0",
+    data: token.methods
+      .transfer(
+        receiver,
+        web3.utils.toHex(web3.utils.toWei(amount.toString(), "ether"))
+      )
+      .encodeABI(),
+    gasPrice: gasprice,
+  };
+
+  web3.eth.accounts.signTransaction(
+    txObject,
+    process.env.AIRDROP_PRIVATE_KEY,
+    (err, res) => {
+      if (err) {
+        return callback("signerError");
+      }
+
+      const raw = res.rawTransaction;
+      web3.eth.sendSignedTransaction(raw, (err, txHash) => {
+        if (err) {
+          return callback("transactionError");
+        } else {
+          callback(txHash);
+        }
+      });
+    }
+  );
 };
 
 module.exports = {
@@ -259,4 +309,5 @@ module.exports = {
   getStakersForArtist,
   getAllNftsFromEthContract,
   getAllNftsFromBscContract,
+  airdropOnNFTPurchase,
 };

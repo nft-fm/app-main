@@ -22,14 +22,21 @@ const {
 const { listenForMintEth, listenForMintBsc } = require("../web3/mint-listener");
 const { trackNftView } = require("../modules/mixpanel");
 const { listenForBuyBsc, listenForBuyEth } = require("../web3/buy-listener");
+const cron = require("node-cron");
+const path = require("path");
+const multerS3 = require("multer-s3");
 
 router.get("/test-get-all", async (req, res) => {
   NftType.find({ isMinted: true })
-    .then(r => res.json(r.map(({ nftId, imageUrl }) => {
-      return { nftId, imageUrl }
-    })))
-    .catch(() => res.status(500).send("Server Error"))
-})
+    .then((r) =>
+      res.json(
+        r.map(({ nftId, imageUrl }) => {
+          return { nftId, imageUrl };
+        })
+      )
+    )
+    .catch(() => res.status(500).send("Server Error"));
+});
 
 // const findLikes = (nfts, account) => {
 //   for (let i = 0; i < nfts.length; i++) {
@@ -53,12 +60,13 @@ router.get("/test-get-all", async (req, res) => {
 //   return nfts;
 // }
 
-const getBucket = () => {
-  return new AWS.S3({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  });
-};
+
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: "us-west-2"
+});
+
 
 router.post("/artist-nfts", async (req, res) => {
   try {
@@ -89,9 +97,9 @@ router.post("/updateStartTime", async (req, res) => {
 
     const updateNft = await NftType.findById(req.body.nft._id);
     updateNft.startTime = req.body.nft.startTime;
-    
+
     await updateNft.save();
-    res.send({success: true});
+    res.send({ success: true });
   } catch (err) {
     res.status(500).send("Server Error");
   }
@@ -485,7 +493,7 @@ router.post("/countNfts", async (req, res) => {
 
 router.post("/getNftsWithParams", async (req, res) => {
   try {
-    const { address, sort, page, limit, length } = req.body;
+    const { address, sort, page, limit, length, genre } = req.body;
     const sortParams = {
       0: { price: -1 },
       1: { price: 1 },
@@ -493,24 +501,40 @@ router.post("/getNftsWithParams", async (req, res) => {
       3: { timestamp: 1 },
       4: { shareCount: 1 },
       5: { likeCount: -1 },
-      6: {genre: ""}
+      6: { numSold: -1 },
     };
     const query = { $regex: req.body.search, $options: "i" };
 
-    let nftTypes = await NftType.find({
-      isDraft: false,
-      isMinted: true,
-      $or: [
-        { title: query }, { artist: query }
-      ],
-    })
-      .sort(sortParams[sort] ? sortParams[sort] : {})
-      .skip(page * limit)
-      .limit(limit);
-    res.send({
-      nfts: findLikes(nftTypes, address),
-      hasMore: length === limit,
-    });
+    console.log("HERE", genre);
+
+    if (genre === "All") {
+      let nftTypes = await NftType.find({
+        isDraft: false,
+        isMinted: true,
+        $or: [{ title: query }, { artist: query }],
+      })
+        .sort(sortParams[sort] ? sortParams[sort] : {})
+        .skip(page * limit)
+        .limit(limit);
+      res.send({
+        nfts: findLikes(nftTypes, address),
+        hasMore: length === limit,
+      });
+    } else {
+      let nftTypes = await NftType.find({
+        isDraft: false,
+        isMinted: true,
+        $or: [{ title: query }, { artist: query }],
+        genre: genre,
+      })
+        .sort(sortParams[sort] ? sortParams[sort] : {})
+        .skip(page * limit)
+        .limit(limit);
+      res.send({
+        nfts: findLikes(nftTypes, address),
+        hasMore: length === limit,
+      });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).send("server error");
@@ -518,22 +542,15 @@ router.post("/getNftsWithParams", async (req, res) => {
 });
 
 router.post("/getSnnipetAWS", async (req, res) => {
-  const s3 = getBucket();
 
   const params = { Bucket: "nftfm-music", Key: req.body.key, Expires: 60 * 5 };
   const url = s3.getSignedUrl("getObject", params);
-  
+
   console.log("got url", url);
   res.status(200).send(url);
 });
 
 router.post("/uploadSnnipetS3", async (req, res) => {
-  var AWS = require("aws-sdk");
-  AWS.config.region = "us-west-2";
-  const multerS3 = require("multer-s3");
-
-  var s3Client = getBucket();
-
   const fileFilter = (req, file, cb) => {
     if (file.mimetype === "audio/mpeg") {
       cb(null, true);
@@ -546,7 +563,7 @@ router.post("/uploadSnnipetS3", async (req, res) => {
     fileFilter,
     storage: multerS3({
       ACL: "public-read",
-      s3: s3Client,
+    s3: s3  ,
       bucket: "nftfm-music",
       metadata: function (req, file, cb) {
         cb(null, { fieldName: "audioFile" });
@@ -584,11 +601,6 @@ router.post("/uploadSnnipetS3", async (req, res) => {
 
 router.post("/uploadAudioS3", async (req, res) => {
   try {
-    var AWS = require("aws-sdk");
-    AWS.config.region = "us-west-2";
-    const multerS3 = require("multer-s3");
-
-    var s3Client = getBucket();
 
     const fileFilter = (req, file, cb) => {
       if (file.mimetype === "audio/mpeg" || file.mimetype === "audio/wav") {
@@ -602,7 +614,7 @@ router.post("/uploadAudioS3", async (req, res) => {
       fileFilter,
       storage: multerS3({
         ACL: "public-read",
-        s3: s3Client,
+        s3: s3,
         bucket: "nftfm-music",
         metadata: function (req, file, cb) {
           cb(null, { fieldName: "audioFile" });
@@ -653,11 +665,6 @@ router.post("/handleAudio", async (req, res) => {
 });
 
 router.post("/uploadImageS3", async (req, res) => {
-  var AWS = require("aws-sdk");
-  AWS.config.region = "us-west-2";
-  const path = require("path");
-  const multerS3 = require("multer-s3");
-  var s3Client = getBucket();
 
   const fileFilter = (req, file, cb) => {
     // if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
@@ -671,7 +678,7 @@ router.post("/uploadImageS3", async (req, res) => {
     fileFilter,
     storage: multerS3({
       ACL: "public-read",
-      s3: s3Client,
+      s3: s3,
       bucket: "nftfm-images",
       metadata: function (req, file, cb) {
         cb(null, { fieldName: "imageFile" });
@@ -739,7 +746,6 @@ router.post("/getNSecondsOfSong", async (req, res) => {
   const _start = new Date();
 
   if (req.body.nft) {
-    const s3 = getBucket();
     const songFullSize = await s3
       .headObject({ Key: req.body.key, Bucket: "nftfm-music" })
       .promise()
@@ -772,7 +778,6 @@ router.post("/getNSecondsOfSong", async (req, res) => {
 });
 
 router.post("/getPartialSong", async (req, res) => {
-  const s3 = getBucket();
   const songFullSize = await s3
     .headObject({ Key: req.body.key, Bucket: "nftfm-music" })
     .promise()
@@ -800,12 +805,9 @@ router.post("/getPartialSong", async (req, res) => {
 
 router.post("/getSong", async (req, res) => {
 
-  const s3 = getBucket();
-
   s3.getObject(
     { Bucket: "nftfm-music", Key: req.body.key },
     function (error, data) {
-
       if (error != null) {
         res.status(500).send("Couldnt retrieve song of music");
         return;
@@ -822,12 +824,8 @@ router.post("/getSongList", async (req, res) => {
     Bucket: "nftfm-music",
     Prefix: account,
   };
-  var AWS = require("aws-sdk");
-  AWS.config.region = "us-west-2";
-  const path = require("path");
 
   // AWS.config.loadFromPath(path.join(__dirname, '../aws_config.json'));
-  var s3 = getBucket();
   s3.listObjectsV2(params, function (err, data) {
     console.log(data);
     if (err) console.log(err, err.stack);
@@ -836,14 +834,9 @@ router.post("/getSongList", async (req, res) => {
   });
 });
 
-router.post("/purchase", async (req, res) => {
-  try {
-    listenForBuyEth();
-    listenForBuyBsc();
-    res.send("ok");
-  } catch (err) {
-    res.status(500).send(err);
-  }
+router.get("/purchase", () => {
+  listenForBuyEth();
+  listenForBuyBsc();
 });
 
 // router.post("/purchase", async (req, res) => {
@@ -900,7 +893,11 @@ router.post("/newShare", async (req, res) => {
 router.post("/get-by-nftId", async (req, res) => {
   try {
     const getNft = await NftType.findOne({ nftId: req.body.nftId });
-    res.status(200).send(getNft.map(nft => { return {} }));
+    res.status(200).send(
+      getNft.map((nft) => {
+        return {};
+      })
+    );
   } catch (err) {
     res.status(500).send(err);
   }
@@ -1002,7 +999,7 @@ router.get("/testing", async (req, res) => {
         });
       }
     });
-  } catch (err) { }
+  } catch (err) {}
 });
 
 router.post("/updatePrice", async (req, res) => {
@@ -1022,6 +1019,7 @@ router.post("/updatePrice", async (req, res) => {
 //this function will compare the numSold of the db nfts to the
 //contract and update the db to reflect the sold ammount in the contract
 const compareAndUpdateDBtoContract = async () => {
+  console.log("here");
   const allEthNfts = await NftType.find({ isMinted: true, chain: "ETH" }).sort({
     nftId: -1,
   });
@@ -1052,6 +1050,15 @@ const compareAndUpdateDBtoContract = async () => {
     }
   });
 };
-// compareAndUpdateDBtoContract();
+// cron every two hours
+cron.schedule("0 */2 * * *", () => {
+  try {
+    process.env.REACT_APP_IS_MAINNET &&
+      process.env.PRODUCTION &&
+      compareAndUpdateDBtoContract();
+  } catch (err) {
+    console.log(err);
+  }
+});
 
 module.exports = router;

@@ -109,8 +109,9 @@ const InvisibleBar = styled.div`
 
 const Toogle = styled.div`
   position: absolute;
-  width: 4px;
-  height: 12px;
+  width: 5px;
+  height: 14px;
+  cursor: pointer;
   background-color: ${(props) => props.theme.color.lightgray};
   border-radius: 5px;
   top: -5px;
@@ -130,8 +131,8 @@ const FillBar = styled.div`
 const ProgressBar = styled.div`
   position: relative;
   width: 100%;
-  height: 2px;
-
+  height: 3px;
+  cursor: pointer;
   margin-top: 6px;
   /* margin-bottom: 14px; */
   border-radius: 50px;

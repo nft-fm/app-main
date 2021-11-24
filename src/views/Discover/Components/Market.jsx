@@ -23,56 +23,6 @@ const Listen = () => {
   const limit = 200;
   const [pauseSong, setPauseSong] = useState(() => () => {}) // this is fucking weird, don't touch me.
 
-
-  // const getNftsWithParams = async (pageIncrease, searchParam, sortParam) => {
-  //   console.log("here", hasMore);
-  //   if (hasMore) {
-  //     await axios
-  //       .post("/api/nft-type/getNftsWithParams", {
-  //         address: account,
-  //         limit,
-  //         page: page,
-  //         search: searchParam,
-  //         sort: sortParam,
-  //       })
-  //       .then((res) => {
-  //         setAllNfts([...allNfts, ...res.data.nfts]);
-  //         setPage(page + pageIncrease);
-  //         setHasMore(res.data.hasMore);
-  //       });
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   const fetchWithNoSearch = async () => {
-  //     setPage(0);
-  //     if (search === "") {
-  //       setHasMore(true);
-  //       setAllNfts([]);
-  //       await axios
-  //         .post("/api/nft-type/getNftsWithParams", {
-  //           address: account,
-  //           limit,
-  //           page: 0,
-  //           search: "",
-  //           sort: sort,
-  //         })
-  //         .then((res) => {
-  //           setAllNfts(res.data.nfts);
-  //           setPage(page + 1);
-  //           setHasMore(res.data.hasMore);
-  //         });
-  //     }
-  //   };
-
-  //   fetchWithNoSearch();
-  // }, [search, account]);
-
-  axios.post("/api/nft-type/get-featured").then(res => {
-    setFeaturedNfts(res.data);
-  });
-
-
   console.log("genre", genre);
 
   const handleSort = useCallback(async () => {
@@ -98,6 +48,12 @@ const Listen = () => {
   useEffect(() => {
     handleSort();
   }, [sort, account, handleSort, genre]);
+
+  useEffect(() => {
+    axios.post("/api/nft-type/get-featured").then(res => {
+      setFeaturedNfts(res.data);
+    });
+  }, [])
 
   const handleSearch = async (e, pageIncrease, searchParam, sortParam) => {
     e.preventDefault();

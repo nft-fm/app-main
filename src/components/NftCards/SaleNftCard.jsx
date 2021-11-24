@@ -77,12 +77,6 @@ const NftCard = (props) => {
   };
 
   useEffect(() => {
-    if (userInfo?.profilePic) {
-      setProfilePic(userInfo.profilePic);
-    }
-  }, [userInfo]);
-
-  useEffect(() => {
     if (nft?.artist) {
       axios
         .post("/api/user/get-public-account", {
@@ -90,10 +84,17 @@ const NftCard = (props) => {
         })
         .then((res) => {
           setUserInfo(res.data[0]);
+          if (res.data[0]?.profilePic) {
+            setProfilePic(res.data[0].profilePic);
+          }
         })
         .catch(() => (window.location = "/"));
     }
   }, [nft]);
+
+  useEffect(() => {
+    getSnnipetAWS(props.nft);
+  }, []);
 
   useEffect(() => {
     if (basicLoaded) {
@@ -114,12 +115,12 @@ const NftCard = (props) => {
     }
   }, [props.nft, user]);
 
-  const fetchSong = (e) => (() => {
-    e.stopPropagation()
+  const fetchSong = (e) => {
+    // e.stopPropagation()
     getSnnipetAWS(props.nft);
     //setPartialSong(partialSong);
     //getNSeconds(props.nft);
-  });
+  };
 
   if (!nft) {
     return null;
@@ -175,7 +176,9 @@ const NftCard = (props) => {
           alt="image"
           onLoad={() => setImageLoaded(true)}
         />
-        <PreviewButton onClick={(e) => e.fetchSong()}>
+        <PreviewButton
+        // onClick={(e) => fetchSong(e)}
+        >
           {partialSong && <PlaySongSnippet partialSong={partialSong} pauseSong={props.pauseSong} setPauseSong={props.setPauseSong} />}
         </PreviewButton>
         {nft.isRedeemable && (
@@ -298,6 +301,9 @@ top: 380px;
 right: 10px;
 display: flex;
 justify-content: flex-end;
+/* width: 100%; */
+/* height: 100%; */
+/* background-color: blue; */
 `
 
 const Text = styled.div`

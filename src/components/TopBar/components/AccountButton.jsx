@@ -13,6 +13,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import queryString from "query-string";
+import Modal from './Modal'
 
 // https://stackoverflow.com/questions/21741841/detecting-ios-android-operating-system
 
@@ -95,7 +96,6 @@ const AccountButton = (props) => {
 
   return (
     <>
-      <ChainSelector />
       {(() => {
         if (!account && isMobile()) {
           return (

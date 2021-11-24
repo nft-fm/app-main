@@ -94,7 +94,6 @@ const AccountButton = (props) => {
 
   return (
     <>
-      <ChainSelector />
       {!account ? (
         <ConnectButton onClick={handleUnlockClick}>
           <LogoContainer>

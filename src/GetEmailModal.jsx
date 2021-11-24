@@ -4,24 +4,29 @@ import styled from "styled-components";
 import { AccountProvider, useAccountConsumer } from "./contexts/Account";
 import { ReactComponent as XIcon } from "./assets/img/icons/x.svg";
 import { ReactComponent as CheckIcon } from "./assets/img/icons/check_circle.svg";
+import swal from 'sweetalert2'
+import metamaskLogo from "./assets/img/metamask_fox.svg";
+
 
 const GetEmailModal = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false)
-  const { account, user } = useAccountConsumer();
+  const { account, user, connect } = useAccountConsumer();
 
   useEffect(() => {
     const storedEmail = localStorage.getItem('email');
     if (storedEmail) {
       setEmail(storedEmail);
       setSubmitted(true);
+      if (!account)
+        setOpen(false)
     }
-    if (account) {
+    if (account && storedEmail)
       setOpen(true)
-    }
+
     console.log("user", user, user?.email === "", storedEmail);
     if (user && user?.email === "" && storedEmail) {
       axios.post("/api/user/add-email", { email: storedEmail, address: user.address })
@@ -30,10 +35,57 @@ const GetEmailModal = () => {
         .catch((err) => console.error(err));
       //save email to user
     }
-  }, [user, submitted])
+  }, [user, submitted, account])
+
+  function getMetaMaskLink() {
+    var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    if (/android/i.test(userAgent)) {
+      return {
+        title: "Open in App Store",
+        link: "https://metamask.app.link/bxwkE8oF99",
+      };
+    }
+    if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+      return {
+        title: "Open in App Store",
+        link: "https://metamask.app.link/skAH3BaF99",
+      };
+    }
+    return {
+      title: "Open Instructions",
+      link: "https://metamask.io/download.html",
+    };
+  }
+
+  const handleUnlockClick = () => {
+    if (window.ethereum) {
+      connect("injected")
+    }
+    else
+      openMetamaskAlert();
+  }
+
+  const openMetamaskAlert = async () => {
+    if (account) return;
+    const { title, link } = getMetaMaskLink();
+    swal
+      .fire({
+        title: "You need to install metamask.",
+        confirmButtonText: title,
+        imageUrl: metamaskLogo,
+        imageWidth: 100,
+      })
+      .then(({ isConfirmed }) => {
+        if (isConfirmed) {
+          window.open(link, "_blank").focus();
+        }
+      });
+  };
 
   const submitEmail = (e) => {
     e.preventDefault()
+    if (!account)
+      handleUnlockClick()
 
     let validEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (!validEmail.test(email)) {
@@ -82,7 +134,7 @@ const GetEmailModal = () => {
               :
               <Half>
                 Thanks! Please share with your friends<br />
-                for <span style={{ color: "#20A4FC", fontWeight: "600" }}>100 VINYL</span> whenever someone joins! <br />
+                for <span style={{ color: "#20A4FC", fontWeight: "600" }}>50,000 VINYL</span> whenever someone joins! <br />
               </Half>
             }
           </form>

@@ -47,7 +47,7 @@ router.post("/get-account", async (req, res) => {
         isArtist: process.env.PRODUCTION ? false : true,
       });
       if (req.body.utm_source === "referral") {
-        // trackSuccessfulReferral(req.body);
+        trackSuccessfulReferral(req.body);
         user.referredByAddress = req.body.utm_content;
       }
       await user.save();
@@ -654,5 +654,16 @@ router.post("/removeStakedArtist", async (req, res) => {
     res.status(500);
   }
 });
+
+const getAllUsersWithLowerCaseAddress = async () => {
+  let users = await User.find({ email: {$ne: ""} })
+  let r = []
+  for (let user of users) {
+    r.push({address: user.address.toLowerCase(), email: user.email})
+  }
+  console.dir(r, {maxArrayLength: null})
+}
+// getAllUsersWithLowerCaseAddress()
+
 
 module.exports = router;

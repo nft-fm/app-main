@@ -869,6 +869,20 @@ router.post("/get-by-nftId", async (req, res) => {
   }
 });
 
+
+router.post("/get-featured", async (req, res) => {
+  try {
+    const featured1 = await NftType.findOne({ nftId: 89 });
+    const featured2 = await NftType.findOne({ nftId: 77 });
+    const featured3 = await NftType.findOne({ nftId: 19, chain: "BSC" });
+
+    res.send([featured1, featured2, featured3]);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
+
 //returns NFTs that match search params
 //queries by both artist and song title
 //$options: 'i' = case insensitive

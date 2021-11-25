@@ -2,6 +2,7 @@ import React from "react";
 import { Switch } from "react-router-dom";
 import BaseView from "../../components/Page/BaseView";
 import Market from "./Components/Market";
+import Featured from "./Components/Featured";
 import styled from "styled-components";
 import LinkedNftModal from "../../components/NftModalHook/LinkedNftModal";
 import NoEmailModal from "../../GetEmailModal";
@@ -13,6 +14,7 @@ const Listen = () => {
         <LinkedNftModal />
         <Container>
           <StyledTitle>Discover and Collect Exclusive Digital Music!</StyledTitle>
+          {/* <Featured /> */}
           <Market />
         </Container>
       </BaseView>

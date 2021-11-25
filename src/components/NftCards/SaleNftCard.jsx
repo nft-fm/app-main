@@ -43,9 +43,9 @@ const NftCard = (props) => {
     await axios
       .post("/api/nft-type/getSnnipetAWS", {
         key:
-          completeNft.address +
+          completeNft?.address +
           "/30_sec_snnipets/" +
-          completeNft.audioUrl.split("/").slice(-1)[0],
+          completeNft?.audioUrl.split("/").slice(-1)[0],
       })
       .then((res) => {
         if (!res.data) {
@@ -63,9 +63,9 @@ const NftCard = (props) => {
     await axios
       .post("/api/nft-type/getNSecondsOfSong", {
         key:
-          completeNft.address +
+          completeNft?.address +
           "/" +
-          completeNft.audioUrl.split("/").slice(-1)[0],
+          completeNft?.audioUrl.split("/").slice(-1)[0],
         nft: completeNft,
         startTime: 30,
       })
@@ -77,12 +77,6 @@ const NftCard = (props) => {
   };
 
   useEffect(() => {
-    if (userInfo?.profilePic) {
-      setProfilePic(userInfo.profilePic);
-    }
-  }, [userInfo]);
-
-  useEffect(() => {
     if (nft?.artist) {
       axios
         .post("/api/user/get-public-account", {
@@ -90,10 +84,17 @@ const NftCard = (props) => {
         })
         .then((res) => {
           setUserInfo(res.data[0]);
+          if (res.data[0]?.profilePic) {
+            setProfilePic(res.data[0].profilePic);
+          }
         })
         .catch(() => (window.location = "/"));
     }
   }, [nft]);
+
+  useEffect(() => {
+    getSnnipetAWS(props.nft);
+  }, []);
 
   useEffect(() => {
     if (basicLoaded) {
@@ -114,16 +115,9 @@ const NftCard = (props) => {
     }
   }, [props.nft, user]);
 
-  useEffect(() => {
-    getSnnipetAWS(props.nft);
-    //setPartialSong(partialSong);
-    //getNSeconds(props.nft);
-  }, []);
-
   if (!nft) {
     return null;
   }
-
 
   return (
     <>
@@ -174,7 +168,10 @@ const NftCard = (props) => {
           alt="image"
           onLoad={() => setImageLoaded(true)}
         />
-        <PreviewButton onClick={(e) => e.stopPropagation()}>
+        <PreviewButton
+          onClick={(e) => { e.stopPropagation() }}
+        // onClick={(e) => fetchSong(e)}
+        >
           {partialSong && <PlaySongSnippet partialSong={partialSong} pauseSong={props.pauseSong} setPauseSong={props.setPauseSong} />}
         </PreviewButton>
         {nft.isRedeemable && (
@@ -182,7 +179,7 @@ const NftCard = (props) => {
             <RedeemButton>
               {/* Merch */}
               <MerchIcon />
-            </RedeemButton>  
+            </RedeemButton>
           </RedeemButtonBackground>
         )}
 
@@ -297,6 +294,9 @@ top: 380px;
 right: 10px;
 display: flex;
 justify-content: flex-end;
+/* width: 100%; */
+/* height: 100%; */
+/* background-color: blue; */
 `
 
 const Text = styled.div`

@@ -10,11 +10,16 @@ import { ReactComponent as IconTwitter } from "../../assets/img/icons/social_twi
 import Instagram from "../../assets/img/icons/social_instagram.png";
 import Audius from "../../assets/img/icons/social_audius.png";
 import Spotify from "../../assets/img/icons/social_spotify.png";
+import Button from "../../components/Button/Button";
+
 const Artist = () => {
   const [edit, setEdit] = useState(false);
   const [profilePic, setProfilePic] = useState("");
   const [userInfo, setUserInfo] = useState();
   const [userNfts, setUserNfts] = useState();
+
+
+
   useEffect(() => {
     if (userInfo?.profilePic) {
       setProfilePic(userInfo.profilePic);

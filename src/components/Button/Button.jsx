@@ -21,6 +21,14 @@ const Button = ({
   let buttonPadding;
   let fontSize;
   switch (size) {
+    case 'xsm':
+      boxShadow = `4px 4px 8px ${color.grey},
+        -8px -8px 16px ${color.grey}FF;`
+      buttonPadding = 0
+      buttonSize = 100
+      buttonHeight = 50
+      fontSize = 2
+      break
     case 'sm':
       boxShadow = `4px 4px 8px ${color.grey},
         -8px -8px 16px ${color.grey}FF;`

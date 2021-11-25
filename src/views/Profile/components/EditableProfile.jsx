@@ -237,6 +237,7 @@ const EditSMButton = styled.button`
   margin-bottom: 20px;
   margin-right: 80px;
   padding: 10px;
+  z-index: 1;
   &:hover {
     background-color: rgba(256, 256, 256, 0.2);
   }

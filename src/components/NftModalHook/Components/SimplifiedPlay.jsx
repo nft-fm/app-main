@@ -95,6 +95,7 @@ const PlaySongSnippet = (props) => {
       if (audioRef && audioRef.current) audioRef.current.pause();
     };
   }, []);
+
   return (
     <Wrapper onClick={isPlaying ? stopSong : playSong}>
       {isLoading ? (

@@ -9,6 +9,7 @@ import { useAccountConsumer } from "../../../contexts/Account";
 const Listen = () => {
   const { account } = useAccountConsumer();
   const [allNfts, setAllNfts] = useState([]);
+  const [featuredNfts, setFeaturedNfts] = useState([]);
   const [shown, setShown] = useState(6);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
@@ -20,52 +21,7 @@ const Listen = () => {
   const [genreMenu, setGenreMenu] = useState(false);
   // const [sort, setSort] = useState(Math.floor(Math.random() * 6));
   const limit = 200;
-  const [pauseSong, setPauseSong] = useState(() => () => {}) // this is fucking weird, don't touch me.
-
-
-  // const getNftsWithParams = async (pageIncrease, searchParam, sortParam) => {
-  //   console.log("here", hasMore);
-  //   if (hasMore) {
-  //     await axios
-  //       .post("/api/nft-type/getNftsWithParams", {
-  //         address: account,
-  //         limit,
-  //         page: page,
-  //         search: searchParam,
-  //         sort: sortParam,
-  //       })
-  //       .then((res) => {
-  //         setAllNfts([...allNfts, ...res.data.nfts]);
-  //         setPage(page + pageIncrease);
-  //         setHasMore(res.data.hasMore);
-  //       });
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   const fetchWithNoSearch = async () => {
-  //     setPage(0);
-  //     if (search === "") {
-  //       setHasMore(true);
-  //       setAllNfts([]);
-  //       await axios
-  //         .post("/api/nft-type/getNftsWithParams", {
-  //           address: account,
-  //           limit,
-  //           page: 0,
-  //           search: "",
-  //           sort: sort,
-  //         })
-  //         .then((res) => {
-  //           setAllNfts(res.data.nfts);
-  //           setPage(page + 1);
-  //           setHasMore(res.data.hasMore);
-  //         });
-  //     }
-  //   };
-
-  //   fetchWithNoSearch();
-  // }, [search, account]);
+  const [pauseSong, setPauseSong] = useState(() => () => { }) // this is fucking weird, don't touch me.
 
   console.log("genre", genre);
 
@@ -92,6 +48,12 @@ const Listen = () => {
   useEffect(() => {
     handleSort();
   }, [sort, account, handleSort, genre]);
+
+  useEffect(() => {
+    axios.post("/api/nft-type/get-featured").then(res => {
+      setFeaturedNfts(res.data);
+    });
+  }, [])
 
   const handleSearch = async (e, pageIncrease, searchParam, sortParam) => {
     e.preventDefault();
@@ -199,66 +161,80 @@ const Listen = () => {
   console.log(pauseSong)
 
   return (
-    <LaunchContainer>
-      <ContainerTitleForm onSubmit={(e) => handleSearch(e, 1, search, 2)}>
-        <ContainerTitleInput
-          type="text"
-          placeholder="Search..."
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </ContainerTitleForm>
+    <>
+      <LaunchContainer>
+        <Featured>
+          Featured
+        </Featured>
+        <ContainerOutline />
+        <NftScroll>
+          {featuredNfts.map((item, index) => {
+            if (index >= shown * 3) return null;
+            else return <NftCard nft={item} pauseSong={pauseSong} setPauseSong={setPauseSong} />;
+          })}
+        </NftScroll>
+      </LaunchContainer>
+      <LaunchContainer>
 
-      <ContainerTitleGenre
-        onMouseEnter={() => setGenreMenu(true)}
-        onMouseLeave={() => setGenreMenu(false)}
-        isMenuOpen={genreMenu}
-        optionCount={genres.length}
-      >
-        <SelectedSpan onClick={() => setGenreMenu(!genreMenu)}>
-          Genre <DownArrow />
-        </SelectedSpan>
-        {genres.map((item) => {
-          return (
-            <MenuSpan
-              isMenuOpen={genreMenu}
-              onClick={() => {
-                setGenre(item);
-                setGenreMenu(false);
-              }}
-              selected={genre === item}
-            >
-              {item}
-            </MenuSpan>
-          );
-        })}
-      </ContainerTitleGenre>
+        <ContainerOutline />
+        <ContainerTitleForm onSubmit={(e) => handleSearch(e, 1, search, 2)}>
+          <ContainerTitleInput
+            type="text"
+            placeholder="Search..."
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </ContainerTitleForm>
 
-      <ContainerTitleSorting
-        onMouseEnter={() => setMenuOpen(true)}
-        onMouseLeave={() => setMenuOpen(false)}
-        isMenuOpen={menuOpen}
-        optionCount={menuOptions.length}
-      >
-        <SelectedSpan onClick={() => setMenuOpen(!menuOpen)}>
-          {/* {selected} */}
-          Sort by <DownArrow />
-        </SelectedSpan>
-        {menuOptions.map((item, index) => {
-          return item;
-        })}
-      </ContainerTitleSorting>
+        <ContainerTitleGenre
+          onMouseEnter={() => setGenreMenu(true)}
+          onMouseLeave={() => setGenreMenu(false)}
+          isMenuOpen={genreMenu}
+          optionCount={genres.length}
+        >
+          <SelectedSpan onClick={() => setGenreMenu(!genreMenu)}>
+            Genre <DownArrow />
+          </SelectedSpan>
+          {genres.map((item) => {
+            return (
+              <MenuSpan
+                isMenuOpen={genreMenu}
+                onClick={() => {
+                  setGenre(item);
+                  setGenreMenu(false);
+                }}
+                selected={genre === item}
+              >
+                {item}
+              </MenuSpan>
+            );
+          })}
+        </ContainerTitleGenre>
 
-      <ContainerOutline />
-      <NftScroll>
-        {allNfts.map((item, index) => {
-          if (index >= shown * 3) return null;
-          else return <NftCard nft={item} pauseSong={pauseSong} setPauseSong={setPauseSong} />;
-        })}
-      </NftScroll>
-      {shown * 3 < allNfts.length && (
-        <LoadMore onClick={loadMore}>Load More</LoadMore>
-      )}
-    </LaunchContainer>
+        <ContainerTitleSorting
+          onMouseEnter={() => setMenuOpen(true)}
+          onMouseLeave={() => setMenuOpen(false)}
+          isMenuOpen={menuOpen}
+          optionCount={menuOptions.length}
+        >
+          <SelectedSpan onClick={() => setMenuOpen(!menuOpen)}>
+            {/* {selected} */}
+            Sort by <DownArrow />
+          </SelectedSpan>
+          {menuOptions.map((item, index) => {
+            return item;
+          })}
+        </ContainerTitleSorting>
+        <NftScroll>
+          {allNfts.map((item, index) => {
+            if (index >= shown * 3) return null;
+            else return <NftCard nft={item} pauseSong={pauseSong} setPauseSong={setPauseSong} />;
+          })}
+        </NftScroll>
+        {shown * 3 < allNfts.length && (
+          <LoadMore onClick={loadMore}>Load More</LoadMore>
+        )}
+      </LaunchContainer>
+    </>
   );
 };
 
@@ -357,9 +333,31 @@ const ContainerTitleSorting = styled.div`
     top: 25px;
   }
 `;
+
+const Featured = styled.div`
+  position: absolute;
+  top: -15px;
+  background-color: #090909;
+  font-size: 50px;
+  font-weight: bold;
+  left: calc(10% + 50px);
+  font-size: 36px;
+    font-weight: bold;
+    left: calc(10% + 50px);
+    width: 160px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  @media only screen and (max-width: 776px) {
+    left: auto;
+  }
+`;
+
+
 const ContainerTitleForm = styled.form`
   position: absolute;
   top: -15px;
+
   left: calc(10% + 50px);
   @media only screen and (max-width: 776px) {
     left: auto;

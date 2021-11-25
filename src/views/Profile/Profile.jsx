@@ -24,6 +24,7 @@ import { providers } from "ethers";
 import { usePlaylistConsumer } from "../../contexts/Playlist";
 import ArtistCard from "../../components/NftCards/ArtistCard";
 import Stakers from "./components/Stakers";
+import { ReactComponent as CheckIcon } from "../../assets/img/icons/check_circle.svg";
 
 const Profile = () => {
   const { account, connect, user } = useAccountConsumer();
@@ -34,6 +35,24 @@ const Profile = () => {
   const [stakers, setStakers] = useState([]);
   const [nfts, setNfts] = useState([]);
   const { setNftsCallback } = usePlaylistConsumer();
+  const [username, setUsername] = useState("");
+  const [copySuccess, setCopySuccess] = useState('');
+
+  useEffect(() => {
+    if (user) {
+    user.suburl && setUsername(user.suburl);
+    }
+  }, [user]);
+
+  const copyToClipBoard = async () => {
+    try {
+      await navigator.clipboard.writeText(`https://beta.fanfare.fm/profile/${username}`);
+      setCopySuccess('Copied!');
+    } catch (err) {
+      setCopySuccess('Failed to copy!');
+    }
+  };
+
 
   const formatNfts = (nftsData) => {
     const formattedNfts = nftsData.map((nft, index) => (
@@ -224,6 +243,13 @@ const Profile = () => {
         <EditableProfile />
       </Landing>
       <SocialsBar>
+      <EmbedSection>
+      <EmbedButton 
+      onClick={copyToClipBoard}
+      >
+      Embed Profile
+      </EmbedButton>
+      </EmbedSection>
         {user.socials.map((social) => {
           // console.log(social);
           if (social.twitter) {
@@ -590,5 +616,49 @@ const Landing = styled.div`
 const Banner = styled.div`
   height: 50px;
 `;
+
+const Check = styled(CheckIcon)`
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  transition: all 0.1s ease-in-out;
+  & path {
+    fill: ${(props) => props.theme.color.white};
+  }
+`;
+
+const Confirm = styled.div`
+display: flex;
+flex-direction: row;
+align-items: center;
+margin: 5px;
+`
+
+const EmbedSection = styled.div`
+
+`;
+
+const EmbedButton = styled.button`
+width: 100px;
+height: 34px;
+cursor: pointer;
+transition: all 0.1s ease-in-out;
+display: flex;
+flex-direction: column;
+font-size: 10px;
+font-weight: 600;
+color: white;
+align-items: center;
+justify-content: center;
+border: 1px solid ${(props) => props.theme.color.boxBorder};
+border-radius: 2px;
+background-color: ${(props) => props.theme.color.box};
+/* margin-bottom: 20px; */
+&:hover {
+  background-color: ${(props) => props.theme.color.boxBorder};
+  border: 1px solid #383838;
+}
+`;
+
 
 export default Profile;

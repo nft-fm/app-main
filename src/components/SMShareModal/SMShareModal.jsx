@@ -20,6 +20,7 @@ const SMShareModal = ({
 
   const url = `https://beta.fanfare.fm/market/${nft.chain}/${nft.nftId}`;
   const message = `${nft.title} by ${nft.artist}\nAvailable at: `;
+  const hashtags =`#NFTCollectors, #MusicLovers, #NFTCommunity, #NFTs, #NFTMusic, #eth, #bnb, $VINYL`
 
   const newShare = () => {
     axios.post("/api/nft-type/newShare", nft);
@@ -37,7 +38,7 @@ const SMShareModal = ({
       <TwitterShareButton
         title={message}
         url={url}
-        hashtags={["NFTFM", "NFTs", "NFTCommunity", "NFTart", "nftmusic"]}
+        hashtags={["#NFTCollectors", "#MusicLovers", "Fanfare", "NFTCommunity"]}
       >
         <ButtonHolder onClick={() => newShare()}>
           <TwitterIcon size={50} borderRadius={"10px"} />
@@ -46,6 +47,7 @@ const SMShareModal = ({
       <FacebookShareButton
         quote={message}
         url={url}
+        hashtags={hashtags}
       >
         <ButtonHolder onClick={() => newShare()}>
           <FacebookIcon size={50} borderRadius={"10px"} />

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import ModalSm from "../../../components/Modal/Modalsm";
+import ModalMd from "../../../components/Modal/Modalmd";
 import Modal from "../../../components/Modal/Modal";
 import ModalTitle from "../../../components/ModalTitle";
 
@@ -19,10 +19,10 @@ const EditSocials = ({
   return (
     <Wrapper editSM={editSM}>
       <Modal>
-        <ModalSm>
+        <ModalMd>
           {/* <CloseModal onDismiss={editSM} /> */}
           <Content>
-            <ModalTitle>Edit Social Medias</ModalTitle>
+            <ModalTitle>Edit Social Media</ModalTitle>
 
             <SocialRow>
               <span>Instagram:</span>
@@ -65,7 +65,7 @@ const EditSocials = ({
               Done Editing
             </DoneButton>
           </Content>
-        </ModalSm>
+        </ModalMd>
       </Modal>
     </Wrapper>
   );
@@ -93,6 +93,7 @@ const DoneButton = styled.button`
 
 const Wrapper = styled.div`
   display: ${(props) => (props.editSM ? "block" : "none")};
+  z-index: 100;
 `;
 
 const SocialRow = styled.div`
@@ -127,7 +128,7 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 20px 0;
 `;
 

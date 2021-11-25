@@ -177,6 +177,7 @@ const NftCard = (props) => {
           onLoad={() => setImageLoaded(true)}
         />
         <PreviewButton
+          onClick={(e) => { e.stopPropagation() }}
         // onClick={(e) => fetchSong(e)}
         >
           {partialSong && <PlaySongSnippet partialSong={partialSong} pauseSong={props.pauseSong} setPauseSong={props.setPauseSong} />}
@@ -186,7 +187,7 @@ const NftCard = (props) => {
             <RedeemButton>
               {/* Merch */}
               <MerchIcon />
-            </RedeemButton>  
+            </RedeemButton>
           </RedeemButtonBackground>
         )}
 

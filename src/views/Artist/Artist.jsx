@@ -20,7 +20,6 @@ const Artist = () => {
   const [copySuccess, setCopySuccess] = useState('');
   const [username, setUsername] = useState('');
 
-
   useEffect(() => {
     if (userInfo) {
       setUsername(userInfo.suburl);

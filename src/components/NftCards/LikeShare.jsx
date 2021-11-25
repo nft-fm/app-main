@@ -18,7 +18,7 @@ const LikeShare = ({ nft, liked, setLiked, likeCount, isLoading, setLikeCount, u
 
   const url = `https://beta.fanfare.fm/market/${nft.chain}/${nft.nftId}`;
   const message = `${nft.title} by ${nft.artist}\nAvailable at: `;
-
+  
   const newShare = () => {
     axios.post("/api/nft-type/newShare", nft);
     if (updateShareCount)
@@ -49,7 +49,7 @@ const LikeShare = ({ nft, liked, setLiked, likeCount, isLoading, setLikeCount, u
             <TwitterShareButton
               title={message}
               url={url}
-              hashtags={["NFTFM", "NFTs", "NFTCommunity", "NFTart", "nftmusic"]}
+              hashtags={["NFTCollectors", "MusicLovers", "NFTCommunity", "NFTs", "NFTMusic", "ETH", "BNB"]}
             >
               <TwitterIcon onClick={() => newShare()} size={25} borderRadius={"10px"} />
             </TwitterShareButton>

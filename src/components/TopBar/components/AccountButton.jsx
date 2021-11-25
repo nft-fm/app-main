@@ -82,6 +82,7 @@ const AccountButton = (props) => {
   //     // that you would like to track with google analytics
   //   });
   // }
+  alert(window.navigator)
 
   return (
     <>

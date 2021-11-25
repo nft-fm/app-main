@@ -40,12 +40,12 @@ const NftCard = (props) => {
   };
 
   const getSnnipetAWS = async (completeNft) => {
-    await axios
+    axios
       .post("/api/nft-type/getSnnipetAWS", {
         key:
-          completeNft?.address +
+          completeNft.address +
           "/30_sec_snnipets/" +
-          completeNft?.audioUrl.split("/").slice(-1)[0],
+          completeNft.audioUrl.split("/").slice(-1)[0],
       })
       .then((res) => {
         if (!res.data) {
@@ -93,8 +93,11 @@ const NftCard = (props) => {
   }, [nft]);
 
   useEffect(() => {
+    if (!props.nft) {
+      return;
+    }
     getSnnipetAWS(props.nft);
-  }, []);
+  }, [props.nft]);
 
   useEffect(() => {
     if (basicLoaded) {

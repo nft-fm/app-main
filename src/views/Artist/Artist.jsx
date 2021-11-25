@@ -17,23 +17,6 @@ const Artist = () => {
   const [profilePic, setProfilePic] = useState("");
   const [userInfo, setUserInfo] = useState();
   const [userNfts, setUserNfts] = useState();
-  const [copySuccess, setCopySuccess] = useState('');
-  const [username, setUsername] = useState('');
-
-  useEffect(() => {
-    if (userInfo) {
-      setUsername(userInfo.suburl);
-    }
-  }, [userInfo]);
-
-  const copyToClipBoard = async () => {
-    try {
-      await navigator.clipboard.writeText(`https://beta.fanfare.fm/profile/${username}`);
-      setCopySuccess('Copied!');
-    } catch (err) {
-      setCopySuccess('Failed to copy!');
-    }
-  };
 
 
 
@@ -87,16 +70,6 @@ const Artist = () => {
       </Landing>
 
       <SocialsBar>
-      <div>
-      <Button 
-      
-      onClick={copyToClipBoard}
-      size= "xsm"
-      styled={{fontSize:"5px"}}
-      >
-      Share
-      </Button>
-      </div>
         {userInfo?.socials.map((social) => {
           if (social.twitter) {
             return (

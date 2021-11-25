@@ -37,6 +37,7 @@ const Profile = () => {
   const { setNftsCallback } = usePlaylistConsumer();
   const [username, setUsername] = useState("");
   const [copySuccess, setCopySuccess] = useState('');
+  const [buttontext, setButtonText] = useState('Embed Profile');
 
   useEffect(() => {
     if (user) {
@@ -46,10 +47,12 @@ const Profile = () => {
 
   const copyToClipBoard = async () => {
     try {
-      await navigator.clipboard.writeText(`https://beta.fanfare.fm/profile/${username}`);
+      await navigator.clipboard.writeText(`<iframe src= "https://beta.fanfare.fm/profile/${username}" title ="Fanfare"></iframe>`);
       setCopySuccess('Copied!');
+      setButtonText('iFrame Copied!');
     } catch (err) {
       setCopySuccess('Failed to copy!');
+      setButtonText('Failed to copy!');
     }
   };
 
@@ -247,7 +250,7 @@ const Profile = () => {
       <EmbedButton 
       onClick={copyToClipBoard}
       >
-      Embed Profile
+      {buttontext}
       </EmbedButton>
       </EmbedSection>
         {user.socials.map((social) => {

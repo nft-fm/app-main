@@ -110,7 +110,7 @@ const NftScroll = styled.div`
 `;
 
 const FillerCard = styled.div`
-  width: 226px;
+  width: 377px;
   height: 0px;
 `;
 

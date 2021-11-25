@@ -43,9 +43,9 @@ const NftCard = (props) => {
     await axios
       .post("/api/nft-type/getSnnipetAWS", {
         key:
-          completeNft.address +
+          completeNft?.address +
           "/30_sec_snnipets/" +
-          completeNft.audioUrl.split("/").slice(-1)[0],
+          completeNft?.audioUrl.split("/").slice(-1)[0],
       })
       .then((res) => {
         if (!res.data) {
@@ -63,9 +63,9 @@ const NftCard = (props) => {
     await axios
       .post("/api/nft-type/getNSecondsOfSong", {
         key:
-          completeNft.address +
+          completeNft?.address +
           "/" +
-          completeNft.audioUrl.split("/").slice(-1)[0],
+          completeNft?.audioUrl.split("/").slice(-1)[0],
         nft: completeNft,
         startTime: 30,
       })
@@ -115,17 +115,9 @@ const NftCard = (props) => {
     }
   }, [props.nft, user]);
 
-  const fetchSong = (e) => {
-    // e.stopPropagation()
-    getSnnipetAWS(props.nft);
-    //setPartialSong(partialSong);
-    //getNSeconds(props.nft);
-  };
-
   if (!nft) {
     return null;
   }
-
 
   return (
     <>

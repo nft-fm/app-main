@@ -298,8 +298,7 @@ border: 1px solid  ${(props) => props.theme.color.boxBorder};
 background: ${props => props.theme.color.box};
 color: white;
 /* border-radius: 0 0 0 20px; */
-border-radius: 2px;
-z-index: 100;
+border-radius: ${(props) => props.theme.borderRadius}px;
 @media only screen and (max-width: 776px) {
   margin-top: 150px;
 }

@@ -487,7 +487,7 @@ const Container = styled.div`
   width: 375px;
   margin-bottom: 40px;
   position: relative;
-  transition: all 0.1s ease-in-out;
+  transition: all 0.05s ease-in-out;
   cursor: pointer;
   // box-shadow: rgba(255, 255, 255, .1) 0px 3px 10px 0px;
   opacity: .9;

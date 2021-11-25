@@ -18,7 +18,7 @@ const LikeShare = ({ nft, liked, setLiked, likeCount, isLoading, setLikeCount, u
 
   const url = `https://beta.fanfare.fm/market/${nft.chain}/${nft.nftId}`;
   const message = `${nft.title} by ${nft.artist}\nAvailable at: `;
-  
+
   const newShare = () => {
     axios.post("/api/nft-type/newShare", nft);
     if (updateShareCount)
@@ -67,21 +67,18 @@ const LikeShare = ({ nft, liked, setLiked, likeCount, isLoading, setLikeCount, u
       }
       <Spacer />
       <IconArea>
-        {isLoading ? (
-          <img src={loading} alt="likes loading" />
-        ) : (
-          <LikeButton
-            onClick={(e) => like(e)}
-            aria-pressed={liked}
-            aria-label="like button"
-          >
-            {liked ? (
-              <LikedHeart aria-hidden="true" />
-            ) : (
-              <Heart aria-hidden="true" />
-            )}
-          </LikeButton>
-        )}
+
+        <LikeButton
+          onClick={(e) => like(e)}
+          aria-pressed={liked}
+          aria-label="like button"
+        >
+          {liked ? (
+            <LikedHeart aria-hidden="true" />
+          ) : (
+            <Heart aria-hidden="true" />
+          )}
+        </LikeButton>
         {likeCount}
       </IconArea>
     </Side>

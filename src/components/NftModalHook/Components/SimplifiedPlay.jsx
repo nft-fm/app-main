@@ -128,15 +128,15 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  width: 30px;
+  height: 30px;
   padding: 10px;
-  padding-bottom: 5px;
   background-color: #1db954;
   border-radius: 40px;
   transition: all .2s ease-in-out;
   box-shadow: rgba(0, 0, 0, 0.3) 0px 8px 8px 0px;
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.1);
   }
 `;
 

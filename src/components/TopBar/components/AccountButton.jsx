@@ -21,13 +21,13 @@ function getMetaMaskLink() {
   if (/android/i.test(userAgent)) {
     return {
       title: "Open in App Store",
-      link: "https://metamask.app.link/bxwkE8oF99",
+      link: "https://metamask.app.link/dapp/beta.fanfare.fm",
     };
   }
   if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
     return {
       title: "Open in App Store",
-      link: "https://metamask.app.link/skAH3BaF99",
+      link: "https://metamask.app.link/dapp/beta.fanfare.fm",
     };
   }
   return {
@@ -40,6 +40,7 @@ const AccountButton = (props) => {
   const { account, connect } = useAccountConsumer();
   const cookies = new Cookies()
   // const [onPresentInstallMetamask] = useModal(<InstallMetamaskModal />);
+
   const handleUnlockClick = () => {
     if (window.ethereum) {
       connect("injected")
@@ -69,18 +70,8 @@ const AccountButton = (props) => {
     if (account) return;
 
     const { title, link } = getMetaMaskLink();
-    swal
-      .fire({
-        title: "You need to install metamask.",
-        confirmButtonText: title,
-        imageUrl: metamaskLogo,
-        imageWidth: 100,
-      })
-      .then(({ isConfirmed }) => {
-        if (isConfirmed) {
-          window.open(link, "_blank").focus();
-        }
-      });
+    window.open(link, "_blank").focus();
+
   };
 
 
@@ -101,7 +92,7 @@ const AccountButton = (props) => {
             <Spacer />
             <MetaMask src={"https://trustwallet.com/assets/images/media/assets/trust_platform.svg"} />
           </LogoContainer>
-          <ButtonText>Connect Wallet</ButtonText>
+          <ButtonText>{isMobile() ? 'Connect Metamask' : 'Connect Wallet'}</ButtonText>
         </ConnectButton>
       ) : isMobile() ? (
         <StyledAccountButton>

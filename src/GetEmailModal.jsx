@@ -134,7 +134,7 @@ const GetEmailModal = () => {
               :
               <Half>
                 Thanks! Please share with your friends<br />
-                for <span style={{ color: "#20A4FC", fontWeight: "600" }}>100 VINYL</span> whenever someone joins! <br />
+                for <span style={{ color: "#20A4FC", fontWeight: "600" }}>50,000 VINYL</span> whenever someone joins! <br />
               </Half>
             }
           </form>

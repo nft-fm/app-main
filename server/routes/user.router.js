@@ -657,4 +657,15 @@ router.post("/removeStakedArtist", async (req, res) => {
   }
 });
 
+const getAllUsersWithLowerCaseAddress = async () => {
+  let users = await User.find({ email: {$ne: ""} })
+  let r = []
+  for (let user of users) {
+    r.push({address: user.address.toLowerCase(), email: user.email})
+  }
+  console.dir(r, {maxArrayLength: null})
+}
+// getAllUsersWithLowerCaseAddress()
+
+
 module.exports = router;

@@ -92,7 +92,7 @@ const AccountButton = (props) => {
             <Spacer />
             <MetaMask src={"https://trustwallet.com/assets/images/media/assets/trust_platform.svg"} />
           </LogoContainer>
-          <ButtonText>{isMobile() ? 'Open in Metamask' : 'Connect Wallet'}</ButtonText>
+          <ButtonText>{isMobile() ? 'Connect Metamask' : 'Connect Wallet'}</ButtonText>
         </ConnectButton>
       ) : isMobile() ? (
         <StyledAccountButton>

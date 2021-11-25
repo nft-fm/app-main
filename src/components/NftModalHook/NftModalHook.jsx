@@ -33,6 +33,7 @@ import { ReactComponent as IconBinance } from "../../assets/img/icons/binance-lo
 import LikeShare from "../NftCards/LikeShare";
 import isMobile from "../../utils/isMobile";
 import metamaskLogo from "../../assets/img/metamask_fox.svg";
+import AccountButton from '../TopBar/components/AccountButton'
 
 function getMetaMaskLink() {
   var userAgent = navigator.userAgent || navigator.vendor || window.opera;
@@ -506,9 +507,7 @@ const BuyNftModal = (props) => {
               </PriceHolder>
             </PricesContainer>
             {!account ? (
-              <BuyButton onClick={() => connectWallet()}>
-                <ButtonText>Connect Wallet</ButtonText>
-              </BuyButton>
+              <AccountButton />
             ) : nft.numSold !== nft.numMinted ? (
               !isLoading ? (
                 isBought ? (

@@ -47,7 +47,7 @@ const Profile = () => {
 
   const copyToClipBoard = async () => {
     try {
-      await navigator.clipboard.writeText(`<iframe src= "https://beta.fanfare.fm/profile/${username}" title="Fanfare" width="100%" height="650px"></iframe>`);
+      await navigator.clipboard.writeText(`<iframe src= "https://beta.fanfare.fm/artist/${username}" title="Fanfare" width="100%" height="650px"></iframe>`);
       setCopySuccess('Copied!');
       setButtonText('iFrame Copied!');
     } catch (err) {

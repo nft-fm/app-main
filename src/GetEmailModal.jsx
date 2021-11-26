@@ -225,8 +225,8 @@ const X = styled(XIcon)`
     fill: ${(props) => props.theme.color.white};
   }
   position: absolute;
-  top: 0;
-  right: 0px;
+  top: 2px;
+  right: 2px;
 `;
 
 

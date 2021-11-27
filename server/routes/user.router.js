@@ -51,15 +51,19 @@ router.post("/get-account", async (req, res) => {
         user.referredByAddress = req.body.utm_content;
       }
       await user.save();
-        trackNewUser({ address: req.body.address, ip: req.ip });
+      trackNewUser({ address: req.body.address, ip: req.ip });
     }
-      trackLogin({ address: req.body.address, ip: req.ip });
+    trackLogin({ address: req.body.address, ip: req.ip });
 
     //This overwrites the user's database nfts with the nfts attributed to the user in the smart contract
     //handles when user's buy/sell nfts off platform
     let ethUserNfts = await getUserNftsETH(user.address);
-    let bscUserNfts = await getUserNftsBSC(user.address);
-    let bothChainsNft = [...ethUserNfts, ...bscUserNfts];
+
+
+    // let bscUserNfts = await getUserNftsBSC(user.address);
+    // let bothChainsNft = [...ethUserNfts, ...bscUserNfts];
+    let bothChainsNft = ethUserNfts;
+    console.log("got both chains nfts");
     if (bothChainsNft) {
       user.nfts = [];
       for (let nft of bothChainsNft) {
@@ -122,10 +126,10 @@ router.post("/add-to-email-list", async (req, res) => {
 
 router.post("/track-pageview", async (req, res) => {
   try {
-      trackPageview({
-        ip: req.ip,
-        ...req.body,
-      });
+    trackPageview({
+      ip: req.ip,
+      ...req.body,
+    });
     res.status(200).send("success");
   } catch (error) {
     res.status(500).send("server error");
@@ -656,12 +660,12 @@ router.post("/removeStakedArtist", async (req, res) => {
 });
 
 const getAllUsersWithLowerCaseAddress = async () => {
-  let users = await User.find({ email: {$ne: ""} })
+  let users = await User.find({ email: { $ne: "" } })
   let r = []
   for (let user of users) {
-    r.push({address: user.address.toLowerCase(), email: user.email})
+    r.push({ address: user.address.toLowerCase(), email: user.email })
   }
-  console.dir(r, {maxArrayLength: null})
+  console.dir(r, { maxArrayLength: null })
 }
 // getAllUsersWithLowerCaseAddress()
 

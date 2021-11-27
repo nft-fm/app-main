@@ -90,14 +90,19 @@ const getUserNftsETH = async (account) => {
   //   numNfts.push(utils.formatEther(nft) * 10e17);
   // });
 
+  console.log("wat here", userNfts);
+
   let nftIdsAndQuantities = [];
   for (let i = 0; i < userNfts[0].length; i++) {
-    nftIdsAndQuantities.push({
-      id: Math.round(utils.formatEther(userNfts[0][i]) * 10e17),
-      quantity: Math.round(utils.formatEther(userNfts[1][i]) * 10e17),
-      chain: "ETH",
-    });
+    if (userNfts[1][i] !== '0x00') {
+      nftIdsAndQuantities.push({
+        id: Math.round(utils.formatEther(userNfts[0][i]) * 10e17),
+        quantity: Math.round(utils.formatEther(userNfts[1][i]) * 10e17),
+        chain: "ETH",
+      });
+    }
   }
+  console.log("eth nfts", nftIdsAndQuantities);
   return nftIdsAndQuantities;
   // return { nftIds, numNfts };
 };
@@ -118,11 +123,14 @@ const getUserNftsBSC = async (account) => {
 
   let nftIdsAndQuantities = [];
   for (let i = 0; i < userNfts[0].length; i++) {
-    nftIdsAndQuantities.push({
-      id: Math.round(utils.formatEther(userNfts[0][i]) * 10e17),
-      quantity: Math.round(utils.formatEther(userNfts[1][i]) * 10e17),
-      chain: "BSC",
-    });
+    if (userNfts[1][i] !== '0x00') {
+      
+      nftIdsAndQuantities.push({
+        id: Math.round(utils.formatEther(userNfts[0][i]) * 10e17),
+        quantity: Math.round(utils.formatEther(userNfts[1][i]) * 10e17),
+        chain: "BSC",
+      });
+    }
   }
   console.log("bsc nfts", nftIdsAndQuantities);
   return nftIdsAndQuantities;

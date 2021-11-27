@@ -57,28 +57,28 @@ router.post("/get-account", async (req, res) => {
 
     //This overwrites the user's database nfts with the nfts attributed to the user in the smart contract
     //handles when user's buy/sell nfts off platform
-    // let ethUserNfts = await getUserNftsETH(user.address);
+    let ethUserNfts = await getUserNftsETH(user.address);
 
 
-    // let bscUserNfts = await getUserNftsBSC(user.address);
-    // let bothChainsNft = [...ethUserNfts, ...bscUserNfts];
-    // // let bothChainsNft = ethUserNfts;
-    // console.log("got both chains nfts");
-    // if (bothChainsNft) {
-    //   user.nfts = [];
-    //   for (let nft of bothChainsNft) {
-    //     if (nft.quantity > 0) {
-    //       let usersNft = await NftType.findOne({
-    //         nftId: nft.id,
-    //         chain: nft.chain,
-    //       });
-    //       if (usersNft) {
-    //         user.nfts.push({ nft: usersNft._id, quantity: nft.quantity, chain: nft.chain });
-    //       }
-    //     }
-    //   }
-    //   user.save();
-    // }
+    let bscUserNfts = await getUserNftsBSC(user.address);
+    let bothChainsNft = [...ethUserNfts, ...bscUserNfts];
+    // let bothChainsNft = ethUserNfts;
+    console.log("got both chains nfts");
+    if (bothChainsNft) {
+      user.nfts = [];
+      for (let nft of bothChainsNft) {
+        if (nft.quantity > 0) {
+          let usersNft = await NftType.findOne({
+            nftId: nft.id,
+            chain: nft.chain,
+          });
+          if (usersNft) {
+            user.nfts.push({ nft: usersNft._id, quantity: nft.quantity, chain: nft.chain });
+          }
+        }
+      }
+      user.save();
+    }
 
     res.send(user);
   } catch (error) {

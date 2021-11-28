@@ -33,7 +33,7 @@ import { ReactComponent as IconBinance } from "../../assets/img/icons/binance-lo
 import LikeShare from "../NftCards/LikeShare";
 import isMobile from "../../utils/isMobile";
 import metamaskLogo from "../../assets/img/metamask_fox.svg";
-import AccountButton from '../TopBar/components/AccountButton'
+import AccountButton from "../TopBar/components/AccountButton";
 
 function getMetaMaskLink() {
   var userAgent = navigator.userAgent || navigator.vendor || window.opera;
@@ -97,17 +97,19 @@ const BuyNftModal = (props) => {
     e.stopPropagation();
   };
 
+  const multiplier = 2;
+
   const calcBonus = () => {
     if (nft.chain === "ETH")
-      if (nft.price < 0.001) return 50000;
-      else if (nft.price < 0.01) return 250000;
-      else if (nft.price < 0.1) return 1500000;
-      else return 15000000;
+      if (nft.price < 0.001) return 50000 * multiplier;
+      else if (nft.price < 0.01) return 250000 * multiplier;
+      else if (nft.price < 0.1) return 1500000 * multiplier;
+      else return 15000000 * multiplier;
     else {
-      if (nft.price < 0.01) return 50000;
-      else if (nft.price < 0.1) return 250000;
-      else if (nft.price < 1) return 1500000;
-      else return 15000000;
+      if (nft.price < 0.01) return 50000 * multiplier;
+      else if (nft.price < 0.1) return 250000 * multiplier;
+      else if (nft.price < 1) return 1500000 * multiplier;
+      else return 15000000 * multiplier;
     }
   };
 
@@ -152,7 +154,7 @@ const BuyNftModal = (props) => {
           showConfirmButton: false,
           timer: 3000,
         }).then(async () => {
-          axios.get("/api/nft-type/purchase")
+          axios.get("/api/nft-type/purchase");
           await buyNFT(
             {
               nftID: id,
@@ -882,10 +884,14 @@ const OpaqueFilter = styled.div`
   backdrop-filter: brightness(20%);
   z-index: 500;
   transform: translateZ(10px);
-  animation: fadein .1s;
+  animation: fadein 0.1s;
   @keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
 `;
 

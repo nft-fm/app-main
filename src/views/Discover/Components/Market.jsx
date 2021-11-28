@@ -23,8 +23,6 @@ const Listen = () => {
   const limit = 200;
   const [pauseSong, setPauseSong] = useState(() => () => { }) // this is fucking weird, don't touch me.
 
-  console.log("genre", genre);
-
   const handleSort = useCallback(async () => {
     setPage(0);
     setHasMore(true);
@@ -157,8 +155,6 @@ const Listen = () => {
     "Traditional/Folk",
     "Other",
   ];
-
-  console.log(pauseSong)
 
   return (
     <>

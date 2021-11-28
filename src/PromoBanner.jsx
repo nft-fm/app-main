@@ -63,7 +63,7 @@ display: none;
 
 const Container = styled.div`
 width: 100vw;
-height: 40px;
+height: 55px;
 border-bottom: 1px solid #232323;
 background-color: #121212;
 display: flex;

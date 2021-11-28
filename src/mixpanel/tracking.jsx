@@ -16,7 +16,7 @@ const Tracking = () => {
   const location = useLocation();
   const { account } = useAccountConsumer();
   
-  console.log("utm", queryString.parse(location.search));
+  // console.log("utm", queryString.parse(location.search));
 
   useEffect(() => {
     axios

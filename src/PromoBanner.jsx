@@ -1,12 +1,13 @@
 import React from "react";
 import styled from "styled-components";
+import {CountDown} from "./components/Countdown"
 
 const GetEmailModal = () => {
   return (
     <Container>
-      <PromoText>💚 Buy an NFT for an immediate VINYL airdrop! Click on an NFT for more information. 💚</PromoText>
-      <MobilePromoText>💚 Buy an NFT for a VINYL airdrop bonus! 💚</MobilePromoText>
-      {/* <CountDownContainer><CountDown endTime={1637546400000}/></CountDownContainer> */}
+      <PromoText>💚 CYBER MONDAY BLOWOUT! Buy an Eligible NFT and get a 2x VINYL Airdrop!! 💚</PromoText>
+      <MobilePromoText>💚 2x VINYL Airdrop for Cyber Monday! 💚</MobilePromoText>
+      <CountDownContainer><CountDown endTime={1638597599000}/></CountDownContainer>
     </Container> 
   )
 }

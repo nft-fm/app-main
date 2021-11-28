@@ -33,7 +33,8 @@ import swal from "sweetalert2";
 import preloadImage from "./utils/preloadImg";
 import saQiBanner from "./assets/img/homepage_assets/saqi_banner.png";
 import saQiBannerMobile from "./assets/img/homepage_assets/saqi_banner_mobile.jpeg";
-import NoEmailModal from "./GetEmailModal";
+import EmailModal from "./GetEmailModal";
+import EmailModalMobile from "./GetEmailModalMobile";
 import PromoBanner from './PromoBanner'
 import isMobile from "./utils/isMobile";
 import theme from "./theme";
@@ -153,16 +154,16 @@ const App = () => {
   }, []);
 
   return (
-      <StyledCanvas>
-        <PromoBanner />
-        <Router>
+    <StyledCanvas>
+      <PromoBanner />
+      <Router>
         <Providers>
           <Tracking />
           <Switches />
-          {<NoEmailModal />}
-          </Providers>
-        </Router>
-      </StyledCanvas>
+          {isMobile() ? <EmailModalMobile /> : <EmailModal />}
+        </Providers>
+      </Router>
+    </StyledCanvas>
   );
 };
 

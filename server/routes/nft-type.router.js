@@ -874,7 +874,7 @@ router.post("/get-featured", async (req, res) => {
   try {
     const featured1 = await NftType.findOne({ nftId: 89 });
     const featured2 = await NftType.findOne({ nftId: 77 });
-    const featured3 = await NftType.findOne({ nftId: 19, chain: "BSC" });
+    const featured3 = await NftType.findOne({ nftId: 22, chain: "BSC" });
 
     res.send([featured1, featured2, featured3]);
   } catch (err) {

@@ -1,16 +1,9 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 import styled from "styled-components";
-import { AccountProvider, useAccountConsumer } from "./contexts/Account";
-import { ReactComponent as XIcon } from "./assets/img/icons/x.svg";
-import { ReactComponent as CheckIcon } from "./assets/img/icons/check_circle.svg";
-import { CountDown } from './components/Countdown'
 
 const GetEmailModal = () => {
-  const [open, setOpen] = useState(false);
-
   return (
-    <Container open={open}>
+    <Container>
       <PromoText>💚 Buy an NFT for an immediate VINYL airdrop! Click on an NFT for more information. 💚</PromoText>
       <MobilePromoText>💚 Buy an NFT for a VINYL airdrop bonus! 💚</MobilePromoText>
       {/* <CountDownContainer><CountDown endTime={1637546400000}/></CountDownContainer> */}

@@ -25,6 +25,7 @@ import { usePlaylistConsumer } from "../../contexts/Playlist";
 import ArtistCard from "../../components/NftCards/ArtistCard";
 import Stakers from "./components/Stakers";
 import { ReactComponent as CheckIcon } from "../../assets/img/icons/check_circle.svg";
+import isMobile from "../../utils/isMobile";
 
 const Profile = () => {
   const { account, connect, user } = useAccountConsumer();
@@ -411,7 +412,8 @@ const PlusIcon = styled(plus_icon)`
   margin-bottom: 2px;
 `;
 
-const CreatedNftHolder = styled.div`
+const CreatedNftHolder = !isMobile 
+? styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -423,7 +425,18 @@ const CreatedNftHolder = styled.div`
   color: white;
   font-size: ${(props) => props.theme.fontSizes.xs};
   padding-right: 4px;
-`;
+`:
+styled.div`  
+display: flex;
+flex-direction: column;
+width: 100%;
+align-items: center;
+/* width: ${(props) => props.theme.homeWidth}px; */
+/* max-width: 80vw; */
+padding-top: 40px;
+color: white;
+font-size: ${(props) => props.theme.fontSizes.xs};
+padding-right: 4px`;
 
 const NftContainer = styled.div`
   position: relative;
@@ -494,7 +507,8 @@ const NftContainerLeftSpan = styled.span`
   cursor: pointer;
 `;
 
-const NftContainerRight = styled.div`
+const NftContainerRight = !isMobile()
+? styled.div`
   cursor: pointer;
   position: absolute;
   font-weight: 600;
@@ -524,6 +538,37 @@ const NftContainerRight = styled.div`
   &:hover {
     color: white;
   }
+`:
+styled.div`
+cursor: pointer;
+position: absolute;
+font-weight: 600;
+margin-left: 40%;
+margin-right: 20%;
+height: 17px;
+/* width: 17px; */
+top: -13px;
+padding: 5px 5px 3px 5px;
+font: "Compita";
+background-color: ${(props) => props.theme.bgColor};
+font-size: ${(props) => props.theme.fontSizes.xs};
+color: ${(props) => props.theme.color.gray};
+display: flex;
+flex-direction: row;
+display: flex;
+align-items: center;
+justify-content: center;
+border: 4px solid #383838;
+border-radius: 20px;
+transition: 0.2s;
+${({ active }) =>
+  !active &&
+  `
+color:  white;
+`}
+&:hover {
+  color: white;
+}
 `;
 
 const NftContainerOutline = styled.div`

@@ -380,6 +380,7 @@ const Featured = styled.div`
     align-items: center;
     display: flex;
     justify-content: center;
+
   @media only screen and (max-width: 776px) {
     left: auto;
   }
@@ -448,6 +449,7 @@ const NftScroll = styled.div`
   width: 100%;
   justify-content: space-between;
   overflowy: scroll !important;
+  min-height: 579px;
   @media only screen and (max-width: 1200px) {
     width: 775px;
   }
@@ -468,6 +470,7 @@ const LaunchContainer = styled.div`
   align-items: center;
   margin-bottom: 40px;
   overflowy: scroll !important;
+  animation: fadein .5s;
 `;
 
 const ContainerOutline = styled.div`

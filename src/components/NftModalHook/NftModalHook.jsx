@@ -882,17 +882,10 @@ const OpaqueFilter = styled.div`
   height: 100vh;
   background-color: rgba(255, 255, 255, 0.1);
   backdrop-filter: brightness(20%);
-  z-index: 500;
+  z-index: 1000;
   transform: translateZ(10px);
   animation: fadein 0.1s;
-  @keyframes fadein {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
+
 `;
 
 const Container = styled.div`

@@ -260,3 +260,11 @@ code {
   border-radius: 5px 0 0 5px;
 }
 
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

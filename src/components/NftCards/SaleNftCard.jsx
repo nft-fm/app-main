@@ -491,6 +491,7 @@ const Container = styled.div`
   cursor: pointer;
   // box-shadow: rgba(255, 255, 255, .1) 0px 3px 10px 0px;
   opacity: .9;
+  animation: fadein .3s linear 0s 1;
   &:hover {
     transform: translateY(-2px) scale(1.01);
     box-shadow: rgba(255, 255, 255, .2) 0px 3px 10px 0px;

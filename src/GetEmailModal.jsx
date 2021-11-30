@@ -305,7 +305,7 @@ background: ${props => props.theme.color.box};
 color: white;
 /* border-radius: 0 0 0 20px; */
 border-radius: ${(props) => props.theme.borderRadius}px;
-z-index: 10001;
+z-index: 101;
 @media only screen and (max-width: 776px) {
   margin-top: 150px;
 }

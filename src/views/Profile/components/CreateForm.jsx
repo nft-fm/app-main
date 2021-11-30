@@ -321,8 +321,11 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
   };
 
   const updateState = (e) => {
-    if (e.target.name === "numMinted" && Number(e.target.value) > 100) {
-      return;
+    if (e.target.name === "numMinted" && Number(e.target.value) > 50) {
+      return setNftData({
+        ...nftData,
+        [e.target.name]: 50,
+      });
     }
     if (e.target.name === "numMinted") {
       return setNftData({

@@ -3,10 +3,10 @@ import axios from "axios";
 import styled from "styled-components";
 import { AccountProvider, useAccountConsumer } from "./contexts/Account";
 import { ReactComponent as XIcon } from "./assets/img/icons/x.svg";
+import { ReactComponent as IconShare } from "./assets/img/icons/share.svg";
 import { ReactComponent as CheckIcon } from "./assets/img/icons/check_circle.svg";
 import swal from 'sweetalert2'
 import metamaskLogo from "./assets/img/metamask_fox.svg";
-
 
 const GetEmailModal = () => {
   const [open, setOpen] = useState(true);
@@ -21,11 +21,7 @@ const GetEmailModal = () => {
     if (storedEmail) {
       setEmail(storedEmail);
       setSubmitted(true);
-      if (!account)
-        setOpen(false)
     }
-    if (account && storedEmail)
-      setOpen(true)
 
     console.log("user", user, user?.email === "", storedEmail);
     if (user && user?.email === "" && storedEmail) {
@@ -105,50 +101,70 @@ const GetEmailModal = () => {
     await navigator.clipboard.writeText(`https://beta.fanfare.fm/?utm_source=referral&utm_campaign=airdrop_1&utm_content=${account}`).then(() => setCopied(true))
   }
 
-  if (open) {
-    return (
-      <Modal>
-        <X onClick={() => setOpen(false)} />
-        {!submitted &&
-          <Half>
-            Sign up for our new<br />
-            platform to earn a <span style={{ color: "#20A4FC", fontWeight: "600" }}>free NFT!</span>
-          </Half>
-        }
-        <Half>
-          <form onSubmit={(e) => submitEmail(e)}>
-            {!submitted ?
-              <Bottom>
-                <Input
-                  error={error}
-                  name="email"
-                  placeholder="email"
-                  type="email"
-                  onChange={(e) => setEmail(e.target.value)}
-                >
-                </Input>
-                <Submit type="submit">
-                  <Check />
-                </Submit>
-              </Bottom>
-              :
-              <Half>
-                Thanks! Please share with your friends<br />
-                for <span style={{ color: "#20A4FC", fontWeight: "600" }}>50,000 VINYL</span> whenever someone joins! <br />
-              </Half>
-            }
-          </form>
-        </Half>
-        {submitted &&
-          <ReferSection>
-            <ReferInput width={copied ? 200 : 300} value={`https://beta.fanfare.fm/?utm_source=referral&utm_campaign=airdrop_1&utm_content=${account}`} onClick={copyToClipboard} /> {copied && <Confirm><Check />copied!</Confirm>}
-          </ReferSection>
-        }
-      </Modal>
-    );
+  const openIfClosed = () => {
+    if (!open) {
+      setOpen(true);
+    }
   }
-  return null;
+
+  if (submitted && !account) return null;
+
+  return (
+    <Modal open={open} onClick={() => openIfClosed()}>
+      {open ?
+        <ModalContents>
+          <X onClick={() => setOpen(false)} />
+          {!submitted &&
+            <Half>
+              Sign up for our new<br />
+              platform to earn a <span style={{ color: "#20A4FC", fontWeight: "600" }}>free NFT!</span>
+            </Half>
+          }
+          <Half>
+            <form onSubmit={(e) => submitEmail(e)}>
+              {!submitted ?
+                <Bottom>
+                  <Input
+                    error={error}
+                    name="email"
+                    placeholder="email"
+                    type="email"
+                    onChange={(e) => setEmail(e.target.value)}
+                  >
+                  </Input>
+                  <Submit type="submit">
+                    <Check />
+                  </Submit>
+                </Bottom>
+                :
+                <Half>
+                  Thanks! Please share with your friends<br />
+                  for <span style={{ color: "#20A4FC", fontWeight: "600" }}>50,000 VINYL</span> whenever someone joins! <br />
+                </Half>
+              }
+            </form>
+          </Half>
+          {submitted &&
+            <ReferSection>
+              <ReferInput width={copied ? 200 : 300} value={`https://beta.fanfare.fm/?utm_source=referral&utm_campaign=airdrop_1&utm_content=${account}`} onClick={copyToClipboard} /> {copied && <Confirm><Check />copied!</Confirm>}
+            </ReferSection>
+          }
+        </ModalContents>
+        :
+        <Share />
+      }
+    </Modal>
+  );
 }
+
+const ModalContents = styled.div`
+width: 100%;
+height: 100%;
+display: flex;
+justify-content: space-between;
+flex-direction: column;
+overflow: hidden;
+`
 
 const Confirm = styled.div`
 display: flex;
@@ -194,18 +210,15 @@ const Submit = styled.button`
       }}
 `
 
-const Thanks = styled.div`
-  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-  background-image: linear-gradient(to right, #20a4fc, #fde404 35%, #68c12f 68%, #fa423e);
-  width: 254px;
-  height: 32px;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: black;
-  font-weight: 600;
-`
+const Share = styled(IconShare)`
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+  transition: all 0.1s ease-in-out;
+  & path {
+    fill: ${(props) => props.theme.color.white};
+  }
+`;
 
 const Check = styled(CheckIcon)`
   cursor: pointer;
@@ -228,14 +241,6 @@ const X = styled(XIcon)`
   top: 2px;
   right: 2px;
 `;
-
-
-// const Exit = styled.div`
-// position: absolute;
-// top: 0;
-// right: 0;
-// width: 20px;
-// `
 
 const Input = styled.input`
 width: calc(100% - 8px);
@@ -282,23 +287,25 @@ justify-content: space-between;
 `
 
 const Modal = styled.div`
-height: 100px;
-    width: 340px;
+height: ${props => props.open ? "80px" : "40px"};
+width: ${props => props.open ? "340px" : "40px"};
+padding: ${props => props.open ? "16px" : "0px"};
+max-width: 85vw;
+transition: all 0.1s ease-in-out;
+position: fixed;
 display: flex;
-justify-content: space-between;
-flex-direction: column;
-position: absolute;
+align-items: center;
+justify-content: center;
 text-align: center;
-/* height: 20px; */
-/* width: 200px; */
-padding: 16px;
-top: 110px;
+cursor: pointer;
+top: 125px;
 right: 10px;
 border: 1px solid  ${(props) => props.theme.color.boxBorder};
 background: ${props => props.theme.color.box};
 color: white;
 /* border-radius: 0 0 0 20px; */
 border-radius: ${(props) => props.theme.borderRadius}px;
+z-index: 10001;
 @media only screen and (max-width: 776px) {
   margin-top: 150px;
 }

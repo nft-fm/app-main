@@ -1,9 +1,12 @@
+import { isMobile } from "@walletconnect/utils";
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { ReactComponent as down_arrow } from "../../../assets/img/icons/down_arrow.svg";
 import NftCard from "../../../components/NftCards/SaleNftCard";
 import { useAccountConsumer } from "../../../contexts/Account";
+import EmailModalMobile from "../../../GetEmailModalMobile";
+
 // import { ReactComponent as down_arrow } from "../../../assets/img/icons/down_arrow.svg";
 
 const Listen = () => {
@@ -163,6 +166,7 @@ const Listen = () => {
           Featured
         </Featured>
         <ContainerOutline />
+        {isMobile() && <EmailModalMobile />}
         <NftScroll>
           {featuredNfts.map((item, index) => {
             if (index >= shown * 3) return null;

@@ -3,10 +3,10 @@ import axios from "axios";
 import styled from "styled-components";
 import { AccountProvider, useAccountConsumer } from "./contexts/Account";
 import { ReactComponent as XIcon } from "./assets/img/icons/x.svg";
-import { ReactComponent as IconShare } from "./assets/img/icons/share.svg";
 import { ReactComponent as CheckIcon } from "./assets/img/icons/check_circle.svg";
 import swal from 'sweetalert2'
 import metamaskLogo from "./assets/img/metamask_fox.svg";
+
 
 const GetEmailModal = () => {
   const [open, setOpen] = useState(true);
@@ -21,7 +21,11 @@ const GetEmailModal = () => {
     if (storedEmail) {
       setEmail(storedEmail);
       setSubmitted(true);
+      if (!account)
+        setOpen(false)
     }
+    if (account && storedEmail)
+      setOpen(true)
 
     console.log("user", user, user?.email === "", storedEmail);
     if (user && user?.email === "" && storedEmail) {
@@ -80,6 +84,8 @@ const GetEmailModal = () => {
 
   const submitEmail = (e) => {
     e.preventDefault()
+    if (!account)
+      handleUnlockClick()
 
     let validEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (!validEmail.test(email)) {
@@ -99,65 +105,50 @@ const GetEmailModal = () => {
     await navigator.clipboard.writeText(`https://beta.fanfare.fm/?utm_source=referral&utm_campaign=airdrop_1&utm_content=${account}`).then(() => setCopied(true))
   }
 
-  const openIfClosed = () => {
-    if (!open) {
-      setOpen(true);
-    }
-  }
-
-  if (submitted && !account) return null;
-
-  return (
-    <Modal open={open} onClick={() => openIfClosed()}>
-        <ModalContents>
-          {!submitted &&
-            <Half>
-              Sign up for our new<br />
-              platform to earn a <span style={{ color: "#20A4FC", fontWeight: "600" }}>free NFT!</span>
-            </Half>
-          }
+  if (open) {
+    return (
+      <Modal>
+        <X onClick={() => setOpen(false)} />
+        {!submitted &&
           <Half>
-            <form onSubmit={(e) => submitEmail(e)}>
-              {!submitted ?
-                <Bottom>
-                  <Input
-                    error={error}
-                    name="email"
-                    placeholder="email"
-                    type="email"
-                    onChange={(e) => setEmail(e.target.value)}
-                  >
-                  </Input>
-                  <Submit type="submit">
-                    <Check />
-                  </Submit>
-                </Bottom>
-                :
-                <Half>
-                  Thanks! Please share with your friends<br />
-                  for <span style={{ color: "#20A4FC", fontWeight: "600" }}>50,000 VINYL</span> whenever someone joins! <br />
-                </Half>
-              }
-            </form>
+            Sign up for our new<br />
+            platform to earn a <span style={{ color: "#20A4FC", fontWeight: "600" }}>free NFT!</span>
           </Half>
-          {submitted &&
-            <ReferSection>
-              <ReferInput width={copied ? 200 : 300} value={`https://beta.fanfare.fm/?utm_source=referral&utm_campaign=airdrop_1&utm_content=${account}`} onClick={copyToClipboard} /> {copied && <Confirm><Check />copied!</Confirm>}
-            </ReferSection>
-          }
-        </ModalContents>
-    </Modal>
-  );
+        }
+        <Half>
+          <form onSubmit={(e) => submitEmail(e)}>
+            {!submitted ?
+              <Bottom>
+                <Input
+                  error={error}
+                  name="email"
+                  placeholder="email"
+                  type="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                >
+                </Input>
+                <Submit type="submit">
+                  <Check />
+                </Submit>
+              </Bottom>
+              :
+              <Half>
+                Thanks! Please share with your friends<br />
+                for <span style={{ color: "#20A4FC", fontWeight: "600" }}>50,000 VINYL</span> whenever someone joins! <br />
+              </Half>
+            }
+          </form>
+        </Half>
+        {submitted &&
+          <ReferSection>
+            <ReferInput width={copied ? 200 : 300} value={`https://beta.fanfare.fm/?utm_source=referral&utm_campaign=airdrop_1&utm_content=${account}`} onClick={copyToClipboard} /> {copied && <Confirm><Check />copied!</Confirm>}
+          </ReferSection>
+        }
+      </Modal>
+    );
+  }
+  return null;
 }
-
-const ModalContents = styled.div`
-width: 100%;
-height: 100%;
-display: flex;
-justify-content: space-between;
-flex-direction: column;
-overflow: hidden;
-`
 
 const Confirm = styled.div`
 display: flex;
@@ -203,15 +194,18 @@ const Submit = styled.button`
       }}
 `
 
-const Share = styled(IconShare)`
-  cursor: pointer;
-  width: 18px;
-  height: 18px;
-  transition: all 0.1s ease-in-out;
-  & path {
-    fill: ${(props) => props.theme.color.white};
-  }
-`;
+const Thanks = styled.div`
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+  background-image: linear-gradient(to right, #20a4fc, #fde404 35%, #68c12f 68%, #fa423e);
+  width: 254px;
+  height: 32px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  font-weight: 600;
+`
 
 const Check = styled(CheckIcon)`
   cursor: pointer;
@@ -235,25 +229,32 @@ const X = styled(XIcon)`
   right: 2px;
 `;
 
+
+// const Exit = styled.div`
+// position: absolute;
+// top: 0;
+// right: 0;
+// width: 20px;
+// `
+
 const Input = styled.input`
 width: calc(100% - 8px);
 text-align: center;
 color: white;
 background-color: #131313;
-text-decoration: none;
 border: 1px solid ${props => props.error ? "red" : "transparent"};
 border-bottom: 1px solid ${props => props.error ? "red" : "#383838"};
 height: 30px;
 font-size: 16px;
 border-radius: 4px;
 &:focus {
-  outline: none;
+  outline: ${props => props.error ? "none" : "1px solid white"};
 }
 `
 
 const Half = styled.div`
 font-size: 16px;
-line-height: 20px;
+line-height: 22px;
 font-weight: 300;
 letter-spacing: .5px;
 `
@@ -281,26 +282,26 @@ justify-content: space-between;
 `
 
 const Modal = styled.div`
-height: 80px;
-width: 340px;
-padding: 12px 12px 12px 16px;
-
-max-width: 85vw;
-transition: all 0.1s ease-in-out;
+height: 100px;
+    width: 340px;
 display: flex;
-align-items: center;
-justify-content: center;
+justify-content: space-between;
+flex-direction: column;
+position: absolute;
 text-align: center;
 /* height: 20px; */
 /* width: 200px; */
-
+padding: 16px;
+top: 125px;
+right: 10px;
 border: 1px solid  ${(props) => props.theme.color.boxBorder};
 background: ${props => props.theme.color.box};
 color: white;
 /* border-radius: 0 0 0 20px; */
 border-radius: ${(props) => props.theme.borderRadius}px;
-z-index: 10001;
-
+@media only screen and (max-width: 776px) {
+  margin-top: 150px;
+}
 `
 
 export default GetEmailModal;

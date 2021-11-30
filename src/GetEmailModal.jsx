@@ -297,7 +297,7 @@ display: flex;
 align-items: center;
 justify-content: center;
 text-align: center;
-cursor: pointer;
+cursor: ${props => props.open ? "default" : "pointer"};
 top: 125px;
 right: 10px;
 border: 1px solid  ${(props) => props.theme.color.boxBorder};

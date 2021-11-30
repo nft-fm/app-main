@@ -13,6 +13,7 @@ const Listen = () => {
   const { account } = useAccountConsumer();
   const [allNfts, setAllNfts] = useState([]);
   const [featuredNfts, setFeaturedNfts] = useState([]);
+  const [hotNfts, setHotNfts] = useState([]);
   const [shown, setShown] = useState(6);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
@@ -23,7 +24,7 @@ const Listen = () => {
   const [genre, setGenre] = useState("All");
   const [genreMenu, setGenreMenu] = useState(false);
   // const [sort, setSort] = useState(Math.floor(Math.random() * 6));
-  const limit = 200;
+  const limit = 500;
   const [pauseSong, setPauseSong] = useState(() => () => { }) // this is fucking weird, don't touch me.
 
   const handleSort = useCallback(async () => {
@@ -40,6 +41,8 @@ const Listen = () => {
       })
       .then((res) => {
         setAllNfts(res.data.nfts);
+        getMostLiked(res.data.nfts.slice(0, shown * 6))
+        getMostBought(res.data.nfts.slice(0, shown * 8))
         setPage(1);
         setHasMore(res.data.hasMore);
       });
@@ -50,11 +53,25 @@ const Listen = () => {
     handleSort();
   }, [sort, account, handleSort, genre]);
 
-  useEffect(() => {
-    axios.post("/api/nft-type/get-featured").then(res => {
-      setFeaturedNfts(res.data);
-    });
-  }, [])
+  // useEffect(() => {
+  //   axios.post("/api/nft-type/get-featured").then(res => {
+  //     setFeaturedNfts(res.data);
+  //   });
+  // }, [])
+
+  const getMostLiked = (nfts) => {
+    nfts.sort((a, b) => {
+      return b.likeCount - a.likeCount
+    })
+    setHotNfts(nfts)
+  }
+
+  const getMostBought = (nfts) => {
+    nfts.sort((a, b) => {
+      return b.numSold - a.numSold
+    })
+    setFeaturedNfts(nfts)
+  }
 
   const handleSearch = async (e, pageIncrease, searchParam, sortParam) => {
     e.preventDefault();
@@ -169,13 +186,27 @@ const Listen = () => {
         {isMobile() && <EmailModalMobile />}
         <NftScroll>
           {featuredNfts.map((item, index) => {
-            if (index >= shown * 3) return null;
+            if (index >= 3) return null;
             else return <NftCard nft={item} pauseSong={pauseSong} setPauseSong={setPauseSong} />;
           })}
         </NftScroll>
       </LaunchContainer>
       <LaunchContainer>
-
+        <Featured>
+          Hot
+        </Featured>
+        <ContainerOutline />
+        <NftScroll>
+          {hotNfts.map((item, index) => {
+            if (index >= 3) return null;
+            else return <NftCard nft={item} pauseSong={pauseSong} setPauseSong={setPauseSong} />;
+          })}
+        </NftScroll>
+      </LaunchContainer>
+      <LaunchContainer>
+        <Browse>
+          Browse
+        </Browse>
         <ContainerOutline />
         <ContainerTitleForm onSubmit={(e) => handleSearch(e, 1, search, 2)}>
           <ContainerTitleInput
@@ -224,6 +255,7 @@ const Listen = () => {
             return item;
           })}
         </ContainerTitleSorting>
+
         <NftScroll>
           {allNfts.map((item, index) => {
             if (index >= shown * 3) return null;
@@ -337,6 +369,25 @@ const ContainerTitleSorting = styled.div`
 const Featured = styled.div`
   position: absolute;
   top: -15px;
+  background-color: #090909;
+  font-size: 50px;
+  font-weight: bold;
+  left: calc(10% + 50px);
+  font-size: 36px;
+    font-weight: bold;
+    left: calc(10% + 50px);
+    width: 160px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  @media only screen and (max-width: 776px) {
+    left: auto;
+  }
+`;
+
+const Browse = styled.div`
+  position: absolute;
+  top: -60px;
   background-color: #090909;
   font-size: 50px;
   font-weight: bold;

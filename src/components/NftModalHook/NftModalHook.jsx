@@ -884,7 +884,7 @@ const OpaqueFilter = styled.div`
   backdrop-filter: brightness(20%);
   z-index: 1000;
   transform: translateZ(10px);
-  animation: fadein 0.1s;
+  animation: fadein 0.3s;
 
 `;
 

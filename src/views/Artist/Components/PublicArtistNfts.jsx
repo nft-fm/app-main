@@ -2,24 +2,12 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import NftCard from "../../../components/NftCards/SaleNftCard";
 
-// import { usePlaylistConsumer } from "../../../contexts/Playlist";
-
-// const preloads = {
-//   1: sexPreload,
-//   2: touchPreload,
-//   3: herePreload,
-//   4: solPreload,
-// };
 const ArtistNfts = ({ nfts }) => {
-  // const [nfts, setNfts] = useState([]);
-  // const [selectedNft, setSelectedNft] = useState();
-  // const { setNftsCallback } = usePlaylistConsumer();
   const [pauseSong, setPauseSong] = useState(() => () => { }) // this is fucking weird, don't touch me.
   const [formattedNft, setFormattedNft] = useState();
 
   const formatNfts = (nftsData) => {
     const formattedNfts = nftsData.map((nft, index) => (
-      // <NftCard nft={nft} key={index} index={index} />
       <NftCard nft={nft} pauseSong={pauseSong} setPauseSong={setPauseSong} />
     ));
     for (let i = 0; i < 3; i++) {
@@ -28,16 +16,7 @@ const ArtistNfts = ({ nfts }) => {
     setFormattedNft(formattedNfts);
   };
 
-  // const getArtistNfts = async () => {
-  //   setNfts([]);
-  //   axios.post("api/nft-type/artist-nfts", user).then((res) => {
-  //     setNfts(formatNfts(res.data));
-  //     setNftsCallback(res.data);
-  //   });
-  // };
-
   useEffect(() => {
-    // getArtistNfts();
     if (nfts) {
       formatNfts(nfts);
     }

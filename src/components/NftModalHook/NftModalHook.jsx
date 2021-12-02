@@ -24,16 +24,15 @@ import moment from "moment";
 import { NavLink } from "react-router-dom";
 import {
   errorIcon,
-  warningIcon,
   imageWidth,
   imageHeight,
 } from "../../utils/swalImages";
 import Ticker from "../../components/Ticker";
 import { ReactComponent as IconBinance } from "../../assets/img/icons/binance-logo.svg";
 import LikeShare from "../NftCards/LikeShare";
-import isMobile from "../../utils/isMobile";
 import metamaskLogo from "../../assets/img/metamask_fox.svg";
 import AccountButton from "../TopBar/components/AccountButton";
+import switchNetwork from "../../utils/switchNetwork";
 
 function getMetaMaskLink() {
   var userAgent = navigator.userAgent || navigator.vendor || window.opera;
@@ -79,6 +78,9 @@ const BuyNftModal = (props) => {
 
   useEffect(() => {
     if (open) {
+
+      history.replace(`/market/${nft.chain}/${nft.nftId}`);
+
       console.log("info", account, nft);
       axios
         .post("/api/nft-type/trackNftView", {
@@ -90,6 +92,7 @@ const BuyNftModal = (props) => {
         })
         .then()
         .catch((err) => console.log(err));
+      console.log("this the neft", nft);
     }
   }, [open]);
 
@@ -138,11 +141,13 @@ const BuyNftModal = (props) => {
     ) {
       swal.fire({
         title: `Wrong Chain`,
-        text: `You must be on the ${nft.chain} blockchain to purchase this NFT. You can change chains in the navbar.`,
+        text: `You must be on the ${nft.chain} blockchain to purchase this NFT. Switching Chains.`,
         imageUrl: errorIcon,
         imageWidth,
         imageHeight,
-      });
+      }).then(() => {
+        switchNetwork(nft.chain);
+      })
       return;
     }
     setIsLoading(true);
@@ -313,30 +318,6 @@ const BuyNftModal = (props) => {
         }
       });
   };
-  const connectWallet = async () => {
-    if (isMobile()) {
-      openMetamaskAlert();
-    } else {
-      const newChainId = await window.ethereum.request({
-        method: "eth_chainId",
-      });
-      if (
-        Number(newChainId) === process.env.REACT_APP_IS_MAINNET
-          ? 1 || 56
-          : 4 || 97
-      ) {
-        connect("injected");
-      } else {
-        swal.fire({
-          title: "Wrong Chain",
-          text: "You are on the wrong chain. Please connect to Ethereum Mainnet.",
-          imageUrl: warningIcon,
-          imageWidth,
-          imageHeight,
-        });
-      }
-    }
-  };
 
   //add in to the nft modal
   // const formatSongDur = (d) => {
@@ -499,9 +480,9 @@ const BuyNftModal = (props) => {
                 <PriceItem>
                   {nft.price
                     ? parseFloat(nft.price).toLocaleString(undefined, {
-                        minimumFractionDigits: 0,
-                        maximumFractionDigits: 6,
-                      })
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 6,
+                    })
                     : "--"}{" "}
                 </PriceItem>
                 &nbsp;
@@ -509,7 +490,9 @@ const BuyNftModal = (props) => {
               </PriceHolder>
             </PricesContainer>
             {!account ? (
-              <AccountButton />
+              <AccountButtonContainer>
+                <AccountButton />
+              </AccountButtonContainer>
             ) : nft.numSold !== nft.numMinted ? (
               !isLoading ? (
                 isBought ? (
@@ -565,6 +548,14 @@ const BuyNftModal = (props) => {
     </OpaqueFilter>
   );
 };
+
+const AccountButtonContainer = styled.div`
+    width: 200px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 
 const MobilePromotion = styled.div`
   margin-top: 10px;

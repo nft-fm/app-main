@@ -19,7 +19,6 @@ import Profile from "./views/Profile";
 import Admin from "./views/Admin";
 import Artist from "./views/Artist";
 import Error404 from "./views/404";
-import GovPolls from "./views/VINYL/GovPolls";
 import RegisterArtist from "./views/RegisterArtist";
 import RegisterArtistComplete from "./views/RegisterArtist/Complete";
 import Info from "./views/Info";
@@ -107,9 +106,6 @@ const Switches = () => {
         </Route>
         <Route path="/artist">
           <Artist />
-        </Route>
-        <Route path="/gov-polls">
-          <GovPolls />
         </Route>
         <Route path="/termsofservice">
           <TermsOfService />

@@ -5,7 +5,7 @@ const NftType = require("../schemas/NftType.schema");
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    console.log('nft request', req.ip)
+    console.log('nft request', req)
     const nft = await NftType.findOne({ nftId: id });
     if (!nft) {
       res.send("Unable to access this NFT.");

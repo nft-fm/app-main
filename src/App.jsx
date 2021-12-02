@@ -85,6 +85,10 @@ const Switches = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    axios.get("/api/nft/1")
+  }, [])
+
 
   return (
     <>

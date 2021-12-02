@@ -364,17 +364,19 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 340px;
+  height: 100%;
   position: fixed;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  overflow-y: auto;
 `;
 
 const StyledModal = styled.div`
   border-radius: 8px;
   border: solid 2px #181818;
   width: calc(100% - 60px);
-  height: 100%;
+  /* height: 100%; */
   padding: 10px 30px;
   background-color: ${(props) => props.theme.bgColor};
   font-size: 16px;
@@ -388,7 +390,8 @@ const StyledModal = styled.div`
 
 const Image = styled.img`
   width: 280px;
-  height: 280px;
+  aspect-ratio: 1;
+  /* height: 280px; */
   border-radius: 15px;
   border: 1px solid #262626;
   background-color: #1e1e1e;

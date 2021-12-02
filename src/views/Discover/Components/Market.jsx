@@ -191,7 +191,7 @@ const Listen = () => {
           })}
         </NftScroll>
       </LaunchContainer>
-      <LaunchContainer>
+      {/* <LaunchContainer>
         <Featured>
           Hot
         </Featured>
@@ -202,7 +202,7 @@ const Listen = () => {
             else return <NftCard nft={item} pauseSong={pauseSong} setPauseSong={setPauseSong} />;
           })}
         </NftScroll>
-      </LaunchContainer>
+      </LaunchContainer> */}
       <LaunchContainer>
         <Browse>
           Browse

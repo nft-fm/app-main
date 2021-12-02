@@ -370,6 +370,10 @@ const Container = styled.div`
   top: 50%;
   transform: translate(-50%, -50%);
   overflow-y: auto;
+    overflow-x: hidden;
+  @media only screen and (min-width: 460px) {
+    height: auto;
+  }
 `;
 
 const StyledModal = styled.div`

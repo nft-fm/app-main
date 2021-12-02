@@ -28,7 +28,8 @@ const Community = (props) => {
   const [hasVinyl, setHasVinyl] = useState(false);
   const { accountTotalStaked } = useStakingConsumer();
 
-  const fetchSuggestions = useCallback(() => {
+  const fetchSuggestions = useCallback(async () => {
+    console.log("fetching suggestions", page, sort);
     axios
       .post(`/api/gov/get-suggestions`, {
         address: account,

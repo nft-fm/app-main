@@ -90,14 +90,14 @@ const getUserNftsETH = async (account) => {
   //   numNfts.push(utils.formatEther(nft) * 10e17);
   // });
 
-  console.log("wat here", userNfts);
 
   let nftIdsAndQuantities = [];
   for (let i = 0; i < userNfts[0].length; i++) {
-    if (userNfts[1][i] !== '0x00') {
+    const quantity = Math.round(utils.formatEther(userNfts[1][i]) * 10e17)
+    if (quantity) {
       nftIdsAndQuantities.push({
         id: Math.round(utils.formatEther(userNfts[0][i]) * 10e17),
-        quantity: Math.round(utils.formatEther(userNfts[1][i]) * 10e17),
+        quantity,
         chain: "ETH",
       });
     }
@@ -123,11 +123,11 @@ const getUserNftsBSC = async (account) => {
 
   let nftIdsAndQuantities = [];
   for (let i = 0; i < userNfts[0].length; i++) {
-    if (userNfts[1][i] !== '0x00') {
-      
+    const quantity = Math.round(utils.formatEther(userNfts[1][i]) * 10e17)
+    if (quantity) {
       nftIdsAndQuantities.push({
         id: Math.round(utils.formatEther(userNfts[0][i]) * 10e17),
-        quantity: Math.round(utils.formatEther(userNfts[1][i]) * 10e17),
+        quantity,
         chain: "BSC",
       });
     }

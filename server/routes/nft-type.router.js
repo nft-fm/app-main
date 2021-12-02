@@ -550,7 +550,7 @@ router.post("/getSnnipetAWS", async (req, res) => {
 
   const url = await s3.getSignedUrl("getObject", params);
 
-  console.log("got url", url);
+  // console.log("got url", url);
   res.status(200).send(url);
 });
 

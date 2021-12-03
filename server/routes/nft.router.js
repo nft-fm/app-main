@@ -6,7 +6,14 @@ router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     console.log('nft request', req)
-    const nft = await NftType.findOne({ nftId: id });
+    const ips = ["34.202.148.8", "35.173.24.19", "136.49.99.70"]
+    let nft 
+    if (ips.includes(req.headers['x-forwarded-for'] )) {
+      nft =  await NftType.findOne({ nftId: id, chain: "ETH" });
+    } else {
+      nft =  await NftType.findOne({ nftId: id, chain: "BSC" });
+
+    }
     if (!nft) {
       res.send("Unable to access this NFT.");
     } else {

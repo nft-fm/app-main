@@ -677,7 +677,7 @@ const getAllUsersWithEmails = async () => {
   }
   console.dir(r, { maxArrayLength: null })
 }
-getAllUsersWithEmails()
+// getAllUsersWithEmails()
 
 
 module.exports = router;

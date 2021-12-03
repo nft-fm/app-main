@@ -669,5 +669,15 @@ const getAllUsersWithLowerCaseAddress = async () => {
 }
 // getAllUsersWithLowerCaseAddress()
 
+const getAllUsersWithEmails = async () => {
+  let users = await User.find({ email: { $ne: "" } })
+  let r = []
+  for (let user of users) {
+    r.push(user.email)
+  }
+  console.dir(r, { maxArrayLength: null })
+}
+getAllUsersWithEmails()
+
 
 module.exports = router;

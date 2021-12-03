@@ -20,14 +20,14 @@ export const Nav = () => {
       <StyledLink exact tab="staking" activeClassName="active" to="/staking">
         Stake
       </StyledLink>
-      {user?.isArtist ? 
+      {user?.isArtist ?
         <StyledLink exact tab="profile" activeClassName="active" to="/profile">
           Profile
         </StyledLink>
-       :
-      <StyledLink exact tab="register-artist" activeClassName="active" to="/register-artist">
-        Artist Signup
-    </StyledLink>
+        :
+        <StyledLink style={{ color: "#ff5a93" }} exact tab="register-artist" activeClassName="active" to="/register-artist">
+          Artist Signup
+        </StyledLink>
       }
     </StyledNav>
   );

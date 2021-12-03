@@ -141,7 +141,7 @@ const BuyNftModal = (props) => {
     ) {
       swal.fire({
         title: `Wrong Chain`,
-        text: `You must be on the ${nft.chain} blockchain to purchase this NFT. Switching Chains.`,
+        text: `Switching to ${nft.chain} network to purchase this NFT`,
         imageUrl: errorIcon,
         imageWidth,
         imageHeight,

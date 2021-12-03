@@ -21,7 +21,7 @@ const Step4 = ({ nftData, updateState, usdPerEth, usdPerBnb, currChainId }) => {
   const handleSubmit = async () => {
   if (!checked) {
     return swal.fire({
-      title: "🚨🚨Warning your NFTs may not sell using advanced options.🚨🚨",
+      title: "🚨 Advanced options NFTs may be less likely to sell 🚨",
       timer: 5000,
       imageUrl: warningIcon,
       imageWidth, 

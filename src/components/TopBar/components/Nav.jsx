@@ -14,17 +14,21 @@ export const Nav = () => {
       <StyledLink exact tab="library" activeClassName="active" to="/library">
         Library
       </StyledLink>
-      <StyledLink exact tab="about" activeClassName="active" to="/info">
+      <StyledLink exact tab="info" activeClassName="active" to="/info">
         Info
       </StyledLink>
-      <StyledLink exact tab="about" activeClassName="active" to="/staking">
+      <StyledLink exact tab="staking" activeClassName="active" to="/staking">
         Stake
       </StyledLink>
-      {user?.isArtist && (
+      {user?.isArtist ?
         <StyledLink exact tab="profile" activeClassName="active" to="/profile">
           Profile
         </StyledLink>
-      )}
+        :
+        <StyledLink style={{ color: "#ff5a93" }} exact tab="register-artist" activeClassName="active" to="/register-artist">
+          Artist Signup
+        </StyledLink>
+      }
     </StyledNav>
   );
 };

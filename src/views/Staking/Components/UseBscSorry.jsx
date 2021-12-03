@@ -20,46 +20,46 @@ const UseBscSorry = () => {
             <AccountButton />
           </GetConnected>
         </IsConnected>
-          ) : (
-          <StyledLink>
-            <BigTitle>Change Network</BigTitle>
-            <SubTitle>
-              you need to be on Binance Smart Chain to access staking
-            </SubTitle>
-            <ButtonContainer>
-              <Button
-                aria-label="Switch to BSC"
-                onClick={switchBsc}
-              >Switch To Binance Smart Chain</Button>
-            </ButtonContainer>
-          </StyledLink>
+      ) : (
+        <StyledLink>
+          <BigTitle>Change Network</BigTitle>
+          <SubTitle>
+            you need to be on Binance Smart Chain to access staking
+          </SubTitle>
+          <ButtonContainer>
+            <Button
+              aria-label="Switch to BSC"
+              onClick={switchBsc}
+            >Switch To Binance Smart Chain</Button>
+          </ButtonContainer>
+        </StyledLink>
       )}
     </StyledLinkContainer>
-      );
+  );
 };
 
-      const Spacer = styled.div`
+const Spacer = styled.div`
       width: 10px;
       `
 
-      const LogoContainer = styled.div`
+const LogoContainer = styled.div`
       display: flex;
       flex-direction: row;
       `
 
-      const ButtonText = styled.span`
+const ButtonText = styled.span`
       font-family: "Compita";
       font-size: ${(props) => props.theme.fontSizes.xs};
       font-weight: 600;
       color: white;
       `;
 
-      const MetaMask = styled.img`
+const MetaMask = styled.img`
       width: 32px;
       height: auto;
       `;
 
-      const ConnectButton = styled.button`
+const ConnectButton = styled.button`
       width: 140px;
       height: 64px;
       cursor: pointer;
@@ -78,7 +78,7 @@ const UseBscSorry = () => {
   }
       `;
 
-      const GetConnected = styled.div`
+const GetConnected = styled.div`
       width: 300px;
       height: 150px;
       color: white;
@@ -94,15 +94,15 @@ const UseBscSorry = () => {
       margin-top: 300px;
       `;
 
-      const IsConnected = styled.div`
+const IsConnected = styled.div`
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.7);
+      /* background-color: rgba(0, 0, 0, 0.7); */
       position: absolute;
       z-index: 11;
       `;
 
-      const ButtonContainer = styled.div`
+const ButtonContainer = styled.div`
       margin-top: 20px;
       height: 50px;
       width: 100%;
@@ -111,7 +111,7 @@ const UseBscSorry = () => {
       justify-content: center;
       `;
 
-      const Button = styled.button`
+const Button = styled.button`
       color: white;
       background: transparent;
       border: 2px solid ${(props) => props.theme.color.red};
@@ -132,7 +132,7 @@ const UseBscSorry = () => {
   }
       `;
 
-      const StyledLink = styled.div`
+const StyledLink = styled.div`
       font-size: 40px;
       font-stretch: normal;
       font-style: normal;
@@ -154,7 +154,7 @@ const UseBscSorry = () => {
       color: white;
       `;
 
-      const StyledLinkContainer = styled.div`
+const StyledLinkContainer = styled.div`
       display: flex;
       align-items: center;
       justify-content: center;
@@ -164,7 +164,7 @@ const UseBscSorry = () => {
       position: absolute;
       `;
 
-      const SubTitle = styled.div`
+const SubTitle = styled.div`
       font-size: 20px;
       font-stretch: normal;
       font-style: normal;
@@ -173,7 +173,7 @@ const UseBscSorry = () => {
       margin-bottom: 20px;
       `;
 
-      const BigTitle = styled.div`
+const BigTitle = styled.div`
       font-stretch: normal;
       font-style: normal;
       line-height: 1;
@@ -184,4 +184,4 @@ const UseBscSorry = () => {
       align-items: center;
       `;
 
-      export default UseBscSorry;
+export default UseBscSorry;

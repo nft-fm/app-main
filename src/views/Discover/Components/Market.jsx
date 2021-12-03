@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { ReactComponent as down_arrow } from "../../../assets/img/icons/down_arrow.svg";
 import NftCard from "../../../components/NftCards/SaleNftCard";
 import { useAccountConsumer } from "../../../contexts/Account";
+import { useHistory } from "react-router-dom";
 import EmailModalMobile from "../../../GetEmailModalMobile";
 
 // import { ReactComponent as down_arrow } from "../../../assets/img/icons/down_arrow.svg";
@@ -26,6 +27,8 @@ const Listen = () => {
   // const [sort, setSort] = useState(Math.floor(Math.random() * 6));
   const limit = 500;
   const [pauseSong, setPauseSong] = useState(() => () => { }) // this is fucking weird, don't touch me.
+  const history = useHistory();
+
 
   const handleSort = useCallback(async () => {
     setPage(0);
@@ -52,12 +55,6 @@ const Listen = () => {
   useEffect(() => {
     handleSort();
   }, [sort, account, handleSort, genre]);
-
-  // useEffect(() => {
-  //   axios.post("/api/nft-type/get-featured").then(res => {
-  //     setFeaturedNfts(res.data);
-  //   });
-  // }, [])
 
   const getMostLiked = (nfts) => {
     nfts.sort((a, b) => {
@@ -191,7 +188,7 @@ const Listen = () => {
           })}
         </NftScroll>
       </LaunchContainer>
-      <LaunchContainer>
+      {/* <LaunchContainer>
         <Featured>
           Hot
         </Featured>
@@ -202,7 +199,7 @@ const Listen = () => {
             else return <NftCard nft={item} pauseSong={pauseSong} setPauseSong={setPauseSong} />;
           })}
         </NftScroll>
-      </LaunchContainer>
+      </LaunchContainer> */}
       <LaunchContainer>
         <Browse>
           Browse

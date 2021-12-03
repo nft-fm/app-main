@@ -476,7 +476,7 @@ const RightSide = styled.div`
           flex-direction: column;
           align-items: center;
           width: calc(100% - 465px - 80px);
-          padding: 10px 40px;
+          padding: 0px 40px;
           @media only screen and (max-width: 776px) {
             width: 100%;
             height: 40vw;

@@ -147,8 +147,23 @@ router.get("/has-draft/:id", async (req, res) => {
       isDraft: true,
       address: req.params.id,
     });
-
+    console.log("draft", draft);
     res.send({ hasDraft: !!draft });
+  } catch (err) {
+    res.status(500).send("Server Error");
+  }
+});
+
+router.get("/delete-draft/:id", async (req, res) => {
+  try {
+    console.log("deleting?", req.params.id);
+    if (!req.params.id) res.status(400).send("No address >_<");
+    const draft = await NftType.deleteOne({
+      isDraft: true,
+      address: req.params.id,
+    });
+    console.log("draft", draft);
+    res.send("success");
   } catch (err) {
     res.status(500).send("Server Error");
   }
@@ -543,7 +558,7 @@ router.post("/getNftsWithParams", async (req, res) => {
 
 router.post("/getSnnipetAWS", async (req, res) => {
   const params = { Bucket: "nftfm-music", Key: req.body.key };
-  
+
   await s3
     .headObject(params)
     .promise()
@@ -567,7 +582,7 @@ router.post("/uploadSnnipetS3", async (req, res) => {
     fileFilter,
     storage: multerS3({
       ACL: "public-read",
-    s3: s3  ,
+      s3: s3,
       bucket: "nftfm-music",
       metadata: function (req, file, cb) {
         cb(null, { fieldName: "audioFile" });
@@ -979,7 +994,7 @@ router.get("/testing", async (req, res) => {
         });
       }
     });
-  } catch (err) {}
+  } catch (err) { }
 });
 
 router.post("/updatePrice", async (req, res) => {

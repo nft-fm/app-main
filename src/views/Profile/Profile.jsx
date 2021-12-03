@@ -26,9 +26,10 @@ import ArtistCard from "../../components/NftCards/ArtistCard";
 import Stakers from "./components/Stakers";
 import { ReactComponent as CheckIcon } from "../../assets/img/icons/check_circle.svg";
 import isMobile from "../../utils/isMobile";
+import switchNetwork from "../../utils/switchNetwork";
 
 const Profile = () => {
-  const { account, connect, user } = useAccountConsumer();
+  const { account, connect, user, currChainId, setCurrChainId } = useAccountConsumer();
   const [open, setOpen] = useState(false);
   const [reset, setReset] = useState(false);
   const [userSigned, setUserSigned] = useState(false);
@@ -99,6 +100,7 @@ const Profile = () => {
       }
 
       const hasDraft = await axios.get(`/api/nft-type/has-draft/${account}`);
+      console.log("hasDraft", hasDraft);
       if (hasDraft.data.hasDraft) {
         swal
           .fire({
@@ -130,6 +132,7 @@ const Profile = () => {
                 })
                 .then(async (res2) => {
                   if (res2.isConfirmed) {
+                    await axios.get(`/api/nft-type/delete-draft/${account}`);
                     setReset(true);
                     setOpen(!open);
                   }
@@ -211,12 +214,10 @@ const Profile = () => {
                   .catch((err) => {
                     console.log("err", err.response);
                     swal.fire({
-                      title: `Error: ${
-                        err.response ? err.response.status : 404
-                      }`,
-                      text: `${
-                        err.response ? err.response.data : "server error"
-                      }`,
+                      title: `Error: ${err.response ? err.response.status : 404
+                        }`,
+                      text: `${err.response ? err.response.data : "server error"
+                        }`,
                       imageUrl: errorIcon,
                       imageWidth,
                       imageHeight,
@@ -226,7 +227,23 @@ const Profile = () => {
           }
         });
     } else {
-      openMintModal();
+      console.log("chain", currChainId);
+      if (currChainId !== 97 && currChainId !== 56) {
+        swal.fire({
+          title: 'Only BSC minting is supported at this time.',
+          text: "change chain?",
+          icon: 'warning',
+          showCancelButton: true,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            switchNetwork("BSC");
+          } else {
+            return;
+          }
+        })
+      } else {
+        openMintModal();
+      }
     }
   };
 
@@ -409,7 +426,7 @@ const PlusIcon = styled(plus_icon)`
   margin-bottom: 2px;
 `;
 
-const CreatedNftHolder = !isMobile
+const CreatedNftHolder = !isMobile()
   ? styled.div`
       display: flex;
       flex-direction: column;
@@ -534,22 +551,13 @@ const NftContainerRight = styled.div`
   border-radius: 20px;
   transition: 0.2s;
   ${({ active }) =>
-    !active &&
-    `
+      !active &&
+      `
   color:  white;
   `}
-  &:hover {
-    color: white;
-  }
-  @media only screen and (max-width: 460px) {
-    top: 25px;
-    margin-left: 0;
-    margin-right: 0;
-    right: 15px;
-  }
-`;
+`
 
-const NftContainerOutline = styled.div`
+const NftContainerOutline = git sstyled.div`
   /* border-top: 6px solid #383838;
   height: 40px;
   width: 80%;

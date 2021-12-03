@@ -13,15 +13,14 @@ import { ReactComponent as GiftIcon } from "../../assets/img/icons/rewards-gift.
 import loading from "../../assets/img/loading.gif";
 import { useAccountConsumer } from "../../contexts/Account";
 import NftModalHook from "../NftModalHook/NftModalHook";
-import ShareModal from "../SMShareModal/SMShareModal";
 import LikeShare from "./LikeShare";
 import PlaySongSnippet from "../NftModalHook/Components/SimplifiedPlay";
-
+import { useHistory } from "react-router-dom";
 
 const NftCard = (props) => {
   const { user, account } = useAccountConsumer();
   const [nft, setNft] = useState(null);
-
+ 
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
@@ -33,9 +32,10 @@ const NftCard = (props) => {
   const [likesLoading, setLikesLoading] = useState(false);
   const [profilePic, setProfilePic] = useState("");
   const [userInfo, setUserInfo] = useState();
+  const history = useHistory();
 
-  // const show = () => setIsModalOpen(true);
   const hide = () => {
+    history.replace(`/market/${""}`);
     setIsModalOpen(false);
   };
 
@@ -122,25 +122,27 @@ const NftCard = (props) => {
     return null;
   }
 
+
   return (
     <>
-
-      <NftModalHook
-        open={isModalOpen}
-        hide={hide}
-        nft={nft}
-        profilePic={profilePic}
-        partialSong={partialSong}
-        liked={liked}
-        setLiked={setLiked}
-        likeCount={likeCount}
-        setLikeCount={setLikeCount}
-        setShareCount={() => setShareCount({ count: shareCount.count + 1 })}
-        shareCount={shareCount}
-        likesLoading={likesLoading}
-      />
+      {/* {isModalOpen && */}
+        <NftModalHook
+          open={isModalOpen}
+          hide={hide}
+          nft={nft}
+          profilePic={profilePic}
+          partialSong={partialSong}
+          liked={liked}
+          setLiked={setLiked}
+          likeCount={likeCount}
+          setLikeCount={setLikeCount}
+          setShareCount={() => setShareCount({ count: shareCount.count + 1 })}
+          shareCount={shareCount}
+          likesLoading={likesLoading}
+        />
+      {/* } */}
       <Container
-        onClick={() => setIsModalOpen(!isModalOpen)}
+        onClick={() => setIsModalOpen(true)}
         role="button"
         aria-pressed="false"
         tabindex="0"
@@ -178,7 +180,7 @@ const NftCard = (props) => {
           {partialSong && <PlaySongSnippet partialSong={partialSong} pauseSong={props.pauseSong} setPauseSong={props.setPauseSong} />}
         </PreviewButton>
         {nft.isRedeemable && (
-          <RedeemButtonBackground onClick={() => setIsModalOpen(!isModalOpen)}>
+          <RedeemButtonBackground >
             <RedeemButton>
               {/* Merch */}
               <MerchIcon />
@@ -187,7 +189,7 @@ const NftCard = (props) => {
         )}
 
         <MidSection>
-          <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>
+          <TrackName >
             {nft.title.length > 25 ? nft.title.slice(0, 25) + "..." : nft.title}
           </TrackName>
           <BadgeHolder>

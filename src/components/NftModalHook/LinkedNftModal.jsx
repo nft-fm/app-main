@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useAccountConsumer } from "../../contexts/Account";
 import ShareModal from "../SMShareModal/SMShareModal";
 import NftModalHook from "./NftModalHook";
+import { useHistory } from "react-router-dom";
 
 const NftCard = (props) => {
   const { account } = useAccountConsumer();
@@ -14,10 +15,13 @@ const NftCard = (props) => {
   const [likeCount, setLikeCount] = useState(0);
   const [partialSong, setPartialSong] = useState(false);
   const [shareCount, setShareCount] = useState({ count: 0 });
+  const history = useHistory();
 
   // const show = () => setIsModalOpen(true);
   const hide = () => {
     setIsModalOpen(false);
+    history.replace(`/market/${""}`);
+
   };
 
   const getSnnipetAWS = async (completeNft) => {

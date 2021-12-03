@@ -557,7 +557,7 @@ const NftContainerRight = styled.div`
   `}
 `
 
-const NftContainerOutline = git sstyled.div`
+const NftContainerOutline = styled.div`
   /* border-top: 6px solid #383838;
   height: 40px;
   width: 80%;

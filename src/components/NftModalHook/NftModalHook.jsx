@@ -110,11 +110,11 @@ const BuyNftModal = (props) => {
       else return 15000000 * multiplier;
     }
   };
-
   const calcEligibility = () => {
-    if (nft.chain === "BSC" && nft.price < 0.001) return false;
-    if (nft.numMinted < 5) return nft.numMinted - nft.numSold > 0;
-    else return nft.numSold < 5;
+    // if (nft.chain === "BSC" && nft.price < 0.001) return false;
+    // if (nft.numMinted < 5) return nft.numMinted - nft.numSold > 0;
+    // else return nft.numSold < 5;
+    return false
   };
 
   const airdrop = async () => {

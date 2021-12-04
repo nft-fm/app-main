@@ -112,9 +112,7 @@ const BuyNftModal = ({
       <Container onClick={(e) => stopProp(e)}>
         <StyledModal>
           <X onClick={(e) => !loading && hide(e)} />
-          <CardTitle>
-            {/*<Logo src={logo} />*/}
-          </CardTitle>
+          <CardTitle>{/*<Logo src={logo} />*/}</CardTitle>
           <CardTop>
             <Side>
               <IconArea>
@@ -149,10 +147,8 @@ const BuyNftModal = ({
               <TableRow className="header">
                 <th>Update Snippet</th>
               </TableRow>
-              <UpdateSnnipets 
-              nft={nft}
-              />
-              </StyledTable>
+              <UpdateSnnipets nft={nft} />
+            </StyledTable>
             <StyledTable>
               <TableRow className="header">
                 <th>Earnings</th>
@@ -370,7 +366,7 @@ const Container = styled.div`
   top: 50%;
   transform: translate(-50%, -50%);
   overflow-y: auto;
-    overflow-x: hidden;
+  overflow-x: hidden;
   @media only screen and (min-width: 460px) {
     height: auto;
   }

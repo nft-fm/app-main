@@ -356,6 +356,7 @@ const MusicPlayer = (props) => {
         })
         .then(
           (songFile) => {
+            console.log("songfile", songFile)
             startPartialSong(songFile);
           },
           (e) => {

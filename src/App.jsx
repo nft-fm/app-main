@@ -34,7 +34,7 @@ import saQiBanner from "./assets/img/homepage_assets/saqi_banner.png";
 import saQiBannerMobile from "./assets/img/homepage_assets/saqi_banner_mobile.jpeg";
 import EmailModal from "./GetEmailModal";
 import EmailModalMobile from "./GetEmailModalMobile";
-import PromoBanner from './PromoBanner'
+// import PromoBanner from './PromoBanner'
 import isMobile from "./utils/isMobile";
 import theme from "./theme";
 import Tracking from "./mixpanel/tracking";
@@ -155,7 +155,7 @@ const App = () => {
 
   return (
     <StyledCanvas>
-      <PromoBanner />
+      {/* <PromoBanner /> */}
       <Router>
         <Providers>
           <Tracking />

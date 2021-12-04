@@ -180,7 +180,7 @@ const Listen = () => {
           Featured
         </Featured>
         <ContainerOutline />
-        {isMobile() && <EmailModalMobile />}
+        {/* {isMobile() && <EmailModalMobile />} */}
         <NftScroll>
           {featuredNfts.map((item, index) => {
             if (index >= 3) return null;

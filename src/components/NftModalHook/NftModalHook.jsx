@@ -22,11 +22,7 @@ import { ReactComponent as Exclusive } from "../../assets/img/Badges/exclusive.s
 import { ReactComponent as GiftIcon } from "../../assets/img/icons/rewards-gift.svg";
 import moment from "moment";
 import { NavLink } from "react-router-dom";
-import {
-  errorIcon,
-  imageWidth,
-  imageHeight,
-} from "../../utils/swalImages";
+import { errorIcon, imageWidth, imageHeight } from "../../utils/swalImages";
 import Ticker from "../../components/Ticker";
 import { ReactComponent as IconBinance } from "../../assets/img/icons/binance-logo.svg";
 import LikeShare from "../NftCards/LikeShare";
@@ -78,7 +74,6 @@ const BuyNftModal = (props) => {
 
   useEffect(() => {
     if (open) {
-
       history.replace(`/market/${nft.chain}/${nft.nftId}`);
 
       console.log("info", account, nft);
@@ -139,15 +134,17 @@ const BuyNftModal = (props) => {
       (nft.chain === "ETH" && currChainId !== 1 && currChainId !== 4) ||
       (nft.chain === "BSC" && currChainId !== 56 && currChainId !== 97)
     ) {
-      swal.fire({
-        title: `Wrong Chain`,
-        text: `Switching to ${nft.chain} network to purchase this NFT`,
-        imageUrl: errorIcon,
-        imageWidth,
-        imageHeight,
-      }).then(() => {
-        switchNetwork(nft.chain);
-      })
+      swal
+        .fire({
+          title: `Wrong Chain`,
+          text: `Switching to ${nft.chain} network to purchase this NFT`,
+          imageUrl: errorIcon,
+          imageWidth,
+          imageHeight,
+        })
+        .then(() => {
+          switchNetwork(nft.chain);
+        });
       return;
     }
     setIsLoading(true);
@@ -226,8 +223,10 @@ const BuyNftModal = (props) => {
                     }).then((res) => {
                       if (res.isConfirmed) {
                         let text = `I’m proud to directly support up-and-coming artists by buying their NFTs on Fanfare! Check out this song by ${nft.artist} at ${window.location}`;
+
+                        let hashtags = `Fanfare,NFTCollectors,MusicLovers,NFTCommunity,NFTs,NFTMusic,VINYL`;
                         window.open(
-                          `https://twitter.com/intent/tweet?text=${text}`
+                          `https://twitter.com/intent/tweet?text=${text}&hashtags=${hashtags}`
                         );
                       }
                     });
@@ -239,9 +238,10 @@ const BuyNftModal = (props) => {
                       confirmButtonText: "Share My NFT!",
                     }).then((res) => {
                       if (res.isConfirmed) {
-                        let text = `I’m proud to directly support up-and-coming artists by buying their NFTs on Fanfare! Check out this song by ${nft.artist} at ${window.location}`;
+                        let hashtags = `Fanfare,NFTCollectors,MusicLovers,NFTCommunity,NFTs,NFTMusic,VINYL`;
+                        let text = `I’m proud to directly support up-and-coming artists by buying their NFTs on Fanfare! Check out this song by ${nft.artist} at ${window.location} #Fanfare #NFTCollectors, #MusicLovers, #NFTCommunity, #NFTs, #NFTMusic, $VINYL`;
                         window.open(
-                          `https://twitter.com/intent/tweet?text=${text}`
+                          `https://twitter.com/intent/tweet?text=${text}&hashtags=${hashtags}`
                         );
                       }
                     });
@@ -480,9 +480,9 @@ const BuyNftModal = (props) => {
                 <PriceItem>
                   {nft.price
                     ? parseFloat(nft.price).toLocaleString(undefined, {
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 6,
-                    })
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 6,
+                      })
                     : "--"}{" "}
                 </PriceItem>
                 &nbsp;
@@ -550,12 +550,12 @@ const BuyNftModal = (props) => {
 };
 
 const AccountButtonContainer = styled.div`
-    width: 200px;
+  width: 200px;
   height: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
-`
+`;
 
 const MobilePromotion = styled.div`
   margin-top: 10px;
@@ -876,7 +876,6 @@ const OpaqueFilter = styled.div`
   z-index: 1000;
   transform: translateZ(10px);
   animation: fadein 0.3s;
-
 `;
 
 const Container = styled.div`

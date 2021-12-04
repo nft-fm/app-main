@@ -425,7 +425,7 @@ const NodeMail = (name, email, music, account) => {
 
   var mail = {
     from: "Jackson Felty <jackson@nftfm.io>", //sender email
-    to: "jackson@nftfm.io", // receiver email
+    to: "info@fanfare.team", // receiver email
     subject: "New Artist Application",
     html: message,
   };

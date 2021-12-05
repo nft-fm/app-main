@@ -116,28 +116,32 @@ const GetEmailModal = () => {
           <X onClick={() => setOpen(false)} />
           {!submitted &&
             <Half>
-              Sign up for our new platform to <br /> earn a <span style={{ color: "#20A4FC", fontWeight: "600" }}>free NFT!</span> <a style={{ fontSize: "12px", marginBottom: "2px" }} target="_blank"
+              Sign up for our{" "}
+              <LearnMoreLink target="_blank"
                 rel="noopener noreferrer" href={`https://fanfare.fm/?source=beta&campaign=email_signup`}>
-                learn more
-              </a>
+                Full Release
+              </LearnMoreLink>
+              {" "}to <br /> earn a <span style={{ color: "#20A4FC", fontWeight: "600" }}>free NFT!</span>
             </Half>
           }
           <Half>
             <form onSubmit={(e) => submitEmail(e)}>
               {!submitted ?
-                <Bottom>
-                  <Input
-                    error={error}
-                    name="email"
-                    placeholder="email"
-                    type="email"
-                    onChange={(e) => setEmail(e.target.value)}
-                  >
-                  </Input>
-                  <Submit type="submit">
-                    <Check />
-                  </Submit>
-                </Bottom>
+                <>
+                  <Bottom>
+                    <Input
+                      error={error}
+                      name="email"
+                      placeholder="email"
+                      type="email"
+                      onChange={(e) => setEmail(e.target.value)}
+                    >
+                    </Input>
+                    <Submit type="submit">
+                      <Check />
+                    </Submit>
+                  </Bottom>
+                </>
                 :
                 <Half>
                   Thanks! Please share with your friends<br />
@@ -158,6 +162,10 @@ const GetEmailModal = () => {
     </Modal>
   );
 }
+
+const LearnMoreLink = styled.a`
+margin-bottom: 4px;
+`
 
 const ModalContents = styled.div`
 width: 100%;
@@ -255,7 +263,6 @@ height: 30px;
 font-size: 16px;
 border-radius: 4px;
 &:focus {
-  outline: ${props => props.error ? "none" : "1px solid white"};
 }
 `
 
@@ -300,7 +307,7 @@ align-items: center;
 justify-content: center;
 text-align: center;
 cursor: ${props => props.open ? "default" : "pointer"};
-top: 125px;
+top: 75px;
 right: 10px;
 border: 1px solid  ${(props) => props.theme.color.boxBorder};
 background: ${props => props.theme.color.box};

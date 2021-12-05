@@ -116,8 +116,10 @@ const GetEmailModal = () => {
           <X onClick={() => setOpen(false)} />
           {!submitted &&
             <Half>
-              Sign up for our new<br />
-              platform to earn a <span style={{ color: "#20A4FC", fontWeight: "600" }}>free NFT!</span>
+              Sign up for our new platform to <br /> earn a <span style={{ color: "#20A4FC", fontWeight: "600" }}>free NFT!</span> <a style={{ fontSize: "12px", marginBottom: "2px" }} target="_blank"
+                rel="noopener noreferrer" href={`https://fanfare.fm/?source=beta&campaign=email_signup`}>
+                learn more
+              </a>
             </Half>
           }
           <Half>

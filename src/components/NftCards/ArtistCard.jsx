@@ -172,51 +172,6 @@ const Cart = styled(IconCart)`
   }
 `;
 
-// const Share = styled(IconShare)`
-//   width: 16px;
-//   height: 16px;
-//   margin: 0 4px 0 0;
-//   cursor: pointer;
-//   transition: all 0.2s ease-in-out;
-//   & path {
-//     transition: all 0.2s ease-in-out;
-//     fill: ${(props) => props.theme.color.gray};
-//   }
-//   &:hover {
-//     & path {
-//       fill: #20a4fc;
-//     }
-//   }
-// `;
-
-// const LikedHeart = styled(IconHeart)`
-//   width: 20px;
-//   height: 20px;
-//   margin: -3px 4px 0 0;
-//   cursor: pointer;
-//   transition: all 0.2s ease-in-out;
-//   & path {
-//     stroke: ${(props) => props.theme.color.pink};
-//   }
-// `;
-
-// const Heart = styled(IconHeart)`
-//   width: 20px;
-//   height: 20px;
-//   margin: -3px 4px 0 0;
-//   cursor: pointer;
-//   transition: all 0.2s ease-in-out;
-//   & path {
-//     transition: all 0.2s ease-in-out;
-//     stroke: ${(props) => props.theme.color.gray};
-//   }
-//   &:hover {
-//     & path {
-//       stroke: ${(props) => props.theme.color.pink};
-//     }
-//   }
-// `;
-
 const Side = styled.div`
   display: flex;
   align-items: center;
@@ -231,8 +186,6 @@ const IconArea = styled.div`
 `;
 
 const CardTop = styled.div`
-  /* width: calc(100% - 4px); */
-  /* padding: 0px 2px; */
   width: 100%;
   margin-bottom: 12px;
   display: flex;

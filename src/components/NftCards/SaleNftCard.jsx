@@ -20,7 +20,7 @@ import { useHistory } from "react-router-dom";
 const NftCard = (props) => {
   const { user, account } = useAccountConsumer();
   const [nft, setNft] = useState(null);
- 
+
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
@@ -126,20 +126,20 @@ const NftCard = (props) => {
   return (
     <>
       {/* {isModalOpen && */}
-        <NftModalHook
-          open={isModalOpen}
-          hide={hide}
-          nft={nft}
-          profilePic={profilePic}
-          partialSong={partialSong}
-          liked={liked}
-          setLiked={setLiked}
-          likeCount={likeCount}
-          setLikeCount={setLikeCount}
-          setShareCount={() => setShareCount({ count: shareCount.count + 1 })}
-          shareCount={shareCount}
-          likesLoading={likesLoading}
-        />
+      <NftModalHook
+        open={isModalOpen}
+        hide={hide}
+        nft={nft}
+        profilePic={profilePic}
+        partialSong={partialSong}
+        liked={liked}
+        setLiked={setLiked}
+        likeCount={likeCount}
+        setLikeCount={setLikeCount}
+        setShareCount={() => setShareCount({ count: shareCount.count + 1 })}
+        shareCount={shareCount}
+        likesLoading={likesLoading}
+      />
       {/* } */}
       <Container
         onClick={() => setIsModalOpen(true)}
@@ -166,13 +166,23 @@ const NftCard = (props) => {
             </IconArea>
           </Side>
         </CardTop>
-        {imageLoaded ? null : <Loading img={loading} alt="image" />}
-        <Image
-          src={nft.imageUrl}
-          style={imageLoaded ? {} : { display: "none" }}
-          alt="image"
-          onLoad={() => setImageLoaded(true)}
-        />
+        <ImageContainer>
+          {imageLoaded ? null : <Loading img={loading} alt="image" />}
+          <Image
+            src={nft.imageUrl}
+            style={imageLoaded ? {} : { display: "none" }}
+            alt="image"
+            onLoad={() => setImageLoaded(true)}
+          />
+          {
+            nft.numMinted === nft.numSold && (<SoldOut>
+              <SoldOutText>
+                SOLD OUT
+              </SoldOutText>
+            </SoldOut>
+            )
+          }
+        </ImageContainer>
         <PreviewButton
           onClick={(e) => { e.stopPropagation() }}
         // onClick={(e) => fetchSong(e)}
@@ -292,6 +302,28 @@ const NftCard = (props) => {
     </>
   );
 };
+
+const SoldOutText = styled.span`
+font-family: Compita;
+  font-size: 20px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.1;
+  letter-spacing: normal;
+  color: #fff;
+  margin: 18px;
+  letter-spacing: 0.5px;
+  `
+
+const SoldOut = styled.div`
+width: 100%;
+height: 100%;
+position: absolute;
+background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5),#000);
+display: flex;
+align-items: flex-end;
+`;
 
 const PreviewButton = styled.div`
 position: absolute;
@@ -524,12 +556,12 @@ const Container = styled.div`
 //   }
 // `;
 
-const Image = styled.img`
+const ImageContainer = styled.div`
   cursor: pointer;
+  position: relative;
   width: 375px;
   height: 375px;
   /* border-radius: 12px; */
-  object-fit: cover;
   margin-bottom: 12px;
   border: 1px solid ${(props) => props.theme.color.boxBorder};
   background-color: #1e1e1e;
@@ -538,6 +570,16 @@ const Image = styled.img`
     height: 300px;
   }
 `;
+
+const Image = styled.img`
+  cursor: pointer;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  /* border-radius: 12px; */
+  object-fit: cover;
+`;
+
 
 const Loading = styled.div`
   cursor: pointer;

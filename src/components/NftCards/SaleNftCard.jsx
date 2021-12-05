@@ -474,7 +474,6 @@ width: 90%;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
 
 `;
 
@@ -511,7 +510,7 @@ const CardTop = styled.div`
 
 const Container = styled.div`
   color: ${(props) => props.theme.color.gray};
-  padding: 12px 0;
+  padding: 12px 0 4px 0;
   background-color: ${(props) => props.theme.color.box};
   border: 1px solid ${(props) => props.theme.color.boxBorder};
   border-radius: ${(props) => props.theme.borderRadius}px;
@@ -519,6 +518,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 375px;
+  height: 500px;
   margin-bottom: 40px;
   position: relative;
   transition: all 0.05s ease-in-out;

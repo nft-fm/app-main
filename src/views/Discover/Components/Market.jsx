@@ -202,7 +202,7 @@ const Listen = () => {
       </LaunchContainer> */}
       <LaunchContainer>
         <Browse>
-          Browse
+          Browse{"  "}New
         </Browse>
         <ContainerOutline />
         <ContainerTitleForm onSubmit={(e) => handleSearch(e, 1, search, 2)}>
@@ -393,7 +393,7 @@ const Browse = styled.div`
   font-size: 36px;
     font-weight: bold;
     left: calc(10% + 50px);
-    width: 160px;
+    width: 200px;
     align-items: center;
     display: flex;
     justify-content: center;
@@ -446,7 +446,7 @@ const NftScroll = styled.div`
   width: 100%;
   justify-content: space-between;
   overflowy: scroll !important;
-  min-height: 579px;
+  min-height: 560px;
   @media only screen and (max-width: 1200px) {
     width: 775px;
   }

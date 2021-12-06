@@ -74,8 +74,9 @@ const BuyNftModal = (props) => {
 
   useEffect(() => {
     if (open) {
-      history.replace(`/market/${nft.chain}/${nft.nftId}`);
-
+      if (history.location.pathname.slice(0, 7) !== "/artist") {
+        history.replace(`/market/${nft.chain}/${nft.nftId}`);
+      }
       console.log("info", account, nft);
       axios
         .post("/api/nft-type/trackNftView", {
@@ -480,9 +481,9 @@ const BuyNftModal = (props) => {
                 <PriceItem>
                   {nft.price
                     ? parseFloat(nft.price).toLocaleString(undefined, {
-                        minimumFractionDigits: 0,
-                        maximumFractionDigits: 6,
-                      })
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 6,
+                    })
                     : "--"}{" "}
                 </PriceItem>
                 &nbsp;

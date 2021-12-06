@@ -34,8 +34,12 @@ const NftCard = (props) => {
   const [userInfo, setUserInfo] = useState();
   const history = useHistory();
 
+  console.log("history",);
+
   const hide = () => {
-    history.replace(`/market/${""}`);
+    if (history.location.pathname.slice(0, 7) !== "/artist") {
+      history.replace(`/market/${""}`);
+    }
     setIsModalOpen(false);
   };
 

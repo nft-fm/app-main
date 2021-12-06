@@ -72,6 +72,7 @@ const Profile = () => {
   const getArtistNfts = async () => {
     setNfts([]);
     axios.post("api/nft-type/artist-nfts", user).then((res) => {
+      console.log("artist nfts", res.data);
       setNfts(formatNfts(res.data));
       setNftsCallback(res.data);
     });
@@ -551,8 +552,8 @@ const NftContainerRight = styled.div`
   border-radius: 20px;
   transition: 0.2s;
   ${({ active }) =>
-      !active &&
-      `
+    !active &&
+    `
   color:  white;
   `}
 `

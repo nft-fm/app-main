@@ -366,6 +366,7 @@ router.post("/get-public-account", async (req, res) => {
     const getNfts = await NftType.find({
       address: getUser.address,
       isDraft: false,
+      isMinted: true,
     });
     if (getUser) res.status(200).send([getUser, findLikes(getNfts)]);
     else return res.status(500).send("No User Found");

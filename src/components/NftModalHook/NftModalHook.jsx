@@ -137,8 +137,8 @@ const BuyNftModal = (props) => {
     ) {
       swal
         .fire({
-          title: `Wrong Chain`,
-          text: `Switching to ${nft.chain} network to purchase this NFT`,
+          title: `:/`,
+          text: `Please switch to the ${nft.chain} network to purchase this NFT`,
           imageUrl: errorIcon,
           imageWidth,
           imageHeight,
@@ -153,7 +153,7 @@ const BuyNftModal = (props) => {
     await getEthBalance(async (balance) => {
       if (parseFloat(balance) >= nft.price) {
         Swal.fire({
-          title: "Purchasing, please do not leave this page.",
+          title: "Crafting your exclusive auditory experience...",
           showConfirmButton: false,
           timer: 3000,
         }).then(async () => {
@@ -173,8 +173,8 @@ const BuyNftModal = (props) => {
                   imageUrl: errorIcon,
                   imageWidth,
                   imageHeight,
-                  title: "Couldn't complete sale!",
-                  text: "Please try again",
+                  title: ":/",
+                  text: "It didn't work, please try again",
                 });
               } else {
                 setTimeout(function () {
@@ -216,14 +216,20 @@ const BuyNftModal = (props) => {
                   if (calcEligibility()) {
                     airdrop();
                     Swal.fire({
-                      title: "Successful purchase!",
-                      html: `<div><p>View in your library (can take a few minutes to appear)<p>
+                      title: `Thank you so much for supporting ${nft.artist}!`,
+                      html: `<div><p>Enjoy your new Music NFT in the Library.<p>
                       <p>You received an airdrop of ${calcBonus()} $VINYL!</p>
                       <div>`,
-                      confirmButtonText: "Share My NFT!",
+                      confirmButtonText: "Share My New NFT!",
+                      backdrop: `
+                        rgba(0,0,123,0.4)
+                        url(https://thumbs.gfycat.com/CorruptBriefGreatwhiteshark-size_restricted.gif)
+                        center / contain
+                        no-repeat
+                        `
                     }).then((res) => {
                       if (res.isConfirmed) {
-                        let text = `I’m proud to directly support up-and-coming artists by buying their NFTs on Fanfare! Check out this song by ${nft.artist} at ${window.location}`;
+                        let text = `I’m proud to directly support up-and-coming artists by buying their NFTs on Fanfare! \nCheck out this song by ${nft.artist} at ${window.location}`;
 
                         let hashtags = `Fanfare,NFTCollectors,MusicLovers,NFTCommunity,NFTs,NFTMusic,VINYL`;
                         window.open(
@@ -233,14 +239,19 @@ const BuyNftModal = (props) => {
                     });
                   } else {
                     Swal.fire({
-                      title: "Successful purchase!",
-                      html: `<div>View in your library (can take a few minutes to appear)
-                      <div>`,
-                      confirmButtonText: "Share My NFT!",
+                      title: `Thank you so much for supporting ${nft.artist}!`,
+                      html: `<div>Enjoy your new Music NFT in the Library.<div>`,
+                      confirmButtonText: "Share My New NFT!",
+                      backdrop: `
+                        rgba(0,0,123,0.4)
+                        url(https://thumbs.gfycat.com/CorruptBriefGreatwhiteshark-size_restricted.gif)
+                        center / contain
+                        no-repeat
+                        `
                     }).then((res) => {
                       if (res.isConfirmed) {
                         let hashtags = `Fanfare,NFTCollectors,MusicLovers,NFTCommunity,NFTs,NFTMusic,VINYL`;
-                        let text = `I’m proud to directly support up-and-coming artists by buying their NFTs on Fanfare! Check out this song by ${nft.artist} at ${window.location} #Fanfare #NFTCollectors, #MusicLovers, #NFTCommunity, #NFTs, #NFTMusic, $VINYL`;
+                        let text = `I’m proud to directly support up-and-coming artists by buying their NFTs on Fanfare! \nCheck out this song by ${nft.artist} at ${window.location} #Fanfare #NFTCollectors, #MusicLovers, #NFTCommunity, #NFTs, #NFTMusic, $VINYL`;
                         window.open(
                           `https://twitter.com/intent/tweet?text=${text}&hashtags=${hashtags}`
                         );

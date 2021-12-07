@@ -57,10 +57,12 @@ router.post("/get-account", async (req, res) => {
 
     //This overwrites the user's database nfts with the nfts attributed to the user in the smart contract
     //handles when user's buy/sell nfts off platform
+    let bscUserNfts = await getUserNftsBSC(user.address);
+
+
     let ethUserNfts = await getUserNftsETH(user.address);
 
 
-    let bscUserNfts = await getUserNftsBSC(user.address);
     let bothChainsNft = [...ethUserNfts, ...bscUserNfts];
     // let bothChainsNft = ethUserNfts;
     console.log("got both chains nfts");

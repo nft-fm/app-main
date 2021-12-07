@@ -168,8 +168,7 @@ const MusicPlayer = (props) => {
   };
 
   const prepareRemainingSong = async (songFile, partial) => {
-    console.log(partial)
-    const fullTime = partial.buffer ? partial.buffer.duration : 300;
+    const fullTime = partial.buffer.duration;
     const abSong = toArrayBuffer(songFile.data.Body.data);
     const _bufferSrc = audioContextRef.current.createBufferSource();
     audioContextRef.current.decodeAudioData(abSong, async (_buffer) => {

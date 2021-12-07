@@ -804,23 +804,40 @@ router.post("/getPartialSong", async (req, res) => {
     .then((res) => res.ContentLength)
     .catch((err) => console.log("err", err));
 
-  let partialBytes = req.body.howManySec
-    ? req.body.howManySec
-    : (songFullSize / 20).toFixed(0);
-  s3.getObject(
-    {
-      Bucket: "nftfm-music",
-      Key: req.body.key,
-      Range: "bytes=0-" + partialBytes,
-    },
-    function (error, data) {
-      if (error != null) {
-        res.status(500).send("Couldnt retrieve nSec of music");
-      } else {
-        res.status(200).send(data);
+  if (songFullSize > 36740556) {
+    let partialBytes = req.body.howManySec
+      ? req.body.howManySec
+      : (songFullSize / 20).toFixed(0);
+    s3.getObject(
+      {
+        Bucket: "nftfm-music",
+        Key: req.body.key,
+        Range: "bytes=0-" + partialBytes,
+      },
+      function (error, data) {
+        if (error != null) {
+          res.status(500).send("Couldnt retrieve nSec of music");
+        } else {
+          res.status(200).send(data);
+        }
       }
-    }
-  );
+    );
+  }
+  else {
+    s3.getObject(
+      {
+        Bucket: "nftfm-music",
+        Key: req.body.key,
+      },
+      function (error, data) {
+        if (error != null) {
+          res.status(500).send("Couldnt retrieve nSec of music");
+        } else {
+          res.status(200).send(data);
+        }
+      }
+    );
+  }
 });
 
 router.post("/getSong", async (req, res) => {

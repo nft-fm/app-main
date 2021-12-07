@@ -876,7 +876,7 @@ const OpaqueFilter = styled.div`
   backdrop-filter: brightness(20%);
   z-index: 1000;
   transform: translateZ(10px);
-  animation: fadein 0.3s;
+  animation: fadein 0.2s;
 `;
 
 const Container = styled.div`

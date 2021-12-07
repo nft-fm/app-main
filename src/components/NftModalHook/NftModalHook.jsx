@@ -488,6 +488,7 @@ const BuyNftModal = (props) => {
                 </PriceItem>
                 &nbsp;
                 {nft.chain === "ETH" ? <Eth /> : <Bsc />}
+                {nft.chain === "ETH" ? " ETH" : " BNB"}
               </PriceHolder>
             </PricesContainer>
             {!account ? (
@@ -614,12 +615,14 @@ const Bsc = styled(IconBinance)`
   width: 18px;
   height: 18px;
   margin: -2px 0 0 4px;
+  margin-right: 4px;
 `;
 
 const Eth = styled(IconEth)`
   width: 18px;
   height: 18px;
   margin: -2px 0 0 4px;
+  margin-right: 4px;
   & path {
     fill: ${(props) => props.theme.color.white};
   }
@@ -768,6 +771,7 @@ const PriceHolder = styled.div`
   background-color: ${(props) => props.theme.bgColor};
   margin-top: -8px;
   padding: 0 10px;
+  color: white;
 `;
 
 const PriceItem = styled.span`

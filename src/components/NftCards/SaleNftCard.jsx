@@ -289,7 +289,11 @@ const NftCard = (props) => {
                 maximumFractionDigits: 6,
               })
               : nft.price}
-            {nft.chain === "ETH" ? <Eth /> : <Bsc />}
+
+            <Price>
+              {nft.chain === "ETH" ? <Eth /> : <Bsc />}
+              {nft.chain === "ETH" ? " ETH" : " BNB"}
+            </Price>
           </CostEth>
           <LikeShare
             nft={nft}
@@ -306,6 +310,13 @@ const NftCard = (props) => {
     </>
   );
 };
+
+const Price = styled.div`
+color: white;
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+`
 
 const SoldOutText = styled.span`
 font-family: Compita;
@@ -456,12 +467,14 @@ const Bsc = styled(IconBinance)`
   width: 18px;
   height: 18px;
   margin: -2px 0 0 4px;
+  margin-right: 4px;
 `;
 
 const Eth = styled(IconEth)`
   width: 18px;
   height: 18px;
   margin: -2px 0 0 4px;
+  margin-right: 4px;
   & path {
     fill: ${(props) => props.theme.color.white};
   }
@@ -469,6 +482,9 @@ const Eth = styled(IconEth)`
 
 const CostEth = styled.span`
   display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 85px;
   color: white;
 `;
 

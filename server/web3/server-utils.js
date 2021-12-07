@@ -190,7 +190,7 @@ const addArtistToStake = async (artistAddress, callback) => {
   const STAKING_ADDRESS = process.env.REACT_APP_IS_MAINNET
     ? MAIN_StakingAddress
     : TEST_StakingAddress;
-  let provider = new providers.WebSocketProvider(PROVIDER_URL);
+  let provider = new providers.JsonRpcProvider(PROVIDER_URL);
   let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
   const contract = new Contract(
     STAKING_ADDRESS,

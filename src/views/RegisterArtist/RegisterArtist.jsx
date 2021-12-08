@@ -35,7 +35,7 @@ const RegisterArtist = () => {
   };
 
   const submit = () => {
-    if (name === "" || email === "" || musicLinks === "") { 
+    if (name === "" || email === "" || musicLinks === "") {
       swal.fire({
         title: "Missing Information",
         text: "Please fill out all fields.",
@@ -43,6 +43,7 @@ const RegisterArtist = () => {
         imageWidth,
         imageHeight,
       });
+      return;
     }
 
     const provider = new providers.Web3Provider(window.ethereum);

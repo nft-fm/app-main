@@ -60,13 +60,11 @@ router.get("/test-get-all", async (req, res) => {
 //   return nfts;
 // }
 
-
 const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: "us-west-2"
+  region: "us-west-2",
 });
-
 
 router.post("/artist-nfts", async (req, res) => {
   try {
@@ -259,18 +257,9 @@ router.post("/finalize", async (req, res) => {
     let newData = req.body;
     newData.price = newData.price.toString();
     newData.isDraft = false;
-    let NFT_FlatPriceSale;
-    if (newData.chain === "ETH") {
-      NFT_FlatPriceSale = process.env.REACT_APP_IS_MAINNET
-        ? MAIN_FlatPriceSale
-        : TEST_FlatPriceSale;
-    } else if (newData.chain === "BSC") {
-      NFT_FlatPriceSale = process.env.REACT_APP_IS_MAINNET
-        ? MAIN_BSC_FlatPriceSale
-        : TEST_BSC_FlatPriceSale;
-    } else {
-      console.error("CHAIN ERROR CHAIN ERROR");
-    }
+    let NFT_FlatPriceSale = process.env.REACT_APP_IS_MAINNET
+      ? MAIN_BSC_FlatPriceSale
+      : TEST_BSC_FlatPriceSale;
     let findNFT = await NftType.findById(newData._id);
     if (findNFT) {
       const startTime = 0;
@@ -559,9 +548,7 @@ router.post("/getNftsWithParams", async (req, res) => {
 router.post("/getSnnipetAWS", async (req, res) => {
   const params = { Bucket: "nftfm-music", Key: req.body.key };
 
-  await s3
-    .headObject(params)
-    .promise()
+  await s3.headObject(params).promise();
 
   const url = await s3.getSignedUrl("getObject", params);
 
@@ -620,7 +607,6 @@ router.post("/uploadSnnipetS3", async (req, res) => {
 
 router.post("/uploadAudioS3", async (req, res) => {
   try {
-
     const fileFilter = (req, file, cb) => {
       if (file.mimetype === "audio/mpeg" || file.mimetype === "audio/wav") {
         cb(null, true);
@@ -684,7 +670,6 @@ router.post("/handleAudio", async (req, res) => {
 });
 
 router.post("/uploadImageS3", async (req, res) => {
-
   const fileFilter = (req, file, cb) => {
     // if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
     cb(null, true);
@@ -822,8 +807,7 @@ router.post("/getPartialSong", async (req, res) => {
         }
       }
     );
-  }
-  else {
+  } else {
     s3.getObject(
       {
         Bucket: "nftfm-music",
@@ -901,7 +885,6 @@ router.post("/get-by-nftId", async (req, res) => {
   }
 });
 
-
 router.post("/get-featured", async (req, res) => {
   try {
     const featured1 = await NftType.findOne({ nftId: 89 });
@@ -913,7 +896,6 @@ router.post("/get-featured", async (req, res) => {
     res.status(500).send(err);
   }
 });
-
 
 //returns NFTs that match search params
 //queries by both artist and song title
@@ -1011,7 +993,7 @@ router.get("/testing", async (req, res) => {
         });
       }
     });
-  } catch (err) { }
+  } catch (err) {}
 });
 
 router.post("/updatePrice", async (req, res) => {

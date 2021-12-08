@@ -445,7 +445,7 @@ const NodeMail = (name, email, music, account) => {
 router.post("/send-artist-form", async (req, res) => {
   try {
     const { name, email, account, musicLinks } = req.body;
-    NodeMail(name, email, musicLinks, account); //sends Jackson and Quinn an email alerting them, can remove once new docusigner is found
+
     const sender = utils.verifyMessage(
       JSON.stringify({
         name: name,
@@ -461,7 +461,7 @@ router.post("/send-artist-form", async (req, res) => {
       $or: [{ email: email }, { account: account }],
     });
     if (alreadyApplied) {
-      return res.status(403).send("You have already submitted an application.");
+      return res.status(403).send("You have already submitted an application. If you need to update the information, please email info@fanfare.team");
     }
     let application = new Application({
       name,
@@ -470,6 +470,7 @@ router.post("/send-artist-form", async (req, res) => {
       musicLinks,
     });
     await application.save();
+    NodeMail(name, email, musicLinks, account); //sends Jackson and Quinn an email alerting them, can remove once new docusigner is found
     if (name && email) {
       sendSignRequest(req.body);
       return res.sendStatus(200);

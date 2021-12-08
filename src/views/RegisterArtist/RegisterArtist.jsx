@@ -35,6 +35,16 @@ const RegisterArtist = () => {
   };
 
   const submit = () => {
+    if (name === "" || email === "" || musicLinks === "") { 
+      swal.fire({
+        title: "Missing Information",
+        text: "Please fill out all fields.",
+        imageUrl: errorIcon,
+        imageWidth,
+        imageHeight,
+      });
+    }
+
     const provider = new providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     signer

@@ -188,6 +188,7 @@ outline: none;
   width: ${props => props.width}px;
   cursor: pointer;
   user-select: none;
+  pointer-events: none;
   `
 
 const Submit = styled.button`

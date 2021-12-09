@@ -28,16 +28,16 @@ const sendSignRequest = async (data) => {
 			}, {
 				"role": "Company",
 				"name": "Jackson Felty",
-				"email": "jackson@nftfm.io",
+				"email": "info@fanfare.team",
 				"pin": "",
 				"message": "",
 				"deliver_email": "",
 				"language": "en"
 			}], // people who must sign the document
 			"recipients": [{
-				"role": "FM",
+				"role": "Company",
 				"name": "Jackson Felty",
-				"email": "jackson@nftfm.io",
+				"email": "info@fanfare.team",
 				"language": "en"
 			}] // people who are CCed with the finished document
 	})

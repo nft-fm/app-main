@@ -71,6 +71,7 @@ router.post("/suggestion", async (req, res) => {
 
 router.post("/get-suggestions", async (req, res) => {
   try {
+
     console.log(
       "get suggestions!\naddress: ",
       req.body.address,
@@ -89,7 +90,9 @@ router.post("/get-suggestions", async (req, res) => {
 
     let suggestions = [];
     for (let suggestion of initialSuggestions) {
+      console.log("suggestion", suggestion);
       let user = await User.findOne({ _id: suggestion.userId });
+      console.log("user", user);
       const { address, picture, pictureColor, nickname } = user;
       const { totalVotes, _id, userId, message, timestamp } = suggestion;
       let upDooted;

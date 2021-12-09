@@ -64,14 +64,14 @@ const NftCard = (props) => {
                 <Cart />
               </IconArea>
             )}
-            {/* {(nft.chain === "BSC") && (
+            {(nft.chain === "BSC") && (
             <IconArea
-              href={''}
+              href={`https://app.babylons.io/token/0xbe2158fd41bcca105bf68f54b8a4794d4a25a3cc::${nft.nftId}::${user.address}`}
             >
-              BSC
+              Trade 
               <Cart />
             </IconArea>
-          )} */}
+          )}
           </Side>
         </CardTop>
         <Image

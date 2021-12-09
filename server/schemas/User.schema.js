@@ -40,6 +40,7 @@ const UserSchema = new Schema({
   },
   confirmedFeeIncrease: {
     type: Boolean,
+    default: true,
   },
   profilePic: {
     type: String,

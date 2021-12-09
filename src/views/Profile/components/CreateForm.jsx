@@ -175,14 +175,13 @@ const CreateForm = ({ open, hide, reset, setReset }) => {
     }
 
     let newNftData = { ...nftData, timestamp: moment().format() }; //sets timestamp to right when the /finalize route is called
-    if (currChainId === 1 || currChainId === 4) {
-      newNftData = { ...nftData, chain: "ETH" };
-    } else if (currChainId === 56 || currChainId === 97) {
+
+    if (currChainId === 56 || currChainId === 97) {
       newNftData = { ...nftData, chain: "BSC" };
     } else if (!currChainId) {
       swal.fire({
         title: "Not connected to a blockchain!",
-        text: "Please connect your wallet to the Ethereum or Binance chain to mint an NFT.",
+        text: "Please connect your wallet to the Binance chain to mint an NFT.",
       });
       onCloseModal();
       return;
@@ -476,7 +475,7 @@ const RightSide = styled.div`
           flex-direction: column;
           align-items: center;
           width: calc(100% - 465px - 80px);
-          padding: 10px 40px;
+          padding: 0px 40px;
           @media only screen and (max-width: 776px) {
             width: 100%;
             height: 40vw;

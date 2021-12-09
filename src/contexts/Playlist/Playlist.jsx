@@ -71,6 +71,7 @@ export const PlaylistProvider = ({ children }) => {
 
   const setNftCallback = (_nft) => {
     if (selectedNft) {
+      console.log("selectedNft", _nft)
       setSelectedNft(false);
       const timer = setTimeout(() => {
         setSelectedNft(_nft);
@@ -78,6 +79,7 @@ export const PlaylistProvider = ({ children }) => {
         clearTimeout(timer);
       }, 10);
     } else if (_nft) {
+      console.log("_nft", _nft)
       setSelectedNft(_nft);
       setIndex(nfts.indexOf(_nft));
       setIsOpen(true);

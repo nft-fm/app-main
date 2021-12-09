@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { ReactComponent as down_arrow } from "../../../assets/img/icons/down_arrow.svg";
 import NftCard from "../../../components/NftCards/SaleNftCard";
 import { useAccountConsumer } from "../../../contexts/Account";
+import { useHistory } from "react-router-dom";
 import EmailModalMobile from "../../../GetEmailModalMobile";
 
 // import { ReactComponent as down_arrow } from "../../../assets/img/icons/down_arrow.svg";
@@ -26,6 +27,8 @@ const Listen = () => {
   // const [sort, setSort] = useState(Math.floor(Math.random() * 6));
   const limit = 500;
   const [pauseSong, setPauseSong] = useState(() => () => { }) // this is fucking weird, don't touch me.
+  const history = useHistory();
+
 
   const handleSort = useCallback(async () => {
     setPage(0);
@@ -52,12 +55,6 @@ const Listen = () => {
   useEffect(() => {
     handleSort();
   }, [sort, account, handleSort, genre]);
-
-  // useEffect(() => {
-  //   axios.post("/api/nft-type/get-featured").then(res => {
-  //     setFeaturedNfts(res.data);
-  //   });
-  // }, [])
 
   const getMostLiked = (nfts) => {
     nfts.sort((a, b) => {
@@ -183,7 +180,7 @@ const Listen = () => {
           Featured
         </Featured>
         <ContainerOutline />
-        {isMobile() && <EmailModalMobile />}
+        {/* {isMobile() && <EmailModalMobile />} */}
         <NftScroll>
           {featuredNfts.map((item, index) => {
             if (index >= 3) return null;
@@ -191,7 +188,7 @@ const Listen = () => {
           })}
         </NftScroll>
       </LaunchContainer>
-      <LaunchContainer>
+      {/* <LaunchContainer>
         <Featured>
           Hot
         </Featured>
@@ -202,10 +199,10 @@ const Listen = () => {
             else return <NftCard nft={item} pauseSong={pauseSong} setPauseSong={setPauseSong} />;
           })}
         </NftScroll>
-      </LaunchContainer>
+      </LaunchContainer> */}
       <LaunchContainer>
         <Browse>
-          Browse
+          Browse{"  "}New
         </Browse>
         <ContainerOutline />
         <ContainerTitleForm onSubmit={(e) => handleSearch(e, 1, search, 2)}>
@@ -396,7 +393,7 @@ const Browse = styled.div`
   font-size: 36px;
     font-weight: bold;
     left: calc(10% + 50px);
-    width: 160px;
+    width: 200px;
     align-items: center;
     display: flex;
     justify-content: center;
@@ -449,7 +446,7 @@ const NftScroll = styled.div`
   width: 100%;
   justify-content: space-between;
   overflowy: scroll !important;
-  min-height: 579px;
+  min-height: 560px;
   @media only screen and (max-width: 1200px) {
     width: 775px;
   }

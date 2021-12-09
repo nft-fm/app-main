@@ -26,9 +26,10 @@ import ArtistCard from "../../components/NftCards/ArtistCard";
 import Stakers from "./components/Stakers";
 import { ReactComponent as CheckIcon } from "../../assets/img/icons/check_circle.svg";
 import isMobile from "../../utils/isMobile";
+import switchNetwork from "../../utils/switchNetwork";
 
 const Profile = () => {
-  const { account, connect, user } = useAccountConsumer();
+  const { account, connect, user, currChainId, setCurrChainId } = useAccountConsumer();
   const [open, setOpen] = useState(false);
   const [reset, setReset] = useState(false);
   const [userSigned, setUserSigned] = useState(false);
@@ -37,26 +38,27 @@ const Profile = () => {
   const [nfts, setNfts] = useState([]);
   const { setNftsCallback } = usePlaylistConsumer();
   const [username, setUsername] = useState("");
-  const [copySuccess, setCopySuccess] = useState('');
-  const [buttontext, setButtonText] = useState('Embed Profile');
+  const [copySuccess, setCopySuccess] = useState("");
+  const [buttontext, setButtonText] = useState("Embed Profile");
 
   useEffect(() => {
     if (user) {
-    user.suburl && setUsername(user.suburl);
+      user.suburl && setUsername(user.suburl);
     }
   }, [user]);
 
   const copyToClipBoard = async () => {
     try {
-      await navigator.clipboard.writeText(`<iframe src= "https://beta.fanfare.fm/artist/${username}" title="Fanfare" width="100%" height="650px"></iframe>`);
-      setCopySuccess('Copied!');
-      setButtonText('iFrame Copied!');
+      await navigator.clipboard.writeText(
+        `<iframe src= "https://beta.fanfare.fm/artist/${username}" title="Fanfare" width="100%" height="650px"></iframe>`
+      );
+      setCopySuccess("Copied!");
+      setButtonText("iFrame Copied!");
     } catch (err) {
-      setCopySuccess('Failed to copy!');
-      setButtonText('Failed to copy!');
+      setCopySuccess("Failed to copy!");
+      setButtonText("Failed to copy!");
     }
   };
-
 
   const formatNfts = (nftsData) => {
     const formattedNfts = nftsData.map((nft, index) => (
@@ -70,6 +72,7 @@ const Profile = () => {
   const getArtistNfts = async () => {
     setNfts([]);
     axios.post("api/nft-type/artist-nfts", user).then((res) => {
+      console.log("artist nfts", res.data);
       setNfts(formatNfts(res.data));
       setNftsCallback(res.data);
     });
@@ -77,7 +80,7 @@ const Profile = () => {
   const getStakers = async () => {
     axios.post("api/nft-type/artist-stakers", user).then((res) => {
       if (res.data.length > 0) {
-        console.log(res.data)
+        console.log(res.data);
         setStakers(res.data);
       }
     });
@@ -98,6 +101,7 @@ const Profile = () => {
       }
 
       const hasDraft = await axios.get(`/api/nft-type/has-draft/${account}`);
+      console.log("hasDraft", hasDraft);
       if (hasDraft.data.hasDraft) {
         swal
           .fire({
@@ -129,6 +133,7 @@ const Profile = () => {
                 })
                 .then(async (res2) => {
                   if (res2.isConfirmed) {
+                    await axios.get(`/api/nft-type/delete-draft/${account}`);
                     setReset(true);
                     setOpen(!open);
                   }
@@ -210,12 +215,10 @@ const Profile = () => {
                   .catch((err) => {
                     console.log("err", err.response);
                     swal.fire({
-                      title: `Error: ${
-                        err.response ? err.response.status : 404
-                      }`,
-                      text: `${
-                        err.response ? err.response.data : "server error"
-                      }`,
+                      title: `Error: ${err.response ? err.response.status : 404
+                        }`,
+                      text: `${err.response ? err.response.data : "server error"
+                        }`,
                       imageUrl: errorIcon,
                       imageWidth,
                       imageHeight,
@@ -225,7 +228,23 @@ const Profile = () => {
           }
         });
     } else {
-      openMintModal();
+      console.log("chain", currChainId);
+      if (currChainId !== 97 && currChainId !== 56) {
+        swal.fire({
+          title: 'Only BSC minting is supported at this time.',
+          text: "change chain?",
+          icon: 'warning',
+          showCancelButton: true,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            switchNetwork("BSC");
+          } else {
+            return;
+          }
+        })
+      } else {
+        openMintModal();
+      }
     }
   };
 
@@ -247,13 +266,9 @@ const Profile = () => {
         <EditableProfile />
       </Landing>
       <SocialsBar>
-      <EmbedSection>
-      <EmbedButton 
-      onClick={copyToClipBoard}
-      >
-      {buttontext}
-      </EmbedButton>
-      </EmbedSection>
+        <EmbedSection>
+          <EmbedButton onClick={copyToClipBoard}>{buttontext}</EmbedButton>
+        </EmbedSection>
         {user.socials.map((social) => {
           // console.log(social);
           if (social.twitter) {
@@ -317,7 +332,7 @@ const Profile = () => {
             &nbsp;|&nbsp;
             <NftContainerLeftSpan
               selected={!whichView}
-              onClick={() =>  stakers && setWhichView(!whichView)}
+              onClick={() => stakers && setWhichView(!whichView)}
             >
               Staking
             </NftContainerLeftSpan>
@@ -412,31 +427,32 @@ const PlusIcon = styled(plus_icon)`
   margin-bottom: 2px;
 `;
 
-const CreatedNftHolder = !isMobile 
-? styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  align-items: center;
-  justify-content: space-around;
-  /* width: ${(props) => props.theme.homeWidth}px; */
-  /* max-width: 80vw; */
-  padding-top: 40px;
-  color: white;
-  font-size: ${(props) => props.theme.fontSizes.xs};
-  padding-right: 4px;
-`:
-styled.div`  
-display: flex;
-flex-direction: column;
-width: 100%;
-align-items: center;
-/* width: ${(props) => props.theme.homeWidth}px; */
-/* max-width: 80vw; */
-padding-top: 40px;
-color: white;
-font-size: ${(props) => props.theme.fontSizes.xs};
-padding-right: 4px`;
+const CreatedNftHolder = !isMobile()
+  ? styled.div`
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      align-items: center;
+      justify-content: space-around;
+      /* width: ${(props) => props.theme.homeWidth}px; */
+      /* max-width: 80vw; */
+      padding-top: 40px;
+      color: white;
+      font-size: ${(props) => props.theme.fontSizes.xs};
+      padding-right: 4px;
+    `
+  : styled.div`
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      align-items: center;
+      /* width: ${(props) => props.theme.homeWidth}px; */
+      /* max-width: 80vw; */
+      padding-top: 40px;
+      color: white;
+      font-size: ${(props) => props.theme.fontSizes.xs};
+      padding-right: 4px;
+    `;
 
 const NftContainer = styled.div`
   position: relative;
@@ -500,6 +516,12 @@ const NftContainerLeft = styled.div`
   border-radius: 20px;
   transition: 0.2s;
   color: ${(props) => props.theme.color.gray};
+  @media only screen and (max-width: 460px) {
+    top: 25px;
+    margin-left: 0;
+    margin-right: 0;
+    left: 15px;
+  }
 `;
 
 const NftContainerLeftSpan = styled.span`
@@ -507,8 +529,7 @@ const NftContainerLeftSpan = styled.span`
   cursor: pointer;
 `;
 
-const NftContainerRight = !isMobile()
-? styled.div`
+const NftContainerRight = styled.div`
   cursor: pointer;
   position: absolute;
   font-weight: 600;
@@ -535,41 +556,7 @@ const NftContainerRight = !isMobile()
     `
   color:  white;
   `}
-  &:hover {
-    color: white;
-  }
-`:
-styled.div`
-cursor: pointer;
-position: absolute;
-font-weight: 600;
-margin-left: 40%;
-margin-right: 20%;
-height: 17px;
-/* width: 17px; */
-top: -13px;
-padding: 5px 5px 3px 5px;
-font: "Compita";
-background-color: ${(props) => props.theme.bgColor};
-font-size: ${(props) => props.theme.fontSizes.xs};
-color: ${(props) => props.theme.color.gray};
-display: flex;
-flex-direction: row;
-display: flex;
-align-items: center;
-justify-content: center;
-border: 4px solid #383838;
-border-radius: 20px;
-transition: 0.2s;
-${({ active }) =>
-  !active &&
-  `
-color:  white;
-`}
-&:hover {
-  color: white;
-}
-`;
+`
 
 const NftContainerOutline = styled.div`
   /* border-top: 6px solid #383838;
@@ -676,37 +663,34 @@ const Check = styled(CheckIcon)`
 `;
 
 const Confirm = styled.div`
-display: flex;
-flex-direction: row;
-align-items: center;
-margin: 5px;
-`
-
-const EmbedSection = styled.div`
-
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 5px;
 `;
+
+const EmbedSection = styled.div``;
 
 const EmbedButton = styled.button`
-width: 100px;
-height: 34px;
-cursor: pointer;
-transition: all 0.1s ease-in-out;
-display: flex;
-flex-direction: column;
-font-size: 10px;
-font-weight: 600;
-color: white;
-align-items: center;
-justify-content: center;
-border: 1px solid ${(props) => props.theme.color.boxBorder};
-border-radius: 2px;
-background-color: ${(props) => props.theme.color.box};
-/* margin-bottom: 20px; */
-&:hover {
-  background-color: ${(props) => props.theme.color.boxBorder};
-  border: 1px solid #383838;
-}
+  width: 100px;
+  height: 34px;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  font-size: 10px;
+  font-weight: 600;
+  color: white;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid ${(props) => props.theme.color.boxBorder};
+  border-radius: 2px;
+  background-color: ${(props) => props.theme.color.box};
+  /* margin-bottom: 20px; */
+  &:hover {
+    background-color: ${(props) => props.theme.color.boxBorder};
+    border: 1px solid #383838;
+  }
 `;
-
 
 export default Profile;

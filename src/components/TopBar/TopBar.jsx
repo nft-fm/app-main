@@ -5,7 +5,7 @@ import Container from "../Container";
 import Logo from "../Logo";
 import AccountButton from "./components/AccountButton";
 import { Nav } from "./components/Nav";
-import ChainSelector from './components/ChainSelector'
+// import ChainSelector from './components/ChainSelector'
 
 const TopBar = () => {
   return (
@@ -21,7 +21,7 @@ const TopBar = () => {
             <NavContainer>
               <Nav />
             </NavContainer>
-            <ChainSelector />
+            {/* <ChainSelector /> */}
             <AccountButton />
           </NavRight>
         </StyledTopBarInner>

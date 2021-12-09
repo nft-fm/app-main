@@ -121,16 +121,11 @@ export const StakingProvider = ({ children }) => {
   const [update, setUpdate] = useState(false);
 
   const updateOrder = async () => {
-    await axios
-      .post(`/api/user/get-account`, { address: account })
-      .then((res) => {
-        console.log("user", res);
-        orderArtists(res.data);
-        setUpdate(true);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (user) {
+
+      orderArtists(user);
+      setUpdate(true);
+    }
   };
 
   useEffect(() => {

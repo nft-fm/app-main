@@ -90,14 +90,14 @@ const getUserNftsETH = async (account) => {
   //   numNfts.push(utils.formatEther(nft) * 10e17);
   // });
 
-  console.log("wat here", userNfts);
 
   let nftIdsAndQuantities = [];
   for (let i = 0; i < userNfts[0].length; i++) {
-    if (userNfts[1][i] !== '0x00') {
+    const quantity = Math.round(utils.formatEther(userNfts[1][i]) * 10e17)
+    if (quantity) {
       nftIdsAndQuantities.push({
         id: Math.round(utils.formatEther(userNfts[0][i]) * 10e17),
-        quantity: Math.round(utils.formatEther(userNfts[1][i]) * 10e17),
+        quantity,
         chain: "ETH",
       });
     }
@@ -115,23 +115,29 @@ const getUserNftsBSC = async (account) => {
     ? MAIN_BSC_NFTToken
     : TEST_BSC_NFTToken;
 
-  let provider = new providers.WebSocketProvider(PROVIDER_URL);
+  let provider = new providers.JsonRpcProvider(PROVIDER_URL);
+  // WebSocketProvider(PROVIDER_URL);
+  console.log(1);
   let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
   const contract = new Contract(NFTToken, NFTTokenABI, walletWithProvider);
+  console.log(2);
 
   let userNfts = await contract.getFullBalance(account);
 
+  console.log(3);
   let nftIdsAndQuantities = [];
   for (let i = 0; i < userNfts[0].length; i++) {
-    if (userNfts[1][i] !== '0x00') {
-      
+    console.log(4);
+    const quantity = Math.round(utils.formatEther(userNfts[1][i]) * 10e17)
+    if (quantity) {
       nftIdsAndQuantities.push({
         id: Math.round(utils.formatEther(userNfts[0][i]) * 10e17),
-        quantity: Math.round(utils.formatEther(userNfts[1][i]) * 10e17),
+        quantity,
         chain: "BSC",
       });
     }
   }
+  console.log(5);
   console.log("bsc nfts", nftIdsAndQuantities);
   return nftIdsAndQuantities;
   // return { nftIds, numNfts };
@@ -184,7 +190,7 @@ const addArtistToStake = async (artistAddress, callback) => {
   const STAKING_ADDRESS = process.env.REACT_APP_IS_MAINNET
     ? MAIN_StakingAddress
     : TEST_StakingAddress;
-  let provider = new providers.WebSocketProvider(PROVIDER_URL);
+  let provider = new providers.JsonRpcProvider(PROVIDER_URL);
   let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
   const contract = new Contract(
     STAKING_ADDRESS,

@@ -17,5 +17,10 @@ const NftScroll = styled.div`
     flex-direction: column;
     align-items: center;
   }
+  @media only screen and (max-width: 460px) {
+    width: auto;
+    margin-top: 30px;
+    flex-direction: column;
+  }
 `;
 export default ArtistNfts;

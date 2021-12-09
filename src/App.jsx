@@ -19,7 +19,6 @@ import Profile from "./views/Profile";
 import Admin from "./views/Admin";
 import Artist from "./views/Artist";
 import Error404 from "./views/404";
-import GovPolls from "./views/VINYL/GovPolls";
 import RegisterArtist from "./views/RegisterArtist";
 import RegisterArtistComplete from "./views/RegisterArtist/Complete";
 import Info from "./views/Info";
@@ -35,7 +34,7 @@ import saQiBanner from "./assets/img/homepage_assets/saqi_banner.png";
 import saQiBannerMobile from "./assets/img/homepage_assets/saqi_banner_mobile.jpeg";
 import EmailModal from "./GetEmailModal";
 import EmailModalMobile from "./GetEmailModalMobile";
-import PromoBanner from './PromoBanner'
+// import PromoBanner from './PromoBanner'
 import isMobile from "./utils/isMobile";
 import theme from "./theme";
 import Tracking from "./mixpanel/tracking";
@@ -86,6 +85,10 @@ const Switches = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    axios.get("/api/nft/1")
+  }, [])
+
 
   return (
     <>
@@ -107,9 +110,6 @@ const Switches = () => {
         </Route>
         <Route path="/artist">
           <Artist />
-        </Route>
-        <Route path="/gov-polls">
-          <GovPolls />
         </Route>
         <Route path="/termsofservice">
           <TermsOfService />
@@ -155,7 +155,7 @@ const App = () => {
 
   return (
     <StyledCanvas>
-      <PromoBanner />
+      {/* <PromoBanner /> */}
       <Router>
         <Providers>
           <Tracking />

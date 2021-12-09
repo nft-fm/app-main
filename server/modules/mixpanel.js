@@ -64,6 +64,7 @@ const trackPageview = (props) => {
     utm_content,
   });
 };
+
 const trackNftMint = () => {};
 
 const trackArtistApplication = () => {};

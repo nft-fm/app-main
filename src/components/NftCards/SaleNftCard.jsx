@@ -13,10 +13,9 @@ import { ReactComponent as GiftIcon } from "../../assets/img/icons/rewards-gift.
 import loading from "../../assets/img/loading.gif";
 import { useAccountConsumer } from "../../contexts/Account";
 import NftModalHook from "../NftModalHook/NftModalHook";
-import ShareModal from "../SMShareModal/SMShareModal";
 import LikeShare from "./LikeShare";
 import PlaySongSnippet from "../NftModalHook/Components/SimplifiedPlay";
-
+import { useHistory } from "react-router-dom";
 
 const NftCard = (props) => {
   const { user, account } = useAccountConsumer();
@@ -33,9 +32,14 @@ const NftCard = (props) => {
   const [likesLoading, setLikesLoading] = useState(false);
   const [profilePic, setProfilePic] = useState("");
   const [userInfo, setUserInfo] = useState();
+  const history = useHistory();
 
-  // const show = () => setIsModalOpen(true);
+  console.log("history",);
+
   const hide = () => {
+    if (history.location.pathname.slice(0, 7) !== "/artist") {
+      history.replace(`/market/${""}`);
+    }
     setIsModalOpen(false);
   };
 
@@ -122,9 +126,10 @@ const NftCard = (props) => {
     return null;
   }
 
+
   return (
     <>
-
+      {/* {isModalOpen && */}
       <NftModalHook
         open={isModalOpen}
         hide={hide}
@@ -139,8 +144,9 @@ const NftCard = (props) => {
         shareCount={shareCount}
         likesLoading={likesLoading}
       />
+      {/* } */}
       <Container
-        onClick={() => setIsModalOpen(!isModalOpen)}
+        onClick={() => setIsModalOpen(true)}
         role="button"
         aria-pressed="false"
         tabindex="0"
@@ -164,13 +170,23 @@ const NftCard = (props) => {
             </IconArea>
           </Side>
         </CardTop>
-        {imageLoaded ? null : <Loading img={loading} alt="image" />}
-        <Image
-          src={nft.imageUrl}
-          style={imageLoaded ? {} : { display: "none" }}
-          alt="image"
-          onLoad={() => setImageLoaded(true)}
-        />
+        <ImageContainer>
+          {imageLoaded ? null : <Loading img={loading} alt="image" />}
+          <Image
+            src={nft.imageUrl}
+            style={imageLoaded ? {} : { display: "none" }}
+            alt="image"
+            onLoad={() => setImageLoaded(true)}
+          />
+          {
+            nft.numMinted === nft.numSold && (<SoldOut>
+              <SoldOutText>
+                SOLD OUT
+              </SoldOutText>
+            </SoldOut>
+            )
+          }
+        </ImageContainer>
         <PreviewButton
           onClick={(e) => { e.stopPropagation() }}
         // onClick={(e) => fetchSong(e)}
@@ -178,7 +194,7 @@ const NftCard = (props) => {
           {partialSong && <PlaySongSnippet partialSong={partialSong} pauseSong={props.pauseSong} setPauseSong={props.setPauseSong} />}
         </PreviewButton>
         {nft.isRedeemable && (
-          <RedeemButtonBackground onClick={() => setIsModalOpen(!isModalOpen)}>
+          <RedeemButtonBackground >
             <RedeemButton>
               {/* Merch */}
               <MerchIcon />
@@ -187,7 +203,7 @@ const NftCard = (props) => {
         )}
 
         <MidSection>
-          <TrackName onClick={() => setIsModalOpen(!isModalOpen)}>
+          <TrackName >
             {nft.title.length > 25 ? nft.title.slice(0, 25) + "..." : nft.title}
           </TrackName>
           <BadgeHolder>
@@ -273,7 +289,11 @@ const NftCard = (props) => {
                 maximumFractionDigits: 6,
               })
               : nft.price}
-            {nft.chain === "ETH" ? <Eth /> : <Bsc />}
+
+            <Price>
+              {nft.chain === "ETH" ? <Eth /> : <Bsc />}
+              {nft.chain === "ETH" ? " ETH" : " BNB"}
+            </Price>
           </CostEth>
           <LikeShare
             nft={nft}
@@ -290,6 +310,35 @@ const NftCard = (props) => {
     </>
   );
 };
+
+const Price = styled.div`
+color: white;
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+`
+
+const SoldOutText = styled.span`
+font-family: Compita;
+  font-size: 20px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.1;
+  letter-spacing: normal;
+  color: #fff;
+  margin: 18px;
+  letter-spacing: 0.5px;
+  `
+
+const SoldOut = styled.div`
+width: 100%;
+height: 100%;
+position: absolute;
+background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5),#000);
+display: flex;
+align-items: flex-end;
+`;
 
 const PreviewButton = styled.div`
 position: absolute;
@@ -418,12 +467,14 @@ const Bsc = styled(IconBinance)`
   width: 18px;
   height: 18px;
   margin: -2px 0 0 4px;
+  margin-right: 4px;
 `;
 
 const Eth = styled(IconEth)`
   width: 18px;
   height: 18px;
   margin: -2px 0 0 4px;
+  margin-right: 4px;
   & path {
     fill: ${(props) => props.theme.color.white};
   }
@@ -431,6 +482,9 @@ const Eth = styled(IconEth)`
 
 const CostEth = styled.span`
   display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 85px;
   color: white;
 `;
 
@@ -440,7 +494,6 @@ width: 90%;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
 
 `;
 
@@ -477,7 +530,7 @@ const CardTop = styled.div`
 
 const Container = styled.div`
   color: ${(props) => props.theme.color.gray};
-  padding: 12px 0;
+  padding: 12px 0 4px 0;
   background-color: ${(props) => props.theme.color.box};
   border: 1px solid ${(props) => props.theme.color.boxBorder};
   border-radius: ${(props) => props.theme.borderRadius}px;
@@ -485,6 +538,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 375px;
+  height: 500px;
   margin-bottom: 40px;
   position: relative;
   transition: all 0.05s ease-in-out;
@@ -522,12 +576,12 @@ const Container = styled.div`
 //   }
 // `;
 
-const Image = styled.img`
+const ImageContainer = styled.div`
   cursor: pointer;
+  position: relative;
   width: 375px;
   height: 375px;
   /* border-radius: 12px; */
-  object-fit: cover;
   margin-bottom: 12px;
   border: 1px solid ${(props) => props.theme.color.boxBorder};
   background-color: #1e1e1e;
@@ -536,6 +590,16 @@ const Image = styled.img`
     height: 300px;
   }
 `;
+
+const Image = styled.img`
+  cursor: pointer;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  /* border-radius: 12px; */
+  object-fit: cover;
+`;
+
 
 const Loading = styled.div`
   cursor: pointer;

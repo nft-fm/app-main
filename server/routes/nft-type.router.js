@@ -857,6 +857,7 @@ router.post("/getSongList", async (req, res) => {
 });
 
 router.get("/purchase", () => {
+  console.log("/purchase");
   listenForBuyEth();
   listenForBuyBsc();
 });

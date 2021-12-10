@@ -266,7 +266,7 @@ const getAllNftsFromBscContract = async (nftsFromDB, callback) => {
 const airdropOnNFTPurchase = async (receiver, amount, callback) => {
   const web3 = new Web3(
     process.env.REACT_APP_IS_MAINNET && process.env.PRODUCTION
-      ? process.env.BSC_PROVIDER_URL
+      ? process.env.BSC_PROVIDER_URL_2
       : process.env.BSCTEST_PROVIDER_URL
   );
   const gasprice = await web3.eth.getGasPrice();

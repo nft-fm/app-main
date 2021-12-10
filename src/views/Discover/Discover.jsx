@@ -33,7 +33,7 @@ const Container = styled.div`
 const StyledTitle = styled.div`
   font-family: "Compita";
   font-size: ${(props) => props.theme.fontSizes.md};
-  margin: 30px 0 40px 0;
+  margin: 30px 0 60px 0;
   font-weight: 600;
   /* letter-spacing: 3px; */
   color: white;

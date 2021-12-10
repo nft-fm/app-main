@@ -69,5 +69,6 @@ const StyledLink = styled(NavLink)`
     display: flex;
     justify-content: center;
     align-items: center;
+    min-width:  100px;
   }
 `;

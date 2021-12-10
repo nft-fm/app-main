@@ -160,7 +160,7 @@ const App = () => {
         <Providers>
           <Tracking />
           <Switches />
-          {!isMobile() && <EmailModal />}
+         <EmailModal />
         </Providers>
       </Router>
     </StyledCanvas>

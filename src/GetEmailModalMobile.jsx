@@ -105,48 +105,17 @@ const GetEmailModal = () => {
     }
   }
 
-  if (submitted && !account) return null;
 
   return (
-    <Modal open={open} onClick={() => openIfClosed()}>
+    <Modal open={true} >
       <ModalContents>
-        {!submitted &&
           <Half>
-            Sign up for our new platform to <br /> earn a <span style={{ color: "#20A4FC", fontWeight: "600" }}>free NFT!</span> <a style={{ fontSize: "12px", marginBottom: "2px" }} target="_blank"
+            Sign up for our new platform to <br /> earn a <span style={{ color: "#20A4FC", fontWeight: "600" }}>free NFT!</span>
+            <a style={{ fontSize: "12px", marginBottom: "2px" }} target="_blank"
               rel="noopener noreferrer" href={`https://fanfare.fm/?source=beta&campaign=email_signup`}>
-              learn more
+              VISIT FULL SITE
             </a>
           </Half>
-        }
-        <Half>
-          <form onSubmit={(e) => submitEmail(e)}>
-            {!submitted ?
-              <Bottom>
-                <Input
-                  error={error}
-                  name="email"
-                  placeholder="email"
-                  type="email"
-                  onChange={(e) => setEmail(e.target.value)}
-                >
-                </Input>
-                <Submit type="submit">
-                  <Check />
-                </Submit>
-              </Bottom>
-              :
-              <Half>
-                Thanks! Please share with your friends<br />
-                for <span style={{ color: "#20A4FC", fontWeight: "600" }}>50,000 VINYL</span> whenever someone joins! <br />
-              </Half>
-            }
-          </form>
-        </Half>
-        {submitted &&
-          <ReferSection>
-            <ReferInput width={copied ? 200 : 300} value={`https://beta.fanfare.fm/?utm_source=referral&utm_campaign=airdrop_1&utm_content=${account}`} onClick={copyToClipboard} /> {copied && <Confirm><Check />copied!</Confirm>}
-          </ReferSection>
-        }
       </ModalContents>
     </Modal>
   );

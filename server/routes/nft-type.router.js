@@ -825,19 +825,24 @@ router.post("/getPartialSong", async (req, res) => {
 });
 
 router.post("/getSong", async (req, res) => {
-  console.log("/getSong");
+  console.log("/getSong", req.body.key);
 
   s3.getObject(
     { Bucket: "nftfm-music", Key: req.body.key },
-    function (error, data) {
-      if (error != null) {
-        res.status(500).send("Couldnt retrieve song of music");
-        return;
-      } else {
-        res.status(200).send(data); // successful response
-      }
-    }
-  );
+    // function (error, data) {
+    //   if (error != null) {
+    //     res.status(500).send("Couldnt retrieve song of music");
+    //     return;
+    //   } else {
+    //     res.status(200).send(data); // successful response
+    //   }
+    // }
+  )
+    .createReadStream()
+    .pipe(res)
+    .on("finish", () => {
+      console.log("done");
+    })
 });
 
 router.post("/getSongList", async (req, res) => {
@@ -994,7 +999,7 @@ router.get("/testing", async (req, res) => {
         });
       }
     });
-  } catch (err) {}
+  } catch (err) { }
 });
 
 router.post("/updatePrice", async (req, res) => {

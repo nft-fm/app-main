@@ -117,17 +117,17 @@ const getUserNftsBSC = async (account) => {
 
   let provider = new providers.JsonRpcProvider(PROVIDER_URL);
   // WebSocketProvider(PROVIDER_URL);
-  console.log(1);
+  // console.log(1);
   let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
   const contract = new Contract(NFTToken, NFTTokenABI, walletWithProvider);
-  console.log(2);
+  // console.log(2);
 
   let userNfts = await contract.getFullBalance(account);
 
-  console.log(3);
+  // console.log(3);
   let nftIdsAndQuantities = [];
   for (let i = 0; i < userNfts[0].length; i++) {
-    console.log(4);
+    // console.log(4);
     const quantity = Math.round(utils.formatEther(userNfts[1][i]) * 10e17)
     if (quantity) {
       nftIdsAndQuantities.push({
@@ -137,7 +137,7 @@ const getUserNftsBSC = async (account) => {
       });
     }
   }
-  console.log(5);
+  // console.log(5);
   console.log("bsc nfts", nftIdsAndQuantities);
   return nftIdsAndQuantities;
   // return { nftIds, numNfts };

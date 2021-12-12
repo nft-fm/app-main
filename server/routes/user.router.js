@@ -81,7 +81,7 @@ router.post("/get-account", async (req, res) => {
       }
       user.save();
     }
-
+    
     res.send(user);
   } catch (error) {
     console.error(error);
@@ -677,9 +677,10 @@ const getAllUsersWithEmails = async () => {
   let users = await User.find({ email: { $ne: "" } })
   let r = []
   for (let user of users) {
-    r.push(user.email)
+    // r.push(user.email)
+    console.log(user.email)
   }
-  console.dir(r, { maxArrayLength: null })
+  // console.dir(r, { maxArrayLength: null })
 }
 // getAllUsersWithEmails()
 

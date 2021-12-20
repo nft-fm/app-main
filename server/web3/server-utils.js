@@ -107,6 +107,60 @@ const getUserNftsETH = async (account) => {
   // return { nftIds, numNfts };
 };
 
+const getCollectorsETH = async (account, email) => {
+  const PROVIDER_URL = process.env.REACT_APP_IS_MAINNET
+    ? process.env.MAIN_PROVIDER_URL
+    : process.env.RINKEBY_PROVIDER_URL;
+  const NFTToken = process.env.REACT_APP_IS_MAINNET
+    ? MAIN_NFTToken
+    : TEST_NFTToken;
+  let provider = new providers.WebSocketProvider(PROVIDER_URL);
+  let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
+  const contract = new Contract(NFTToken, NFTTokenABI, walletWithProvider);
+
+  let userNfts = await contract.getFullBalance(account);
+
+  let total = 0;
+  for (let i = 0; i < userNfts[0].length; i++) {
+    const quantity = Math.round(utils.formatEther(userNfts[1][i]) * 10e17)
+    if (quantity) { 
+      total++;
+    }
+  }
+  if (total) {
+    console.log(email, total);
+  }
+  return;
+};
+
+const getCollectorsBSC = async (account, email) => {
+  const PROVIDER_URL = process.env.REACT_APP_IS_MAINNET
+    ? process.env.BSC_PROVIDER_URL
+    : process.env.BSCTEST_PROVIDER_URL;
+  const NFTToken = process.env.REACT_APP_IS_MAINNET
+    ? MAIN_BSC_NFTToken
+    : TEST_BSC_NFTToken;
+
+  let provider = new providers.JsonRpcProvider(PROVIDER_URL);
+  let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
+  const contract = new Contract(NFTToken, NFTTokenABI, walletWithProvider);
+
+  let userNfts = await contract.getFullBalance(account);
+
+  let total = 0;
+  for (let i = 0; i < userNfts[0].length; i++) {
+    const quantity = Math.round(utils.formatEther(userNfts[1][i]) * 10e17)
+    if (quantity) { 
+      total++;
+    }
+  }
+  if (total) {
+    console.log(email, total);
+  }
+  return;
+};
+
+
 const getUserNftsBSC = async (account) => {
   const PROVIDER_URL = process.env.REACT_APP_IS_MAINNET
     ? process.env.BSC_PROVIDER_URL
@@ -324,4 +378,6 @@ module.exports = {
   getAllNftsFromEthContract,
   getAllNftsFromBscContract,
   airdropOnNFTPurchase,
+  getCollectorsBSC,
+  getCollectorsETH,
 };

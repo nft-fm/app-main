@@ -22,7 +22,7 @@ const {
   trackLogin,
   trackPageview,
 } = require("../modules/mixpanel");
-const { airdropOnNFTPurchase } = require("../web3/server-utils.js");
+const { airdropOnNFTPurchase, getCollectorsBSC, getCollectorsETH } = require("../web3/server-utils.js");
 
 // const trackSuccessfulReferral = (props) => {
 //   console.log("successful refer", props);
@@ -682,7 +682,16 @@ const getAllUsersWithEmails = async () => {
   }
   // console.dir(r, { maxArrayLength: null })
 }
-// getAllUsersWithEmails()
+
+const getAllCollectorsWithEmails = async () => {
+  let users = await User.find({ email: { $ne: "" } })
+  for (let user of users) {
+    getCollectorsBSC(user.address, user.email);
+    getCollectorsETH(user.address, user.email);
+  }
+}
+
+// getAllCollectorsWithEmails();
 
 
 module.exports = router;

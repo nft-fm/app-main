@@ -257,7 +257,6 @@ const Modal = styled.div`
 height: 80px;
 width: 340px;
 padding: 12px 12px 12px 16px;
-position: absolute;
 max-width: 85vw;
 transition: all 0.1s ease-in-out;
 display: flex;

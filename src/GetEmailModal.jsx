@@ -269,7 +269,6 @@ width: ${props => props.open ? "280px" : "40px"};
 padding: ${props => props.open ? "16px" : "0px"};
 max-width: 85vw;
 transition: all 0.1s ease-in-out;
-position: fixed;
 display: flex;
 align-items: center;
 justify-content: center;

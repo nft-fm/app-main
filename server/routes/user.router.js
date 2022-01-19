@@ -674,11 +674,11 @@ const getAllUsersWithLowerCaseAddress = async () => {
 // getAllUsersWithLowerCaseAddress()
 
 const getAllUsersWithEmails = async () => {
-  let users = await User.find({ email: { $ne: "" } })
+  let users = await User.find({ isArtist: true, email: { $ne: "" } })
   let r = []
   for (let user of users) {
     // r.push(user.email)
-    console.log(user.email)
+    console.log(user.email + ",", user.username);
   }
   // console.dir(r, { maxArrayLength: null })
 }
@@ -691,7 +691,7 @@ const getAllCollectorsWithEmails = async () => {
   }
 }
 
-// getAllCollectorsWithEmails();
+// getAllUsersWithEmails();
 
 
 module.exports = router;

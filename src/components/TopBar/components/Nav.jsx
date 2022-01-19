@@ -25,13 +25,32 @@ export const Nav = () => {
           Profile
         </StyledLink>
         :
-        <StyledLink style={{ color: "#ff5a93" }} exact tab="register-artist" activeClassName="active" to="/register-artist">
+        <StyledA style={{ color: "#ff5a93" }} href="https://www.fanfare.fm/artist-registration/?utm_source=backlink&utm_campaign=artist-registration&utm_content=beta">
           Artist Signup
-        </StyledLink>
+        </StyledA>
       }
     </StyledNav>
   );
 };
+
+const StyledA = styled.a`
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  font-family: "Compita";
+  text-decoration: none;
+  font-weight: 900;
+  margin-right: 50px;
+  @media only screen and (max-width: 776px) {
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    margin-right: 0;
+    & > * {
+      padding-top: 10px;
+      width: calc(100vw / 4);
+    }
+  }
+`;
 
 const StyledNav = styled.nav`
   justify-content: center;
@@ -47,6 +66,7 @@ const StyledNav = styled.nav`
     }
   }
 `;
+
 const StyledLink = styled(NavLink)`
   font-size: ${(props) => props.theme.fontSizes.xs};
   font-weight: 600;

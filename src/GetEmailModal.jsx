@@ -112,12 +112,12 @@ const GetEmailModal = () => {
     <Modal open={true}>
       <ModalContents>
         <Half>
-          Sign up for our Full Release and <br /> earn a <span style={{ color: "#20A4FC", fontWeight: "600" }}>free NFT!</span>
+          Buy music NFTs with fiat on <br /> the <span style={{ color: "#20A4FC", fontWeight: "600" }}>main fanfare platform!</span>
         </Half>
         <LearnMoreLink target="_blank"
-            rel="noopener noreferrer" href={`https://fanfare.fm/?source=beta&campaign=email_signup`}>
-            VISIT FULL SITE
-          </LearnMoreLink>
+          rel="noopener noreferrer" href={`https://fanfare.fm/?source=beta&campaign=email_signup`}>
+          VISIT FULL SITE
+        </LearnMoreLink>
       </ModalContents>
     </Modal>
   );
@@ -264,6 +264,7 @@ justify-content: space-between;
 `
 
 const Modal = styled.div`
+position: fixed;
 height: ${props => props.open ? "80px" : "40px"};
 width: ${props => props.open ? "280px" : "40px"};
 padding: ${props => props.open ? "16px" : "0px"};

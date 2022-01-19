@@ -41,7 +41,7 @@ const Roadmap = () => {
         <LaunchFeaturesBox>
           <LaunchFeaturesHeader>Q3 2021</LaunchFeaturesHeader>
           <LaunchFeatureList>
-          <LaunchFeatureRow>
+            <LaunchFeatureRow>
               <LaunchFeatureText>Streamlined Artist Uploading</LaunchFeatureText>
               <FillerLine />
               <Checkmark src={greenCheckMark} />
@@ -56,7 +56,7 @@ const Roadmap = () => {
               <FillerLine />
               <Checkmark src={greenCheckMark} />
             </LaunchFeatureRow>
-                      <LaunchFeatureRow>
+            <LaunchFeatureRow>
               <LaunchFeatureText>Artist Staking and Fanclubs</LaunchFeatureText>
               <FillerLine />
               <Checkmark src={greenCheckMark} />
@@ -65,48 +65,44 @@ const Roadmap = () => {
           </LaunchFeatureList>
         </LaunchFeaturesBox>
       </LaunchFeaturesContainer>
-      <LaunchFeaturesContainer style={{marginTop: "40px"}}>
+      <LaunchFeaturesContainer style={{ marginTop: "40px" }}>
         <LaunchFeaturesBox >
           <LaunchFeaturesHeader>Q4 2021</LaunchFeaturesHeader>
           <LaunchFeatureList>
-          <LaunchFeatureRow>
+            <LaunchFeatureRow>
               <LaunchFeatureText>Public User Profiles</LaunchFeatureText>
               <FillerLine />
-              {/* <Checkmark src={grayCheckMark} /> */}
-              in progress
+              <Checkmark src={greenCheckMark} />
             </LaunchFeatureRow>
-          <LaunchFeatureRow>
+            <LaunchFeatureRow>
               <LaunchFeatureText>Auctions</LaunchFeatureText>
               <FillerLine />
-              {/* <Checkmark src={grayCheckMark} /> */}
-              in progress
+              <Checkmark src={greenCheckMark} />
             </LaunchFeatureRow>
             <LaunchFeatureRow>
               <LaunchFeatureText>Fiat Payment</LaunchFeatureText>
               <FillerLine />
-              {/* <Checkmark src={grayCheckMark} /> */}
-              in progress
+              <Checkmark src={greenCheckMark} />
             </LaunchFeatureRow>
-          <LaunchFeatureRow>
+            <LaunchFeatureRow>
               <LaunchFeatureText>New Blockchain Integration (FLOW)</LaunchFeatureText>
               <FillerLine />
-              {/* <Checkmark src={grayCheckMark} /> */}
-              in progress
+              <Checkmark src={greenCheckMark} />
             </LaunchFeatureRow>
           </LaunchFeatureList>
         </LaunchFeaturesBox>
         <LaunchFeaturesBox>
           <LaunchFeaturesHeader>Q1 2022</LaunchFeaturesHeader>
           <LaunchFeatureList>
-          <LaunchFeatureRow>
+            <LaunchFeatureRow>
               <LaunchFeatureText>Mass Artist Outreach</LaunchFeatureText>
               <FillerLine />
-              <Checkmark src={grayCheckMark} />
+              in progress
             </LaunchFeatureRow>
             <LaunchFeatureRow>
               <LaunchFeatureText>NFT Cross-Chain Bridge</LaunchFeatureText>
               <FillerLine />
-              <Checkmark src={grayCheckMark} />
+              in progress
             </LaunchFeatureRow>
             <LaunchFeatureRow>
               <LaunchFeatureText>Much More TBA Soon!</LaunchFeatureText>

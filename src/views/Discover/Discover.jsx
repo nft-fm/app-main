@@ -12,8 +12,8 @@ const Listen = () => {
         <LinkedNftModal />
         <Container>
           <LearnMoreLink target="_blank"
-            rel="noopener noreferrer" href={`https://fanfare.fm/?source=beta&campaign=email_signup`}>
-            We've Launched 1 of 1 Auctions on our full site!
+            rel="noopener noreferrer" href={`https://fanfare.fm/?s=beta&c=email_signup`}>
+            Check out the full site!
           </LearnMoreLink>
           <Market />
         </Container>

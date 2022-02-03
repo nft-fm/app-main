@@ -1,6 +1,7 @@
 import axios from "axios";
 import { providers } from "ethers";
 import React, { useState } from "react";
+import { useEffect } from "react";
 import { Switch } from "react-router-dom";
 import styled from "styled-components";
 import swal from "sweetalert2";
@@ -35,6 +36,17 @@ const RegisterArtist = () => {
   };
 
   const submit = () => {
+    if (name === "" || email === "" || musicLinks === "") {
+      swal.fire({
+        title: "Missing Information",
+        text: "Please fill out all fields.",
+        imageUrl: errorIcon,
+        imageWidth,
+        imageHeight,
+      });
+      return;
+    }
+
     const provider = new providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     signer
@@ -69,6 +81,10 @@ const RegisterArtist = () => {
           });
       });
   };
+
+  useEffect(() => {
+    window.location.replace("https://www.fanfare.fm/artist-registration/?utm_source=backlink&utm_campaign=artist-registration&utm_content=beta");
+  })
 
   return (
     <Switch>

@@ -136,12 +136,12 @@ router.post("/sendPurchaseEmails", async (req, res) => {
     console.log("sendPurchaseNotification hit", req.body);
     let artist = await User.findOne({ address: req.body.nft.address });
     //send to artist and to user
-    ArtistMail(artist.email, req.body.nft);
+    // ArtistMail(artist.email, req.body.nft);
     if (req.body.user.email != "") {
-      UserMail(req.body.user.email, {
-        title: req.body.nft.title,
-        artist: artist.username,
-      });
+      // UserMail(req.body.user.email, {
+      //   title: req.body.nft.title,
+      //   artist: artist.username,
+      // });
     }
     res.status(200).send("Success!");
   } catch (err) {

@@ -11,13 +11,29 @@ const Listen = () => {
       <BaseView>
         <LinkedNftModal />
         <Container>
-          <StyledTitle>Discover and Collect Exclusive Digital Music!</StyledTitle>
+          <LearnMoreLink target="_blank"
+            rel="noopener noreferrer" href={`https://fanfare.fm/?source=beta&campaign=email_signup`}>
+            We've Launched 1 of 1 Auctions on our full site!
+          </LearnMoreLink>
           <Market />
         </Container>
       </BaseView>
     </Switch>
   );
 };
+
+const LearnMoreLink = styled.a`
+margin-top: 100px;
+margin-bottom: 50px;
+text-decoration: underline;
+    color: rgb(240, 240, 240);
+    font-size: 18px;
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+`
+
 
 const Container = styled.div`
   display: flex;
@@ -33,7 +49,7 @@ const Container = styled.div`
 const StyledTitle = styled.div`
   font-family: "Compita";
   font-size: ${(props) => props.theme.fontSizes.md};
-  margin: 30px 0 40px 0;
+  margin: 30px 0 60px 0;
   font-weight: 600;
   /* letter-spacing: 3px; */
   color: white;

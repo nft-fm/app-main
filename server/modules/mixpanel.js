@@ -2,11 +2,11 @@ const Mixpanel = require("mixpanel");
 const mixpanelToken = process.env.PRODUCTION
   ? process.env.MAIN_MIXPANEL_TOKEN
   : process.env.TEST_MIXPANEL_TOKEN;
+console.log("tokens", mixpanelToken, process.env.PRODUCTION);
 const mixpanel = Mixpanel.init(mixpanelToken, { protocol: "https" });
-
+ 
 const trackNftPurchase = (props) => {
   const { address, artistAddress, nftId, nftPrice, chain, title, artist } = props;
-  console.log("tracking NFT Purchase", props, process.env.PRODUCTION, mixpanelToken);
   mixpanel.track("nft purchase", {
     distinct_id: address,
     artistAddress,
@@ -49,7 +49,7 @@ const trackLogin = (props) => {
 const trackPageview = (props) => {
   const { address, ip, page, hasMetamask, browser, deviceType, platform, utm_source, utm_campaign, utm_content } = props;
   console.log("track pageview", props);
-    mixpanel.track("pageview", {
+  mixpanel.track("pageview", {
     hasMetamask: hasMetamask,
     distinct_id: address ? address : null,
     ip,
@@ -64,9 +64,10 @@ const trackPageview = (props) => {
     utm_content,
   });
 };
-const trackNftMint = () => {};
 
-const trackArtistApplication = () => {};
+const trackNftMint = () => { };
+
+const trackArtistApplication = () => { };
 
 const trackNftView = (props) => {
   console.log("nft view", props);
@@ -83,7 +84,7 @@ const trackNftView = (props) => {
   });
 };
 
-const trackSnippetPlay = (address, ipAddress, nftId, artist) => {};
+const trackSnippetPlay = (address, ipAddress, nftId, artist) => { };
 
 module.exports = {
   trackNftPurchase,

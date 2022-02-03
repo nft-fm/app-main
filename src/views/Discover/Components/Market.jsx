@@ -27,8 +27,6 @@ const Listen = () => {
   // const [sort, setSort] = useState(Math.floor(Math.random() * 6));
   const limit = 500;
   const [pauseSong, setPauseSong] = useState(() => () => { }) // this is fucking weird, don't touch me.
-  const history = useHistory();
-
 
   const handleSort = useCallback(async () => {
     setPage(0);

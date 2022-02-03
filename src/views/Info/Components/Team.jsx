@@ -16,12 +16,12 @@ const Team = () => {
           role="CEO, Lead Developer"
           linkedin="https://www.linkedin.com/in/jacksonfelty/"
         />
-        <TeamMember
+        {/* <TeamMember
           src={quinn}
           name="Quinn"
           role="CTO, Developer"
           linkedin="https://www.linkedin.com/in/quinn-labrie-300411a9/"
-        />
+        /> */}
         {/* <TeamMember src={james} name="James" role="CFO" />
         <TeamMember src={ben} name="Benjamin" role="Designer" /> */}
       </TeamSection>

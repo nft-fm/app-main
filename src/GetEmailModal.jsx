@@ -107,64 +107,31 @@ const GetEmailModal = () => {
     }
   }
 
-  if (submitted && !account) return null;
 
   return (
-    <Modal open={open} onClick={() => openIfClosed()}>
-      {open ?
-        <ModalContents>
-          <X onClick={() => setOpen(false)} />
-          {!submitted &&
-            <Half>
-              Sign up for our{" "}
-              <LearnMoreLink target="_blank"
-                rel="noopener noreferrer" href={`https://fanfare.fm/?source=beta&campaign=email_signup`}>
-                Full Release
-              </LearnMoreLink>
-              {" "}to <br /> earn a <span style={{ color: "#20A4FC", fontWeight: "600" }}>free NFT!</span>
-            </Half>
-          }
-          <Half>
-            <form onSubmit={(e) => submitEmail(e)}>
-              {!submitted ?
-                <>
-                  <Bottom>
-                    <Input
-                      error={error}
-                      name="email"
-                      placeholder="email"
-                      type="email"
-                      onChange={(e) => setEmail(e.target.value)}
-                    >
-                    </Input>
-                    <Submit type="submit">
-                      <Check />
-                    </Submit>
-                  </Bottom>
-                </>
-                :
-                <Half>
-                  Thanks! Please share with your friends<br />
-                  for <span style={{ color: "#20A4FC", fontWeight: "600" }}>50,000 VINYL</span> whenever someone joins! <br />
-                </Half>
-              }
-            </form>
-          </Half>
-          {submitted &&
-            <ReferSection>
-              <ReferInput width={copied ? 200 : 300} value={`https://beta.fanfare.fm/?utm_source=referral&utm_campaign=airdrop_1&utm_content=${account}`} onClick={copyToClipboard} /> {copied && <Confirm><Check />copied!</Confirm>}
-            </ReferSection>
-          }
-        </ModalContents>
-        :
-        <Share />
-      }
+    <Modal open={true}>
+      <ModalContents>
+        <Half>
+          Buy music NFTs with fiat on <br /> the <span style={{ color: "#20A4FC", fontWeight: "600" }}>main fanfare platform!</span>
+        </Half>
+        <LearnMoreLink target="_blank"
+          rel="noopener noreferrer" href={`https://fanfare.fm/?source=beta&campaign=email_signup`}>
+          VISIT FULL SITE
+        </LearnMoreLink>
+      </ModalContents>
     </Modal>
   );
 }
 
 const LearnMoreLink = styled.a`
 margin-bottom: 4px;
+text-decoration: underline;
+    color: rgb(240, 240, 240);
+    font-size: 18px;
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
 `
 
 const ModalContents = styled.div`
@@ -198,6 +165,7 @@ outline: none;
   width: ${props => props.width}px;
   cursor: pointer;
   user-select: none;
+  pointer-events: none;
   `
 
 const Submit = styled.button`
@@ -268,7 +236,7 @@ border-radius: 4px;
 
 const Half = styled.div`
 font-size: 16px;
-line-height: 22px;
+line-height: 18px;
 font-weight: 300;
 letter-spacing: .5px;
 `
@@ -296,12 +264,12 @@ justify-content: space-between;
 `
 
 const Modal = styled.div`
+position: fixed;
 height: ${props => props.open ? "80px" : "40px"};
-width: ${props => props.open ? "340px" : "40px"};
+width: ${props => props.open ? "280px" : "40px"};
 padding: ${props => props.open ? "16px" : "0px"};
 max-width: 85vw;
 transition: all 0.1s ease-in-out;
-position: fixed;
 display: flex;
 align-items: center;
 justify-content: center;
@@ -317,6 +285,9 @@ border-radius: ${(props) => props.theme.borderRadius}px;
 z-index: 101;
 @media only screen and (max-width: 776px) {
   margin-top: 150px;
+  top: 90px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 `
 

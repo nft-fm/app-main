@@ -22,7 +22,7 @@ const {
   trackLogin,
   trackPageview,
 } = require("../modules/mixpanel");
-const { airdropOnNFTPurchase } = require("../web3/server-utils.js");
+const { airdropOnNFTPurchase, getCollectorsBSC, getCollectorsETH } = require("../web3/server-utils.js");
 
 // const trackSuccessfulReferral = (props) => {
 //   console.log("successful refer", props);
@@ -81,7 +81,7 @@ router.post("/get-account", async (req, res) => {
       }
       user.save();
     }
-
+    
     res.send(user);
   } catch (error) {
     console.error(error);
@@ -445,7 +445,7 @@ const NodeMail = (name, email, music, account) => {
 router.post("/send-artist-form", async (req, res) => {
   try {
     const { name, email, account, musicLinks } = req.body;
-    NodeMail(name, email, musicLinks, account); //sends Jackson and Quinn an email alerting them, can remove once new docusigner is found
+
     const sender = utils.verifyMessage(
       JSON.stringify({
         name: name,
@@ -461,7 +461,7 @@ router.post("/send-artist-form", async (req, res) => {
       $or: [{ email: email }, { account: account }],
     });
     if (alreadyApplied) {
-      return res.status(403).send("You have already submitted an application.");
+      return res.status(403).send("You have already submitted an application. If you need to update the information, please email info@fanfare.team");
     }
     let application = new Application({
       name,
@@ -470,6 +470,7 @@ router.post("/send-artist-form", async (req, res) => {
       musicLinks,
     });
     await application.save();
+    NodeMail(name, email, musicLinks, account); //sends Jackson and Quinn an email alerting them, can remove once new docusigner is found
     if (name && email) {
       sendSignRequest(req.body);
       return res.sendStatus(200);
@@ -673,14 +674,24 @@ const getAllUsersWithLowerCaseAddress = async () => {
 // getAllUsersWithLowerCaseAddress()
 
 const getAllUsersWithEmails = async () => {
-  let users = await User.find({ email: { $ne: "" } })
+  let users = await User.find({ isArtist: true, email: { $ne: "" } })
   let r = []
   for (let user of users) {
-    r.push(user.email)
+    // r.push(user.email)
+    console.log(user.email + ",", user.username);
   }
-  console.dir(r, { maxArrayLength: null })
+  // console.dir(r, { maxArrayLength: null })
 }
-// getAllUsersWithEmails()
+
+const getAllCollectorsWithEmails = async () => {
+  let users = await User.find({ email: { $ne: "" } })
+  for (let user of users) {
+    getCollectorsBSC(user.address, user.email);
+    getCollectorsETH(user.address, user.email);
+  }
+}
+
+// getAllUsersWithEmails();
 
 
 module.exports = router;

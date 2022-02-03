@@ -40,10 +40,10 @@ const listenForMintBsc = async () => {
     ? MAIN_BSC_NFTToken
     : TEST_BSC_NFTToken;
   const PROVIDER_URL = process.env.REACT_APP_IS_MAINNET
-    ? process.env.BSC_PROVIDER_URL
+    ? process.env.BSC_PROVIDER_URL_2
     : process.env.BSCTEST_PROVIDER_URL;
-  let provider = new providers.WebSocketProvider(PROVIDER_URL);
-  let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
+    let provider = new providers.JsonRpcProvider(PROVIDER_URL);
+    let walletWithProvider = new Wallet(process.env.OWNER_KEY, provider);
   const contract = new Contract(NFTToken, NFTTokenABI, walletWithProvider);
 
   contract.on("MintAndStake", async (data) => {
@@ -51,7 +51,7 @@ const listenForMintBsc = async () => {
 
     let filter = contract.filters.MintAndStake(data);
     let event = await contract
-      .queryFilter(filter, blockNum - 4000, blockNum)
+      .queryFilter(filter, blockNum - 250, blockNum)
       .then((r) => {
         return r;
       })

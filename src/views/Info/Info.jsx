@@ -47,11 +47,11 @@ const Info = () => {
               <section>We answer your questions</section>
             </InfoSubContainer>
             {/* <InfoSubContainer> */}
-            <InfoSubContainer onClick={() => handleClick("tokenomicsRef")}>
+            {/* <InfoSubContainer onClick={() => handleClick("tokenomicsRef")}>
               <LinkImage src={tokenomics} alt="tokenomics" />
               <h3>Tokenomics</h3>
               <section>Coming Soon</section>
-            </InfoSubContainer>
+            </InfoSubContainer> */}
           </MobileInfo>
           <MobileInfo childs={1}>
             <InfoSubContainer onClick={() => handleClick("teamsRef")}>

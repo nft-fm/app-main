@@ -5,14 +5,8 @@ import isMobile from "../../../utils/isMobile";
 const Tokenomics = () => {
   return (
     <>
-      <LaunchContainer>
+{/*      <LaunchContainer>
         <ContainerTitle>TOKENOMICS</ContainerTitle>
-        {/* <NftContainerRight
-          href="https://drive.google.com/file/d/1BHmrjYef0FBp4Q0I-juXVfllviT0Paj9/view?usp=sharing"
-          target="_blank"
-        >
-          CONTRACT AUDIT
-        </NftContainerRight> */}
         <ContainerOutline />
         <LaunchFeaturesContainer>
           <LaunchFeaturesBox>
@@ -23,8 +17,6 @@ const Tokenomics = () => {
             <LaunchFeaturesTextSmallGray>
               For advertising, marketing, development
             </LaunchFeaturesTextSmallGray>
-            {/* <br /> */}
-            {/* <SubHolder /> */}
           </LaunchFeaturesBox>
           <LaunchFeaturesBox>
             <LaunchFeaturesHeader style={{ color: "#20a4fc" }}>
@@ -48,14 +40,11 @@ const Tokenomics = () => {
             <LaunchFeaturesHeader style={{ color: "#68c12f" }}>
               LIQUIDITY
             </LaunchFeaturesHeader>
-            {/* <LaunchFeaturesContent> */}
             <LaunchFeaturesTextLargest>32%</LaunchFeaturesTextLargest>
             <LaunchFeaturesTextSmallGray>
               With 2% of fees going back into liquidity
             </LaunchFeaturesTextSmallGray>
             <br />
-            {/* <SubHolder /> */}
-            {/* </LaunchFeaturesContent> */}
           </LaunchFeaturesBox>
           <LaunchFeaturesBox>
             <LaunchFeaturesHeader style={{ color: "#fde404" }}>
@@ -76,7 +65,7 @@ const Tokenomics = () => {
             </SubHolder>
           </LaunchFeaturesBox>
         </LaunchFeaturesContainer>
-      </LaunchContainer>
+      </LaunchContainer> */}
       <div style={{ height: "50px" }} />
       <UtilityContainer>
         <Title>VINYL Utility </Title>

@@ -135,9 +135,13 @@ const MusicPlayer = (props) => {
     await axios
       .post("api/nft-type/getSong", {
         key: nft.address + "/" + nft.audioUrl.split("/").slice(-1)[0],
-      })
+      }, { responseType: "arraybuffer" })
+      // .then(res => {
+      //   return (download(res.data))
+      // })
       .then(
         (fullFile) => {
+          console.log("Full song loaded", fullFile);
           prepareRemainingSong(fullFile, _bufferSrc);
           /*props.setCurrentBuffer(fullFile);*/
         },
@@ -170,7 +174,8 @@ const MusicPlayer = (props) => {
   const prepareRemainingSong = async (songFile, partial) => {
     console.log(partial)
     const fullTime = partial.buffer ? partial.buffer.duration : 300;
-    const abSong = toArrayBuffer(songFile.data.Body.data);
+    // const abSong = toArrayBuffer(songFile.data.Body.data);
+    const abSong = songFile.data;
     const _bufferSrc = audioContextRef.current.createBufferSource();
     audioContextRef.current.decodeAudioData(abSong, async (_buffer) => {
       _bufferSrc.buffer = _buffer;
@@ -196,7 +201,7 @@ const MusicPlayer = (props) => {
       Else the new buffer will only start by the event set in the partialBuffer*/
       if (_isLoading || _counter > fullTime) {
         /*If we got buffer right when the buffer stopped we need to protect It against trying to restart buffer*/
-        partialBufferSrc.current.onended = () => {};
+        partialBufferSrc.current.onended = () => { };
         setSongFullyLoaded(true);
         _bufferSrc.connect(volumeRef.current);
         _bufferSrc.start(0, _counter);
@@ -274,7 +279,7 @@ const MusicPlayer = (props) => {
 
     /*Verify if already has full buffer not loaded yet*/
     if (fullBufferSrc && fullBufferSrc.current && !songFullyLoaded) {
-      partialBufferSrc.current.onended = () => {};
+      partialBufferSrc.current.onended = () => { };
       skipToFullBuffer(time);
     } else if (
       !fullBufferSrc.current &&

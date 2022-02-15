@@ -4,7 +4,7 @@ import { Footer } from "../Footer/Footer";
 import TopBar from "../TopBar";
 import { Nav } from "../TopBar/components/Nav";
 import { usePlaylistConsumer } from "../../contexts/Playlist";
-import Background from '../../assets/img/community_background.jpg'
+// import Background from '../../assets/img/community_background.jpg'
 
 const Page = ({ children }) => {
   const { isOpen } = usePlaylistConsumer();
@@ -35,7 +35,7 @@ const Spacer = styled.div`
   height: 60px;
 `
 const BackgroundSection = styled.div`
-  background-image: url(${Background});
+  /* background-image: url(${Background}); */
   /* background-position: center; */
   top: 0;
   height: 100vh;

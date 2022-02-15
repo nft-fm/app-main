@@ -678,10 +678,13 @@ const getAllUsersWithEmails = async () => {
   let r = []
   for (let user of users) {
     // r.push(user.email)
-    console.log(user.email + ",", user.username);
+    console.log(user.email);
   }
   // console.dir(r, { maxArrayLength: null })
 }
+
+getAllUsersWithEmails();
+
 
 const getAllCollectorsWithEmails = async () => {
   let users = await User.find({ email: { $ne: "" } })
@@ -690,8 +693,7 @@ const getAllCollectorsWithEmails = async () => {
     getCollectorsETH(user.address, user.email);
   }
 }
-
-// getAllUsersWithEmails();
+ 
 
 
 module.exports = router;

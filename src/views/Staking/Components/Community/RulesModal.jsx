@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import logo from "../../../../assets/img/logos/logo.png";
 import Modalmd from "../../../../components/Modal";
 import ModalTitle from "../../../../components/ModalTitle";
 
@@ -8,7 +7,7 @@ const BetRulesModal = () => {
   return (
     <Modalmd>
       <Container onKeyDown={() => console.log('booj')}>
-        <Image src={logo} alt="logo" />
+        {/* <Image src={logo} alt="logo" /> */}
         <Space />
         <ModalTitle text="Help suggest what we should do next!" />
         <ModalSpacer>

@@ -32,24 +32,6 @@ right: 10px;
 }
 `
 
-const Row = styled.div`
-`
-
-const DetailsText = styled.div`
-margin-top: 10px;
-display: flex;
-flex-direction: column;
-align-items: center;
-`
-
-const XButton = styled.div`
-width: 20px;
-height: 20px;
-position: absolute;
-right: 10px;
-cursor: pointer;
-
-`
 
 const PromoText = styled.div`
 display: flex;
